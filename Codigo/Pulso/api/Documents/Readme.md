@@ -47,6 +47,7 @@ Servidor HTTP construído com **Node.js + Express** seguindo uma arquitetura em 
 
 ## 📁 Estrutura de Pastas
 
+```
 Pulso/api/
 ├── .env
 ├── .env.example
@@ -137,7 +138,7 @@ Pulso/api/
 ├── services/
 ├── controllers/
 └── integration/
-
+```
 ---
 
 ## 📖 Descrição das Camadas
