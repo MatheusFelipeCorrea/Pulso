@@ -1,0 +1,336 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum AuthProvider {
+  EMAIL
+  GOOGLE
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum ResourceType {
+  MONEY
+  VA
+  VR
+  VT
+}
+
+enum GoalStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum GoalType {
+  SHORT_TERM
+  LONG_TERM
+}
+
+enum CategoryType {
+  INCOME
+  EXPENSE
+}
+
+// ==========================================
+// USERS
+// ==========================================
+
+model User {
+  id           String       @id @default(cuid())
+  name         String
+  email        String       @unique
+  passwordHash String?      @map("password_hash")
+  avatarUrl    String?      @map("avatar_url")
+  authProvider AuthProvider @default(EMAIL) @map("auth_provider")
+  googleId     String?      @unique @map("google_id")
+  isVerified   Boolean      @default(false) @map("is_verified")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  settings         UserSettings?
+  refreshTokens    RefreshToken[]
+  transactions     Transaction[]
+  categories       Category[]
+  tags             Tag[]
+  goals            Goal[]
+  trips            Trip[]
+  reminders        Reminder[]
+  vtSales          VtSale[]
+  streak           Streak?
+  userAchievements UserAchievement[]
+
+  @@map("users")
+}
+
+// ==========================================
+// USER SETTINGS
+// ==========================================
+
+model UserSettings {
+  id                 String  @id @default(cuid())
+  userId             String  @unique @map("user_id")
+  salaryAmount       Float?  @default(0) @map("salary_amount")
+  salaryDay          Int?    @default(5) @map("salary_day")
+  vaAmount           Float?  @default(0) @map("va_amount")
+  vaDay              Int?    @default(5) @map("va_day")
+  vrAmount           Float?  @default(0) @map("vr_amount")
+  vrDay              Int?    @default(5) @map("vr_day")
+  vtAmount           Float?  @default(0) @map("vt_amount")
+  vtDay              Int?    @default(5) @map("vt_day")
+  vtSaleIntervalDays Int?    @default(30) @map("vt_sale_interval_days")
+  theme              String  @default("light")
+  gamificationOn     Boolean @default(true) @map("gamification_on")
+  googleCalendarOn   Boolean @default(false) @map("google_calendar_on")
+  googleTokens       String? @map("google_tokens")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_settings")
+}
+
+// ==========================================
+// REFRESH TOKENS
+// ==========================================
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  userId    String    @map("user_id")
+  token     String    @unique
+  expiresAt DateTime  @map("expires_at")
+  isRevoked Boolean   @default(false) @map("is_revoked")
+  createdAt DateTime  @default(now()) @map("created_at")
+  revokedAt DateTime? @map("revoked_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+// ==========================================
+// CATEGORIES
+// ==========================================
+
+model Category {
+  id        String       @id @default(cuid())
+  name      String
+  icon      String?
+  type      CategoryType
+  isDefault Boolean      @default(false) @map("is_default")
+  userId    String?      @map("user_id")
+
+  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+
+  @@map("categories")
+}
+
+// ==========================================
+// TRANSACTIONS
+// ==========================================
+
+model Transaction {
+  id             String          @id @default(cuid())
+  userId         String          @map("user_id")
+  categoryId     String          @map("category_id")
+  type           TransactionType
+  resource       ResourceType
+  amount         Float
+  description    String?
+  date           DateTime
+  isRecurring    Boolean         @default(false) @map("is_recurring")
+  recurrenceRule String?         @map("recurrence_rule")
+  createdAt      DateTime        @default(now()) @map("created_at")
+
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category         @relation(fields: [categoryId], references: [id])
+  tags     TransactionTag[]
+
+  @@map("transactions")
+}
+
+// ==========================================
+// TAGS
+// ==========================================
+
+model Tag {
+  id     String @id @default(cuid())
+  name   String
+  userId String @map("user_id")
+
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions TransactionTag[]
+
+  @@map("tags")
+}
+
+model TransactionTag {
+  transactionId String @map("transaction_id")
+  tagId         String @map("tag_id")
+
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  tag         Tag         @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([transactionId, tagId])
+  @@map("transaction_tags")
+}
+
+// ==========================================
+// GOALS
+// ==========================================
+
+model Goal {
+  id            String     @id @default(cuid())
+  userId        String     @map("user_id")
+  name          String
+  targetAmount  Float      @map("target_amount")
+  currentAmount Float      @default(0) @map("current_amount")
+  deadline      DateTime
+  type          GoalType
+  status        GoalStatus @default(ACTIVE)
+  description   String?
+  createdAt     DateTime   @default(now()) @map("created_at")
+
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contributions GoalContribution[]
+  trips         Trip[]
+
+  @@map("goals")
+}
+
+model GoalContribution {
+  id     String   @id @default(cuid())
+  goalId String   @map("goal_id")
+  amount Float
+  date   DateTime
+
+  goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@map("goal_contributions")
+}
+
+// ==========================================
+// TRIPS
+// ==========================================
+
+model Trip {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  destination String
+  currency    String
+  plannedDate DateTime @map("planned_date")
+  goalId      String?  @map("goal_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal     Goal?         @relation(fields: [goalId], references: [id], onDelete: SetNull)
+  expenses TripExpense[]
+
+  @@map("trips")
+}
+
+model TripExpense {
+  id              String  @id @default(cuid())
+  tripId          String  @map("trip_id")
+  category        String
+  description     String?
+  estimatedAmount Float   @map("estimated_amount")
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  @@map("trip_expenses")
+}
+
+// ==========================================
+// REMINDERS
+// ==========================================
+
+model Reminder {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  title         String
+  amount        Float?
+  dueDate       DateTime @map("due_date")
+  advanceDays   Int      @default(1) @map("advance_days")
+  googleEventId String?  @map("google_event_id")
+  isSynced      Boolean  @default(false) @map("is_synced")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reminders")
+}
+
+// ==========================================
+// VALE TRANSPORTE
+// ==========================================
+
+model VtSale {
+  id            String    @id @default(cuid())
+  userId        String    @map("user_id")
+  buyerName     String    @map("buyer_name")
+  saleDate      DateTime  @map("sale_date")
+  nominalValue  Float     @map("nominal_value")
+  receivedValue Float     @map("received_value")
+  nextSaleDate  DateTime? @map("next_sale_date")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("vt_sales")
+}
+
+// ==========================================
+// GAMIFICATION
+// ==========================================
+
+model Streak {
+  id            String    @id @default(cuid())
+  userId        String    @unique @map("user_id")
+  currentStreak Int       @default(0) @map("current_streak")
+  longestStreak Int       @default(0) @map("longest_streak")
+  lastActivity  DateTime? @map("last_activity")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("streaks")
+}
+
+model Achievement {
+  id          String @id @default(cuid())
+  name        String
+  description String
+  icon        String
+  criteria    String
+
+  userAchievements UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  achievementId String   @map("achievement_id")
+  unlockedAt    DateTime @default(now()) @map("unlocked_at")
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
