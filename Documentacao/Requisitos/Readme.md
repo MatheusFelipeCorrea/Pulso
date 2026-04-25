@@ -8,9 +8,9 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 84 | 0 |  |
+| Requisitos Funcionais | 102 | 0 |  |
 | Requisitos Não Funcionais | 15 | 0 |  |
-| **Total** | **99** | **0** |  |
+| **Total** | **117** | **0** |  |
 
 ---
 
@@ -29,6 +29,8 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | 📈 Relatórios | 6 | 0 |  |
 | 👤 Perfil e Configurações | 6 | 0 |  |
 | 🎮 Gamificação | 5 | 0 |  |
+| 🏠 Homepage | 4 | 0 |  |
+| 👥 Grupos | 15 | 0 |  |
 | ⚙️ Não Funcionais | 15 | 0 |  |
 
 ---
@@ -193,6 +195,39 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 ---
 
+## 🏠 Módulo 12 — Homepage (Landing Page)
+
+| Status | Código | Requisito | Prioridade |
+|---|---|---|---|
+| - [ ] | RF-084 | O sistema deve exibir uma homepage pública apresentando o Pulso, suas funcionalidades e benefícios | 🔴 Essencial |
+| - [ ] | RF-085 | A homepage deve conter botões de chamada para ação (Cadastrar e Entrar) | 🔴 Essencial |
+| - [ ] | RF-086 | A homepage deve exibir seções com os principais módulos do sistema (dashboard, metas, viagens, insights, chatbot, gamificação) | 🟡 Importante |
+| - [ ] | RF-087 | A homepage deve ser responsiva e atraente visualmente com a paleta Vital Purple | 🔴 Essencial |
+
+---
+
+## 👥 Módulo 13 — Grupos
+
+| Status | Código | Requisito | Prioridade |
+|---|---|---|---|
+| - [ ] | RF-088 | O sistema deve permitir criar um grupo com nome e descrição | 🔴 Essencial |
+| - [ ] | RF-089 | O sistema deve gerar um link/código de convite para o grupo | 🔴 Essencial |
+| - [ ] | RF-090 | O sistema deve permitir entrar em um grupo via link/código de convite | 🔴 Essencial |
+| - [ ] | RF-091 | O sistema deve permitir que o criador do grupo defina um papel para cada membro (admin ou membro) | 🟡 Importante |
+| - [ ] | RF-092 | O sistema deve permitir vincular uma viagem ao grupo para planejamento compartilhado | 🔴 Essencial |
+| - [ ] | RF-093 | O sistema deve permitir que membros do grupo adicionem pretensões de gastos na viagem compartilhada | 🔴 Essencial |
+| - [ ] | RF-094 | O sistema deve calcular o custo total da viagem do grupo somando pretensões de todos os membros | 🔴 Essencial |
+| - [ ] | RF-095 | O sistema deve exibir quanto cada membro deve contribuir para a viagem | 🟡 Importante |
+| - [ ] | RF-096 | O sistema deve permitir criar metas financeiras compartilhadas no grupo | 🟡 Importante |
+| - [ ] | RF-097 | O sistema deve permitir que cada membro faça aportes individuais na meta do grupo | 🟡 Importante |
+| - [ ] | RF-098 | O sistema deve manter os perfis e finanças pessoais completamente separados dos dados do grupo | 🔴 Essencial |
+| - [ ] | RF-099 | O sistema deve permitir o membro sair do grupo a qualquer momento | 🔴 Essencial |
+| - [ ] | RF-100 | O sistema deve permitir o admin remover membros do grupo | 🟡 Importante |
+| - [ ] | RF-101 | O sistema deve exibir um painel do grupo com resumo das viagens e metas compartilhadas | 🟡 Importante |
+| - [ ] | RF-102 | O sistema deve permitir chat/mensagens dentro do grupo | 🟢 Desejável |
+
+---
+
 ## ⚙️ Requisitos Não Funcionais
 
 | Status | Código | Requisito | Categoria | Prioridade |
@@ -289,10 +324,10 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Prioridade | Quantidade | Percentual |
 |---|---|---|
-| 🔴 Essencial | 51 | 52% |
-| 🟡 Importante | 34 | 34% |
-| 🟢 Desejável | 14 | 14% |
-| **Total** | **99** | **100%** |
+| 🔴 Essencial | 62 | 53% |
+| 🟡 Importante | 40 | 34% |
+| 🟢 Desejável | 15 | 13% |
+| **Total** | **117** | **100%** |
 
 ---
 

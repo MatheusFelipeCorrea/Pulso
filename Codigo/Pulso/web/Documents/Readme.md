@@ -11,6 +11,10 @@ Interface construída com **React + Vite** estilizada com **Tailwind CSS v4.2**,
 - [Descrição das Camadas](#-descrição-das-camadas)
 - [Fluxo de Dados](#-fluxo-de-dados)
 - [Rotas da Aplicação](#-rotas-da-aplicação)
+  - [Sidebar — Menus e Submenus](#️-sidebar--menus-e-submenus)
+  - [Modais](#-modais)
+  - [Componentes Flutuantes](#-componentes-flutuantes)
+  - [Contagem de Interfaces](#-contagem-de-interfaces)
 - [Como Rodar](#-como-rodar)
 - [Variáveis de Ambiente](#-variáveis-de-ambiente)
 
@@ -297,18 +301,25 @@ Montam a tela usando components/features. Dispatcham actions do Redux. Gerenciam
 
 | Página | Rota | Layout | Componentes usados |
 |---|---|---|---|
+| HomePage.jsx | / | Próprio | Hero, Features, HowItWorks, CTA, Footer |
 | Login.jsx | /login | AuthLayout | LoginForm, GoogleLoginButton |
 | Register.jsx | /register | AuthLayout | RegisterForm, GoogleLoginButton |
 | ForgotPassword.jsx | /forgot-password | AuthLayout | ForgotPasswordForm |
-| Dashboard.jsx | / | MainLayout | BalanceCards, ResourceBalanceCard, IncomeExpenseChart, CategoryChart, RecentTransactions, GoalsProgress, HealthScore, AlertsBanner, StreakCounter |
+| ResetPassword.jsx | /reset-password/:token | AuthLayout | ResetPasswordForm |
+| VerifyEmail.jsx | /verify-email/:token | AuthLayout | EmailVerificationFeedback |
+| Dashboard.jsx | /dashboard | MainLayout | BalanceCards, ResourceBalanceCard, IncomeExpenseChart, CategoryChart, RecentTransactions, GoalsProgress, HealthScore, AlertsBanner, StreakCounter |
 | Transactions.jsx | /transactions | MainLayout | TransactionForm, TransactionList, TransactionItem, TransactionFilters, RecurringBadge |
 | Goals.jsx | /goals | MainLayout | GoalForm, GoalCard, GoalList, GoalProgressBar, ContributionForm |
-| Trips.jsx | /trips | MainLayout | TripForm, TripCard, TripList, TripExpenseForm, TripExpenseList, CurrencyConverter, CurrencyChart, FavoriteCurrencies |
+| Trips.jsx | /trips | MainLayout | TripCard, TripList, CurrencyConverter, FavoriteCurrencies |
+| TripDetail.jsx | /trips/:id | MainLayout | TripExpenseForm, TripExpenseList, CurrencyChart, TripCard |
 | Insights.jsx | /insights | MainLayout | MonthlySummary, CategoryComparison, SuggestionsList, PredictiveAlerts, HealthScoreCard |
 | Reminders.jsx | /reminders | MainLayout | ReminderForm, ReminderList, ReminderItem, GoogleCalendarConnect |
 | Transport.jsx | /transport | MainLayout | VTBalanceCard, VTSaleForm, VTSaleHistory, VTUsageForm, VTNextSaleCountdown |
 | Reports.jsx | /reports | MainLayout | MonthlyReport, CategoryPieChart, MonthComparisonChart, BalanceEvolutionChart, ExportPDFButton, ExportCSVButton |
 | Profile.jsx | /profile | MainLayout | Edição de perfil, receitas fixas, preferências, exclusão de conta |
+| Groups.jsx | /groups | MainLayout | GroupCard, GroupList, GroupForm |
+| GroupDetail.jsx | /groups/:id | MainLayout | GroupMembers, GroupExpenses, InviteForm |
+| Achievements.jsx | /achievements | MainLayout | StreakCounter, AchievementsList, FinancialLevel, MonthlyChallenge |
 | NotFound.jsx | * | — | Página 404 |
 
 ---
@@ -456,29 +467,132 @@ Se token expirar (401): interceptor do axios detecta → tenta refresh automáti
 
 ## 🛣️ Rotas da Aplicação
 
-**Públicas (AuthLayout — sem menu)**
+### 🔓 Públicas (sem autenticação)
+
+| Rota | Tela | Layout |
+|---|---|---|
+| `/` | Homepage (Landing Page) | Próprio |
+| `/login` | Login | AuthLayout |
+| `/register` | Cadastro | AuthLayout |
+| `/forgot-password` | Esqueci a Senha | AuthLayout |
+| `/reset-password/:token` | Redefinir Senha | AuthLayout |
+| `/verify-email/:token` | Verificar Email | AuthLayout |
+
+### 🔒 Privadas (autenticadas)
+
+| Rota | Tela | Tipo | CRUD? |
+|---|---|---|---|
+| `/dashboard` | Dashboard | Visualização | ❌ |
+| `/transactions` | Transações | Lista + Filtros | ✅ CRUD |
+| `/goals` | Metas | Lista + Cards | ✅ CRUD |
+| `/trips` | Viagens | Lista + Cards | ✅ CRUD |
+| `/trips/:id` | Detalhe da Viagem | Detalhe + Sub-CRUD | ✅ CRUD |
+| `/insights` | Insights IA | Visualização | ❌ |
+| `/reminders` | Lembretes | Lista | ✅ CRUD |
+| `/transport` | Vale Transporte | Dashboard + Lista | Parcial |
+| `/reports` | Relatórios | Visualização + Export | ❌ |
+| `/profile` | Perfil + Configurações | Formulário + Config | Parcial |
+| `/groups` | Grupos | Lista | ✅ CRUD |
+| `/groups/:id` | Detalhe do Grupo | Detalhe + Sub-CRUD | ✅ CRUD |
+| `/achievements` | Gamificação | Visualização | ❌ |
+
+### 🚫 Catch-all
 
 | Rota | Tela |
 |---|---|
-| /login | Login |
-| /register | Cadastro |
-| /forgot-password | Recuperação de senha |
+| `*` | 404 |
 
-**Privadas (MainLayout — usuário logado)**
+---
 
-| Rota | Tela |
+### 🗂️ Sidebar — Menus e Submenus
+
+```
+┌──────────────────────────┐
+│                          │
+│  📊 Dashboard            │  ← link direto
+│                          │
+│  💰 Financeiro       ▾   │  ← dropdown
+│     💳 Transações        │
+│     🚌 Vale Transporte   │
+│     📈 Relatórios        │
+│                          │
+│  🎯 Planejamento     ▾   │  ← dropdown
+│     🎯 Metas             │
+│     🌍 Viagens           │
+│     📅 Lembretes         │
+│                          │
+│  🤖 Inteligência     ▾   │  ← dropdown
+│     🤖 Insights          │
+│                          │
+│  👥 Grupos               │  ← link direto
+│                          │
+│  ──────────              │
+│                          │
+│  👤 Perfil               │
+│  🚪 Sair                 │
+│                          │
+│     « ◁                  │
+└──────────────────────────┘
+```
+
+Colapsada (64px — só ícones):
+```
+┌────┐
+│ 📊 │
+│ 💰▾│
+│ 🎯▾│
+│ 🤖▾│
+│ 👥 │
+│ ── │
+│ 👤 │
+│ 🚪 │
+│ «  │
+└────┘
+```
+
+---
+
+### 📦 Modais
+
+| # | Modal | Onde abre | Tipo |
+|---|---|---|---|
+| M1 | Nova/Editar Transação | Transações | Create/Edit |
+| M2 | Nova/Editar Meta | Metas | Create/Edit |
+| M3 | Aporte na Meta | Metas | Create |
+| M4 | Nova/Editar Viagem | Viagens | Create/Edit |
+| M5 | Nova Pretensão | Detalhe Viagem | Create/Edit |
+| M6 | Novo/Editar Lembrete | Lembretes | Create/Edit |
+| M7 | Registrar Venda VT | Vale Transporte | Create |
+| M8 | Registrar Uso VT | Vale Transporte | Create |
+| M9 | Novo Grupo | Grupos | Create |
+| M10 | Entrar no Grupo | Grupos | Action |
+| M11 | Convidar pro Grupo | Detalhe do Grupo | Action |
+| M12 | Editar Perfil | Perfil | Edit |
+| M13 | Alterar Senha | Perfil | Edit |
+
+---
+
+### 💬 Componentes Flutuantes
+
+| # | Componente | Onde aparece |
+|---|---|---|
+| F1 | Chatbot | Todas as telas privadas (canto inferior direito) |
+
+---
+
+### 📊 Contagem de Interfaces
+
+| Categoria | Quantidade |
 |---|---|
-| / | Dashboard |
-| /transactions | Gestão de transações |
-| /goals | Metas financeiras |
-| /trips | Planejador de viagens + câmbio |
-| /insights | Análises inteligentes (Gemini) |
-| /reminders | Lembretes + Google Agenda |
-| /transport | Controle de Vale Transporte |
-| /reports | Relatórios e exportações |
-| /profile | Perfil e configurações |
+| 🔓 Telas Públicas | 6 |
+| 🔒 Telas Privadas | 14 |
+| 📦 Modais | 13 |
+| 💬 Flutuantes | 1 |
+| **TOTAL** | **34** |
 
-**Catch-all:** * → Página 404
+**CRUDs completos:** Transações, Metas, Viagens (+ Pretensões), Lembretes, Grupos (+ Membros), VT (create vendas/uso + read)
+
+**Visualizações (sem CRUD):** Dashboard, Insights, Relatórios, Gamificação, Homepage
 
 ---
 
