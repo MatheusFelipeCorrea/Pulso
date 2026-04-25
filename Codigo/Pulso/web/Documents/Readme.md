@@ -45,6 +45,7 @@ Interface construída com **React + Vite** estilizada com **Tailwind CSS v4.2**,
 
 ## 📁 Estrutura de Pastas
 
+```
 Pulso/web/
 ├── .env
 ├── .env.example
@@ -79,7 +80,7 @@ Pulso/web/
 ├── components/
 ├── hooks/
 └── services/
-
+```
 ---
 
 ## 📖 Descrição das Camadas
