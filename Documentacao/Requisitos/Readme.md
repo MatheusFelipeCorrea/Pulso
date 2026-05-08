@@ -142,6 +142,15 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 ---
 
+
+
+
+
+
+
+
+
+
 ## 🚌 Módulo 08 — Gestão de Vale Transporte
 
 | Status | Código | Requisito | Prioridade |

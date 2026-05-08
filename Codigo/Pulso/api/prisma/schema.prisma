@@ -13,155 +13,218 @@ datasource db {
 // ENUMS
 // ==========================================
 
-enum AuthProvider {
+enum ProvedorAuth {
   EMAIL
   GOOGLE
 }
 
-enum TransactionType {
-  INCOME
-  EXPENSE
+enum TipoTransacao {
+  RECEITA
+  DESPESA
 }
 
-enum ResourceType {
-  MONEY
+enum TipoRecurso {
+  DINHEIRO
   VA
   VR
   VT
 }
 
-enum GoalStatus {
-  ACTIVE
-  PAUSED
-  COMPLETED
-  CANCELLED
+enum StatusMeta {
+  ATIVA
+  PAUSADA
+  CONCLUIDA
+  CANCELADA
 }
 
-enum GoalType {
-  SHORT_TERM
-  LONG_TERM
+enum TipoMeta {
+  CURTO_PRAZO
+  LONGO_PRAZO
 }
 
-enum CategoryType {
-  INCOME
-  EXPENSE
+enum TipoCategoria {
+  RECEITA
+  DESPESA
+}
+
+enum CategoriaDespesaViagem {
+  TRANSPORTE
+  HOSPEDAGEM
+  ALIMENTACAO
+  PASSEIOS
+  COMPRAS
+  OUTROS
+}
+
+enum Tema {
+  CLARO
+  ESCURO
+}
+
+enum AntecedenciaLembrete {
+  NO_DIA
+  UM_DIA
+  TRES_DIAS
+}
+
+enum PapelGrupo {
+  ADMIN
+  MEMBRO
+}
+
+enum NivelFinanceiro {
+  INICIANTE
+  CONSCIENTE
+  ESTRATEGISTA
+  INVESTIDOR
 }
 
 // ==========================================
-// USERS
+// USUÁRIOS
 // ==========================================
 
-model User {
+model Usuario {
   id           String       @id @default(cuid())
-  name         String
-  email        String       @unique
-  passwordHash String?      @map("password_hash")
-  avatarUrl    String?      @map("avatar_url")
-  authProvider AuthProvider @default(EMAIL) @map("auth_provider")
+  nome         String       @db.VarChar(120)
+  email        String       @unique @db.VarChar(180)
+  senhaHash    String?      @map("senha_hash")
+  urlAvatar    String?      @map("url_avatar")
+  provedorAuth ProvedorAuth @default(EMAIL) @map("provedor_auth")
   googleId     String?      @unique @map("google_id")
-  isVerified   Boolean      @default(false) @map("is_verified")
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime     @updatedAt @map("updated_at")
+  verificado   Boolean      @default(false)
+  criadoEm     DateTime     @default(now()) @map("criado_em")
+  atualizadoEm DateTime     @updatedAt @map("atualizado_em")
 
-  settings         UserSettings?
-  refreshTokens    RefreshToken[]
-  transactions     Transaction[]
-  categories       Category[]
-  tags             Tag[]
-  goals            Goal[]
-  trips            Trip[]
-  reminders        Reminder[]
-  vtSales          VtSale[]
-  streak           Streak?
-  userAchievements UserAchievement[]
+  configuracoes       ConfiguracaoUsuario?
+  tokensRenovacao     TokenRenovacao[]
+  transacoes          Transacao[]
+  categorias          Categoria[]
+  tags                Tag[]
+  metas               Meta[]
+  viagens             Viagem[]
+  lembretes           Lembrete[]
+  vendasVt            VendaVt[]
+  usosVt              UsoVt[]
+  sequencia           Sequencia?
+  conquistasUsuario   ConquistaUsuario[]
+  moedasFavoritas     MoedaFavorita[]
+  desafiosMensais     DesafioMensal[]
+  mensagensChat       MensagemChat[]
+  historicoScore      HistoricoScore[]
+  gruposCriados       Grupo[]              @relation("CriadorGrupo")
+  membrosGrupo        MembroGrupo[]
+  aportesGrupo        AporteMetaGrupo[]
+  despesasViagemGrupo DespesaViagemGrupo[]
+  mensagensChatGrupo  MensagemChatGrupo[]
 
-  @@map("users")
+  @@index([email])
+  @@map("usuarios")
 }
 
 // ==========================================
-// USER SETTINGS
+// CONFIGURAÇÕES DO USUÁRIO
 // ==========================================
 
-model UserSettings {
-  id                 String  @id @default(cuid())
-  userId             String  @unique @map("user_id")
-  salaryAmount       Float?  @default(0) @map("salary_amount")
-  salaryDay          Int?    @default(5) @map("salary_day")
-  vaAmount           Float?  @default(0) @map("va_amount")
-  vaDay              Int?    @default(5) @map("va_day")
-  vrAmount           Float?  @default(0) @map("vr_amount")
-  vrDay              Int?    @default(5) @map("vr_day")
-  vtAmount           Float?  @default(0) @map("vt_amount")
-  vtDay              Int?    @default(5) @map("vt_day")
-  vtSaleIntervalDays Int?    @default(30) @map("vt_sale_interval_days")
-  theme              String  @default("light")
-  gamificationOn     Boolean @default(true) @map("gamification_on")
-  googleCalendarOn   Boolean @default(false) @map("google_calendar_on")
-  googleTokens       String? @map("google_tokens")
+model ConfiguracaoUsuario {
+  id                   String   @id @default(cuid())
+  usuarioId            String   @unique @map("usuario_id")
+  valorSalario         Decimal  @default(0) @db.Decimal(12, 2) @map("valor_salario")
+  diaSalario           Int      @default(5) @map("dia_salario")
+  valorVa              Decimal  @default(0) @db.Decimal(12, 2) @map("valor_va")
+  diaVa                Int      @default(5) @map("dia_va")
+  valorVr              Decimal  @default(0) @db.Decimal(12, 2) @map("valor_vr")
+  diaVr                Int      @default(5) @map("dia_vr")
+  valorVt              Decimal  @default(0) @db.Decimal(12, 2) @map("valor_vt")
+  diaVt                Int      @default(5) @map("dia_vt")
+  diasIntervaloVendaVt Int      @default(30) @map("dias_intervalo_venda_vt")
+  tema                 Tema     @default(CLARO)
+  gamificacaoAtiva     Boolean  @default(true) @map("gamificacao_ativa")
+  googleCalendarAtivo  Boolean  @default(false) @map("google_calendar_ativo")
+  tokensGoogle         Json?    @map("tokens_google") // criptografado em repouso
+  limiteGastos         Decimal? @db.Decimal(12, 2) @map("limite_gastos")
+  criadoEm             DateTime @default(now()) @map("criado_em")
+  atualizadoEm         DateTime @updatedAt @map("atualizado_em")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
-  @@map("user_settings")
+  @@map("configuracoes_usuario")
 }
 
 // ==========================================
-// REFRESH TOKENS
+// TOKENS DE RENOVAÇÃO
 // ==========================================
 
-model RefreshToken {
-  id        String    @id @default(cuid())
-  userId    String    @map("user_id")
-  token     String    @unique
-  expiresAt DateTime  @map("expires_at")
-  isRevoked Boolean   @default(false) @map("is_revoked")
-  createdAt DateTime  @default(now()) @map("created_at")
-  revokedAt DateTime? @map("revoked_at")
+model TokenRenovacao {
+  id         String    @id @default(cuid())
+  usuarioId  String    @map("usuario_id")
+  token      String    @unique
+  expiraEm   DateTime  @map("expira_em")
+  revogado   Boolean   @default(false)
+  criadoEm   DateTime  @default(now()) @map("criado_em")
+  revogadoEm DateTime? @map("revogado_em")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
-  @@map("refresh_tokens")
+  @@index([usuarioId])
+  @@index([expiraEm])
+  @@map("tokens_renovacao")
 }
 
 // ==========================================
-// CATEGORIES
+// CATEGORIAS
 // ==========================================
 
-model Category {
-  id        String       @id @default(cuid())
-  name      String
-  icon      String?
-  type      CategoryType
-  isDefault Boolean      @default(false) @map("is_default")
-  userId    String?      @map("user_id")
+model Categoria {
+  id        String        @id @default(cuid())
+  nome      String        @db.VarChar(60)
+  icone     String?       @db.VarChar(40)
+  cor       String        @default("#7C3AED") @db.VarChar(7) // hex color (#RRGGBB)
+  tipo      TipoCategoria
+  padrao    Boolean       @default(false)
+  usuarioId String?       @map("usuario_id")
+  criadoEm  DateTime      @default(now()) @map("criado_em")
 
-  user         User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transactions Transaction[]
+  usuario        Usuario?        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  transacoes     Transacao[]
+  despesasViagem DespesaViagem[]
 
-  @@map("categories")
+  @@unique([usuarioId, nome, tipo])
+  @@index([usuarioId])
+  @@index([tipo])
+  @@map("categorias")
 }
 
 // ==========================================
-// TRANSACTIONS
+// TRANSAÇÕES
 // ==========================================
 
-model Transaction {
-  id             String          @id @default(cuid())
-  userId         String          @map("user_id")
-  categoryId     String          @map("category_id")
-  type           TransactionType
-  resource       ResourceType
-  amount         Float
-  description    String?
-  date           DateTime
-  isRecurring    Boolean         @default(false) @map("is_recurring")
-  recurrenceRule String?         @map("recurrence_rule")
-  createdAt      DateTime        @default(now()) @map("created_at")
+model Transacao {
+  id               String        @id @default(cuid())
+  usuarioId        String        @map("usuario_id")
+  categoriaId      String        @map("categoria_id")
+  tipo             TipoTransacao
+  recurso          TipoRecurso
+  valor            Decimal       @db.Decimal(12, 2)
+  descricao        String?       @db.VarChar(255)
+  data             DateTime
+  recorrente       Boolean       @default(false)
+  regraRecorrencia String?       @map("regra_recorrencia") // RFC 5545 (RRULE)
+  paiId            String?       @map("pai_id") // referência à transação "mãe" recorrente
+  criadoEm         DateTime      @default(now()) @map("criado_em")
+  atualizadoEm     DateTime      @updatedAt @map("atualizado_em")
 
-  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  category Category         @relation(fields: [categoryId], references: [id])
-  tags     TransactionTag[]
+  usuario   Usuario        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  categoria Categoria      @relation(fields: [categoriaId], references: [id])
+  pai       Transacao?     @relation("TransacoesFilhas", fields: [paiId], references: [id], onDelete: SetNull)
+  filhas    Transacao[]    @relation("TransacoesFilhas")
+  tags      TransacaoTag[]
 
-  @@map("transactions")
+  @@index([usuarioId, data(sort: Desc)])
+  @@index([usuarioId, categoriaId])
+  @@index([usuarioId, tipo])
+  @@index([usuarioId, recurso])
+  @@index([usuarioId, recorrente])
+  @@map("transacoes")
 }
 
 // ==========================================
@@ -169,168 +232,394 @@ model Transaction {
 // ==========================================
 
 model Tag {
-  id     String @id @default(cuid())
-  name   String
-  userId String @map("user_id")
+  id        String @id @default(cuid())
+  nome      String @db.VarChar(40)
+  usuarioId String @map("usuario_id")
 
-  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transactions TransactionTag[]
+  usuario    Usuario        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  transacoes TransacaoTag[]
 
+  @@unique([usuarioId, nome])
+  @@index([usuarioId])
   @@map("tags")
 }
 
-model TransactionTag {
-  transactionId String @map("transaction_id")
-  tagId         String @map("tag_id")
+model TransacaoTag {
+  transacaoId String @map("transacao_id")
+  tagId       String @map("tag_id")
 
-  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
-  tag         Tag         @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  transacao Transacao @relation(fields: [transacaoId], references: [id], onDelete: Cascade)
+  tag       Tag       @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
-  @@id([transactionId, tagId])
-  @@map("transaction_tags")
+  @@id([transacaoId, tagId])
+  @@index([tagId])
+  @@map("transacoes_tags")
 }
 
 // ==========================================
-// GOALS
+// METAS
 // ==========================================
 
-model Goal {
-  id            String     @id @default(cuid())
-  userId        String     @map("user_id")
-  name          String
-  targetAmount  Float      @map("target_amount")
-  currentAmount Float      @default(0) @map("current_amount")
-  deadline      DateTime
-  type          GoalType
-  status        GoalStatus @default(ACTIVE)
-  description   String?
-  createdAt     DateTime   @default(now()) @map("created_at")
+model Meta {
+  id           String     @id @default(cuid())
+  usuarioId    String     @map("usuario_id")
+  nome         String     @db.VarChar(100)
+  valorAlvo    Decimal    @db.Decimal(12, 2) @map("valor_alvo")
+  valorAtual   Decimal    @default(0) @db.Decimal(12, 2) @map("valor_atual")
+  prazo        DateTime
+  tipo         TipoMeta
+  status       StatusMeta @default(ATIVA)
+  descricao    String?    @db.VarChar(500)
+  concluidaEm  DateTime?  @map("concluida_em")
+  criadoEm     DateTime   @default(now()) @map("criado_em")
+  atualizadoEm DateTime   @updatedAt @map("atualizado_em")
 
-  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  contributions GoalContribution[]
-  trips         Trip[]
+  usuario Usuario      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  aportes AporteMeta[]
+  viagens Viagem[]
 
-  @@map("goals")
+  @@index([usuarioId, status])
+  @@index([usuarioId, prazo])
+  @@map("metas")
 }
 
-model GoalContribution {
-  id     String   @id @default(cuid())
-  goalId String   @map("goal_id")
-  amount Float
-  date   DateTime
+model AporteMeta {
+  id       String   @id @default(cuid())
+  metaId   String   @map("meta_id")
+  valor    Decimal  @db.Decimal(12, 2)
+  data     DateTime
+  criadoEm DateTime @default(now()) @map("criado_em")
 
-  goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  meta Meta @relation(fields: [metaId], references: [id], onDelete: Cascade)
 
-  @@map("goal_contributions")
-}
-
-// ==========================================
-// TRIPS
-// ==========================================
-
-model Trip {
-  id          String   @id @default(cuid())
-  userId      String   @map("user_id")
-  destination String
-  currency    String
-  plannedDate DateTime @map("planned_date")
-  goalId      String?  @map("goal_id")
-  createdAt   DateTime @default(now()) @map("created_at")
-
-  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  goal     Goal?         @relation(fields: [goalId], references: [id], onDelete: SetNull)
-  expenses TripExpense[]
-
-  @@map("trips")
-}
-
-model TripExpense {
-  id              String  @id @default(cuid())
-  tripId          String  @map("trip_id")
-  category        String
-  description     String?
-  estimatedAmount Float   @map("estimated_amount")
-
-  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
-
-  @@map("trip_expenses")
+  @@index([metaId, data(sort: Desc)])
+  @@map("aportes_meta")
 }
 
 // ==========================================
-// REMINDERS
+// VIAGENS
 // ==========================================
 
-model Reminder {
-  id            String   @id @default(cuid())
-  userId        String   @map("user_id")
-  title         String
-  amount        Float?
-  dueDate       DateTime @map("due_date")
-  advanceDays   Int      @default(1) @map("advance_days")
-  googleEventId String?  @map("google_event_id")
-  isSynced      Boolean  @default(false) @map("is_synced")
-  createdAt     DateTime @default(now()) @map("created_at")
+model Viagem {
+  id           String   @id @default(cuid())
+  usuarioId    String   @map("usuario_id")
+  destino      String   @db.VarChar(120)
+  moeda        String   @db.VarChar(3)
+  dataPrevista DateTime @map("data_prevista")
+  metaId       String?  @map("meta_id")
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  usuario  Usuario         @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  meta     Meta?           @relation(fields: [metaId], references: [id], onDelete: SetNull)
+  despesas DespesaViagem[]
 
-  @@map("reminders")
+  @@index([usuarioId, dataPrevista])
+  @@map("viagens")
+}
+
+model DespesaViagem {
+  id            String                 @id @default(cuid())
+  viagemId      String                 @map("viagem_id")
+  categoria     CategoriaDespesaViagem
+  categoriaId   String?                @map("categoria_id")
+  descricao     String?                @db.VarChar(255)
+  valorEstimado Decimal                @db.Decimal(12, 2) @map("valor_estimado")
+  criadoEm      DateTime               @default(now()) @map("criado_em")
+
+  viagem             Viagem     @relation(fields: [viagemId], references: [id], onDelete: Cascade)
+  categoriaVinculada Categoria? @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
+
+  @@index([viagemId])
+  @@map("despesas_viagem")
+}
+
+// ==========================================
+// MOEDAS FAVORITAS
+// ==========================================
+
+model MoedaFavorita {
+  id        String   @id @default(cuid())
+  usuarioId String   @map("usuario_id")
+  codigo    String   @db.VarChar(3) // USD, EUR, ARS...
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, codigo])
+  @@index([usuarioId])
+  @@map("moedas_favoritas")
+}
+
+// ==========================================
+// LEMBRETES
+// ==========================================
+
+model Lembrete {
+  id             String               @id @default(cuid())
+  usuarioId      String               @map("usuario_id")
+  titulo         String               @db.VarChar(120)
+  valor          Decimal?             @db.Decimal(12, 2)
+  dataVencimento DateTime             @map("data_vencimento")
+  antecedencia   AntecedenciaLembrete @default(UM_DIA)
+  googleEventId  String?              @map("google_event_id")
+  sincronizado   Boolean              @default(false)
+  criadoEm       DateTime             @default(now()) @map("criado_em")
+  atualizadoEm   DateTime             @updatedAt @map("atualizado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, dataVencimento])
+  @@index([sincronizado])
+  @@map("lembretes")
 }
 
 // ==========================================
 // VALE TRANSPORTE
 // ==========================================
 
-model VtSale {
-  id            String    @id @default(cuid())
-  userId        String    @map("user_id")
-  buyerName     String    @map("buyer_name")
-  saleDate      DateTime  @map("sale_date")
-  nominalValue  Float     @map("nominal_value")
-  receivedValue Float     @map("received_value")
-  nextSaleDate  DateTime? @map("next_sale_date")
+model VendaVt {
+  id               String    @id @default(cuid())
+  usuarioId        String    @map("usuario_id")
+  nomeComprador    String    @db.VarChar(120) @map("nome_comprador")
+  dataVenda        DateTime  @map("data_venda")
+  valorNominal     Decimal   @db.Decimal(12, 2) @map("valor_nominal")
+  valorRecebido    Decimal   @db.Decimal(12, 2) @map("valor_recebido")
+  proximaDataVenda DateTime? @map("proxima_data_venda")
+  criadoEm         DateTime  @default(now()) @map("criado_em")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
-  @@map("vt_sales")
+  @@index([usuarioId, dataVenda(sort: Desc)])
+  @@map("vendas_vt")
+}
+
+model UsoVt {
+  id               String   @id @default(cuid())
+  usuarioId        String   @map("usuario_id")
+  quantidade       Int
+  valorPorPassagem Decimal  @db.Decimal(10, 2) @map("valor_por_passagem")
+  data             DateTime
+  criadoEm         DateTime @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, data(sort: Desc)])
+  @@map("usos_vt")
 }
 
 // ==========================================
-// GAMIFICATION
+// GAMIFICAÇÃO
 // ==========================================
 
-model Streak {
-  id            String    @id @default(cuid())
-  userId        String    @unique @map("user_id")
-  currentStreak Int       @default(0) @map("current_streak")
-  longestStreak Int       @default(0) @map("longest_streak")
-  lastActivity  DateTime? @map("last_activity")
+model Sequencia {
+  id              String          @id @default(cuid())
+  usuarioId       String          @unique @map("usuario_id")
+  sequenciaAtual  Int             @default(0) @map("sequencia_atual")
+  maiorSequencia  Int             @default(0) @map("maior_sequencia")
+  xp              Int             @default(0)
+  nivel           NivelFinanceiro @default(INICIANTE)
+  ultimaAtividade DateTime?       @map("ultima_atividade")
+  atualizadoEm    DateTime        @updatedAt @map("atualizado_em")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
-  @@map("streaks")
+  @@map("sequencias")
 }
 
-model Achievement {
-  id          String @id @default(cuid())
-  name        String
-  description String
-  icon        String
-  criteria    String
+model Conquista {
+  id           String @id @default(cuid())
+  codigo       String @unique @db.VarChar(60) // identificador técnico (ex: PRIMEIRA_META)
+  nome         String @db.VarChar(100)
+  descricao    String @db.VarChar(255)
+  icone        String @db.VarChar(40)
+  criterio     Json // regras estruturadas
+  recompensaXp Int    @default(0) @map("recompensa_xp")
 
-  userAchievements UserAchievement[]
+  conquistasUsuario ConquistaUsuario[]
 
-  @@map("achievements")
+  @@map("conquistas")
 }
 
-model UserAchievement {
+model ConquistaUsuario {
+  id             String   @id @default(cuid())
+  usuarioId      String   @map("usuario_id")
+  conquistaId    String   @map("conquista_id")
+  desbloqueadaEm DateTime @default(now()) @map("desbloqueada_em")
+
+  usuario   Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  conquista Conquista @relation(fields: [conquistaId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, conquistaId])
+  @@index([usuarioId])
+  @@map("conquistas_usuario")
+}
+
+model DesafioMensal {
+  id          String    @id @default(cuid())
+  usuarioId   String    @map("usuario_id")
+  titulo      String    @db.VarChar(120)
+  descricao   String    @db.VarChar(500)
+  criterio    Json
+  mes         Int // 1-12
+  ano         Int
+  progresso   Decimal   @default(0) @db.Decimal(5, 2) // 0-100
+  concluido   Boolean   @default(false)
+  concluidoEm DateTime? @map("concluido_em")
+  criadoEm    DateTime  @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, mes, ano])
+  @@index([usuarioId])
+  @@map("desafios_mensais")
+}
+
+// ==========================================
+// IA / CHATBOT
+// ==========================================
+
+model MensagemChat {
+  id        String   @id @default(cuid())
+  usuarioId String   @map("usuario_id")
+  papel     String   @db.VarChar(20) // "user" | "assistant"
+  conteudo  String   @db.Text
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, criadoEm(sort: Desc)])
+  @@map("mensagens_chat")
+}
+
+model HistoricoScore {
+  id        String   @id @default(cuid())
+  usuarioId String   @map("usuario_id")
+  score     Int
+  detalhes  Json?
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, criadoEm(sort: Desc)])
+  @@map("historico_score")
+}
+
+// ==========================================
+// GRUPOS
+// ==========================================
+
+model Grupo {
   id            String   @id @default(cuid())
-  userId        String   @map("user_id")
-  achievementId String   @map("achievement_id")
-  unlockedAt    DateTime @default(now()) @map("unlocked_at")
+  nome          String   @db.VarChar(100)
+  descricao     String?  @db.VarChar(500)
+  codigoConvite String   @unique @map("codigo_convite")
+  criadorId     String   @map("criador_id")
+  criadoEm      DateTime @default(now()) @map("criado_em")
+  atualizadoEm  DateTime @updatedAt @map("atualizado_em")
 
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  criador   Usuario             @relation("CriadorGrupo", fields: [criadorId], references: [id], onDelete: Cascade)
+  membros   MembroGrupo[]
+  viagens   ViagemGrupo[]
+  metas     MetaGrupo[]
+  mensagens MensagemChatGrupo[]
 
-  @@unique([userId, achievementId])
-  @@map("user_achievements")
+  @@index([criadorId])
+  @@map("grupos")
+}
+
+model MembroGrupo {
+  id        String     @id @default(cuid())
+  grupoId   String     @map("grupo_id")
+  usuarioId String     @map("usuario_id")
+  papel     PapelGrupo @default(MEMBRO)
+  entrouEm  DateTime   @default(now()) @map("entrou_em")
+
+  grupo   Grupo   @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([grupoId, usuarioId])
+  @@index([usuarioId])
+  @@map("membros_grupo")
+}
+
+model ViagemGrupo {
+  id           String   @id @default(cuid())
+  grupoId      String   @map("grupo_id")
+  destino      String   @db.VarChar(120)
+  moeda        String   @db.VarChar(3)
+  dataPrevista DateTime @map("data_prevista")
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  grupo    Grupo                @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  despesas DespesaViagemGrupo[]
+
+  @@index([grupoId])
+  @@map("viagens_grupo")
+}
+
+model DespesaViagemGrupo {
+  id              String                 @id @default(cuid())
+  viagemGrupoId   String                 @map("viagem_grupo_id")
+  adicionadoPorId String                 @map("adicionado_por_id")
+  categoria       CategoriaDespesaViagem
+  descricao       String?                @db.VarChar(255)
+  valorEstimado   Decimal                @db.Decimal(12, 2) @map("valor_estimado")
+  criadoEm        DateTime               @default(now()) @map("criado_em")
+
+  viagem        ViagemGrupo @relation(fields: [viagemGrupoId], references: [id], onDelete: Cascade)
+  adicionadoPor Usuario     @relation(fields: [adicionadoPorId], references: [id], onDelete: Cascade)
+
+  @@index([viagemGrupoId])
+  @@map("despesas_viagem_grupo")
+}
+
+model MetaGrupo {
+  id           String     @id @default(cuid())
+  grupoId      String     @map("grupo_id")
+  nome         String     @db.VarChar(100)
+  valorAlvo    Decimal    @db.Decimal(12, 2) @map("valor_alvo")
+  valorAtual   Decimal    @default(0) @db.Decimal(12, 2) @map("valor_atual")
+  prazo        DateTime
+  status       StatusMeta @default(ATIVA)
+  descricao    String?    @db.VarChar(500)
+  criadoEm     DateTime   @default(now()) @map("criado_em")
+  atualizadoEm DateTime   @updatedAt @map("atualizado_em")
+
+  grupo   Grupo             @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  aportes AporteMetaGrupo[]
+
+  @@index([grupoId, status])
+  @@map("metas_grupo")
+}
+
+model AporteMetaGrupo {
+  id          String   @id @default(cuid())
+  metaGrupoId String   @map("meta_grupo_id")
+  usuarioId   String   @map("usuario_id")
+  valor       Decimal  @db.Decimal(12, 2)
+  data        DateTime
+  criadoEm    DateTime @default(now()) @map("criado_em")
+
+  meta    MetaGrupo @relation(fields: [metaGrupoId], references: [id], onDelete: Cascade)
+  usuario Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([metaGrupoId, data(sort: Desc)])
+  @@index([usuarioId])
+  @@map("aportes_meta_grupo")
+}
+
+model MensagemChatGrupo {
+  id        String   @id @default(cuid())
+  grupoId   String   @map("grupo_id")
+  usuarioId String   @map("usuario_id")
+  conteudo  String   @db.Text
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  grupo   Grupo   @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([grupoId, criadoEm(sort: Desc)])
+  @@map("mensagens_chat_grupo")
 }
