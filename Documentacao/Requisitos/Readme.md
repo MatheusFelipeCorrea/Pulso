@@ -32,6 +32,11 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | 🏠 Homepage | 4 | 0 |  |
 | 👥 Grupos | 15 | 0 |  |
 | ⚙️ Não Funcionais | 15 | 0 |  |
+| 📊 Orçamento Mensal | 6 | 0 |  |
+| 💸 Divisão de Despesas | 6 | 0 |  |
+| 📅 Calendário Financeiro | 5 | 0 |  |
+| 🤝 Dívidas Pessoais | 7 | 0 |  |
+| 🛒 Planejamento de Compra | 6 | 0 |  |
 
 ---
 
