@@ -8,9 +8,9 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 102 | 0 |  |
+| Requisitos Funcionais | 138  | 0 |  |
 | Requisitos Não Funcionais | 15 | 0 |  |
-| **Total** | **117** | **0** |  |
+| **Total** | **153** | **0** |  |
 
 ---
 
@@ -127,6 +127,8 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | - [ ] | RF-051 | O sistema deve contextualizar as respostas do chatbot com os dados reais do usuário | 🔴 Essencial |
 | - [ ] | RF-052 | O sistema deve limitar o chatbot a responder apenas sobre finanças, recusando perguntas fora do escopo | 🟡 Importante |
 | - [ ] | RF-053 | O sistema deve exibir histórico da conversa do chatbot na sessão atual | 🟢 Desejável |
+| - [ ] | RF-107 | O sistema deve gerar projeções futuras em 3 cenários (otimista, atual, pessimista) para 3, 6 e 12 meses | 🟡 Importante |
+| - [ ] | RF-108 | O sistema deve exibir em quanto tempo o usuário ficará negativo caso mantenha o ritmo atual de gastos | 🟡 Importante |
 
 ---
 
@@ -189,6 +191,8 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | - [ ] | RF-076 | O sistema deve permitir alternar entre tema claro e escuro | 🟡 Importante |
 | - [ ] | RF-077 | O sistema deve permitir o usuário excluir sua conta e todos os dados associados | 🔴 Essencial |
 | - [ ] | RF-078 | O sistema deve permitir ativar/desativar o módulo de gamificação | 🟡 Importante |
+| - [ ] | RF-103 | O sistema deve permitir selecionar o modo de uso: Estagiário, CLT ou Freelancer | 🔴 Essencial |
+| - [ ] | RF-104 | O sistema deve adaptar a interface e funcionalidades visíveis conforme o modo selecionado (ex: VT só aparece no modo Estagiário) | 🟡 Importante |
 
 ---
 
@@ -201,6 +205,8 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | - [ ] | RF-081 | O sistema deve atribuir um nível financeiro ao usuário (Iniciante → Consciente → Estrategista → Investidor) | 🟢 Desejável |
 | - [ ] | RF-082 | O sistema deve gerar desafios mensais personalizados (ex: "Gaste 10% menos em delivery") | 🟢 Desejável |
 | - [ ] | RF-083 | O sistema deve exibir um painel de conquistas desbloqueadas e pendentes | 🟡 Importante |
+| - [ ] | RF-105 | O sistema deve oferecer dicas educativas contextualizadas baseadas nos hábitos do usuário (módulo ativável/desativável) | 🟡 Importante |
+| - [ ] | RF-106 | O sistema deve oferecer quizzes financeiros semanais com XP como recompensa | 🟢 Desejável |
 
 ---
 
@@ -236,7 +242,61 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | - [ ] | RF-102 | O sistema deve permitir chat/mensagens dentro do grupo | 🟢 Desejável |
 
 ---
+## 📊 Módulo 14 — Orçamento Mensal
 
+| Status | Código | Requisito | Prioridade |
+|---|---|---|---|
+| - [ ] | RF-109 | O sistema deve permitir definir um limite mensal de gasto por categoria | 🔴 Essencial |
+| - [ ] | RF-110 | O sistema deve exibir barra de progresso do gasto atual vs limite definido por categoria | 🔴 Essencial |
+| - [ ] | RF-111 | O sistema deve alertar quando o gasto atingir 80% do limite de uma categoria | 🟡 Importante |
+| - [ ] | RF-112 | O sistema deve alertar quando o gasto estourar o limite de uma categoria | 🔴 Essencial |
+| - [ ] | RF-113 | O sistema deve permitir editar os limites de orçamento a qualquer momento | 🟡 Importante |
+| - [ ] | RF-114 | O sistema deve exibir um resumo visual de quanto ainda pode gastar por categoria no mês | 🔴 Essencial |
+---
+## 💸 Módulo 15 — Divisão de Despesas
+
+| Status | Código | Requisito | Prioridade |
+|---|---|---|---|
+| - [ ] | RF-115 | O sistema deve permitir registrar uma despesa compartilhada informando valor total e participantes | 🔴 Essencial |
+| - [ ] | RF-116 | O sistema deve calcular automaticamente quanto cada participante deve | 🔴 Essencial |
+| - [ ] | RF-117 | O sistema deve permitir divisão igualitária ou por valores personalizados | 🟡 Importante |
+| - [ ] | RF-118 | O sistema deve permitir marcar quem já pagou sua parte | 🔴 Essencial |
+| - [ ] | RF-119 | O sistema deve exibir saldo consolidado (quanto me devem vs quanto eu devo) | 🟡 Importante |
+| - [ ] | RF-120 | O sistema deve permitir enviar lembrete de cobrança para participantes do grupo | 🟢 Desejável |
+---
+## 📅 Módulo 16 — Calendário Financeiro
+
+| Status | Código | Requisito | Prioridade |
+|---|---|---|---|
+| - [ ] | RF-121 | O sistema deve exibir um calendário mensal visual com marcadores de transações por dia | 🔴 Essencial |
+| - [ ] | RF-122 | O sistema deve diferenciar visualmente dias com receitas (verde), despesas (vermelho) e ambos (roxo) | 🔴 Essencial |
+| - [ ] | RF-123 | O sistema deve exibir os dias de recebimento fixo (salário, VA, VR, VT) destacados no calendário | 🟡 Importante |
+| - [ ] | RF-124 | O sistema deve exibir vencimentos de contas/lembretes no calendário | 🟡 Importante |
+| - [ ] | RF-125 | O sistema deve permitir clicar em um dia para ver o detalhe das transações daquele dia | 🔴 Essencial |
+---
+## 🤝 Módulo 17 — Dívidas Pessoais
+
+| Status | Código | Requisito | Prioridade |
+|---|---|---|---|
+| - [ ] | RF-126 | O sistema deve permitir registrar um empréstimo feito a alguém (quem me deve) com valor, pessoa e data | 🔴 Essencial |
+| - [ ] | RF-127 | O sistema deve permitir registrar um empréstimo recebido de alguém (quem eu devo) com valor, pessoa e data | 🔴 Essencial |
+| - [ ] | RF-128 | O sistema deve permitir definir prazo de devolução para cada dívida | 🟡 Importante |
+| - [ ] | RF-129 | O sistema deve permitir marcar uma dívida como paga/devolvida | 🔴 Essencial |
+| - [ ] | RF-130 | O sistema deve exibir saldo consolidado: total que me devem vs total que eu devo | 🔴 Essencial |
+| - [ ] | RF-131 | O sistema deve exibir histórico completo de empréstimos (ativos e quitados) | 🟡 Importante |
+| - [ ] | RF-132 | O sistema deve alertar quando uma dívida estiver próxima do vencimento | 🟢 Desejável |
+---
+## 🛒 Módulo 18 — Planejamento de Compra
+
+| Status | Código | Requisito | Prioridade |
+|---|---|---|---|
+| - [ ] | RF-133 | O sistema deve permitir registrar um item desejado com nome, valor e prioridade | 🔴 Essencial |
+| - [ ] | RF-134 | O sistema deve calcular em quanto tempo o usuário poderá comprar o item baseado na sobra mensal atual | 🔴 Essencial |
+| - [ ] | RF-135 | O sistema deve simular cenários de compra à vista vs parcelado (com quantidade de parcelas) | 🟡 Importante |
+| - [ ] | RF-136 | O sistema deve alertar sobre o percentual da renda comprometido com parcelas | 🟡 Importante |
+| - [ ] | RF-137 | O sistema deve permitir vincular um planejamento de compra a uma meta financeira | 🟢 Desejável |
+| - [ ] | RF-138 | O sistema deve permitir marcar um item como "comprado" e registrar a transação automaticamente | 🟡 Importante |
+---
 ## ⚙️ Requisitos Não Funcionais
 
 | Status | Código | Requisito | Categoria | Prioridade |
