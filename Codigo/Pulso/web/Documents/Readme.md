@@ -1,6 +1,6 @@
 # 🌐 Web — Frontend
 
-Interface construída com **React + Vite** estilizada com **Tailwind CSS v4.2**, gerenciamento de estado global com **Redux Toolkit (Slices)** seguindo uma arquitetura baseada em **componentes, páginas e camadas de dados**.
+Interface construída com **React + Vite** estilizada com **Tailwind CSS v4.2**, gerenciamento de estado global com **Redux Toolkit (Slices)** e um **Design System próprio reutilizável** seguindo uma arquitetura baseada em **componentes, páginas e camadas de dados**.
 
 ---
 
@@ -8,13 +8,13 @@ Interface construída com **React + Vite** estilizada com **Tailwind CSS v4.2**,
 
 - [Tecnologias](#-tecnologias)
 - [Estrutura de Pastas](#-estrutura-de-pastas)
+- [Arquitetura em Camadas](#-arquitetura-em-camadas)
+- [Design System vs Projeto](#-design-system-vs-projeto)
 - [Descrição das Camadas](#-descrição-das-camadas)
 - [Fluxo de Dados](#-fluxo-de-dados)
 - [Rotas da Aplicação](#-rotas-da-aplicação)
-  - [Sidebar — Menus e Submenus](#️-sidebar--menus-e-submenus)
-  - [Modais](#-modais)
-  - [Componentes Flutuantes](#-componentes-flutuantes)
-  - [Contagem de Interfaces](#-contagem-de-interfaces)
+- [Sidebar — Menus e Submenus](#-sidebar--menus-e-submenus)
+- [Modais](#-modais)
 - [Como Rodar](#-como-rodar)
 - [Variáveis de Ambiente](#-variáveis-de-ambiente)
 
@@ -27,7 +27,6 @@ Interface construída com **React + Vite** estilizada com **Tailwind CSS v4.2**,
 | React 18 | Biblioteca de interface |
 | Vite | Bundler e servidor de desenvolvimento |
 | Tailwind CSS v4.2 | Estilização (CSS-first, plugin Vite) |
-| shadcn/ui | Componentes acessíveis e customizáveis |
 | React Router DOM v6 | Navegação entre páginas |
 | Redux Toolkit | Gerenciamento de estado global (slices) |
 | Axios | Requisições HTTP |
@@ -52,7 +51,6 @@ Pulso/web/
 ├── .gitignore
 ├── eslint.config.js
 ├── index.html
-├── package-lock.json
 ├── package.json
 ├── vite.config.js
 ├── Documents/
@@ -61,544 +59,508 @@ Pulso/web/
 │   ├── favicon.svg
 │   └── icons.svg
 └── src/
-├── main.jsx
-├── App.jsx
-├── assets/
-├── components/
-│   ├── ui/
-│   ├── layouts/
-│   └── features/
-├── pages/
-├── hooks/
-├── store/
-│   └── slices/
-├── services/
-├── schemas/
-├── utils/
-├── styles/
-└── tests/
-├── components/
-├── hooks/
-└── services/
+ ├── main.jsx
+ ├── App.jsx
+ │
+ ├── design-system/           ← 🎨 REUTILIZÁVEL (portável)
+ │   ├── components/
+ │   │   ├── inputs/
+ │   │   ├── selects/
+ │   │   ├── pickers/
+ │   │   ├── buttons/
+ │   │   ├── feedback/
+ │   │   ├── data-display/
+ │   │   ├── navigation/
+ │   │   ├── overlays/
+ │   │   ├── forms/
+ │   │   └── index.js
+ │   ├── hooks/
+ │   ├── utils/
+ │   ├── styles/
+ │   │   ├── tokens.css
+ │   │   ├── base.css
+ │   │   └── animations.css
+ │   └── README.md
+ │
+ ├── components/              ← 💼 ESPECÍFICO DO PULSO
+ │   ├── layouts/
+ │   │   ├── MainLayout/
+ │   │   ├── AuthLayout/
+ │   │   ├── Header/
+ │   │   ├── Sidebar/
+ │   │   └── Footer/
+ │   └── features/
+ │       ├── auth/
+ │       ├── dashboard/
+ │       ├── transactions/
+ │       ├── goals/
+ │       ├── trips/
+ │       ├── insights/
+ │       ├── chatbot/
+ │       ├── reminders/
+ │       ├── transport/
+ │       ├── reports/
+ │       ├── gamification/
+ │       ├── groups/
+ │       ├── budget/
+ │       ├── debts/
+ │       ├── split/
+ │       ├── purchase/
+ │       ├── calendar/
+ │       └── homepage/
+ │
+ ├── pages/
+ ├── hooks/                   ← hooks específicos do Pulso
+ ├── store/
+ │   └── slices/
+ ├── services/
+ ├── schemas/
+ ├── utils/                   ← utils específicos do Pulso
+ ├── styles/
+ │   └── globals.css          ← importa design-system + tema Pulso
+ └── tests/
+     ├── components/
+     ├── hooks/
+     └── services/
 ```
+
+---
+
+## 🏗️ Arquitetura em Camadas
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                        PAGES                             │
+│  Telas completas que compõem as rotas                    │
+└─────────────────────────┬───────────────────────────────┘
+                       ▼
+┌─────────────────────────────────────────────────────────┐
+│              COMPONENTS (features + layouts)              │
+│  Componentes de NEGÓCIO específicos do Pulso             │
+│  Importam do design-system para construir a UI           │
+└───────────┬─────────────────────────┬───────────────────┘
+         ▼                         ▼
+┌───────────────────────┐  ┌──────────────────────────────┐
+│    DESIGN SYSTEM      │  │      HOOKS + STORE           │
+│  Componentes puros    │  │  Lógica + Estado global      │
+│  Não conhecem Pulso   │  │  Conectam UI com dados       │
+│  Portáveis            │  │                              │
+└───────────────────────┘  └──────────────┬───────────────┘
+                                       ▼
+                        ┌──────────────────────────────┐
+                        │         SERVICES              │
+                        │  Comunicação HTTP (Axios)     │
+                        └──────────────┬───────────────┘
+                                       ▼
+                        ┌──────────────────────────────┐
+                        │         API BACKEND           │
+                        └──────────────────────────────┘
+```
+
+---
+
+## 🎨 Design System vs Projeto
+
+| Aspecto | 🎨 design-system/ | 💼 components/ |
+|---|---|---|
+| Conhece "Pulso"? | ❌ Não | ✅ Sim |
+| Importa de fora? | ❌ Nunca | ✅ Importa do design-system |
+| Acessa Redux? | ❌ Nunca | ✅ Sim |
+| Faz HTTP? | ❌ Nunca | ✅ Via hooks/services |
+| Recebe dados via? | Props | Props + Store + Hooks |
+| Cores via? | CSS Variables (--ds-*) | CSS Variables (definidas no tema Pulso) |
+| Portável? | ✅ Copia pra qualquer projeto | ❌ Específico do Pulso |
+
+**Import correto:**
+
+```jsx
+// ✅ Feature importa do design-system
+import { Button, InputMoney, Select, Modal } from '@/design-system/components'
+
+// ✅ Feature importa hooks do projeto
+import { useTransactions } from '@/hooks/useTransactions'
+
+// ❌ Design-system NUNCA importa do projeto
+// import { useAuth } from '@/hooks/useAuth'  ← PROIBIDO dentro de design-system
+```
+
 ---
 
 ## 📖 Descrição das Camadas
 
 ---
 
-### 📄 Arquivos da Raiz
+### 📁 `design-system/` — Componentes Reutilizáveis
 
-| Arquivo | Descrição |
+Biblioteca de UI genérica. Não sabe o que é "transação", "meta" ou "VT". Só sabe o que é "input", "botão", "modal". Pode ser copiada integralmente para qualquer outro projeto React + Tailwind.
+
+**Documentação completa:** Ver `design-system/README.md`
+
+**Categorias de componentes:**
+
+| Categoria | Componentes |
 |---|---|
-| `.env` | Variáveis de ambiente da aplicação. Nunca versionar |
-| `.env.example` | Modelo do .env para o time. Versionar |
-| `.gitignore` | Arquivos ignorados pelo git (node_modules, .env, dist, .vite) |
-| `eslint.config.js` | Regras de qualidade e padronização do código |
-| `index.html` | HTML base da aplicação. Ponto de montagem do React (#root) |
-| `package.json` | Dependências e scripts do projeto |
-| `vite.config.js` | Configuração do Vite: plugin React, Tailwind v4 (@tailwindcss/vite), aliases de importação, proxy para a API |
+| inputs/ | InputText, InputPassword, InputMoney, InputNumber, InputSearch, Textarea |
+| selects/ | Select, SelectSearch, MultiSelect, MultiSelectSearch, TagsInput |
+| pickers/ | DatePicker, DateRangePicker, MonthPicker, TimePicker |
+| buttons/ | Button, IconButton |
+| feedback/ | Toast, Alert, Spinner, Skeleton, EmptyState, ErrorState |
+| data-display/ | Badge, Avatar, ProgressBar, ProgressCircle, Table, Tooltip, Card |
+| navigation/ | Tabs, Breadcrumbs, Pagination |
+| overlays/ | Modal, Drawer, Dropdown |
+| forms/ | Toggle, Checkbox, Radio, FormField |
+
+**Hooks genéricos:** useTheme, useMediaQuery, useClickOutside, useDebounce, useLocalStorage, useKeyboard, useCopyToClipboard, useToggle
+
+**Utils genéricos:** cn (classnames), formatCurrency, formatDate, formatNumber
 
 ---
 
-### 📄 `src/main.jsx` — Ponto de entrada da aplicação
+### 📁 `components/layouts/` — Esqueletos Visuais
 
-Renderiza o App no DOM. Configura o Provider store (Redux). Configura o BrowserRouter (rotas). Importa o styles/globals.css.
+Layouts que envolvem as páginas. Específicos do Pulso. Usam componentes do design-system.
 
----
+**MainLayout/** — Header + Sidebar + Conteúdo + Footer. Todas as páginas logadas.
 
-### 📄 `src/App.jsx` — Componente raiz
+**AuthLayout/** — Tela limpa centralizada. Login, cadastro, recuperação.
 
-Chama o componente de rotas. Providers globais (toast, tema). Verifica autenticação inicial (refresh token).
+**Header/** — Logo, streak, score, avatar, toggle tema.
 
----
+**Sidebar/** — Menus com dropdown, tag de modo, colapsável, responsiva.
 
-### 📁 `assets/` — Arquivos estáticos
-
-Logos, banners, ilustrações (.png .jpg .svg). Logo do Pulso. Não colocar imagens que vêm de URL/API externa.
+**Footer/** — Versão, créditos.
 
 ---
 
-### 📁 `components/ui/` — Design system (shadcn/ui)
+### 📁 `components/features/` — Componentes de Negócio
 
-Componentes visuais genéricos estilizados com Tailwind v4. Recebem tudo via props. Reutilizáveis em qualquer parte do projeto. Não acessam store. Não fazem chamada de API.
+Organizados por domínio. Cada feature importa do design-system e adiciona lógica de negócio do Pulso.
 
-- **Button** — Variações: primary, secondary, danger, outline, ghost
-- **Input** — Campo de texto padrão
-- **Modal** — Janela modal reutilizável
-- **Select** — Campo de seleção (dropdown)
-- **Card** — Container visual com bordas e sombra
-- **Badge** — Etiqueta colorida (recurso, status de meta, categorias)
-- **Table** — Tabela de dados reutilizável
-- **Spinner** — Indicador de carregamento
-- **ProgressBar** — Barra de progresso (metas, score)
-- **Tooltip** — Dica flutuante ao passar o mouse
-
----
-
-### 📁 `components/layouts/` — Esqueletos visuais
-
-Podem acessar store (tema, user). Conhecem a estrutura da aplicação. Não são páginas completas.
-
-**MainLayout/** (MainLayout.jsx + MainLayout.styles.jsx) — Tela completa com navegação. Renderiza Header + Sidebar + conteúdo + Footer. Usado em todas as páginas logadas.
-
-**AuthLayout/** (AuthLayout.jsx + AuthLayout.styles.jsx) — Tela limpa sem menu lateral. Usado em /login, /register e /forgot-password.
-
-**Header/** (Header.jsx + Header.styles.jsx) — Cabeçalho da aplicação. Exibe logo Pulso, nome do usuário, score de saúde financeira, streak ativo, toggle de tema claro/escuro.
-
-**Sidebar/** (Sidebar.jsx + Sidebar.styles.jsx) — Navegação lateral. Links para todas as páginas. Destaca a rota ativa. Colapsável em telas menores.
-
-**Footer/** (Footer.jsx + Footer.styles.jsx) — Rodapé. Exibe versão do sistema e créditos.
+| Feature | Responsabilidade |
+|---|---|
+| auth/ | Login, cadastro, recuperação, Google OAuth |
+| dashboard/ | Cards de saldo, gráficos, resumos |
+| transactions/ | CRUD transações, filtros, recorrentes |
+| goals/ | CRUD metas, aportes, progresso |
+| trips/ | CRUD viagens, pretensões, conversor, câmbio |
+| insights/ | Resumo IA, score, projeções, alertas |
+| chatbot/ | Interface de chat com Gemini |
+| reminders/ | CRUD lembretes, Google Calendar |
+| transport/ | Gestão VT (saldo, vendas, uso) |
+| reports/ | Gráficos comparativos, export PDF/CSV |
+| gamification/ | Streak, conquistas, XP, desafios, quiz |
+| groups/ | CRUD grupos, membros, viagem/meta compartilhada |
+| budget/ | Orçamento mensal, limites por categoria |
+| debts/ | Dívidas pessoais (quem deve, quem eu devo) |
+| split/ | Divisão de despesas (rachas) |
+| purchase/ | Planejamento de compra, simulação parcelas |
+| calendar/ | Calendário financeiro + lembretes unificados |
+| homepage/ | Landing page (hero, features, CTA) |
 
 ---
 
-### 📁 `components/features/` — Componentes de negócio
-
-Organizados por domínio. Cada componente tem sua própria pasta com JSX e estilos separados.
-
-#### `features/auth/`
-
-**Login/** — Formulário de login. Campos: email e senha. Validação com React Hook Form + Zod. Dispatch: loginUser() async thunk.
-
-**Register/** — Formulário de cadastro. Campos: nome, email, senha, confirmação. Validação: senha mínima 8 chars, 1 número, 1 maiúscula.
-
-**ForgotPassword/** — Formulário de recuperação de senha. Campo: email. Envia link de redefinição.
-
-**Google/** — Botão "Entrar com Google". Redireciona para OAuth. Callback cria ou vincula conta.
-
-#### `features/dashboard/`
-
-**BalanceCards/** — Container dos cards de saldo. Exibe os 4 ResourceBalanceCards + total geral.
-
-**ResourceBalanceCard/** — Card individual por tipo de recurso. Tipos: Salário (roxo), VA (verde), VR (laranja), VT (azul). Exibe: recebido, gasto, saldo restante.
-
-**IncomeExpenseChart/** — Gráfico de barras: receitas vs despesas do mês. Cores: verde (receita) e vermelho (despesa). Recharts.
-
-**CategoryChart/** — Gráfico de pizza: distribuição de gastos por categoria. 8 cores da paleta. Tooltip com valor e percentual.
-
-**RecentTransactions/** — Lista das últimas 5-10 transações. Exibe: ícone, descrição, valor, data, badge de recurso.
-
-**GoalsProgress/** — Resumo das metas ativas (máx 3). Barra de progresso com percentual.
-
-**HealthScore/** — Score de saúde financeira (0-100). Gauge colorido (vermelho→amarelo→azul→verde→roxo). Gerado pela Gemini.
-
-**AlertsBanner/** — Alertas visuais no topo do dashboard. Tipos: gasto acima do limite, VA acabando, meta próxima.
-
-#### `features/transactions/`
-
-**TransactionForm/** — Formulário de nova receita ou despesa. Campos: valor, data, descrição, categoria, recurso (Salário/VA/VR/VT). Toggle receita/despesa. Checkbox recorrente. Validação: valor > 0, recurso obrigatório, não permitir alimentação com VT.
-
-**TransactionList/** — Lista paginada de todas as transações. Ordenação por data.
-
-**TransactionItem/** — Linha individual. Exibe: ícone, descrição, valor, data, badge recurso. Cor: verde (receita) ou vermelho (despesa). Ações: editar, excluir.
-
-**TransactionFilters/** — Barra de filtros: período, categoria, tipo, recurso. Campo de busca por descrição ou tag.
-
-**RecurringBadge/** — Badge indicando transação recorrente. Exibe frequência e ícone de repetição.
-
-#### `features/goals/`
-
-**GoalForm/** — Formulário de criação/edição de meta. Campos: nome, valor-alvo, prazo, descrição, tipo.
-
-**GoalCard/** — Card visual de uma meta. Exibe: nome, valor atual/alvo, prazo, tipo, barra de progresso. Ações: editar, pausar, concluir, excluir.
-
-**GoalList/** — Lista de todas as metas. Filtro: ativas, pausadas, concluídas.
-
-**GoalProgressBar/** — Barra de progresso visual. Cor: primary (em andamento), success (concluída). Exibe percentual e valor faltante.
-
-**ContributionForm/** — Formulário de aporte parcial. Campos: valor, data.
-
-#### `features/trips/`
-
-**TripForm/** — Formulário de criação/edição de viagem. Campos: destino, moeda local, data prevista. Opção de vincular a meta.
-
-**TripCard/** — Card visual de viagem planejada. Exibe: destino, data, moeda, total estimado em BRL, progresso da meta vinculada.
-
-**TripList/** — Lista de todas as viagens planejadas.
-
-**TripExpenseForm/** — Formulário de pretensão de gasto. Campos: categoria (transporte, hospedagem, alimentação, passeios, compras), descrição, valor estimado na moeda do destino.
-
-**TripExpenseList/** — Lista de pretensões dentro da viagem. Exibe total somado. Conversão automática para BRL.
-
-**CurrencyConverter/** — Conversor simples de moedas. Campos: valor, moeda origem, moeda destino. Resultado com cotação atual e horário. AwesomeAPI.
-
-**CurrencyChart/** — Gráfico de histórico de cotação. Período: 7d, 30d, 90d. Recharts.
-
-**FavoriteCurrencies/** — Lista de moedas favoritas. Acesso rápido. Botão adicionar/remover.
-
-#### `features/insights/`
-
-**MonthlySummary/** — Resumo mensal em linguagem natural (Gemini). Análise de receitas, despesas e padrões. Botão regenerar.
-
-**CategoryComparison/** — Comparativo de gastos por categoria vs mês anterior. Setas e percentual de variação.
-
-**SuggestionsList/** — Sugestões personalizadas de economia (Gemini). Mínimo 2 por mês.
-
-**PredictiveAlerts/** — Alertas preditivos baseados no ritmo de gasto. Ex: "No ritmo atual, seu VA acaba dia 22".
-
-**HealthScoreCard/** — Card detalhado do score (0-100). Breakdown dos critérios. Dicas para melhorar.
-
-#### `features/chatbot/`
-
-**ChatWindow/** — Janela do chatbot financeiro. Flutuante no canto inferior direito. Expandível/minimizável. Histórico da sessão.
-
-**ChatMessage/** — Balão individual. Tipos: usuário (direita, roxo) e bot (esquerda, cinza). Texto formatado.
-
-**ChatInput/** — Campo de pergunta. Botão enviar. Placeholder: "Pergunte ao Pulso...". Enter para enviar.
-
-#### `features/reminders/`
-
-**ReminderForm/** — Formulário de lembrete. Campos: título, valor, data de vencimento, antecedência (no dia, 1 dia, 3 dias).
-
-**ReminderList/** — Lista de lembretes. Ordenação por data de vencimento.
-
-**ReminderItem/** — Card individual. Exibe: título, valor, data, status de sincronização. Ações: editar, excluir.
-
-**GoogleCalendarConnect/** — Botão conectar/desconectar Google Calendar. Status: conectado (verde) ou desconectado (cinza). OAuth com consentimento explícito.
-
-#### `features/transport/`
-
-**VTBalanceCard/** — Card com saldo atual de VT. Exibe: recebido, usado, vendido, saldo restante. Cor: azul.
-
-**VTSaleForm/** — Formulário de venda de VT. Campos: comprador, data, valor nominal, valor recebido. Calcula diferença automaticamente.
-
-**VTSaleHistory/** — Tabela com histórico de vendas. Colunas: data, comprador, nominal, recebido, diferença. Totais acumulados.
-
-**VTUsageForm/** — Formulário de uso real do VT. Campos: quantidade de passagens, valor por passagem, data.
-
-**VTNextSaleCountdown/** — Contador regressivo para próxima venda. Barra de progresso. Intervalo configurável.
-
-#### `features/reports/`
-
-**MonthlyReport/** — Relatório mensal completo. Total receitas, despesas, saldo. Seletor de mês/ano.
-
-**CategoryPieChart/** — Gráfico de pizza por categoria. 8 cores da paleta. Tooltip com valor e percentual.
-
-**MonthComparisonChart/** — Gráfico de barras comparando até 6 meses.
-
-**BalanceEvolutionChart/** — Gráfico de linha: evolução do saldo. Cor: primary (roxo) com área translúcida.
-
-**ExportPDFButton/** — Gera PDF do relatório. @react-pdf/renderer.
-
-**ExportCSVButton/** — Exporta transações em CSV. PapaParse.
-
-#### `features/gamification/`
-
-**StreakCounter/** — Dias consecutivos de registro. Ícone de fogo. Cor: amarelo dourado. Conquista em 7, 30, 90 dias.
-
-**AchievementCard/** — Card de conquista. Estados: desbloqueada (roxo) ou bloqueada (cinza). Exibe: ícone, nome, descrição, data.
-
-**AchievementsList/** — Painel com todas as conquistas. Separação: desbloqueadas e pendentes. Progresso geral.
-
-**FinancialLevel/** — Nível financeiro: Iniciante → Consciente → Estrategista → Investidor. Barra de XP.
-
-**MonthlyChallenge/** — Desafio do mês gerado pela Gemini. Progresso visual com barra.
+### 📁 `pages/` — Telas da Aplicação
+
+Cada page monta uma tela completa usando components/features. Dispatcham actions do Redux. Gerenciam estado local quando necessário.
+
+| Página | Rota | Layout |
+|---|---|---|
+| Homepage.jsx | / | Próprio |
+| Login.jsx | /login | AuthLayout |
+| Register.jsx | /register | AuthLayout |
+| ForgotPassword.jsx | /forgot-password | AuthLayout |
+| ResetPassword.jsx | /reset-password/:token | AuthLayout |
+| VerifyEmail.jsx | /verify-email/:token | AuthLayout |
+| Dashboard.jsx | /dashboard | MainLayout |
+| Transactions.jsx | /transactions | MainLayout |
+| Budget.jsx | /budget | MainLayout |
+| Transport.jsx | /transport | MainLayout |
+| Calendar.jsx | /calendar | MainLayout |
+| Debts.jsx | /debts | MainLayout |
+| Split.jsx | /split | MainLayout |
+| Goals.jsx | /goals | MainLayout |
+| Trips.jsx | /trips | MainLayout |
+| TripDetail.jsx | /trips/:id | MainLayout |
+| Purchase.jsx | /purchase | MainLayout |
+| Groups.jsx | /groups | MainLayout |
+| GroupDetail.jsx | /groups/:id | MainLayout |
+| Reports.jsx | /reports | MainLayout |
+| Insights.jsx | /insights | MainLayout |
+| Chatbot.jsx | /chatbot | MainLayout |
+| Achievements.jsx | /achievements | MainLayout |
+| Profile.jsx | /profile | MainLayout |
+| Settings.jsx | /settings | MainLayout |
+| NotFound.jsx | * | — |
 
 ---
 
-### 📁 `pages/` — Telas da aplicação
+### 📁 `hooks/` — Lógica Reutilizável (Pulso)
 
-Montam a tela usando components/features. Dispatcham actions do Redux. Gerenciam estado local quando necessário. Não fazem fetch direto. Lógica complexa vai para hooks.
-
-| Página | Rota | Layout | Componentes usados |
-|---|---|---|---|
-| HomePage.jsx | / | Próprio | Hero, Features, HowItWorks, CTA, Footer |
-| Login.jsx | /login | AuthLayout | LoginForm, GoogleLoginButton |
-| Register.jsx | /register | AuthLayout | RegisterForm, GoogleLoginButton |
-| ForgotPassword.jsx | /forgot-password | AuthLayout | ForgotPasswordForm |
-| ResetPassword.jsx | /reset-password/:token | AuthLayout | ResetPasswordForm |
-| VerifyEmail.jsx | /verify-email/:token | AuthLayout | EmailVerificationFeedback |
-| Dashboard.jsx | /dashboard | MainLayout | BalanceCards, ResourceBalanceCard, IncomeExpenseChart, CategoryChart, RecentTransactions, GoalsProgress, HealthScore, AlertsBanner, StreakCounter |
-| Transactions.jsx | /transactions | MainLayout | TransactionForm, TransactionList, TransactionItem, TransactionFilters, RecurringBadge |
-| Goals.jsx | /goals | MainLayout | GoalForm, GoalCard, GoalList, GoalProgressBar, ContributionForm |
-| Trips.jsx | /trips | MainLayout | TripCard, TripList, CurrencyConverter, FavoriteCurrencies |
-| TripDetail.jsx | /trips/:id | MainLayout | TripExpenseForm, TripExpenseList, CurrencyChart, TripCard |
-| Insights.jsx | /insights | MainLayout | MonthlySummary, CategoryComparison, SuggestionsList, PredictiveAlerts, HealthScoreCard |
-| Reminders.jsx | /reminders | MainLayout | ReminderForm, ReminderList, ReminderItem, GoogleCalendarConnect |
-| Transport.jsx | /transport | MainLayout | VTBalanceCard, VTSaleForm, VTSaleHistory, VTUsageForm, VTNextSaleCountdown |
-| Reports.jsx | /reports | MainLayout | MonthlyReport, CategoryPieChart, MonthComparisonChart, BalanceEvolutionChart, ExportPDFButton, ExportCSVButton |
-| Profile.jsx | /profile | MainLayout | Edição de perfil, receitas fixas, preferências, exclusão de conta |
-| Groups.jsx | /groups | MainLayout | GroupCard, GroupList, GroupForm |
-| GroupDetail.jsx | /groups/:id | MainLayout | GroupMembers, GroupExpenses, InviteForm |
-| Achievements.jsx | /achievements | MainLayout | StreakCounter, AchievementsList, FinancialLevel, MonthlyChallenge |
-| NotFound.jsx | * | — | Página 404 |
-
----
-
-### 📁 `hooks/` — Lógica reutilizável
-
-Sempre começam com "use". Retornam dados e funções. Usam useAppSelector e useAppDispatch do Redux. Não renderizam JSX.
+Hooks específicos do projeto. Usam useAppSelector/useAppDispatch. Encapsulam operações de cada domínio.
 
 | Hook | Responsabilidade |
 |---|---|
-| useAuth.js | Verifica autenticação. Retorna: user, isAuthenticated, isLoading |
-| useTransactions.js | Operações de transações. Retorna: transactions, create, update, delete, filters |
-| useGoals.js | Operações de metas. Retorna: goals, create, update, contribute, pause, complete |
-| useTrips.js | Operações de viagens. Retorna: trips, create, update, addExpense, removeExpense |
-| useCurrency.js | Cotações e histórico. Retorna: rates, convert, history, favorites |
-| useInsights.js | Insights da Gemini. Retorna: summary, suggestions, alerts, score |
-| useChatbot.js | Conversa com chatbot. Retorna: messages, sendMessage, clearHistory |
-| useReminders.js | Operações de lembretes. Retorna: reminders, create, update, delete, syncStatus |
-| useTransport.js | Operações de VT. Retorna: balance, sales, registerSale, registerUsage, countdown |
-| useReports.js | Dados para relatórios. Retorna: monthlyData, categoryData, comparisonData |
-| useGamification.js | Dados de gamificação. Retorna: streak, achievements, level, challenge |
-| useTheme.js | Tema claro/escuro. Retorna: theme, toggleTheme. Persiste no localStorage |
+| useAuth.js | Autenticação, user, isAuthenticated |
+| useTransactions.js | CRUD transações, filtros |
+| useGoals.js | CRUD metas, aportes |
+| useTrips.js | CRUD viagens, pretensões |
+| useCurrency.js | Cotações, conversão, favoritas |
+| useInsights.js | Insights IA, score, projeções |
+| useChatbot.js | Mensagens do chatbot |
+| useReminders.js | CRUD lembretes, sync calendar |
+| useTransport.js | Saldo VT, vendas, uso |
+| useBudget.js | Limites por categoria |
+| useDebts.js | Dívidas pessoais |
+| useSplit.js | Divisão de despesas |
+| usePurchase.js | Planejamento de compra |
+| useReports.js | Dados de relatórios |
+| useGamification.js | Streak, conquistas, XP |
+| useGroups.js | CRUD grupos, membros |
 
 ---
 
-### 📁 `store/` — Estado global (Redux Toolkit)
-
-Dados que múltiplos componentes precisam. Persiste entre navegações. Async thunks chamam os services. Não colocar estado local de um componente só.
-
-**index.js** — configureStore com todos os reducers.
-
-**hooks.js** — useAppSelector e useAppDispatch tipados. Usar ESSES ao invés dos originais.
+### 📁 `store/` — Estado Global (Redux Toolkit)
 
 | Slice | Estado | Async Thunks |
 |---|---|---|
-| authSlice.js | user, accessToken, isAuthenticated, isLoading, error | loginUser, registerUser, logoutUser, refreshToken |
-| transactionSlice.js | transactions, filtros ativos | fetchTransactions, createTransaction, updateTransaction, deleteTransaction |
-| goalSlice.js | metas do usuário | fetchGoals, createGoal, updateGoal, contributeToGoal |
-| tripSlice.js | viagens e pretensões | fetchTrips, createTrip, addTripExpense |
-| insightSlice.js | insights e score | fetchInsights, fetchScore |
+| authSlice.js | user, token, isAuthenticated | loginUser, registerUser, logoutUser, refreshToken |
+| transactionSlice.js | transactions, filtros | fetchTransactions, createTransaction, updateTransaction, deleteTransaction |
+| goalSlice.js | metas | fetchGoals, createGoal, contributeToGoal |
+| tripSlice.js | viagens, pretensões | fetchTrips, createTrip, addTripExpense |
+| insightSlice.js | insights, score | fetchInsights, fetchScore |
 | reminderSlice.js | lembretes | fetchReminders, createReminder, syncCalendar |
-| transportSlice.js | dados de VT (saldo, vendas, uso) | fetchVTData, registerSale, registerUsage |
-| gamificationSlice.js | streak, conquistas, nível, desafio | fetchGamificationData |
-| themeSlice.js | tema (light/dark). Persiste no localStorage | toggleTheme, setTheme |
+| transportSlice.js | saldo VT, vendas, uso | fetchVTData, registerSale, registerUsage |
+| budgetSlice.js | limites por categoria | fetchBudget, updateLimits |
+| debtSlice.js | dívidas | fetchDebts, createDebt, markAsPaid |
+| splitSlice.js | divisões | fetchSplits, createSplit |
+| purchaseSlice.js | itens desejados | fetchItems, createItem |
+| gamificationSlice.js | streak, conquistas, XP | fetchGamificationData |
+| groupSlice.js | grupos, membros | fetchGroups, createGroup, joinGroup |
+| themeSlice.js | tema (light/dark) | toggleTheme, setTheme |
 
 ---
 
 ### 📁 `services/` — Comunicação HTTP
 
-Toda comunicação HTTP fica aqui. Retornam a promise diretamente. Chamados pelos async thunks dos slices. Não tratam loading/error. Não acessam store.
+Toda comunicação HTTP. Retornam promises. Chamados pelos async thunks dos slices.
 
-**api.js** — Instância axios com baseURL, interceptor de token JWT e refresh automático em 401.
+**api.js** — Instância Axios com baseURL, interceptor JWT e refresh automático em 401.
 
-| Service | Endpoints |
+| Service | Prefixo de rota |
 |---|---|
-| authService.js | POST /auth/login, POST /auth/register, GET /auth/verify, POST /auth/forgot-password, POST /auth/reset-password, POST /auth/refresh, POST /auth/logout, GET /auth/google/callback |
-| transactionService.js | GET /transactions, GET /transactions/:id, POST /transactions, PUT /transactions/:id, DELETE /transactions/:id, GET /transactions/recurring |
-| goalService.js | GET /goals, GET /goals/:id, POST /goals, PUT /goals/:id, DELETE /goals/:id, POST /goals/:id/contribute |
-| tripService.js | GET /trips, GET /trips/:id, POST /trips, PUT /trips/:id, DELETE /trips/:id, POST /trips/:id/expenses, DELETE /trips/:id/expenses/:eid |
-| insightService.js | GET /insights/summary, GET /insights/suggestions, GET /insights/alerts, GET /insights/score |
-| chatbotService.js | POST /chatbot/message |
-| reminderService.js | GET /reminders, POST /reminders, PUT /reminders/:id, DELETE /reminders/:id, POST /reminders/sync |
-| transportService.js | GET /transport, POST /transport/sales, POST /transport/usage, GET /transport/sales |
-| reportService.js | GET /reports/monthly, GET /reports/categories, GET /reports/comparison, GET /reports/evolution |
-| currencyService.js | GET /currency/rates, GET /currency/convert, GET /currency/history, GET /currency/favorites, POST /currency/favorites |
-| gamificationService.js | GET /gamification, GET /gamification/achievements, GET /gamification/challenge |
+| authService.js | /auth/* |
+| transactionService.js | /transactions/* |
+| goalService.js | /goals/* |
+| tripService.js | /trips/* |
+| insightService.js | /insights/* |
+| chatbotService.js | /chatbot/* |
+| reminderService.js | /reminders/* |
+| transportService.js | /transport/* |
+| budgetService.js | /budget/* |
+| debtService.js | /debts/* |
+| splitService.js | /split/* |
+| purchaseService.js | /purchase/* |
+| reportService.js | /reports/* |
+| currencyService.js | /currency/* |
+| gamificationService.js | /gamification/* |
+| groupService.js | /groups/* |
 
 ---
 
 ### 📁 `schemas/` — Validação com Zod
 
-Usados pelo React Hook Form (zodResolver). Validação no front ANTES de enviar pro back. O back TAMBÉM valida (defesa em profundidade).
+Validação no front ANTES de enviar pro back (defesa em profundidade).
 
-| Schema | Campos |
+| Schema | Campos validados |
 |---|---|
-| authSchemas.js | loginSchema (email, password), registerSchema (name, email, password, confirmPassword), forgotSchema (email) |
-| transactionSchemas.js | transactionSchema (amount, date, description, category, resource, type, isRecurring, frequency) |
-| goalSchemas.js | goalSchema (name, targetAmount, deadline, type, description), contributionSchema (amount, date) |
-| tripSchemas.js | tripSchema (destination, currency, plannedDate), tripExpenseSchema (category, description, estimatedAmount) |
-| reminderSchemas.js | reminderSchema (title, amount, dueDate, advanceDays) |
-| transportSchemas.js | vtSaleSchema (buyerName, saleDate, nominalValue, receivedValue), vtUsageSchema (quantity, valuePerTrip, date) |
+| authSchemas.js | login, register, forgot, reset |
+| transactionSchemas.js | create/edit transação |
+| goalSchemas.js | create/edit meta, aporte |
+| tripSchemas.js | create/edit viagem, pretensão |
+| reminderSchemas.js | create/edit lembrete |
+| transportSchemas.js | venda VT, uso VT |
+| budgetSchemas.js | limites de orçamento |
+| debtSchemas.js | novo empréstimo |
+| splitSchemas.js | nova divisão |
+| purchaseSchemas.js | novo item de compra |
+| groupSchemas.js | novo grupo, meta grupo |
 
 ---
 
-### 📁 `utils/` — Funções puras de utilidade
+### 📁 `styles/` — Estilos Globais
 
-Funções puras (mesmo input = mesmo output). Sem efeitos colaterais. Sem hooks, store ou chamadas HTTP.
+**globals.css:**
+```css
+/* Importa estilos do design system */
+@import "../design-system/styles/tokens.css";
+@import "../design-system/styles/base.css";
+@import "../design-system/styles/animations.css";
 
-**formatCurrency.js** — formatBRL(valor) → R$ 1.200,00 | formatUSD(valor) → $ 1,200.00 | formatGeneric(valor, moeda)
+/* Importa Tailwind */
+@import "tailwindcss";
 
-**formatDate.js** — formatDate → 22/04/2026 | formatDateTime → 22/04/2026 às 14:30 | formatRelative → "há 2 dias" | daysUntil → 12
+/* Tema do Pulso (sobrescreve tokens) */
+:root { /* cores light */ }
+.dark { /* cores dark */ }
 
-**constants.js** — ROUTES, RESOURCE_TYPES, GOAL_STATUS, CHART_COLORS, FINANCIAL_LEVELS
-
-**helpers.js** — calculatePercentage, getResourceColor, getScoreColor, truncateText
+/* Estilos específicos do Pulso (se necessário) */
+```
 
 ---
 
-### 📁 `styles/` — Estilos globais
+### 📁 `utils/` — Utilitários Específicos do Pulso
 
-**globals.css** — @import "tailwindcss". @theme com variáveis da paleta Vital Purple. Cores customizadas: primary, success, danger, warning, info. Dark mode via classe .dark. Fontes: Inter (sans), JetBrains Mono (mono).
+Funções que fazem sentido SÓ no contexto do Pulso (não são genéricas).
 
----
+| Função | Uso |
+|---|---|
+| constants.js | ROUTES, RESOURCE_TYPES, GOAL_STATUS, CHART_COLORS, FINANCIAL_LEVELS |
+| helpers.js | calculatePercentage, getResourceColor, getScoreColor |
+| validators.js | isValidVTSale, isCompatibleResource |
 
-### 📁 `tests/` — Testes unitários (Vitest + Testing Library)
-
-Cobertura mínima: 85%. Rodar com: npm test.
-
-- **tests/components/** — NomeComponente.spec.jsx. Testa: renderização, interação, props.
-- **tests/hooks/** — useNome.spec.js. Testa: retorno de dados, chamadas dispatch.
-- **tests/services/** — nomeService.spec.js. Testa: chamadas HTTP corretas, payloads.
+> Funções genéricas (formatCurrency, formatDate, cn) ficam em `design-system/utils/`
 
 ---
 
 ## 🔄 Fluxo de Dados
 
+```
 👤 Usuário interage com a tela
-│
-▼
-page / component (estilizado com Tailwind v4)
-│
-▼
-dispatch(asyncThunk) — ex: dispatch(fetchTransactions())
-│
-▼
-async thunk chama o service — ex: transactionService.getAll()
-│
-▼
-service (axios) faz a requisição HTTP
-│
-▼
-══════ HTTPS ══════
-/api/transactions
-══════ HTTPS ══════
-│
-▼
-async thunk resolve → slice atualiza o state
-│
-▼
-componente re-renderiza via useAppSelector(state => state.transactions)
+     │
+     ▼
+Page / Feature Component
+(usa componentes do design-system pra UI)
+(usa hooks do projeto pra lógica)
+     │
+     ▼
+dispatch(asyncThunk)
+     │
+     ▼
+Async thunk chama Service (Axios)
+     │
+     ▼
+═══════ HTTPS ═══════
+ /api/endpoint
+═══════ HTTPS ═══════
+     │
+     ▼
+Slice atualiza o state
+     │
+     ▼
+Componente re-renderiza via useAppSelector
+```
 
-Se token expirar (401): interceptor do axios detecta → tenta refresh automático → sucesso: repete requisição | falha: dispatch(logout) e redireciona para /login.
+Se token expirar (401): interceptor detecta → tenta refresh → sucesso: repete | falha: logout + redirect /login
 
 ---
 
 ## 🛣️ Rotas da Aplicação
 
-### 🔓 Públicas (sem autenticação)
-
-| Rota | Tela | Layout |
-|---|---|---|
-| `/` | Homepage (Landing Page) | Próprio |
-| `/login` | Login | AuthLayout |
-| `/register` | Cadastro | AuthLayout |
-| `/forgot-password` | Esqueci a Senha | AuthLayout |
-| `/reset-password/:token` | Redefinir Senha | AuthLayout |
-| `/verify-email/:token` | Verificar Email | AuthLayout |
-
-### 🔒 Privadas (autenticadas)
-
-| Rota | Tela | Tipo | CRUD? |
-|---|---|---|---|
-| `/dashboard` | Dashboard | Visualização | ❌ |
-| `/transactions` | Transações | Lista + Filtros | ✅ CRUD |
-| `/goals` | Metas | Lista + Cards | ✅ CRUD |
-| `/trips` | Viagens | Lista + Cards | ✅ CRUD |
-| `/trips/:id` | Detalhe da Viagem | Detalhe + Sub-CRUD | ✅ CRUD |
-| `/insights` | Insights IA | Visualização | ❌ |
-| `/reminders` | Lembretes | Lista | ✅ CRUD |
-| `/transport` | Vale Transporte | Dashboard + Lista | Parcial |
-| `/reports` | Relatórios | Visualização + Export | ❌ |
-| `/profile` | Perfil + Configurações | Formulário + Config | Parcial |
-| `/groups` | Grupos | Lista | ✅ CRUD |
-| `/groups/:id` | Detalhe do Grupo | Detalhe + Sub-CRUD | ✅ CRUD |
-| `/achievements` | Gamificação | Visualização | ❌ |
-
-### 🚫 Catch-all
+**Públicas (sem auth):**
 
 | Rota | Tela |
 |---|---|
-| `*` | 404 |
+| / | Homepage |
+| /login | Login |
+| /register | Cadastro |
+| /forgot-password | Esqueci a Senha |
+| /reset-password/:token | Redefinir Senha |
+| /verify-email/:token | Verificar Email |
 
----
+**Privadas (autenticadas):**
 
-### 🗂️ Sidebar — Menus e Submenus
-
-```
-┌──────────────────────────┐
-│                          │
-│  📊 Dashboard            │  ← link direto
-│                          │
-│  💰 Financeiro       ▾   │  ← dropdown
-│     💳 Transações        │
-│     🚌 Vale Transporte   │
-│     📈 Relatórios        │
-│                          │
-│  🎯 Planejamento     ▾   │  ← dropdown
-│     🎯 Metas             │
-│     🌍 Viagens           │
-│     📅 Lembretes         │
-│                          │
-│  🤖 Inteligência     ▾   │  ← dropdown
-│     🤖 Insights          │
-│                          │
-│  👥 Grupos               │  ← link direto
-│                          │
-│  ──────────              │
-│                          │
-│  👤 Perfil               │
-│  🚪 Sair                 │
-│                          │
-│     « ◁                  │
-└──────────────────────────┘
-```
-
-Colapsada (64px — só ícones):
-```
-┌────┐
-│ 📊 │
-│ 💰▾│
-│ 🎯▾│
-│ 🤖▾│
-│ 👥 │
-│ ── │
-│ 👤 │
-│ 🚪 │
-│ «  │
-└────┘
-```
-
----
-
-### 📦 Modais
-
-| # | Modal | Onde abre | Tipo |
-|---|---|---|---|
-| M1 | Nova/Editar Transação | Transações | Create/Edit |
-| M2 | Nova/Editar Meta | Metas | Create/Edit |
-| M3 | Aporte na Meta | Metas | Create |
-| M4 | Nova/Editar Viagem | Viagens | Create/Edit |
-| M5 | Nova Pretensão | Detalhe Viagem | Create/Edit |
-| M6 | Novo/Editar Lembrete | Lembretes | Create/Edit |
-| M7 | Registrar Venda VT | Vale Transporte | Create |
-| M8 | Registrar Uso VT | Vale Transporte | Create |
-| M9 | Novo Grupo | Grupos | Create |
-| M10 | Entrar no Grupo | Grupos | Action |
-| M11 | Convidar pro Grupo | Detalhe do Grupo | Action |
-| M12 | Editar Perfil | Perfil | Edit |
-| M13 | Alterar Senha | Perfil | Edit |
-
----
-
-### 💬 Componentes Flutuantes
-
-| # | Componente | Onde aparece |
-|---|---|---|
-| F1 | Chatbot | Todas as telas privadas (canto inferior direito) |
-
----
-
-### 📊 Contagem de Interfaces
-
-| Categoria | Quantidade |
+| Rota | Tela |
 |---|---|
-| 🔓 Telas Públicas | 6 |
-| 🔒 Telas Privadas | 14 |
-| 📦 Modais | 13 |
-| 💬 Flutuantes | 1 |
-| **TOTAL** | **34** |
+| /dashboard | Dashboard |
+| /transactions | Transações |
+| /budget | Orçamento Mensal |
+| /transport | Vale Transporte |
+| /calendar | Calendário + Lembretes |
+| /debts | Dívidas Pessoais |
+| /split | Divisão de Despesas |
+| /goals | Metas Financeiras |
+| /trips | Viagens e Moedas |
+| /trips/:id | Detalhe da Viagem |
+| /purchase | Planejamento de Compra |
+| /groups | Grupos |
+| /groups/:id | Detalhe do Grupo |
+| /reports | Relatórios |
+| /insights | Insights IA |
+| /chatbot | Chatbot |
+| /achievements | Gamificação |
+| /profile | Perfil |
+| /settings | Configurações |
+| * | 404 |
 
-**CRUDs completos:** Transações, Metas, Viagens (+ Pretensões), Lembretes, Grupos (+ Membros), VT (create vendas/uso + read)
+---
 
-**Visualizações (sem CRUD):** Dashboard, Insights, Relatórios, Gamificação, Homepage
+## 🗂️ Sidebar — Menus e Submenus
+
+```
+📊 Dashboard
+
+💰 Financeiro ▾
+💳 Transações
+📊 Orçamento Mensal
+🚌 Vale Transporte
+📅 Calendário Financeiro
+🤝 Dívidas
+💸 Divisão de Despesas
+
+🎯 Planejamento & Metas ▾
+🎯 Metas Financeiras
+🌍 Viagens e Moedas
+🛒 Planejamento de Compra
+👥 Grupos
+
+🧠 Inteligência & Relatórios ▾
+📈 Relatórios
+🤖 Insights
+💬 Chatbot
+🎮 Gamificação
+
+────────
+👤 Perfil
+⚙️ Configurações
+🚪 Sair
+```
+
+---
+
+## 📦 Modais
+
+| Modal | Onde abre |
+|---|---|
+| Nova/Editar Transação | Transações |
+| Nova/Editar Meta | Metas |
+| Aporte na Meta | Metas |
+| Nova/Editar Viagem | Viagens |
+| Nova Pretensão | Detalhe Viagem |
+| Observação Viagem | Detalhe Viagem |
+| Novo/Editar Lembrete | Calendário |
+| Registrar Venda VT | Vale Transporte |
+| Registrar Uso VT | Vale Transporte |
+| Novo Grupo | Grupos |
+| Entrar no Grupo | Grupos |
+| Convidar pro Grupo | Detalhe Grupo |
+| Meta do Grupo | Detalhe Grupo |
+| Aporte Meta Grupo | Detalhe Grupo |
+| Nova Divisão | Divisão Despesas |
+| Lembrete Cobrança | Divisão Despesas |
+| Nova Dívida | Dívidas |
+| Novo Item Compra | Planejamento Compra |
+| Vincular Meta | Planejamento Compra |
+| Editar Limites | Orçamento |
+| Quiz Financeiro | Gamificação |
+| Alterar Senha | Perfil |
+| Sessões Ativas | Perfil |
+| Confirmar Exclusão | Global (genérico) |
 
 ---
 
 ## ▶️ Como Rodar
 
+```bash
 # Instalar dependências
 npm install
 
@@ -609,14 +571,15 @@ cp .env.example .env
 npm run dev
 # → http://localhost:5173
 
-# Gerar build de produção
+# Build de produção
 npm run build
 
-# Rodar os testes
+# Testes
 npm test
 
-# Rodar o lint
+# Lint
 npm run lint
+```
 
 ---
 
@@ -624,19 +587,19 @@ npm run lint
 
 | Script | Descrição |
 |---|---|
-| `npm run dev` | Desenvolvimento com hot reload |
-| `npm run build` | Build de produção |
-| `npm run preview` | Preview do build |
-| `npm test` | Testes unitários (Vitest) |
-| `npm run lint` | Lint (ESLint) |
+| npm run dev | Desenvolvimento com hot reload |
+| npm run build | Build de produção |
+| npm run preview | Preview do build |
+| npm test | Testes unitários (Vitest) |
+| npm run lint | Lint (ESLint) |
 
 ---
 
 ## 🔑 Variáveis de Ambiente
 
-Copie o `.env.example` e crie seu `.env`:
-
-cp .env.example .env
-
+```env
 VITE_API_URL=http://localhost:3333/api
-VITE_GOOGLE_CLIENT_ID=seu_client_id_aqui
+VITE_GOOGLE_CLIENT_ID=seu_client_id.apps.googleusercontent.com
+`
+
+---
