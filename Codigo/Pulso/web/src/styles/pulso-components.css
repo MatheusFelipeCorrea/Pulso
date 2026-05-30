@@ -1,0 +1,297 @@
+/**
+ * Pulso-specific component tokens and styles
+ * (ResourceCard, NotificationPanel)
+ */
+
+:root {
+  --ds-resource-va: #059669;
+  --ds-resource-vr: #EA580C;
+  --ds-resource-vt: #2563EB;
+
+  --ds-notification-grupo: #06B6D4;
+  --ds-notification-divida: #F97316;
+  --ds-notification-insight: #8B5CF6;
+}
+
+.dark {
+  --ds-resource-va: #34D399;
+  --ds-resource-vr: #FB923C;
+  --ds-resource-vt: #60A5FA;
+
+  --ds-notification-grupo: #22D3EE;
+  --ds-notification-divida: #FB923C;
+  --ds-notification-insight: #C4B5FD;
+}
+
+/* ── ResourceCard ───────────────────────────────────────────── */
+
+.pulso-resource-card {
+  --pulso-resource-color: var(--ds-color-primary);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--ds-space-6);
+  border-radius: var(--ds-radius-xl);
+  background: var(--ds-color-card-bg);
+  border: 1px solid color-mix(in srgb, var(--pulso-resource-color) 22%, var(--ds-color-border));
+  box-shadow: var(--ds-shadow-sm);
+  min-width: 0;
+  transition: background var(--ds-transition-fast), border-color var(--ds-transition-fast),
+    box-shadow var(--ds-transition-fast);
+}
+
+.dark .pulso-resource-card {
+  box-shadow: none;
+}
+
+.pulso-resource-card--interactive {
+  cursor: pointer;
+}
+
+.pulso-resource-card--interactive:hover {
+  background: var(--ds-color-hover);
+  border-color: color-mix(in srgb, var(--pulso-resource-color) 35%, var(--ds-color-border));
+}
+
+.pulso-resource-card--filled {
+  border: none;
+  background: linear-gradient(
+    135deg,
+    var(--ds-color-primary) 0%,
+    var(--ds-color-primary-dark) 100%
+  );
+  box-shadow: var(--ds-shadow-md);
+}
+
+.pulso-resource-card--filled .pulso-resource-card__label,
+.pulso-resource-card--filled .pulso-resource-card__subtitle-text {
+  color: color-mix(in srgb, white 75%, transparent);
+}
+
+.pulso-resource-card--filled .pulso-resource-card__value {
+  color: #fff;
+}
+
+.pulso-resource-card--filled .pulso-resource-card__icon-wrap {
+  background: color-mix(in srgb, white 18%, transparent);
+  color: #fff;
+}
+
+.pulso-resource-card__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--ds-radius-md);
+  background: color-mix(in srgb, var(--pulso-resource-color) 15%, transparent);
+  color: var(--pulso-resource-color);
+  flex-shrink: 0;
+}
+
+.pulso-resource-card__label {
+  margin: var(--ds-space-4) 0 0;
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-color-text-secondary);
+  line-height: var(--ds-line-height-tight);
+}
+
+.pulso-resource-card__value {
+  margin: var(--ds-space-2) 0 0;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: var(--ds-font-weight-bold);
+  color: var(--pulso-resource-color);
+  line-height: var(--ds-line-height-tight);
+}
+
+.pulso-resource-card__subtitle {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-space-2);
+  margin-top: var(--ds-space-2);
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-color-text-secondary);
+  line-height: var(--ds-line-height-normal);
+}
+
+.pulso-resource-card__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--ds-radius-full);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.pulso-resource-card__dot[data-dot='available'],
+.pulso-resource-card__dot[data-dot='growth'] {
+  background: var(--ds-color-success);
+}
+
+.pulso-resource-card__dot[data-dot='suggestion'] {
+  background: var(--ds-color-warning);
+}
+
+.pulso-resource-card__subtitle-text--growth {
+  color: var(--ds-color-success);
+}
+
+.pulso-resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--ds-space-4);
+}
+
+@media (min-width: 1024px) {
+  .pulso-resources-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* ── NotificationPanel ─────────────────────────────────────── */
+
+.pulso-notification-panel {
+  min-width: 360px;
+  max-width: 440px;
+  background: var(--ds-color-modal-bg);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-shadow-lg);
+  border: 1px solid var(--ds-color-border);
+  overflow: hidden;
+}
+
+.pulso-notification-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-4) var(--ds-space-5);
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.pulso-notification-panel__title {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  font-size: var(--ds-font-size-md);
+  font-weight: var(--ds-font-weight-bold);
+  color: var(--ds-color-text);
+}
+
+.pulso-notification-panel__title-icon {
+  color: var(--ds-color-primary);
+  flex-shrink: 0;
+}
+
+.pulso-notification-panel__mark-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-color-primary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pulso-notification-panel__mark-all:hover {
+  opacity: 0.85;
+}
+
+.pulso-notification-panel__mark-all:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pulso-notification-panel__list {
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.pulso-notification-item {
+  --pulso-notification-color: var(--ds-color-primary);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-space-3);
+  min-height: 64px;
+  padding: 12px var(--ds-space-4);
+  border-left: 4px solid var(--pulso-notification-color);
+  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border) 50%, transparent);
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--ds-transition-fast);
+}
+
+.pulso-notification-item:last-child {
+  border-bottom: none;
+}
+
+.pulso-notification-item:hover {
+  background: var(--ds-color-hover);
+}
+
+.pulso-notification-item--unread {
+  background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+}
+
+.pulso-notification-item--unread:hover {
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-color-hover));
+}
+
+.pulso-notification-item__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--ds-radius-full);
+  background: color-mix(in srgb, var(--pulso-notification-color) 10%, transparent);
+  color: var(--pulso-notification-color);
+  flex-shrink: 0;
+}
+
+.pulso-notification-item__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pulso-notification-item__title {
+  font-size: 12px;
+  font-weight: var(--ds-font-weight-bold);
+  color: var(--ds-color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: var(--ds-line-height-tight);
+}
+
+.pulso-notification-item__description {
+  font-size: 13px;
+  color: var(--ds-color-text-secondary);
+  line-height: var(--ds-line-height-normal);
+}
+
+.pulso-notification-item__time {
+  font-size: 11px;
+  color: var(--ds-color-text-secondary);
+  flex-shrink: 0;
+  padding-top: 2px;
+  white-space: nowrap;
+}
+
+.pulso-notification-panel__empty {
+  padding: var(--ds-space-8) var(--ds-space-5);
+}
+
+.pulso-notification-panel__loading {
+  padding: var(--ds-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+}

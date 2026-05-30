@@ -23,7 +23,8 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | 💳 Transações | 11 | 0 |  |
 | 🎯 Metas | 7 | 0 |  |
 | 🌍 Viagens e Moedas | 11 | 0 |  |
-| 🤖 Insights e Chatbot | 10 | 0 |  |
+| 🤖 Insights | 7 | 0 |  |
+| 💬 Chatbot | 5 | 0 |  |
 | 📅 Lembretes | 5 | 0 |  |
 | 🚌 Vale Transporte | 8 | 0 |  |
 | 📈 Relatórios | 6 | 0 |  |
@@ -118,7 +119,9 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 ---
 
-## 🤖 Módulo 06 — Insights Inteligentes e Chatbot
+## 🤖 Módulo 06 — Inteligência (Insights e Chatbot)
+
+### Insights
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
@@ -127,13 +130,18 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | - [ ] | RF-046 | O sistema deve gerar sugestões personalizadas de economia com base no perfil e histórico | 🟡 Importante |
 | - [ ] | RF-047 | O sistema deve gerar alertas preditivos (ex: "No ritmo atual, seu VA acaba dia 22") | 🟡 Importante |
 | - [ ] | RF-048 | O sistema deve gerar um score de saúde financeira (0-100) com base nos hábitos do usuário | 🟡 Importante |
+| - [ ] | RF-107 | O sistema deve gerar projeções futuras em 3 cenários (otimista, atual, pessimista) para 3, 6 e 12 meses | 🟡 Importante |
+| - [ ] | RF-108 | O sistema deve exibir em quanto tempo o usuário ficará negativo caso mantenha o ritmo atual de gastos | 🟡 Importante |
+
+### Chatbot
+
+| Status | Código | Requisito | Prioridade |
+|---|---|---|---|
 | - [ ] | RF-049 | O sistema deve disponibilizar um chatbot financeiro acessível via interface de chat | 🔴 Essencial |
 | - [ ] | RF-050 | O sistema deve permitir perguntas em linguagem natural sobre transações, saldos, metas e categorias | 🔴 Essencial |
 | - [ ] | RF-051 | O sistema deve contextualizar as respostas do chatbot com os dados reais do usuário | 🔴 Essencial |
 | - [ ] | RF-052 | O sistema deve limitar o chatbot a responder apenas sobre finanças, recusando perguntas fora do escopo | 🟡 Importante |
 | - [ ] | RF-053 | O sistema deve exibir histórico da conversa do chatbot na sessão atual | 🟢 Desejável |
-| - [ ] | RF-107 | O sistema deve gerar projeções futuras em 3 cenários (otimista, atual, pessimista) para 3, 6 e 12 meses | 🟡 Importante |
-| - [ ] | RF-108 | O sistema deve exibir em quanto tempo o usuário ficará negativo caso mantenha o ritmo atual de gastos | 🟡 Importante |
 
 ---
 

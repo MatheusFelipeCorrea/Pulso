@@ -1,0 +1,239 @@
+/**
+ * Design System Tokens
+ * 
+ * Variáveis CSS centralizadas para temas light/dark.
+ * Todos os componentes do design-system devem usar essas variáveis.
+ * 
+ * Uso: var(--ds-color-primary)
+ * Tema escuro: Adicionar classe .dark no <html>
+ */
+
+:root {
+  /* ============================================================
+     CORES PRINCIPAIS
+     ============================================================ */
+  --ds-color-primary: #7C3AED;
+  --ds-color-primary-light: #A78BFA;
+  --ds-color-primary-dark: #5B21B6;
+  --ds-color-primary-range: color-mix(in srgb, var(--ds-color-primary-light) 35%, transparent);
+
+  /* ============================================================
+     BACKGROUND E SUPERFÍCIE
+     ============================================================ */
+  --ds-color-background: #FAFAFA;
+  --ds-color-surface: #F4F4F5;
+  --ds-color-surface-elevated: #E4E4E7;
+  --ds-color-card-bg: #FFFFFF;
+
+  /* ============================================================
+     TEXTO
+     ============================================================ */
+  --ds-color-text: #18181B;
+  --ds-color-text-secondary: #71717A;
+
+  /* ============================================================
+     BORDAS
+     ============================================================ */
+  --ds-color-border: #E4E4E7;
+
+  /* ============================================================
+     INPUTS E FORMULÁRIOS
+     ============================================================ */
+  --ds-color-input-bg: #FFFFFF;
+  --ds-color-input-border: #E4E4E7;
+  --ds-color-input-focus: #7C3AED;
+  --ds-color-placeholder: #A1A1AA;
+  --ds-color-input-disabled: #F4F4F5;
+  --ds-color-hover: #F4F4F5;
+  --ds-color-textarea-bg: #FFFFFF;
+  --ds-color-textarea-border: #E4E4E7;
+  --ds-color-select-bg: #FFFFFF;
+  --ds-color-select-border: #E4E4E7;
+
+  /* ============================================================
+     SEMÂNTICAS
+     ============================================================ */
+  --ds-color-success: #10B981;
+  --ds-color-danger: #EF4444;
+  --ds-color-warning: #F59E0B;
+  --ds-color-info: #3B82F6;
+  --ds-color-cyan: #06B6D4;
+  --ds-color-orange: #F97316;
+
+  /* ============================================================
+     OVERLAY / MODAL / TOOLTIP
+     ============================================================ */
+  --ds-color-overlay: rgba(0, 0, 0, 0.4);
+  --ds-color-modal-bg: #FFFFFF;
+  --ds-color-tooltip-bg: #18181B;
+  --ds-color-tooltip-text: #FAFAFA;
+
+  /* ============================================================
+     COMPONENTES ESPECÍFICOS
+     ============================================================ */
+  --ds-color-skeleton-base: #E4E4E7;
+  --ds-color-skeleton-shimmer: #F4F4F5;
+  --ds-color-dropdown-bg: #FFFFFF;
+  --ds-color-dropdown-hover: #F4F4F5;
+
+  /* Toggle / Checkbox / Radio */
+  --ds-color-toggle-track-off: #E5E7EB;
+  --ds-color-toggle-border: #F3F4F6;
+  --ds-color-toggle-thumb-off: #FAFAFA;
+  --ds-color-toggle-thumb-on: #FAFAFA;
+  --ds-color-toggle-thumb-hover: #71717A;
+  --ds-color-control-border: #71717A;
+  --ds-color-picker-cell-hover: #F3E8FF;
+  --ds-color-empty-icon: var(--ds-color-primary);
+  --ds-color-progress-track: #ECECF2;
+  --ds-color-table-row-selected: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  --ds-color-error-surface: color-mix(in srgb, var(--ds-color-danger) 10%, transparent);
+  --ds-color-error-inline-bg: color-mix(in srgb, var(--ds-color-danger) 5%, transparent);
+  --ds-color-error-inline-border: color-mix(in srgb, var(--ds-color-danger) 30%, transparent);
+
+  /* ============================================================
+     ESPAÇAMENTOS
+     ============================================================ */
+  --ds-space-1: 4px;
+  --ds-space-2: 8px;
+  --ds-space-3: 12px;
+  --ds-space-4: 16px;
+  --ds-space-5: 20px;
+  --ds-space-6: 24px;
+  --ds-space-8: 32px;
+  --ds-space-10: 40px;
+  --ds-space-12: 48px;
+  --ds-space-16: 64px;
+
+  /* ============================================================
+     BORDER RADIUS
+     ============================================================ */
+  --ds-radius-sm: 4px;
+  --ds-radius-md: 8px;
+  --ds-radius-lg: 12px;
+  --ds-radius-xl: 16px;
+  --ds-radius-full: 999px;
+
+  /* ============================================================
+     TIPOGRAFIA
+     ============================================================ */
+  --ds-font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --ds-font-mono: 'Fira Code', 'Cascadia Code', 'Monaco', 'Courier New', monospace;
+
+  --ds-font-size-xs: 12px;
+  --ds-font-size-sm: 14px;
+  --ds-font-size-md: 16px;
+  --ds-font-size-lg: 18px;
+  --ds-font-size-xl: 24px;
+  --ds-font-size-2xl: 32px;
+
+  --ds-line-height-tight: 1.25;
+  --ds-line-height-normal: 1.5;
+  --ds-line-height-relaxed: 1.75;
+
+  --ds-font-weight-normal: 400;
+  --ds-font-weight-medium: 500;
+  --ds-font-weight-semibold: 600;
+  --ds-font-weight-bold: 700;
+
+  /* ============================================================
+     SOMBRAS
+     ============================================================ */
+  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --ds-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --ds-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+  --ds-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.2);
+
+  /* ============================================================
+     TRANSIÇÕES
+     ============================================================ */
+  --ds-transition-fast: 150ms ease;
+  --ds-transition-normal: 200ms ease;
+  --ds-transition-slow: 300ms ease;
+
+  /* ============================================================
+     Z-INDEX
+     ============================================================ */
+  --ds-z-dropdown: 100;
+  --ds-z-modal: 200;
+  --ds-z-toast: 300;
+  --ds-z-tooltip: 400;
+  --ds-z-overlay: 9999;
+}
+
+/* ============================================================
+   MODO ESCURO (.dark no <html>)
+   ============================================================ */
+.dark {
+  /* CORES PRINCIPAIS */
+  --ds-color-primary: #A78BFA;
+  --ds-color-primary-light: #C4B5FD;
+  --ds-color-primary-dark: #7C3AED;
+  --ds-color-primary-range: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+
+  /* BACKGROUND E SUPERFÍCIE */
+  --ds-color-background: #09090B;
+  --ds-color-surface: #18181B;
+  --ds-color-surface-elevated: #27272A;
+  --ds-color-card-bg: #18181B;
+
+  /* TEXTO */
+  --ds-color-text: #FAFAFA;
+  --ds-color-text-secondary: #A1A1AA;
+
+  /* BORDAS */
+  --ds-color-border: #27272A;
+
+  /* INPUTS E FORMULÁRIOS */
+  --ds-color-input-bg: #27272A;
+  --ds-color-input-border: #27272A;
+  --ds-color-input-focus: #7C3AED;
+  --ds-color-placeholder: #71717A;
+  --ds-color-input-disabled: #18181B;
+  --ds-color-hover: #27272A;
+  --ds-color-textarea-bg: #18181B;
+  --ds-color-textarea-border: #27272A;
+  --ds-color-select-bg: #27272A;
+  --ds-color-select-border: #27272A;
+
+  /* SEMÂNTICAS */
+  --ds-color-success: #34D399;
+  --ds-color-danger: #F87171;
+  --ds-color-warning: #FBBF24;
+  --ds-color-info: #60A5FA;
+  --ds-color-cyan: #22D3EE;
+  --ds-color-orange: #FB923C;
+
+  /* OVERLAY / MODAL / TOOLTIP */
+  --ds-color-overlay: rgba(0, 0, 0, 0.6);
+  --ds-color-modal-bg: #18181B;
+  --ds-color-tooltip-bg: #FAFAFA;
+  --ds-color-tooltip-text: #09090B;
+
+  /* COMPONENTES ESPECÍFICOS */
+  --ds-color-skeleton-base: #27272A;
+  --ds-color-skeleton-shimmer: #3F3F46;
+  --ds-color-dropdown-bg: #18181B;
+  --ds-color-dropdown-hover: #27272A;
+
+  /* Toggle / Checkbox / Radio */
+  --ds-color-toggle-track-off: #27272A;
+  --ds-color-toggle-border: #3F3F46;
+  --ds-color-toggle-thumb-off: #71717A;
+  --ds-color-toggle-thumb-on: #FAFAFA;
+  --ds-color-toggle-thumb-hover: #71717A;
+  --ds-color-control-border: #71717A;
+  --ds-color-picker-cell-hover: #27272A;
+  --ds-color-empty-icon: #71717A;
+  --ds-color-progress-track: #27272A;
+  --ds-color-table-row-selected: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+  --ds-color-error-surface: color-mix(in srgb, var(--ds-color-danger) 10%, transparent);
+  --ds-color-error-inline-bg: color-mix(in srgb, var(--ds-color-danger) 5%, transparent);
+  --ds-color-error-inline-border: color-mix(in srgb, var(--ds-color-danger) 30%, transparent);
+
+  /* SOMBRAS - remover no dark mode */
+  --ds-shadow-sm: none;
+  --ds-shadow-md: none;
+  --ds-shadow-lg: none;
+  --ds-shadow-xl: none;
+}

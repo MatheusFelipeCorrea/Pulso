@@ -1,0 +1,403 @@
+/**
+ * Design System Animations
+ * 
+ * Keyframes e classes utilitárias para animações consistentes.
+ * Usadas em Toasts, Modals, Dropdowns, Tooltips e transições de estado.
+ */
+
+/* ============================================================
+   KEYFRAMES - FADE
+   ============================================================ */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   KEYFRAMES - SLIDE
+   ============================================================ */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================================
+   KEYFRAMES - SCALE
+   ============================================================ */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scale-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* ============================================================
+   KEYFRAMES - SHAKE (para erros de validação)
+   ============================================================ */
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+/* ============================================================
+   KEYFRAMES - SPIN (para Spinner)
+   ============================================================ */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================================
+   KEYFRAMES - PULSE (para SpinnerDots)
+   ============================================================ */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+/* Animação específica para SpinnerDots (3 pontos pulsando em sequência) */
+@keyframes pulse-dot {
+  0%, 80%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* ============================================================
+   KEYFRAMES - TOAST (para notificações)
+   ============================================================ */
+@keyframes toast-enter {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes toast-exit {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20px) scale(0.95);
+  }
+}
+
+/* ============================================================
+   KEYFRAMES - SHIMMER (para Skeleton)
+   ============================================================ */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ============================================================
+   KEYFRAMES - BOUNCE (para notificações/toasts)
+   ============================================================ */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* ============================================================
+   CLASSES UTILITÁRIAS - FADE
+   ============================================================ */
+.animate-fade-in {
+  animation: fade-in var(--ds-transition-normal) ease;
+}
+
+.animate-fade-out {
+  animation: fade-out var(--ds-transition-normal) ease;
+}
+
+/* ============================================================
+   CLASSES UTILITÁRIAS - SLIDE
+   ============================================================ */
+.animate-slide-up {
+  animation: slide-up var(--ds-transition-normal) ease;
+}
+
+.animate-slide-down {
+  animation: slide-down var(--ds-transition-normal) ease;
+}
+
+.animate-slide-left {
+  animation: slide-left var(--ds-transition-normal) ease;
+}
+
+.animate-slide-right {
+  animation: slide-right var(--ds-transition-normal) ease;
+}
+
+/* ============================================================
+   CLASSES UTILITÁRIAS - SCALE
+   ============================================================ */
+.animate-scale-in {
+  animation: scale-in var(--ds-transition-normal) ease;
+}
+
+.animate-scale-out {
+  animation: scale-out var(--ds-transition-normal) ease;
+}
+
+/* ============================================================
+   CLASSES UTILITÁRIAS - SHAKE
+   ============================================================ */
+.animate-shake {
+  animation: shake 0.5s ease;
+}
+
+/* ============================================================
+   CLASSES UTILITÁRIAS - SPIN
+   ============================================================ */
+.animate-spin {
+  animation: spin 600ms linear infinite;
+}
+
+/* ============================================================
+   CLASSES UTILITÁRIAS - PULSE
+   ============================================================ */
+.animate-pulse {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+/* ============================================================
+   CLASSES UTILITÁRIAS - SHIMMER
+   ============================================================ */
+.animate-shimmer {
+  animation: shimmer 1.5s linear infinite;
+}
+
+/* ============================================================
+   CLASSES UTILITÁRIAS - BOUNCE
+   ============================================================ */
+.animate-bounce {
+  animation: bounce 0.5s ease;
+}
+
+/* ============================================================
+   CLASSES UTILITÁRIAS - TOAST
+   ============================================================ */
+.animate-toast-enter {
+  animation: toast-enter 200ms ease;
+}
+
+.animate-toast-exit {
+  animation: toast-exit 200ms ease;
+}
+
+/* ============================================================
+   DURAÇÃO CUSTOMIZADA
+   ============================================================ */
+.duration-fast {
+  animation-duration: var(--ds-transition-fast) !important;
+}
+
+.duration-normal {
+  animation-duration: var(--ds-transition-normal) !important;
+}
+
+.duration-slow {
+  animation-duration: var(--ds-transition-slow) !important;
+}
+
+/* ============================================================
+   DELAY CUSTOMIZADO
+   ============================================================ */
+.delay-100 {
+  animation-delay: 100ms !important;
+}
+
+.delay-200 {
+  animation-delay: 200ms !important;
+}
+
+.delay-300 {
+  animation-delay: 300ms !important;
+}
+
+.delay-400 {
+  animation-delay: 400ms !important;
+}
+
+.delay-500 {
+  animation-delay: 500ms !important;
+}
+
+/* ============================================================
+   TRANSIÇÕES COMUNS
+   ============================================================ */
+.transition-colors {
+  transition-property: color, background-color, border-color;
+  transition-timing-function: ease;
+  transition-duration: var(--ds-transition-fast);
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: ease;
+  transition-duration: var(--ds-transition-fast);
+}
+
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: ease;
+  transition-duration: var(--ds-transition-fast);
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: ease;
+  transition-duration: var(--ds-transition-normal);
+}
+
+@keyframes ds-check-pop {
+  from {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   PICKER DROPDOWN
+   ============================================================ */
+@keyframes ds-picker-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ds-picker-slide {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============================================================
+   UTILITY - REDUCED MOTION (acessibilidade)
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

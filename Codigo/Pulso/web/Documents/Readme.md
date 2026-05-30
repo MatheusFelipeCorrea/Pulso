@@ -514,10 +514,12 @@ Se token expirar (401): interceptor detecta → tenta refresh → sucesso: repet
 👥 Grupos
 
 🧠 Inteligência & Relatórios ▾
-📈 Relatórios
-🤖 Insights
-💬 Chatbot
-🎮 Gamificação
+📈 Relatórios        → /reports
+✨ Insights          → /insights   (item próprio — não agrupar com Chatbot)
+💬 Chatbot           → /chatbot    (item próprio)
+🎮 Gamificação       → /achievements
+
+> Config em código: `src/config/sidebarNavigation.js`
 
 ────────
 👤 Perfil
