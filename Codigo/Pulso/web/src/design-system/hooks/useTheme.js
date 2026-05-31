@@ -20,9 +20,13 @@ export function useTheme() {
   // Detecta preferência do sistema
   const getSystemTheme = () => {
     if (typeof window === 'undefined') return 'light'
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light'
+    if (typeof window.matchMedia !== 'function') return 'light'
+
+    try {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    } catch {
+      return 'light'
+    }
   }
 
   // Estado persistido (usa sistema como fallback)
@@ -41,6 +45,8 @@ export function useTheme() {
 
   // Sincroniza com mudanças na preferência do sistema (se usuário não escolheu)
   useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return
+
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     
     const handleChange = (e) => {

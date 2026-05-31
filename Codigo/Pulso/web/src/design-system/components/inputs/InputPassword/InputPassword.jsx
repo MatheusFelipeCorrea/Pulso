@@ -51,20 +51,6 @@ export const InputPassword = forwardRef(
           ? 'focused'
           : 'default'
 
-    const leftIconColor = disabled
-      ? 'text-[var(--ds-color-placeholder)] opacity-50'
-      : hasError
-        ? 'text-[var(--ds-color-danger)]'
-        : 'text-[var(--ds-color-placeholder)]'
-
-    const toggleIconColor = disabled
-      ? 'text-[var(--ds-color-placeholder)] opacity-50'
-      : hasError
-        ? 'text-[var(--ds-color-danger)]'
-        : isVisible || isFocused
-          ? 'text-[var(--ds-color-primary)]'
-          : 'text-[var(--ds-color-placeholder)]'
-
     const handleFocus = (e) => {
       setIsFocused(true)
       onFocus?.(e)
@@ -75,6 +61,60 @@ export const InputPassword = forwardRef(
       onBlur?.(e)
     }
 
+    const fieldBlock = (
+      <>
+        <div
+          className={inputContainerVariants({
+            focused: isFocused && !hasError,
+            error: hasError,
+            disabled,
+          })}
+        >
+          <span className="ds-input-icon">
+            <LockKeyhole size={20} />
+          </span>
+
+          <input
+            ref={ref}
+            id={inputId}
+            type="text"
+            value={value}
+            onChange={onChange}
+            disabled={disabled}
+            required={required}
+            placeholder={placeholder}
+            autoComplete="current-password"
+            aria-invalid={hasError || undefined}
+            aria-describedby={hasError ? errorId : undefined}
+            className={cn('ds-input-field', !isVisible && 'ds-input-masked')}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            {...rest}
+          />
+
+          <button
+            type="button"
+            onClick={() => !disabled && setIsVisible((v) => !v)}
+            disabled={disabled}
+            className="ds-input-action"
+            aria-label={isVisible ? 'Ocultar senha' : 'Mostrar senha'}
+          >
+            {isVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
+
+        {hasError && (
+          <p id={errorId} className={inputHelperVariants({ type: 'error' })} role="alert">
+            {error}
+          </p>
+        )}
+
+        {!hasError && helperText && (
+          <p className={inputHelperVariants({ type: 'helper' })}>{helperText}</p>
+        )}
+      </>
+    )
+
     return (
       <div className={cn(inputWrapperVariants(), className)}>
         {label && (
@@ -84,73 +124,10 @@ export const InputPassword = forwardRef(
           </label>
         )}
 
-        <div className={cn('flex gap-6 items-start', showValidation && 'flex-col sm:flex-row')}>
-          <div className="flex-1 min-w-0 space-y-1.5">
-            <div
-              className={inputContainerVariants({
-                focused: isFocused && !hasError,
-                error: hasError,
-                disabled,
-              })}
-            >
-              <span className={cn('inline-flex shrink-0 items-center justify-center', leftIconColor)}>
-                <LockKeyhole size={20} />
-              </span>
-
-              <input
-                ref={ref}
-                id={inputId}
-                type="text"
-                value={value}
-                onChange={onChange}
-                disabled={disabled}
-                required={required}
-                placeholder={placeholder}
-                autoComplete="current-password"
-                aria-invalid={hasError || undefined}
-                aria-describedby={hasError ? errorId : undefined}
-                className={cn(
-                  'min-w-0 flex-1 bg-transparent',
-                  'text-sm text-[var(--ds-color-text)]',
-                  'placeholder:text-[var(--ds-color-placeholder)]',
-                  'border-0 outline-none focus:outline-none focus-visible:outline-none',
-                  'disabled:cursor-not-allowed',
-                  !isVisible && 'ds-input-masked'
-                )}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                {...rest}
-              />
-
-              <button
-                type="button"
-                onClick={() => !disabled && setIsVisible((v) => !v)}
-                disabled={disabled}
-                className={cn(
-                  'inline-flex shrink-0 items-center justify-center',
-                  'transition-colors duration-[var(--ds-transition-fast)]',
-                  'disabled:cursor-not-allowed',
-                  toggleIconColor
-                )}
-                aria-label={isVisible ? 'Ocultar senha' : 'Mostrar senha'}
-              >
-                {isVisible ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-
-            {hasError && (
-              <p id={errorId} className={inputHelperVariants({ type: 'error' })} role="alert">
-                {error}
-              </p>
-            )}
-
-            {!hasError && helperText && (
-              <p className={inputHelperVariants({ type: 'helper' })}>{helperText}</p>
-            )}
-          </div>
-
-          {showValidation && !disabled && (
-            <ul className="flex flex-col gap-2 sm:pt-2.5 sm:min-w-[220px]" aria-live="polite">
+        {showValidation && !disabled ? (
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
+            <div className="min-w-0 flex-1 space-y-1.5">{fieldBlock}</div>
+            <ul className="flex flex-col gap-2 sm:min-w-[220px] sm:pt-2.5" aria-live="polite">
               {validationRules.map((rule) => {
                 const passed = rule.test(value)
                 return (
@@ -173,8 +150,10 @@ export const InputPassword = forwardRef(
                 )
               })}
             </ul>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="space-y-1.5">{fieldBlock}</div>
+        )}
       </div>
     )
   }

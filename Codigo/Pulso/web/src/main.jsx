@@ -4,19 +4,28 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import { store } from './store'
 import App from './App'
+import { AppErrorBoundary } from './components/AppErrorBoundary.jsx'
+import { ThemeProvider } from './components/ThemeProvider.jsx'
 // Design System - Foundation (devem ser importados antes do globals.css)
 import './design-system/styles/tokens.css'
 import './design-system/styles/base.css'
+import './design-system/styles/components.css'
 import './design-system/styles/animations.css'
 import './styles/globals.css'
+import './styles/auth.css'
+import './styles/legal.css'
 import './styles/pulso-components.css'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-        <Provider store={store}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </Provider>
+        <AppErrorBoundary>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <ThemeProvider>
+                        <App />
+                    </ThemeProvider>
+                </BrowserRouter>
+            </Provider>
+        </AppErrorBoundary>
     </StrictMode>
 )

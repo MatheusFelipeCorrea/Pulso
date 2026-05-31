@@ -4,47 +4,51 @@ import { cn } from '../../../utils/cn.js'
 import { iconButtonVariants } from './IconButton.styles.jsx'
 
 /**
- * IconButton — botão com ícone (circular ou pílula com label)
- *
+ * IconButton - Botão circular apenas com ícone
+ * 
+ * @component
  * @example
  * ```jsx
- * // Circular (toolbar, cards)
- * <IconButton icon={<Edit size={20} />} aria-label="Editar" />
- *
- * // Pílula com texto
- * <IconButton icon={<Plus size={20} />} label="Criar novo" />
- *
- * // Tooltip nativo quando sem label visível
- * <IconButton icon={<X size={20} />} tooltip="Fechar" aria-label="Fechar" />
+ * <IconButton variant="primary" icon={<Edit />} />
+ * <IconButton variant="danger" size="sm" icon={<Trash />} />
+ * <IconButton variant="ghost" icon={<X />} onClick={onClose} />
  * ```
+ * 
+ * @param {object} props
+ * @param {React.ReactNode} props.icon - Ícone a ser exibido (componente lucide-react)
+ * @param {('primary'|'secondary'|'ghost'|'danger'|'success')} [props.variant='primary']
+ * @param {('sm'|'md'|'lg')} [props.size='md']
+ * @param {boolean} [props.loading=false] - Exibe spinner no lugar do ícone
+ * @param {boolean} [props.disabled=false]
+ * @param {string} [props.ariaLabel] - Label acessível (OBRIGATÓRIO para botões sem texto)
+ * @param {string} [props.className]
+ * @param {function} [props.onClick]
+ * @param {string} [props.type='button']
  */
 export const IconButton = forwardRef(
   (
     {
       icon,
-      label,
-      variant = 'ghost',
+      variant = 'primary',
       size = 'md',
       loading = false,
       disabled = false,
-      tooltip,
       ariaLabel,
       className,
       onClick,
       type = 'button',
-      'aria-label': ariaLabelFromRest,
       ...rest
     },
     ref
   ) => {
+    // ============================================================
+    // ESTADOS
+    // ============================================================
     const isDisabled = disabled || loading
-    const hasLabel = Boolean(label)
 
-    const resolvedAriaLabel =
-      ariaLabel ?? ariaLabelFromRest ?? (!hasLabel ? tooltip : undefined)
-
-    const spinnerSize = { sm: 14, md: 16, lg: 18 }[size]
-
+    // ============================================================
+    // HANDLERS
+    // ============================================================
     const handleClick = (e) => {
       if (isDisabled) {
         e.preventDefault()
@@ -53,41 +57,37 @@ export const IconButton = forwardRef(
       onClick?.(e)
     }
 
+    // ============================================================
+    // TAMANHOS DOS ÍCONES
+    // ============================================================
+    const iconSize = {
+      sm: 16,
+      md: 20,
+      lg: 20,
+    }[size]
+
+    // ============================================================
+    // RENDER
+    // ============================================================
     return (
       <button
         ref={ref}
         type={type}
         disabled={isDisabled}
-        aria-disabled={isDisabled || undefined}
-        aria-busy={loading || undefined}
-        aria-label={resolvedAriaLabel}
-        title={tooltip}
+        aria-label={ariaLabel}
         className={cn(
-          iconButtonVariants({ variant, size, labeled: hasLabel }),
+          iconButtonVariants({ variant, size }),
           className
         )}
         onClick={handleClick}
         {...rest}
       >
         {loading ? (
-          <>
-            <span className="invisible inline-flex items-center gap-1.5">
-              <span className="inline-flex shrink-0 items-center justify-center">
-                {icon}
-              </span>
-              {label && <span>{label}</span>}
-            </span>
-            <span className="absolute inset-0 flex items-center justify-center">
-              <Loader2 size={spinnerSize} className="animate-spin" />
-            </span>
-          </>
+          <Loader2 size={iconSize} className="animate-spin" />
         ) : (
-          <>
-            <span className="inline-flex shrink-0 items-center justify-center">
-              {icon}
-            </span>
-            {label && <span>{label}</span>}
-          </>
+          <span className="inline-flex items-center justify-center">
+            {icon}
+          </span>
         )}
       </button>
     )

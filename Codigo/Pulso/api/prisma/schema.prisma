@@ -107,6 +107,10 @@ model Usuario {
   provedorAuth ProvedorAuth @default(EMAIL) @map("provedor_auth")
   googleId     String?      @unique @map("google_id")
   verificado   Boolean      @default(false)
+  tokenVerificacaoEmail  String?   @map("token_verificacao_email") @db.VarChar(64)
+  tokenVerificacaoExpira DateTime? @map("token_verificacao_expira")
+  tokenResetSenha        String?   @map("token_reset_senha") @db.VarChar(64)
+  tokenResetExpira       DateTime? @map("token_reset_expira")
   criadoEm     DateTime     @default(now()) @map("criado_em")
   atualizadoEm DateTime     @updatedAt @map("atualizado_em")
 
@@ -133,6 +137,8 @@ model Usuario {
   mensagensChatGrupo  MensagemChatGrupo[]
 
   @@index([email])
+  @@index([tokenVerificacaoEmail])
+  @@index([tokenResetSenha])
   @@map("usuarios")
 }
 

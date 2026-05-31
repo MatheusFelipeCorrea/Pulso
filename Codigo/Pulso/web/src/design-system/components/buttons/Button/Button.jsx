@@ -68,10 +68,10 @@ export const Button = forwardRef(
     // ============================================================
     // TAMANHOS DOS ÍCONES BASEADO NO SIZE DO BOTÃO
     // ============================================================
-    const spinnerSize = {
-      sm: 14,
-      md: 16,
-      lg: 18,
+    const iconSize = {
+      sm: 16,
+      md: 20,
+      lg: 20,
     }[size]
 
     // ============================================================
@@ -82,8 +82,6 @@ export const Button = forwardRef(
         ref={ref}
         type={type}
         disabled={isDisabled}
-        aria-disabled={isDisabled || undefined}
-        aria-busy={loading || undefined}
         className={cn(
           buttonVariants({ variant, size, fullWidth }),
           className
@@ -91,30 +89,28 @@ export const Button = forwardRef(
         onClick={handleClick}
         {...rest}
       >
-        {/* Conteúdo — invisible durante loading preserva largura */}
-        <span
-          className={cn(
-            'inline-flex items-center gap-2',
-            loading && 'invisible'
-          )}
-        >
-          {leftIcon && (
-            <span className="inline-flex shrink-0 items-center justify-center">
-              {leftIcon}
-            </span>
-          )}
-          {children && <span className="inline-block">{children}</span>}
-          {rightIcon && (
-            <span className="inline-flex shrink-0 items-center justify-center">
-              {rightIcon}
-            </span>
-          )}
-        </span>
-
-        {/* Spinner centralizado — substitui conteúdo visual no estado loading */}
+        {/* Spinner de loading (substitui leftIcon) */}
         {loading && (
-          <span className="absolute inset-0 flex items-center justify-center">
-            <Loader2 size={spinnerSize} className="animate-spin" />
+          <Loader2 
+            size={iconSize} 
+            className="animate-spin" 
+          />
+        )}
+
+        {/* Ícone esquerdo */}
+        {!loading && leftIcon && (
+          <span className="inline-flex items-center justify-center">
+            {leftIcon}
+          </span>
+        )}
+
+        {/* Texto do botão */}
+        {children && <span>{children}</span>}
+
+        {/* Ícone direito */}
+        {rightIcon && (
+          <span className="inline-flex items-center justify-center">
+            {rightIcon}
           </span>
         )}
       </button>

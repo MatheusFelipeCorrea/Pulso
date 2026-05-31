@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@source "../**/*.{js,jsx}";
+
 @theme {
     --color-primary-50: #F5F3FF;
     --color-primary-100: #EDE9FE;

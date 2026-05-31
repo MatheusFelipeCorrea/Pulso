@@ -1,0 +1,18 @@
+module.exports = {
+    createUser: jest.fn(),
+    findByEmail: jest.fn(),
+    findById: jest.fn(),
+    findByEmailOrNome: jest.fn(),
+    findByGoogleId: jest.fn(),
+    findByVerificationToken: jest.fn(),
+    findByResetToken: jest.fn(),
+    updateUser: jest.fn(),
+    deleteUser: jest.fn(),
+    createRefreshToken: jest.fn(),
+    findRefreshToken: jest.fn(),
+    revokeRefreshToken: jest.fn(),
+    revokeAllRefreshTokensForUser: jest.fn(),
+    deleteExpiredRefreshTokens: jest.fn(),
+    clearExpiredVerificationTokens: jest.fn(),
+    clearExpiredResetTokens: jest.fn(),
+};

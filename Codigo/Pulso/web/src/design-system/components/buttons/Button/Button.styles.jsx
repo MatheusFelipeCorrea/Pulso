@@ -11,11 +11,10 @@ import { cva } from 'class-variance-authority'
 export const buttonVariants = cva(
   // Base styles - aplicados a todos os botões
   [
-    'relative inline-flex items-center justify-center gap-2',
-    'w-auto max-w-none shrink-0',
-    'font-semibold whitespace-nowrap',
-    'rounded-[var(--ds-radius-md)]',
-    'transition-all duration-[var(--ds-transition-fast)]',
+    'inline-flex items-center justify-center gap-2',
+    'font-medium',
+    'rounded-lg',
+    'transition-all',
     'focus:outline-none',
     'disabled:cursor-not-allowed',
     'disabled:opacity-50',
@@ -34,13 +33,12 @@ export const buttonVariants = cva(
       },
 
       // ============================================================
-      // TAMANHOS (conforme protótipo: padding intrínseco por conteúdo)
-      // sm: 32px / 12px / 8px 12px | md: 40px / 14px / 10px 16px | lg: 48px / 16px / 12px 24px
+      // TAMANHOS (padding horizontal fixo de 17px para todos)
       // ============================================================
       size: {
-        sm: 'h-8 min-h-8 px-3 text-xs leading-none',
-        md: 'h-10 min-h-10 px-4 text-sm leading-none',
-        lg: 'h-12 min-h-12 px-6 text-base leading-none',
+        sm: 'h-8 px-[17px] text-sm',     // 32px altura, 17px lateral
+        md: 'h-10 px-[17px] text-base',  // 40px altura, 17px lateral (padrão)
+        lg: 'h-12 px-[17px] text-lg',    // 48px altura, 17px lateral
       },
 
       // ============================================================

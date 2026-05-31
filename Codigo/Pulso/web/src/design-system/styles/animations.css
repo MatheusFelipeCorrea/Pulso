@@ -280,11 +280,11 @@
    CLASSES UTILITÁRIAS - TOAST
    ============================================================ */
 .animate-toast-enter {
-  animation: toast-enter 200ms ease;
+  animation: toast-enter 300ms ease-out;
 }
 
 .animate-toast-exit {
-  animation: toast-exit 200ms ease;
+  animation: toast-exit 300ms ease-in;
 }
 
 /* ============================================================
@@ -350,42 +350,6 @@
   transition-property: all;
   transition-timing-function: ease;
   transition-duration: var(--ds-transition-normal);
-}
-
-@keyframes ds-check-pop {
-  from {
-    transform: scale(0.9);
-    opacity: 0.6;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* ============================================================
-   PICKER DROPDOWN
-   ============================================================ */
-@keyframes ds-picker-enter {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes ds-picker-slide {
-  from {
-    opacity: 0;
-    transform: translateX(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
 
 /* ============================================================

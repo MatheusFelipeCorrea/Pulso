@@ -40,6 +40,7 @@ module.exports = {
     SMTP_PORT: process.env.SMTP_PORT,
     SMTP_USER: process.env.SMTP_USER,
     SMTP_PASS: process.env.SMTP_PASS,
+    SMTP_FROM: process.env.SMTP_FROM,
     CORS_ORIGIN: process.env.CORS_ORIGIN,
     FRONTEND_URL: process.env.FRONTEND_URL,
 };

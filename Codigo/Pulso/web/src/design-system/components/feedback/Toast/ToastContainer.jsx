@@ -17,13 +17,16 @@ import { Toast } from './Toast.jsx'
  * ```
  */
 export const ToastContainer = ({ toasts, onClose }) => {
+  // Limita a 3 toasts visíveis (conforme protótipo)
+  const visibleToasts = toasts.slice(0, 3)
+
   return createPortal(
     <div
-      className="fixed top-4 right-4 z-[var(--ds-z-toast)] flex flex-col gap-2 pointer-events-none"
+      className="ds-toast-container fixed top-4 right-4 z-[var(--ds-z-toast)] flex flex-col gap-3 pointer-events-none"
       aria-live="polite"
       aria-atomic="false"
     >
-      {toasts.map((toast) => (
+      {visibleToasts.map((toast) => (
         <div key={toast.id} className="pointer-events-auto">
           <Toast
             id={toast.id}
@@ -31,7 +34,6 @@ export const ToastContainer = ({ toasts, onClose }) => {
             title={toast.title}
             message={toast.message}
             duration={toast.duration}
-            action={toast.action}
             onClose={onClose}
           />
         </div>

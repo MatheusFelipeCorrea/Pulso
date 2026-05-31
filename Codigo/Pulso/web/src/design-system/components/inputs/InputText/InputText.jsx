@@ -53,12 +53,6 @@ export const InputText = forwardRef(
           ? 'focused'
           : 'default'
 
-    const iconColor = disabled
-      ? 'text-[var(--ds-color-placeholder)] opacity-50'
-      : hasError
-        ? 'text-[var(--ds-color-danger)]'
-        : 'text-[var(--ds-color-placeholder)]'
-
     const handleFocus = (e) => {
       setIsFocused(true)
       onFocus?.(e)
@@ -85,11 +79,7 @@ export const InputText = forwardRef(
             disabled,
           })}
         >
-          {leftIcon && (
-            <span className={cn('inline-flex shrink-0 items-center justify-center', iconColor)}>
-              {leftIcon}
-            </span>
-          )}
+          {leftIcon && <span className="ds-input-icon">{leftIcon}</span>}
 
           <input
             ref={ref}
@@ -102,13 +92,7 @@ export const InputText = forwardRef(
             placeholder={placeholder}
             aria-invalid={hasError || undefined}
             aria-describedby={hasError ? errorId : undefined}
-            className={cn(
-              'min-w-0 flex-1 bg-transparent',
-              'text-sm text-[var(--ds-color-text)]',
-              'placeholder:text-[var(--ds-color-placeholder)]',
-              'border-0 outline-none focus:outline-none focus-visible:outline-none',
-              'disabled:cursor-not-allowed'
-            )}
+            className="ds-input-field"
             onFocus={handleFocus}
             onBlur={handleBlur}
             {...rest}
@@ -118,11 +102,7 @@ export const InputText = forwardRef(
             <button
               type="button"
               onClick={() => onClear?.()}
-              className={cn(
-                'inline-flex shrink-0 items-center justify-center',
-                'text-[var(--ds-color-placeholder)] hover:text-[var(--ds-color-text)]',
-                'transition-colors duration-[var(--ds-transition-fast)]'
-              )}
+              className="ds-input-action"
               aria-label="Limpar campo"
             >
               <X size={20} />
@@ -130,15 +110,13 @@ export const InputText = forwardRef(
           )}
 
           {!showClear && hasError && (
-            <span className={cn('inline-flex shrink-0 items-center justify-center', iconColor)}>
+            <span className="ds-input-icon">
               <AlertTriangle size={20} />
             </span>
           )}
 
           {!showClear && !hasError && rightIcon && (
-            <span className={cn('inline-flex shrink-0 items-center justify-center', iconColor)}>
-              {rightIcon}
-            </span>
+            <span className="ds-input-icon">{rightIcon}</span>
           )}
         </div>
 
