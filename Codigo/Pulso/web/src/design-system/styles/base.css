@@ -288,6 +288,59 @@ legend {
    BUTTON VARIANTS - CLASSES CUSTOMIZADAS
    ============================================================ */
 
+/* Layout compartilhado (padding no CSS — evita conflito com reset button { padding: 0 }) */
+button.btn-primary,
+button.btn-secondary,
+button.btn-ghost,
+button.btn-danger,
+button.btn-success,
+.btn-primary,
+.btn-secondary,
+.btn-ghost,
+.btn-danger,
+.btn-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-sizing: border-box;
+  width: auto;
+  max-width: none;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: visible;
+  font-weight: 500;
+  border-radius: var(--ds-radius-md);
+  line-height: 1.25;
+  cursor: pointer;
+  transition:
+    background-color var(--ds-transition-fast),
+    color var(--ds-transition-fast),
+    border-color var(--ds-transition-fast);
+}
+
+.btn-sm {
+  min-height: 2rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+}
+
+.btn-md {
+  min-height: 2.5rem;
+  padding: 0 1.25rem;
+  font-size: 1rem;
+}
+
+.btn-lg {
+  min-height: 3rem;
+  padding: 0 1.5rem;
+  font-size: 1.125rem;
+}
+
+.btn-full {
+  width: 100%;
+}
+
 /* PRIMARY */
 .btn-primary {
   background-color: var(--ds-color-primary);
@@ -386,6 +439,42 @@ legend {
 }
 
 /* ICON BUTTON VARIANTS */
+button.iconbtn-primary,
+button.iconbtn-secondary,
+button.iconbtn-ghost,
+button.iconbtn-danger,
+button.iconbtn-success,
+.iconbtn-primary,
+.iconbtn-secondary,
+.iconbtn-ghost,
+.iconbtn-danger,
+.iconbtn-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  padding: 0;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color var(--ds-transition-fast), color var(--ds-transition-fast);
+}
+
+.iconbtn-sm {
+  width: 2rem;
+  height: 2rem;
+}
+
+.iconbtn-md {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.iconbtn-lg {
+  width: 3rem;
+  height: 3rem;
+}
+
 .iconbtn-primary {
   background-color: var(--ds-color-primary);
   color: white;

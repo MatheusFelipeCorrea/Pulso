@@ -105,7 +105,11 @@ export const Button = forwardRef(
         )}
 
         {/* Texto do botão */}
-        {children && <span>{children}</span>}
+        {children && (
+          <span className="inline-flex shrink-0 items-center whitespace-nowrap">
+            {children}
+          </span>
+        )}
 
         {/* Ícone direito */}
         {rightIcon && (

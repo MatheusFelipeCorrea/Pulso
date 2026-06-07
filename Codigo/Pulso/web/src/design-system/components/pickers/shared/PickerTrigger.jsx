@@ -24,7 +24,6 @@ export const PickerTrigger = ({
         open,
         error,
         disabled,
-        hoverable: !open && !error && !disabled,
       }),
       className
     )}

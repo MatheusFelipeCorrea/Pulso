@@ -1,16 +1,31 @@
-# React + Vite
+# Pulso — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface web do **Pulso**, construída com React + Vite, design system próprio e Tailwind CSS v4.
 
-Currently, two official plugins are available:
+## Documentação completa
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Leia **[Documents/Readme.md](./Documents/Readme.md)** — arquitetura, rotas, estrutura de pastas e como rodar.
 
-## React Compiler
+Design system: **[src/design-system/README.md](./src/design-system/README.md)**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Início rápido
 
-## Expanding the ESLint configuration
+```bash
+npm install
+cp .env.example .env
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Abre em `http://localhost:5173`. A API deve estar em `http://localhost:3333/api` (ver `.env`).
+
+## O que já funciona
+
+- Autenticação (email/senha, Google OAuth, verificação, reset de senha)
+- Layout autenticado (sidebar + mobile drawer)
+- **Transações** — listagem, filtros, resumo, CRUD, recorrência, tags
+- Termos de uso e política de privacidade
+- Demo do design system em `/design-system`
+
+A **homepage** (`/`) ainda é só um placeholder; a landing completa aguarda prototipação.
+
+Demais rotas do menu exibem placeholder **“Em desenvolvimento”**.

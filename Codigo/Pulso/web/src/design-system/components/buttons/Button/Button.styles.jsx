@@ -9,21 +9,13 @@ import { cva } from 'class-variance-authority'
  */
 
 export const buttonVariants = cva(
-  // Base styles - aplicados a todos os botões
   [
-    'inline-flex items-center justify-center gap-2',
-    'font-medium',
-    'rounded-lg',
-    'transition-all',
     'focus:outline-none',
     'disabled:cursor-not-allowed',
     'disabled:opacity-50',
   ],
   {
     variants: {
-      // ============================================================
-      // VARIANTES DE TIPO (usando classes customizadas do base.css)
-      // ============================================================
       variant: {
         primary: 'btn-primary',
         secondary: 'btn-secondary',
@@ -32,24 +24,17 @@ export const buttonVariants = cva(
         success: 'btn-success',
       },
 
-      // ============================================================
-      // TAMANHOS (padding horizontal fixo de 17px para todos)
-      // ============================================================
       size: {
-        sm: 'h-8 px-[17px] text-sm',     // 32px altura, 17px lateral
-        md: 'h-10 px-[17px] text-base',  // 40px altura, 17px lateral (padrão)
-        lg: 'h-12 px-[17px] text-lg',    // 48px altura, 17px lateral
+        sm: 'btn-sm',
+        md: 'btn-md',
+        lg: 'btn-lg',
       },
 
-      // ============================================================
-      // LARGURA COMPLETA
-      // ============================================================
       fullWidth: {
-        true: 'w-full',
+        true: 'btn-full',
       },
     },
 
-    // Valores padrão
     defaultVariants: {
       variant: 'primary',
       size: 'md',

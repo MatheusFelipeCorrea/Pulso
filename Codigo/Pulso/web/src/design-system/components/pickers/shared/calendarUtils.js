@@ -22,6 +22,11 @@ export const MONTH_SHORT_LABELS = [
   'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez',
 ]
 
+export const MONTH_LONG_LABELS = [
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+]
+
 /** Grade de dias para um mês (inclui dias adjacentes para completar semanas) */
 export function getCalendarDays(month, weekStartsOn = 0) {
   const start = startOfWeek(startOfMonth(month), { weekStartsOn })

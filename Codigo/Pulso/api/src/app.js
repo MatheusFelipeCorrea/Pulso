@@ -9,7 +9,10 @@ const app = express();
 
 // Middlewares globais
 app.use(helmet());
-app.use(cors({ origin: env.CORS_ORIGIN }));
+app.use(cors({
+    origin: env.CORS_ORIGIN,
+    exposedHeaders: ['X-Total-Count', 'X-Total-Pages', 'X-Current-Page'],
+}));
 app.use(express.json());
 app.use(passport.initialize());
 

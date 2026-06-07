@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const env = require('../config/env');
+const { getLogoAttachment, getLogoSrc, getLogoPublicUrl } = require('./emailAssets');
 const {
     buildVerificationEmailHtml,
     buildVerificationEmailText,
@@ -19,9 +20,24 @@ const transporter = nodemailer.createTransport({
     },
 });
 
+const resolveLogoForEmail = () => {
+    try {
+        return {
+            logoSrc: getLogoSrc(),
+            attachments: [getLogoAttachment()],
+        };
+    } catch {
+        return {
+            logoSrc: getLogoPublicUrl(env.FRONTEND_URL),
+            attachments: [],
+        };
+    }
+};
+
 const sendVerificationEmail = async (email, token) => {
     const verificationUrl = `${env.FRONTEND_URL}/verify-email/${token}`;
     const recipientEmail = email.trim().toLowerCase();
+    const { logoSrc, attachments } = resolveLogoForEmail();
 
     await transporter.sendMail({
         from: {
@@ -33,15 +49,17 @@ const sendVerificationEmail = async (email, token) => {
         text: buildVerificationEmailText({ verificationUrl, recipientEmail }),
         html: buildVerificationEmailHtml({
             verificationUrl,
-            frontendUrl: env.FRONTEND_URL,
+            logoSrc,
             recipientEmail,
         }),
+        attachments,
     });
 };
 
 const sendPasswordResetEmail = async (email, token) => {
     const resetUrl = `${env.FRONTEND_URL}/reset-password/${token}`;
     const recipientEmail = email.trim().toLowerCase();
+    const { logoSrc, attachments } = resolveLogoForEmail();
 
     await transporter.sendMail({
         from: {
@@ -53,9 +71,10 @@ const sendPasswordResetEmail = async (email, token) => {
         text: buildPasswordResetEmailText({ resetUrl, recipientEmail }),
         html: buildPasswordResetEmailHtml({
             resetUrl,
-            frontendUrl: env.FRONTEND_URL,
+            logoSrc,
             recipientEmail,
         }),
+        attachments,
     });
 };
 

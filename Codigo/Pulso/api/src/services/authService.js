@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const AppError = require('../utils/appError');
 const authRepository = require('../repositories/authRepository');
 const emailProvider = require('../providers/emailProvider');
+const categoryService = require('./categoryService');
 const logger = require('../utils/logger');
 const env = require('../config/env');
 const {
@@ -76,6 +77,8 @@ const registerUser = async ({ nome, email, senha, confirmarSenha }) => {
             },
         },
     });
+
+    await categoryService.seedCategoriasPadrao(usuario.id);
 
     try {
         await emailProvider.sendVerificationEmail(email, tokenVerificacaoEmail);
@@ -205,12 +208,29 @@ const issueAuthTokens = async (usuario, lembrarMe = false) => {
     return { accessToken, refreshToken };
 };
 
-const formatUserResponse = (usuario) => ({
-    id: usuario.id,
-    nome: usuario.nome,
-    email: usuario.email,
-    urlAvatar: usuario.urlAvatar,
-});
+const formatUserResponse = (usuario) => {
+    const modoUso = usuario.configuracoes?.modoUso ?? 'CLT';
+    const vtRaw = usuario.configuracoes?.vtHabilitado;
+
+    let vtHabilitado = false;
+    if (modoUso === 'ESTAGIARIO' || modoUso === 'CLT') {
+        vtHabilitado = true;
+    } else if (modoUso === 'PJ') {
+        vtHabilitado = vtRaw ?? null;
+    }
+
+    return {
+        id: usuario.id,
+        nome: usuario.nome,
+        email: usuario.email,
+        urlAvatar: usuario.urlAvatar,
+        modoUso,
+        vtHabilitado,
+        valorPadraoPassagem: usuario.configuracoes?.valorPadraoPassagem
+            ? Number(usuario.configuracoes.valorPadraoPassagem).toFixed(2)
+            : null,
+    };
+};
 
 const loginUser = async ({ email, senha, lembrarMe = false }) => {
     const identificador = email?.trim();
@@ -411,6 +431,9 @@ const authenticateGoogle = async (profile) => {
         verificado: true,
         senhaHash: null,
         ...defaultUserRelations,
+    }).then(async (usuario) => {
+        await categoryService.seedCategoriasPadrao(usuario.id);
+        return usuario;
     });
 };
 

@@ -37,7 +37,7 @@ export const Badge = ({
       )}
       {iconNode}
       {children != null && children !== '' && (
-        <span className="truncate">{children}</span>
+        <span className="ds-badge__label">{children}</span>
       )}
     </span>
   )
@@ -48,18 +48,18 @@ function resolveIconNode(icon, size) {
   if (!icon) return null
 
   if (isValidElement(icon)) {
-    return <span className="inline-flex shrink-0 items-center">{icon}</span>
+    return <span className="ds-badge__icon">{icon}</span>
   }
 
   if (typeof icon === 'function') {
     const Icon = icon
     const dim = size === 'lg' ? 16 : size === 'sm' ? 12 : 14
     return (
-      <span className="inline-flex shrink-0 items-center" aria-hidden>
+      <span className="ds-badge__icon" aria-hidden>
         <Icon size={dim} />
       </span>
     )
   }
 
-  return <span className="inline-flex shrink-0 items-center">{icon}</span>
+  return <span className="ds-badge__icon">{icon}</span>
 }

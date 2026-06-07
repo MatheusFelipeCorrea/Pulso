@@ -6,7 +6,7 @@ import { SelectChevron } from '../../selects/shared/SelectChevron.jsx'
 import { usePickerDropdown } from '../shared/usePickerDropdown.js'
 import { PickerTrigger } from '../shared/PickerTrigger.jsx'
 import { pickerDropdownVariants } from '../shared/picker.styles.jsx'
-import { MONTH_SHORT_LABELS } from '../shared/calendarUtils.js'
+import { MONTH_SHORT_LABELS, MONTH_LONG_LABELS } from '../shared/calendarUtils.js'
 
 /** MonthPicker — seleção de mês/ano em grid 4×3 */
 export const MonthPicker = ({
@@ -20,6 +20,7 @@ export const MonthPicker = ({
   disabled = false,
   label,
   required = false,
+  monthDisplay = 'short',
   id: idProp,
   className,
 }) => {
@@ -32,7 +33,9 @@ export const MonthPicker = ({
   const [slideDir, setSlideDir] = useState(0)
 
   const displayValue = value
-    ? `${MONTH_SHORT_LABELS[value.month - 1]}/${value.year}`
+    ? monthDisplay === 'long'
+      ? `${MONTH_LONG_LABELS[value.month - 1]} de ${value.year}`
+      : `${MONTH_SHORT_LABELS[value.month - 1]}/${value.year}`
     : null
 
   const isMonthDisabled = (monthIndex) => {
@@ -77,7 +80,7 @@ export const MonthPicker = ({
       id={id}
       className={className}
     >
-      <div ref={ref} className="relative w-60 max-w-full">
+      <div ref={ref} className="relative w-full">
         <PickerTrigger
           id={id}
           open={isOpen}
@@ -97,20 +100,21 @@ export const MonthPicker = ({
         </PickerTrigger>
 
         {isOpen && (
-          <div className={cn(pickerDropdownVariants(), 'w-[280px] p-3')} role="dialog">
-            <div className="mb-3 flex items-center justify-between">
+          <div className={cn(pickerDropdownVariants(), 'p-3')} role="dialog">
+            <div className="ds-picker-dropdown__header">
               <button
                 type="button"
                 onClick={() => changeYear(-1)}
                 disabled={!canGoPrev}
-                className="text-[var(--ds-color-text-secondary)] hover:text-[var(--ds-color-text)] disabled:opacity-30"
+                className="ds-picker-dropdown__nav"
+                aria-label="Ano anterior"
               >
                 ‹
               </button>
               <span
                 key={viewYear}
                 className={cn(
-                  'text-sm font-bold text-[var(--ds-color-text)]',
+                  'ds-picker-dropdown__year',
                   slideDir !== 0 && 'animate-[ds-picker-slide_200ms_ease]'
                 )}
               >
@@ -120,13 +124,14 @@ export const MonthPicker = ({
                 type="button"
                 onClick={() => changeYear(1)}
                 disabled={!canGoNext}
-                className="text-[var(--ds-color-text-secondary)] hover:text-[var(--ds-color-text)] disabled:opacity-30"
+                className="ds-picker-dropdown__nav"
+                aria-label="Próximo ano"
               >
                 ›
               </button>
             </div>
 
-            <div className="grid grid-cols-4 gap-2">
+            <div className="ds-picker-dropdown__grid">
               {MONTH_SHORT_LABELS.map((label, index) => {
                 const disabledMonth = isMonthDisabled(index)
                 const selected = isSelected(index)

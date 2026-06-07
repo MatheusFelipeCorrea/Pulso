@@ -4,6 +4,7 @@ const logger = require('./utils/logger');
 const prisma = require('./config/database');
 const cron = require('node-cron');
 const { runTokenCleanup } = require('./jobs/tokenCleanupJob');
+const { runRecurringTransactions } = require('./jobs/recurringTransactions');
 
 const startTokenCleanupScheduler = () => {
     if (env.NODE_ENV === 'test') {
@@ -22,6 +23,22 @@ const startTokenCleanupScheduler = () => {
     logger.info('🧹 Agendador de limpeza de tokens ativo (hourly)');
 };
 
+const startRecurringTransactionsScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule('5 0 * * *', async () => {
+        try {
+            await runRecurringTransactions();
+        } catch (error) {
+            logger.error(`Falha no job de transações recorrentes: ${error.message}`);
+        }
+    });
+
+    logger.info('🔄 Agendador de transações recorrentes ativo (diário 00:05)');
+};
+
 const start = async () => {
     try {
         // Testa conexão com o banco
@@ -29,6 +46,7 @@ const start = async () => {
         logger.info('🗄️  Banco de dados conectado');
 
         startTokenCleanupScheduler();
+        startRecurringTransactionsScheduler();
 
         app.listen(env.PORT, () => {
             logger.info(`💜 Pulso API rodando na porta ${env.PORT}`);

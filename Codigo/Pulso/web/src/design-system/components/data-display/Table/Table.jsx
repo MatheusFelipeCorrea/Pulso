@@ -46,7 +46,6 @@ export const Table = ({
   skeletonRows = 5,
   density = 'comfortable',
   footer,
-  showMobileScrollHint = false,
   className,
   'aria-label': ariaLabel = 'Tabela de dados',
 }) => {
@@ -247,9 +246,6 @@ export const Table = ({
           )}
         </table>
       </div>
-      {showMobileScrollHint && (
-        <p className="ds-table__scroll-hint">Deslize para ver mais colunas →</p>
-      )}
     </div>
   )
 }

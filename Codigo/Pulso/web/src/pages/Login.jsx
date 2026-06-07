@@ -98,7 +98,7 @@ export default function Login() {
       })
       dispatch(setUser(result.user))
       toast.success(`Bem-vindo de volta, ${result.user.nome}!`)
-      navigate('/', { replace: true })
+      navigate('/dashboard', { replace: true })
     } catch (error) {
       const message =
         error.response?.data?.message || 'Erro ao fazer login. Tente novamente.'

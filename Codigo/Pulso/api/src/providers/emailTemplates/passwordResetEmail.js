@@ -2,8 +2,7 @@
  * Template HTML — recuperação de senha
  */
 
-const buildPasswordResetEmailHtml = ({ resetUrl, frontendUrl, recipientEmail }) => {
-    const logoUrl = `${frontendUrl}/LogoMClaro.png`;
+const buildPasswordResetEmailHtml = ({ resetUrl, logoSrc, recipientEmail }) => {
     const year = new Date().getFullYear();
 
     return `<!DOCTYPE html>
@@ -20,7 +19,7 @@ const buildPasswordResetEmailHtml = ({ resetUrl, frontendUrl, recipientEmail }) 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;">
           <tr>
             <td align="center" style="padding-bottom:24px;">
-              <img src="${logoUrl}" alt="Pulso" width="120" height="36" style="display:block;height:36px;width:auto;max-width:120px;border:0;" />
+              <img src="${logoSrc}" alt="Pulso" width="120" height="36" style="display:block;height:36px;width:auto;max-width:120px;border:0;" />
               <p style="margin:8px 0 0;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;color:#71717A;">
                 Seu monitoramento financeiro
               </p>

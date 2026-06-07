@@ -44,7 +44,10 @@ export const DatePicker = ({
   }
 
   const handleToday = () => {
-    setViewMonth(new Date())
+    const today = startOfDay(new Date())
+    setViewMonth(today)
+    onChange?.(today)
+    close()
   }
 
   return (
@@ -57,7 +60,7 @@ export const DatePicker = ({
       id={id}
       className={className}
     >
-      <div ref={ref} className="relative w-60 max-w-full">
+      <div ref={ref} className="relative w-full">
         <PickerTrigger
           id={id}
           open={isOpen}
@@ -83,7 +86,7 @@ export const DatePicker = ({
         </PickerTrigger>
 
         {isOpen && (
-          <div className={cn(pickerDropdownVariants(), 'w-[280px]')} role="dialog">
+          <div className={cn(pickerDropdownVariants(), 'ds-picker-dropdown--calendar')} role="dialog">
             <CalendarHeader
               month={viewMonth}
               onPrev={() => setViewMonth((m) => subMonths(m, 1))}
@@ -97,12 +100,8 @@ export const DatePicker = ({
               disablePast={disablePast}
               onDayClick={handleSelect}
             />
-            <div className="border-t border-[var(--ds-color-border)] py-2 text-center">
-              <button
-                type="button"
-                onClick={handleToday}
-                className="text-sm font-medium text-[var(--ds-color-primary)] hover:text-[var(--ds-color-primary-light)]"
-              >
+            <div className="ds-picker-dropdown__footer">
+              <button type="button" onClick={handleToday} className="ds-picker-dropdown__today">
                 Hoje
               </button>
             </div>

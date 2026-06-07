@@ -35,13 +35,15 @@ export const Modal = ({
       onClick={closeOnOverlay ? handleClose : undefined}
       role="presentation"
     >
-      <div
-        role="dialog"
-        aria-modal="true"
-        className={cn(modalContentVariants({ size }), className)}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {children}
+      <div className="flex min-h-full items-start justify-center py-2 sm:py-4">
+        <div
+          role="dialog"
+          aria-modal="true"
+          className={cn(modalContentVariants({ size }), className)}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {children}
+        </div>
       </div>
     </div>,
     document.body

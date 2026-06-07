@@ -32,13 +32,16 @@ Biblioteca de componentes UI genéricos, reutilizáveis e agnósticos de projeto
 ## 🚀 Como usar em outro projeto
 
 1. Copie a pasta `design-system/` para o `src/` do novo projeto
-2. Importe os estilos base no seu `globals.css`:
+2. Importe os estilos base no `main.jsx` ou `globals.css`:
 
 ```css
 @import "../design-system/styles/tokens.css";
 @import "../design-system/styles/base.css";
+@import "../design-system/styles/components.css";
 @import "../design-system/styles/animations.css";
 ```
+
+> **`components.css`** é obrigatório para Select, MonthPicker, DatePicker, Badge, Checkbox e demais componentes que usam classes `.ds-*`.
 
 3. Sobrescreva os tokens com as cores do seu projeto:
 
@@ -157,6 +160,7 @@ design-system/
 ├── styles/
 │   ├── tokens.css
 │   ├── base.css
+│   ├── components.css      ← estilos dos componentes (.ds-select-*, .ds-badge, …)
 │   └── animations.css
 │
 └── README.md
@@ -293,7 +297,7 @@ Os componentes usam variáveis CSS ao invés de cores hardcoded. O projeto que c
 
 | Componente | Props principais | Descrição |
 |---|---|---|
-| Select | options, value, onChange, placeholder, error | Dropdown simples (single) |
+| Select | options, value, onChange, placeholder, error | Dropdown single-select; opções podem ter `icon`, `iconColor` |
 | SelectSearch | options, value, onChange, searchPlaceholder | Dropdown com campo de busca |
 | MultiSelect | options, values, onChange, placeholder | Múltipla seleção sem busca |
 | MultiSelectSearch | options, values, onChange, searchPlaceholder | Múltipla seleção com busca |
@@ -305,7 +309,7 @@ Os componentes usam variáveis CSS ao invés de cores hardcoded. O projeto que c
 |---|---|---|
 | DatePicker | value, onChange, minDate, maxDate, placeholder | Seletor de data única |
 | DateRangePicker | startDate, endDate, onChange, presets | Seletor de período |
-| MonthPicker | value, onChange, minYear, maxYear | Seletor de mês/ano |
+| MonthPicker | value, onChange, minYear, maxYear, monthDisplay | Seletor de mês/ano; `monthDisplay="long"` → "Maio de 2025" |
 | TimePicker | value, onChange, format, minuteStep | Seletor de hora |
 
 ### Buttons
@@ -320,8 +324,9 @@ Os componentes usam variáveis CSS ao invés de cores hardcoded. O projeto que c
 | Componente | Props principais | Descrição |
 |---|---|---|
 | Toast | type, title, message, duration, onClose | Notificação temporária (success, error, warning, info) |
-| Alert | type, title, message, closable | Banner de alerta inline |
-| Spinner | size, color | Indicador de loading circular |
+| Alert | type, title, message, dismissible | Banner de alerta inline |
+| Spinner | size, variant | Indicador de loading circular |
+| SpinnerDots | label, center | Três pontos pulsando (filtros, listas) |
 | Skeleton | width, height, variant | Placeholder de carregamento |
 | EmptyState | icon, title, description, action | Estado vazio com CTA |
 | ErrorState | icon, title, description, onRetry | Estado de erro com retry |
@@ -427,7 +432,7 @@ expect(screen.getByRole('status')).toBeInTheDocument()
 ## ✅ Checklist para copiar pro próximo projeto
 
 - [ ] Copiar pasta `design-system/` para `src/`
-- [ ] Importar estilos no `globals.css`
+- [ ] Importar estilos no app: `tokens.css`, `base.css`, **`components.css`**, `animations.css`
 - [ ] Sobrescrever tokens com cores do novo projeto
 - [ ] Configurar alias `@/design-system` no vite/webpack
 - [ ] Instalar dependências peer: `react`, `tailwindcss`, `lucide-react`, `date-fns`

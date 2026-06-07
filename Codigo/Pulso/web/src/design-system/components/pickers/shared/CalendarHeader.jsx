@@ -13,12 +13,12 @@ export const CalendarHeader = ({
   onTitleClick,
   className,
 }) => (
-  <div className={cn('flex items-center justify-between px-3 py-2', className)}>
+  <div className={cn('ds-picker-calendar-header', className)}>
     <button
       type="button"
       onClick={onPrev}
       disabled={disablePrev}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--ds-radius-md)] text-[var(--ds-color-text-secondary)] hover:bg-[var(--ds-color-hover)] disabled:cursor-not-allowed disabled:opacity-30"
+      className="ds-picker-calendar-header__nav"
       aria-label="Mês anterior"
     >
       <ChevronLeft size={18} />
@@ -27,7 +27,7 @@ export const CalendarHeader = ({
     <button
       type="button"
       onClick={onTitleClick}
-      className="text-sm font-semibold capitalize text-[var(--ds-color-text)] hover:text-[var(--ds-color-primary)]"
+      className="ds-picker-calendar-header__title"
     >
       {format(month, 'MMMM yyyy', { locale: ptBR })}
     </button>
@@ -36,7 +36,7 @@ export const CalendarHeader = ({
       type="button"
       onClick={onNext}
       disabled={disableNext}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-[var(--ds-radius-md)] text-[var(--ds-color-text-secondary)] hover:bg-[var(--ds-color-hover)] disabled:cursor-not-allowed disabled:opacity-30"
+      className="ds-picker-calendar-header__nav"
       aria-label="Próximo mês"
     >
       <ChevronRight size={18} />

@@ -19,11 +19,17 @@ const createRefreshToken = async ({ usuarioId, token, expiraEm }) => {
 };
 
 const findByEmail = async (email) => {
-    return prisma.usuario.findUnique({ where: { email } });
+    return prisma.usuario.findUnique({
+        where: { email },
+        include: { configuracoes: true },
+    });
 };
 
 const findById = async (id) => {
-    return prisma.usuario.findUnique({ where: { id } });
+    return prisma.usuario.findUnique({
+        where: { id },
+        include: { configuracoes: true },
+    });
 };
 
 const findByEmailOrNome = async (identificador) => {
@@ -40,6 +46,7 @@ const findByEmailOrNome = async (identificador) => {
                 mode: 'insensitive',
             },
         },
+        include: { configuracoes: true },
     });
 };
 

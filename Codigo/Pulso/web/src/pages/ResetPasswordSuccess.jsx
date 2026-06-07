@@ -26,7 +26,7 @@ export default function ResetPasswordSuccess() {
           />
         </div>
 
-        <Link to="/" className="auth-email-sent-cta block">
+        <Link to="/login" className="auth-email-sent-cta block">
           <Button variant="primary" size="lg" fullWidth leftIcon={<LayoutGrid size={18} />}>
             Ir para o Dashboard
           </Button>

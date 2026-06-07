@@ -101,14 +101,10 @@ export const TagsInput = ({
       <div ref={wrapperRef} className="relative">
         <div
           className={cn(
-            'ds-select-container flex min-h-11 flex-wrap items-center gap-1.5',
-            'rounded-[var(--ds-radius-md)] border px-3 py-2.5',
-            'bg-[var(--ds-color-select-bg)]',
-            'transition-[border-color,box-shadow] duration-[var(--ds-transition-fast)]',
-            isFocused && !error && 'border-[var(--ds-color-input-focus)] shadow-[0_0_0_1px_var(--ds-color-input-focus)]',
-            !isFocused && !error && 'border-[var(--ds-color-select-border)] hover:border-[var(--ds-color-text-secondary)]',
-            error && 'border-[var(--ds-color-danger)]',
-            disabled && 'cursor-not-allowed opacity-50'
+            'ds-select-container ds-select-container--tags',
+            isFocused && !error && 'ds-select-container--open',
+            error && 'ds-select-container--error',
+            disabled && 'ds-select-container--disabled'
           )}
           onClick={() => !disabled && inputRef.current?.focus()}
         >
@@ -121,9 +117,7 @@ export const TagsInput = ({
             />
           ))}
 
-          {tags.length > 0 && (
-            <span className="h-4 w-px shrink-0 bg-[var(--ds-color-border)]" aria-hidden="true" />
-          )}
+          {tags.length > 0 ? <span className="ds-tags-input-divider" aria-hidden="true" /> : null}
 
           <input
             ref={inputRef}
@@ -131,32 +125,28 @@ export const TagsInput = ({
             type="text"
             value={inputValue}
             disabled={disabled || atMax}
-            placeholder={tags.length === 0 ? placeholder : placeholder}
+            placeholder={placeholder}
             onChange={(e) => setInputValue(e.target.value)}
             onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             onKeyDown={handleKeyDown}
-            className={cn(
-              'min-w-[80px] flex-1 bg-transparent text-sm text-[var(--ds-color-text)]',
-              'placeholder:text-[var(--ds-color-placeholder)]',
-              'border-0 outline-none focus:outline-none focus-visible:outline-none',
-              'disabled:cursor-not-allowed'
-            )}
+            className="ds-tags-input-field"
           />
         </div>
 
-        {showSuggestions && isFocused && (
-          <div className={selectDropdownVariants()}>
-            <div className="max-h-60 overflow-y-auto">
+        {showSuggestions && isFocused ? (
+          <div className={selectDropdownVariants()} role="listbox">
+            <div className="ds-select-dropdown__scroll">
               {filteredSuggestions.map((suggestion) => (
                 <button
                   key={suggestion}
                   type="button"
-                  onClick={() => { addTag(suggestion); closeSuggestions() }}
-                  className={cn(
-                    'ds-select-option flex w-full items-center gap-3 px-4 py-3 text-left text-sm',
-                    'text-[var(--ds-color-text)]',
-                    'transition-colors duration-[var(--ds-transition-fast)]'
-                  )}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    addTag(suggestion)
+                    closeSuggestions()
+                  }}
+                  className="ds-select-option"
                 >
                   <Tag size={16} className="shrink-0 text-[var(--ds-color-text-secondary)]" />
                   <span className="flex-1 truncate">{suggestion}</span>
@@ -165,15 +155,15 @@ export const TagsInput = ({
               ))}
 
               {!tags.some((t) => t.toLowerCase() === inputValue.trim().toLowerCase()) &&
-                inputValue.trim() && (
+                inputValue.trim() ? (
                   <button
                     type="button"
-                    onClick={() => { addTag(inputValue); closeSuggestions() }}
-                    className={cn(
-                      'ds-select-option flex w-full items-center gap-3 px-4 py-3 text-left text-sm',
-                      'text-[var(--ds-color-text)]',
-                      'transition-colors duration-[var(--ds-transition-fast)]'
-                    )}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => {
+                      addTag(inputValue)
+                      closeSuggestions()
+                    }}
+                    className="ds-select-option"
                   >
                     <Plus size={16} className="shrink-0 text-[var(--ds-color-primary)]" />
                     <span className="flex-1 truncate">
@@ -183,22 +173,22 @@ export const TagsInput = ({
                       Pressione Enter ou ,
                     </span>
                   </button>
-                )}
+                ) : null}
             </div>
           </div>
-        )}
+        ) : null}
       </div>
 
-      {!error && resolvedHelper && (
+      {!error && resolvedHelper ? (
         <p
           className={cn(
-            inputHelperVariants({ type: atMax ? 'helper' : 'helper' }),
+            inputHelperVariants({ type: 'helper' }),
             atMax && 'text-[var(--ds-color-warning)]'
           )}
         >
           {resolvedHelper}
         </p>
-      )}
+      ) : null}
     </SelectFieldWrapper>
   )
 }

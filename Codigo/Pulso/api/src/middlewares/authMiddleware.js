@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 const env = require('../config/env');
-const authRepository = require('../repositories/authRepository');
 
 const authMiddleware = async (req, res, next) => {
     try {
@@ -14,16 +13,15 @@ const authMiddleware = async (req, res, next) => {
         const token = authHeader.split(' ')[1];
         const decoded = jwt.verify(token, env.JWT_SECRET);
 
-        const usuario = await authRepository.findById(decoded.sub);
-
-        if (!usuario) {
-            throw new AppError('Usuário não encontrado.', 401);
+        if (!decoded.sub) {
+            throw new AppError('Token inválido.', 401);
         }
 
+        // Claims já vêm do JWT — evita query ao banco em toda requisição autenticada
         req.user = {
-            id: usuario.id,
-            email: usuario.email,
-            nome: usuario.nome,
+            id: decoded.sub,
+            email: decoded.email,
+            nome: decoded.nome,
         };
 
         next();

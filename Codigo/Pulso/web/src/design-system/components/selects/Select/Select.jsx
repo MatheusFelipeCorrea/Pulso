@@ -86,11 +86,14 @@ export const Select = ({
         >
           {selectedOption ? (
             <span className="flex min-w-0 flex-1 items-center gap-2 truncate text-[var(--ds-color-text)]">
-              {selectedOption.icon && (
-                <span className="inline-flex shrink-0" style={{ color: selectedOption.iconColor }}>
+              {selectedOption.icon ? (
+                <span
+                  className="ds-select-option__icon"
+                  style={selectedOption.iconColor ? { color: selectedOption.iconColor } : undefined}
+                >
                   {selectedOption.icon}
                 </span>
-              )}
+              ) : null}
               <span className="truncate">{selectedOption.label}</span>
             </span>
           ) : (
@@ -103,7 +106,7 @@ export const Select = ({
 
         {isOpen && (
           <div className={selectDropdownVariants()} role="listbox">
-            <div className="max-h-60 overflow-y-auto">
+            <div className="ds-select-dropdown__scroll">
               {options.map((option) => {
                 const enabledIdx = enabledOptions.indexOf(option)
                 return (

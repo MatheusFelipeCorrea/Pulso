@@ -8,20 +8,13 @@ import { cva } from 'class-variance-authority'
  */
 
 export const iconButtonVariants = cva(
-  // Base styles
   [
-    'inline-flex items-center justify-center',
-    'rounded-full',
-    'transition-all',
     'focus:outline-none',
     'disabled:cursor-not-allowed',
     'disabled:opacity-50',
   ],
   {
     variants: {
-      // ============================================================
-      // VARIANTES DE TIPO (usando classes customizadas do base.css)
-      // ============================================================
       variant: {
         primary: 'iconbtn-primary',
         secondary: 'iconbtn-secondary',
@@ -30,17 +23,13 @@ export const iconButtonVariants = cva(
         success: 'iconbtn-success',
       },
 
-      // ============================================================
-      // TAMANHOS (quadrados perfeitos)
-      // ============================================================
       size: {
-        sm: 'w-8 h-8',      // 32px
-        md: 'w-10 h-10',    // 40px (padrão)
-        lg: 'w-12 h-12',    // 48px
+        sm: 'iconbtn-sm',
+        md: 'iconbtn-md',
+        lg: 'iconbtn-lg',
       },
     },
 
-    // Valores padrão
     defaultVariants: {
       variant: 'primary',
       size: 'md',

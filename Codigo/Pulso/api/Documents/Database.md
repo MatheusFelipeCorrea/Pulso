@@ -1,6 +1,21 @@
 # 🗄️ Pulso — Dicionário de Dados
 
-Documento de referência de todas as entidades do banco de dados do sistema **Pulso**.
+Documento de referência das entidades do banco de dados do **Pulso**.
+
+> **Fonte de verdade:** `Codigo/Pulso/api/prisma/schema.prisma`  
+> **Última revisão:** maio/2026 — alinhado ao schema Prisma 5.x (PostgreSQL / Neon)
+
+---
+
+## 📊 Estado do schema vs API
+
+| Camada | Situação |
+|--------|----------|
+| **Prisma** | 28 modelos mapeados (todas as áreas do produto) |
+| **API em uso** | `Usuario`, `TokenRenovacao`, `ConfiguracaoUsuario`, `Categoria`, `Transacao`, `Tag`, `TransacaoTag`, `VendaVt`, `UsoVt`, `Sequencia` |
+| **Pendente na API** | Metas, viagens, lembretes, VT, grupos, IA, etc. |
+
+Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`, `configuracoes_usuario`).
 
 ---
 
@@ -42,7 +57,7 @@ Documento de referência de todas as entidades do banco de dados do sistema **Pu
 
 ## 👤 Usuario
 
-Dados principais da conta do usuário.
+Dados principais da conta do usuário. Tabela: `usuarios`
 
 | Campo | Tipo | Obrigatório | Descrição |
 |---|---|---|---|
@@ -54,6 +69,10 @@ Dados principais da conta do usuário.
 | `provedorAuth` | Enum | ✅ | `EMAIL` ou `GOOGLE` |
 | `googleId` | String | ❌ | ID único do Google (se OAuth) |
 | `verificado` | Boolean | ✅ | Email já confirmado? |
+| `tokenVerificacaoEmail` | VarChar(64) | ❌ | Token de confirmação de email |
+| `tokenVerificacaoExpira` | DateTime | ❌ | Expiração do token de verificação |
+| `tokenResetSenha` | VarChar(64) | ❌ | Token de recuperação de senha |
+| `tokenResetExpira` | DateTime | ❌ | Expiração do token de reset |
 | `criadoEm` | DateTime | ✅ | Data de cadastro |
 | `atualizadoEm` | DateTime | ✅ | Última atualização |
 
@@ -61,7 +80,7 @@ Dados principais da conta do usuário.
 
 ## ⚙️ ConfiguracaoUsuario
 
-Preferências e receitas fixas recorrentes do usuário.
+Preferências e receitas fixas recorrentes do usuário. Tabela: `configuracoes_usuario`
 
 | Campo | Tipo | Descrição |
 |---|---|---|
@@ -75,19 +94,21 @@ Preferências e receitas fixas recorrentes do usuário.
 | `diaVr` | Int | Dia em que cai o VR |
 | `valorVt` | Decimal(12,2) | Valor do Vale Transporte |
 | `diaVt` | Int | Dia em que cai o VT |
-| `diasIntervaloVendaVt` | Int | Intervalo em dias entre vendas de VT |
+| `diasIntervaloVendaVt` | Int | Intervalo em dias entre vendas de VT (default 30) |
 | `tema` | Enum | `CLARO` ou `ESCURO` |
 | `gamificacaoAtiva` | Boolean | Módulo de gamificação ativo? |
 | `googleCalendarAtivo` | Boolean | Integração com Google Calendar? |
 | `tokensGoogle` | Json | Tokens OAuth do Google (criptografados) |
 | `limiteGastos` | Decimal(12,2) | Limite de gastos pra alerta |
+| `valorPadraoPassagem` | Decimal(10,2) | Valor padrão da passagem de VT (uso) |
+| `modoUso` | Enum | `ESTAGIARIO`, `CLT`, `PJ`, `PESSOA_FISICA` (RF-103) |
 | `criadoEm` / `atualizadoEm` | DateTime | Timestamps |
 
 ---
 
 ## 🔑 TokenRenovacao
 
-Controle de sessões ativas (refresh tokens).
+Controle de sessões ativas (refresh tokens). Tabela: `tokens_renovacao`
 
 | Campo | Tipo | Descrição |
 |---|---|---|
@@ -103,24 +124,26 @@ Controle de sessões ativas (refresh tokens).
 
 ## 🏷️ Categoria
 
-Categorias de receitas/despesas (padrão ou personalizadas).
+Categorias de receitas/despesas por usuário. Tabela: `categorias`
 
 | Campo | Tipo | Obrigatório | Descrição |
 |---|---|---|---|
 | `id` | String | ✅ | Identificador |
 | `nome` | VarChar(60) | ✅ | Ex: "Alimentação" |
-| `icone` | VarChar(40) | ❌ | Nome do ícone lucide-react (ex: `Utensils`) |
-| `cor` | VarChar(7) | ✅ | Hex color `#RRGGBB` (default `#7C3AED`) |
+| `icone` | VarChar(40) | ❌ | Nome Lucide (ex: `UtensilsCrossed`, `Bus`) |
+| `cor` | VarChar(7) | ✅ | Hex `#RRGGBB` (default `#7C3AED`) |
 | `tipo` | Enum | ✅ | `RECEITA` ou `DESPESA` |
-| `padrao` | Boolean | ✅ | `true` = global, `false` = do usuário |
-| `usuarioId` | String | ❌ | FK nullable (null = global) |
+| `padrao` | Boolean | ✅ | `true` = categoria do catálogo inicial (RN-165) |
+| `usuarioId` | String | ❌ | FK do dono (null permitido no schema; seed usa id do usuário) |
 | `criadoEm` | DateTime | ✅ | Timestamp |
+
+**Índice único:** `(usuarioId, nome, tipo)`
 
 ---
 
 ## 💳 Transacao
 
-Coração do sistema — receitas e despesas.
+Receitas e despesas. Tabela: `transacoes`
 
 | Campo | Tipo | Obrigatório | Descrição |
 |---|---|---|---|
@@ -133,31 +156,35 @@ Coração do sistema — receitas e despesas.
 | `descricao` | VarChar(255) | ❌ | Descrição livre |
 | `data` | DateTime | ✅ | Data da transação |
 | `recorrente` | Boolean | ✅ | Se repete periodicamente |
-| `regraRecorrencia` | String | ❌ | Regra RRULE (ex: mensal) |
-| `paiId` | String | ❌ | Se foi gerada por recorrência, aponta a "mãe" |
+| `regraRecorrencia` | String | ❌ | JSON com frequência, `ateQuando`, `dataFim` |
+| `paiId` | String | ❌ | Transação “mãe” se gerada por recorrência |
 | `criadoEm` / `atualizadoEm` | DateTime | ✅ | Timestamps |
 
-**Regras de negócio:**
-- ❌ Alimentação NÃO pode usar recurso `VT`
+**Regras de negócio (validação recurso × categoria):**
+- ❌ Alimentação **não** pode usar `VT`
+- ❌ `VT` só com categoria Transporte (despesas)
+- ❌ `VR` só com Alimentação; `VA` com Alimentação ou Compras
 - ✅ Valor sempre > 0
 
 ---
 
 ## 🏷️ Tag
 
-Etiquetas livres pro usuário classificar transações.
+Etiquetas do usuário para classificar transações. Tabela: `tags`
 
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | String | Identificador |
-| `nome` | VarChar(40) | Nome da tag |
+| `nome` | VarChar(40) | Nome da tag (único por usuário) |
+| `icone` | VarChar(40) | Nome Lucide (default `Tag`) |
+| `cor` | VarChar(7) | Hex `#RRGGBB` (default `#71717A`) |
 | `usuarioId` | String (FK) | Dono |
 
 ---
 
 ## 🔗 TransacaoTag
 
-Relação N:N entre Transação ↔ Tags.
+Relação N:N entre Transação ↔ Tags. Tabela: `transacoes_tags`
 
 | Campo | Descrição |
 |---|---|
@@ -180,6 +207,7 @@ Objetivos de economia do usuário.
 | `prazo` | DateTime | ✅ | Data limite |
 | `tipo` | Enum | ✅ | `CURTO_PRAZO` ou `LONGO_PRAZO` |
 | `status` | Enum | ✅ | `ATIVA`, `PAUSADA`, `CONCLUIDA`, `CANCELADA` |
+| `prioridade` | Enum | ❌ | `ALTA`, `MEDIA`, `BAIXA` |
 | `descricao` | VarChar(500) | ❌ | Descrição opcional |
 | `concluidaEm` | DateTime | ❌ | Data da conclusão |
 | `criadoEm` / `atualizadoEm` | DateTime | ✅ | Timestamps |
@@ -541,6 +569,8 @@ Chat interno do grupo.
 | `AntecedenciaLembrete` | `NO_DIA`, `UM_DIA`, `TRES_DIAS` |
 | `PapelGrupo` | `ADMIN`, `MEMBRO` |
 | `NivelFinanceiro` | `INICIANTE`, `CONSCIENTE`, `ESTRATEGISTA`, `INVESTIDOR` |
+| `ModoUso` | `ESTAGIARIO`, `CLT`, `PJ`, `PESSOA_FISICA` |
+| `Prioridade` | `ALTA`, `MEDIA`, `BAIXA` |
 
 ---
 
@@ -572,11 +602,13 @@ Grupo ──── (N) ViagemGrupo ──── (N) DespesaViagemGrupo
 
 ## 📝 Notas
 
-- **Timestamps**: `criadoEm` e `atualizadoEm` são gerenciados automaticamente pelo Prisma
-- **IDs**: todos usam `cuid()` (collision-resistant unique identifier)
-- **Valores monetários**: sempre `Decimal(12,2)` para evitar erros de arredondamento
-- **Cores**: formato hex `#RRGGBB` (7 caracteres com `#`)
-- **Ícones**: nome do componente do lucide-react como string (ex: `"Utensils"`)
-- **Moedas**: código ISO 4217 de 3 letras (ex: `"USD"`, `"BRL"`, `"EUR"`)
-- **Tokens Google**: devem ser criptografados em repouso antes de salvar
-- **Enums sem acentos**: convenção pra evitar problemas de encoding no banco
+- **Fonte de verdade:** alterações de modelo → editar `prisma/schema.prisma` e rodar `npm run db:migrate`
+- **Timestamps:** `criadoEm` e `atualizadoEm` gerenciados pelo Prisma (`@default(now())`, `@updatedAt`)
+- **IDs:** `cuid()` em todas as entidades
+- **Valores monetários:** `Decimal(12,2)` (ou `Decimal(10,2)` em `UsoVt.valorPorPassagem`)
+- **Cores:** hex `#RRGGBB` (7 caracteres)
+- **Ícones:** string com nome Lucide (ex: `UtensilsCrossed`, `Banknote`) — ver `web/src/components/badges/iconRegistry.jsx`
+- **Moedas:** ISO 4217, 3 letras (`USD`, `BRL`, `EUR`)
+- **Tokens Google:** criptografar em repouso antes de persistir em `tokensGoogle`
+- **Recorrência:** `regraRecorrencia` armazena JSON (`frequencia`, `ateQuando`, `dataFim`), não RRULE RFC 5545
+- **Nomes de tabela:** ver `@@map` em cada model no schema Prisma

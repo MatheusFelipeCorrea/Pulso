@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback } from 'react'
+import { createContext, useState, useCallback, useMemo } from 'react'
 import { ToastContainer } from './ToastContainer.jsx'
 
 /**
@@ -77,15 +77,18 @@ export const ToastProvider = ({ children }) => {
   // ============================================================
   // VALUE DO CONTEXT
   // ============================================================
-  const value = {
-    toasts,
-    addToast,
-    removeToast,
-    success,
-    error,
-    warning,
-    info,
-  }
+  const value = useMemo(
+    () => ({
+      toasts,
+      addToast,
+      removeToast,
+      success,
+      error,
+      warning,
+      info,
+    }),
+    [toasts, addToast, removeToast, success, error, warning, info]
+  )
 
   return (
     <ToastContext.Provider value={value}>

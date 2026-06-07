@@ -24,11 +24,14 @@ export const SelectOption = ({
     )}
   >
     {leftSlot}
-    {option.icon && (
-      <span className="inline-flex shrink-0 items-center" style={{ color: option.iconColor }}>
+    {option.icon ? (
+      <span
+        className="ds-select-option__icon"
+        style={option.iconColor ? { color: option.iconColor } : undefined}
+      >
         {option.icon}
       </span>
-    )}
+    ) : null}
     <span className="flex-1 truncate">{option.label}</span>
     {selected && showCheck && (
       <Check size={16} className="shrink-0 text-[var(--ds-color-primary-light)]" />

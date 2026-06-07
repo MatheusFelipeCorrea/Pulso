@@ -22,7 +22,7 @@ export const ToastContainer = ({ toasts, onClose }) => {
 
   return createPortal(
     <div
-      className="ds-toast-container fixed top-4 right-4 z-[var(--ds-z-toast)] flex flex-col gap-3 pointer-events-none"
+      className="ds-toast-container fixed top-4 right-4 z-[var(--ds-z-toast)] flex flex-col gap-2 pointer-events-none"
       aria-live="polite"
       aria-atomic="false"
     >

@@ -176,6 +176,28 @@
   }
 }
 
+@keyframes ds-dropdown-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ds-picker-slide {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ============================================================
    KEYFRAMES - SHIMMER (para Skeleton)
    ============================================================ */
@@ -280,11 +302,11 @@
    CLASSES UTILITÁRIAS - TOAST
    ============================================================ */
 .animate-toast-enter {
-  animation: toast-enter 300ms ease-out;
+  animation: toast-enter 200ms ease;
 }
 
 .animate-toast-exit {
-  animation: toast-exit 300ms ease-in;
+  animation: toast-exit 200ms ease;
 }
 
 /* ============================================================

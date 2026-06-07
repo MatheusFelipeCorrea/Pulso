@@ -15,6 +15,9 @@ import './styles/globals.css'
 import './styles/auth.css'
 import './styles/legal.css'
 import './styles/pulso-components.css'
+import './styles/sidebar.css'
+import './styles/transactions.css'
+import './styles/transport.css'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>

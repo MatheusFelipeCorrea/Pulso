@@ -24,7 +24,6 @@ export const SelectTrigger = ({
         error,
         disabled,
         multiline,
-        hoverable: !open && !error && !disabled,
       }),
       className
     )}

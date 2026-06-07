@@ -2,8 +2,7 @@
  * Template HTML — verificação de email (compatível com clientes de email)
  */
 
-const buildVerificationEmailHtml = ({ verificationUrl, frontendUrl, recipientEmail }) => {
-    const logoUrl = `${frontendUrl}/LogoMClaro.png`;
+const buildVerificationEmailHtml = ({ verificationUrl, logoSrc, recipientEmail }) => {
     const year = new Date().getFullYear();
 
     return `<!DOCTYPE html>
@@ -37,7 +36,7 @@ const buildVerificationEmailHtml = ({ verificationUrl, frontendUrl, recipientEma
           <!-- Logo acima do card -->
           <tr>
             <td align="center" style="padding-bottom:24px;">
-              <img src="${logoUrl}" alt="Pulso" width="120" height="36" style="display:block;height:36px;width:auto;max-width:120px;border:0;" />
+              <img src="${logoSrc}" alt="Pulso" width="120" height="36" style="display:block;height:36px;width:auto;max-width:120px;border:0;" />
               <p style="margin:8px 0 0;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;line-height:1.4;color:#71717A;">
                 Seu monitoramento financeiro
               </p>

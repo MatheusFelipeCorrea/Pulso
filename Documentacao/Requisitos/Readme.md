@@ -2,15 +2,20 @@
 
 Documento de rastreamento de todos os requisitos funcionais e não funcionais do sistema **Pulso**.
 
+> **Última revisão:** alinhado ao código em maio/2026.  
+> Documentação técnica: [Frontend](../../Codigo/Pulso/web/Documents/Readme.md) · [API](../../Codigo/Pulso/api/Documents/Readme.md) · [Banco de dados](../../Codigo/Pulso/api/Documents/Database.md)
+
 ---
 
 ## 📊 Progresso Geral
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 138  | 0 |  |
-| Requisitos Não Funcionais | 15 | 0 |  |
-| **Total** | **153** | **0** |  |
+| Requisitos Funcionais | 138 | 16 | ~12% |
+| Requisitos Não Funcionais | 15 | 6 | ~40% |
+| **Total** | **153** | **22** | **~14%** |
+
+Contagem considera apenas requisitos **implementados e utilizáveis** no código atual (auth, transações). Demais módulos têm schema/API planejados ou parcialmente preparados.
 
 ---
 
@@ -18,9 +23,9 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Módulo | Total | Concluídos | Progresso |
 |---|---|---|---|
-| 🔐 Autenticação | 6 | 0 |  |
+| 🔐 Autenticação | 6 | 6 | ✅ |
 | 📊 Dashboard | 8 | 0 |  |
-| 💳 Transações | 11 | 0 |  |
+| 💳 Transações | 11 | 10 | 🟡 |
 | 🎯 Metas | 7 | 0 |  |
 | 🌍 Viagens e Moedas | 11 | 0 |  |
 | 🤖 Insights | 7 | 0 |  |
@@ -28,16 +33,18 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | 📅 Lembretes | 5 | 0 |  |
 | 🚌 Vale Transporte | 8 | 0 |  |
 | 📈 Relatórios | 6 | 0 |  |
-| 👤 Perfil e Configurações | 6 | 0 |  |
-| 🎮 Gamificação | 5 | 0 |  |
-| 🏠 Homepage | 4 | 0 |  |
+| 👤 Perfil e Configurações | 8 | 0 | 🟡 |
+| 🎮 Gamificação | 7 | 0 |  |
+| 🏠 Homepage | 4 | 0 | ⏳ Prototipação pendente |
 | 👥 Grupos | 15 | 0 |  |
-| ⚙️ Não Funcionais | 15 | 0 |  |
+| ⚙️ Não Funcionais | 15 | 6 | 🟡 |
 | 📊 Orçamento Mensal | 6 | 0 |  |
 | 💸 Divisão de Despesas | 6 | 0 |  |
 | 📅 Calendário Financeiro | 5 | 0 |  |
 | 🤝 Dívidas Pessoais | 7 | 0 |  |
 | 🛒 Planejamento de Compra | 6 | 0 |  |
+
+**Legenda:** ✅ módulo entregue · 🟡 parcial (UI ou backend incompleto) · ⏳ aguardando prototipação/implementação
 
 ---
 
@@ -45,12 +52,12 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-001 | O sistema deve permitir cadastro com email e senha | 🔴 Essencial |
-| - [ ] | RF-002 | O sistema deve permitir login via Google OAuth 2.0 | 🔴 Essencial |
-| - [ ] | RF-003 | O sistema deve enviar email de confirmação ao cadastrar com email/senha | 🔴 Essencial |
-| - [ ] | RF-004 | O sistema deve permitir recuperação de senha via email | 🔴 Essencial |
-| - [ ] | RF-005 | O sistema deve manter a sessão ativa via token JWT com refresh token | 🔴 Essencial |
-| - [ ] | RF-006 | O sistema deve permitir logout com invalidação de sessão | 🔴 Essencial |
+| - [x] | RF-001 | O sistema deve permitir cadastro com email e senha | 🔴 Essencial |
+| - [x] | RF-002 | O sistema deve permitir login via Google OAuth 2.0 | 🔴 Essencial |
+| - [x] | RF-003 | O sistema deve enviar email de confirmação ao cadastrar com email/senha | 🔴 Essencial |
+| - [x] | RF-004 | O sistema deve permitir recuperação de senha via email | 🔴 Essencial |
+| - [x] | RF-005 | O sistema deve manter a sessão ativa via token JWT com refresh token | 🔴 Essencial |
+| - [x] | RF-006 | O sistema deve permitir logout com invalidação de sessão | 🔴 Essencial |
 
 ---
 
@@ -73,17 +80,17 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-015 | O sistema deve permitir registrar receitas informando valor, data, categoria e origem (salário, VA, VR, VT, extra) | 🔴 Essencial |
-| - [ ] | RF-016 | O sistema deve permitir registrar despesas informando valor, data, categoria e recurso utilizado | 🔴 Essencial |
-| - [ ] | RF-017 | O sistema deve oferecer categorias padrão (alimentação, transporte, lazer, educação, moradia, saúde, etc.) | 🔴 Essencial |
+| - [x] | RF-015 | O sistema deve permitir registrar receitas informando valor, data, categoria e origem (salário, VA, VR, VT, extra) | 🔴 Essencial |
+| - [x] | RF-016 | O sistema deve permitir registrar despesas informando valor, data, categoria e recurso utilizado | 🔴 Essencial |
+| - [x] | RF-017 | O sistema deve oferecer categorias padrão (alimentação, transporte, lazer, educação, moradia, saúde, etc.) | 🔴 Essencial |
 | - [ ] | RF-018 | O sistema deve permitir o usuário criar categorias personalizadas | 🟡 Importante |
-| - [ ] | RF-019 | O sistema deve permitir adicionar tags livres às transações | 🟢 Desejável |
-| - [ ] | RF-020 | O sistema deve permitir registrar transações recorrentes com frequência configurável (semanal, mensal, etc.) | 🔴 Essencial |
-| - [ ] | RF-021 | O sistema deve gerar automaticamente transações recorrentes nas datas programadas | 🔴 Essencial |
-| - [ ] | RF-022 | O sistema deve permitir editar e excluir transações já registradas | 🔴 Essencial |
-| - [ ] | RF-023 | O sistema deve permitir filtrar transações por período, categoria, tipo (receita/despesa) e recurso | 🟡 Importante |
-| - [ ] | RF-024 | O sistema deve permitir buscar transações por descrição ou tag | 🟡 Importante |
-| - [ ] | RF-025 | O sistema deve impedir que o usuário registre despesas de alimentação usando recurso do tipo VT | 🟡 Importante |
+| - [x] | RF-019 | O sistema deve permitir adicionar tags livres às transações | 🟢 Desejável |
+| - [x] | RF-020 | O sistema deve permitir registrar transações recorrentes com frequência configurável (semanal, mensal, etc.) | 🔴 Essencial |
+| - [x] | RF-021 | O sistema deve gerar automaticamente transações recorrentes nas datas programadas | 🔴 Essencial |
+| - [x] | RF-022 | O sistema deve permitir editar e excluir transações já registradas | 🔴 Essencial |
+| - [x] | RF-023 | O sistema deve permitir filtrar transações por período, categoria, tipo (receita/despesa) e recurso | 🟡 Importante |
+| - [x] | RF-024 | O sistema deve permitir buscar transações por descrição ou tag | 🟡 Importante |
+| - [x] | RF-025 | O sistema deve impedir que o usuário registre despesas de alimentação usando recurso do tipo VT | 🟡 Importante |
 
 ---
 
@@ -225,6 +232,8 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 ## 🏠 Módulo 12 — Homepage (Landing Page)
 
+> **Status:** prototipação ainda **pendente**. Existe apenas um placeholder mínimo em `LandingPage.jsx` (título + CTAs); a landing completa com seções de produto ainda não foi desenhada nem implementada.
+
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
 | - [ ] | RF-084 | O sistema deve exibir uma homepage pública apresentando o Pulso, suas funcionalidades e benefícios | 🔴 Essencial |
@@ -315,20 +324,33 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | Status | Código | Requisito | Categoria | Prioridade |
 |---|---|---|---|---|
 | - [ ] | RNF-001 | O sistema deve responder a qualquer requisição em no máximo 2 segundos em condições normais | Performance | 🔴 Essencial |
-| - [ ] | RNF-002 | O sistema deve armazenar senhas com hash bcrypt com salt rounds ≥ 12 | Segurança | 🔴 Essencial |
+| - [x] | RNF-002 | O sistema deve armazenar senhas com hash bcrypt com salt rounds ≥ 12 | Segurança | 🔴 Essencial |
 | - [ ] | RNF-003 | Toda comunicação deve ser feita via HTTPS | Segurança | 🔴 Essencial |
 | - [ ] | RNF-004 | O sistema deve implementar rate limiting para prevenir abuso de APIs (máx. 100 req/min por usuário) | Segurança | 🔴 Essencial |
-| - [ ] | RNF-005 | O sistema deve validar e sanitizar toda entrada de dados no backend para prevenir SQL Injection e XSS | Segurança | 🔴 Essencial |
-| - [ ] | RNF-006 | O front-end deve ser responsivo e funcional em telas de 360px até 1920px | Usabilidade | 🔴 Essencial |
+| - [x] | RNF-005 | O sistema deve validar e sanitizar toda entrada de dados no backend para prevenir SQL Injection e XSS | Segurança | 🔴 Essencial |
+| - [x] | RNF-006 | O front-end deve ser responsivo e funcional em telas de 360px até 1920px | Usabilidade | 🔴 Essencial |
 | - [ ] | RNF-007 | O sistema deve suportar no mínimo 500 usuários simultâneos dentro do free tier | Escalabilidade | 🟡 Importante |
 | - [ ] | RNF-008 | O banco de dados deve ter backup automático (recurso nativo do Neon) | Confiabilidade | 🔴 Essencial |
 | - [ ] | RNF-009 | O sistema deve ter disponibilidade mínima de 95% mensal | Disponibilidade | 🟡 Importante |
 | - [ ] | RNF-010 | O sistema deve seguir padrões de acessibilidade WCAG 2.1 nível A (contraste, navegação por teclado, aria-labels) | Acessibilidade | 🟡 Importante |
-| - [ ] | RNF-011 | O código deve seguir arquitetura em camadas com separação clara entre controllers, services e repositories | Manutenibilidade | 🔴 Essencial |
-| - [ ] | RNF-012 | O sistema deve utilizar variáveis de ambiente para todas as chaves e credenciais sensíveis | Segurança | 🔴 Essencial |
-| - [ ] | RNF-013 | Os tokens JWT devem expirar em 15 minutos com refresh token de 7 dias | Segurança | 🔴 Essencial |
-| - [ ] | RNF-014 | O sistema deve implementar CORS configurado apenas para origens permitidas | Segurança | 🔴 Essencial |
+| - [x] | RNF-011 | O código deve seguir arquitetura em camadas com separação clara entre controllers, services e repositories | Manutenibilidade | 🔴 Essencial |
+| - [x] | RNF-012 | O sistema deve utilizar variáveis de ambiente para todas as chaves e credenciais sensíveis | Segurança | 🔴 Essencial |
+| - [x] | RNF-013 | Os tokens JWT devem expirar em 15 minutos com refresh token de 7 dias | Segurança | 🔴 Essencial |
+| - [x] | RNF-014 | O sistema deve implementar CORS configurado apenas para origens permitidas | Segurança | 🔴 Essencial |
 | - [ ] | RNF-015 | O sistema deve manter cobertura mínima de 85% de testes unitários nas camadas de serviço, podendo ser superior | Qualidade | 🔴 Essencial |
+
+---
+
+## 📌 Notas de implementação (maio/2026)
+
+| Item | Situação |
+|------|----------|
+| RF-084–087 | Homepage pública **pendente** — só placeholder em `LandingPage.jsx`; **prototipação da landing ainda não feita** |
+| RF-018 | Categorias **personalizadas** ainda não têm CRUD na API — só seed padrão no registro |
+| RF-076 | Toggle claro/escuro via `useTheme()` no **mobile**; tela Configurações ainda não existe |
+| RF-103 / RF-104 | Campo `modoUso` existe no banco (`ConfiguracaoUsuario`); UI de perfil pendente |
+| Sidebar / layout autenticado | Entregue; demais rotas do menu = placeholder |
+| Banco completo | Schema Prisma com 28 entidades; API expõe auth + transações + categorias + tags |
 
 ---
 
@@ -404,12 +426,14 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 ## 📊 Distribuição por Prioridade
 
+Contagem apenas dos **138 requisitos funcionais** (RF-001 a RF-138).
+
 | Prioridade | Quantidade | Percentual |
 |---|---|---|
-| 🔴 Essencial | 62 | 53% |
-| 🟡 Importante | 40 | 34% |
-| 🟢 Desejável | 15 | 13% |
-| **Total** | **117** | **100%** |
+| 🔴 Essencial | 71 | 51% |
+| 🟡 Importante | 53 | 38% |
+| 🟢 Desejável | 14 | 10% |
+| **Total** | **138** | **100%** |
 
 ---
 
@@ -421,3 +445,5 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 - [ ] 📊 Dashboard customizável (drag and drop de widgets)
 - [ ] 🏦 Integração com Open Banking
 - [ ] 📸 OCR de cupons fiscais (foto → transação)
+- [ ] 📱 Tabela FIPE Sistema de gestão de veiculos e busca de veiculos
+- [ ] 📱 Integração com bot whatsapp

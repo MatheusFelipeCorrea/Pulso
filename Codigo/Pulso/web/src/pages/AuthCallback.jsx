@@ -71,7 +71,7 @@ export default function AuthCallback() {
         const user = await getMe()
 
         dispatch(setUser(user))
-        navigate('/', { replace: true })
+        navigate('/dashboard', { replace: true })
 
       } catch {
 

@@ -1,607 +1,285 @@
 # 🌐 Web — Frontend
 
-Interface construída com **React + Vite** estilizada com **Tailwind CSS v4.2**, gerenciamento de estado global com **Redux Toolkit (Slices)** e um **Design System próprio reutilizável** seguindo uma arquitetura baseada em **componentes, páginas e camadas de dados**.
+Interface do **Pulso** com React + Vite, Tailwind CSS v4, Redux (auth) e design system próprio.
+
+> Este documento descreve o **estado atual do código**. Módulos ainda não implementados aparecem em [Roadmap](#-roadmap).
 
 ---
 
 ## 🗂️ Índice
 
+- [Estado do projeto](#-estado-do-projeto)
 - [Tecnologias](#-tecnologias)
-- [Estrutura de Pastas](#-estrutura-de-pastas)
-- [Arquitetura em Camadas](#-arquitetura-em-camadas)
-- [Design System vs Projeto](#-design-system-vs-projeto)
-- [Descrição das Camadas](#-descrição-das-camadas)
-- [Fluxo de Dados](#-fluxo-de-dados)
-- [Rotas da Aplicação](#-rotas-da-aplicação)
-- [Sidebar — Menus e Submenus](#-sidebar--menus-e-submenus)
-- [Modais](#-modais)
-- [Como Rodar](#-como-rodar)
-- [Variáveis de Ambiente](#-variáveis-de-ambiente)
+- [Estrutura de pastas](#-estrutura-de-pastas)
+- [Arquitetura em camadas](#-arquitetura-em-camadas)
+- [Design System vs Pulso](#-design-system-vs-pulso)
+- [Rotas](#-rotas)
+- [Sidebar](#-sidebar)
+- [Módulo Transações (implementado)](#-módulo-transações-implementado)
+- [Autenticação](#-autenticação)
+- [Store Redux](#-store-redux)
+- [Services e hooks](#-services-e-hooks)
+- [Estilos globais](#-estilos-globais)
+- [Como rodar](#-como-rodar)
+- [Variáveis de ambiente](#-variáveis-de-ambiente)
+- [Roadmap](#-roadmap)
+
+---
+
+## 📊 Estado do projeto
+
+| Área | Status |
+|------|--------|
+| Páginas legais (`/termos`, `/privacidade`) | ✅ |
+| Homepage / landing (`/`) | ⏳ Prototipação pendente (placeholder mínimo) |
+| Auth (login, registro, OAuth, reset, verify) | ✅ |
+| Layout autenticado (MainLayout + Sidebar) | ✅ |
+| Design System + demo `/design-system` | ✅ |
+| **Transações** (`/transactions`) | ✅ |
+| **Vale Transporte** (`/transport-voucher`) | ✅ |
+| Dashboard, metas, viagens, etc. | 🔜 Placeholder (`InDevelopmentPage`) |
 
 ---
 
 ## 🛠️ Tecnologias
 
 | Tecnologia | Uso |
-|---|---|
-| React 18 | Biblioteca de interface |
-| Vite | Bundler e servidor de desenvolvimento |
-| Tailwind CSS v4.2 | Estilização (CSS-first, plugin Vite) |
-| React Router DOM v6 | Navegação entre páginas |
-| Redux Toolkit | Gerenciamento de estado global (slices) |
-| Axios | Requisições HTTP |
-| React Hook Form | Gerenciamento de formulários |
-| Zod | Validação de dados |
-| Recharts | Gráficos e visualizações |
+|------------|-----|
+| React 19 | UI |
+| Vite 6 | Build e dev server |
+| Tailwind CSS v4 | Utilitários (`@tailwindcss/vite`) |
+| React Router v7 | Rotas |
+| Redux Toolkit | Estado global (**auth**; demais slices planejados) |
+| Axios | HTTP |
+| React Hook Form + Zod | Formulários (auth e futuros módulos) |
 | Lucide React | Ícones |
-| date-fns | Manipulação de datas |
-| Sonner | Notificações toast |
-| @react-pdf/renderer | Exportação de relatórios em PDF |
-| PapaParse | Exportação de dados em CSV |
-| Vitest + Testing Library | Testes unitários |
+| date-fns | Datas |
+| Toast próprio (design-system) | Notificações — **não** usa Sonner em runtime |
+| Vitest + Testing Library | Testes |
+| Recharts, PapaParse, @react-pdf/renderer | Dependências para módulos futuros |
 
 ---
 
-## 📁 Estrutura de Pastas
+## 📁 Estrutura de pastas
 
 ```
 Pulso/web/
-├── .env
-├── .env.example
-├── .gitignore
-├── eslint.config.js
-├── index.html
-├── package.json
-├── vite.config.js
-├── Documents/
-│   └── Readme.md
-├── public/
-│   ├── favicon.svg
-│   └── icons.svg
-└── src/
- ├── main.jsx
- ├── App.jsx
- │
- ├── design-system/           ← 🎨 REUTILIZÁVEL (portável)
- │   ├── components/
- │   │   ├── inputs/
- │   │   ├── selects/
- │   │   ├── pickers/
- │   │   ├── buttons/
- │   │   ├── feedback/
- │   │   ├── data-display/
- │   │   ├── navigation/
- │   │   ├── overlays/
- │   │   ├── forms/
- │   │   └── index.js
- │   ├── hooks/
- │   ├── utils/
- │   ├── styles/
- │   │   ├── tokens.css
- │   │   ├── base.css
- │   │   └── animations.css
- │   └── README.md
- │
- ├── components/              ← 💼 ESPECÍFICO DO PULSO
- │   ├── layouts/
- │   │   ├── MainLayout/
- │   │   ├── AuthLayout/
- │   │   ├── Header/
- │   │   ├── Sidebar/
- │   │   └── Footer/
- │   └── features/
- │       ├── auth/
- │       ├── dashboard/
- │       ├── transactions/
- │       ├── goals/
- │       ├── trips/
- │       ├── insights/
- │       ├── chatbot/
- │       ├── reminders/
- │       ├── transport/
- │       ├── reports/
- │       ├── gamification/
- │       ├── groups/
- │       ├── budget/
- │       ├── debts/
- │       ├── split/
- │       ├── purchase/
- │       ├── calendar/
- │       └── homepage/
- │
- ├── pages/
- ├── hooks/                   ← hooks específicos do Pulso
- ├── store/
- │   └── slices/
- ├── services/
- ├── schemas/
- ├── utils/                   ← utils específicos do Pulso
- ├── styles/
- │   └── globals.css          ← importa design-system + tema Pulso
- └── tests/
-     ├── components/
-     ├── hooks/
-     └── services/
+├── Documents/Readme.md
+├── src/
+│   ├── main.jsx                 ← imports de CSS (DS + app)
+│   ├── App.jsx
+│   ├── design-system/           ← UI reutilizável (ver README próprio)
+│   ├── components/
+│   │   ├── badges/              ← PulsoBadge, iconRegistry, catálogo
+│   │   ├── features/
+│   │   │   ├── auth/
+│   │   │   ├── dashboard/       ← parcial (cards/notificações)
+│   │   │   └── transactions/    ← módulo completo
+│   │   ├── layouts/
+│   │   │   ├── MainLayout/
+│   │   │   ├── AuthLayout/
+│   │   │   └── Sidebar/
+│   │   └── routing/             ← ProtectedRoute, AuthBootstrap
+│   ├── pages/
+│   ├── hooks/                   ← useFilterOptions, useTransactionFilterOptions
+│   ├── services/                ← api, auth, transações, categorias, tags
+│   ├── store/slices/            ← authSlice, themeSlice
+│   ├── config/                  ← appRoutes, sidebarNavigation
+│   ├── utils/                   ← filterOptions, transactionValidation, etc.
+│   ├── styles/                  ← globals, auth, sidebar, transactions, …
+│   └── content/                 ← textos legais
 ```
 
 ---
 
-## 🏗️ Arquitetura em Camadas
+## 🏗️ Arquitetura em camadas
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                        PAGES                             │
-│  Telas completas que compõem as rotas                    │
-└─────────────────────────┬───────────────────────────────┘
-                       ▼
-┌─────────────────────────────────────────────────────────┐
-│              COMPONENTS (features + layouts)              │
-│  Componentes de NEGÓCIO específicos do Pulso             │
-│  Importam do design-system para construir a UI           │
-└───────────┬─────────────────────────┬───────────────────┘
-         ▼                         ▼
-┌───────────────────────┐  ┌──────────────────────────────┐
-│    DESIGN SYSTEM      │  │      HOOKS + STORE           │
-│  Componentes puros    │  │  Lógica + Estado global      │
-│  Não conhecem Pulso   │  │  Conectam UI com dados       │
-│  Portáveis            │  │                              │
-└───────────────────────┘  └──────────────┬───────────────┘
-                                       ▼
-                        ┌──────────────────────────────┐
-                        │         SERVICES              │
-                        │  Comunicação HTTP (Axios)     │
-                        └──────────────┬───────────────┘
-                                       ▼
-                        ┌──────────────────────────────┐
-                        │         API BACKEND           │
-                        └──────────────────────────────┘
+Pages
+  → components/features (+ layouts)
+    → design-system (UI pura)
+    → hooks + services (dados)
+      → API /api/*
 ```
+
+**Transações hoje:** estado de filtros e listagem ficam em `TransactionsPage` (useState + useEffect), não em Redux/TanStack Query. Serviços em `transactionService.js`.
 
 ---
 
-## 🎨 Design System vs Projeto
+## 🎨 Design System vs Pulso
 
-| Aspecto | 🎨 design-system/ | 💼 components/ |
-|---|---|---|
-| Conhece "Pulso"? | ❌ Não | ✅ Sim |
-| Importa de fora? | ❌ Nunca | ✅ Importa do design-system |
-| Acessa Redux? | ❌ Nunca | ✅ Sim |
-| Faz HTTP? | ❌ Nunca | ✅ Via hooks/services |
-| Recebe dados via? | Props | Props + Store + Hooks |
-| Cores via? | CSS Variables (--ds-*) | CSS Variables (definidas no tema Pulso) |
-| Portável? | ✅ Copia pra qualquer projeto | ❌ Específico do Pulso |
-
-**Import correto:**
+| | design-system/ | components/ |
+|--|----------------|-------------|
+| Conhece Pulso? | ❌ | ✅ |
+| HTTP / Redux | ❌ | ✅ (via services/hooks) |
+| Cores | `--ds-*` em CSS | Badges/recursos em `components/badges/` |
 
 ```jsx
-// ✅ Feature importa do design-system
-import { Button, InputMoney, Select, Modal } from '@/design-system/components'
+import { Button, Select, Modal } from '@/design-system/components'
+import { PulsoBadge } from '@/components/badges/PulsoBadge.jsx'
+import { obterOpcoesFiltro } from '@/services/transactionService.js'
+```
 
-// ✅ Feature importa hooks do projeto
-import { useTransactions } from '@/hooks/useTransactions'
+Documentação: `src/design-system/README.md`
 
-// ❌ Design-system NUNCA importa do projeto
-// import { useAuth } from '@/hooks/useAuth'  ← PROIBIDO dentro de design-system
+---
+
+## 🛣️ Rotas
+
+### Públicas
+
+| Rota | Página |
+|------|--------|
+| `/` | Landing (placeholder — prototipação pendente) |
+| `/login`, `/register` | Auth |
+| `/forgot-password`, `/reset-password/:token` | Recuperação de senha |
+| `/verify-email/:token` | Verificação de email |
+| `/auth/callback` | Retorno OAuth Google |
+| `/termos`, `/privacidade` | Legal |
+| `/design-system` | Demo do DS |
+
+### Autenticadas (`MainLayout`)
+
+| Rota | Página |
+|------|--------|
+| `/transactions` | **Transações** (implementada) |
+| `/dashboard`, `/budget`, `/goals`, … | `InDevelopmentPage` |
+
+Lista completa de paths: `src/config/appRoutes.js`  
+Menu lateral: `src/config/sidebarNavigation.js`
+
+---
+
+## 🗂️ Sidebar
+
+Configuração única em `sidebarNavigation.js` (`SIDEBAR_NAV` + `SIDEBAR_NAV_FOOTER`).
+
+- Desktop: sidebar fixa, colapsável
+- Mobile: drawer + header com menu e toggle de tema
+- Tema: `useTheme()` → classe `.dark` no `<html>`, chave `ds-theme` no localStorage
+
+---
+
+## 💳 Módulo Transações (implementado)
+
+**Página:** `pages/TransactionsPage.jsx`
+
+**Componentes** (`components/features/transactions/`):
+
+| Arquivo | Função |
+|---------|--------|
+| `TransactionFilters.jsx` | Busca, período, categoria, tipo, recurso, Filtrar/Limpar |
+| `TransactionSummaryCards.jsx` | Receitas, despesas, saldo |
+| `TransactionList.jsx` | Lista agrupada por data |
+| `TransactionFormModal.jsx` | Criar/editar, tags, recorrência |
+| `DeleteTransactionModal.jsx` | Exclusão (incl. futuras recorrentes) |
+
+**Dados:**
+
+- `GET /transacoes`, `/transacoes/resumo`, `/transacoes/filtros`
+- `POST /transacoes`, `PATCH /transacoes/:id`, `DELETE /transacoes/:id`
+- Opções de filtro/formulário vêm do backend (`useTransactionFilterOptions`)
+- Ícones de categoria/recurso: `utils/filterOptions.js` + `components/badges/`
+
+**Estilos:** `styles/transactions.css`
+
+---
+
+## 🔐 Autenticação
+
+- JWT access + refresh (`services/authService.js`, `store/slices/authSlice.js`)
+- Interceptor Axios em `services/api.js` (401 → refresh ou logout)
+- Rotas protegidas: `ProtectedRoute`, bootstrap: `AuthBootstrap`
+
+---
+
+## 🗄️ Store Redux
+
+| Slice | Uso |
+|-------|-----|
+| `authSlice` | Usuário logado, tokens |
+| `themeSlice` | Legado; tema visual usa `useTheme()` + `localStorage` (`ds-theme`) |
+
+Slices de transações, metas, etc. estão comentados em `store/index.js` — previstos para módulos futuros.
+
+---
+
+## 🔌 Services e hooks
+
+### Services (implementados)
+
+| Arquivo | Rotas |
+|---------|-------|
+| `authService.js` | `/auth/*` |
+| `transactionService.js` | `/transacoes/*` |
+| `categoryService.js` | `/categorias` |
+| `tagService.js` | `/tags` |
+
+### Hooks (implementados)
+
+| Hook | Função |
+|------|--------|
+| `useFilterOptions.js` | Genérico para carregar opções com cache simples |
+| `useTransactionFilterOptions.js` | Metadados de filtros/formulário de transações |
+
+### Utils relevantes
+
+| Arquivo | Função |
+|---------|--------|
+| `filterOptions.js` | Categoria/recurso → opções de Select com ícone |
+| `transactionValidation.js` | Regras recurso × categoria (front) |
+| `transactionRecurrence.js` | Período, MonthPicker, regra de recorrência |
+
+---
+
+## 🎨 Estilos globais
+
+Importados em `main.jsx` (ordem importa):
+
+```js
+import './design-system/styles/tokens.css'
+import './design-system/styles/base.css'
+import './design-system/styles/components.css'  // Select, inputs, badges, pickers…
+import './design-system/styles/animations.css'
+import './styles/globals.css'
+import './styles/auth.css'
+import './styles/legal.css'
+import './styles/pulso-components.css'
+import './styles/sidebar.css'
+import './styles/transactions.css'
 ```
 
 ---
 
-## 📖 Descrição das Camadas
-
----
-
-### 📁 `design-system/` — Componentes Reutilizáveis
-
-Biblioteca de UI genérica. Não sabe o que é "transação", "meta" ou "VT". Só sabe o que é "input", "botão", "modal". Pode ser copiada integralmente para qualquer outro projeto React + Tailwind.
-
-**Documentação completa:** Ver `design-system/README.md`
-
-**Categorias de componentes:**
-
-| Categoria | Componentes |
-|---|---|
-| inputs/ | InputText, InputPassword, InputMoney, InputNumber, InputSearch, Textarea |
-| selects/ | Select, SelectSearch, MultiSelect, MultiSelectSearch, TagsInput |
-| pickers/ | DatePicker, DateRangePicker, MonthPicker, TimePicker |
-| buttons/ | Button, IconButton |
-| feedback/ | Toast, Alert, Spinner, Skeleton, EmptyState, ErrorState |
-| data-display/ | Badge, Avatar, ProgressBar, ProgressCircle, Table, Tooltip, Card |
-| navigation/ | Tabs, Breadcrumbs, Pagination |
-| overlays/ | Modal, Drawer, Dropdown |
-| forms/ | Toggle, Checkbox, Radio, FormField |
-
-**Hooks genéricos:** useTheme, useMediaQuery, useClickOutside, useDebounce, useLocalStorage, useKeyboard, useCopyToClipboard, useToggle
-
-**Utils genéricos:** cn (classnames), formatCurrency, formatDate, formatNumber
-
----
-
-### 📁 `components/layouts/` — Esqueletos Visuais
-
-Layouts que envolvem as páginas. Específicos do Pulso. Usam componentes do design-system.
-
-**MainLayout/** — Header + Sidebar + Conteúdo + Footer. Todas as páginas logadas.
-
-**AuthLayout/** — Tela limpa centralizada. Login, cadastro, recuperação.
-
-**Header/** — Logo, streak, score, avatar, toggle tema.
-
-**Sidebar/** — Menus com dropdown, tag de modo, colapsável, responsiva.
-
-**Footer/** — Versão, créditos.
-
----
-
-### 📁 `components/features/` — Componentes de Negócio
-
-Organizados por domínio. Cada feature importa do design-system e adiciona lógica de negócio do Pulso.
-
-| Feature | Responsabilidade |
-|---|---|
-| auth/ | Login, cadastro, recuperação, Google OAuth |
-| dashboard/ | Cards de saldo, gráficos, resumos |
-| transactions/ | CRUD transações, filtros, recorrentes |
-| goals/ | CRUD metas, aportes, progresso |
-| trips/ | CRUD viagens, pretensões, conversor, câmbio |
-| insights/ | Resumo IA, score, projeções, alertas |
-| chatbot/ | Interface de chat com Gemini |
-| reminders/ | CRUD lembretes, Google Calendar |
-| transport/ | Gestão VT (saldo, vendas, uso) |
-| reports/ | Gráficos comparativos, export PDF/CSV |
-| gamification/ | Streak, conquistas, XP, desafios, quiz |
-| groups/ | CRUD grupos, membros, viagem/meta compartilhada |
-| budget/ | Orçamento mensal, limites por categoria |
-| debts/ | Dívidas pessoais (quem deve, quem eu devo) |
-| split/ | Divisão de despesas (rachas) |
-| purchase/ | Planejamento de compra, simulação parcelas |
-| calendar/ | Calendário financeiro + lembretes unificados |
-| homepage/ | Landing page (hero, features, CTA) |
-
----
-
-### 📁 `pages/` — Telas da Aplicação
-
-Cada page monta uma tela completa usando components/features. Dispatcham actions do Redux. Gerenciam estado local quando necessário.
-
-| Página | Rota | Layout |
-|---|---|---|
-| Homepage.jsx | / | Próprio |
-| Login.jsx | /login | AuthLayout |
-| Register.jsx | /register | AuthLayout |
-| ForgotPassword.jsx | /forgot-password | AuthLayout |
-| ResetPassword.jsx | /reset-password/:token | AuthLayout |
-| VerifyEmail.jsx | /verify-email/:token | AuthLayout |
-| Dashboard.jsx | /dashboard | MainLayout |
-| Transactions.jsx | /transactions | MainLayout |
-| Budget.jsx | /budget | MainLayout |
-| Transport.jsx | /transport | MainLayout |
-| Calendar.jsx | /calendar | MainLayout |
-| Debts.jsx | /debts | MainLayout |
-| Split.jsx | /split | MainLayout |
-| Goals.jsx | /goals | MainLayout |
-| Trips.jsx | /trips | MainLayout |
-| TripDetail.jsx | /trips/:id | MainLayout |
-| Purchase.jsx | /purchase | MainLayout |
-| Groups.jsx | /groups | MainLayout |
-| GroupDetail.jsx | /groups/:id | MainLayout |
-| Reports.jsx | /reports | MainLayout |
-| Insights.jsx | /insights | MainLayout |
-| Chatbot.jsx | /chatbot | MainLayout |
-| Achievements.jsx | /achievements | MainLayout |
-| Profile.jsx | /profile | MainLayout |
-| Settings.jsx | /settings | MainLayout |
-| NotFound.jsx | * | — |
-
----
-
-### 📁 `hooks/` — Lógica Reutilizável (Pulso)
-
-Hooks específicos do projeto. Usam useAppSelector/useAppDispatch. Encapsulam operações de cada domínio.
-
-| Hook | Responsabilidade |
-|---|---|
-| useAuth.js | Autenticação, user, isAuthenticated |
-| useTransactions.js | CRUD transações, filtros |
-| useGoals.js | CRUD metas, aportes |
-| useTrips.js | CRUD viagens, pretensões |
-| useCurrency.js | Cotações, conversão, favoritas |
-| useInsights.js | Insights IA, score, projeções |
-| useChatbot.js | Mensagens do chatbot |
-| useReminders.js | CRUD lembretes, sync calendar |
-| useTransport.js | Saldo VT, vendas, uso |
-| useBudget.js | Limites por categoria |
-| useDebts.js | Dívidas pessoais |
-| useSplit.js | Divisão de despesas |
-| usePurchase.js | Planejamento de compra |
-| useReports.js | Dados de relatórios |
-| useGamification.js | Streak, conquistas, XP |
-| useGroups.js | CRUD grupos, membros |
-
----
-
-### 📁 `store/` — Estado Global (Redux Toolkit)
-
-| Slice | Estado | Async Thunks |
-|---|---|---|
-| authSlice.js | user, token, isAuthenticated | loginUser, registerUser, logoutUser, refreshToken |
-| transactionSlice.js | transactions, filtros | fetchTransactions, createTransaction, updateTransaction, deleteTransaction |
-| goalSlice.js | metas | fetchGoals, createGoal, contributeToGoal |
-| tripSlice.js | viagens, pretensões | fetchTrips, createTrip, addTripExpense |
-| insightSlice.js | insights, score | fetchInsights, fetchScore |
-| reminderSlice.js | lembretes | fetchReminders, createReminder, syncCalendar |
-| transportSlice.js | saldo VT, vendas, uso | fetchVTData, registerSale, registerUsage |
-| budgetSlice.js | limites por categoria | fetchBudget, updateLimits |
-| debtSlice.js | dívidas | fetchDebts, createDebt, markAsPaid |
-| splitSlice.js | divisões | fetchSplits, createSplit |
-| purchaseSlice.js | itens desejados | fetchItems, createItem |
-| gamificationSlice.js | streak, conquistas, XP | fetchGamificationData |
-| groupSlice.js | grupos, membros | fetchGroups, createGroup, joinGroup |
-| themeSlice.js | tema (light/dark) | toggleTheme, setTheme |
-
----
-
-### 📁 `services/` — Comunicação HTTP
-
-Toda comunicação HTTP. Retornam promises. Chamados pelos async thunks dos slices.
-
-**api.js** — Instância Axios com baseURL, interceptor JWT e refresh automático em 401.
-
-| Service | Prefixo de rota |
-|---|---|
-| authService.js | /auth/* |
-| transactionService.js | /transactions/* |
-| goalService.js | /goals/* |
-| tripService.js | /trips/* |
-| insightService.js | /insights/* |
-| chatbotService.js | /chatbot/* |
-| reminderService.js | /reminders/* |
-| transportService.js | /transport/* |
-| budgetService.js | /budget/* |
-| debtService.js | /debts/* |
-| splitService.js | /split/* |
-| purchaseService.js | /purchase/* |
-| reportService.js | /reports/* |
-| currencyService.js | /currency/* |
-| gamificationService.js | /gamification/* |
-| groupService.js | /groups/* |
-
----
-
-### 📁 `schemas/` — Validação com Zod
-
-Validação no front ANTES de enviar pro back (defesa em profundidade).
-
-| Schema | Campos validados |
-|---|---|
-| authSchemas.js | login, register, forgot, reset |
-| transactionSchemas.js | create/edit transação |
-| goalSchemas.js | create/edit meta, aporte |
-| tripSchemas.js | create/edit viagem, pretensão |
-| reminderSchemas.js | create/edit lembrete |
-| transportSchemas.js | venda VT, uso VT |
-| budgetSchemas.js | limites de orçamento |
-| debtSchemas.js | novo empréstimo |
-| splitSchemas.js | nova divisão |
-| purchaseSchemas.js | novo item de compra |
-| groupSchemas.js | novo grupo, meta grupo |
-
----
-
-### 📁 `styles/` — Estilos Globais
-
-**globals.css:**
-```css
-/* Importa estilos do design system */
-@import "../design-system/styles/tokens.css";
-@import "../design-system/styles/base.css";
-@import "../design-system/styles/animations.css";
-
-/* Importa Tailwind */
-@import "tailwindcss";
-
-/* Tema do Pulso (sobrescreve tokens) */
-:root { /* cores light */ }
-.dark { /* cores dark */ }
-
-/* Estilos específicos do Pulso (se necessário) */
-```
-
----
-
-### 📁 `utils/` — Utilitários Específicos do Pulso
-
-Funções que fazem sentido SÓ no contexto do Pulso (não são genéricas).
-
-| Função | Uso |
-|---|---|
-| constants.js | ROUTES, RESOURCE_TYPES, GOAL_STATUS, CHART_COLORS, FINANCIAL_LEVELS |
-| helpers.js | calculatePercentage, getResourceColor, getScoreColor |
-| validators.js | isValidVTSale, isCompatibleResource |
-
-> Funções genéricas (formatCurrency, formatDate, cn) ficam em `design-system/utils/`
-
----
-
-## 🔄 Fluxo de Dados
-
-```
-👤 Usuário interage com a tela
-     │
-     ▼
-Page / Feature Component
-(usa componentes do design-system pra UI)
-(usa hooks do projeto pra lógica)
-     │
-     ▼
-dispatch(asyncThunk)
-     │
-     ▼
-Async thunk chama Service (Axios)
-     │
-     ▼
-═══════ HTTPS ═══════
- /api/endpoint
-═══════ HTTPS ═══════
-     │
-     ▼
-Slice atualiza o state
-     │
-     ▼
-Componente re-renderiza via useAppSelector
-```
-
-Se token expirar (401): interceptor detecta → tenta refresh → sucesso: repete | falha: logout + redirect /login
-
----
-
-## 🛣️ Rotas da Aplicação
-
-**Públicas (sem auth):**
-
-| Rota | Tela |
-|---|---|
-| / | Homepage |
-| /login | Login |
-| /register | Cadastro |
-| /forgot-password | Esqueci a Senha |
-| /reset-password/:token | Redefinir Senha |
-| /verify-email/:token | Verificar Email |
-
-**Privadas (autenticadas):**
-
-| Rota | Tela |
-|---|---|
-| /dashboard | Dashboard |
-| /transactions | Transações |
-| /budget | Orçamento Mensal |
-| /transport | Vale Transporte |
-| /calendar | Calendário + Lembretes |
-| /debts | Dívidas Pessoais |
-| /split | Divisão de Despesas |
-| /goals | Metas Financeiras |
-| /trips | Viagens e Moedas |
-| /trips/:id | Detalhe da Viagem |
-| /purchase | Planejamento de Compra |
-| /groups | Grupos |
-| /groups/:id | Detalhe do Grupo |
-| /reports | Relatórios |
-| /insights | Insights IA |
-| /chatbot | Chatbot |
-| /achievements | Gamificação |
-| /profile | Perfil |
-| /settings | Configurações |
-| * | 404 |
-
----
-
-## 🗂️ Sidebar — Menus e Submenus
-
-```
-📊 Dashboard
-
-💰 Financeiro ▾
-💳 Transações
-📊 Orçamento Mensal
-🚌 Vale Transporte
-📅 Calendário Financeiro
-🤝 Dívidas
-💸 Divisão de Despesas
-
-🎯 Planejamento & Metas ▾
-🎯 Metas Financeiras
-🌍 Viagens e Moedas
-🛒 Planejamento de Compra
-👥 Grupos
-
-🧠 Inteligência & Relatórios ▾
-📈 Relatórios        → /reports
-✨ Insights          → /insights   (item próprio — não agrupar com Chatbot)
-💬 Chatbot           → /chatbot    (item próprio)
-🎮 Gamificação       → /achievements
-
-> Config em código: `src/config/sidebarNavigation.js`
-
-────────
-👤 Perfil
-⚙️ Configurações
-🚪 Sair
-```
-
----
-
-## 📦 Modais
-
-| Modal | Onde abre |
-|---|---|
-| Nova/Editar Transação | Transações |
-| Nova/Editar Meta | Metas |
-| Aporte na Meta | Metas |
-| Nova/Editar Viagem | Viagens |
-| Nova Pretensão | Detalhe Viagem |
-| Observação Viagem | Detalhe Viagem |
-| Novo/Editar Lembrete | Calendário |
-| Registrar Venda VT | Vale Transporte |
-| Registrar Uso VT | Vale Transporte |
-| Novo Grupo | Grupos |
-| Entrar no Grupo | Grupos |
-| Convidar pro Grupo | Detalhe Grupo |
-| Meta do Grupo | Detalhe Grupo |
-| Aporte Meta Grupo | Detalhe Grupo |
-| Nova Divisão | Divisão Despesas |
-| Lembrete Cobrança | Divisão Despesas |
-| Nova Dívida | Dívidas |
-| Novo Item Compra | Planejamento Compra |
-| Vincular Meta | Planejamento Compra |
-| Editar Limites | Orçamento |
-| Quiz Financeiro | Gamificação |
-| Alterar Senha | Perfil |
-| Sessões Ativas | Perfil |
-| Confirmar Exclusão | Global (genérico) |
-
----
-
-## ▶️ Como Rodar
+## ▶️ Como rodar
 
 ```bash
-# Instalar dependências
 npm install
-
-# Copiar o .env
 cp .env.example .env
-
-# Rodar em desenvolvimento
 npm run dev
-# → http://localhost:5173
-
-# Build de produção
-npm run build
-
-# Testes
-npm test
-
-# Lint
-npm run lint
 ```
 
----
-
-## 📋 Scripts
-
 | Script | Descrição |
-|---|---|
-| npm run dev | Desenvolvimento com hot reload |
-| npm run build | Build de produção |
-| npm run preview | Preview do build |
-| npm test | Testes unitários (Vitest) |
-| npm run lint | Lint (ESLint) |
+|--------|-----------|
+| `npm run dev` | Dev server (`http://localhost:5173`) |
+| `npm run build` | Build produção |
+| `npm run preview` | Preview do build |
+| `npm test` | Vitest |
+| `npm run lint` | ESLint |
 
 ---
 
-## 🔑 Variáveis de Ambiente
+## 🔑 Variáveis de ambiente
 
 ```env
 VITE_API_URL=http://localhost:3333/api
 VITE_GOOGLE_CLIENT_ID=seu_client_id.apps.googleusercontent.com
-`
+```
 
 ---
+
+## 🗺️ Roadmap
+
+Epics e critérios de aceite: `.github/plans/cards/`
+
+Módulos documentados no README antigo (metas, viagens, VT, insights, etc.) seguem o plano de produto, mas **ainda não possuem páginas/services dedicados** neste repositório.

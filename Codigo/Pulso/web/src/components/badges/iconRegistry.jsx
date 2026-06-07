@@ -3,6 +3,7 @@ import {
   DollarSign,
   Apple,
   Utensils,
+  UtensilsCrossed,
   Bus,
   Play,
   Pause,
@@ -26,6 +27,13 @@ import {
   Star,
   Diamond,
   Info,
+  Banknote,
+  TrendingUp,
+  CircleDollarSign,
+  Gamepad2,
+  Home,
+  HeartPulse,
+  ShoppingBag,
 } from 'lucide-react'
 
 /**
@@ -37,6 +45,7 @@ const ICON_REGISTRY = {
   DollarSign,
   Apple,
   Utensils,
+  UtensilsCrossed,
   Bus,
   Play,
   Pause,
@@ -60,6 +69,13 @@ const ICON_REGISTRY = {
   Star,
   Diamond,
   Info,
+  Banknote,
+  TrendingUp,
+  CircleDollarSign,
+  Gamepad2,
+  Home,
+  HeartPulse,
+  ShoppingBag,
 }
 
 const ICON_SIZES = { sm: 12, md: 14, lg: 16 }
@@ -74,7 +90,7 @@ export function registerBadgeIcon(name, IconComponent) {
 export function resolveBadgeIcon(iconName, { size = 'md' } = {}) {
   if (!iconName) return null
   const Icon = ICON_REGISTRY[iconName] ?? ICON_REGISTRY.Tag
-  const dim = ICON_SIZES[size] ?? 14
+  const dim = typeof size === 'number' ? size : (ICON_SIZES[size] ?? 14)
   return <Icon size={dim} aria-hidden />
 }
 

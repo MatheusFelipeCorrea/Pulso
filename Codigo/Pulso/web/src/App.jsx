@@ -1,5 +1,9 @@
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { ToastProvider } from './design-system/components/feedback/index.js'
+import { AuthBootstrap } from './components/routing/AuthBootstrap'
+import { ProtectedRoute, GuestRoute } from './components/routing/ProtectedRoute'
+import { MainLayout } from './components/layouts/MainLayout'
+import { APP_ROUTE_PATHS } from './config/appRoutes'
 import DesignSystemDemo from './pages/DesignSystemDemo'
 import Register from './pages/Register'
 import RegisterEmailSent from './pages/RegisterEmailSent'
@@ -12,55 +16,67 @@ import ResetPassword from './pages/ResetPassword'
 import ResetPasswordSuccess from './pages/ResetPasswordSuccess'
 import TermsOfUse from './pages/TermsOfUse'
 import PrivacyPolicy from './pages/PrivacyPolicy'
+import InDevelopmentPage from './pages/InDevelopmentPage'
+import LandingPage from './pages/LandingPage'
+import TransactionsPage from './pages/TransactionsPage'
+import TransportVoucherPage from './pages/TransportVoucherPage'
 
 function App() {
   return (
     <ToastProvider>
-      <Routes>
-        <Route path="/" element={
-          <div className="min-h-screen bg-[var(--ds-color-background)] text-[var(--ds-color-text)]">
-            <div className="flex items-center justify-center min-h-screen">
-              <div className="text-center px-4">
-                <h1 className="text-4xl font-bold text-[var(--ds-color-primary)] mb-2">
-                  💜 Pulso
-                </h1>
-                <p className="text-[var(--ds-color-text-secondary)]">
-                  O pulso da sua vida financeira
-                </p>
-                <p className="text-sm text-[var(--ds-color-text-secondary)] mt-4 opacity-70">
-                  Front rodando com sucesso!
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-                  <Link
-                    to="/register"
-                    className="inline-block px-6 py-3 bg-[var(--ds-color-primary)] text-white rounded-lg hover:opacity-90 transition-opacity"
-                  >
-                    Criar conta
-                  </Link>
-                  <Link
-                    to="/design-system"
-                    className="inline-block px-6 py-3 border border-[var(--ds-color-border)] rounded-lg hover:bg-[var(--ds-color-hover)] transition-colors"
-                  >
-                    Design System
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        } />
-        <Route path="/register" element={<Register />} />
-        <Route path="/register/email-sent" element={<RegisterEmailSent />} />
-        <Route path="/verify-email/:token" element={<VerifyEmail />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/forgot-password/email-sent" element={<ForgotPasswordEmailSent />} />
-        <Route path="/reset-password/success" element={<ResetPasswordSuccess />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/auth/callback" element={<AuthCallback />} />
-        <Route path="/termos" element={<TermsOfUse />} />
-        <Route path="/privacidade" element={<PrivacyPolicy />} />
-        <Route path="/design-system" element={<DesignSystemDemo />} />
-      </Routes>
+      <AuthBootstrap>
+        <Routes>
+          {/* Público — landing */}
+          <Route path="/" element={<LandingPage />} />
+
+          {/* Auth — só visitantes */}
+          <Route
+            path="/register"
+            element={
+              <GuestRoute>
+                <Register />
+              </GuestRoute>
+            }
+          />
+          <Route path="/register/email-sent" element={<RegisterEmailSent />} />
+          <Route path="/verify-email/:token" element={<VerifyEmail />} />
+          <Route
+            path="/login"
+            element={
+              <GuestRoute>
+                <Login />
+              </GuestRoute>
+            }
+          />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/forgot-password/email-sent" element={<ForgotPasswordEmailSent />} />
+          <Route path="/reset-password/success" element={<ResetPasswordSuccess />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/termos" element={<TermsOfUse />} />
+          <Route path="/privacidade" element={<PrivacyPolicy />} />
+          <Route path="/design-system" element={<DesignSystemDemo />} />
+
+          {/* App autenticado — sidebar + placeholders */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<MainLayout />}>
+              <Route path="transactions" element={<TransactionsPage />} />
+              <Route path="transport-voucher" element={<TransportVoucherPage />} />
+              {APP_ROUTE_PATHS.filter(
+                (path) => path !== '/transactions' && path !== '/transport-voucher'
+              ).map((path) => (
+                <Route
+                  key={path}
+                  path={path.replace(/^\//, '')}
+                  element={<InDevelopmentPage />}
+                />
+              ))}
+            </Route>
+          </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthBootstrap>
     </ToastProvider>
   )
 }
