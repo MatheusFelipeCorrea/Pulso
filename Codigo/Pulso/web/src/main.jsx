@@ -18,6 +18,7 @@ import './styles/pulso-components.css'
 import './styles/sidebar.css'
 import './styles/transactions.css'
 import './styles/transport.css'
+import './styles/landing.css'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>

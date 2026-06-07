@@ -23,25 +23,7 @@ html {
   color: var(--ds-color-text);
 }
 
-/* ── Header full-width ── */
-.auth-header {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  padding: 1.125rem 2rem;
-  border-bottom: 1px solid var(--ds-color-border);
-  background: var(--ds-color-background);
-}
-
-@media (min-width: 1024px) {
-  .auth-header {
-    padding: 1.25rem 2.5rem;
-  }
-}
-
-/* ── Logo Pulso (PNG claro / escuro) ── */
+/* ── Body split ── */
 .pulso-brand {
   display: inline-flex;
   flex-direction: column;
@@ -94,61 +76,6 @@ html {
   font-size: 0.8125rem;
   line-height: 1.25;
   color: var(--ds-color-text-secondary);
-}
-
-.auth-nav {
-  display: none;
-  align-items: center;
-  gap: 2rem;
-}
-
-@media (min-width: 1024px) {
-  .auth-nav {
-    display: flex;
-  }
-}
-
-.auth-nav-link {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #7c3aed;
-  text-decoration: none;
-  transition: opacity 150ms ease;
-}
-
-.auth-nav-link:hover {
-  opacity: 0.75;
-  text-decoration: none;
-  color: #7c3aed;
-}
-
-.dark .auth-nav-link {
-  color: #a78bfa;
-}
-
-.dark .auth-nav-link:hover {
-  color: #a78bfa;
-}
-
-.auth-nav-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 2.5rem;
-  padding: 0 1.25rem;
-  border-radius: 0.5rem;
-  border: 1px solid #7c3aed;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #7c3aed;
-  text-decoration: none;
-  background: transparent;
-  cursor: default;
-}
-
-.dark .auth-nav-cta {
-  border-color: #a78bfa;
-  color: #a78bfa;
 }
 
 /* ── Body split ── */
