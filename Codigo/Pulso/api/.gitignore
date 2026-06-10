@@ -1,10 +1,13 @@
 # Dependências
 node_modules/
 
-# Variáveis de ambiente
+# Variáveis de ambiente (qualquer pasta)
 .env
-.env.local
-.env.production
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
 
 # Prisma
 node_modules/.prisma/

@@ -1,0 +1,9 @@
+# Variáveis de ambiente (qualquer pasta do repositório)
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Exceções: templates sem credenciais
+!.env.example
+!**/.env.example

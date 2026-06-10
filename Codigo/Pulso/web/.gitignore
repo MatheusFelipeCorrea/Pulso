@@ -23,9 +23,13 @@ dist-ssr
 *.sln
 *.sw?
 
-# Variáveis de ambiente
+# Variáveis de ambiente (qualquer pasta)
 .env
-.env.production
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
 
 # Vite cache
 .vite/
