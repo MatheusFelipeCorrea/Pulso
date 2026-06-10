@@ -74,12 +74,10 @@ export const ToastProvider = ({ children }) => {
     [addToast]
   )
 
-  // ============================================================
-  // VALUE DO CONTEXT
-  // ============================================================
-  const value = useMemo(
+  // API estável — não inclui `toasts`, senão todo toast novo re-renderiza
+  // consumidores de useToast() e reexecuta efeitos com `toast` nas deps.
+  const api = useMemo(
     () => ({
-      toasts,
       addToast,
       removeToast,
       success,
@@ -87,11 +85,11 @@ export const ToastProvider = ({ children }) => {
       warning,
       info,
     }),
-    [toasts, addToast, removeToast, success, error, warning, info]
+    [addToast, removeToast, success, error, warning, info]
   )
 
   return (
-    <ToastContext.Provider value={value}>
+    <ToastContext.Provider value={api}>
       {children}
       <ToastContainer toasts={toasts} onClose={removeToast} />
     </ToastContext.Provider>

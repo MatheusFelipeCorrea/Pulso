@@ -91,7 +91,7 @@ export const Pagination = ({
     </div>
   )
 
-  if (layout === 'full' || (showInfo && showPageSize)) {
+  if (layout === 'full' || showInfo || showPageSize) {
     return (
       <div className={cn('ds-pagination ds-pagination--full', className)}>
         {showInfo && totalItems > 0 && (

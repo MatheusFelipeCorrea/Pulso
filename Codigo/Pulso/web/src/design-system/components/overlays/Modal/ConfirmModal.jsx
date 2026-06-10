@@ -1,11 +1,19 @@
-import { useState, useId } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { Trash2, AlertTriangle, Lock } from 'lucide-react'
 import { cn } from '../../../utils/cn.js'
-import { Button } from '../../buttons/Button/Button.jsx'
 import { inputContainerVariants } from '../../inputs/shared/inputField.styles.jsx'
 import { Modal } from './Modal.jsx'
 
-/** ConfirmModal — confirmação de ação destrutiva */
+const BTN_CLASS = {
+  cancel: 'ds-confirm-modal__btn ds-confirm-modal__btn--cancel',
+  muted: 'ds-confirm-modal__btn ds-confirm-modal__btn--muted',
+  danger: 'ds-confirm-modal__btn ds-confirm-modal__btn--danger',
+  primary: 'ds-confirm-modal__btn ds-confirm-modal__btn--primary',
+}
+
+/**
+ * ConfirmModal — confirmação de ação destrutiva (protótipo DS).
+ */
 export const ConfirmModal = ({
   isOpen,
   onClose,
@@ -19,6 +27,7 @@ export const ConfirmModal = ({
   loading = false,
   icon,
   confirmationText,
+  actions,
   className,
 }) => {
   const [typed, setTyped] = useState('')
@@ -26,6 +35,14 @@ export const ConfirmModal = ({
   const confirmInputId = useId()
   const isCritical = variant === 'critical'
   const canConfirm = !isCritical || typed === confirmationText
+  const hasCustomActions = Array.isArray(actions) && actions.length > 0
+  const isWarning = tone === 'warning'
+
+  useEffect(() => {
+    if (!isOpen) return
+    setTyped('')
+    setInputFocused(false)
+  }, [isOpen])
 
   const handleClose = () => {
     setTyped('')
@@ -39,47 +56,44 @@ export const ConfirmModal = ({
 
   const defaultIcon =
     tone === 'danger' ? (
-      <Trash2 size={32} className="text-[var(--ds-color-danger)]" />
+      <Trash2 size={24} strokeWidth={1.75} aria-hidden />
     ) : (
-      <AlertTriangle size={32} className="text-[var(--ds-color-warning)]" />
+      <AlertTriangle size={24} strokeWidth={1.75} aria-hidden />
     )
 
-  const iconBg =
-    tone === 'danger'
-      ? 'bg-[color-mix(in_srgb,var(--ds-color-danger)_15%,transparent)]'
-      : 'bg-[color-mix(in_srgb,var(--ds-color-warning)_15%,transparent)]'
-
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="sm" className={cn('p-8', className)}>
-      <div className="flex flex-col items-center text-center">
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="sm"
+      className={cn('ds-confirm-modal', className)}
+    >
+      <div className="ds-confirm-modal__body">
         <div
           className={cn(
-            'mb-4 flex h-[72px] w-[72px] items-center justify-center rounded-full',
-            iconBg
+            'ds-confirm-modal__icon-wrap',
+            isWarning && 'ds-confirm-modal__icon-wrap--warning'
           )}
         >
           {icon ?? defaultIcon}
         </div>
 
-        <h2 className="mb-2 text-xl font-bold text-[var(--ds-color-text)]">{title}</h2>
+        <h2 className="ds-confirm-modal__title">{title}</h2>
 
-        {message && (
+        {message ? (
           <p
             className={cn(
-              'text-sm leading-relaxed text-[var(--ds-color-text-secondary)]',
-              isCritical && confirmationText ? 'mb-4' : 'mb-6'
+              'ds-confirm-modal__message',
+              isCritical && confirmationText && 'ds-confirm-modal__message--critical'
             )}
           >
             {message}
           </p>
-        )}
+        ) : null}
 
-        {isCritical && confirmationText && (
-          <div className="mb-8 w-full space-y-3 text-left">
-            <label
-              htmlFor={confirmInputId}
-              className="block text-sm font-medium text-[var(--ds-color-danger)]"
-            >
+        {isCritical && confirmationText ? (
+          <div className="ds-confirm-modal__critical">
+            <label htmlFor={confirmInputId}>
               Digite &apos;{confirmationText}&apos; para confirmar
             </label>
 
@@ -109,36 +123,59 @@ export const ConfirmModal = ({
               />
             </div>
 
-            {!canConfirm && (
-              <p className="flex items-center gap-1.5 text-xs text-[var(--ds-color-text-secondary)]">
-                <Lock size={14} className="shrink-0" />
+            {!canConfirm ? (
+              <p className="ds-confirm-modal__critical-hint">
+                <Lock size={14} aria-hidden />
                 Digite &apos;{confirmationText}&apos; para habilitar
               </p>
-            )}
+            ) : null}
+          </div>
+        ) : null}
+
+        {hasCustomActions ? (
+          <div className="ds-confirm-modal__footer ds-confirm-modal__footer--stacked">
+            <div className="ds-confirm-modal__actions-row">
+              {actions.map((action) => (
+                <button
+                  key={action.label}
+                  type="button"
+                  className={BTN_CLASS[action.variant === 'danger' ? 'danger' : 'muted']}
+                  onClick={action.onClick}
+                  disabled={loading || action.disabled}
+                >
+                  {action.label}
+                </button>
+              ))}
+            </div>
+            <button
+              type="button"
+              className={cn(BTN_CLASS.cancel, 'ds-confirm-modal__btn--full')}
+              onClick={handleClose}
+              disabled={loading}
+            >
+              {cancelLabel}
+            </button>
+          </div>
+        ) : (
+          <div className="ds-confirm-modal__footer">
+            <button
+              type="button"
+              className={BTN_CLASS.cancel}
+              onClick={handleClose}
+              disabled={loading}
+            >
+              {cancelLabel}
+            </button>
+            <button
+              type="button"
+              className={tone === 'danger' ? BTN_CLASS.danger : BTN_CLASS.primary}
+              onClick={handleConfirm}
+              disabled={!canConfirm || loading}
+            >
+              {loading ? 'Aguarde...' : confirmLabel}
+            </button>
           </div>
         )}
-
-        {!isCritical && !message && <div className="mb-6" />}
-
-        <div className="flex w-full min-w-0 gap-3 pt-1">
-          <Button
-            variant="secondary"
-            className="min-w-0 flex-1"
-            onClick={handleClose}
-            disabled={loading}
-          >
-            {cancelLabel}
-          </Button>
-          <Button
-            variant={tone === 'danger' ? 'danger' : 'primary'}
-            className="min-w-0 flex-1"
-            onClick={handleConfirm}
-            loading={loading}
-            disabled={!canConfirm}
-          >
-            {confirmLabel}
-          </Button>
-        </div>
       </div>
     </Modal>
   )

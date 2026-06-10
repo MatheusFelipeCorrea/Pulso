@@ -1,5 +1,12 @@
-import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
-import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
+import { ConfirmModal } from '@/design-system/components/overlays/Modal/ConfirmModal.jsx'
+import {
+  deleteRecurringTransactionMessage,
+  deleteTransactionMessage,
+} from '@/utils/confirmDeleteMessages.js'
+
+function transactionLabel(transacao) {
+  return transacao?.descricao?.trim() || transacao?.categoria?.nome || 'esta transação'
+}
 
 export function DeleteTransactionModal({
   open,
@@ -8,58 +15,43 @@ export function DeleteTransactionModal({
   onConfirm,
   loading,
 }) {
+  const label = transactionLabel(transacao)
   const isRecorrente = transacao?.recorrente || transacao?.paiId
-
-  if (!open) return null
 
   if (isRecorrente) {
     return (
-      <Modal isOpen={open} onClose={onClose} size="sm">
-        <div className="tx-delete-modal">
-          <h3 className="tx-delete-modal__title">Excluir transação recorrente</h3>
-          <p className="tx-delete-modal__text">Como deseja excluir esta transação?</p>
-          <div className="tx-delete-modal__actions">
-            <Button variant="secondary" onClick={onClose} disabled={loading}>
-              Cancelar
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => onConfirm?.({ excluirFuturas: false })}
-              loading={loading}
-            >
-              Excluir só esta
-            </Button>
-            <Button
-              variant="danger"
-              onClick={() => onConfirm?.({ excluirFuturas: true, transacaoId: transacao.paiId || transacao.id })}
-              loading={loading}
-            >
-              Excluir esta e futuras
-            </Button>
-          </div>
-        </div>
-      </Modal>
+      <ConfirmModal
+        isOpen={open}
+        onClose={onClose}
+        message={deleteRecurringTransactionMessage(label)}
+        loading={loading}
+        actions={[
+          {
+            label: 'Excluir só esta',
+            variant: 'secondary',
+            onClick: () => onConfirm?.({ excluirFuturas: false }),
+          },
+          {
+            label: 'Excluir esta e futuras',
+            variant: 'danger',
+            onClick: () =>
+              onConfirm?.({
+                excluirFuturas: true,
+                transacaoId: transacao.paiId || transacao.id,
+              }),
+          },
+        ]}
+      />
     )
   }
 
   return (
-    <Modal isOpen={open} onClose={onClose} size="sm">
-      <div className="tx-delete-modal">
-        <h3 className="tx-delete-modal__title">Excluir transação</h3>
-        <p className="tx-delete-modal__text">Tem certeza que deseja excluir esta transação?</p>
-        <div className="tx-delete-modal__actions">
-          <Button variant="secondary" onClick={onClose} disabled={loading}>
-            Cancelar
-          </Button>
-          <Button
-            variant="danger"
-            onClick={() => onConfirm?.({ excluirFuturas: false })}
-            loading={loading}
-          >
-            Excluir
-          </Button>
-        </div>
-      </div>
-    </Modal>
+    <ConfirmModal
+      isOpen={open}
+      onClose={onClose}
+      onConfirm={() => onConfirm?.({ excluirFuturas: false })}
+      message={deleteTransactionMessage(label)}
+      loading={loading}
+    />
   )
 }

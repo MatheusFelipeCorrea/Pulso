@@ -14,6 +14,9 @@ Servidor **Node.js + Express** com arquitetura em camadas (routes → controller
 - [Fluxo de uma requisição](#-fluxo-de-uma-requisição)
 - [Rotas implementadas](#-rotas-implementadas)
 - [Transações — detalhes](#-transações--detalhes)
+- [Orçamento — detalhes](#-orçamento--detalhes)
+- [Notificações — detalhes](#-notificações--detalhes)
+- [Lembretes e Calendário — detalhes](#-lembretes-e-calendário--detalhes)
 - [Autenticação](#-autenticação)
 - [Regras de negócio (transações)](#-regras-de-negócio-transações)
 - [Seed de desenvolvimento](#-seed-de-desenvolvimento)
@@ -32,8 +35,14 @@ Servidor **Node.js + Express** com arquitetura em camadas (routes → controller
 | Categorias padrão no registro | ✅ |
 | Tags | ✅ |
 | **Transações** (CRUD, filtros, resumo, recorrência) | ✅ |
+| **Vale Transporte** (saldo, vendas, usos) | ✅ |
+| **Orçamento mensal** (limites, cópia, alertas) | ✅ |
+| **Notificações** (listagem, contador, marcar lida) | ✅ |
+| **Lembretes** (CRUD, marcar pago) | ✅ |
+| **Calendário** (visão mês/dia, Google Calendar) | 🟡 Parcial — integração com IA pendente |
 | Job transações recorrentes | ✅ |
-| Metas, viagens, VT, insights, relatórios, … | 🔜 Planejado |
+| Job alertas de orçamento | ✅ |
+| Metas, viagens, insights, relatórios, … | 🔜 Planejado |
 
 Prefixo global: **`/api`**
 
@@ -49,7 +58,7 @@ Prefixo global: **`/api`**
 | JWT + bcrypt | Auth |
 | Passport | Google OAuth |
 | Nodemailer | Emails transacionais |
-| node-cron | Jobs (recorrência, cleanup tokens) |
+| node-cron | Jobs (recorrência, cleanup tokens, alertas de orçamento) |
 | Winston | Logs |
 | Jest + Supertest | Testes |
 
@@ -69,11 +78,16 @@ Pulso/api/
     ├── config/          env, database, passport
     ├── middlewares/     auth, validate, rate limit, error
     ├── routes/
-    │   ├── index.js     → monta /auth, /transacoes, /categorias, /tags, /transporte
+    │   ├── index.js     → monta todas as rotas abaixo
     │   ├── authRoutes.js
     │   ├── transactionRoutes.js
     │   ├── categoryRoutes.js
-    │   └── tagRoutes.js
+    │   ├── tagRoutes.js
+    │   ├── transportRoutes.js
+    │   ├── budgetRoutes.js
+    │   ├── notificationRoutes.js
+    │   ├── reminderRoutes.js
+    │   └── calendarRoutes.js
     ├── controllers/
     ├── services/
     ├── repositories/
@@ -81,7 +95,7 @@ Pulso/api/
     ├── schemas/
     ├── constants/       defaultCategories, transactionOptions
     ├── utils/           transactionMapper, recursoCategoriaRules, …
-    └── jobs/            recurringTransactions, tokenCleanupJob
+    └── jobs/            recurringTransactions, tokenCleanupJob, budgetAlertJob
 ```
 
 ---
@@ -158,6 +172,50 @@ Erros: `AppError` → `errorMiddleware` → `{ status: 'error', message }`
 
 Acesso restrito a `modoUso` **ESTAGIARIO** ou **CLT** (403 para PJ / Pessoa Física).
 
+### Orçamento — `/api/orcamentos`
+
+| Método | Rota | Acesso |
+|--------|------|--------|
+| GET | `/status` | 🔒 Resumo do mês (`?mes=YYYY-MM`) |
+| GET | `/` | 🔒 Lista limites + gastos por categoria |
+| POST | `/` | 🔒 Salvar/atualizar limites em lote |
+| POST | `/copiar` | 🔒 Copiar limites do mês anterior |
+| DELETE | `/:id` | 🔒 Remover limite de uma categoria |
+
+### Notificações — `/api/notificacoes`
+
+| Método | Rota | Acesso |
+|--------|------|--------|
+| GET | `/contador` | 🔒 Quantidade de não lidas |
+| GET | `/` | 🔒 Lista paginada |
+| PATCH | `/:id/marcar-lida` | 🔒 Marcar uma como lida |
+| PATCH | `/marcar-todas-lidas` | 🔒 Marcar todas como lidas |
+
+Tipos ativos no job de alertas: `ALERTA_ORCAMENTO` (80%) e `ORCAMENTO_ESTOURADO`.
+
+### Lembretes — `/api/lembretes`
+
+| Método | Rota | Acesso |
+|--------|------|--------|
+| GET | `/` | 🔒 Lista do mês (`?mes=YYYY-MM`) |
+| POST | `/` | 🔒 Criar |
+| PATCH | `/:id` | 🔒 Editar |
+| POST | `/:id/pagar` | 🔒 Marcar como pago |
+| DELETE | `/:id` | 🔒 Excluir |
+
+### Calendário — `/api/calendario`
+
+| Método | Rota | Acesso |
+|--------|------|--------|
+| GET | `/mes` | 🔒 Visão mensal (transações + lembretes + insights) |
+| GET | `/dia` | 🔒 Detalhe de um dia (`?data=YYYY-MM-DD`) |
+| GET | `/google/status` | 🔒 Status da integração (inclui e-mail da conta Google) |
+| GET | `/google/url` | 🔒 URL de autorização OAuth |
+| GET | `/google/callback` | 🔓 Callback OAuth |
+| POST | `/google/desconectar` | 🔒 Revogar integração |
+| GET | `/google/sync/pendentes` | 🔒 Lembretes pendentes de sync |
+| POST | `/google/sync` | 🔒 Sincronizar lembretes com Google Calendar |
+
 ---
 
 ## 💳 Transações — detalhes
@@ -176,6 +234,33 @@ Acesso restrito a `modoUso` **ESTAGIARIO** ou **CLT** (403 para PJ / Pessoa Fís
 **Categorias padrão:** criadas no registro a partir de `constants/defaultCategories.js` (RN-165).
 
 **Recorrência:** job `jobs/recurringTransactions.js` gera lançamentos conforme regra.
+
+---
+
+## 📊 Orçamento — detalhes
+
+- Limite único por `(usuarioId, categoriaId, mesReferencia)`
+- Gastos calculados a partir das transações de despesa do período
+- Job `jobs/budgetAlertJob.js` verifica limites e cria notificações (`ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO`)
+- Agendamento em `server.js`: a cada **20 min** (`*/20 * * * *`)
+
+---
+
+## 🔔 Notificações — detalhes
+
+- Persistidas em `notificacoes` com `tipo`, `titulo`, `mensagem`, `linkAcao`, `metadados`
+- `linkAcao` usado pelo frontend para navegação ao clicar em **Ver**
+- Contador e listagem filtram por usuário autenticado
+
+---
+
+## 📅 Lembretes e Calendário — detalhes
+
+- Lembretes com categoria (`CategoriaLembrete`), valor opcional, antecedência e flag `pago`
+- Integração Google Calendar: tokens em `ConfiguracaoUsuario.tokensGoogle`, e-mail exibido em `googleCalendarEmail`
+- Sync cria/atualiza eventos no calendário dedicado do Pulso (`googleCalendarId`)
+- Visão mensal agrega transações, lembretes e cards de insight (variação vs mês anterior)
+- **Pendente:** integração com IA na tela do calendário (análises/sugestões via Gemini)
 
 ---
 
@@ -250,6 +335,7 @@ JWT_REFRESH_SECRET=...
 GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
 GOOGLE_CALLBACK_URL=http://localhost:3333/api/auth/google/callback
+GOOGLE_CALENDAR_CALLBACK_URL=http://localhost:3333/api/calendario/google/callback
 SMTP_HOST=...
 SMTP_PORT=587
 SMTP_USER=...
@@ -283,7 +369,7 @@ FRONTEND_URL=http://localhost:5173
 
 ## 🗺️ Roadmap (não implementado)
 
-A versão anterior deste README descrevia módulos completos (metas, viagens, insights, VT, gamificação, Swagger, etc.) como se já existissem. Eles fazem parte do **plano de produto** (`.github/plans/cards/`), mas **ainda não têm routes/controllers/services** no código.
+Módulos ainda planejados (metas, viagens, insights, gamificação, Swagger, etc.) fazem parte do **plano de produto** (`.github/plans/cards/`), mas **ainda não têm routes/controllers/services** no código.
 
 Quando cada epic for implementado, esta seção deve migrar para [Rotas implementadas](#-rotas-implementadas).
 

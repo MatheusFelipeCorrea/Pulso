@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { HIGHLIGHTS, FEATURES, AUDIENCE, BENEFITS, TESTIMONIALS } from './landingData.js'
-import { Briefcase, Check, GraduationCap, Laptop, Star, UserRound } from 'lucide-react'
+import { APP_DOWNLOADS, HIGHLIGHTS, FEATURES, AUDIENCE, BENEFITS, TESTIMONIALS } from './landingData.js'
+import { LandingPhoneHomeShowcase } from './LandingPhoneHomeMockup.jsx'
+import { Briefcase, Check, Download, GraduationCap, Laptop, Star, UserRound } from 'lucide-react'
 
 const AUDIENCE_ICONS = {
   graduation: GraduationCap,
@@ -112,31 +113,34 @@ export function LandingMobile() {
         <div className="landing-mobile__content">
           <h2>Leve o Pulso com você</h2>
           <p>
-            Acesse saldo, metas e insights de qualquer lugar. Em breve nas lojas — por enquanto,
-            use a Web App no navegador.
+            Baixe o app direto aqui na homepage — sem Google Play nem App Store. Acesse saldo,
+            metas e insights de qualquer lugar.
           </p>
-          <div className="landing-mobile__stores">
-            <button type="button" className="landing-store-btn" disabled>
-              Google Play
-            </button>
-            <button type="button" className="landing-store-btn" disabled>
-              App Store
-            </button>
+          <div className="landing-mobile__downloads">
+            {APP_DOWNLOADS.map(({ id, label, hint, href, filename }) => (
+              <a
+                key={id}
+                href={href}
+                download={filename}
+                className={`landing-download-btn landing-download-btn--${id}`}
+              >
+                <span className="landing-download-btn__icon" aria-hidden>
+                  <Download size={20} />
+                </span>
+                <span className="landing-download-btn__text">
+                  <small>Baixar para</small>
+                  <strong>{label}</strong>
+                  <em>{hint}</em>
+                </span>
+              </a>
+            ))}
           </div>
-          <p className="landing-mobile__note">Em breve para Web App PWA</p>
+          <p className="landing-mobile__note">
+            No iOS, pode ser necessário autorizar o app em Ajustes → Geral → VPN e Gerenciamento
+            de Dispositivo.
+          </p>
         </div>
-        <div className="landing-mobile__phones" aria-hidden>
-          {['Resumo', 'Gastos', 'Insights'].map((label) => (
-            <div key={label} className="landing-phone">
-              <div className="landing-phone__screen">
-                <span className="landing-phone__label">{label}</span>
-                <div className="landing-phone__bar" />
-                <div className="landing-phone__bar landing-phone__bar--short" />
-                <div className="landing-phone__chart" />
-              </div>
-            </div>
-          ))}
-        </div>
+        <LandingPhoneHomeShowcase />
       </div>
     </section>
   )

@@ -32,6 +32,8 @@
 
 .tx-page__pagination {
   margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--ds-color-border);
 }
 
 /* Summary cards */
@@ -443,30 +445,6 @@
   background: color-mix(in srgb, var(--ds-color-danger) 8%, transparent);
   color: var(--ds-color-danger);
   border-color: var(--ds-color-danger);
-}
-
-/* Delete modal */
-.tx-delete-modal {
-  padding: 24px;
-}
-
-.tx-delete-modal__title {
-  margin: 0 0 8px;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--ds-color-text);
-}
-
-.tx-delete-modal__text {
-  margin: 0 0 20px;
-  color: var(--ds-color-text-secondary);
-}
-
-.tx-delete-modal__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: flex-end;
 }
 
 @media (max-width: 1024px) {

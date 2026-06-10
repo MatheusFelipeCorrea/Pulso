@@ -41,7 +41,7 @@ Biblioteca de componentes UI genéricos, reutilizáveis e agnósticos de projeto
 @import "../design-system/styles/animations.css";
 ```
 
-> **`components.css`** é obrigatório para Select, MonthPicker, DatePicker, Badge, Checkbox e demais componentes que usam classes `.ds-*`.
+> **`components.css`** é obrigatório para Select, MonthPicker, DatePicker, Badge, Checkbox, Pagination e demais componentes que usam classes `.ds-*`.
 
 3. Sobrescreva os tokens com as cores do seu projeto:
 

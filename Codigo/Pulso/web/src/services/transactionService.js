@@ -4,7 +4,13 @@ const buildParams = (filtros = {}) => {
   const params = new URLSearchParams()
 
   if (filtros.periodo) params.set('periodo', filtros.periodo)
-  if (filtros.categoria) params.set('categoria', filtros.categoria)
+  if (filtros.categoria) {
+    if (typeof filtros.categoria === 'string' && filtros.categoria.startsWith('nome:')) {
+      params.set('categoriaNome', filtros.categoria.slice(5))
+    } else {
+      params.set('categoria', filtros.categoria)
+    }
+  }
   if (filtros.tipo && filtros.tipo !== 'TODOS') params.set('tipo', filtros.tipo)
   if (filtros.recurso && filtros.recurso !== 'TODOS') params.set('recurso', filtros.recurso)
   if (filtros.busca) params.set('busca', filtros.busca)

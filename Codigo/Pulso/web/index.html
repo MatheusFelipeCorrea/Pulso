@@ -9,6 +9,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pulso</title>
+    <script>
+      ;(function () {
+        try {
+          var pref = localStorage.getItem('ds-theme-preference')
+          var legacy = localStorage.getItem('ds-theme')
+          var mode = 'system'
+
+          if (pref) {
+            var parsed = JSON.parse(pref)
+            if (parsed === 'light' || parsed === 'dark' || parsed === 'system') mode = parsed
+          } else if (legacy) {
+            var old = JSON.parse(legacy)
+            if (old === 'light' || old === 'dark') mode = old
+          }
+
+          var dark =
+            mode === 'dark' ||
+            (mode === 'system' &&
+              window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+
+          if (dark) document.documentElement.classList.add('dark')
+        } catch (e) {}
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

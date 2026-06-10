@@ -183,3 +183,21 @@ export const FOOTER_LINKS = {
     { label: 'LinkedIn', href: 'https://linkedin.com', external: true },
   ],
 }
+
+/** Links de download direto do app — arquivos em public/downloads/ */
+export const APP_DOWNLOADS = [
+  {
+    id: 'android',
+    label: 'Android',
+    hint: 'Arquivo .apk',
+    href: '/downloads/pulso-android.apk',
+    filename: 'pulso-android.apk',
+  },
+  {
+    id: 'ios',
+    label: 'iOS',
+    hint: 'Arquivo .ipa',
+    href: '/downloads/pulso-ios.ipa',
+    filename: 'pulso-ios.ipa',
+  },
+]

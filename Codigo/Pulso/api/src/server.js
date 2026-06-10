@@ -5,6 +5,7 @@ const prisma = require('./config/database');
 const cron = require('node-cron');
 const { runTokenCleanup } = require('./jobs/tokenCleanupJob');
 const { runRecurringTransactions } = require('./jobs/recurringTransactions');
+const { runBudgetAlertJob } = require('./jobs/budgetAlertJob');
 
 const startTokenCleanupScheduler = () => {
     if (env.NODE_ENV === 'test') {
@@ -39,6 +40,22 @@ const startRecurringTransactionsScheduler = () => {
     logger.info('🔄 Agendador de transações recorrentes ativo (diário 00:05)');
 };
 
+const startBudgetAlertScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule('*/20 * * * *', async () => {
+        try {
+            await runBudgetAlertJob();
+        } catch (error) {
+            logger.error(`Falha no job de alertas de orçamento: ${error.message}`);
+        }
+    });
+
+    logger.info('📊 Agendador de alertas de orçamento ativo (a cada 20 min)');
+};
+
 const start = async () => {
     try {
         // Testa conexão com o banco
@@ -47,6 +64,7 @@ const start = async () => {
 
         startTokenCleanupScheduler();
         startRecurringTransactionsScheduler();
+        startBudgetAlertScheduler();
 
         app.listen(env.PORT, () => {
             logger.info(`💜 Pulso API rodando na porta ${env.PORT}`);

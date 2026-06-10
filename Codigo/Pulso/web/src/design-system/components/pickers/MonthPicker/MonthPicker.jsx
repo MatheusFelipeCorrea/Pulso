@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { Calendar } from 'lucide-react'
 import { cn } from '../../../utils/cn.js'
 import { SelectFieldWrapper } from '../../selects/shared/SelectFieldWrapper.jsx'
@@ -32,10 +32,18 @@ export const MonthPicker = ({
   const [viewYear, setViewYear] = useState(() => value?.year ?? now.getFullYear())
   const [slideDir, setSlideDir] = useState(0)
 
+  useEffect(() => {
+    if (value?.year != null) {
+      setViewYear(value.year)
+    }
+  }, [value?.year])
+
   const displayValue = value
     ? monthDisplay === 'long'
       ? `${MONTH_LONG_LABELS[value.month - 1]} de ${value.year}`
-      : `${MONTH_SHORT_LABELS[value.month - 1]}/${value.year}`
+      : monthDisplay === 'compact'
+        ? `${MONTH_LONG_LABELS[value.month - 1]} ${value.year}`
+        : `${MONTH_SHORT_LABELS[value.month - 1]}/${value.year}`
     : null
 
   const isMonthDisabled = (monthIndex) => {

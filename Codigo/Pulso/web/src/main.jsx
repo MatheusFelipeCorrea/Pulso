@@ -17,6 +17,8 @@ import './styles/legal.css'
 import './styles/pulso-components.css'
 import './styles/sidebar.css'
 import './styles/transactions.css'
+import './styles/budget.css'
+import './styles/calendar.css'
 import './styles/transport.css'
 import './styles/landing.css'
 

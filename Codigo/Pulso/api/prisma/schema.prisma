@@ -61,10 +61,67 @@ enum Tema {
   ESCURO
 }
 
+enum CategoriaLembrete {
+  ALUGUEL
+  CONDOMINIO
+  IPTU
+  SEGURO_RESIDENCIAL
+  LUZ
+  AGUA
+  GAS
+  INTERNET
+  TELEFONE
+  TV_ASSINATURA
+  FATURA_CARTAO
+  EMPRESTIMO
+  FINANCIAMENTO
+  INVESTIMENTO
+  IMPOSTO
+  DECLARACAO_IR
+  IPVA
+  SEGURO_VEICULO
+  LICENCIAMENTO
+  REVISAO_VEICULO
+  MULTA
+  PLANO_SAUDE
+  CONSULTA
+  EXAME
+  MEDICAMENTO
+  ACADEMIA
+  MENSALIDADE_ESCOLA
+  MENSALIDADE_FACULDADE
+  CURSO
+  MATERIAL_ESCOLAR
+  STREAMING
+  SOFTWARE
+  DOMINIO
+  HOSPEDAGEM
+  NUVEM
+  VACINA_PET
+  CONSULTA_PET
+  RACAO_PET
+  NOTA_FISCAL
+  FOLHA_PAGAMENTO
+  CONTRATO
+  RENOVACAO_CONTRATO
+  CERTIDAO
+  ALVARA
+  ANIVERSARIO
+  REUNIAO
+  COMPROMISSO
+  VIAGEM
+  RENOVACAO_DOCUMENTO
+  RECORRENTE
+  PARCELAMENTO
+  OUTRO
+}
+
 enum AntecedenciaLembrete {
   NO_DIA
   UM_DIA
   TRES_DIAS
+  CINCO_DIAS
+  UMA_SEMANA
 }
 
 enum PapelGrupo {
@@ -92,6 +149,20 @@ enum Prioridade {
   ALTA
   MEDIA
   BAIXA
+}
+
+enum TipoNotificacao {
+  RECEITA_REGISTRADA
+  DESPESA_REGISTRADA
+  META_ATINGIDA
+  ALERTA_ORCAMENTO
+  ORCAMENTO_ESTOURADO
+  LEMBRETE_VENCIMENTO
+  STREAK
+  CONQUISTA
+  GRUPO_ATIVIDADE
+  DIVIDA_COBRANCA
+  INSIGHT_IA
 }
 
 // ==========================================
@@ -135,6 +206,8 @@ model Usuario {
   aportesGrupo        AporteMetaGrupo[]
   despesasViagemGrupo DespesaViagemGrupo[]
   mensagensChatGrupo  MensagemChatGrupo[]
+  orcamentos          Orcamento[]
+  notificacoes        Notificacao[]
 
   @@index([email])
   @@index([tokenVerificacaoEmail])
@@ -161,8 +234,11 @@ model ConfiguracaoUsuario {
   tema                 Tema     @default(CLARO)
   gamificacaoAtiva     Boolean  @default(true) @map("gamificacao_ativa")
   googleCalendarAtivo  Boolean  @default(false) @map("google_calendar_ativo")
+  googleCalendarId     String?  @map("google_calendar_id")
+  googleCalendarEmail  String?  @map("google_calendar_email") @db.VarChar(180)
   tokensGoogle         Json?    @map("tokens_google") // criptografado em repouso
   limiteGastos         Decimal? @db.Decimal(12, 2) @map("limite_gastos")
+  rendaMensalPlanejada Decimal? @db.Decimal(12, 2) @map("renda_mensal_planejada")
   valorPadraoPassagem  Decimal? @db.Decimal(10, 2) @map("valor_padrao_passagem")
   vtHabilitado         Boolean? @map("vt_habilitado")
   modoUso              ModoUso  @default(CLT) @map("modo_uso")
@@ -211,6 +287,7 @@ model Categoria {
   usuario        Usuario?        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   transacoes     Transacao[]
   despesasViagem DespesaViagem[]
+  orcamentos     Orcamento[]
 
   @@unique([usuarioId, nome, tipo])
   @@index([usuarioId])
@@ -389,6 +466,8 @@ model Lembrete {
   valor          Decimal?             @db.Decimal(12, 2)
   dataVencimento DateTime             @map("data_vencimento")
   antecedencia   AntecedenciaLembrete @default(UM_DIA)
+  categoria      CategoriaLembrete    @default(OUTRO) @map("categoria")
+  pago           Boolean              @default(false)
   googleEventId  String?              @map("google_event_id")
   sincronizado   Boolean              @default(false)
   criadoEm       DateTime             @default(now()) @map("criado_em")
@@ -649,4 +728,49 @@ model MensagemChatGrupo {
 
   @@index([grupoId, criadoEm(sort: Desc)])
   @@map("mensagens_chat_grupo")
+}
+
+// ==========================================
+// ORÇAMENTO MENSAL
+// ==========================================
+
+model Orcamento {
+  id            String   @id @default(cuid())
+  usuarioId     String   @map("usuario_id")
+  categoriaId   String   @map("categoria_id")
+  mesReferencia DateTime @map("mes_referencia") @db.Date
+  limiteValor   Decimal  @db.Decimal(12, 2) @map("limite_valor")
+  criadoEm      DateTime @default(now()) @map("criado_em")
+  atualizadoEm  DateTime @updatedAt @map("atualizado_em")
+
+  usuario   Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  categoria Categoria @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, categoriaId, mesReferencia])
+  @@index([usuarioId, mesReferencia])
+  @@index([categoriaId])
+  @@map("orcamentos")
+}
+
+// ==========================================
+// NOTIFICAÇÕES
+// ==========================================
+
+model Notificacao {
+  id        String           @id @default(cuid())
+  usuarioId String           @map("usuario_id")
+  tipo      TipoNotificacao
+  titulo    String           @db.VarChar(120)
+  mensagem  String?          @db.VarChar(500)
+  lida      Boolean          @default(false)
+  linkAcao  String?          @db.VarChar(255) @map("link_acao")
+  metadados Json?
+  criadoEm  DateTime         @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, lida])
+  @@index([usuarioId, criadoEm(sort: Desc)])
+  @@index([tipo])
+  @@map("notificacoes")
 }

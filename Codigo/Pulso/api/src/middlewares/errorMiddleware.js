@@ -1,7 +1,14 @@
 const logger = require('../utils/logger');
 
 const errorMiddleware = (err, req, res, next) => {
-// Se for AppError (erro conhecido)
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        return res.status(400).json({
+            status: 'error',
+            message: 'Corpo da requisição inválido',
+        });
+    }
+
+    // Se for AppError (erro conhecido)
     if (err.isOperational) {
         logger.warn(`${err.statusCode} - ${err.message}`);
         return res.status(err.statusCode).json({

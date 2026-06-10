@@ -4,14 +4,13 @@ import { Sidebar, SidebarDrawer } from '@/components/layouts/Sidebar/Sidebar'
 import { useSidebarState } from '@/components/layouts/Sidebar/useSidebarState'
 import { useIsDesktop } from '@/design-system/hooks/useMediaQuery'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
-import { useTheme } from '@/design-system/hooks/useTheme'
-import { Moon, Sun } from 'lucide-react'
+import { NotificationBell } from '@/components/layouts/NotificationBell/NotificationBell.jsx'
+import { UserMenu } from '@/components/layouts/UserMenu/UserMenu.jsx'
 
 export function MainLayout() {
   const isDesktop = useIsDesktop()
   const sidebarState = useSidebarState()
   const { isCollapsed, mobileOpen, openMobile, closeMobile } = sidebarState
-  const { theme, toggleTheme } = useTheme()
 
   return (
     <div
@@ -35,15 +34,17 @@ export function MainLayout() {
               onClick={openMobile}
             />
             <span className="main-layout__mobile-title">Pulso</span>
-            <IconButton
-              variant="ghost"
-              size="md"
-              ariaLabel={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
-              icon={theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-              onClick={toggleTheme}
-            />
+            <NotificationBell />
+            <UserMenu compact />
           </header>
         )}
+
+        {isDesktop ? (
+          <header className="main-layout__toolbar">
+            <NotificationBell />
+            <UserMenu />
+          </header>
+        ) : null}
 
         <main className="main-layout__main">
           <Outlet />

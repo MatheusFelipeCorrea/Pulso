@@ -34,6 +34,17 @@ import {
   Home,
   HeartPulse,
   ShoppingBag,
+  Shirt,
+  Sparkles,
+  Smartphone,
+  Landmark,
+  PawPrint,
+  Plane,
+  Gift,
+  Car,
+  CreditCard,
+  Users,
+  Building2,
 } from 'lucide-react'
 
 /**
@@ -76,6 +87,17 @@ const ICON_REGISTRY = {
   Home,
   HeartPulse,
   ShoppingBag,
+  Shirt,
+  Sparkles,
+  Smartphone,
+  Landmark,
+  PawPrint,
+  Plane,
+  Gift,
+  Car,
+  CreditCard,
+  Users,
+  Building2,
 }
 
 const ICON_SIZES = { sm: 12, md: 14, lg: 16 }

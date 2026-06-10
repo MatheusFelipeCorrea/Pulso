@@ -3,7 +3,7 @@
 Documento de referência das entidades do banco de dados do **Pulso**.
 
 > **Fonte de verdade:** `Codigo/Pulso/api/prisma/schema.prisma`  
-> **Última revisão:** maio/2026 — alinhado ao schema Prisma 5.x (PostgreSQL / Neon)
+> **Última revisão:** junho/2026 — alinhado ao schema Prisma 5.x (PostgreSQL / Neon)
 
 ---
 
@@ -11,9 +11,9 @@ Documento de referência das entidades do banco de dados do **Pulso**.
 
 | Camada | Situação |
 |--------|----------|
-| **Prisma** | 28 modelos mapeados (todas as áreas do produto) |
-| **API em uso** | `Usuario`, `TokenRenovacao`, `ConfiguracaoUsuario`, `Categoria`, `Transacao`, `Tag`, `TransacaoTag`, `VendaVt`, `UsoVt`, `Sequencia` |
-| **Pendente na API** | Metas, viagens, lembretes, VT, grupos, IA, etc. |
+| **Prisma** | 30 modelos mapeados (todas as áreas do produto) |
+| **API em uso** | `Usuario`, `TokenRenovacao`, `ConfiguracaoUsuario`, `Categoria`, `Transacao`, `Tag`, `TransacaoTag`, `VendaVt`, `UsoVt`, `Orcamento`, `Notificacao`, `Lembrete`, `Sequencia` |
+| **Pendente na API** | Metas, viagens, grupos, IA, gamificação completa, etc. |
 
 Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`, `configuracoes_usuario`).
 
@@ -49,6 +49,8 @@ Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`,
 - [🎯 MetaGrupo](#-metagrupo)
 - [💵 AporteMetaGrupo](#-aportemetagrupo)
 - [💬 MensagemChatGrupo](#-mensagemchatgrupo)
+- [📊 Orcamento](#-orcamento)
+- [🔔 Notificacao](#-notificacao)
 - [📊 Resumo Geral](#-resumo-geral)
 - [🎨 Enums Disponíveis](#-enums-disponíveis)
 - [🔗 Relações Importantes](#-relações-importantes)
@@ -98,9 +100,13 @@ Preferências e receitas fixas recorrentes do usuário. Tabela: `configuracoes_u
 | `tema` | Enum | `CLARO` ou `ESCURO` |
 | `gamificacaoAtiva` | Boolean | Módulo de gamificação ativo? |
 | `googleCalendarAtivo` | Boolean | Integração com Google Calendar? |
+| `googleCalendarId` | String | ID do calendário dedicado no Google |
+| `googleCalendarEmail` | VarChar(180) | E-mail da conta Google conectada (OAuth) |
 | `tokensGoogle` | Json | Tokens OAuth do Google (criptografados) |
 | `limiteGastos` | Decimal(12,2) | Limite de gastos pra alerta |
+| `rendaMensalPlanejada` | Decimal(12,2) | Renda mensal planejada (orçamento) |
 | `valorPadraoPassagem` | Decimal(10,2) | Valor padrão da passagem de VT (uso) |
+| `vtHabilitado` | Boolean | VT habilitado para o usuário? |
 | `modoUso` | Enum | `ESTAGIARIO`, `CLT`, `PJ`, `PESSOA_FISICA` (RF-103) |
 | `criadoEm` / `atualizadoEm` | DateTime | Timestamps |
 
@@ -285,6 +291,8 @@ Lembretes de contas a pagar (sincronizáveis com Google Calendar).
 | `valor` | Decimal(12,2) | ❌ | Valor opcional |
 | `dataVencimento` | DateTime | ✅ | Data de vencimento |
 | `antecedencia` | Enum | ✅ | `NO_DIA`, `UM_DIA`, `TRES_DIAS` |
+| `categoria` | Enum | ✅ | `CategoriaLembrete` (ex.: `ALUGUEL`, `LUZ`, `FATURA_CARTAO`, `OUTRO`) |
+| `pago` | Boolean | ✅ | Já foi pago? |
 | `googleEventId` | String | ❌ | ID do evento no Calendar |
 | `sincronizado` | Boolean | ✅ | Sincronizado com Google? |
 | `criadoEm` / `atualizadoEm` | DateTime | ✅ | Timestamps |
@@ -536,6 +544,41 @@ Chat interno do grupo.
 
 ---
 
+## 📊 Orcamento
+
+Limite mensal por categoria de despesa. Tabela: `orcamentos`
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `id` | String | Identificador |
+| `usuarioId` | String (FK) | Dono |
+| `categoriaId` | String (FK) | Categoria de despesa |
+| `mesReferencia` | Date | Primeiro dia do mês de referência |
+| `limiteValor` | Decimal(12,2) | Valor máximo planejado |
+| `criadoEm` / `atualizadoEm` | DateTime | Timestamps |
+
+**Constraint:** único por `(usuarioId, categoriaId, mesReferencia)`.
+
+---
+
+## 🔔 Notificacao
+
+Alertas in-app para o usuário. Tabela: `notificacoes`
+
+| Campo | Tipo | Descrição |
+|---|---|---|
+| `id` | String | Identificador |
+| `usuarioId` | String (FK) | Destinatário |
+| `tipo` | Enum | `TipoNotificacao` (ex.: `ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO`) |
+| `titulo` | VarChar(120) | Título exibido |
+| `mensagem` | VarChar(500) | Corpo opcional |
+| `lida` | Boolean | Já foi lida? |
+| `linkAcao` | VarChar(255) | Rota de destino no frontend |
+| `metadados` | Json | Dados extras (categoria, percentual, etc.) |
+| `criadoEm` | DateTime | Timestamp |
+
+---
+
 ## 📊 Resumo Geral
 
 | # | Categoria | Entidades | Total |
@@ -547,10 +590,11 @@ Chat interno do grupo.
 | 5 | 💱 Câmbio | MoedaFavorita | 1 |
 | 6 | 📅 Lembretes | Lembrete | 1 |
 | 7 | 🚌 VT | VendaVt, UsoVt | 2 |
-| 8 | 🎮 Gamificação | Sequencia, Conquista, ConquistaUsuario, DesafioMensal | 4 |
-| 9 | 🤖 IA | MensagemChat, HistoricoScore | 2 |
-| 10 | 👥 Grupos | Grupo, MembroGrupo, ViagemGrupo, DespesaViagemGrupo, MetaGrupo, AporteMetaGrupo, MensagemChatGrupo | 7 |
-| | | **TOTAL** | **28** |
+| 8 | 📊 Orçamento & Alertas | Orcamento, Notificacao | 2 |
+| 9 | 🎮 Gamificação | Sequencia, Conquista, ConquistaUsuario, DesafioMensal | 4 |
+| 10 | 🤖 IA | MensagemChat, HistoricoScore | 2 |
+| 11 | 👥 Grupos | Grupo, MembroGrupo, ViagemGrupo, DespesaViagemGrupo, MetaGrupo, AporteMetaGrupo, MensagemChatGrupo | 7 |
+| | | **TOTAL** | **30** |
 
 ---
 
@@ -571,6 +615,8 @@ Chat interno do grupo.
 | `NivelFinanceiro` | `INICIANTE`, `CONSCIENTE`, `ESTRATEGISTA`, `INVESTIDOR` |
 | `ModoUso` | `ESTAGIARIO`, `CLT`, `PJ`, `PESSOA_FISICA` |
 | `Prioridade` | `ALTA`, `MEDIA`, `BAIXA` |
+| `CategoriaLembrete` | `ALUGUEL`, `CONDOMINIO`, `IPTU`, `LUZ`, `AGUA`, `GAS`, `INTERNET`, `FATURA_CARTAO`, `OUTRO`, … (ver schema) |
+| `TipoNotificacao` | `RECEITA_REGISTRADA`, `DESPESA_REGISTRADA`, `META_ATINGIDA`, `ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO` |
 
 ---
 
@@ -585,6 +631,8 @@ Usuario (1) ──── (1) ConfiguracaoUsuario
                     └──── (0:1) Viagem
   (1) ──── (N) Viagem ──── (N) DespesaViagem
   (1) ──── (N) Lembrete
+  (1) ──── (N) Orcamento ──── (N) Categoria
+  (1) ──── (N) Notificacao
   (1) ──── (N) VendaVt, UsoVt
   (1) ──── (N) MoedaFavorita
   (1) ──── (N) ConquistaUsuario ──── (N) Conquista

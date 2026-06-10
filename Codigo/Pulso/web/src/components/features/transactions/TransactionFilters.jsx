@@ -1,4 +1,6 @@
+import { useMemo } from 'react'
 import { RotateCcw } from 'lucide-react'
+import { filtrosTransacaoSaoPadrao } from '@/utils/transactionFilters.js'
 import { InputSearch } from '@/design-system/components/inputs/InputSearch/InputSearch.jsx'
 import { Select } from '@/design-system/components/selects/Select/Select.jsx'
 import { MonthPicker } from '@/design-system/components/pickers/MonthPicker/MonthPicker.jsx'
@@ -13,34 +15,39 @@ import { categoriaFilterOptions, recursoFilterOptions, toSelectOptions } from '@
 
 export function TransactionFilters({
   filtros,
+  filtrosAtivos,
   opcoes,
   opcoesLoading,
   onChange,
   onFiltrar,
   onLimpar,
-  botaoHabilitado,
-  filtrosAplicados,
+  filtrosPendentes,
   loading,
 }) {
-  const categoriaOptions = categoriaFilterOptions(opcoes?.categorias)
+  const categoriaOptions = useMemo(
+    () => categoriaFilterOptions(opcoes?.categorias ?? []),
+    [opcoes?.categorias]
+  )
   const tipoOptions = toSelectOptions(opcoes?.tipos)
   const recursoOptions = recursoFilterOptions(opcoes?.recursos)
+
+  const podeLimpar = !filtrosPendentes && !filtrosTransacaoSaoPadrao(filtrosAtivos)
 
   const handleFilterChange = (patch) => {
     onChange?.({ ...filtros, ...patch })
   }
 
   const handleBotao = () => {
-    if (filtrosAplicados) {
-      onLimpar?.()
-    } else {
+    if (filtrosPendentes) {
       onFiltrar?.()
+    } else if (podeLimpar) {
+      onLimpar?.()
     }
   }
 
   const botaoIcon = loading ? (
-    <SpinnerDots label={filtrosAplicados ? 'Limpando filtros...' : 'Aplicando filtros...'} />
-  ) : filtrosAplicados ? (
+    <SpinnerDots label={podeLimpar && !filtrosPendentes ? 'Limpando filtros...' : 'Aplicando filtros...'} />
+  ) : podeLimpar && !filtrosPendentes ? (
     <RotateCcw size={16} />
   ) : undefined
 
@@ -101,14 +108,14 @@ export function TransactionFilters({
 
         <div className="tx-filters__action-wrap">
           <Button
-            variant={filtrosAplicados ? 'secondary' : 'primary'}
+            variant={podeLimpar && !filtrosPendentes ? 'secondary' : 'primary'}
             size="md"
-            disabled={loading || (!filtrosAplicados && !botaoHabilitado)}
+            disabled={loading || (!filtrosPendentes && !podeLimpar)}
             onClick={handleBotao}
             leftIcon={botaoIcon}
             className="tx-filters__action"
           >
-            {filtrosAplicados ? 'Limpar filtros' : 'Filtrar'}
+            {filtrosPendentes ? 'Filtrar' : podeLimpar ? 'Limpar filtros' : 'Filtrar'}
           </Button>
         </div>
       </div>

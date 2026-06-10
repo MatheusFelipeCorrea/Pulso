@@ -20,6 +20,8 @@ import InDevelopmentPage from './pages/InDevelopmentPage'
 import LandingPage from './pages/LandingPage'
 import TransactionsPage from './pages/TransactionsPage'
 import TransportVoucherPage from './pages/TransportVoucherPage'
+import BudgetPage from './pages/BudgetPage'
+import CalendarPage from './pages/CalendarPage'
 
 function App() {
   return (
@@ -62,8 +64,14 @@ function App() {
             <Route element={<MainLayout />}>
               <Route path="transactions" element={<TransactionsPage />} />
               <Route path="transport-voucher" element={<TransportVoucherPage />} />
+              <Route path="budget" element={<BudgetPage />} />
+              <Route path="calendar" element={<CalendarPage />} />
               {APP_ROUTE_PATHS.filter(
-                (path) => path !== '/transactions' && path !== '/transport-voucher'
+                (path) =>
+                  path !== '/transactions' &&
+                  path !== '/transport-voucher' &&
+                  path !== '/budget' &&
+                  path !== '/calendar'
               ).map((path) => (
                 <Route
                   key={path}

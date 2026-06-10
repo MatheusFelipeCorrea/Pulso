@@ -1,14 +1,25 @@
 const prisma = require('../config/database');
 const { DEFAULT_CATEGORIES } = require('../constants/defaultCategories');
 
+const OUTROS = 'Outros';
+
+const ordenarCategorias = (categorias) =>
+    [...categorias].sort((a, b) => {
+        if (a.tipo !== b.tipo) return a.tipo.localeCompare(b.tipo);
+
+        const aOutros = a.nome === OUTROS;
+        const bOutros = b.nome === OUTROS;
+        if (aOutros !== bOutros) return aOutros ? 1 : -1;
+
+        return a.nome.localeCompare(b.nome, 'pt-BR');
+    });
+
 const listarPorUsuario = async (usuarioId, tipo) => {
     const where = { usuarioId };
     if (tipo) where.tipo = tipo;
 
-    return prisma.categoria.findMany({
-        where,
-        orderBy: [{ tipo: 'asc' }, { nome: 'asc' }],
-    });
+    const categorias = await prisma.categoria.findMany({ where });
+    return ordenarCategorias(categorias);
 };
 
 const buscarPorId = async (categoriaId, usuarioId) =>

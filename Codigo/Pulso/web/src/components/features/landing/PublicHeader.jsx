@@ -14,7 +14,7 @@ function scrollToSection(id) {
  * @param {'login' | 'register' | null} activeAuth — destaca a ação da tela atual
  */
 export function PublicHeader({ activeAuth = null }) {
-  const { theme, toggleTheme } = useTheme()
+  const { theme, setThemePreference } = useTheme()
   const location = useLocation()
   const isLanding = location.pathname === '/'
 
@@ -43,14 +43,26 @@ export function PublicHeader({ activeAuth = null }) {
         </nav>
 
         <div className="landing-header__actions">
-          <button
-            type="button"
-            className="landing-header__theme"
-            onClick={toggleTheme}
-            aria-label={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
-          >
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
+          <div className="landing-theme-toggle" role="group" aria-label="Tema da interface">
+            <button
+              type="button"
+              className={`landing-theme-toggle__option${theme === 'light' ? ' landing-theme-toggle__option--active' : ''}`}
+              onClick={() => setThemePreference('light')}
+              aria-label="Modo claro"
+              aria-pressed={theme === 'light'}
+            >
+              <Sun size={16} strokeWidth={2} />
+            </button>
+            <button
+              type="button"
+              className={`landing-theme-toggle__option${theme === 'dark' ? ' landing-theme-toggle__option--active' : ''}`}
+              onClick={() => setThemePreference('dark')}
+              aria-label="Modo escuro"
+              aria-pressed={theme === 'dark'}
+            >
+              <Moon size={16} strokeWidth={2} />
+            </button>
+          </div>
 
           {activeAuth === 'login' ? (
             <span className="landing-header__login landing-header__login--active" aria-current="page">

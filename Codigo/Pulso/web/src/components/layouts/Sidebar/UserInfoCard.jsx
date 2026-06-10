@@ -2,10 +2,11 @@ import { Avatar } from '@/design-system/components/data-display/Avatar/Avatar.js
 import { PulsoBadge } from '@/components/badges/PulsoBadge.jsx'
 import { badgeKindFromModoUso } from '@/components/badges/enumMappers'
 import { useAppSelector } from '@/store/hooks'
+import { getUserDisplayName } from '@/utils/userDisplayName'
 
 export function UserInfoCard({ collapsed = false }) {
   const user = useAppSelector((state) => state.auth.user)
-  const nome = user?.nome ?? 'Usuário'
+  const nome = getUserDisplayName(user?.nome)
   const avatarUrl = user?.urlAvatar ?? null
   const badgeKind = badgeKindFromModoUso(user?.modoUso ?? 'ESTAGIARIO') ?? 'perfil.estagiario'
 

@@ -35,6 +35,14 @@ module.exports = {
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
+    GOOGLE_CALENDAR_CALLBACK_URL:
+        process.env.GOOGLE_CALENDAR_CALLBACK_URL ||
+        (process.env.GOOGLE_CALLBACK_URL
+            ? process.env.GOOGLE_CALLBACK_URL.replace(
+                  '/api/auth/google/callback',
+                  '/api/calendario/google/callback'
+              )
+            : undefined),
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_PORT: process.env.SMTP_PORT,

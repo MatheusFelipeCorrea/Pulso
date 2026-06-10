@@ -2,7 +2,7 @@
 
 Documento de rastreamento de todos os requisitos funcionais e não funcionais do sistema **Pulso**.
 
-> **Última revisão:** alinhado ao código em maio/2026.  
+> **Última revisão:** alinhado ao código em junho/2026.  
 > Documentação técnica: [Frontend](../../Codigo/Pulso/web/Documents/Readme.md) · [API](../../Codigo/Pulso/api/Documents/Readme.md) · [Banco de dados](../../Codigo/Pulso/api/Documents/Database.md)
 
 ---
@@ -11,11 +11,11 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 138 | 16 | ~12% |
+| Requisitos Funcionais | 138 | 39 | ~28% |
 | Requisitos Não Funcionais | 15 | 6 | ~40% |
-| **Total** | **153** | **22** | **~14%** |
+| **Total** | **153** | **45** | **~29%** |
 
-Contagem considera apenas requisitos **implementados e utilizáveis** no código atual (auth, transações). Demais módulos têm schema/API planejados ou parcialmente preparados.
+Contagem considera apenas requisitos **implementados e utilizáveis** no código atual. Módulos entregues: auth, transações, vale transporte, orçamento, calendário/lembretes (incl. Google Calendar) e notificações de orçamento.
 
 ---
 
@@ -30,17 +30,17 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | 🌍 Viagens e Moedas | 11 | 0 |  |
 | 🤖 Insights | 7 | 0 |  |
 | 💬 Chatbot | 5 | 0 |  |
-| 📅 Lembretes | 5 | 0 |  |
-| 🚌 Vale Transporte | 8 | 0 |  |
+| 📅 Lembretes | 5 | 5 | ✅ |
+| 🚌 Vale Transporte | 8 | 8 | ✅ |
 | 📈 Relatórios | 6 | 0 |  |
 | 👤 Perfil e Configurações | 8 | 0 | 🟡 |
 | 🎮 Gamificação | 7 | 0 |  |
 | 🏠 Homepage | 4 | 0 | ⏳ Prototipação pendente |
 | 👥 Grupos | 15 | 0 |  |
 | ⚙️ Não Funcionais | 15 | 6 | 🟡 |
-| 📊 Orçamento Mensal | 6 | 0 |  |
+| 📊 Orçamento Mensal | 6 | 6 | ✅ |
 | 💸 Divisão de Despesas | 6 | 0 |  |
-| 📅 Calendário Financeiro | 5 | 0 |  |
+| 📅 Calendário Financeiro | 5 | 4 | 🟡 |
 | 🤝 Dívidas Pessoais | 7 | 0 |  |
 | 🛒 Planejamento de Compra | 6 | 0 |  |
 
@@ -156,11 +156,11 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-054 | O sistema deve permitir o usuário conectar sua conta Google para integração com o Google Calendar | 🔴 Essencial |
-| - [ ] | RF-055 | O sistema deve permitir criar lembretes de contas a pagar com data e valor | 🔴 Essencial |
-| - [ ] | RF-056 | O sistema deve sincronizar lembretes criados como eventos no Google Calendar | 🔴 Essencial |
-| - [ ] | RF-057 | O sistema deve permitir o usuário ativar/desativar a integração com Google Agenda a qualquer momento | 🔴 Essencial |
-| - [ ] | RF-058 | O sistema deve permitir configurar antecedência do lembrete (1 dia antes, no dia, etc.) | 🟡 Importante |
+| - [x] | RF-054 | O sistema deve permitir o usuário conectar sua conta Google para integração com o Google Calendar | 🔴 Essencial |
+| - [x] | RF-055 | O sistema deve permitir criar lembretes de contas a pagar com data e valor | 🔴 Essencial |
+| - [x] | RF-056 | O sistema deve sincronizar lembretes criados como eventos no Google Calendar | 🔴 Essencial |
+| - [x] | RF-057 | O sistema deve permitir o usuário ativar/desativar a integração com Google Agenda a qualquer momento | 🔴 Essencial |
+| - [x] | RF-058 | O sistema deve permitir configurar antecedência do lembrete (1 dia antes, no dia, etc.) | 🟡 Importante |
 
 ---
 
@@ -177,14 +177,14 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-059 | O sistema deve permitir registrar o valor mensal recebido de VT | 🔴 Essencial |
-| - [ ] | RF-060 | O sistema deve permitir registrar uso real do VT (passagens utilizadas) | 🔴 Essencial |
-| - [ ] | RF-061 | O sistema deve permitir registrar venda do VT informando: comprador, data da venda, valor nominal vendido e valor recebido | 🔴 Essencial |
-| - [ ] | RF-062 | O sistema deve manter um histórico de vendas de VT com todos os detalhes registrados | 🟡 Importante |
-| - [ ] | RF-063 | O sistema deve calcular a diferença entre valor nominal e valor recebido na venda (perda/ganho) | 🟡 Importante |
-| - [ ] | RF-064 | O sistema deve permitir configurar o intervalo de dias entre vendas de VT | 🟡 Importante |
-| - [ ] | RF-065 | O sistema deve exibir um contador regressivo informando em quantos dias o usuário poderá vender o VT novamente | 🟡 Importante |
-| - [ ] | RF-066 | O sistema deve exibir saldo atual de VT (recebido – usado – vendido) | 🟡 Importante |
+| - [x] | RF-059 | O sistema deve permitir registrar o valor mensal recebido de VT | 🔴 Essencial |
+| - [x] | RF-060 | O sistema deve permitir registrar uso real do VT (passagens utilizadas) | 🔴 Essencial |
+| - [x] | RF-061 | O sistema deve permitir registrar venda do VT informando: comprador, data da venda, valor nominal vendido e valor recebido | 🔴 Essencial |
+| - [x] | RF-062 | O sistema deve manter um histórico de vendas de VT com todos os detalhes registrados | 🟡 Importante |
+| - [x] | RF-063 | O sistema deve calcular a diferença entre valor nominal e valor recebido na venda (perda/ganho) | 🟡 Importante |
+| - [x] | RF-064 | O sistema deve permitir configurar o intervalo de dias entre vendas de VT | 🟡 Importante |
+| - [x] | RF-065 | O sistema deve exibir um contador regressivo informando em quantos dias o usuário poderá vender o VT novamente | 🟡 Importante |
+| - [x] | RF-066 | O sistema deve exibir saldo atual de VT (recebido – usado – vendido) | 🟡 Importante |
 
 ---
 
@@ -268,12 +268,12 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-109 | O sistema deve permitir definir um limite mensal de gasto por categoria | 🔴 Essencial |
-| - [ ] | RF-110 | O sistema deve exibir barra de progresso do gasto atual vs limite definido por categoria | 🔴 Essencial |
-| - [ ] | RF-111 | O sistema deve alertar quando o gasto atingir 80% do limite de uma categoria | 🟡 Importante |
-| - [ ] | RF-112 | O sistema deve alertar quando o gasto estourar o limite de uma categoria | 🔴 Essencial |
-| - [ ] | RF-113 | O sistema deve permitir editar os limites de orçamento a qualquer momento | 🟡 Importante |
-| - [ ] | RF-114 | O sistema deve exibir um resumo visual de quanto ainda pode gastar por categoria no mês | 🔴 Essencial |
+| - [x] | RF-109 | O sistema deve permitir definir um limite mensal de gasto por categoria | 🔴 Essencial |
+| - [x] | RF-110 | O sistema deve exibir barra de progresso do gasto atual vs limite definido por categoria | 🔴 Essencial |
+| - [x] | RF-111 | O sistema deve alertar quando o gasto atingir 80% do limite de uma categoria | 🟡 Importante |
+| - [x] | RF-112 | O sistema deve alertar quando o gasto estourar o limite de uma categoria | 🔴 Essencial |
+| - [x] | RF-113 | O sistema deve permitir editar os limites de orçamento a qualquer momento | 🟡 Importante |
+| - [x] | RF-114 | O sistema deve exibir um resumo visual de quanto ainda pode gastar por categoria no mês | 🔴 Essencial |
 ---
 ## 💸 Módulo 15 — Divisão de Despesas
 
@@ -290,11 +290,11 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-121 | O sistema deve exibir um calendário mensal visual com marcadores de transações por dia | 🔴 Essencial |
-| - [ ] | RF-122 | O sistema deve diferenciar visualmente dias com receitas (verde), despesas (vermelho) e ambos (roxo) | 🔴 Essencial |
+| - [x] | RF-121 | O sistema deve exibir um calendário mensal visual com marcadores de transações por dia | 🔴 Essencial |
+| - [x] | RF-122 | O sistema deve diferenciar visualmente dias com receitas (verde), despesas (vermelho) e ambos (roxo) | 🔴 Essencial |
 | - [ ] | RF-123 | O sistema deve exibir os dias de recebimento fixo (salário, VA, VR, VT) destacados no calendário | 🟡 Importante |
-| - [ ] | RF-124 | O sistema deve exibir vencimentos de contas/lembretes no calendário | 🟡 Importante |
-| - [ ] | RF-125 | O sistema deve permitir clicar em um dia para ver o detalhe das transações daquele dia | 🔴 Essencial |
+| - [x] | RF-124 | O sistema deve exibir vencimentos de contas/lembretes no calendário | 🟡 Importante |
+| - [x] | RF-125 | O sistema deve permitir clicar em um dia para ver o detalhe das transações daquele dia | 🔴 Essencial |
 ---
 ## 🤝 Módulo 17 — Dívidas Pessoais
 
@@ -341,16 +341,18 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 
 ---
 
-## 📌 Notas de implementação (maio/2026)
+## 📌 Notas de implementação (junho/2026)
 
 | Item | Situação |
 |------|----------|
 | RF-084–087 | Homepage pública **pendente** — só placeholder em `LandingPage.jsx`; **prototipação da landing ainda não feita** |
 | RF-018 | Categorias **personalizadas** ainda não têm CRUD na API — só seed padrão no registro |
 | RF-076 | Toggle claro/escuro via `useTheme()` no **mobile**; tela Configurações ainda não existe |
-| RF-103 / RF-104 | Campo `modoUso` existe no banco (`ConfiguracaoUsuario`); UI de perfil pendente |
-| Sidebar / layout autenticado | Entregue; demais rotas do menu = placeholder |
-| Banco completo | Schema Prisma com 28 entidades; API expõe auth + transações + categorias + tags |
+| RF-103 / RF-104 | `modoUso` usado na API de VT; UI de perfil/configurações ainda pendente |
+| Páginas implementadas | `/transactions`, `/transport-voucher`, `/budget`, `/calendar` |
+| Notificações | Alertas de orçamento (`ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO`) via job (a cada 20 min) + sino no layout |
+| Calendário + IA | Tela entregue; integração com IA (Gemini) na página do calendário **pendente** |
+| Banco completo | Schema Prisma com 30 entidades; API expõe auth, transações, VT, orçamento, lembretes, calendário e notificações |
 
 ---
 

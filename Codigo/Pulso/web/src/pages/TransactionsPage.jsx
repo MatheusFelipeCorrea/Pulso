@@ -11,26 +11,24 @@ import { DeleteTransactionModal } from '@/components/features/transactions/Delet
 import * as transactionService from '@/services/transactionService.js'
 import * as tagService from '@/services/tagService.js'
 import { useTransactionFilterOptions } from '@/hooks/useTransactionFilterOptions.js'
-import { periodoAtual } from '@/utils/transactionRecurrence.js'
-
-const DEFAULT_FILTROS = () => ({
-  periodo: periodoAtual(),
-  categoria: null,
-  tipo: 'TODOS',
-  recurso: 'TODOS',
-  busca: '',
-})
+import {
+  DEFAULT_TRANSACTION_FILTROS,
+  filtrosTransacaoIguais,
+} from '@/utils/transactionFilters.js'
 
 export default function TransactionsPage() {
   const toast = useToast()
   const toastRef = useRef(toast)
   toastRef.current = toast
 
-  const [filtros, setFiltros] = useState(() => DEFAULT_FILTROS())
-  const [filtrosAtivos, setFiltrosAtivos] = useState(() => DEFAULT_FILTROS())
-  const [filtrosAlterados, setFiltrosAlterados] = useState(false)
-  const [filtrosAplicados, setFiltrosAplicados] = useState(false)
+  const [filtros, setFiltros] = useState(() => DEFAULT_TRANSACTION_FILTROS())
+  const [filtrosAtivos, setFiltrosAtivos] = useState(() => DEFAULT_TRANSACTION_FILTROS())
   const [pagina, setPagina] = useState(1)
+
+  const filtrosPendentes = useMemo(
+    () => !filtrosTransacaoIguais(filtros, filtrosAtivos),
+    [filtros, filtrosAtivos]
+  )
 
   const [transacoes, setTransacoes] = useState([])
   const [totalPaginas, setTotalPaginas] = useState(1)
@@ -106,24 +104,19 @@ export default function TransactionsPage() {
 
   const handleFiltrosChange = (novos) => {
     setFiltros(novos)
-    setFiltrosAlterados(true)
   }
 
   const handleFiltrar = () => {
     setLoadingFilter(true)
     setFiltrosAtivos({ ...filtros })
-    setFiltrosAplicados(true)
-    setFiltrosAlterados(false)
     setPagina(1)
   }
 
   const handleLimpar = () => {
-    const defaults = DEFAULT_FILTROS()
+    const defaults = DEFAULT_TRANSACTION_FILTROS()
     setLoadingFilter(true)
     setFiltros(defaults)
     setFiltrosAtivos(defaults)
-    setFiltrosAplicados(false)
-    setFiltrosAlterados(false)
     setPagina(1)
   }
 
@@ -230,13 +223,13 @@ export default function TransactionsPage() {
 
       <TransactionFilters
         filtros={filtros}
+        filtrosAtivos={filtrosAtivos}
         opcoes={opcoesFiltro}
         opcoesLoading={opcoesLoading}
         onChange={handleFiltrosChange}
         onFiltrar={handleFiltrar}
         onLimpar={handleLimpar}
-        botaoHabilitado={filtrosAlterados}
-        filtrosAplicados={filtrosAplicados}
+        filtrosPendentes={filtrosPendentes}
         loading={loadingFilter}
       />
 

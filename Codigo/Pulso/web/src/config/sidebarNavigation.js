@@ -45,14 +45,6 @@ export const SIDEBAR_NAV = [
       { id: 'gamificacao', label: 'Gamificação', path: '/achievements', icon: 'Gamepad2' },
     ],
   },
-  {
-    id: 'ferramentas',
-    label: 'Ferramentas',
-    icon: 'Wrench',
-    children: [
-      { id: 'agenda', label: 'Agenda e Lembretes', path: '/reminders', icon: 'CalendarCheck' },
-    ],
-  },
 ]
 
 /** Itens fixos no rodapé da sidebar (seção Conta) */

@@ -10,16 +10,18 @@ import { NotificationItem } from './NotificationItem.jsx'
  * @param {object} props
  * @param {import('./NotificationItem.jsx').Notification[]} [props.notifications=[]]
  * @param {function} [props.onMarkAllRead]
- * @param {(id: string) => void} [props.onRead]
- * @param {(notification: import('./NotificationItem.jsx').Notification) => void} [props.onNotificationClick]
+ * @param {(id: string) => void} [props.onMarkRead]
+ * @param {(notification: import('./NotificationItem.jsx').Notification) => void} [props.onView]
+ * @param {string | null} [props.markingReadId]
  * @param {boolean} [props.loading]
  * @param {string} [props.className]
  */
 export const NotificationPanel = ({
   notifications = [],
   onMarkAllRead,
-  onRead,
-  onNotificationClick,
+  onMarkRead,
+  onView,
+  markingReadId = null,
   loading = false,
   className,
 }) => {
@@ -71,8 +73,9 @@ export const NotificationPanel = ({
             <NotificationItem
               key={notification.id}
               notification={notification}
-              onRead={onRead}
-              onClick={onNotificationClick}
+              onView={onView}
+              onMarkRead={onMarkRead}
+              markingRead={markingReadId === notification.id}
             />
           ))}
         </div>

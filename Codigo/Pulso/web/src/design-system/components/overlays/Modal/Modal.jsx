@@ -35,7 +35,7 @@ export const Modal = ({
       onClick={closeOnOverlay ? handleClose : undefined}
       role="presentation"
     >
-      <div className="flex min-h-full items-start justify-center py-2 sm:py-4">
+      <div className="flex min-h-full items-center justify-center py-4 sm:py-6">
         <div
           role="dialog"
           aria-modal="true"

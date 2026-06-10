@@ -15,7 +15,9 @@ const buildWhere = (usuarioId, filtros = {}) => {
         where.data = { gte: inicio, lte: fim };
     }
 
-    if (filtros.categoria) {
+    if (filtros.categoriaNome) {
+        where.categoria = { nome: filtros.categoriaNome, usuarioId };
+    } else if (filtros.categoria) {
         where.categoriaId = filtros.categoria;
     }
 

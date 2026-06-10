@@ -47,7 +47,6 @@ export default function TransportVoucherPage() {
   const [periodoRascunho, setPeriodoRascunho] = useState(() =>
     monthValueFromPeriodo(periodoAtual())
   )
-  const [filtrosAplicados, setFiltrosAplicados] = useState(false)
   const [loadingFilter, setLoadingFilter] = useState(false)
   const [aba, setAba] = useState('vendas')
   const [pagina, setPagina] = useState(1)
@@ -71,7 +70,8 @@ export default function TransportVoucherPage() {
     () => periodoFromMonthValue(periodoRascunho),
     [periodoRascunho]
   )
-  const botaoHabilitado = periodoRascunhoStr !== periodo
+  const periodoPendente = periodoRascunhoStr !== periodo
+  const podeLimparPeriodo = !periodoPendente && periodo !== periodoAtual()
 
   const carregarSaldo = useCallback(async (signal) => {
     setLoadingSaldo(true)
@@ -151,7 +151,6 @@ export default function TransportVoucherPage() {
   const handleFiltrar = () => {
     setLoadingFilter(true)
     setPeriodo(periodoRascunhoStr)
-    setFiltrosAplicados(true)
     setPagina(1)
   }
 
@@ -160,23 +159,22 @@ export default function TransportVoucherPage() {
     setLoadingFilter(true)
     setPeriodoRascunho(monthValueFromPeriodo(atual))
     setPeriodo(atual)
-    setFiltrosAplicados(false)
     setPagina(1)
   }
 
   const handleBotaoFiltro = () => {
-    if (filtrosAplicados) {
-      handleLimparFiltros()
-    } else {
+    if (periodoPendente) {
       handleFiltrar()
+    } else if (podeLimparPeriodo) {
+      handleLimparFiltros()
     }
   }
 
   const botaoFiltroIcon = loadingFilter ? (
     <SpinnerDots
-      label={filtrosAplicados ? 'Limpando filtros...' : 'Aplicando filtros...'}
+      label={podeLimparPeriodo && !periodoPendente ? 'Limpando filtros...' : 'Aplicando filtros...'}
     />
-  ) : filtrosAplicados ? (
+  ) : podeLimparPeriodo && !periodoPendente ? (
     <RotateCcw size={16} />
   ) : undefined
 
@@ -279,14 +277,14 @@ export default function TransportVoucherPage() {
         <div className="vt-filters__action-wrap">
           <Button
             type="button"
-            variant={filtrosAplicados ? 'secondary' : 'primary'}
+            variant={podeLimparPeriodo && !periodoPendente ? 'secondary' : 'primary'}
             size="md"
-            disabled={loadingFilter || (!filtrosAplicados && !botaoHabilitado)}
+            disabled={loadingFilter || (!periodoPendente && !podeLimparPeriodo)}
             onClick={handleBotaoFiltro}
             leftIcon={botaoFiltroIcon}
             className="vt-filters__action"
           >
-            {filtrosAplicados ? 'Limpar filtros' : 'Filtrar'}
+            {periodoPendente ? 'Filtrar' : podeLimparPeriodo ? 'Limpar filtros' : 'Filtrar'}
           </Button>
         </div>
       </section>

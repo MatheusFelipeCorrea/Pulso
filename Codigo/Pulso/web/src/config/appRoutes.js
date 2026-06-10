@@ -17,7 +17,6 @@ export const APP_PAGE_TITLES = {
   '/insights': 'Insights',
   '/chatbot': 'Chatbot',
   '/achievements': 'Gamificação',
-  '/reminders': 'Agenda e Lembretes',
   '/profile': 'Perfil',
   '/settings': 'Configurações',
 }

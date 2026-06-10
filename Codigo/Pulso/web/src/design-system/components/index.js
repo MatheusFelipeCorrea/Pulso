@@ -52,6 +52,6 @@ export { Checkbox, Radio, RadioGroup, Toggle, FormField } from './forms/index.js
 // export { Tabs, Breadcrumbs, Pagination } from './navigation/index.js'
 
 // ============================================================
-// OVERLAYS (TODO)
+// OVERLAYS
 // ============================================================
-// export { Modal, Drawer, Dropdown } from './overlays/index.js'
+export { Modal, ConfirmModal } from './overlays/index.js'

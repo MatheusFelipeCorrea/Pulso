@@ -18,7 +18,9 @@ const BADGE_VARIANT_ICON_COLORS = {
   default: '#71717A',
 }
 
-/** Categoria da API → opção de Select com ícone colorido */
+export const CATEGORIA_FILTRO_NOME_PREFIX = 'nome:'
+
+/** Categoria da API → opção de Select com ícone colorido (formulário) */
 export function categoriaToSelectOption(categoria) {
   return {
     value: categoria.id,
@@ -26,6 +28,38 @@ export function categoriaToSelectOption(categoria) {
     icon: resolveBadgeIcon(categoria.icone ?? 'Tag', { size: 16 }),
     iconColor: categoria.cor,
   }
+}
+
+/** Uma opção por nome — nomes repetidos (ex.: Outros) viram filtro único por nome */
+function agruparCategoriasParaFiltro(categorias = []) {
+  const porNome = new Map()
+
+  for (const categoria of categorias) {
+    if (!porNome.has(categoria.nome)) {
+      porNome.set(categoria.nome, [])
+    }
+    porNome.get(categoria.nome).push(categoria)
+  }
+
+  const nomes = [...porNome.keys()].sort((a, b) => {
+    if (a === 'Outros') return 1
+    if (b === 'Outros') return -1
+    return a.localeCompare(b, 'pt-BR')
+  })
+
+  return nomes.map((nome) => {
+    const grupo = porNome.get(nome)
+    const representante = grupo[0]
+    const value =
+      grupo.length > 1 ? `${CATEGORIA_FILTRO_NOME_PREFIX}${nome}` : representante.id
+
+    return {
+      value,
+      label: nome,
+      icon: resolveBadgeIcon(representante.icone ?? 'Tag', { size: 16 }),
+      iconColor: representante.cor,
+    }
+  })
 }
 
 /** Recurso (Dinheiro, VA, VR, VT) → opção de Select com ícone do catálogo */
@@ -78,12 +112,9 @@ export function withEmptyOption(options, { value = '', label = 'Todas' } = {}) {
   return [{ value, label }, ...options]
 }
 
-/** Categorias da API → opções de filtro */
+/** Categorias da API → opções de filtro (agrupa por nome; tipo refina depois) */
 export function categoriaFilterOptions(categorias = []) {
-  return withEmptyOption(
-    categorias.map(categoriaToSelectOption),
-    { value: '', label: 'Todas' }
-  )
+  return withEmptyOption(agruparCategoriasParaFiltro(categorias), { value: '', label: 'Todas' })
 }
 
 /** Tags da API → sugestões para TagsInput */
