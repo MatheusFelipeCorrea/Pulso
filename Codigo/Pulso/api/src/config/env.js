@@ -1,4 +1,6 @@
-require('dotenv').config();
+if (!process.env.VERCEL) {
+    require('dotenv').config();
+}
 
 const requiredVars = [
     'DATABASE_URL',
@@ -8,7 +10,6 @@ const requiredVars = [
     'GOOGLE_CLIENT_ID',
     'GOOGLE_CLIENT_SECRET',
     'GOOGLE_CALLBACK_URL',
-    'GEMINI_API_KEY',
     'SMTP_HOST',
     'SMTP_PORT',
     'SMTP_USER',

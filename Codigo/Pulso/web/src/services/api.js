@@ -1,13 +1,14 @@
 import axios from 'axios'
+import { getApiBaseUrl } from '@/utils/apiBaseUrl.js'
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3333/api',
+    baseURL: getApiBaseUrl(),
     headers: {
         'Content-Type': 'application/json',
     },
 })
 
-const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3333/api'
+const baseURL = getApiBaseUrl()
 
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('accessToken')

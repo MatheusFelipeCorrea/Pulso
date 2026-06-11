@@ -2,6 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "npm install",
   "buildCommand": "npm run build",
+  "build": {
+    "env": {
+      "VITE_API_URL": "/api"
+    }
+  },
   "outputDirectory": "Codigo/Pulso/web/dist",
   "functions": {
     "api/index.js": {

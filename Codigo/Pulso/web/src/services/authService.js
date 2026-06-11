@@ -1,4 +1,5 @@
 import api from './api'
+import { getApiBaseUrl } from '@/utils/apiBaseUrl.js'
 
 export const register = async (data) => {
   const { aceitarTermos: _aceitarTermos, ...payload } = data
@@ -64,8 +65,7 @@ export const resendVerification = async (email) => {
 }
 
 export const loginWithGoogle = () => {
-  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3333/api'
-  window.location.href = `${baseUrl}/auth/google`
+  window.location.href = `${getApiBaseUrl()}/auth/google`
 }
 
 export const storeAuthTokens = ({ accessToken, refreshToken }) => {

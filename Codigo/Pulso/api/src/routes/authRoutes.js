@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('../config/passport');
+const { ensureGoogleStrategy } = passport;
 const authController = require('../controllers/authController');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const authMiddleware = require('../middlewares/authMiddleware');
@@ -73,6 +74,14 @@ router.post(
 
 router.get(
     '/google',
+    (req, res, next) => {
+        try {
+            ensureGoogleStrategy();
+            next();
+        } catch (error) {
+            next(error);
+        }
+    },
     passport.authenticate('google', {
         scope: ['profile', 'email'],
         session: false,
@@ -80,6 +89,12 @@ router.get(
 );
 
 router.get('/google/callback', (req, res, next) => {
+    try {
+        ensureGoogleStrategy();
+    } catch (error) {
+        return next(error);
+    }
+
     passport.authenticate('google', { session: false }, (err, user) => {
         if (err || !user) {
             const redirectUrl = authService.buildGoogleErrorRedirect(
