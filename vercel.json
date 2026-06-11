@@ -11,7 +11,6 @@
   "functions": {
     "api/index.js": {
       "maxDuration": 30,
-      "includeFiles": "{Codigo/Pulso/api/node_modules/.prisma/client/**,Codigo/Pulso/api/node_modules/@prisma/client/**}",
       "excludeFiles": "{Codigo/Pulso/api/{tests,Documents,scripts,prisma/migrations}/**,Codigo/Pulso/web/**}"
     }
   },

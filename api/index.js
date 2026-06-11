@@ -2,7 +2,6 @@
  * Entrada serverless da Vercel — encaminha /api/* para o Express.
  * Dev local continua usando Codigo/Pulso/api/src/server.js (npm run dev).
  */
-const fs = require('fs');
 const path = require('path');
 const serverless = require('serverless-http');
 
@@ -10,15 +9,6 @@ if (!process.env.VERCEL) {
     require('dotenv').config({
         path: path.join(__dirname, '../Codigo/Pulso/api/.env'),
     });
-}
-
-const prismaEngine = path.join(
-    __dirname,
-    '../Codigo/Pulso/api/node_modules/.prisma/client/libquery_engine-rhel-openssl-3.0.x.so.node'
-);
-
-if (fs.existsSync(prismaEngine)) {
-    process.env.PRISMA_QUERY_ENGINE_LIBRARY = prismaEngine;
 }
 
 let handler;

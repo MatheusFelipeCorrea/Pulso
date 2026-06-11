@@ -13,10 +13,22 @@ const isTransientConnectionError = (error) => {
 
 const logConfig = ['error', 'warn'];
 
-const createBaseClient = () =>
-    new PrismaClient({
-        log: logConfig,
-    });
+const createBaseClient = () => {
+    if (process.env.VERCEL) {
+        const { PrismaNeon } = require('@prisma/adapter-neon');
+        const { Pool, neonConfig } = require('@neondatabase/serverless');
+        const ws = require('ws');
+
+        neonConfig.webSocketConstructor = ws;
+
+        const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+        const adapter = new PrismaNeon(pool);
+
+        return new PrismaClient({ adapter, log: logConfig });
+    }
+
+    return new PrismaClient({ log: logConfig });
+};
 
 /**
  * Evita múltiplas instâncias no nodemon (dev) e reconecta se o Neon fechar conexão idle.
