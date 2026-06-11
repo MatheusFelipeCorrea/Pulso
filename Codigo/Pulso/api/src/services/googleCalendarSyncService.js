@@ -1,7 +1,8 @@
-const { google } = require('googleapis');
+const { calendar_v3 } = require('@googleapis/calendar');
 const prisma = require('../config/database');
 const AppError = require('../utils/appError');
 const env = require('../config/env');
+const { createOAuthClient } = require('../utils/googleOAuth');
 const { ANTECEDENCIA_MINUTOS } = require('../utils/reminderAntecedencia');
 const { CATEGORIA_LABELS } = require('../constants/reminderCategories');
 
@@ -11,8 +12,7 @@ const TIMEZONE = 'America/Sao_Paulo';
 const getRedirectUri = () =>
     env.GOOGLE_CALENDAR_CALLBACK_URL || 'http://localhost:3333/api/calendario/google/callback';
 
-const getOAuthClient = () =>
-    new google.auth.OAuth2(env.GOOGLE_CLIENT_ID, env.GOOGLE_CLIENT_SECRET, getRedirectUri());
+const getOAuthClient = () => createOAuthClient(getRedirectUri());
 
 const parseTokens = (tokensGoogle) =>
     typeof tokensGoogle === 'string' ? JSON.parse(tokensGoogle) : tokensGoogle;
@@ -102,7 +102,7 @@ const getCalendarApi = async (usuarioId) => {
     });
 
     return {
-        calendar: google.calendar({ version: 'v3', auth: client }),
+        calendar: new calendar_v3.Calendar({ auth: client }),
         config,
     };
 };

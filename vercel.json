@@ -6,7 +6,8 @@
   "functions": {
     "api/index.js": {
       "maxDuration": 10,
-      "includeFiles": "Codigo/Pulso/api/**"
+      "includeFiles": "Codigo/Pulso/api/node_modules/.prisma/client/**",
+      "excludeFiles": "{Codigo/Pulso/api/{tests,Documents,scripts,prisma/migrations}/**,Codigo/Pulso/web/**}"
     }
   },
   "rewrites": [

@@ -27,7 +27,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
+    "@googleapis/calendar": "^9.8.0",
+    "@googleapis/oauth2": "^5.0.1",
     "@prisma/client": "5.22.0",
     "prisma": "5.22.0",
     "axios": "^1.15.2",
@@ -40,7 +41,7 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.3.2",
     "express-session": "^1.18.1",
-    "googleapis": "^171.4.0",
+    "google-auth-library": "^10.5.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "node-cron": "^4.2.1",
@@ -48,8 +49,6 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
     "winston": "^3.19.0",
     "zod": "^4.3.6"
   },
@@ -60,6 +59,8 @@
     "jest": "^30.4.2",
     "nodemon": "^3.1.14",
     "prettier": "^3.8.3",
-    "supertest": "^7.2.2"
+    "supertest": "^7.2.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   }
 }

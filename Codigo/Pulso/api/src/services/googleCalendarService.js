@@ -1,7 +1,8 @@
-const { google } = require('googleapis');
+const { oauth2_v2 } = require('@googleapis/oauth2');
 const prisma = require('../config/database');
 const AppError = require('../utils/appError');
 const env = require('../config/env');
+const { createOAuthClient } = require('../utils/googleOAuth');
 
 const googleCalendarSync = require('./googleCalendarSyncService');
 
@@ -22,8 +23,7 @@ const buildRedirectUri = (req) => {
     return `${proto}://${host}${CALLBACK_PATH}`;
 };
 
-const getOAuthClient = (redirectUri) =>
-    new google.auth.OAuth2(env.GOOGLE_CLIENT_ID, env.GOOGLE_CLIENT_SECRET, redirectUri);
+const getOAuthClient = (redirectUri) => createOAuthClient(redirectUri);
 
 const parseTokens = (tokensGoogle) =>
     typeof tokensGoogle === 'string' ? JSON.parse(tokensGoogle) : tokensGoogle;
@@ -36,7 +36,7 @@ const obterEmailContaGoogle = async (tokensGoogle) => {
     );
     client.setCredentials(parseTokens(tokensGoogle));
 
-    const oauth2 = google.oauth2({ version: 'v2', auth: client });
+    const oauth2 = new oauth2_v2.Oauth2({ auth: client });
     const { data } = await oauth2.userinfo.get();
     return data.email ?? null;
 };
@@ -100,7 +100,7 @@ const processarCallback = async (code, usuarioId, redirectUri) => {
 
     let googleCalendarEmail = null;
     try {
-        const oauth2 = google.oauth2({ version: 'v2', auth: client });
+        const oauth2 = new oauth2_v2.Oauth2({ auth: client });
         const { data } = await oauth2.userinfo.get();
         googleCalendarEmail = data.email ?? null;
     } catch {
