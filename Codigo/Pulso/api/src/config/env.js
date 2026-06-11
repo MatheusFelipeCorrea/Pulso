@@ -10,10 +10,6 @@ const requiredVars = [
     'GOOGLE_CLIENT_ID',
     'GOOGLE_CLIENT_SECRET',
     'GOOGLE_CALLBACK_URL',
-    'SMTP_HOST',
-    'SMTP_PORT',
-    'SMTP_USER',
-    'SMTP_PASS',
     'CORS_ORIGIN',
     'FRONTEND_URL',
 ];

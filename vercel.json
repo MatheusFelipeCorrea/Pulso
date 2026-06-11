@@ -10,7 +10,7 @@
   "outputDirectory": "Codigo/Pulso/web/dist",
   "functions": {
     "api/index.js": {
-      "maxDuration": 10,
+      "maxDuration": 30,
       "includeFiles": "Codigo/Pulso/api/node_modules/.prisma/client/**",
       "excludeFiles": "{Codigo/Pulso/api/{tests,Documents,scripts,prisma/migrations}/**,Codigo/Pulso/web/**}"
     }

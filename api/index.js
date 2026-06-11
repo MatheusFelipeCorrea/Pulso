@@ -11,8 +11,16 @@ if (!process.env.VERCEL) {
     });
 }
 
-const app = require('../Codigo/Pulso/api/src/app');
+let handler;
 
-module.exports = serverless(app, {
-    binary: ['image/*', 'application/pdf'],
-});
+const getHandler = () => {
+    if (!handler) {
+        const app = require('../Codigo/Pulso/api/src/app');
+        handler = serverless(app, {
+            binary: ['image/*', 'application/pdf'],
+        });
+    }
+    return handler;
+};
+
+module.exports = (req, res) => getHandler()(req, res);
