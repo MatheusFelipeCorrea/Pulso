@@ -15,7 +15,10 @@ let handler;
 
 const getHandler = () => {
     if (!handler) {
+        const startedAt = Date.now();
+        console.log('[pulso] carregando Express...');
         const app = require('../Codigo/Pulso/api/src/app');
+        console.log(`[pulso] Express carregado em ${Date.now() - startedAt}ms`);
         handler = serverless(app, {
             binary: ['image/*', 'application/pdf'],
         });

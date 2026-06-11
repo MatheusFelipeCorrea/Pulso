@@ -10,15 +10,22 @@ const {
     buildPasswordResetEmailText,
 } = require('./emailTemplates/passwordResetEmail');
 
-const transporter = nodemailer.createTransport({
-    host: env.SMTP_HOST,
-    port: Number(env.SMTP_PORT),
-    secure: false,
-    auth: {
-        user: env.SMTP_USER,
-        pass: env.SMTP_PASS,
-    },
-});
+let transporter;
+
+const getTransporter = () => {
+    if (!transporter) {
+        transporter = nodemailer.createTransport({
+            host: env.SMTP_HOST,
+            port: Number(env.SMTP_PORT),
+            secure: false,
+            auth: {
+                user: env.SMTP_USER,
+                pass: env.SMTP_PASS,
+            },
+        });
+    }
+    return transporter;
+};
 
 const resolveLogoForEmail = () => {
     try {
@@ -39,7 +46,7 @@ const sendVerificationEmail = async (email, token) => {
     const recipientEmail = email.trim().toLowerCase();
     const { logoSrc, attachments } = resolveLogoForEmail();
 
-    await transporter.sendMail({
+    await getTransporter().sendMail({
         from: {
             name: 'Pulso',
             address: env.SMTP_FROM || env.SMTP_USER,
@@ -61,7 +68,7 @@ const sendPasswordResetEmail = async (email, token) => {
     const recipientEmail = email.trim().toLowerCase();
     const { logoSrc, attachments } = resolveLogoForEmail();
 
-    await transporter.sendMail({
+    await getTransporter().sendMail({
         from: {
             name: 'Pulso',
             address: env.SMTP_FROM || env.SMTP_USER,

@@ -30,9 +30,6 @@ const createBaseClient = () => {
     return new PrismaClient({ log: logConfig });
 };
 
-/**
- * Evita múltiplas instâncias no nodemon (dev) e reconecta se o Neon fechar conexão idle.
- */
 const createPrismaClient = () => {
     const baseClient = createBaseClient();
 
@@ -60,10 +57,20 @@ const createPrismaClient = () => {
 
 const globalForPrisma = globalThis;
 
-const prisma = globalForPrisma.prisma ?? createPrismaClient();
+const getPrisma = () => {
+    if (!globalForPrisma.prisma) {
+        globalForPrisma.prisma = createPrismaClient();
+    }
+    return globalForPrisma.prisma;
+};
 
-if (!globalForPrisma.prisma) {
-    globalForPrisma.prisma = prisma;
-}
-
-module.exports = prisma;
+module.exports = new Proxy(
+    {},
+    {
+        get(_target, prop) {
+            const prisma = getPrisma();
+            const value = prisma[prop];
+            return typeof value === 'function' ? value.bind(prisma) : value;
+        },
+    }
+);
