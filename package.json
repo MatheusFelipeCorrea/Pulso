@@ -4,7 +4,7 @@
   "description": "Pulso — deploy unificado Vercel (web + API)",
   "scripts": {
     "build:web": "npm run build --prefix Codigo/Pulso/web",
-    "build:api": "npm run db:generate --prefix Codigo/Pulso/api && npx prisma migrate deploy --schema Codigo/Pulso/api/prisma/schema.prisma",
+    "build:api": "npm run db:generate --prefix Codigo/Pulso/api",
     "dev:web": "npm run dev --prefix Codigo/Pulso/web",
     "dev:api": "npm run dev --prefix Codigo/Pulso/api"
   },

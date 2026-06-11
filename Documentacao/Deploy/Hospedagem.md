@@ -133,11 +133,22 @@ https://seu-app.vercel.app/api/calendario/google/callback
 
 ### Migrations
 
-Rodam no build (`prisma migrate deploy`). Se falhar no primeiro deploy, rode localmente:
+Rodam **uma vez** no Neon (local), não no build da Vercel:
 
 ```bash
 cd Codigo/Pulso/api
-npx prisma migrate deploy
+npm run db:migrate:deploy
+```
+
+Se aparecer `P3009` (migration falhou no meio), marque como aplicada ou revertida:
+
+```bash
+# se a tabela já existe no banco:
+npx prisma migrate resolve --applied 20260610140000_notificacoes
+
+# se a migration falhou e nada foi criado:
+npx prisma migrate resolve --rolled-back 20260610140000_notificacoes
+npm run db:migrate:deploy
 ```
 
 ---
