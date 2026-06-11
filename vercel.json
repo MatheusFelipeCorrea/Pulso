@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm install && npm install --prefix Codigo/Pulso/api && npm install --prefix Codigo/Pulso/web",
-  "buildCommand": "npm run build:web && npm run build:api",
+  "installCommand": "npm install && npm install --include=dev --prefix Codigo/Pulso/api && npm install --include=dev --prefix Codigo/Pulso/web",
+  "buildCommand": "npm run build",
   "outputDirectory": "Codigo/Pulso/web/dist",
   "functions": {
     "api/index.js": {
