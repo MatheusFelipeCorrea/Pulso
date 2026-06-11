@@ -449,3 +449,4 @@ Contagem apenas dos **138 requisitos funcionais** (RF-001 a RF-138).
 - [ ] 📸 OCR de cupons fiscais (foto → transação)
 - [ ] 📱 Tabela FIPE Sistema de gestão de veiculos e busca de veiculos
 - [ ] 📱 Integração com bot whatsapp
+- [ ] 🏦 Botão de importar extrato de banco, Vale Refeição, Vale Alimentação

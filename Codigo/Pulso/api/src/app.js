@@ -9,8 +9,10 @@ const app = express();
 
 // Middlewares globais
 app.use(helmet());
+const corsOrigins = env.CORS_ORIGIN.split(',').map((o) => o.trim()).filter(Boolean);
+
 app.use(cors({
-    origin: env.CORS_ORIGIN,
+    origin: corsOrigins.length <= 1 ? corsOrigins[0] : corsOrigins,
     exposedHeaders: ['X-Total-Count', 'X-Total-Pages', 'X-Current-Page'],
 }));
 app.use(express.json());
