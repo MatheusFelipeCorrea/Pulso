@@ -8,6 +8,7 @@ const budgetRoutes = require('./budgetRoutes');
 const notificationRoutes = require('./notificationRoutes');
 const reminderRoutes = require('./reminderRoutes');
 const calendarRoutes = require('./calendarRoutes');
+const cronRoutes = require('./cronRoutes');
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use('/orcamentos', budgetRoutes);
 router.use('/notificacoes', notificationRoutes);
 router.use('/lembretes', reminderRoutes);
 router.use('/calendario', calendarRoutes);
+router.use('/cron', cronRoutes);
 
 module.exports = router;

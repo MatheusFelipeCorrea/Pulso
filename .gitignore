@@ -1,3 +1,5 @@
+node_modules/
+
 # Variáveis de ambiente (qualquer pasta do repositório)
 .env
 .env.*

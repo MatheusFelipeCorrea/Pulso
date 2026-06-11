@@ -1,0 +1,26 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm install && npm install --prefix Codigo/Pulso/api && npm install --prefix Codigo/Pulso/web",
+  "buildCommand": "npm run build:web && npm run build:api",
+  "outputDirectory": "Codigo/Pulso/web/dist",
+  "functions": {
+    "api/index.js": {
+      "maxDuration": 10,
+      "includeFiles": "Codigo/Pulso/api/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/tick",
+      "schedule": "*/20 * * * *"
+    },
+    {
+      "path": "/api/cron/daily",
+      "schedule": "5 0 * * *"
+    }
+  ]
+}

@@ -51,4 +51,5 @@ module.exports = {
     SMTP_FROM: process.env.SMTP_FROM,
     CORS_ORIGIN: process.env.CORS_ORIGIN,
     FRONTEND_URL: process.env.FRONTEND_URL,
+    CRON_SECRET: process.env.CRON_SECRET,
 };

@@ -62,9 +62,14 @@ const start = async () => {
         await prisma.$connect();
         logger.info('🗄️  Banco de dados conectado');
 
-        startTokenCleanupScheduler();
-        startRecurringTransactionsScheduler();
-        startBudgetAlertScheduler();
+        // Na Vercel os jobs rodam via /api/cron/* (vercel.json crons)
+        if (!process.env.VERCEL) {
+            startTokenCleanupScheduler();
+            startRecurringTransactionsScheduler();
+            startBudgetAlertScheduler();
+        } else {
+            logger.info('⏭️  Cron local desativado (ambiente Vercel)');
+        }
 
         app.listen(env.PORT, () => {
             logger.info(`💜 Pulso API rodando na porta ${env.PORT}`);

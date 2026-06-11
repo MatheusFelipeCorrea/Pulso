@@ -16,6 +16,7 @@ Aplicativo de gestão financeira pessoal — receitas, despesas, metas, viagens,
 - **Frontend:** [Codigo/Pulso/web/Documents/Readme.md](./Codigo/Pulso/web/Documents/Readme.md)
 - **Backend:** [Codigo/Pulso/api/Documents/Readme.md](./Codigo/Pulso/api/Documents/Readme.md)
 - **Design System:** [Codigo/Pulso/web/src/design-system/README.md](./Codigo/Pulso/web/src/design-system/README.md)
+- **Hospedagem (Vercel — web + API):** [Documentacao/Deploy/Hospedagem.md](./Documentacao/Deploy/Hospedagem.md)
 
 ## Como rodar (desenvolvimento)
 
