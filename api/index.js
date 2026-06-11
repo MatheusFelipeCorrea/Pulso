@@ -5,9 +5,11 @@
 const path = require('path');
 const serverless = require('serverless-http');
 
-require('dotenv').config({
-    path: path.join(__dirname, '../Codigo/Pulso/api/.env'),
-});
+if (!process.env.VERCEL) {
+    require('dotenv').config({
+        path: path.join(__dirname, '../Codigo/Pulso/api/.env'),
+    });
+}
 
 const app = require('../Codigo/Pulso/api/src/app');
 
