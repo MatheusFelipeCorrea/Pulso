@@ -21,13 +21,20 @@ const tick = async (req, res, next) => {
     }
 };
 
+/** Hobby Vercel: 1×/dia — roda todos os jobs agendados. */
 const daily = async (req, res, next) => {
     try {
+        const [budget, cleanup] = await Promise.all([
+            runBudgetAlertJob(),
+            runTokenCleanup(),
+        ]);
         await runRecurringTransactions();
 
         res.status(200).json({
             status: 'ok',
-            job: 'recurring-transactions',
+            budget,
+            cleanup,
+            recurring: true,
         });
     } catch (error) {
         logger.error(`Falha no cron daily: ${error.message}`);

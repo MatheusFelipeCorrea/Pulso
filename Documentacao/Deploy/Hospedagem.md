@@ -76,12 +76,17 @@ O `vercel.json` na raiz já define install, build e output.
 
 | Cron | Rota | O que faz |
 |------|------|-----------|
-| `*/20 * * * *` | `GET /api/cron/tick` | Alertas de orçamento + limpeza de tokens |
-| `5 0 * * *` | `GET /api/cron/daily` | Transações recorrentes |
+| `5 0 * * *` (1×/dia) | `GET /api/cron/daily` | Alertas de orçamento + limpeza de tokens + transações recorrentes |
 
 Protegidos por `CRON_SECRET` — a Vercel envia `Authorization: Bearer <CRON_SECRET>` automaticamente.
 
-**Plano Hobby:** até 2 crons (já configurados). Plano Pro permite mais.
+**Plano Hobby:** só crons **diários** (máx. 1× por dia cada). Alertas de orçamento passam a rodar 1×/dia às 00:05 UTC.
+
+**Dev local:** `node-cron` no `server.js` mantém intervalos curtos (20 min, hourly).
+
+**Opcional (alertas mais frequentes em prod):** serviço externo gratuito ([cron-job.org](https://cron-job.org)) chamando `GET /api/cron/tick` a cada 20 min com header `Authorization: Bearer <CRON_SECRET>`.
+
+**Plano Pro Vercel:** permite crons a cada minuto — pode restaurar `*/20 * * * *` em `/api/cron/tick`.
 
 ---
 
@@ -153,7 +158,7 @@ npx prisma migrate deploy
 |------|---------|
 | Cold start | 1–3 s na API após idle |
 | Timeout | 10 s por request |
-| Crons | 2 jobs (configurados) |
+| Crons | 1 job/dia (limite Hobby) |
 | Gemini | Cota da API Google separada |
 
 ---
