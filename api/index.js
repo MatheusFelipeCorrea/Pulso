@@ -1,9 +1,8 @@
 /**
- * Entrada serverless da Vercel — encaminha /api/* para o Express.
+ * Entrada serverless da Vercel — exporta o Express diretamente.
  * Dev local continua usando Codigo/Pulso/api/src/server.js (npm run dev).
  */
 const path = require('path');
-const serverless = require('serverless-http');
 
 if (!process.env.VERCEL) {
     require('dotenv').config({
@@ -11,33 +10,4 @@ if (!process.env.VERCEL) {
     });
 }
 
-let handler;
-
-const getHandler = () => {
-    if (!handler) {
-        const startedAt = Date.now();
-        console.log('[pulso] carregando Express...');
-        const app = require('../Codigo/Pulso/api/src/app');
-        console.log(`[pulso] Express carregado em ${Date.now() - startedAt}ms`);
-        handler = serverless(app, {
-            binary: ['image/*', 'application/pdf'],
-        });
-    }
-    return handler;
-};
-
-const isHealthRequest = (req) => {
-    const url = req.url || '';
-    return url === '/api/health' || url.startsWith('/api/health?');
-};
-
-module.exports = async (req, res) => {
-    if (isHealthRequest(req)) {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify({ status: 'ok', message: '💜 Pulso API rodando!' }));
-        return;
-    }
-
-    return getHandler()(req, res);
-};
+module.exports = require('../Codigo/Pulso/api/src/app');
