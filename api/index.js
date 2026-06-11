@@ -31,7 +31,7 @@ const isHealthRequest = (req) => {
     return url === '/api/health' || url.startsWith('/api/health?');
 };
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
     if (isHealthRequest(req)) {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
