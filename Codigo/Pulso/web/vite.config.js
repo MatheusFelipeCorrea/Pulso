@@ -13,6 +13,34 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./tests/setup.js'],
+    include: ['tests/**/*.test.{js,jsx}', 'tests/**/*.spec.{js,jsx}'],
+    coverage: {
+      provider: 'v8',
+      include: [
+        'src/utils/**',
+        'src/services/**',
+        'src/store/**',
+        'src/schemas/**',
+        'src/hooks/**',
+        'src/design-system/utils/**',
+      ],
+      exclude: [
+        '**/*.styles.jsx',
+        '**/index.js',
+        'src/main.jsx',
+        'src/utils/reminderCategories.jsx',
+      ],
+      thresholds: {
+        lines: 90,
+        statements: 90,
+        functions: 90,
+        branches: 85,
+      },
+    },
+  },
   server: {
     port: 5173,
     proxy: {

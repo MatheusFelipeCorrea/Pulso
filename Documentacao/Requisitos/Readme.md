@@ -335,7 +335,7 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | - [x] | RNF-012 | O sistema deve utilizar variáveis de ambiente para todas as chaves e credenciais sensíveis | Segurança | 🔴 Essencial |
 | - [x] | RNF-013 | Os tokens JWT devem expirar em 15 minutos com refresh token de 7 dias | Segurança | 🔴 Essencial |
 | - [x] | RNF-014 | O sistema deve implementar CORS configurado apenas para origens permitidas | Segurança | 🔴 Essencial |
-| - [ ] | RNF-015 | O sistema deve manter cobertura mínima de 85% de testes unitários nas camadas de serviço, podendo ser superior | Qualidade | 🔴 Essencial |
+| - [x] | RNF-015 | O sistema deve manter cobertura mínima de 85% de testes unitários nas camadas de serviço, podendo ser superior | Qualidade | 🔴 Essencial |
 
 ---
 
@@ -364,7 +364,7 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | Rate limiting global (RNF-004) | Apenas rotas de auth |
 | Tokens Google em repouso | JSON sem criptografia (schema prevê criptografia) |
 | Cron Vercel (Hobby) | Jobs diários 1×/dia; orçamento local roda a cada 20 min |
-| Cobertura de testes (RNF-015) | Apenas auth/tokens — expandir para serviços críticos |
+| Cobertura de testes (RNF-015) | API ~95% linhas / ~94% statements (Jest); Web ~97% linhas (Vitest) — services, utils, jobs, middlewares |
 | Tags CRUD completo | Opcional pós-MVP; criação sob demanda cobre o fluxo atual |
 
 ### Tags — posicionamento (jun/2026)

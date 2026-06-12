@@ -23,9 +23,8 @@ const startOfDayInTimezone = (date) => {
 
 const endOfDayInTimezone = (date) => {
     const dateOnly = formatDateOnly(date);
-    const nextDay = addDays(dateOnly, 1);
-    const [year, month, day] = formatDateOnly(nextDay).split('-').map(Number);
-    return new Date(Date.UTC(year, month - 1, day, 2, 59, 59, 999));
+    const [year, month, day] = dateOnly.split('-').map(Number);
+    return new Date(Date.UTC(year, month - 1, day + 1, 2, 59, 59, 999));
 };
 
 const todayInTimezone = () => formatDateOnly(new Date());
