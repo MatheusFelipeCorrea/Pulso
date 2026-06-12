@@ -1,21 +1,15 @@
 import { Palette, Shapes } from 'lucide-react'
 import { cn } from '@/design-system/utils/cn.js'
+import { FormFieldLabel } from '@/design-system/components/forms/FormFieldLabel/FormFieldLabel.jsx'
 import { resolveBadgeIcon } from '@/components/badges/iconRegistry.jsx'
-
-function SectionLabel({ icon: Icon, children }) {
-  return (
-    <span className="category-icon-picker__label">
-      <Icon size={15} strokeWidth={2} aria-hidden />
-      <span>{children}</span>
-    </span>
-  )
-}
 
 export function CategoryIconPicker({ icones = [], cores = [], valueIcon, valueCor, onChangeIcon, onChangeCor }) {
   return (
     <div className="category-icon-picker">
       <section className="category-icon-picker__card">
-        <SectionLabel icon={Shapes}>Ícone</SectionLabel>
+        <FormFieldLabel icon={Shapes} tone="purple" className="category-icon-picker__label">
+          Ícone
+        </FormFieldLabel>
         <div
           className="category-icon-picker__grid"
           role="radiogroup"
@@ -52,7 +46,9 @@ export function CategoryIconPicker({ icones = [], cores = [], valueIcon, valueCo
       </section>
 
       <section className="category-icon-picker__card">
-        <SectionLabel icon={Palette}>Cor</SectionLabel>
+        <FormFieldLabel icon={Palette} tone="blue" className="category-icon-picker__label">
+          Cor
+        </FormFieldLabel>
         <div className="category-icon-picker__colors" role="radiogroup" aria-label="Cor da categoria">
           {cores.map((cor) => {
             const selected = valueCor === cor

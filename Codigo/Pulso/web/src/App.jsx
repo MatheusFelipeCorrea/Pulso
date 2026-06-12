@@ -22,6 +22,7 @@ import TransactionsPage from './pages/TransactionsPage'
 import TransportVoucherPage from './pages/TransportVoucherPage'
 import BudgetPage from './pages/BudgetPage'
 import CalendarPage from './pages/CalendarPage'
+import DebtsPage from './pages/DebtsPage'
 
 function App() {
   return (
@@ -66,12 +67,14 @@ function App() {
               <Route path="transport-voucher" element={<TransportVoucherPage />} />
               <Route path="budget" element={<BudgetPage />} />
               <Route path="calendar" element={<CalendarPage />} />
+              <Route path="debts" element={<DebtsPage />} />
               {APP_ROUTE_PATHS.filter(
                 (path) =>
                   path !== '/transactions' &&
                   path !== '/transport-voucher' &&
                   path !== '/budget' &&
-                  path !== '/calendar'
+                  path !== '/calendar' &&
+                  path !== '/debts'
               ).map((path) => (
                 <Route
                   key={path}

@@ -6,6 +6,11 @@ const { mesReferenciaFromQuery, intervaloDoMes, mesAnterior, mesReferenciaToQuer
 const reminderRepository = require('../repositories/reminderRepository');
 const { startOfDay, endOfDay, diasAteVencimento } = require('./reminderService');
 const { formatDateOnly } = require('../utils/dateTimezone');
+const {
+    obterRecebimentosFixosConfig,
+    recebimentosFixosNoDia,
+    aplicarMarcadoresRecebimentoFixo,
+} = require('../utils/fixedIncomeUtils');
 
 const includeTransacao = {
     categoria: true,
@@ -29,41 +34,6 @@ const emptyDayMarker = () => ({
     temRecebimentoFixo: false,
     recebimentosFixos: [],
 });
-
-const diasNoMes = (year, month) => new Date(year, month, 0).getDate();
-
-const obterRecebimentosFixosConfig = (config) => {
-    if (!config) return [];
-
-    const itens = [];
-    if (Number(config.valorSalario) > 0) {
-        itens.push({ tipo: 'SALARIO', label: 'Salário', dia: config.diaSalario });
-    }
-    if (Number(config.valorVa) > 0) {
-        itens.push({ tipo: 'VA', label: 'Vale Alimentação', dia: config.diaVa });
-    }
-    if (Number(config.valorVr) > 0) {
-        itens.push({ tipo: 'VR', label: 'Vale Refeição', dia: config.diaVr });
-    }
-    if (config.vtHabilitado !== false && Number(config.valorVt) > 0) {
-        itens.push({ tipo: 'VT', label: 'Vale Transporte', dia: config.diaVt });
-    }
-    return itens;
-};
-
-const aplicarMarcadoresRecebimentoFixo = (dias, recebimentos, year, month) => {
-    const ultimoDia = diasNoMes(year, month);
-
-    for (const item of recebimentos) {
-        const dia = Math.min(item.dia, ultimoDia);
-        const key = `${year}-${String(month).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
-        if (!dias[key]) dias[key] = emptyDayMarker();
-        dias[key].temRecebimentoFixo = true;
-        if (!dias[key].recebimentosFixos.includes(item.tipo)) {
-            dias[key].recebimentosFixos.push(item.tipo);
-        }
-    }
-};
 
 const obterResumoMes = async (usuarioId, inicio, fim) => {
     const agregados = await prisma.transacao.groupBy({
@@ -211,14 +181,23 @@ const obterDetalheDia = async (usuarioId, query) => {
     const inicio = startOfDay(data);
     const fim = endOfDay(data);
 
-    const [transacoes, lembretes] = await Promise.all([
+    const [transacoes, lembretes, config] = await Promise.all([
         prisma.transacao.findMany({
             where: { usuarioId, data: { gte: inicio, lte: fim } },
             include: includeTransacao,
             orderBy: { data: 'asc' },
         }),
         reminderRepository.listarPorUsuario(usuarioId, { inicio, fim }),
+        prisma.configuracaoUsuario.findUnique({ where: { usuarioId } }),
     ]);
+
+    const recebimentosConfig = obterRecebimentosFixosConfig(config);
+    const recebimentosFixos = recebimentosFixosNoDia(
+        recebimentosConfig,
+        data.getFullYear(),
+        data.getMonth() + 1,
+        data.getDate()
+    );
 
     let receitas = 0;
     let despesas = 0;
@@ -241,6 +220,7 @@ const obterDetalheDia = async (usuarioId, query) => {
             despesas,
             saldo: receitas - despesas,
         },
+        recebimentosFixos,
     };
 };
 

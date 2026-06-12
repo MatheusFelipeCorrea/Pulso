@@ -406,7 +406,7 @@ Os componentes usam variáveis CSS ao invés de cores hardcoded. O projeto que c
 | Exportação | Named exports (não default) |
 | Props | Destructuring no parâmetro |
 | CSS variables | Prefixo `--ds-` |
-| Testes | NomeComponente.spec.jsx |
+| Testes | `tests/unit/.../NomeModulo.test.js` (ou `.spec.jsx` para componentes) |
 
 ---
 

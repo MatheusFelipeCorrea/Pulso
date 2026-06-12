@@ -39,6 +39,14 @@ const listarTransacoesQuerySchema = z.object({
             .string()
             .regex(/^\d{4}-\d{2}$/, 'Período deve estar no formato YYYY-MM')
             .optional(),
+        dataInicio: z
+            .string()
+            .regex(/^\d{4}-\d{2}-\d{2}$/, 'dataInicio deve estar no formato YYYY-MM-DD')
+            .optional(),
+        dataFim: z
+            .string()
+            .regex(/^\d{4}-\d{2}-\d{2}$/, 'dataFim deve estar no formato YYYY-MM-DD')
+            .optional(),
         categoria: z.string().optional(),
         categoriaNome: z.string().max(60).optional(),
         tipo: z.enum(['RECEITA', 'DESPESA', 'TODOS']).optional().default('TODOS'),

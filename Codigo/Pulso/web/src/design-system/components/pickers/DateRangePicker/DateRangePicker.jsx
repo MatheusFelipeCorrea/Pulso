@@ -44,6 +44,7 @@ export const DateRangePicker = ({
   label,
   id: idProp,
   className,
+  fullWidth = false,
 }) => {
   const generatedId = useId()
   const id = idProp ?? generatedId
@@ -123,7 +124,7 @@ export const DateRangePicker = ({
       id={id}
       className={className}
     >
-      <div ref={ref} className="relative w-full max-w-md">
+      <div ref={ref} className={cn('relative w-full', !fullWidth && 'max-w-md')}>
         <PickerTrigger
           id={id}
           open={isOpen}
@@ -162,33 +163,33 @@ export const DateRangePicker = ({
           <div
             className={cn(
               pickerDropdownVariants(),
-              'left-0 right-auto flex w-auto min-w-[320px] flex-col sm:min-w-[640px] sm:flex-row'
+              'ds-picker-dropdown--range left-0 right-auto flex w-auto min-w-[320px] flex-col sm:min-w-[640px]'
             )}
             role="dialog"
           >
-            {!isMobile && (
-              <div className="w-44 shrink-0 border-r border-[var(--ds-color-border)] p-2">
-                <p className="mb-2 px-2 text-xs font-semibold uppercase text-[var(--ds-color-text-secondary)]">
-                  Atalhos
-                </p>
-                {presets.map((preset) => (
-                  <button
-                    key={preset.id}
-                    type="button"
-                    onClick={() => handlePreset(preset)}
-                    data-active={activePreset === preset.id ? 'true' : 'false'}
-                    className="ds-range-preset"
-                  >
-                    <span>{preset.label}</span>
-                    {activePreset === preset.id && <Check size={14} aria-hidden="true" />}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className={cn('ds-range-picker__body', isMobile ? 'flex-col' : 'flex-row')}>
+              {!isMobile && (
+                <aside className="ds-range-picker__presets">
+                  <p className="ds-range-picker__presets-title">Atalhos</p>
+                  <div className="ds-range-picker__presets-list">
+                    {presets.map((preset) => (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        onClick={() => handlePreset(preset)}
+                        data-active={activePreset === preset.id ? 'true' : 'false'}
+                        className="ds-range-preset"
+                      >
+                        <span>{preset.label}</span>
+                        {activePreset === preset.id && <Check size={14} aria-hidden="true" />}
+                      </button>
+                    ))}
+                  </div>
+                </aside>
+              )}
 
-            <div className="flex-1">
-              <div className={cn('flex', isMobile ? 'flex-col' : 'flex-row')}>
-                <div className="flex-1">
+              <div className={cn('ds-range-picker__calendars', isMobile ? 'flex-col' : 'flex-row')}>
+                <div className="ds-range-picker__month">
                   <CalendarHeader
                     month={viewMonth}
                     onPrev={() => setViewMonth((m) => subMonths(m, 1))}
@@ -206,7 +207,7 @@ export const DateRangePicker = ({
                   />
                 </div>
                 {!isMobile && (
-                  <div className="flex-1 border-l border-[var(--ds-color-border)]">
+                  <div className="ds-range-picker__month ds-range-picker__month--next">
                     <CalendarHeader
                       month={secondMonth}
                       onPrev={() => setViewMonth((m) => subMonths(m, 1))}
@@ -225,21 +226,21 @@ export const DateRangePicker = ({
                   </div>
                 )}
               </div>
-
-              <div className="flex items-center justify-between gap-2 border-t border-[var(--ds-color-border)] px-4 py-3">
-                <Button variant="ghost" size="sm" onClick={handleClear}>
-                  Limpar
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={handleApply}
-                  disabled={!pendingStart || !pendingEnd || pendingStart > pendingEnd}
-                >
-                  Aplicar
-                </Button>
-              </div>
             </div>
+
+            <footer className="ds-range-picker__footer">
+              <Button variant="ghost" size="sm" onClick={handleClear}>
+                Limpar
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleApply}
+                disabled={!pendingStart || !pendingEnd || pendingStart > pendingEnd}
+              >
+                Aplicar
+              </Button>
+            </footer>
           </div>
         )}
       </div>
