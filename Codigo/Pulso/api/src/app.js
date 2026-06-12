@@ -7,6 +7,11 @@ const errorMiddleware = require('./middlewares/errorMiddleware');
 
 const app = express();
 
+// Vercel (e outros proxies) enviam X-Forwarded-For — necessário para rate-limit e IP real
+if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+}
+
 // Middlewares globais
 app.use(helmet());
 const corsOrigins = (env.CORS_ORIGIN || '')
