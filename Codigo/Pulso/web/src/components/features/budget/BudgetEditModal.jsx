@@ -5,11 +5,13 @@ import {
   Check,
   Info,
   Plus,
+  Tag,
   TrendingUp,
   Wallet,
   X,
 } from 'lucide-react'
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
+import { FormFieldLabel } from '@/design-system/components/forms/FormFieldLabel/FormFieldLabel.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { Select } from '@/design-system/components/selects/Select/Select.jsx'
 import { InputMoney } from '@/design-system/components/inputs/InputMoney/InputMoney.jsx'
@@ -176,7 +178,11 @@ export function BudgetEditModal({
           <h3 className="budget-edit-modal__section-title">Adicionar categoria</h3>
           <div className="budget-edit-modal__add">
             <Select
-              label="Categoria"
+              label={
+                <FormFieldLabel icon={Tag} tone="blue">
+                  Categoria
+                </FormFieldLabel>
+              }
               value={categoriaAdicionar}
               onChange={setCategoriaAdicionar}
               options={categoriaOptions}

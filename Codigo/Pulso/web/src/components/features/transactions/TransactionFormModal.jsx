@@ -1,6 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
-import { X, RefreshCw, Trash2, Heart } from 'lucide-react'
+import {
+  AlignLeft,
+  Calendar,
+  CalendarClock,
+  CircleDollarSign,
+  Heart,
+  RefreshCw,
+  Tag,
+  Tags,
+  Trash2,
+  Wallet,
+  X,
+} from 'lucide-react'
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
+import { FormFieldLabel } from '@/design-system/components/forms/FormFieldLabel/FormFieldLabel.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { InputMoney } from '@/design-system/components/inputs/InputMoney/InputMoney.jsx'
 import { InputText } from '@/design-system/components/inputs/InputText/InputText.jsx'
@@ -191,7 +204,11 @@ export function TransactionFormModal({
 
           <div className={cn('tx-form__money', isReceita ? 'tx-form__money--income' : 'tx-form__money--expense')}>
             <InputMoney
-              label="Valor"
+              label={
+                <FormFieldLabel icon={CircleDollarSign} tone="green">
+                  Valor
+                </FormFieldLabel>
+              }
               value={form.valor}
               onChange={(v) => updateForm({ valor: v })}
               size="large"
@@ -201,13 +218,21 @@ export function TransactionFormModal({
 
           <div className="tx-form__grid">
             <DatePicker
-              label="Data"
+              label={
+                <FormFieldLabel icon={Calendar} tone="purple">
+                  Data
+                </FormFieldLabel>
+              }
               value={form.data}
               onChange={(d) => updateForm({ data: d })}
               required
             />
             <Select
-              label="Categoria"
+              label={
+                <FormFieldLabel icon={Tag} tone="blue">
+                  Categoria
+                </FormFieldLabel>
+              }
               value={form.categoriaId}
               onChange={(v) => updateForm({ categoriaId: v })}
               options={categoriaOptions}
@@ -217,14 +242,22 @@ export function TransactionFormModal({
           </div>
 
           <InputText
-            label="Descrição"
+            label={
+              <FormFieldLabel icon={AlignLeft} tone="purple">
+                Descrição
+              </FormFieldLabel>
+            }
             value={form.descricao}
             onChange={(e) => updateForm({ descricao: e.target.value })}
             placeholder="Ex: Almoço no RU"
           />
 
           <Select
-            label="Recurso de origem"
+            label={
+              <FormFieldLabel icon={Wallet} tone="green">
+                Recurso de origem
+              </FormFieldLabel>
+            }
             value={form.recurso}
             onChange={(v) => updateForm({ recurso: v })}
             options={recursoOptions}
@@ -234,7 +267,11 @@ export function TransactionFormModal({
           />
 
           <TagsInput
-            label="Tags"
+            label={
+              <FormFieldLabel icon={Tags} tone="blue">
+                Tags
+              </FormFieldLabel>
+            }
             tags={form.tagLabels}
             onAdd={addTagByName}
             onRemove={removeTag}
@@ -246,29 +283,41 @@ export function TransactionFormModal({
             checked={form.recorrente}
             onChange={(checked) => updateForm({ recorrente: checked })}
             label={
-              <span className="tx-form__recurring-label">
-                <RefreshCw size={16} /> Repetir automaticamente
-              </span>
+              <FormFieldLabel icon={RefreshCw} tone="purple" className="tx-form__recurring-label">
+                Repetir automaticamente
+              </FormFieldLabel>
             }
           />
 
           {form.recorrente ? (
             <div className="tx-form__grid tx-form__recurring">
               <Select
-                label="Frequência"
+                label={
+                  <FormFieldLabel icon={RefreshCw} tone="purple">
+                    Frequência
+                  </FormFieldLabel>
+                }
                 value={form.frequencia}
                 onChange={(v) => updateForm({ frequencia: v })}
                 options={frequenciaOptions}
               />
               <Select
-                label="Até quando"
+                label={
+                  <FormFieldLabel icon={CalendarClock} tone="yellow">
+                    Até quando
+                  </FormFieldLabel>
+                }
                 value={form.ateQuando}
                 onChange={(v) => updateForm({ ateQuando: v })}
                 options={ateQuandoOptions}
               />
               {form.ateQuando === 'DATA' ? (
                 <DatePicker
-                  label="Data final"
+                  label={
+                    <FormFieldLabel icon={Calendar} tone="purple">
+                      Data final
+                    </FormFieldLabel>
+                  }
                   value={form.dataFim}
                   onChange={(d) => updateForm({ dataFim: d })}
                 />

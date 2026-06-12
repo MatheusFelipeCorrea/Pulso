@@ -435,6 +435,96 @@
 }
 
 /* DatePicker — calendário */
+.ds-picker-dropdown--range {
+  width: max(100%, 40rem);
+  max-width: min(40rem, calc(100vw - 2rem));
+  overflow: visible;
+}
+
+.ds-range-picker__body {
+  display: flex;
+  min-width: 0;
+}
+
+.ds-range-picker__presets {
+  width: 11.5rem;
+  flex-shrink: 0;
+  padding: 12px 10px;
+  border-right: 1px solid var(--ds-color-border);
+  background: color-mix(in srgb, var(--ds-color-border) 8%, transparent);
+}
+
+.ds-range-picker__presets-title {
+  margin: 0 0 8px;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-range-picker__presets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ds-range-picker__calendars {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-range-picker__month {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px 10px;
+}
+
+.ds-range-picker__month--next {
+  border-left: 1px solid var(--ds-color-border);
+}
+
+.ds-range-picker__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--ds-color-border);
+  background: var(--ds-color-modal-bg);
+}
+
+.ds-range-preset {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  margin: 0;
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+  font-size: var(--ds-font-size-sm);
+  line-height: 1.4;
+  color: var(--ds-color-text);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--ds-transition-fast);
+}
+
+.ds-range-preset:hover {
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+.ds-range-preset[data-active='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+  color: var(--ds-color-primary);
+  font-weight: 600;
+}
+
 .ds-picker-dropdown--calendar {
   min-width: 17.5rem;
 }
@@ -1644,4 +1734,38 @@
 
 .ds-pagination__page-size-select {
   min-width: 4.5rem;
+}
+
+/* Form field label with icon (modals) */
+.ds-form-field-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ds-color-text);
+}
+
+.ds-form-field-label__icon {
+  flex-shrink: 0;
+}
+
+.ds-form-field-label--purple .ds-form-field-label__icon {
+  color: var(--ds-color-primary);
+}
+
+.ds-form-field-label--green .ds-form-field-label__icon {
+  color: #059669;
+}
+
+.dark .ds-form-field-label--green .ds-form-field-label__icon {
+  color: var(--ds-color-success);
+}
+
+.ds-form-field-label--yellow .ds-form-field-label__icon {
+  color: #eab308;
+}
+
+.ds-form-field-label--blue .ds-form-field-label__icon {
+  color: #3b82f6;
 }

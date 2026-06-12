@@ -73,6 +73,16 @@ const verificarNotificacaoDuplicadaLembrete = async (usuarioId, tipo, metadados)
     );
 };
 
+const verificarNotificacaoDuplicadaDivida = async (usuarioId, tipo, metadados) => {
+    if (!metadados?.dividaId || !metadados?.dataAlerta) return null;
+    return notificationRepository.buscarDuplicadaDivida(
+        usuarioId,
+        tipo,
+        metadados.dividaId,
+        metadados.dataAlerta
+    );
+};
+
 module.exports = {
     listarNotificacoes,
     contarNaoLidas,
@@ -81,4 +91,5 @@ module.exports = {
     criarNotificacao,
     verificarNotificacaoDuplicada,
     verificarNotificacaoDuplicadaLembrete,
+    verificarNotificacaoDuplicadaDivida,
 };

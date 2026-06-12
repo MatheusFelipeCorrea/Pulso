@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Bell, Calendar, CircleDollarSign, Paperclip, RefreshCw, Tag, X } from 'lucide-react'
+import { Bell, Calendar, CircleDollarSign, Hash, Paperclip, RefreshCw, Tag, X } from 'lucide-react'
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
+import { FormFieldLabel } from '@/design-system/components/forms/FormFieldLabel/FormFieldLabel.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { InputText } from '@/design-system/components/inputs/InputText/InputText.jsx'
 import { InputMoney } from '@/design-system/components/inputs/InputMoney/InputMoney.jsx'
@@ -32,15 +33,6 @@ const emptyForm = (defaultDate = new Date(), googleConnected = false) => ({
   repetirMensal: false,
   diaRecorrencia: defaultDate.getDate(),
 })
-
-function FieldLabel({ icon: Icon, tone, children }) {
-  return (
-    <span className={`calendar-reminder-form__field-label calendar-reminder-form__field-label--${tone}`}>
-      {Icon ? <Icon size={16} strokeWidth={2} aria-hidden /> : null}
-      <span>{children}</span>
-    </span>
-  )
-}
 
 function GoogleCalendarGlyph() {
   return (
@@ -126,9 +118,9 @@ export function ReminderFormModal({
         <div className="calendar-reminder-form__body">
           <InputText
             label={
-              <FieldLabel icon={Paperclip} tone="purple">
+              <FormFieldLabel icon={Paperclip} tone="purple">
                 Título
-              </FieldLabel>
+              </FormFieldLabel>
             }
             value={form.titulo}
             onChange={(e) => setForm((prev) => ({ ...prev, titulo: e.target.value }))}
@@ -139,18 +131,18 @@ export function ReminderFormModal({
           <div className="calendar-reminder-form__row">
             <InputMoney
               label={
-                <FieldLabel icon={CircleDollarSign} tone="green">
+                <FormFieldLabel icon={CircleDollarSign} tone="green">
                   Valor (opcional)
-                </FieldLabel>
+                </FormFieldLabel>
               }
               value={form.valor}
               onChange={(value) => setForm((prev) => ({ ...prev, valor: value }))}
             />
             <DatePicker
               label={
-                <FieldLabel icon={Calendar} tone="purple">
+                <FormFieldLabel icon={Calendar} tone="purple">
                   Data de vencimento
-                </FieldLabel>
+                </FormFieldLabel>
               }
               value={form.dataVencimento}
               onChange={(value) =>
@@ -166,9 +158,9 @@ export function ReminderFormModal({
 
           <Select
             label={
-              <FieldLabel icon={Bell} tone="yellow">
+              <FormFieldLabel icon={Bell} tone="yellow">
                 Antecedência
-              </FieldLabel>
+              </FormFieldLabel>
             }
             value={form.antecedencia}
             onChange={(value) => setForm((prev) => ({ ...prev, antecedencia: value }))}
@@ -181,9 +173,9 @@ export function ReminderFormModal({
 
           <Select
             label={
-              <FieldLabel icon={Tag} tone="blue">
+              <FormFieldLabel icon={Tag} tone="blue">
                 Ícone / Tipo
-              </FieldLabel>
+              </FormFieldLabel>
             }
             value={form.categoria}
             onChange={handleCategoriaChange}
@@ -234,7 +226,9 @@ export function ReminderFormModal({
 
             {form.repetirMensal ? (
               <div className="calendar-reminder-form__day-picker">
-                <span className="calendar-reminder-form__day-picker-label">Dia do mês</span>
+                <FormFieldLabel icon={Hash} tone="purple" className="calendar-reminder-form__day-picker-label">
+                  Dia do mês
+                </FormFieldLabel>
                 <div
                   className="calendar-reminder-form__day-grid"
                   role="radiogroup"

@@ -751,6 +751,16 @@ html:not(.dark) .calendar-google__email {
   font-weight: 700;
 }
 
+.calendar-day-panel__item--recebimento .calendar-grid__dot {
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+.calendar-day-panel__section--recebimentos {
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
 .calendar-day-panel__item-value--income {
   color: #22c55e;
 }

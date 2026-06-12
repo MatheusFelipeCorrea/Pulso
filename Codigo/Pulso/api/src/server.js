@@ -8,6 +8,8 @@ const { runRecurringTransactions } = require('./jobs/recurringTransactions');
 const { runBudgetAlertJob } = require('./jobs/budgetAlertJob');
 const { runReminderAlertJob } = require('./jobs/reminderAlertJob');
 const { runReminderRecurrenceJob } = require('./jobs/reminderRecurrenceJob');
+const { runDebtAlertJob } = require('./jobs/debtAlertJob');
+const { runDebtCleanupJob } = require('./jobs/debtCleanupJob');
 
 const startTokenCleanupScheduler = () => {
     if (env.NODE_ENV === 'test') {
@@ -78,6 +80,46 @@ const startReminderAlertScheduler = () => {
     logger.info('🔔 Agendador de lembretes ativo (diário 10:00 BRT)');
 };
 
+const startDebtCleanupScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule(
+        '0 2 * * *',
+        async () => {
+            try {
+                await runDebtCleanupJob();
+            } catch (error) {
+                logger.error(`Falha no job de limpeza de dívidas: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🧹 Agendador de limpeza de dívidas ativo (diário 02:00 BRT)');
+};
+
+const startDebtAlertScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule(
+        '0 8 * * *',
+        async () => {
+            try {
+                await runDebtAlertJob();
+            } catch (error) {
+                logger.error(`Falha no job de alertas de dívidas: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🔔 Agendador de alertas de dívidas ativo (diário 08:00 BRT)');
+};
+
 const startReminderRecurrenceScheduler = () => {
     if (env.NODE_ENV === 'test') {
         return;
@@ -111,6 +153,8 @@ const start = async () => {
             startBudgetAlertScheduler();
             startReminderAlertScheduler();
             startReminderRecurrenceScheduler();
+            startDebtCleanupScheduler();
+            startDebtAlertScheduler();
         } else {
             logger.info('⏭️  Cron local desativado (ambiente Vercel)');
         }

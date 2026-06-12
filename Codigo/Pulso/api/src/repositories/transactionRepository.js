@@ -1,4 +1,5 @@
 const prisma = require('../config/database');
+const { startOfDayInTimezone, endOfDayInTimezone } = require('../utils/dateTimezone');
 
 const includeRelacionamentos = {
     categoria: true,
@@ -8,7 +9,15 @@ const includeRelacionamentos = {
 const buildWhere = (usuarioId, filtros = {}) => {
     const where = { usuarioId };
 
-    if (filtros.periodo) {
+    if (filtros.dataInicio || filtros.dataFim) {
+        where.data = {};
+        if (filtros.dataInicio) {
+            where.data.gte = startOfDayInTimezone(filtros.dataInicio);
+        }
+        if (filtros.dataFim) {
+            where.data.lte = endOfDayInTimezone(filtros.dataFim);
+        }
+    } else if (filtros.periodo) {
         const [year, month] = filtros.periodo.split('-').map(Number);
         const inicio = new Date(year, month - 1, 1);
         const fim = new Date(year, month, 0, 23, 59, 59, 999);

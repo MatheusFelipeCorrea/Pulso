@@ -21,6 +21,7 @@ import './styles/categories.css'
 import './styles/budget.css'
 import './styles/calendar.css'
 import './styles/transport.css'
+import './styles/debts.css'
 import './styles/landing.css'
 
 createRoot(document.getElementById('root')).render(
