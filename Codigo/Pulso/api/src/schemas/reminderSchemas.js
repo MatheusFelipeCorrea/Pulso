@@ -56,6 +56,10 @@ const criarLembreteSchema = z.object({
 
         sincronizarGoogle: z.boolean().optional(),
 
+        repetirMensal: z.boolean().optional(),
+
+        diaRecorrencia: z.coerce.number().int().min(1).max(28).optional(),
+
     }),
 
 });
@@ -85,6 +89,10 @@ const atualizarLembreteSchema = z.object({
         pago: z.boolean().optional(),
 
         sincronizarGoogle: z.boolean().optional(),
+
+        repetirMensal: z.boolean().optional(),
+
+        diaRecorrencia: z.coerce.number().int().min(1).max(28).optional(),
 
     }),
 

@@ -34,6 +34,8 @@ function dayMarkers(marker) {
 
   if (marker.temLembrete) items.push('lembrete')
 
+  if (marker.temRecebimentoFixo) items.push('recebimento')
+
   return items
 
 }
@@ -168,6 +170,12 @@ export function CalendarMonthGrid({ monthDate, selectedDate, dias = {}, onSelect
 
                   ) : null}
 
+                  {markers.includes('recebimento') ? (
+
+                    <span className="calendar-grid__dot calendar-grid__dot--recebimento" />
+
+                  ) : null}
+
                 </span>
 
               ) : null}
@@ -196,6 +204,8 @@ export function CalendarMonthGrid({ monthDate, selectedDate, dias = {}, onSelect
         <span><i className="calendar-grid__dot calendar-grid__dot--misto" /> Ambos</span>
 
         <span><i className="calendar-grid__dot calendar-grid__dot--lembrete" /> Lembrete</span>
+
+        <span><i className="calendar-grid__dot calendar-grid__dot--recebimento" /> Recebimento</span>
 
       </div>
 

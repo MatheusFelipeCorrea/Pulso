@@ -26,6 +26,6 @@ export async function excluirLembrete(id, options = {}) {
 }
 
 export async function marcarComoPago(id, options = {}) {
-  const { data } = await api.post(`/lembretes/${id}/pagar`, null, axiosConfig(options))
+  const { data } = await api.post(`/lembretes/${id}/pagar`, {}, axiosConfig(options))
   return data
 }

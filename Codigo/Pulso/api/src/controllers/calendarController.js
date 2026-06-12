@@ -11,6 +11,15 @@ const obterMes = async (req, res, next) => {
 
     try {
 
+        const conectado = await googleCalendarSync.estaConectado(req.user.id);
+        if (conectado) {
+            try {
+                await googleCalendarSync.importarAlteracoesDoGoogle(req.user.id);
+            } catch {
+                // Falha na importação não impede a visão do mês
+            }
+        }
+
         const dados = await calendarService.obterVisaoMes(req.user.id, req.query);
 
         res.status(200).json(dados);
@@ -148,6 +157,12 @@ const sincronizarPendentesGoogle = async (req, res, next) => {
             req.body.escopo ?? 'futuros'
 
         );
+
+        try {
+            await googleCalendarSync.importarAlteracoesDoGoogle(req.user.id);
+        } catch {
+            // Exportação concluída mesmo se importação falhar
+        }
 
         res.status(200).json(resultado);
 

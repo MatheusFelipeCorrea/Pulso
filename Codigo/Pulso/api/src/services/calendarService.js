@@ -5,6 +5,7 @@ const { mapLembrete } = require('../utils/reminderMapper');
 const { mesReferenciaFromQuery, intervaloDoMes, mesAnterior, mesReferenciaToQuery } = require('../utils/monthUtils');
 const reminderRepository = require('../repositories/reminderRepository');
 const { startOfDay, endOfDay, diasAteVencimento } = require('./reminderService');
+const { formatDateOnly } = require('../utils/dateTimezone');
 
 const includeTransacao = {
     categoria: true,
@@ -25,7 +26,44 @@ const emptyDayMarker = () => ({
     temReceita: false,
     temDespesa: false,
     temLembrete: false,
+    temRecebimentoFixo: false,
+    recebimentosFixos: [],
 });
+
+const diasNoMes = (year, month) => new Date(year, month, 0).getDate();
+
+const obterRecebimentosFixosConfig = (config) => {
+    if (!config) return [];
+
+    const itens = [];
+    if (Number(config.valorSalario) > 0) {
+        itens.push({ tipo: 'SALARIO', label: 'Salário', dia: config.diaSalario });
+    }
+    if (Number(config.valorVa) > 0) {
+        itens.push({ tipo: 'VA', label: 'Vale Alimentação', dia: config.diaVa });
+    }
+    if (Number(config.valorVr) > 0) {
+        itens.push({ tipo: 'VR', label: 'Vale Refeição', dia: config.diaVr });
+    }
+    if (config.vtHabilitado !== false && Number(config.valorVt) > 0) {
+        itens.push({ tipo: 'VT', label: 'Vale Transporte', dia: config.diaVt });
+    }
+    return itens;
+};
+
+const aplicarMarcadoresRecebimentoFixo = (dias, recebimentos, year, month) => {
+    const ultimoDia = diasNoMes(year, month);
+
+    for (const item of recebimentos) {
+        const dia = Math.min(item.dia, ultimoDia);
+        const key = `${year}-${String(month).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        if (!dias[key]) dias[key] = emptyDayMarker();
+        dias[key].temRecebimentoFixo = true;
+        if (!dias[key].recebimentosFixos.includes(item.tipo)) {
+            dias[key].recebimentosFixos.push(item.tipo);
+        }
+    }
+};
 
 const obterResumoMes = async (usuarioId, inicio, fim) => {
     const agregados = await prisma.transacao.groupBy({
@@ -82,7 +120,7 @@ const obterMarcadoresDias = async (usuarioId, inicio, fim) => {
     }
 
     for (const lembrete of lembretes) {
-        const key = dayKey(lembrete.dataVencimento);
+        const key = formatDateOnly(lembrete.dataVencimento);
         if (!dias[key]) dias[key] = emptyDayMarker();
         dias[key].lembretes += 1;
         dias[key].temLembrete = true;
@@ -97,12 +135,21 @@ const obterVisaoMes = async (usuarioId, query) => {
     const mesAnteriorRef = mesAnterior(mesReferencia);
     const { inicio: inicioAnterior, fim: fimAnterior } = intervaloDoMes(mesAnteriorRef);
 
-    const [resumo, resumoAnterior, dias, proximosVencimentos] = await Promise.all([
+    const [resumo, resumoAnterior, dias, proximosVencimentos, config] = await Promise.all([
         obterResumoMes(usuarioId, inicio, fim),
         obterResumoMes(usuarioId, inicioAnterior, fimAnterior),
         obterMarcadoresDias(usuarioId, inicio, fim),
         reminderRepository.listarProximos(usuarioId, { limite: 10 }),
+        prisma.configuracaoUsuario.findUnique({ where: { usuarioId } }),
     ]);
+
+    const recebimentosFixos = obterRecebimentosFixosConfig(config);
+    aplicarMarcadoresRecebimentoFixo(
+        dias,
+        recebimentosFixos,
+        mesReferencia.getFullYear(),
+        mesReferencia.getMonth() + 1
+    );
 
     const buildVariacao = (atual, anterior, modo = 'percentual') => {
         if (modo === 'contagem') {
@@ -147,6 +194,7 @@ const obterVisaoMes = async (usuarioId, query) => {
             ...mapLembrete(item),
             diasAteVencimento: diasAteVencimento(item.dataVencimento),
         })),
+        recebimentosFixos,
     };
 };
 

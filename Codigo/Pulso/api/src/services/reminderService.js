@@ -3,23 +3,39 @@ const reminderRepository = require('../repositories/reminderRepository');
 const googleCalendarSync = require('./googleCalendarSyncService');
 const { mapLembrete } = require('../utils/reminderMapper');
 const { normalizeCategoria } = require('../constants/reminderCategories');
+const {
+    formatDateOnly,
+    parseVencimentoDate,
+    startOfDayInTimezone,
+    endOfDayInTimezone,
+} = require('../utils/dateTimezone');
 
-const startOfDay = (date) => {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    return d;
-};
-
-const endOfDay = (date) => {
-    const d = new Date(date);
-    d.setHours(23, 59, 59, 999);
-    return d;
-};
+const startOfDay = startOfDayInTimezone;
+const endOfDay = endOfDayInTimezone;
 
 const diasAteVencimento = (dataVencimento) => {
-    const hoje = startOfDay(new Date());
-    const vencimento = startOfDay(dataVencimento);
-    return Math.round((vencimento - hoje) / (1000 * 60 * 60 * 24));
+    const hoje = formatDateOnly(new Date());
+    const vencimento = formatDateOnly(dataVencimento);
+    const [hy, hm, hd] = hoje.split('-').map(Number);
+    const [vy, vm, vd] = vencimento.split('-').map(Number);
+    const hojeUtc = Date.UTC(hy, hm - 1, hd);
+    const vencimentoUtc = Date.UTC(vy, vm - 1, vd);
+    return Math.round((vencimentoUtc - hojeUtc) / (1000 * 60 * 60 * 24));
+};
+
+const camposAfetamSync = (body) =>
+    body.titulo != null ||
+    body.valor !== undefined ||
+    body.dataVencimento != null ||
+    body.antecedencia != null ||
+    body.categoria != null;
+
+const normalizarRecorrencia = (body, dataVencimento) => {
+    if (!body.repetirMensal) {
+        return { repetirMensal: false, diaRecorrencia: null };
+    }
+    const dia = body.diaRecorrencia ?? Number(formatDateOnly(dataVencimento).split('-')[2]);
+    return { repetirMensal: true, diaRecorrencia: Math.min(Math.max(dia, 1), 28) };
 };
 
 const mapLembreteComContagem = (lembrete) => ({
@@ -59,8 +75,10 @@ const listarLembretes = async (usuarioId, query = {}) => {
 };
 
 const criarLembrete = async (usuarioId, body) => {
-    const dataVencimento = startOfDay(body.dataVencimento);
+    const dataVencimento = parseVencimentoDate(body.dataVencimento);
     const wantsSync = Boolean(body.sincronizarGoogle);
+
+    const recorrencia = normalizarRecorrencia(body, dataVencimento);
 
     const lembrete = await reminderRepository.criar({
         usuarioId,
@@ -71,6 +89,7 @@ const criarLembrete = async (usuarioId, body) => {
         categoria: normalizeCategoria(body.categoria ?? 'OUTRO'),
         sincronizado: false,
         googleEventId: null,
+        ...recorrencia,
     });
 
     if (!wantsSync) {
@@ -94,23 +113,46 @@ const atualizarLembrete = async (usuarioId, id, body) => {
     const data = {};
     if (body.titulo != null) data.titulo = body.titulo.trim();
     if (body.valor !== undefined) data.valor = body.valor;
-    if (body.dataVencimento != null) data.dataVencimento = startOfDay(body.dataVencimento);
+    if (body.dataVencimento != null) data.dataVencimento = parseVencimentoDate(body.dataVencimento);
     if (body.antecedencia != null) data.antecedencia = body.antecedencia;
     if (body.categoria != null) data.categoria = normalizeCategoria(body.categoria);
     if (body.pago !== undefined) data.pago = Boolean(body.pago);
-
-    const parcial = await reminderRepository.atualizar(id, data);
-    const merged = { ...existente, ...parcial };
+    if (body.repetirMensal !== undefined || body.diaRecorrencia !== undefined) {
+        const baseDate = body.dataVencimento != null ? parseVencimentoDate(body.dataVencimento) : existente.dataVencimento;
+        Object.assign(
+            data,
+            normalizarRecorrencia(
+                {
+                    repetirMensal: body.repetirMensal ?? existente.repetirMensal,
+                    diaRecorrencia: body.diaRecorrencia ?? existente.diaRecorrencia,
+                },
+                baseDate
+            )
+        );
+    }
 
     const wantsSync =
         body.sincronizarGoogle !== undefined
             ? Boolean(body.sincronizarGoogle)
-            : Boolean(existente.sincronizado);
+            : Boolean(existente.sincronizado || existente.googleEventId);
 
-    const syncData = await aplicarSyncGoogle(usuarioId, merged, wantsSync);
-    const final = await reminderRepository.atualizar(id, syncData);
+    if (wantsSync && camposAfetamSync(body)) {
+        data.sincronizado = false;
+    }
 
-    return mapLembreteComContagem(final);
+    const parcial = await reminderRepository.atualizar(id, data);
+    const merged = { ...existente, ...parcial };
+
+    try {
+        const syncData = await aplicarSyncGoogle(usuarioId, merged, wantsSync);
+        const final = await reminderRepository.atualizar(id, syncData);
+        return mapLembreteComContagem(final);
+    } catch (error) {
+        if (wantsSync) {
+            await reminderRepository.atualizar(id, { sincronizado: false });
+        }
+        throw error;
+    }
 };
 
 const removerLembrete = async (usuarioId, id) => {
@@ -133,7 +175,15 @@ const marcarComoPago = async (usuarioId, id) => {
     const existente = await reminderRepository.buscarPorId(id, usuarioId);
     if (!existente) throw new AppError('Lembrete não encontrado', 404);
 
-    const atualizado = await reminderRepository.atualizar(id, { pago: true });
+    if (existente.googleEventId) {
+        await googleCalendarSync.removerEventoLembrete(usuarioId, existente.googleEventId);
+    }
+
+    const atualizado = await reminderRepository.atualizar(id, {
+        pago: true,
+        googleEventId: null,
+        sincronizado: false,
+    });
     return mapLembreteComContagem(atualizado);
 };
 
