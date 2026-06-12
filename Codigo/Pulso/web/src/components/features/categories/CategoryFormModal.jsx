@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { ArrowDownCircle, ArrowUpCircle, Tag, X } from 'lucide-react'
+import { ArrowDownCircle, ArrowUpCircle, Layers, Tag, X } from 'lucide-react'
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
+import { FormFieldLabel } from '@/design-system/components/forms/FormFieldLabel/FormFieldLabel.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { InputText } from '@/design-system/components/inputs/InputText/InputText.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
@@ -14,15 +15,6 @@ const emptyForm = (tipo = 'DESPESA') => ({
   icone: 'Tag',
   cor: '#7C3AED',
 })
-
-function FieldLabel({ icon: Icon, tone = 'purple', children }) {
-  return (
-    <span className={`category-form__field-label category-form__field-label--${tone}`}>
-      {Icon ? <Icon size={16} strokeWidth={2} aria-hidden /> : null}
-      <span>{children}</span>
-    </span>
-  )
-}
 
 export function CategoryFormModal({
   open,
@@ -100,9 +92,9 @@ export function CategoryFormModal({
 
           <InputText
             label={
-              <FieldLabel icon={Tag} tone="purple">
+              <FormFieldLabel icon={Tag} tone="purple">
                 Nome
-              </FieldLabel>
+              </FormFieldLabel>
             }
             value={form.nome}
             onChange={(e) => setForm((prev) => ({ ...prev, nome: e.target.value }))}
@@ -113,7 +105,9 @@ export function CategoryFormModal({
 
           {!isEdit ? (
             <div className="category-form__tipo">
-              <span className="category-form__tipo-label">Tipo</span>
+              <FormFieldLabel icon={Layers} tone="blue" className="category-form__tipo-label">
+                Tipo
+              </FormFieldLabel>
               <div className="category-form__tipo-toggle">
                 <button
                   type="button"

@@ -3,14 +3,10 @@ import { RotateCcw } from 'lucide-react'
 import { filtrosTransacaoSaoPadrao } from '@/utils/transactionFilters.js'
 import { InputSearch } from '@/design-system/components/inputs/InputSearch/InputSearch.jsx'
 import { Select } from '@/design-system/components/selects/Select/Select.jsx'
-import { MonthPicker } from '@/design-system/components/pickers/MonthPicker/MonthPicker.jsx'
+import { DateRangePicker } from '@/design-system/components/pickers/DateRangePicker/DateRangePicker.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { Skeleton } from '@/design-system/components/feedback/Skeleton/Skeleton.jsx'
 import { SpinnerDots } from '@/design-system/components/feedback/Spinner/SpinnerDots.jsx'
-import {
-  monthPickerParaPeriodo,
-  periodoParaMonthPicker,
-} from '@/utils/transactionRecurrence.js'
 import { categoriaFilterOptions, recursoFilterOptions, toSelectOptions } from '@/utils/filterOptions.js'
 
 export function TransactionFilters({
@@ -77,12 +73,15 @@ export function TransactionFilters({
       </div>
 
       <div className="tx-filters__row">
-        <MonthPicker
+        <DateRangePicker
           label="Período"
-          value={periodoParaMonthPicker(filtros.periodo)}
-          onChange={(v) => handleFilterChange({ periodo: monthPickerParaPeriodo(v) })}
-          disableFuture
-          monthDisplay="long"
+          startDate={filtros.dataInicio}
+          endDate={filtros.dataFim}
+          onChange={({ start, end }) =>
+            handleFilterChange({ dataInicio: start, dataFim: end })
+          }
+          maxDate={new Date()}
+          fullWidth
         />
 
         <Select

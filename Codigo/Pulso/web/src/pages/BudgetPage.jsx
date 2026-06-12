@@ -33,11 +33,15 @@ import {
 
 } from '@/utils/budgetUtils.js'
 
+import { periodoParaDateRange } from '@/utils/dateRangeFilterUtils.js'
+
 import {
 
   DEFAULT_TRANSACTION_FILTROS,
 
   filtrosTransacaoIguais,
+
+  periodoFromFiltros,
 
 } from '@/utils/transactionFilters.js'
 
@@ -98,7 +102,10 @@ export default function BudgetPage() {
 
     try {
 
-      const data = await budgetService.obterStatusOrcamento(filtrosAtivos.periodo, { signal })
+      const data = await budgetService.obterStatusOrcamento(
+        periodoFromFiltros(filtrosAtivos),
+        { signal }
+      )
 
       setStatus(data)
 
@@ -120,15 +127,24 @@ export default function BudgetPage() {
 
     }
 
-  }, [filtrosAtivos.periodo])
+  }, [filtrosAtivos.dataInicio, filtrosAtivos.dataFim])
 
 
 
   useEffect(() => {
     const mes = searchParams.get('mes')
     if (!mes || !MES_QUERY_REGEX.test(mes)) return
-    setFiltros((prev) => (prev.periodo === mes ? prev : { ...prev, periodo: mes }))
-    setFiltrosAtivos((prev) => (prev.periodo === mes ? prev : { ...prev, periodo: mes }))
+    const { start, end } = periodoParaDateRange(mes)
+    setFiltros((prev) =>
+      prev.dataInicio?.getTime() === start.getTime() && prev.dataFim?.getTime() === end.getTime()
+        ? prev
+        : { ...prev, dataInicio: start, dataFim: end }
+    )
+    setFiltrosAtivos((prev) =>
+      prev.dataInicio?.getTime() === start.getTime() && prev.dataFim?.getTime() === end.getTime()
+        ? prev
+        : { ...prev, dataInicio: start, dataFim: end }
+    )
   }, [searchParams])
 
   useEffect(() => {
@@ -139,7 +155,7 @@ export default function BudgetPage() {
 
     return () => controller.abort()
 
-  }, [filtrosAtivos.periodo, carregar])
+  }, [filtrosAtivos.dataInicio, filtrosAtivos.dataFim, carregar])
 
 
 
@@ -173,7 +189,7 @@ export default function BudgetPage() {
 
   const handleFiltrar = () => {
 
-    if (filtros.periodo !== filtrosAtivos.periodo) {
+    if (periodoFromFiltros(filtros) !== periodoFromFiltros(filtrosAtivos)) {
 
       setLoadingFilter(true)
 
@@ -189,7 +205,7 @@ export default function BudgetPage() {
 
     const defaults = DEFAULT_TRANSACTION_FILTROS()
 
-    if (defaults.periodo !== filtrosAtivos.periodo) {
+    if (periodoFromFiltros(defaults) !== periodoFromFiltros(filtrosAtivos)) {
 
       setLoadingFilter(true)
 
@@ -250,7 +266,7 @@ export default function BudgetPage() {
 
     try {
 
-      const periodo = filtrosAtivos.periodo
+      const periodo = periodoFromFiltros(filtrosAtivos)
 
       const resultado = await budgetService.copiarOrcamento({
 
@@ -403,7 +419,7 @@ export default function BudgetPage() {
 
         onClose={() => setModalOpen(false)}
 
-        mesReferencia={periodoToMesReferencia(filtrosAtivos.periodo)}
+        mesReferencia={periodoToMesReferencia(periodoFromFiltros(filtrosAtivos))}
 
         categoriasComLimite={status?.categorias ?? []}
 

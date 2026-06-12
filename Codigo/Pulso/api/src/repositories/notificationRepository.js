@@ -83,6 +83,23 @@ const buscarDuplicadaLembrete = async (usuarioId, tipo, lembreteId, dataAlerta) 
     });
 };
 
+const buscarDuplicadaDivida = async (usuarioId, tipo, dividaId, dataAlerta) => {
+    const items = await prisma.notificacao.findMany({
+        where: {
+            usuarioId,
+            tipo,
+        },
+        orderBy: { criadoEm: 'desc' },
+        take: 200,
+    });
+
+    return items.find((item) => {
+        const meta = item.metadados;
+        if (!meta || typeof meta !== 'object') return false;
+        return meta.dividaId === dividaId && meta.dataAlerta === dataAlerta;
+    });
+};
+
 const buscarDuplicadaOrcamento = async (usuarioId, tipo, categoriaId, mesReferencia) => {
     const items = await prisma.notificacao.findMany({
         where: {
@@ -109,5 +126,6 @@ module.exports = {
     marcarTodasLidas,
     contarNaoLidas,
     buscarDuplicadaLembrete,
+    buscarDuplicadaDivida,
     buscarDuplicadaOrcamento,
 };

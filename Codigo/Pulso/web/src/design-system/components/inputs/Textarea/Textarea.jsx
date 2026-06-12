@@ -108,12 +108,6 @@ export const Textarea = forwardRef(
         {!hasError && helperText && (
           <p className={inputHelperVariants({ type: 'helper' })}>{helperText}</p>
         )}
-
-        {!hasError && !helperText && maxLength && (
-          <p className={inputHelperVariants({ type: 'helper' })}>
-            Mínimo: 100px de altura | Máximo: {maxLength} caracteres
-          </p>
-        )}
       </div>
     )
   }
