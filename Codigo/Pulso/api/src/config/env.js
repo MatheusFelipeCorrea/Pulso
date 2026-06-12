@@ -1,4 +1,6 @@
-if (!process.env.VERCEL) {
+const isVercelRuntime = process.env.VERCEL === '1' && Boolean(process.env.VERCEL_ENV);
+
+if (!isVercelRuntime) {
     require('dotenv').config();
 }
 
