@@ -11,11 +11,11 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 138 | 39 | ~28% |
+| Requisitos Funcionais | 138 | 41 | ~30% |
 | Requisitos Não Funcionais | 15 | 6 | ~40% |
-| **Total** | **153** | **45** | **~29%** |
+| **Total** | **153** | **47** | **~31%** |
 
-Contagem considera apenas requisitos **implementados e utilizáveis** no código atual. Módulos entregues: auth, transações, vale transporte, orçamento, calendário/lembretes (incl. Google Calendar) e notificações de orçamento.
+Contagem considera apenas requisitos **implementados e utilizáveis** no código atual. Módulos entregues: auth, transações (incl. categorias personalizadas), vale transporte, orçamento, calendário/lembretes (incl. Google Calendar bidirecional parcial), homepage pública e notificações (orçamento + lembretes).
 
 ---
 
@@ -25,7 +25,7 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 |---|---|---|---|
 | 🔐 Autenticação | 6 | 6 | ✅ |
 | 📊 Dashboard | 8 | 0 |  |
-| 💳 Transações | 11 | 10 | 🟡 |
+| 💳 Transações | 11 | 11 | ✅ |
 | 🎯 Metas | 7 | 0 |  |
 | 🌍 Viagens e Moedas | 11 | 0 |  |
 | 🤖 Insights | 7 | 0 |  |
@@ -35,12 +35,12 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | 📈 Relatórios | 6 | 0 |  |
 | 👤 Perfil e Configurações | 8 | 0 | 🟡 |
 | 🎮 Gamificação | 7 | 0 |  |
-| 🏠 Homepage | 4 | 0 | ⏳ Prototipação pendente |
+| 🏠 Homepage | 4 | 4 | ✅ |
 | 👥 Grupos | 15 | 0 |  |
 | ⚙️ Não Funcionais | 15 | 6 | 🟡 |
 | 📊 Orçamento Mensal | 6 | 6 | ✅ |
 | 💸 Divisão de Despesas | 6 | 0 |  |
-| 📅 Calendário Financeiro | 5 | 4 | 🟡 |
+| 📅 Calendário Financeiro | 5 | 5 | 🟡 |
 | 🤝 Dívidas Pessoais | 7 | 0 |  |
 | 🛒 Planejamento de Compra | 6 | 0 |  |
 
@@ -83,7 +83,7 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | - [x] | RF-015 | O sistema deve permitir registrar receitas informando valor, data, categoria e origem (salário, VA, VR, VT, extra) | 🔴 Essencial |
 | - [x] | RF-016 | O sistema deve permitir registrar despesas informando valor, data, categoria e recurso utilizado | 🔴 Essencial |
 | - [x] | RF-017 | O sistema deve oferecer categorias padrão (alimentação, transporte, lazer, educação, moradia, saúde, etc.) | 🔴 Essencial |
-| - [ ] | RF-018 | O sistema deve permitir o usuário criar categorias personalizadas | 🟡 Importante |
+| - [x] | RF-018 | O sistema deve permitir o usuário criar categorias personalizadas | 🟡 Importante |
 | - [x] | RF-019 | O sistema deve permitir adicionar tags livres às transações | 🟢 Desejável |
 | - [x] | RF-020 | O sistema deve permitir registrar transações recorrentes com frequência configurável (semanal, mensal, etc.) | 🔴 Essencial |
 | - [x] | RF-021 | O sistema deve gerar automaticamente transações recorrentes nas datas programadas | 🔴 Essencial |
@@ -232,14 +232,14 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 
 ## 🏠 Módulo 12 — Homepage (Landing Page)
 
-> **Status:** prototipação ainda **pendente**. Existe apenas um placeholder mínimo em `LandingPage.jsx` (título + CTAs); a landing completa com seções de produto ainda não foi desenhada nem implementada.
+> **Status:** landing pública implementada em `LandingPage.jsx` com hero, features, benefícios, depoimentos e CTAs.
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-084 | O sistema deve exibir uma homepage pública apresentando o Pulso, suas funcionalidades e benefícios | 🔴 Essencial |
-| - [ ] | RF-085 | A homepage deve conter botões de chamada para ação (Cadastrar e Entrar) | 🔴 Essencial |
-| - [ ] | RF-086 | A homepage deve exibir seções com os principais módulos do sistema (dashboard, metas, viagens, insights, chatbot, gamificação) | 🟡 Importante |
-| - [ ] | RF-087 | A homepage deve ser responsiva e atraente visualmente com a paleta Vital Purple | 🔴 Essencial |
+| - [x] | RF-084 | O sistema deve exibir uma homepage pública apresentando o Pulso, suas funcionalidades e benefícios | 🔴 Essencial |
+| - [x] | RF-085 | A homepage deve conter botões de chamada para ação (Cadastrar e Entrar) | 🔴 Essencial |
+| - [x] | RF-086 | A homepage deve exibir seções com os principais módulos do sistema (dashboard, metas, viagens, insights, chatbot, gamificação) | 🟡 Importante |
+| - [x] | RF-087 | A homepage deve ser responsiva e atraente visualmente com a paleta Vital Purple | 🔴 Essencial |
 
 ---
 
@@ -292,7 +292,7 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 |---|---|---|---|
 | - [x] | RF-121 | O sistema deve exibir um calendário mensal visual com marcadores de transações por dia | 🔴 Essencial |
 | - [x] | RF-122 | O sistema deve diferenciar visualmente dias com receitas (verde), despesas (vermelho) e ambos (roxo) | 🔴 Essencial |
-| - [ ] | RF-123 | O sistema deve exibir os dias de recebimento fixo (salário, VA, VR, VT) destacados no calendário | 🟡 Importante |
+| - [~] | RF-123 | O sistema deve exibir os dias de recebimento fixo (salário, VA, VR, VT) destacados no calendário | 🟡 Importante |
 | - [x] | RF-124 | O sistema deve exibir vencimentos de contas/lembretes no calendário | 🟡 Importante |
 | - [x] | RF-125 | O sistema deve permitir clicar em um dia para ver o detalhe das transações daquele dia | 🔴 Essencial |
 ---
@@ -345,14 +345,31 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 
 | Item | Situação |
 |------|----------|
-| RF-084–087 | Homepage pública **pendente** — só placeholder em `LandingPage.jsx`; **prototipação da landing ainda não feita** |
-| RF-018 | Categorias **personalizadas** ainda não têm CRUD na API — só seed padrão no registro |
+| RF-018 | CRUD de categorias personalizadas com **ícone e cor** (padrão Lucide + paleta). UI em Transações → **Categorias** |
+| RF-123 | **Parcial:** marcador azul de recebimento no calendário quando `valorSalario` / `valorVa` / `valorVr` / `valorVt` > 0 em `configuracoes_usuario`. Dias vêm de `diaSalario`, `diaVa`, etc. — **sem onboarding ainda**, então só aparece após configurar valores (futuro onboarding/RF-075) |
 | RF-076 | Toggle claro/escuro via `useTheme()` no **mobile**; tela Configurações ainda não existe |
 | RF-103 / RF-104 | `modoUso` usado na API de VT; UI de perfil/configurações ainda pendente |
-| Páginas implementadas | `/transactions`, `/transport-voucher`, `/budget`, `/calendar` |
-| Notificações | Alertas de orçamento (`ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO`) via job (a cada 20 min) + sino no layout |
+| Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar` |
+| Notificações | Orçamento (`ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO`) + **lembretes** (`LEMBRETE_VENCIMENTO`) via jobs diários (10:00 BRT) + sino no layout |
+| Google Calendar | Sync Pulso → Google na criação/edição; **importação Google → Pulso** ao abrir o mês e após sync manual; marcar pago remove evento |
+| Lembretes recorrentes | UI “Repetir todo mês” enviada ao backend; job diário gera instâncias mensais |
+| Tags | Criar na digitação + listar no catálogo — **sem editar/excluir** (suficiente para MVP; ver observação abaixo) |
 | Calendário + IA | Tela entregue; integração com IA (Gemini) na página do calendário **pendente** |
-| Banco completo | Schema Prisma com 30 entidades; API expõe auth, transações, VT, orçamento, lembretes, calendário e notificações |
+| Banco completo | Schema Prisma com 30+ entidades; API expõe auth, transações, categorias, VT, orçamento, lembretes, calendário e notificações |
+
+### Implementações técnicas fora da lista de RF (dívida / melhorias futuras)
+
+| Item | Situação |
+|------|----------|
+| Rate limiting global (RNF-004) | Apenas rotas de auth |
+| Tokens Google em repouso | JSON sem criptografia (schema prevê criptografia) |
+| Cron Vercel (Hobby) | Jobs diários 1×/dia; orçamento local roda a cada 20 min |
+| Cobertura de testes (RNF-015) | Apenas auth/tokens — expandir para serviços críticos |
+| Tags CRUD completo | Opcional pós-MVP; criação sob demanda cobre o fluxo atual |
+
+### Tags — posicionamento (jun/2026)
+
+O fluxo atual (criar tag ao digitar na transação, reutilizar no catálogo, ícone/cor padrão) é **adequado para o MVP**. Edição/exclusão e merge de tags duplicadas podem entrar quando houver tela de configurações ou volume alto de tags por usuário.
 
 ---
 

@@ -3,11 +3,17 @@ const prisma = require('../config/database');
 const AppError = require('../utils/appError');
 const env = require('../config/env');
 const { createOAuthClient } = require('../utils/googleOAuth');
-const { ANTECEDENCIA_MINUTOS } = require('../utils/reminderAntecedencia');
+const { ANTECEDENCIA_MINUTOS, HORA_PADRAO_LEMBRETE } = require('../utils/reminderAntecedencia');
 const { CATEGORIA_LABELS } = require('../constants/reminderCategories');
+const {
+    TIMEZONE,
+    formatDateOnly,
+    parseVencimentoDate,
+    startOfDayInTimezone,
+    addDays,
+} = require('../utils/dateTimezone');
 
 const PULSO_CALENDAR_SUMMARY = 'Pulso';
-const TIMEZONE = 'America/Sao_Paulo';
 
 const getRedirectUri = () =>
     env.GOOGLE_CALENDAR_CALLBACK_URL || 'http://localhost:3333/api/calendario/google/callback';
@@ -16,21 +22,6 @@ const getOAuthClient = () => createOAuthClient(getRedirectUri());
 
 const parseTokens = (tokensGoogle) =>
     typeof tokensGoogle === 'string' ? JSON.parse(tokensGoogle) : tokensGoogle;
-
-const formatDateOnly = (date) =>
-    new Intl.DateTimeFormat('en-CA', { timeZone: TIMEZONE }).format(new Date(date));
-
-const addDays = (date, days) => {
-    const d = new Date(date);
-    d.setDate(d.getDate() + days);
-    return d;
-};
-
-const startOfDay = (date) => {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    return d;
-};
 
 const mapGoogleError = (error) => {
     if (error instanceof AppError) return error;
@@ -72,7 +63,7 @@ const pendenteSyncWhere = (usuarioId, { apenasFuturos = false } = {}) => {
     };
 
     if (apenasFuturos) {
-        where.dataVencimento = { gte: startOfDay(new Date()) };
+        where.dataVencimento = { gte: startOfDayInTimezone(new Date()) };
     }
 
     return where;
@@ -187,7 +178,8 @@ const garantirCalendarioPulso = async (usuarioId) =>
 
 const buildEventBody = (lembrete) => {
     const startDate = formatDateOnly(lembrete.dataVencimento);
-    const endDate = formatDateOnly(addDays(lembrete.dataVencimento, 1));
+    const hora = String(HORA_PADRAO_LEMBRETE).padStart(2, '0');
+    const horaFim = String(HORA_PADRAO_LEMBRETE + 1).padStart(2, '0');
     const categoriaLabel = CATEGORIA_LABELS[lembrete.categoria] ?? lembrete.categoria;
     const valorTexto =
         lembrete.valor != null && Number(lembrete.valor) > 0
@@ -202,8 +194,8 @@ const buildEventBody = (lembrete) => {
     return {
         summary: lembrete.titulo,
         description: linhas.join('\n'),
-        start: { date: startDate, timeZone: TIMEZONE },
-        end: { date: endDate, timeZone: TIMEZONE },
+        start: { dateTime: `${startDate}T${hora}:00:00`, timeZone: TIMEZONE },
+        end: { dateTime: `${startDate}T${horaFim}:00:00`, timeZone: TIMEZONE },
         reminders: {
             useDefault: false,
             overrides: [{ method: 'popup', minutes: minutos }],
@@ -240,7 +232,7 @@ const sincronizarLembrete = async (usuarioId, lembrete) =>
     });
 
 const contarPendentesSync = async (usuarioId) => {
-    const hoje = startOfDay(new Date());
+    const hoje = startOfDayInTimezone(new Date());
     const [futuros, todos, futurosNaoPagos, todosNaoPagos] = await Promise.all([
         prisma.lembrete.count({ where: pendenteSyncWhere(usuarioId, { apenasFuturos: true }) }),
         prisma.lembrete.count({ where: pendenteSyncWhere(usuarioId) }),
@@ -259,7 +251,7 @@ const sincronizarPendentes = async (usuarioId, escopo = 'futuros') => {
         throw new AppError('Conecte o Google Agenda para sincronizar lembretes.', 400);
     }
 
-    const hoje = startOfDay(new Date());
+    const hoje = startOfDayInTimezone(new Date());
     let where;
 
     if (escopo === 'todos') {
@@ -332,6 +324,74 @@ const removerEventoLembrete = async (usuarioId, googleEventId) => {
     }
 };
 
+const parseGoogleEventDate = (event) => {
+    if (event.start?.date) {
+        return parseVencimentoDate(`${event.start.date}T12:00:00.000Z`);
+    }
+    if (event.start?.dateTime) {
+        return parseVencimentoDate(event.start.dateTime);
+    }
+    return null;
+};
+
+const importarAlteracoesDoGoogle = async (usuarioId) =>
+    withGoogleHandling(async () => {
+        const conectado = await estaConectado(usuarioId);
+        if (!conectado) return { atualizados: 0, verificados: 0 };
+
+        const calendarId = await garantirCalendarioPulso(usuarioId);
+        const { calendar } = await getCalendarApi(usuarioId);
+
+        const agora = new Date();
+        const timeMin = addDays(agora, -90).toISOString();
+        const timeMax = addDays(agora, 365).toISOString();
+
+        const { data } = await calendar.events.list({
+            calendarId,
+            singleEvents: true,
+            orderBy: 'startTime',
+            timeMin,
+            timeMax,
+            maxResults: 250,
+        });
+
+        const eventos = data.items ?? [];
+        if (eventos.length === 0) return { atualizados: 0, verificados: 0 };
+
+        const lembretes = await prisma.lembrete.findMany({
+            where: { usuarioId, googleEventId: { not: null }, pago: false },
+        });
+        const porEventId = new Map(lembretes.map((item) => [item.googleEventId, item]));
+
+        let atualizados = 0;
+
+        for (const evento of eventos) {
+            const lembrete = porEventId.get(evento.id);
+            if (!lembrete) continue;
+
+            const novaData = parseGoogleEventDate(evento);
+            const novoTitulo = evento.summary?.trim();
+            const dataAtual = formatDateOnly(lembrete.dataVencimento);
+            const dataNova = novaData ? formatDateOnly(novaData) : dataAtual;
+            const tituloMudou = novoTitulo && novoTitulo !== lembrete.titulo;
+            const dataMudou = novaData && dataNova !== dataAtual;
+
+            if (!tituloMudou && !dataMudou) continue;
+
+            await prisma.lembrete.update({
+                where: { id: lembrete.id },
+                data: {
+                    ...(tituloMudou ? { titulo: novoTitulo } : {}),
+                    ...(dataMudou ? { dataVencimento: novaData } : {}),
+                    sincronizado: true,
+                },
+            });
+            atualizados += 1;
+        }
+
+        return { atualizados, verificados: eventos.length };
+    });
+
 const removerCalendarioPulso = async (usuarioId) => {
     const config = await prisma.configuracaoUsuario.findUnique({ where: { usuarioId } });
     if (!config?.googleCalendarId || !config.tokensGoogle) return;
@@ -351,6 +411,7 @@ module.exports = {
     sincronizarLembrete,
     contarPendentesSync,
     sincronizarPendentes,
+    importarAlteracoesDoGoogle,
     removerEventoLembrete,
     removerCalendarioPulso,
 };

@@ -12,6 +12,13 @@
   margin-bottom: 24px;
 }
 
+.tx-page__header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
 .tx-page__title {
   margin: 0 0 4px;
   font-size: 28px;
@@ -475,7 +482,13 @@
     align-items: stretch;
   }
 
-  .tx-page__cta {
+  .tx-page__header-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .tx-page__header-actions .tx-page__cta,
+  .tx-page__header-actions button {
     width: 100%;
     justify-content: center;
   }

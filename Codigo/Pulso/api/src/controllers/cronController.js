@@ -1,4 +1,6 @@
 const { runBudgetAlertJob } = require('../jobs/budgetAlertJob');
+const { runReminderAlertJob } = require('../jobs/reminderAlertJob');
+const { runReminderRecurrenceJob } = require('../jobs/reminderRecurrenceJob');
 const { runTokenCleanup } = require('../jobs/tokenCleanupJob');
 const { runRecurringTransactions } = require('../jobs/recurringTransactions');
 const logger = require('../utils/logger');
@@ -21,19 +23,23 @@ const tick = async (req, res, next) => {
     }
 };
 
-/** Hobby Vercel: 1×/dia — roda todos os jobs agendados. */
+/** Hobby Vercel: 1×/dia — roda todos os jobs agendados (10:00 BRT). */
 const daily = async (req, res, next) => {
     try {
-        const [budget, cleanup] = await Promise.all([
+        const [budget, cleanup, reminders] = await Promise.all([
             runBudgetAlertJob(),
             runTokenCleanup(),
+            runReminderAlertJob(),
         ]);
+        const recurringReminders = await runReminderRecurrenceJob();
         await runRecurringTransactions();
 
         res.status(200).json({
             status: 'ok',
             budget,
             cleanup,
+            reminders,
+            recurringReminders,
             recurring: true,
         });
     } catch (error) {

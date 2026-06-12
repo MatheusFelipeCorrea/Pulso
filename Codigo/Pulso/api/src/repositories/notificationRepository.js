@@ -66,6 +66,23 @@ const contarNaoLidas = async (usuarioId) =>
         where: { usuarioId, lida: false },
     });
 
+const buscarDuplicadaLembrete = async (usuarioId, tipo, lembreteId, dataAlerta) => {
+    const items = await prisma.notificacao.findMany({
+        where: {
+            usuarioId,
+            tipo,
+        },
+        orderBy: { criadoEm: 'desc' },
+        take: 200,
+    });
+
+    return items.find((item) => {
+        const meta = item.metadados;
+        if (!meta || typeof meta !== 'object') return false;
+        return meta.lembreteId === lembreteId && meta.dataAlerta === dataAlerta;
+    });
+};
+
 const buscarDuplicadaOrcamento = async (usuarioId, tipo, categoriaId, mesReferencia) => {
     const items = await prisma.notificacao.findMany({
         where: {
@@ -91,5 +108,6 @@ module.exports = {
     marcarComoLida,
     marcarTodasLidas,
     contarNaoLidas,
+    buscarDuplicadaLembrete,
     buscarDuplicadaOrcamento,
 };
