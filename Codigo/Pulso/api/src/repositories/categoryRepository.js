@@ -42,9 +42,31 @@ const criarPadrao = async (usuarioId) => {
     return prisma.categoria.createMany({ data, skipDuplicates: true });
 };
 
+const criar = async (data) => prisma.categoria.create({ data });
+
+const atualizar = async (id, data) =>
+    prisma.categoria.update({
+        where: { id },
+        data,
+    });
+
+const deletar = async (id) => prisma.categoria.delete({ where: { id } });
+
+const contarUso = async (categoriaId) => {
+    const [transacoes, orcamentos] = await Promise.all([
+        prisma.transacao.count({ where: { categoriaId } }),
+        prisma.orcamento.count({ where: { categoriaId } }),
+    ]);
+    return transacoes + orcamentos;
+};
+
 module.exports = {
     listarPorUsuario,
     buscarPorId,
     buscarPorNome,
     criarPadrao,
+    criar,
+    atualizar,
+    deletar,
+    contarUso,
 };

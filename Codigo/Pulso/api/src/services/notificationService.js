@@ -63,6 +63,16 @@ const verificarNotificacaoDuplicada = async (usuarioId, tipo, metadados) => {
     );
 };
 
+const verificarNotificacaoDuplicadaLembrete = async (usuarioId, tipo, metadados) => {
+    if (!metadados?.lembreteId || !metadados?.dataAlerta) return null;
+    return notificationRepository.buscarDuplicadaLembrete(
+        usuarioId,
+        tipo,
+        metadados.lembreteId,
+        metadados.dataAlerta
+    );
+};
+
 module.exports = {
     listarNotificacoes,
     contarNaoLidas,
@@ -70,4 +80,5 @@ module.exports = {
     marcarTodasLidas,
     criarNotificacao,
     verificarNotificacaoDuplicada,
+    verificarNotificacaoDuplicadaLembrete,
 };

@@ -79,8 +79,8 @@ export function ReminderFormModal({
         antecedencia: lembrete.antecedencia ?? 'UM_DIA',
         categoria: lembrete.categoria ?? 'OUTRO',
         sincronizarGoogle: Boolean(lembrete.sincronizado),
-        repetirMensal: false,
-        diaRecorrencia: vencimento.getDate(),
+        repetirMensal: Boolean(lembrete.repetirMensal),
+        diaRecorrencia: lembrete.diaRecorrencia ?? vencimento.getDate(),
       })
     } else {
       setForm(emptyForm(defaultDate, googleConnected))
@@ -101,6 +101,8 @@ export function ReminderFormModal({
       antecedencia: form.antecedencia,
       categoria: form.categoria,
       sincronizarGoogle: googleConnected ? form.sincronizarGoogle : false,
+      repetirMensal: form.repetirMensal,
+      diaRecorrencia: form.repetirMensal ? form.diaRecorrencia : undefined,
     })
   }
 
