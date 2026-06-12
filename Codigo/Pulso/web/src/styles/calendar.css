@@ -631,6 +631,7 @@ html:not(.dark) .calendar-google__email {
 .calendar-grid__dot--despesa { background: #ef4444; }
 .calendar-grid__dot--misto { background: var(--ds-color-primary); }
 .calendar-grid__dot--lembrete { background: #eab308; }
+.calendar-grid__dot--recebimento { background: #3b82f6; }
 
 .calendar-grid__legend {
   display: flex;

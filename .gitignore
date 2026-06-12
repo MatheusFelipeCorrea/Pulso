@@ -9,3 +9,4 @@ node_modules/
 # Exceções: templates sem credenciais
 !.env.example
 !**/.env.example
+.vercel

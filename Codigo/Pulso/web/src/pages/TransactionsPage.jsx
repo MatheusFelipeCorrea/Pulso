@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Plus } from 'lucide-react'
+import { Plus, Tags } from 'lucide-react'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { Pagination } from '@/design-system/components/navigation/Pagination/Pagination.jsx'
 import { useToast } from '@/design-system/components/feedback/Toast/useToast.js'
@@ -7,6 +7,7 @@ import { TransactionSummaryCards } from '@/components/features/transactions/Tran
 import { TransactionFilters } from '@/components/features/transactions/TransactionFilters.jsx'
 import { TransactionList } from '@/components/features/transactions/TransactionList.jsx'
 import { TransactionFormModal } from '@/components/features/transactions/TransactionFormModal.jsx'
+import { CategoryManageModal } from '@/components/features/categories/CategoryManageModal.jsx'
 import { DeleteTransactionModal } from '@/components/features/transactions/DeleteTransactionModal.jsx'
 import * as transactionService from '@/services/transactionService.js'
 import * as tagService from '@/services/tagService.js'
@@ -53,6 +54,8 @@ export default function TransactionsPage() {
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [deleting, setDeleting] = useState(false)
+
+  const [categoryModalOpen, setCategoryModalOpen] = useState(false)
 
   const queryKey = useMemo(
     () =>
@@ -210,15 +213,26 @@ export default function TransactionsPage() {
           <h1 className="tx-page__title">Transações</h1>
           <p className="tx-page__subtitle">Gerencie todas as suas receitas e despesas.</p>
         </div>
-        <Button
-          variant="primary"
-          size="md"
-          className="tx-page__cta shrink-0 whitespace-nowrap"
-          leftIcon={<Plus size={18} />}
-          onClick={abrirCriar}
-        >
-          Nova Transação
-        </Button>
+        <div className="tx-page__header-actions">
+          <Button
+            variant="secondary"
+            size="md"
+            className="shrink-0 whitespace-nowrap"
+            leftIcon={<Tags size={18} />}
+            onClick={() => setCategoryModalOpen(true)}
+          >
+            Categorias
+          </Button>
+          <Button
+            variant="primary"
+            size="md"
+            className="tx-page__cta shrink-0 whitespace-nowrap"
+            leftIcon={<Plus size={18} />}
+            onClick={abrirCriar}
+          >
+            Nova Transação
+          </Button>
+        </div>
       </header>
 
       <TransactionFilters
@@ -273,6 +287,13 @@ export default function TransactionsPage() {
         onClose={() => setDeleteOpen(false)}
         onConfirm={handleConfirmDelete}
         loading={deleting}
+      />
+
+      <CategoryManageModal
+        open={categoryModalOpen}
+        onClose={() => setCategoryModalOpen(false)}
+        onChanged={reloadOpcoesFiltro}
+        tipoInicial={filtrosAtivos.tipo === 'RECEITA' ? 'RECEITA' : 'DESPESA'}
       />
     </div>
   )
