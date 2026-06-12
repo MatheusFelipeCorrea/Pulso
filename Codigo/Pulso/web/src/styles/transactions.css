@@ -144,6 +144,7 @@
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-color-modal-bg);
+  overflow: visible;
 }
 
 .tx-filters__search {
@@ -152,7 +153,7 @@
 
 .tx-filters__row {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)) auto;
   gap: 12px;
   align-items: end;
 }

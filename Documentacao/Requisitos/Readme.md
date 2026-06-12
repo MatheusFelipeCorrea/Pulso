@@ -11,11 +11,11 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 138 | 41 | ~30% |
+| Requisitos Funcionais | 136 | 47 | ~35% |
 | Requisitos Não Funcionais | 15 | 6 | ~40% |
-| **Total** | **153** | **47** | **~31%** |
+| **Total** | **151** | **53** | **~35%** |
 
-Contagem considera apenas requisitos **implementados e utilizáveis** no código atual. Módulos entregues: auth, transações (incl. categorias personalizadas), vale transporte, orçamento, calendário/lembretes (incl. Google Calendar bidirecional parcial), homepage pública e notificações (orçamento + lembretes).
+Contagem considera apenas requisitos **implementados e utilizáveis** no código atual. Módulos entregues: auth, transações (incl. categorias personalizadas), vale transporte, orçamento, calendário/lembretes (incl. Google Calendar bidirecional parcial), **dívidas/empréstimos**, homepage pública e notificações (orçamento + lembretes + dívidas).
 
 ---
 
@@ -31,7 +31,7 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | 🤖 Insights | 7 | 0 |  |
 | 💬 Chatbot | 5 | 0 |  |
 | 📅 Lembretes | 5 | 5 | ✅ |
-| 🚌 Vale Transporte | 8 | 8 | ✅ |
+| 🚌 Vale Transporte | 6 | 6 | ✅ |
 | 📈 Relatórios | 6 | 0 |  |
 | 👤 Perfil e Configurações | 8 | 0 | 🟡 |
 | 🎮 Gamificação | 7 | 0 |  |
@@ -40,8 +40,8 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | ⚙️ Não Funcionais | 15 | 6 | 🟡 |
 | 📊 Orçamento Mensal | 6 | 6 | ✅ |
 | 💸 Divisão de Despesas | 6 | 0 |  |
-| 📅 Calendário Financeiro | 5 | 5 | 🟡 |
-| 🤝 Dívidas Pessoais | 7 | 0 |  |
+| 📅 Calendário Financeiro | 5 | 5 | ✅ |
+| 🤝 Dívidas Pessoais | 7 | 7 | ✅ |
 | 🛒 Planejamento de Compra | 6 | 0 |  |
 
 **Legenda:** ✅ módulo entregue · 🟡 parcial (UI ou backend incompleto) · ⏳ aguardando prototipação/implementação
@@ -182,8 +182,6 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | - [x] | RF-061 | O sistema deve permitir registrar venda do VT informando: comprador, data da venda, valor nominal vendido e valor recebido | 🔴 Essencial |
 | - [x] | RF-062 | O sistema deve manter um histórico de vendas de VT com todos os detalhes registrados | 🟡 Importante |
 | - [x] | RF-063 | O sistema deve calcular a diferença entre valor nominal e valor recebido na venda (perda/ganho) | 🟡 Importante |
-| - [x] | RF-064 | O sistema deve permitir configurar o intervalo de dias entre vendas de VT | 🟡 Importante |
-| - [x] | RF-065 | O sistema deve exibir um contador regressivo informando em quantos dias o usuário poderá vender o VT novamente | 🟡 Importante |
 | - [x] | RF-066 | O sistema deve exibir saldo atual de VT (recebido – usado – vendido) | 🟡 Importante |
 
 ---
@@ -292,7 +290,7 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 |---|---|---|---|
 | - [x] | RF-121 | O sistema deve exibir um calendário mensal visual com marcadores de transações por dia | 🔴 Essencial |
 | - [x] | RF-122 | O sistema deve diferenciar visualmente dias com receitas (verde), despesas (vermelho) e ambos (roxo) | 🔴 Essencial |
-| - [~] | RF-123 | O sistema deve exibir os dias de recebimento fixo (salário, VA, VR, VT) destacados no calendário | 🟡 Importante |
+| - [x] | RF-123 | O sistema deve exibir os dias de recebimento fixo (salário, VA, VR, VT) destacados no calendário | 🟡 Importante |
 | - [x] | RF-124 | O sistema deve exibir vencimentos de contas/lembretes no calendário | 🟡 Importante |
 | - [x] | RF-125 | O sistema deve permitir clicar em um dia para ver o detalhe das transações daquele dia | 🔴 Essencial |
 ---
@@ -300,13 +298,13 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-126 | O sistema deve permitir registrar um empréstimo feito a alguém (quem me deve) com valor, pessoa e data | 🔴 Essencial |
-| - [ ] | RF-127 | O sistema deve permitir registrar um empréstimo recebido de alguém (quem eu devo) com valor, pessoa e data | 🔴 Essencial |
-| - [ ] | RF-128 | O sistema deve permitir definir prazo de devolução para cada dívida | 🟡 Importante |
-| - [ ] | RF-129 | O sistema deve permitir marcar uma dívida como paga/devolvida | 🔴 Essencial |
-| - [ ] | RF-130 | O sistema deve exibir saldo consolidado: total que me devem vs total que eu devo | 🔴 Essencial |
-| - [ ] | RF-131 | O sistema deve exibir histórico completo de empréstimos (ativos e quitados) | 🟡 Importante |
-| - [ ] | RF-132 | O sistema deve alertar quando uma dívida estiver próxima do vencimento | 🟢 Desejável |
+| - [x] | RF-126 | O sistema deve permitir registrar um empréstimo feito a alguém (quem me deve) com valor, pessoa e data | 🔴 Essencial |
+| - [x] | RF-127 | O sistema deve permitir registrar um empréstimo recebido de alguém (quem eu devo) com valor, pessoa e data | 🔴 Essencial |
+| - [x] | RF-128 | O sistema deve permitir definir prazo de devolução para cada dívida | 🟡 Importante |
+| - [x] | RF-129 | O sistema deve permitir marcar uma dívida como paga/devolvida | 🔴 Essencial |
+| - [x] | RF-130 | O sistema deve exibir saldo consolidado: total que me devem vs total que eu devo | 🔴 Essencial |
+| - [x] | RF-131 | O sistema deve exibir histórico completo de empréstimos (ativos e quitados) | 🟡 Importante |
+| - [x] | RF-132 | O sistema deve alertar quando uma dívida estiver próxima do vencimento | 🟢 Desejável |
 ---
 ## 🛒 Módulo 18 — Planejamento de Compra
 
@@ -337,7 +335,7 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | - [x] | RNF-012 | O sistema deve utilizar variáveis de ambiente para todas as chaves e credenciais sensíveis | Segurança | 🔴 Essencial |
 | - [x] | RNF-013 | Os tokens JWT devem expirar em 15 minutos com refresh token de 7 dias | Segurança | 🔴 Essencial |
 | - [x] | RNF-014 | O sistema deve implementar CORS configurado apenas para origens permitidas | Segurança | 🔴 Essencial |
-| - [ ] | RNF-015 | O sistema deve manter cobertura mínima de 85% de testes unitários nas camadas de serviço, podendo ser superior | Qualidade | 🔴 Essencial |
+| - [x] | RNF-015 | O sistema deve manter cobertura mínima de 85% de testes unitários nas camadas de serviço, podendo ser superior | Qualidade | 🔴 Essencial |
 
 ---
 
@@ -346,16 +344,18 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | Item | Situação |
 |------|----------|
 | RF-018 | CRUD de categorias personalizadas com **ícone e cor** (padrão Lucide + paleta). UI em Transações → **Categorias** |
-| RF-123 | **Parcial:** marcador azul de recebimento no calendário quando `valorSalario` / `valorVa` / `valorVr` / `valorVt` > 0 em `configuracoes_usuario`. Dias vêm de `diaSalario`, `diaVa`, etc. — **sem onboarding ainda**, então só aparece após configurar valores (futuro onboarding/RF-075) |
+| RF-123 | Lógica em `fixedIncomeUtils.js`: marcador azul no grid + lista no painel do dia conforme `configuracoes_usuario` (valor/dia por tipo). VA/VR só CLT/Estagiário; VT conforme `modoUso`/`vtHabilitado`. **Coleta dos dados:** onboarding (RF-075); sem tela de config manual por enquanto |
+| RF-064 / RF-065 | **Removidos** — intervalo entre vendas de VT e contador regressivo de venda não fazem mais parte do escopo |
 | RF-076 | Toggle claro/escuro via `useTheme()` no **mobile**; tela Configurações ainda não existe |
 | RF-103 / RF-104 | `modoUso` usado na API de VT; UI de perfil/configurações ainda pendente |
-| Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar` |
-| Notificações | Orçamento (`ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO`) + **lembretes** (`LEMBRETE_VENCIMENTO`) via jobs diários (10:00 BRT) + sino no layout |
+| Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts` |
+| Dívidas (RF-126–132) | CRUD em `/debts` com tabs Me devem / Eu devo / Quitadas; resumo consolidado; filtros (busca, valor, DateRangePicker); job `DIVIDA_COBRANCA` (vence hoje / em 2 dias); limpeza automática de quitadas após 180 dias |
+| Notificações | Orçamento (`ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO`) + **lembretes** (`LEMBRETE_VENCIMENTO`) + **dívidas** (`DIVIDA_COBRANCA`) via jobs diários + sino no layout |
 | Google Calendar | Sync Pulso → Google na criação/edição; **importação Google → Pulso** ao abrir o mês e após sync manual; marcar pago remove evento |
 | Lembretes recorrentes | UI “Repetir todo mês” enviada ao backend; job diário gera instâncias mensais |
 | Tags | Criar na digitação + listar no catálogo — **sem editar/excluir** (suficiente para MVP; ver observação abaixo) |
 | Calendário + IA | Tela entregue; integração com IA (Gemini) na página do calendário **pendente** |
-| Banco completo | Schema Prisma com 30+ entidades; API expõe auth, transações, categorias, VT, orçamento, lembretes, calendário e notificações |
+| Banco completo | Schema Prisma com 30+ entidades; API expõe auth, transações, categorias, VT, orçamento, lembretes, calendário, **dividas** e notificações |
 
 ### Implementações técnicas fora da lista de RF (dívida / melhorias futuras)
 
@@ -364,7 +364,7 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | Rate limiting global (RNF-004) | Apenas rotas de auth |
 | Tokens Google em repouso | JSON sem criptografia (schema prevê criptografia) |
 | Cron Vercel (Hobby) | Jobs diários 1×/dia; orçamento local roda a cada 20 min |
-| Cobertura de testes (RNF-015) | Apenas auth/tokens — expandir para serviços críticos |
+| Cobertura de testes (RNF-015) | API ~95% linhas / ~94% statements (Jest); Web ~97% linhas (Vitest) — services, utils, jobs, middlewares |
 | Tags CRUD completo | Opcional pós-MVP; criação sob demanda cobre o fluxo atual |
 
 ### Tags — posicionamento (jun/2026)

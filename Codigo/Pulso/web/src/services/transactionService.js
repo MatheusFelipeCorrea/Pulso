@@ -3,6 +3,8 @@ import api from './api.js'
 const buildParams = (filtros = {}) => {
   const params = new URLSearchParams()
 
+  if (filtros.dataInicio) params.set('dataInicio', filtros.dataInicio)
+  if (filtros.dataFim) params.set('dataFim', filtros.dataFim)
   if (filtros.periodo) params.set('periodo', filtros.periodo)
   if (filtros.categoria) {
     if (typeof filtros.categoria === 'string' && filtros.categoria.startsWith('nome:')) {

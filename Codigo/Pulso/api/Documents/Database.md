@@ -96,7 +96,6 @@ Preferências e receitas fixas recorrentes do usuário. Tabela: `configuracoes_u
 | `diaVr` | Int | Dia em que cai o VR |
 | `valorVt` | Decimal(12,2) | Valor do Vale Transporte |
 | `diaVt` | Int | Dia em que cai o VT |
-| `diasIntervaloVendaVt` | Int | Intervalo em dias entre vendas de VT (default 30) |
 | `tema` | Enum | `CLARO` ou `ESCURO` |
 | `gamificacaoAtiva` | Boolean | Módulo de gamificação ativo? |
 | `googleCalendarAtivo` | Boolean | Integração com Google Calendar? |
@@ -311,7 +310,6 @@ Registro de VT vendido pelo usuário.
 | `dataVenda` | DateTime | Data da venda |
 | `valorNominal` | Decimal(12,2) | Valor "de face" do VT |
 | `valorRecebido` | Decimal(12,2) | Valor realmente recebido |
-| `proximaDataVenda` | DateTime | Próxima data permitida pra vender |
 | `criadoEm` | DateTime | Timestamp |
 
 **Regra**: `valorRecebido` geralmente é menor que `valorNominal` (diferença = perda na venda).

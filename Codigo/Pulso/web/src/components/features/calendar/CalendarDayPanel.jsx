@@ -65,6 +65,8 @@ export function CalendarDayPanel({
 
   const lembretes = detalhe?.lembretes ?? []
 
+  const recebimentosFixos = detalhe?.recebimentosFixos ?? []
+
   return (
 
     <aside className="calendar-day-panel">
@@ -75,7 +77,24 @@ export function CalendarDayPanel({
 
       </header>
 
-
+      {recebimentosFixos.length > 0 ? (
+        <section className="calendar-day-panel__section calendar-day-panel__section--recebimentos">
+          <h4>Recebimentos previstos</h4>
+          <ul className="calendar-day-panel__list">
+            {recebimentosFixos.map((item) => (
+              <li key={item.tipo} className="calendar-day-panel__item calendar-day-panel__item--recebimento">
+                <span className="calendar-grid__dot calendar-grid__dot--recebimento" aria-hidden />
+                <div className="calendar-day-panel__item-body">
+                  <strong>{item.label}</strong>
+                </div>
+                <span className="calendar-day-panel__item-value calendar-day-panel__item-value--income">
+                  +{formatCurrency(item.valor)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <section className="calendar-day-panel__section">
 

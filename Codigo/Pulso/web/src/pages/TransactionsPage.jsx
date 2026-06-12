@@ -13,6 +13,7 @@ import * as transactionService from '@/services/transactionService.js'
 import * as tagService from '@/services/tagService.js'
 import { useTransactionFilterOptions } from '@/hooks/useTransactionFilterOptions.js'
 import {
+  buildTransactionApiFiltros,
   DEFAULT_TRANSACTION_FILTROS,
   filtrosTransacaoIguais,
 } from '@/utils/transactionFilters.js'
@@ -60,11 +61,7 @@ export default function TransactionsPage() {
   const queryKey = useMemo(
     () =>
       JSON.stringify({
-        periodo: filtrosAtivos.periodo,
-        categoria: filtrosAtivos.categoria,
-        tipo: filtrosAtivos.tipo,
-        recurso: filtrosAtivos.recurso,
-        busca: filtrosAtivos.busca,
+        ...buildTransactionApiFiltros(filtrosAtivos),
         pagina,
       }),
     [filtrosAtivos, pagina]
@@ -75,10 +72,11 @@ export default function TransactionsPage() {
     setLoadingResumo(true)
 
     try {
-      const queryFiltros = { ...filtrosAtivos, pagina, limite: 10 }
+      const apiFiltros = buildTransactionApiFiltros(filtrosAtivos)
+      const queryFiltros = { ...apiFiltros, pagina, limite: 10 }
       const [lista, resumoData] = await Promise.all([
         transactionService.buscarTransacoes(queryFiltros, { signal }),
-        transactionService.obterResumo(filtrosAtivos, { signal }),
+        transactionService.obterResumo(apiFiltros, { signal }),
       ])
 
       if (signal?.aborted) return

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
+  Bookmark,
   Bus,
   Calculator,
   Calendar,
@@ -10,6 +11,7 @@ import {
   Plus,
   X,
 } from 'lucide-react'
+import { FormFieldLabel } from '@/design-system/components/forms/FormFieldLabel/FormFieldLabel.jsx'
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { InputMoney } from '@/design-system/components/inputs/InputMoney/InputMoney.jsx'
@@ -183,7 +185,11 @@ export function VtUsageModal({
             <Toggle
               checked={salvarPadrao}
               onChange={setSalvarPadrao}
-              label="Salvar valor da passagem como padrão"
+              label={
+                <FormFieldLabel icon={Bookmark} tone="blue">
+                  Salvar valor da passagem como padrão
+                </FormFieldLabel>
+              }
               description="Usar este valor como padrão nas próximas vezes"
               disabled={submitting}
             />

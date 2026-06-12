@@ -1,0 +1,39 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, master, Dividas]
+  pull_request:
+
+jobs:
+  api:
+    name: API (Jest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Codigo/Pulso/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: Codigo/Pulso/api/package-lock.json
+      - run: npm ci
+      - run: npm run test:coverage
+
+  web:
+    name: Web (Vitest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Codigo/Pulso/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: Codigo/Pulso/web/package-lock.json
+      - run: npm ci
+      - run: npm run test:coverage
