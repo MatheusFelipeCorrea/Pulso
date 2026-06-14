@@ -5,8 +5,10 @@ const validateMiddleware = require('../middlewares/validateMiddleware');
 const {
     criarDividaSchema,
     editarDividaSchema,
+    registrarPagamentoSchema,
     listarDividasQuerySchema,
     dividaIdParamSchema,
+    pagamentoIdParamSchema,
 } = require('../schemas/debtSchemas');
 
 const router = express.Router();
@@ -29,11 +31,32 @@ router.patch(
     debtController.editar
 );
 
+router.post(
+    '/:id/pagamentos',
+    authMiddleware,
+    validateMiddleware(registrarPagamentoSchema),
+    debtController.registrarPagamento
+);
+
+router.delete(
+    '/:id/pagamentos/:pagamentoId',
+    authMiddleware,
+    validateMiddleware(pagamentoIdParamSchema),
+    debtController.excluirPagamento
+);
+
 router.patch(
     '/:id/quitar',
     authMiddleware,
     validateMiddleware(dividaIdParamSchema),
     debtController.quitar
+);
+
+router.patch(
+    '/:id/reabrir',
+    authMiddleware,
+    validateMiddleware(dividaIdParamSchema),
+    debtController.reabrir
 );
 
 router.delete(

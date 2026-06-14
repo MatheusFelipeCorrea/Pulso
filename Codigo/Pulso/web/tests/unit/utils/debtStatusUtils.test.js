@@ -21,6 +21,7 @@ describe('debtStatusUtils', () => {
       label: 'Quitada em 10/06/2026',
       variant: 'success',
       tone: 'green',
+      icon: 'check',
     })
   })
 
@@ -29,6 +30,7 @@ describe('debtStatusUtils', () => {
       label: 'Sem prazo definido',
       variant: 'neutral',
       tone: 'gray',
+      icon: null,
     })
   })
 
@@ -44,11 +46,12 @@ describe('debtStatusUtils', () => {
     )
   })
 
-  it('retorna status futuro com data formatada', () => {
+  it('retorna status futuro em dias', () => {
     expect(getDebtStatusBadge({ quitada: false, prazoDevolucao: '2026-06-25' })).toEqual({
-      label: 'Vence em 25/06/2026',
+      label: 'Vence em 10 dias',
       variant: 'success',
       tone: 'green',
+      icon: 'hourglass',
     })
   })
 

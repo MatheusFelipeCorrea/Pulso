@@ -1,5 +1,17 @@
 const prisma = require('../config/database');
-const { startOfDayInTimezone, endOfDayInTimezone } = require('../utils/dateTimezone');
+const {
+    startOfDayInTimezone,
+    endOfDayInTimezone,
+    todayInTimezone,
+    addDays,
+    formatDateOnly,
+} = require('../utils/dateTimezone');
+
+const includePagamentos = {
+    pagamentos: {
+        orderBy: { dataPagamento: 'desc' },
+    },
+};
 
 const buildWhere = (usuarioId, filtros = {}) => {
     const where = { usuarioId };
@@ -26,6 +38,32 @@ const buildWhere = (usuarioId, filtros = {}) => {
         }
     }
 
+    if (filtros.prazoInicio || filtros.prazoFim) {
+        where.prazoDevolucao = {};
+        if (filtros.prazoInicio) {
+            where.prazoDevolucao.gte = startOfDayInTimezone(filtros.prazoInicio);
+        }
+        if (filtros.prazoFim) {
+            where.prazoDevolucao.lte = endOfDayInTimezone(filtros.prazoFim);
+        }
+    }
+
+    if (filtros.status === 'vencida') {
+        where.quitada = false;
+        where.prazoDevolucao = {
+            ...(where.prazoDevolucao ?? {}),
+            lt: startOfDayInTimezone(new Date()),
+        };
+    } else if (filtros.status === 'vence_breve') {
+        const hoje = todayInTimezone();
+        where.quitada = false;
+        where.prazoDevolucao = {
+            ...(where.prazoDevolucao ?? {}),
+            gte: startOfDayInTimezone(hoje),
+            lte: endOfDayInTimezone(addDays(hoje, 7)),
+        };
+    }
+
     return where;
 };
 
@@ -38,11 +76,12 @@ const listarPorUsuario = async (usuarioId, filtros, { pagina = 1, limite = 10 } 
     const orderBy =
         filtros.ordenarValor === 'asc' || filtros.ordenarValor === 'desc'
             ? { valor: filtros.ordenarValor }
-            : { dataEmprestimo: 'desc' };
+            : { criadoEm: 'desc' };
 
     const [dividas, total] = await Promise.all([
         prisma.divida.findMany({
             where,
+            include: includePagamentos,
             orderBy,
             skip,
             take: limitNum,
@@ -53,19 +92,43 @@ const listarPorUsuario = async (usuarioId, filtros, { pagina = 1, limite = 10 } 
     return { dividas, total };
 };
 
-const calcularAgregados = async (usuarioId) =>
-    prisma.divida.groupBy({
-        by: ['direcao'],
+const listarAtivasComPagamentos = async (usuarioId) =>
+    prisma.divida.findMany({
         where: { usuarioId, quitada: false },
-        _sum: { valor: true },
-        _count: { id: true },
+        include: includePagamentos,
     });
+
+const contarPorAba = async (usuarioId) => {
+    const { isDividaQuitada } = require('../utils/debtBalanceUtils');
+    const dividas = await prisma.divida.findMany({
+        where: { usuarioId },
+        include: includePagamentos,
+    });
+
+    let meDevem = 0;
+    let euDevo = 0;
+    let quitadas = 0;
+
+    for (const divida of dividas) {
+        const pagamentos = divida.pagamentos ?? [];
+        if (isDividaQuitada(divida, pagamentos)) {
+            quitadas += 1;
+        } else if (divida.direcao === 'ME_DEVEM') {
+            meDevem += 1;
+        } else if (divida.direcao === 'EU_DEVO') {
+            euDevo += 1;
+        }
+    }
+
+    return { meDevem, euDevo, quitadas };
+};
 
 const criar = async (dados) => prisma.divida.create({ data: dados });
 
-const buscarPorId = async (dividaId, usuarioId) =>
+const buscarPorId = async (dividaId, usuarioId, { comPagamentos = false } = {}) =>
     prisma.divida.findFirst({
         where: { id: dividaId, usuarioId },
+        include: comPagamentos ? includePagamentos : undefined,
     });
 
 const atualizar = async (dividaId, usuarioId, dados) =>
@@ -74,12 +137,21 @@ const atualizar = async (dividaId, usuarioId, dados) =>
         data: dados,
     });
 
-const quitar = async (dividaId, usuarioId) =>
+const quitar = async (dividaId, usuarioId, dataQuitacao = new Date()) =>
     prisma.divida.update({
         where: { id: dividaId, usuarioId },
         data: {
             quitada: true,
-            dataQuitacao: new Date(),
+            dataQuitacao,
+        },
+    });
+
+const reabrir = async (dividaId, usuarioId) =>
+    prisma.divida.update({
+        where: { id: dividaId, usuarioId },
+        data: {
+            quitada: false,
+            dataQuitacao: null,
         },
     });
 
@@ -108,17 +180,39 @@ const buscarParaAlertas = async () =>
             quitada: false,
             prazoDevolucao: { not: null },
         },
+        include: includePagamentos,
         orderBy: { prazoDevolucao: 'asc' },
+    });
+
+const criarPagamento = async (dados) => prisma.pagamentoDivida.create({ data: dados });
+
+const buscarPagamento = async (pagamentoId, dividaId, usuarioId) =>
+    prisma.pagamentoDivida.findFirst({
+        where: {
+            id: pagamentoId,
+            dividaId,
+            divida: { usuarioId },
+        },
+    });
+
+const excluirPagamento = async (pagamentoId) =>
+    prisma.pagamentoDivida.delete({
+        where: { id: pagamentoId },
     });
 
 module.exports = {
     listarPorUsuario,
-    calcularAgregados,
+    listarAtivasComPagamentos,
+    contarPorAba,
     criar,
     buscarPorId,
     atualizar,
     quitar,
+    reabrir,
     excluir,
     excluirQuitadasAntigas,
     buscarParaAlertas,
+    criarPagamento,
+    buscarPagamento,
+    excluirPagamento,
 };

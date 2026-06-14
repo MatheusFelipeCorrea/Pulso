@@ -6,11 +6,20 @@ export const DEBT_TABS = {
   QUITADAS: 'QUITADAS',
 }
 
+export const DEBT_STATUS_FILTERS = {
+  TODAS: '',
+  VENCIDA: 'vencida',
+  VENCE_BREVE: 'vence_breve',
+}
+
 export const DEFAULT_DEBT_FILTROS = () => ({
   busca: '',
   ordenarValor: '',
+  status: '',
   dataInicio: null,
   dataFim: null,
+  prazoInicio: null,
+  prazoFim: null,
   pagina: 1,
   limite: 10,
 })
@@ -19,8 +28,11 @@ export function filtrosDividaIguais(a, b) {
   return (
     a.busca === b.busca &&
     a.ordenarValor === b.ordenarValor &&
+    a.status === b.status &&
     a.dataInicio === b.dataInicio &&
-    a.dataFim === b.dataFim
+    a.dataFim === b.dataFim &&
+    a.prazoInicio === b.prazoInicio &&
+    a.prazoFim === b.prazoFim
   )
 }
 
@@ -35,10 +47,15 @@ export function buildApiFiltros(tabAtiva, filtrosAplicados) {
       ? formatDateParam(filtrosAplicados.dataInicio)
       : undefined,
     dataFim: filtrosAplicados.dataFim ? formatDateParam(filtrosAplicados.dataFim) : undefined,
+    prazoInicio: filtrosAplicados.prazoInicio
+      ? formatDateParam(filtrosAplicados.prazoInicio)
+      : undefined,
+    prazoFim: filtrosAplicados.prazoFim ? formatDateParam(filtrosAplicados.prazoFim) : undefined,
+    status: filtrosAplicados.status || undefined,
   }
 
   if (tabAtiva === DEBT_TABS.QUITADAS) {
-    return { ...base, quitada: true }
+    return { ...base, quitada: true, status: undefined }
   }
 
   return {

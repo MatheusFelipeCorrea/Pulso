@@ -1,7 +1,7 @@
 import { ConfirmModal } from '@/design-system/components/overlays/Modal/ConfirmModal.jsx'
 import { formatPersonName } from '@/utils/personName.js'
 
-export function DeleteDebtModal({ open, onClose, onConfirm, divida, loading }) {
+export function ReopenDebtModal({ open, onClose, onConfirm, divida, loading }) {
   if (!divida) return null
 
   const nomePessoa = formatPersonName(divida.nomePessoa)
@@ -11,11 +11,11 @@ export function DeleteDebtModal({ open, onClose, onConfirm, divida, loading }) {
       isOpen={open}
       onClose={onClose}
       onConfirm={onConfirm}
-      title="Excluir empréstimo?"
-      message={`Tem certeza que deseja excluir a dívida com ${nomePessoa}? Esta ação não pode ser desfeita.`}
-      confirmLabel="Excluir"
+      title="Desfazer quitação?"
+      message={`A dívida com ${nomePessoa} voltará para em aberto. Você poderá registrar novos pagamentos.`}
+      confirmLabel="Desfazer"
       cancelLabel="Cancelar"
-      tone="danger"
+      tone="warning"
       loading={loading}
     />
   )

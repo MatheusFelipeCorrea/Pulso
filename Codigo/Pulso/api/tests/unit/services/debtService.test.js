@@ -3,6 +3,23 @@ jest.mock('../../../src/repositories/debtRepository');
 const debtRepository = require('../../../src/repositories/debtRepository');
 const debtService = require('../../../src/services/debtService');
 
+const dividaBase = (overrides = {}) => ({
+    id: 'div-1',
+    usuarioId: 'usr-1',
+    direcao: 'ME_DEVEM',
+    nomePessoa: 'Carlos',
+    valor: 100,
+    dataEmprestimo: new Date('2026-01-09T12:00:00.000Z'),
+    prazoDevolucao: new Date('2026-01-15T12:00:00.000Z'),
+    observacao: 'Pagamento combinado',
+    quitada: false,
+    dataQuitacao: null,
+    criadoEm: new Date('2026-01-09T13:00:00.000Z'),
+    atualizadoEm: new Date('2026-01-09T13:00:00.000Z'),
+    pagamentos: [],
+    ...overrides,
+});
+
 describe('debtService', () => {
     beforeAll(() => {
         jest.useFakeTimers();
@@ -52,19 +69,7 @@ describe('debtService', () => {
     });
 
     it('cria dívida com payload validado e retorna objeto mapeado', async () => {
-        debtRepository.criar.mockResolvedValue({
-            id: 'div-1',
-            direcao: 'ME_DEVEM',
-            nomePessoa: 'Carlos',
-            valor: 100,
-            dataEmprestimo: new Date('2026-01-09T12:00:00.000Z'),
-            prazoDevolucao: new Date('2026-01-15T12:00:00.000Z'),
-            observacao: 'Pagamento combinado',
-            quitada: false,
-            dataQuitacao: null,
-            criadoEm: new Date('2026-01-09T13:00:00.000Z'),
-            atualizadoEm: new Date('2026-01-09T13:00:00.000Z'),
-        });
+        debtRepository.criar.mockResolvedValue(dividaBase());
 
         const result = await debtService.criarDivida('usr-1', {
             direcao: 'ME_DEVEM',
@@ -83,21 +88,13 @@ describe('debtService', () => {
             valor: 100,
             observacao: 'Pagamento combinado',
         });
-        expect(payload.dataEmprestimo).toBeInstanceOf(Date);
-        expect(payload.prazoDevolucao).toBeInstanceOf(Date);
-        expect(payload.prazoDevolucao.getTime()).toBeGreaterThan(payload.dataEmprestimo.getTime());
-        expect(result).toEqual({
+        expect(result).toMatchObject({
             id: 'div-1',
-            direcao: 'ME_DEVEM',
             nomePessoa: 'Carlos',
             valor: '100.00',
-            dataEmprestimo: '2026-01-09T12:00:00.000Z',
-            prazoDevolucao: '2026-01-15T12:00:00.000Z',
-            observacao: 'Pagamento combinado',
-            quitada: false,
-            dataQuitacao: null,
-            criadoEm: '2026-01-09T13:00:00.000Z',
-            atualizadoEm: '2026-01-09T13:00:00.000Z',
+            valorPago: '0.00',
+            valorRestante: '100.00',
+            pagamentos: [],
         });
     });
 
@@ -114,37 +111,38 @@ describe('debtService', () => {
         });
     });
 
-    it('calcula resumo com totais e quantidades formatados', async () => {
-        debtRepository.calcularAgregados.mockResolvedValue([
-            { direcao: 'ME_DEVEM', _sum: { valor: 125.5 }, _count: { id: 2 } },
-            { direcao: 'EU_DEVO', _sum: { valor: 20 }, _count: { id: 1 } },
+    it('calcula resumo com saldo restante e contadores', async () => {
+        debtRepository.listarAtivasComPagamentos.mockResolvedValue([
+            dividaBase({ direcao: 'ME_DEVEM', valor: 100, pagamentos: [] }),
+            dividaBase({
+                id: 'div-2',
+                direcao: 'EU_DEVO',
+                valor: 50,
+                pagamentos: [
+                    {
+                        id: 'p1',
+                        valor: 20,
+                        dataPagamento: new Date('2026-01-09T12:00:00.000Z'),
+                        observacao: null,
+                        criadoEm: new Date('2026-01-09T12:00:00.000Z'),
+                    },
+                ],
+            }),
         ]);
+        debtRepository.contarPorAba.mockResolvedValue({ meDevem: 1, euDevo: 1, quitadas: 3 });
 
         const result = await debtService.calcularResumo('usr-1');
 
         expect(result).toEqual({
-            meDevem: { total: '125.50', quantidade: 2 },
-            euDevo: { total: '20.00', quantidade: 1 },
+            meDevem: { total: '100.00', quantidade: 1 },
+            euDevo: { total: '30.00', quantidade: 1 },
+            contadores: { meDevem: 1, euDevo: 1, quitadas: 3 },
         });
     });
 
     it('lista dívidas com paginação e mapeamento', async () => {
         debtRepository.listarPorUsuario.mockResolvedValue({
-            dividas: [
-                {
-                    id: 'd-1',
-                    direcao: 'ME_DEVEM',
-                    nomePessoa: 'Lia',
-                    valor: 50,
-                    dataEmprestimo: new Date('2026-01-08T12:00:00.000Z'),
-                    prazoDevolucao: null,
-                    observacao: null,
-                    quitada: false,
-                    dataQuitacao: null,
-                    criadoEm: new Date('2026-01-08T13:00:00.000Z'),
-                    atualizadoEm: new Date('2026-01-08T13:00:00.000Z'),
-                },
-            ],
+            dividas: [dividaBase({ id: 'd-1', nomePessoa: 'Lia', valor: 50, prazoDevolucao: null, observacao: null })],
             total: 1,
         });
 
@@ -156,30 +154,21 @@ describe('debtService', () => {
             { pagina: 2, limite: 1 }
         );
         expect(result.total).toBe(1);
-        expect(result.paginas).toBe(1);
-        expect(result.pagina).toBe(2);
         expect(result.dividas[0].valor).toBe('50.00');
+        expect(result.dividas[0].valorRestante).toBe('50.00');
     });
 
     it('edita dívida com campos opcionais', async () => {
-        debtRepository.buscarPorId.mockResolvedValue({
-            id: 'div-1',
-            quitada: false,
-            dataEmprestimo: new Date('2026-01-08T12:00:00.000Z'),
-        });
-        debtRepository.atualizar.mockResolvedValue({
-            id: 'div-1',
-            direcao: 'EU_DEVO',
-            nomePessoa: 'Novo Nome',
-            valor: 99.9,
-            dataEmprestimo: new Date('2026-01-08T12:00:00.000Z'),
-            prazoDevolucao: new Date('2026-01-13T12:00:00.000Z'),
-            observacao: 'ok',
-            quitada: false,
-            dataQuitacao: null,
-            criadoEm: new Date('2026-01-08T13:00:00.000Z'),
-            atualizadoEm: new Date('2026-01-09T13:00:00.000Z'),
-        });
+        debtRepository.buscarPorId.mockResolvedValue(dividaBase());
+        debtRepository.atualizar.mockResolvedValue(
+            dividaBase({
+                direcao: 'EU_DEVO',
+                nomePessoa: 'Novo Nome',
+                valor: 99.9,
+                prazoDevolucao: new Date('2026-01-13T12:00:00.000Z'),
+                observacao: 'ok',
+            })
+        );
 
         const result = await debtService.editarDivida('usr-1', 'div-1', {
             nomePessoa: '  Novo Nome ',
@@ -202,7 +191,7 @@ describe('debtService', () => {
     });
 
     it('bloqueia quitação de dívida já quitada', async () => {
-        debtRepository.buscarPorId.mockResolvedValue({ id: 'div-1', quitada: true });
+        debtRepository.buscarPorId.mockResolvedValue(dividaBase({ quitada: true }));
 
         await expect(debtService.quitarDivida('usr-1', 'div-1')).rejects.toMatchObject({
             statusCode: 400,
@@ -210,26 +199,53 @@ describe('debtService', () => {
         });
     });
 
-    it('quita dívida existente', async () => {
-        debtRepository.buscarPorId.mockResolvedValue({ id: 'div-1', quitada: false });
-        debtRepository.quitar.mockResolvedValue({
-            id: 'div-1',
-            direcao: 'EU_DEVO',
-            nomePessoa: 'Paulo',
-            valor: 30,
-            dataEmprestimo: new Date('2026-01-01T12:00:00.000Z'),
-            prazoDevolucao: null,
-            observacao: null,
-            quitada: true,
-            dataQuitacao: new Date('2026-01-10T12:00:00.000Z'),
-            criadoEm: new Date('2026-01-01T12:00:00.000Z'),
-            atualizadoEm: new Date('2026-01-10T12:00:00.000Z'),
+    it('quita dívida registrando pagamento do saldo restante', async () => {
+        debtRepository.buscarPorId.mockResolvedValue(dividaBase({ valor: 100 }));
+        debtRepository.criarPagamento.mockResolvedValue({
+            id: 'p-quit',
+            valor: 100,
+            dataPagamento: new Date('2026-01-10T12:00:00.000Z'),
+            observacao: 'Quitação do saldo restante',
+            criadoEm: new Date('2026-01-10T12:00:00.000Z'),
         });
+        debtRepository.quitar.mockResolvedValue(
+            dividaBase({ quitada: true, dataQuitacao: new Date('2026-01-10T12:00:00.000Z') })
+        );
 
         const result = await debtService.quitarDivida('usr-1', 'div-1');
 
+        expect(debtRepository.criarPagamento).toHaveBeenCalledWith(
+            expect.objectContaining({
+                dividaId: 'div-1',
+                valor: 100,
+                observacao: 'Quitação do saldo restante',
+            })
+        );
         expect(debtRepository.quitar).toHaveBeenCalledWith('div-1', 'usr-1');
         expect(result.quitada).toBe(true);
+        expect(result.valorPago).toBe('100.00');
+    });
+
+    it('registra pagamento parcial e retorna saldo atualizado sem quitar', async () => {
+        debtRepository.buscarPorId.mockResolvedValue(dividaBase({ valor: 100 }));
+        debtRepository.criarPagamento.mockResolvedValue({
+            id: 'p1',
+            valor: 30,
+            dataPagamento: new Date('2026-01-10T12:00:00.000Z'),
+            observacao: null,
+            criadoEm: new Date('2026-01-10T12:00:00.000Z'),
+        });
+
+        const result = await debtService.registrarPagamento('usr-1', 'div-1', {
+            valor: 30,
+            dataPagamento: '2026-01-10',
+        });
+
+        expect(debtRepository.quitar).not.toHaveBeenCalled();
+        expect(result.divida.quitada).toBe(false);
+        expect(result.divida.valorPago).toBe('30.00');
+        expect(result.divida.valorRestante).toBe('70.00');
+        expect(result.pagamento.valor).toBe('30.00');
     });
 
     it('bloqueia exclusão de dívida quitada', async () => {

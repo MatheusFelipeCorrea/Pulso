@@ -41,9 +41,40 @@ const editar = async (req, res, next) => {
     }
 };
 
+const registrarPagamento = async (req, res, next) => {
+    try {
+        const resultado = await debtService.registrarPagamento(req.user.id, req.params.id, req.body);
+        res.status(201).json(resultado);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const excluirPagamento = async (req, res, next) => {
+    try {
+        const divida = await debtService.excluirPagamento(
+            req.user.id,
+            req.params.id,
+            req.params.pagamentoId
+        );
+        res.status(200).json(divida);
+    } catch (error) {
+        next(error);
+    }
+};
+
 const quitar = async (req, res, next) => {
     try {
         const divida = await debtService.quitarDivida(req.user.id, req.params.id);
+        res.status(200).json(divida);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const reabrir = async (req, res, next) => {
+    try {
+        const divida = await debtService.reabrirDivida(req.user.id, req.params.id);
         res.status(200).json(divida);
     } catch (error) {
         next(error);
@@ -64,6 +95,9 @@ module.exports = {
     obterResumo,
     criar,
     editar,
+    registrarPagamento,
+    excluirPagamento,
     quitar,
+    reabrir,
     excluir,
 };

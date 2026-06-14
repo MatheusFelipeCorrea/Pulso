@@ -5,11 +5,6 @@ jest.mock('../../../src/services/notificationService', () => ({
 }));
 jest.mock('../../../src/utils/dateTimezone', () => ({
     formatDateOnly: jest.fn((d) => new Date(d).toISOString().slice(0, 10)),
-    addDays: jest.fn((date, days) => {
-        const d = new Date(`${date}T00:00:00.000Z`);
-        d.setDate(d.getDate() + days);
-        return d;
-    }),
     todayInTimezone: jest.fn(() => '2026-01-10'),
 }));
 
@@ -23,14 +18,9 @@ describe('debtAlertService', () => {
         jest.clearAllMocks();
         dateTimezone.todayInTimezone.mockReturnValue('2026-01-10');
         dateTimezone.formatDateOnly.mockImplementation((d) => new Date(d).toISOString().slice(0, 10));
-        dateTimezone.addDays.mockImplementation((date, days) => {
-            const base = new Date(`${date}T00:00:00.000Z`);
-            base.setDate(base.getDate() + days);
-            return base;
-        });
     });
 
-    it('notifica dívidas que vencem hoje ou em dois dias', async () => {
+    it('notifica dívidas que vencem em 7, 2 ou 0 dias com saldo restante', async () => {
         debtRepository.buscarParaAlertas.mockResolvedValue([
             {
                 id: 'd1',
@@ -39,6 +29,7 @@ describe('debtAlertService', () => {
                 valor: 100,
                 prazoDevolucao: '2026-01-10T12:00:00.000Z',
                 direcao: 'ME_DEVEM',
+                pagamentos: [],
             },
             {
                 id: 'd2',
@@ -47,14 +38,25 @@ describe('debtAlertService', () => {
                 valor: 80,
                 prazoDevolucao: '2026-01-12T12:00:00.000Z',
                 direcao: 'EU_DEVO',
+                pagamentos: [{ valor: 30 }],
             },
             {
                 id: 'd3',
                 usuarioId: 'u1',
                 nomePessoa: 'Cara',
                 valor: 30,
-                prazoDevolucao: '2026-01-30T12:00:00.000Z',
+                prazoDevolucao: '2026-01-17T12:00:00.000Z',
                 direcao: 'EU_DEVO',
+                pagamentos: [],
+            },
+            {
+                id: 'd4',
+                usuarioId: 'u1',
+                nomePessoa: 'Dani',
+                valor: 50,
+                prazoDevolucao: '2026-01-10T12:00:00.000Z',
+                direcao: 'ME_DEVEM',
+                pagamentos: [{ valor: 50 }],
             },
         ]);
         notificationService.verificarNotificacaoDuplicadaDivida.mockResolvedValue(false);
@@ -62,8 +64,12 @@ describe('debtAlertService', () => {
 
         const result = await debtAlertService.verificarDividasENotificar();
 
-        expect(notificationService.criarNotificacao).toHaveBeenCalledTimes(2);
-        expect(result).toEqual({ criadas: 2, verificadas: 3 });
+        expect(notificationService.criarNotificacao).toHaveBeenCalledTimes(3);
+        expect(result).toEqual({ criadas: 3, verificadas: 4 });
+
+        const mensagens = notificationService.criarNotificacao.mock.calls.map((call) => call[1].mensagem);
+        expect(mensagens.some((msg) => msg.includes('Saldo restante:'))).toBe(true);
+        expect(mensagens.some((msg) => msg.includes('50,00'))).toBe(true);
     });
 
     it('não conta notificação duplicada', async () => {
@@ -75,6 +81,7 @@ describe('debtAlertService', () => {
                 valor: 100,
                 prazoDevolucao: '2026-01-10T12:00:00.000Z',
                 direcao: 'ME_DEVEM',
+                pagamentos: [],
             },
         ]);
         notificationService.verificarNotificacaoDuplicadaDivida.mockResolvedValue(true);

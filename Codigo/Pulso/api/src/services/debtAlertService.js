@@ -1,6 +1,9 @@
 const notificationService = require('./notificationService');
 const debtRepository = require('../repositories/debtRepository');
-const { formatDateOnly, addDays, todayInTimezone } = require('../utils/dateTimezone');
+const { calcSaldoDivida } = require('../utils/debtBalanceUtils');
+const { formatDateOnly, todayInTimezone } = require('../utils/dateTimezone');
+
+const DIAS_ALERTA = [7, 2, 0];
 
 const formatCurrency = (value) =>
     Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -13,14 +16,15 @@ const diasAteVencimento = (prazoDevolucao) => {
     return Math.round((vencDate - hojeDate) / (1000 * 60 * 60 * 24));
 };
 
-const criarNotificacaoDivida = async (divida, diasRestantes, dataAlerta) => {
+const criarNotificacaoDivida = async (divida, diasRestantes, dataAlerta, valorRestante) => {
     const metadados = {
         dividaId: divida.id,
         nomePessoa: divida.nomePessoa,
-        valor: Number(divida.valor).toFixed(2),
+        valor: Number(valorRestante).toFixed(2),
         prazoDevolucao: formatDateOnly(divida.prazoDevolucao),
         direcao: divida.direcao,
         dataAlerta,
+        diasRestantes,
     };
 
     const duplicada = await notificationService.verificarNotificacaoDuplicadaDivida(
@@ -31,12 +35,12 @@ const criarNotificacaoDivida = async (divida, diasRestantes, dataAlerta) => {
     if (duplicada) return null;
 
     const quando =
-        diasRestantes === 0 ? 'hoje' : diasRestantes === 2 ? 'em 2 dias' : `em ${diasRestantes} dias`;
+        diasRestantes === 0 ? 'hoje' : diasRestantes === 1 ? 'amanhã' : `em ${diasRestantes} dias`;
 
     return notificationService.criarNotificacao(divida.usuarioId, {
         tipo: 'DIVIDA_COBRANCA',
         titulo: 'Vencimento de dívida',
-        mensagem: `A dívida com ${divida.nomePessoa} vence ${quando}. Valor: ${formatCurrency(divida.valor)}`,
+        mensagem: `A dívida com ${divida.nomePessoa} vence ${quando}. Saldo restante: ${formatCurrency(valorRestante)}`,
         linkAcao: '/debts',
         metadados,
     });
@@ -44,17 +48,23 @@ const criarNotificacaoDivida = async (divida, diasRestantes, dataAlerta) => {
 
 const verificarDividasENotificar = async () => {
     const hoje = todayInTimezone();
-    const emDoisDias = formatDateOnly(addDays(hoje, 2));
     const dividas = await debtRepository.buscarParaAlertas();
 
     let criadas = 0;
 
     for (const divida of dividas) {
-        const vencimento = formatDateOnly(divida.prazoDevolucao);
-        if (vencimento !== hoje && vencimento !== emDoisDias) continue;
+        const { valorRestante } = calcSaldoDivida(divida, divida.pagamentos ?? []);
+        if (valorRestante <= 0) continue;
 
         const diasRestantes = diasAteVencimento(divida.prazoDevolucao);
-        const notif = await criarNotificacaoDivida(divida, diasRestantes, hoje);
+        if (!DIAS_ALERTA.includes(diasRestantes)) continue;
+
+        const notif = await criarNotificacaoDivida(
+            divida,
+            diasRestantes,
+            hoje,
+            valorRestante
+        );
         if (notif) criadas += 1;
     }
 

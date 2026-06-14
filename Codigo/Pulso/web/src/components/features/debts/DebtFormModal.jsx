@@ -23,6 +23,7 @@ import { DatePicker } from '@/design-system/components/pickers/DatePicker/DatePi
 import { Toggle } from '@/design-system/components/forms/Toggle/Toggle.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { getDebtSummaryText } from '@/utils/debtStatusUtils.js'
+import { formatPersonName } from '@/utils/personName.js'
 
 const emptyForm = () => ({
   direcao: 'ME_DEVEM',
@@ -87,16 +88,14 @@ export function DebtFormModal({ open, onClose, onSubmit, submitting = false, div
     }
 
     const payload = {
-      nomePessoa: form.nomePessoa.trim(),
+      nomePessoa: formatPersonName(form.nomePessoa),
       valor: form.valor,
       dataEmprestimo: form.dataEmprestimo.toISOString(),
       prazoDevolucao: form.definirPrazo && form.prazoDevolucao ? form.prazoDevolucao.toISOString() : null,
       observacao: form.observacao.trim() || null,
     }
 
-    if (!isEdit) {
-      payload.direcao = form.direcao
-    }
+    payload.direcao = form.direcao
 
     try {
       await onSubmit?.(payload)
@@ -117,9 +116,10 @@ export function DebtFormModal({ open, onClose, onSubmit, submitting = false, div
         </header>
 
         <div className="debt-form__body">
-          {!isEdit ? (
-            <section className="debt-form__section">
-              <h3 className="debt-form__section-title">1. DIREÇÃO</h3>
+          <section className="debt-form__section">
+              <h3 className="debt-form__section-title">
+                {isEdit ? 'DIREÇÃO' : '1. DIREÇÃO'}
+              </h3>
               <div className="debt-form__direction" role="radiogroup" aria-label="Direção do empréstimo">
                 <button
                   type="button"
@@ -163,7 +163,6 @@ export function DebtFormModal({ open, onClose, onSubmit, submitting = false, div
                 </button>
               </div>
             </section>
-          ) : null}
 
           <section className="debt-form__section">
             <h3 className="debt-form__section-title">
@@ -179,6 +178,12 @@ export function DebtFormModal({ open, onClose, onSubmit, submitting = false, div
                 }
                 value={form.nomePessoa}
                 onChange={(e) => setForm((prev) => ({ ...prev, nomePessoa: e.target.value }))}
+                onBlur={() =>
+                  setForm((prev) => ({
+                    ...prev,
+                    nomePessoa: formatPersonName(prev.nomePessoa),
+                  }))
+                }
                 placeholder={
                   form.direcao === 'ME_DEVEM'
                     ? 'Pra quem você emprestou?'
