@@ -10,6 +10,7 @@ import { DatePicker } from '@/design-system/components/pickers/DatePicker/DatePi
 import { Checkbox } from '@/design-system/components/forms/Checkbox/Checkbox.jsx'
 import { Toggle } from '@/design-system/components/forms/Toggle/Toggle.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
+import { REQUIRED_FIELD_ERROR, isRequiredValueEmpty } from '@/utils/formValidation.js'
 import {
   buildReminderCategorySelectOptions,
   getReminderCategoryMeta,
@@ -55,6 +56,7 @@ export function ReminderFormModal({
   googleConnected = false,
 }) {
   const [form, setForm] = useState(() => emptyForm(defaultDate))
+  const [fieldErrors, setFieldErrors] = useState({})
   const isEdit = Boolean(lembrete)
 
   const categoriaOptions = useMemo(() => buildReminderCategorySelectOptions(), [])
@@ -62,6 +64,7 @@ export function ReminderFormModal({
 
   useEffect(() => {
     if (!open) return
+    setFieldErrors({})
     if (lembrete) {
       const vencimento = new Date(lembrete.dataVencimento)
       setForm({
@@ -86,6 +89,21 @@ export function ReminderFormModal({
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+
+    const nextFieldErrors = {}
+    if (isRequiredValueEmpty(form.titulo)) {
+      nextFieldErrors.titulo = REQUIRED_FIELD_ERROR
+    }
+    if (!form.dataVencimento) {
+      nextFieldErrors.dataVencimento = REQUIRED_FIELD_ERROR
+    }
+
+    if (Object.keys(nextFieldErrors).length > 0) {
+      setFieldErrors(nextFieldErrors)
+      return
+    }
+
+    setFieldErrors({})
     await onSubmit?.({
       titulo: form.titulo.trim(),
       valor: form.valor > 0 ? form.valor : null,
@@ -100,7 +118,7 @@ export function ReminderFormModal({
 
   return (
     <Modal isOpen={open} onClose={onClose} size="xl" className="calendar-reminder-modal">
-      <form className="calendar-reminder-form" onSubmit={handleSubmit}>
+      <form className="calendar-reminder-form" onSubmit={handleSubmit} noValidate>
         <header className="calendar-reminder-form__header">
           <div>
             <h2>{isEdit ? 'Editar Lembrete' : 'Novo Lembrete'}</h2>
@@ -123,9 +141,20 @@ export function ReminderFormModal({
               </FormFieldLabel>
             }
             value={form.titulo}
-            onChange={(e) => setForm((prev) => ({ ...prev, titulo: e.target.value }))}
+            onChange={(e) => {
+              const titulo = e.target.value
+              setForm((prev) => ({ ...prev, titulo }))
+              if (fieldErrors.titulo) {
+                setFieldErrors((prev) => {
+                  const next = { ...prev }
+                  delete next.titulo
+                  return next
+                })
+              }
+            }}
             placeholder="Ex: Fatura do cartão"
             required
+            error={fieldErrors.titulo}
           />
 
           <div className="calendar-reminder-form__row">
@@ -145,14 +174,22 @@ export function ReminderFormModal({
                 </FormFieldLabel>
               }
               value={form.dataVencimento}
-              onChange={(value) =>
+              onChange={(value) => {
                 setForm((prev) => ({
                   ...prev,
                   dataVencimento: value,
                   diaRecorrencia: value.getDate(),
                 }))
-              }
+                if (fieldErrors.dataVencimento) {
+                  setFieldErrors((prev) => {
+                    const next = { ...prev }
+                    delete next.dataVencimento
+                    return next
+                  })
+                }
+              }}
               required
+              error={fieldErrors.dataVencimento}
             />
           </div>
 

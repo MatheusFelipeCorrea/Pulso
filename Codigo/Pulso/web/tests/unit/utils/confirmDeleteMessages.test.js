@@ -8,6 +8,7 @@ import {
   deleteReminderMessage,
   deleteTransactionMessage,
   deleteTripMessage,
+  deleteTripExpenseMessage,
   leaveGroupMessage,
 } from '@/utils/confirmDeleteMessages.js'
 
@@ -17,6 +18,7 @@ describe('confirmDeleteMessages', () => {
     expect(deleteRecurringTransactionMessage('Assinatura')).toContain('recorrente')
     expect(deleteGoalMessage('Reserva')).toContain('aportes')
     expect(deleteTripMessage('Férias')).toContain('dados relacionados')
+    expect(deleteTripExpenseMessage('Passagens')).toContain('excluída permanentemente')
     expect(deleteReminderMessage('Pagar fatura')).toContain('excluído permanentemente')
     expect(deleteGroupMessage('Time A')).toContain('todos os dados')
     expect(leaveGroupMessage('Time A')).toContain('sairá do grupo')

@@ -23,6 +23,7 @@ import { TagsInput } from '@/design-system/components/selects/TagsInput/TagsInpu
 import { Checkbox } from '@/design-system/components/forms/Checkbox/Checkbox.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { validarRecursoCategoria } from '@/utils/transactionValidation.js'
+import { REQUIRED_FIELD_ERROR } from '@/utils/formValidation.js'
 import { buildRecurrenceRule } from '@/utils/transactionRecurrence.js'
 import { cn } from '@/design-system/utils/cn.js'
 import { tagSuggestions, categoriaToSelectOption, recursoSelectOptions, toSelectOptions } from '@/utils/filterOptions.js'
@@ -53,6 +54,7 @@ export function TransactionFormModal({
   submitting,
 }) {
   const [form, setForm] = useState(emptyForm)
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const categorias = opcoes?.categorias ?? []
   const tagsCatalog = opcoes?.tags ?? []
@@ -62,6 +64,7 @@ export function TransactionFormModal({
 
   useEffect(() => {
     if (!open) return
+    setFieldErrors({})
 
     if (mode === 'edit' && transacao) {
       setForm({
@@ -106,6 +109,17 @@ export function TransactionFormModal({
       }
       return next
     })
+
+    const touchedFields = Object.keys(patch)
+    if (touchedFields.length > 0) {
+      setFieldErrors((prev) => {
+        const next = { ...prev }
+        touchedFields.forEach((field) => {
+          delete next[field]
+        })
+        return next
+      })
+    }
   }
 
   const addTagByName = (nome) => {
@@ -131,10 +145,20 @@ export function TransactionFormModal({
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    if (!form.valor || form.valor <= 0) return
-    if (!form.categoriaId || !form.recurso) return
+    const nextFieldErrors = {}
+    if (!form.valor || form.valor <= 0) nextFieldErrors.valor = REQUIRED_FIELD_ERROR
+    if (!form.data) nextFieldErrors.data = REQUIRED_FIELD_ERROR
+    if (!form.categoriaId) nextFieldErrors.categoriaId = REQUIRED_FIELD_ERROR
+    if (!form.recurso) nextFieldErrors.recurso = REQUIRED_FIELD_ERROR
+
+    if (Object.keys(nextFieldErrors).length > 0) {
+      setFieldErrors(nextFieldErrors)
+      return
+    }
+
     if (recursoError) return
 
+    setFieldErrors({})
     onSubmit?.({
       tipo: form.tipo,
       categoriaId: form.categoriaId,
@@ -161,7 +185,7 @@ export function TransactionFormModal({
 
   return (
     <Modal isOpen={open} onClose={onClose} size="xl">
-      <form className="tx-form" onSubmit={handleSubmit}>
+      <form className="tx-form" onSubmit={handleSubmit} noValidate>
         <header className="tx-form__header">
           <div>
             <h2 className="tx-form__title">
@@ -213,6 +237,7 @@ export function TransactionFormModal({
               onChange={(v) => updateForm({ valor: v })}
               size="large"
               required
+              error={fieldErrors.valor}
             />
           </div>
 
@@ -226,6 +251,7 @@ export function TransactionFormModal({
               value={form.data}
               onChange={(d) => updateForm({ data: d })}
               required
+              error={fieldErrors.data}
             />
             <Select
               label={
@@ -238,6 +264,7 @@ export function TransactionFormModal({
               options={categoriaOptions}
               placeholder="Selecione uma categoria"
               required
+              error={fieldErrors.categoriaId}
             />
           </div>
 
@@ -262,7 +289,7 @@ export function TransactionFormModal({
             onChange={(v) => updateForm({ recurso: v })}
             options={recursoOptions}
             placeholder="Selecione o recurso"
-            error={recursoError}
+            error={recursoError || fieldErrors.recurso}
             required
           />
 

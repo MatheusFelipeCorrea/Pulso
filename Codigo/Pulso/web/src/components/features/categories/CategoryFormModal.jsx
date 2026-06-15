@@ -7,6 +7,7 @@ import { InputText } from '@/design-system/components/inputs/InputText/InputText
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { CategoryIconPicker } from './CategoryIconPicker.jsx'
 import { resolveBadgeIcon } from '@/components/badges/iconRegistry.jsx'
+import { REQUIRED_FIELD_ERROR, isRequiredValueEmpty } from '@/utils/formValidation.js'
 import { cn } from '@/design-system/utils/cn.js'
 
 const emptyForm = (tipo = 'DESPESA') => ({
@@ -27,12 +28,14 @@ export function CategoryFormModal({
   cores = [],
 }) {
   const [form, setForm] = useState(() => emptyForm(tipoPadrao))
+  const [fieldErrors, setFieldErrors] = useState({})
   const isEdit = Boolean(categoria)
   const isReceita = form.tipo === 'RECEITA'
   const previewNome = form.nome.trim() || 'Minha categoria'
 
   useEffect(() => {
     if (!open) return
+    setFieldErrors({})
     if (categoria) {
       setForm({
         nome: categoria.nome ?? '',
@@ -47,7 +50,11 @@ export function CategoryFormModal({
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    if (!form.nome.trim()) return
+    if (isRequiredValueEmpty(form.nome)) {
+      setFieldErrors({ nome: REQUIRED_FIELD_ERROR })
+      return
+    }
+    setFieldErrors({})
     await onSubmit?.({
       nome: form.nome.trim(),
       tipo: form.tipo,
@@ -58,7 +65,7 @@ export function CategoryFormModal({
 
   return (
     <Modal isOpen={open} onClose={onClose} size="xl" className="category-modal category-modal--form">
-      <form className="category-form" onSubmit={handleSubmit}>
+      <form className="category-form" onSubmit={handleSubmit} noValidate>
         <header className="category-form__header">
           <div>
             <h2>{isEdit ? 'Editar categoria' : 'Nova categoria'}</h2>
@@ -97,9 +104,20 @@ export function CategoryFormModal({
               </FormFieldLabel>
             }
             value={form.nome}
-            onChange={(e) => setForm((prev) => ({ ...prev, nome: e.target.value }))}
+            onChange={(e) => {
+              const nome = e.target.value
+              setForm((prev) => ({ ...prev, nome }))
+              if (fieldErrors.nome) {
+                setFieldErrors((prev) => {
+                  const next = { ...prev }
+                  delete next.nome
+                  return next
+                })
+              }
+            }}
             placeholder="Ex: Assinaturas, Freelance extra..."
             required
+            error={fieldErrors.nome}
             maxLength={60}
           />
 

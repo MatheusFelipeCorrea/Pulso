@@ -23,6 +23,9 @@ import TransportVoucherPage from './pages/TransportVoucherPage'
 import BudgetPage from './pages/BudgetPage'
 import CalendarPage from './pages/CalendarPage'
 import DebtsPage from './pages/DebtsPage'
+import GoalsPage from './pages/GoalsPage'
+import TripsPage from './pages/TripsPage'
+import TripDetailPage from './pages/TripDetailPage.jsx'
 
 function App() {
   return (
@@ -68,13 +71,18 @@ function App() {
               <Route path="budget" element={<BudgetPage />} />
               <Route path="calendar" element={<CalendarPage />} />
               <Route path="debts" element={<DebtsPage />} />
+              <Route path="goals" element={<GoalsPage />} />
+              <Route path="trips" element={<TripsPage />} />
+              <Route path="trips/:id" element={<TripDetailPage />} />
               {APP_ROUTE_PATHS.filter(
                 (path) =>
                   path !== '/transactions' &&
                   path !== '/transport-voucher' &&
                   path !== '/budget' &&
                   path !== '/calendar' &&
-                  path !== '/debts'
+                  path !== '/debts' &&
+                  path !== '/goals' &&
+                  path !== '/trips'
               ).map((path) => (
                 <Route
                   key={path}

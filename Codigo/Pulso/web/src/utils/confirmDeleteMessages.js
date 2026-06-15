@@ -16,6 +16,14 @@ export function deleteTripMessage(nome) {
   return `A viagem "${nome}" e todos os dados relacionados serão excluídos.`
 }
 
+export function deleteTripExpenseMessage(nome) {
+  return `A pretensão "${nome}" será excluída permanentemente.`
+}
+
+export function deleteTripObservationMessage(nome) {
+  return `A observação "${nome}" será excluída permanentemente.`
+}
+
 export function deleteReminderMessage(nome) {
   return `O lembrete "${nome}" será excluído permanentemente.`
 }
