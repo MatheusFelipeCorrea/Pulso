@@ -95,12 +95,12 @@ export const tooltipVariants = cva(
 )
 
 export const tooltipWrapperVariants = cva(
-  'relative inline-flex',
+  'relative inline-flex min-w-0',
   {
     variants: {
       // Se o wrapper deve ocupar largura total
       fullWidth: {
-        true: 'w-full',
+        true: 'flex w-full',
       },
     },
     defaultVariants: {

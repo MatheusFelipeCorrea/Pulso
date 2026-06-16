@@ -10,6 +10,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import { ProgressBar } from '@/design-system/components/data-display/ProgressBar/ProgressBar.jsx'
+import { BudgetTruncatedLabel } from '@/components/features/budget/BudgetTruncatedLabel.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { TRIP_EXPENSE_CATEGORY_MAP, getTripExpenseCategoryIcon } from '@/utils/tripExpenseCategories.js'
 import {
@@ -27,8 +28,8 @@ function formatTripDate(iso) {
 export function TripCard({ viagem, catalogMap = {}, onDetails, onEdit, onDelete }) {
   const currency = catalogMap[viagem.moeda] ?? { code: viagem.moeda, name: viagem.moeda }
   const coverImage = useMemo(
-    () => getTripDestinationImage(viagem.destino, viagem.moeda),
-    [viagem.destino, viagem.moeda]
+    () => getTripDestinationImage(viagem.destino, viagem.moeda, viagem.destinoMeta),
+    [viagem.destino, viagem.moeda, viagem.destinoMeta]
   )
   const [imageSrc, setImageSrc] = useState(coverImage)
   const [imageAttempt, setImageAttempt] = useState(0)
@@ -39,7 +40,7 @@ export function TripCard({ viagem, catalogMap = {}, onDetails, onEdit, onDelete 
     setImageSrc(coverImage)
     setImageAttempt(0)
 
-    resolveTripDestinationImage(viagem.destino, viagem.moeda).then((resolvedImage) => {
+    resolveTripDestinationImage(viagem.destino, viagem.moeda, viagem.destinoMeta).then((resolvedImage) => {
       if (!cancelled && resolvedImage && resolvedImage !== coverImage) {
         setImageSrc(resolvedImage)
       }
@@ -48,7 +49,7 @@ export function TripCard({ viagem, catalogMap = {}, onDetails, onEdit, onDelete 
     return () => {
       cancelled = true
     }
-  }, [coverImage, viagem.destino, viagem.moeda])
+  }, [coverImage, viagem.destino, viagem.moeda, viagem.destinoMeta])
 
   const handleImageError = () => {
     if (imageAttempt === 0) {
@@ -119,7 +120,7 @@ export function TripCard({ viagem, catalogMap = {}, onDetails, onEdit, onDelete 
               return (
                 <li key={categoria}>
                   <Icon size={14} aria-hidden />
-                  <span>{meta.label}</span>
+                  <BudgetTruncatedLabel text={meta.label} />
                   <strong>{formatCurrency(valor)}</strong>
                 </li>
               )

@@ -1,0 +1,101 @@
+@startuml pulso-componentes
+' Pulso — Diagrama de Componentes
+' Versão: 1.2 | Data: 2026-06-09
+' Fornecida: --() | Requerida: --(
+
+left to right direction
+skinparam componentStyle uml2
+skinparam linetype ortho
+
+interface "IREST API\n(JSON + JWT)" as IREST
+interface "IAuthState" as IAuth
+interface "IUI Components" as IUI
+interface "IServiceLayer" as IService
+interface "IRepositoryLayer" as IRepo
+interface "IDatabase\n(Prisma)" as IDB
+interface "IEmailProvider" as IEmail
+interface "IOAuthProvider" as IOAuth
+interface "ICalendarProvider" as ICal
+interface "ICotacaoMoedas" as ICotacao
+interface "IAssistenteIA" as IIA
+interface "ICronEndpoint" as ICron
+
+package "Cliente (Browser)" {
+  [Web App\nReact + Vite] as Web
+  [Pages & Features] as Features
+  [Design System] as DS
+  [Redux Store] as Store
+  [Services HTTP\nAxios] as HttpSvc
+
+  DS --() IUI
+  Web --( IUI
+  Features --( IUI
+  Features --( IAuth
+  Features --( IREST
+
+  Store --() IAuth
+  HttpSvc --( IAuth
+  HttpSvc --( IREST
+}
+
+package "API Pulso (Node.js + Express)" {
+  [Middlewares] as MW
+  [Controllers] as Ctrl
+  [Services\nregras de negócio] as Svc
+  [Repositories\nPrisma] as Repo
+  [Jobs / Cron] as Jobs
+  [Providers\nemail, OAuth] as Providers
+
+  MW --() IREST
+  Ctrl --( IService
+  Svc --() IService
+  Svc --( IRepo
+  Repo --() IRepo
+  Jobs --( IService
+
+  Svc --( IEmail
+  Svc --( IOAuth
+  Svc --( ICal
+  Svc --( ICotacao
+  Svc --( IIA
+
+  Providers --() IEmail
+  Providers --() IOAuth
+  Providers --() ICal
+
+  MW --() ICron
+}
+
+package "Persistência" {
+  database "PostgreSQL\nNeon" as DB
+  DB --() IDB
+  Repo --( IDB
+}
+
+package "Serviços Externos" {
+  [Google OAuth] as GoogleAuth
+  [Google Calendar API] as GCal
+  [SMTP] as SMTP
+  [AwesomeAPI\nEconomia] as Awesome
+  [Gemini API] as Gemini
+  [Vercel Cron] as Cron
+
+  GoogleAuth --() IOAuth
+  GCal --() ICal
+  SMTP --() IEmail
+  Awesome --() ICotacao
+  Gemini --() IIA
+  Cron --( ICron
+}
+
+note as N1
+  **Legenda UML**
+  --() fornece (lollipop)
+  --( requer (socket)
+end note
+
+note bottom of Web
+  Vercel: SPA + rewrite /api/*
+end note
+
+@enduml

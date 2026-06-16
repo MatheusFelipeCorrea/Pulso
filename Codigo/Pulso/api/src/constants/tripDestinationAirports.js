@@ -1,70 +1,224 @@
-const DEFAULT_ORIGIN = {
-    code: 'GRU',
-    label: 'São Paulo (GRU)',
+const { DEFAULT_ORIGIN, resolveTripOrigin } = require('./tripOrigins');
+const { buildDestinationAirports, normalizeText } = require('./tripDestinationsCatalog');
+const { getBusRouteEstimate, getTrainRouteEstimate } = require('./tripTransportRoutes');
+const {
+    getSeasonalAdjustment,
+    applySeasonalPrice,
+} = require('./tripSeasonalPricing');
+
+/** @deprecated use tripOrigins.DEFAULT_ORIGIN */
+const DEFAULT_ORIGIN_LEGACY = DEFAULT_ORIGIN;
+
+/** Estimativas legadas — preferir tripTransportRoutes */
+const GROUND_TRANSPORT_BY_IATA = {
+    EZE: {
+        busConvencionalBrl: 580,
+        buserBrl: null,
+        tremDisponivel: false,
+    },
+    MVD: {
+        busConvencionalBrl: 520,
+        buserBrl: null,
+        tremDisponivel: false,
+    },
+    ASU: {
+        busConvencionalBrl: 490,
+        buserBrl: null,
+        tremDisponivel: false,
+    },
+    SCL: {
+        busConvencionalBrl: 650,
+        buserBrl: null,
+        tremDisponivel: false,
+    },
+    LIM: {
+        busConvencionalBrl: 720,
+        buserBrl: null,
+        tremDisponivel: false,
+    },
+    BOG: {
+        busConvencionalBrl: 780,
+        buserBrl: null,
+        tremDisponivel: false,
+    },
+    GIG: {
+        busConvencionalBrl: 145,
+        buserBrl: 89.9,
+        tremDisponivel: false,
+    },
+    VIX: {
+        busConvencionalBrl: 120,
+        buserBrl: 74.9,
+        tremDisponivel: false,
+    },
+    CNF: {
+        busConvencionalBrl: 95,
+        buserBrl: 59.9,
+        tremDisponivel: false,
+    },
+    BSB: {
+        busConvencionalBrl: 110,
+        buserBrl: 69.9,
+        tremDisponivel: false,
+    },
+    SSA: {
+        busConvencionalBrl: 220,
+        buserBrl: 149.9,
+        tremDisponivel: false,
+    },
+    GRU: {
+        busConvencionalBrl: 0,
+        buserBrl: null,
+        tremDisponivel: false,
+    },
 };
 
-const DESTINATION_AIRPORTS = [
-    { keywords: ['argentina', 'buenos aires', 'buenos-aires'], iata: 'EZE', label: 'Buenos Aires', fallbackBrl: 1900 },
-    { keywords: ['uruguai', 'montevideo'], iata: 'MVD', label: 'Montevidéu', fallbackBrl: 1700 },
-    { keywords: ['paraguai', 'asuncion', 'asunción'], iata: 'ASU', label: 'Assunção', fallbackBrl: 1650 },
-    { keywords: ['chile', 'santiago'], iata: 'SCL', label: 'Santiago', fallbackBrl: 2100 },
-    { keywords: ['peru', 'lima', 'cusco'], iata: 'LIM', label: 'Lima', fallbackBrl: 2400 },
-    { keywords: ['colombia', 'colômbia', 'bogota', 'bogotá'], iata: 'BOG', label: 'Bogotá', fallbackBrl: 2600 },
-    { keywords: ['mexico', 'méxico', 'cancun', 'cancún', 'cidade do mexico'], iata: 'MEX', label: 'Cidade do México', fallbackBrl: 3200 },
-    { keywords: ['estados unidos', 'united states', 'usa', 'nova york', 'new york', 'orlando', 'miami'], iata: 'MIA', label: 'Miami', fallbackBrl: 3400 },
-    { keywords: ['canada', 'toronto', 'vancouver'], iata: 'YYZ', label: 'Toronto', fallbackBrl: 4200 },
-    { keywords: ['portugal', 'lisboa'], iata: 'LIS', label: 'Lisboa', fallbackBrl: 3800 },
-    { keywords: ['espanha', 'spain', 'madri', 'madrid', 'barcelona'], iata: 'MAD', label: 'Madri', fallbackBrl: 4100 },
-    { keywords: ['franca', 'frança', 'france', 'paris'], iata: 'CDG', label: 'Paris', fallbackBrl: 4300 },
-    { keywords: ['italia', 'itália', 'italy', 'roma', 'rome'], iata: 'FCO', label: 'Roma', fallbackBrl: 4500 },
-    { keywords: ['reino unido', 'inglaterra', 'london', 'londres'], iata: 'LHR', label: 'Londres', fallbackBrl: 4600 },
-    { keywords: ['alemanha', 'germany', 'berlim', 'berlin', 'munique'], iata: 'FRA', label: 'Frankfurt', fallbackBrl: 4400 },
-    { keywords: ['japao', 'japão', 'japan', 'tokyo', 'toquio', 'tóquio', 'osaka'], iata: 'NRT', label: 'Tóquio', fallbackBrl: 6200 },
-    { keywords: ['coreia', 'seul', 'seoul'], iata: 'ICN', label: 'Seul', fallbackBrl: 5800 },
-    { keywords: ['china', 'pequim', 'beijing', 'shanghai'], iata: 'PVG', label: 'Xangai', fallbackBrl: 5600 },
-    { keywords: ['tailandia', 'tailândia', 'bangkok'], iata: 'BKK', label: 'Bangkok', fallbackBrl: 5200 },
-    { keywords: ['india', 'india', 'delhi', 'mumbai'], iata: 'DEL', label: 'Nova Delhi', fallbackBrl: 5400 },
-    { keywords: ['australia', 'austrália', 'sydney', 'sidney'], iata: 'SYD', label: 'Sydney', fallbackBrl: 7800 },
-    { keywords: ['emirados', 'dubai'], iata: 'DXB', label: 'Dubai', fallbackBrl: 4900 },
-    { keywords: ['marrocos', 'marrakech'], iata: 'RAK', label: 'Marrakech', fallbackBrl: 4700 },
-    { keywords: ['africa do sul', 'cape town', 'cidade do cabo'], iata: 'CPT', label: 'Cidade do Cabo', fallbackBrl: 5100 },
-    { keywords: ['brasil', 'brazil', 'rio de janeiro', 'rio', 'macae', 'macaé', 'sao paulo', 'são paulo'], iata: 'GIG', label: 'Rio de Janeiro', fallbackBrl: 650, domestic: true },
-];
+const SOUTH_AMERICA_BUS_IATA = new Set(['EZE', 'MVD', 'ASU', 'SCL', 'LIM', 'BOG']);
 
-function normalizeText(value) {
-    return String(value ?? '')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase()
-        .trim();
+const DESTINATION_AIRPORTS = buildDestinationAirports();
+
+function keywordMatchesToken(token, normalizedKeyword) {
+    if (!normalizedKeyword) return false;
+
+    if (normalizedKeyword.length <= 3) {
+        const pattern = new RegExp(`(^|[\\s,-])${normalizedKeyword}($|[\\s,-])`);
+        return pattern.test(token);
+    }
+
+    return token.includes(normalizedKeyword);
 }
 
-function resolveDestinationAirport(destino) {
+function resolveDestinationAirport(destino, destinoMeta) {
+    const { getAirportEntryForMeta } = require('./tripDestinationsCatalog');
+    const fromMeta = getAirportEntryForMeta(destinoMeta);
+    if (fromMeta) return fromMeta;
+
     const normalized = normalizeText(destino);
     if (!normalized) return null;
 
     const parts = normalized.split(/[,;/|]+/).map((part) => part.trim()).filter(Boolean);
     const tokens = [...new Set([normalized, ...parts])];
 
-    for (const token of tokens) {
-        const match = DESTINATION_AIRPORTS.find((entry) =>
-            entry.keywords.some((keyword) => {
-                const normalizedKeyword = normalizeText(keyword);
-                if (normalizedKeyword.length <= 2) {
-                    const pattern = new RegExp(`(^|[\\s,])${normalizedKeyword}($|[\\s,])`);
-                    return pattern.test(token);
+    let bestMatch = null;
+    let bestScore = 0;
+
+    for (const entry of DESTINATION_AIRPORTS) {
+        for (const keyword of entry.keywords) {
+            for (const token of tokens) {
+                if (!keywordMatchesToken(token, keyword)) continue;
+
+                const score = keyword.length;
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMatch = entry;
                 }
-                return token.includes(normalizedKeyword);
-            })
-        );
-        if (match) return match;
+            }
+        }
+
+        const normalizedLabel = normalizeText(entry.label);
+        for (const token of tokens) {
+            if (token === normalizedLabel || token.includes(normalizedLabel)) {
+                const score = normalizedLabel.length + 10;
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMatch = entry;
+                }
+            }
+        }
     }
 
-    return null;
+    return bestMatch;
+}
+
+function buildBusInsight(destination, originInput, travelDates = {}) {
+    const origin = resolveTripOrigin(originInput?.id ?? originInput);
+    const estimate = getBusRouteEstimate(origin, destination);
+    const domestic = Boolean(destination.domestic);
+    const busSeason = getSeasonalAdjustment({
+        departureDate: travelDates.departureDate,
+        returnDate: travelDates.returnDate,
+        mode: 'bus',
+        domestic,
+    });
+
+    if (estimate) {
+        const buserDisponivel = estimate.buser != null;
+        const valorConvencionalBrl = applySeasonalPrice(estimate.convencional, busSeason);
+        const valorBuserBrl =
+            estimate.buser != null ? applySeasonalPrice(estimate.buser, busSeason) : null;
+        const baseMessage = `Saindo de ${origin.busOrigin}${domestic ? ' · ida e volta' : ' · ida'}`;
+
+        return {
+            disponivel: true,
+            destino: destination.label,
+            origem: origin.busOrigin,
+            origemId: origin.id,
+            valorConvencionalBrl,
+            valorBuserBrl,
+            buserDisponivel,
+            fonte: 'estimativa',
+            idaVolta: domestic,
+            ajusteSazonal: busSeason.periodo ? busSeason : null,
+            mensagem: baseMessage,
+        };
+    }
+
+    return {
+        disponivel: false,
+        destino: destination.label,
+        origemId: origin.id,
+        mensagem: `Não há rota prática de ônibus de longa distância saindo de ${origin.busOrigin} para ${destination.label}.`,
+    };
+}
+
+function buildTrainInsight(destination, originInput, travelDates = {}) {
+    const origin = resolveTripOrigin(originInput?.id ?? originInput);
+    const estimate = getTrainRouteEstimate(origin, destination);
+    const trainSeason = getSeasonalAdjustment({
+        departureDate: travelDates.departureDate,
+        returnDate: travelDates.returnDate,
+        mode: 'train',
+        domestic: Boolean(destination.domestic),
+    });
+
+    if (estimate) {
+        const baseMessage = estimate.servico;
+
+        return {
+            disponivel: true,
+            destino: destination.label,
+            origem: origin.cidade,
+            origemId: origin.id,
+            valorMedioBrl: applySeasonalPrice(estimate.valor, trainSeason),
+            fonte: 'estimativa',
+            idaVolta: Boolean(estimate.idaVolta),
+            servico: estimate.servico,
+            ajusteSazonal: trainSeason.periodo ? trainSeason : null,
+            mensagem: baseMessage,
+        };
+    }
+
+    if (!destination.domestic) {
+        return {
+            disponivel: false,
+            destino: destination.label,
+            origemId: origin.id,
+            mensagem: `${destination.label} não possui trem intercidades a partir do Brasil. Considere voo + trem local no destino.`,
+        };
+    }
+
+    return {
+        disponivel: false,
+        destino: destination.label,
+        origemId: origin.id,
+        mensagem: `Não há rota ferroviária prática de ${origin.cidade} para ${destination.label}.`,
+    };
 }
 
 module.exports = {
-    DEFAULT_ORIGIN,
+    DEFAULT_ORIGIN: DEFAULT_ORIGIN_LEGACY,
     DESTINATION_AIRPORTS,
     resolveDestinationAirport,
+    buildBusInsight,
+    buildTrainInsight,
 };

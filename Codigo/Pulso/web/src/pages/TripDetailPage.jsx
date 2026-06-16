@@ -22,6 +22,10 @@ import {
   calcTripTotalInCurrency,
   formatTripDetailDate,
 } from '@/utils/tripDetailUtils.js'
+import {
+  getSavedTripOriginId,
+  saveTripOriginId,
+} from '@/utils/tripOriginStorage.js'
 
 export default function TripDetailPage() {
   const { id } = useParams()
@@ -60,6 +64,8 @@ export default function TripDetailPage() {
 
   const [mediaPassagem, setMediaPassagem] = useState(null)
   const [mediaPassagemLoading, setMediaPassagemLoading] = useState(false)
+  const [tripOrigins, setTripOrigins] = useState([])
+  const [tripOriginId, setTripOriginId] = useState(() => getSavedTripOriginId())
 
   const carregar = useCallback(async () => {
     const [viagemData, catalogData, metasData] = await Promise.all([
@@ -100,13 +106,31 @@ export default function TripDetailPage() {
   }, [carregar, navigate, toast])
 
   useEffect(() => {
+    const controller = new AbortController()
+
+    viagemService
+      .listarOrigensViagem({ signal: controller.signal })
+      .then((data) => {
+        if (!controller.signal.aborted) setTripOrigins(data.origens ?? [])
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setTripOrigins([])
+      })
+
+    return () => controller.abort()
+  }, [])
+
+  useEffect(() => {
     if (!viagem?.id) return undefined
 
     const controller = new AbortController()
     setMediaPassagemLoading(true)
 
     viagemService
-      .obterMediaPassagem(viagem.id, { signal: controller.signal })
+      .obterMediaPassagem(viagem.id, {
+        origem: tripOriginId,
+        signal: controller.signal,
+      })
       .then((data) => {
         if (!controller.signal.aborted) setMediaPassagem(data)
       })
@@ -118,7 +142,21 @@ export default function TripDetailPage() {
       })
 
     return () => controller.abort()
-  }, [viagem?.id])
+  }, [viagem?.id, tripOriginId])
+
+  const tripOriginOptions = useMemo(
+    () =>
+      tripOrigins.map((item) => ({
+        value: item.id,
+        label: item.label,
+      })),
+    [tripOrigins]
+  )
+
+  const handleTripOriginChange = (nextOriginId) => {
+    setTripOriginId(nextOriginId)
+    saveTripOriginId(nextOriginId)
+  }
 
   const currencyMeta = catalogMap[viagem?.moeda] ?? { code: viagem?.moeda, name: viagem?.moeda }
   const breakdown = useMemo(
@@ -281,28 +319,37 @@ export default function TripDetailPage() {
 
   return (
     <div className="trip-detail-page">
-      <Link to="/trips" className="trip-detail-page__back">
-        <ArrowLeft size={14} aria-hidden />
-        Voltar para Viagens
-      </Link>
-
       <header className="trip-detail-page__header">
-        <h1>Viagem: {viagem.destino}</h1>
-        <div className="trip-detail-page__badges">
-          <span className="trip-detail-page__badge trip-detail-page__badge--currency">
-            <CurrencyFlag code={viagem.moeda} size={16} />
-            {viagem.moeda} - {currencyMeta.name}
-          </span>
-          <span className="trip-detail-page__badge trip-detail-page__badge--date">
-            <Calendar size={13} aria-hidden />
-            Data prevista: {formatTripDetailDate(viagem.dataPrevista)}
-          </span>
+        <div className="trip-detail-page__intro">
+          <Link to="/trips" className="trip-detail-page__back">
+            <ArrowLeft size={14} aria-hidden />
+            Viagens
+          </Link>
+          <h1 className="trip-detail-page__title">Viagem para {viagem.destino}</h1>
+          <p className="trip-detail-page__subtitle">
+            Gerencie observações e pretensões de gastos, acompanhe a média de passagens aéreas
+            e receba insights inteligentes para planejar melhor sua viagem.
+          </p>
+          <div className="trip-detail-page__badges">
+            <span className="trip-detail-page__badge trip-detail-page__badge--currency">
+              <CurrencyFlag code={viagem.moeda} size={16} />
+              {viagem.moeda} - {currencyMeta.name}
+            </span>
+            <span className="trip-detail-page__badge trip-detail-page__badge--date">
+              <Calendar size={13} aria-hidden />
+              Data prevista: {formatTripDetailDate(viagem.dataPrevista)}
+            </span>
+          </div>
         </div>
       </header>
 
       <div className="trip-detail-page__layout">
         <div className="trip-detail-page__main">
-          <TripDetailGoalCard meta={viagem.meta} onLinkGoal={openLinkGoal} />
+          <TripDetailGoalCard
+            meta={viagem.meta}
+            totalPlanejadoBrl={viagem.totalBrl}
+            onLinkGoal={openLinkGoal}
+          />
           <TripDetailExpensesSection
             despesas={viagem.despesas}
             totalBrl={viagem.totalBrl}
@@ -327,6 +374,9 @@ export default function TripDetailPage() {
           breakdown={breakdown}
           mediaPassagem={mediaPassagem}
           mediaPassagemLoading={mediaPassagemLoading}
+          tripOriginId={tripOriginId}
+          tripOriginOptions={tripOriginOptions}
+          onTripOriginChange={handleTripOriginChange}
         />
       </div>
 

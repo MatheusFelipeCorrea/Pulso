@@ -243,6 +243,7 @@
 .budget-category-row__label,
 .budget-without-limit-card__name {
   display: block;
+  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

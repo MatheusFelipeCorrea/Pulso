@@ -4,6 +4,20 @@ Guia de ordem de desenvolvimento do sistema Pulso, do zero até o deploy.
 
 ---
 
+## ✅ Status atual (jun/2026)
+
+Fases **concluídas ou em uso**:
+
+- Fase 0 — Setup
+- Fase 1 — Design System (componentes principais)
+- Fase 2 — Layouts + Sidebar
+- Fase 3 — Autenticação
+- Fase 4 (parcial) — Transações, VT, orçamento, dívidas, metas, viagens
+
+**Próximo foco sugerido:** Dashboard + perfil/settings + IA (ver [Analise-Produto.md](../Analise-Produto.md)).
+
+---
+
 ## 📋 Visão Geral das Fases
 
 | Fase | O que | Estimativa |

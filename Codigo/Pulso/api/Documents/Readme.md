@@ -42,7 +42,12 @@ Servidor **Node.js + Express** com arquitetura em camadas (routes → controller
 | **Calendário** (visão mês/dia, Google Calendar) | 🟡 Parcial — integração com IA pendente |
 | Job transações recorrentes | ✅ |
 | Job alertas de orçamento | ✅ |
-| Metas, viagens, insights, relatórios, … | 🔜 Planejado |
+| **Dívidas** (CRUD, pagamentos, resumo, alertas) | ✅ |
+| **Metas** (CRUD, aportes, resumo, pausar/concluir) | ✅ |
+| **Viagens** (CRUD, despesas, observações, destinos, passagens) | ✅ |
+| **Moedas** (cotações AwesomeAPI, favoritas, conversor) | ✅ |
+| GeoNames / Duffel / Amadeus (passagens) | 🟡 Opcional — estimativas sazonais sem API |
+| Insights, chatbot, gamificação, grupos, relatórios | 🔜 Schema Prisma · sem rotas |
 
 Prefixo global: **`/api`**
 
@@ -87,15 +92,20 @@ Pulso/api/
     │   ├── budgetRoutes.js
     │   ├── notificationRoutes.js
     │   ├── reminderRoutes.js
-    │   └── calendarRoutes.js
+    │   ├── calendarRoutes.js
+    │   ├── debtRoutes.js
+    │   ├── metaRoutes.js
+    │   ├── viagemRoutes.js
+    │   ├── moedaRoutes.js
+    │   └── cronRoutes.js
     ├── controllers/
     ├── services/
     ├── repositories/
-    ├── providers/       email (+ templates)
+    ├── providers/       email, geonames, duffel, amadeus (+ templates)
     ├── schemas/
-    ├── constants/       defaultCategories, transactionOptions
+    ├── constants/       defaultCategories, tripSeasonalPricing, tripTransportRoutes, …
     ├── utils/           transactionMapper, recursoCategoriaRules, …
-    └── jobs/            recurringTransactions, tokenCleanupJob, budgetAlertJob
+    └── jobs/            recurringTransactions, tokenCleanupJob, budgetAlertJob, …
 ```
 
 ---
@@ -215,6 +225,24 @@ Tipos ativos no job de alertas: `ALERTA_ORCAMENTO` (80%) e `ORCAMENTO_ESTOURADO`
 | POST | `/google/desconectar` | 🔒 Revogar integração |
 | GET | `/google/sync/pendentes` | 🔒 Lembretes pendentes de sync |
 | POST | `/google/sync` | 🔒 Sincronizar lembretes com Google Calendar |
+
+### Dívidas — `/api/dividas`
+
+CRUD de dívidas/empréstimos, pagamentos parciais, resumo consolidado, jobs de alerta (`DIVIDA_COBRANCA`) e limpeza de quitadas.
+
+### Metas — `/api/metas`
+
+CRUD, aportes, resumo, filtros por status. Notificação `META_ATINGIDA` ainda não implementada.
+
+### Viagens — `/api/viagens`
+
+CRUD, despesas, observações, origens, busca de destinos (GeoNames + catálogo), média de passagem (avião/ônibus/trem), cotação de moedas por viagem.
+
+Integrações opcionais: `GEONAMES_USERNAME`, `DUFFEL_ACCESS_TOKEN`, `AMADEUS_*` — ver `.env.example`.
+
+### Moedas — `/api/moedas`
+
+Catálogo, cotações ao vivo (AwesomeAPI), histórico, conversor e moedas favoritas do usuário.
 
 ---
 
@@ -342,6 +370,10 @@ SMTP_USER=...
 SMTP_PASS=...
 CORS_ORIGIN=http://localhost:5173
 FRONTEND_URL=http://localhost:5173
+CRON_SECRET=...                    # produção / Vercel Cron
+GEONAMES_USERNAME=...              # opcional — busca global de destinos
+DUFFEL_ACCESS_TOKEN=...            # opcional — cotação aérea ao vivo
+GEMINI_API_KEY=...                 # opcional — ainda sem uso no código
 ```
 
 ---
@@ -369,8 +401,8 @@ FRONTEND_URL=http://localhost:5173
 
 ## 🗺️ Roadmap (não implementado)
 
-Módulos ainda planejados (metas, viagens, insights, gamificação, Swagger, etc.) fazem parte do **plano de produto** (`.github/plans/cards/`), mas **ainda não têm routes/controllers/services** no código.
+Módulos com **schema Prisma** mas **sem API/UI** hoje: grupos, gamificação completa, chatbot, insights IA, relatórios, divisão de despesas, planejamento de compra.
 
-Quando cada epic for implementado, esta seção deve migrar para [Rotas implementadas](#-rotas-implementadas).
+**Próximos passos sugeridos:** ver [Documentacao/Analise-Produto.md](../../../../Documentacao/Analise-Produto.md).
 
-**Referência de modelo de dados completo:** `prisma/schema.prisma` e `Documents/Database.md`.
+Epics históricos: `.github/plans/cards/`

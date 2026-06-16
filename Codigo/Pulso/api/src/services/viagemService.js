@@ -5,6 +5,11 @@ const metaRepository = require('../repositories/metaRepository');
 const awesomeApiProvider = require('../providers/awesomeApiProvider');
 const { mapViagem } = require('../utils/viagemMapper');
 const { isSupportedCurrency } = require('../constants/currencyCatalog');
+const { listTripOrigins } = require('../constants/tripOrigins');
+const { listTripDestinations, countTripDestinations, getCatalogEntry, buildDestinoMetaFromCatalog } = require('../constants/tripDestinationsCatalog');
+const { resolveDestinationAirport } = require('../constants/tripDestinationAirports');
+const geonamesProvider = require('../providers/geonamesProvider');
+const tripDestinationResolver = require('./tripDestinationResolver');
 const {
     formatDateOnly,
     parseVencimentoDate,
@@ -95,12 +100,99 @@ const obterResumoPagina = async (usuarioId) => {
     };
 };
 
-const criarViagem = async (usuarioId, dados) => {
-    const destino = String(dados.destino ?? '').trim();
-    if (!destino) {
-        throw new AppError('Informe o destino da viagem', 400);
+const resolverDestinoPayload = async (dados) => {
+    const destinoInformado = String(dados.destino ?? '').trim();
+    const metaInformada = dados.destinoMeta ?? null;
+
+    if (metaInformada?.geonameId) {
+        let place = await geonamesProvider.getPlace(metaInformada.geonameId);
+
+        if (!place && metaInformada.label && metaInformada.countryCode) {
+            place = {
+                geonameId: metaInformada.geonameId,
+                name: metaInformada.label,
+                countryCode: metaInformada.countryCode,
+                countryName: metaInformada.countryName,
+                adminName1: metaInformada.region ?? '',
+                lat: metaInformada.lat,
+                lng: metaInformada.lng,
+                source: 'geonames',
+            };
+        }
+
+        if (!place) {
+            throw new AppError('Destino inválido. Selecione novamente na lista.', 400);
+        }
+
+        const resolved = tripDestinationResolver.resolveFromGeoNamesPlace(place);
+        if (!resolved) {
+            throw new AppError('Não foi possível resolver o destino selecionado.', 400);
+        }
+
+        if (destinoInformado && destinoInformado !== resolved.destino) {
+            throw new AppError('O destino informado não corresponde à opção selecionada.', 400);
+        }
+
+        return {
+            destino: resolved.destino,
+            destinoMeta: resolved.destinoMeta,
+        };
     }
 
+    if (metaInformada?.catalogId && metaInformada?.source !== 'geonames') {
+        const catalogEntry = getCatalogEntry(metaInformada.catalogId);
+        if (!catalogEntry) {
+            throw new AppError('Destino inválido. Selecione um local da lista.', 400);
+        }
+
+        const destino = catalogEntry.destino;
+        if (destinoInformado && destinoInformado !== destino) {
+            throw new AppError('O destino informado não corresponde à opção selecionada.', 400);
+        }
+
+        return {
+            destino,
+            destinoMeta: buildDestinoMetaFromCatalog(catalogEntry.id),
+        };
+    }
+
+    if (metaInformada?.catalogId?.startsWith('GN-') && metaInformada?.iata) {
+        if (destinoInformado && metaInformada.label) {
+            return {
+                destino: destinoInformado,
+                destinoMeta: metaInformada,
+            };
+        }
+    }
+
+    if (!destinoInformado) {
+        throw new AppError('Selecione um destino da lista.', 400);
+    }
+
+    const resolvedAirport = resolveDestinationAirport(destinoInformado, metaInformada);
+    if (!resolvedAirport) {
+        throw new AppError('Selecione um destino da lista de sugestões.', 400);
+    }
+
+    const catalogEntry = listTripDestinations().find(
+        (entry) => entry.iata === resolvedAirport.iata && entry.label === resolvedAirport.label
+    );
+
+    if (catalogEntry) {
+        return {
+            destino: catalogEntry.destino,
+            destinoMeta: buildDestinoMetaFromCatalog(catalogEntry.id),
+        };
+    }
+
+    return {
+        destino: destinoInformado,
+        destinoMeta: metaInformada,
+    };
+};
+
+const criarViagem = async (usuarioId, dados) => {
+    const { destino, destinoMeta } = await resolverDestinoPayload(dados);
     const moeda = validarMoeda(dados.moeda);
     const dataPrevista = validarDataFutura(dados.dataPrevista);
     const metaId = await validarMetaVinculo(usuarioId, dados.metaId ?? null);
@@ -108,6 +200,7 @@ const criarViagem = async (usuarioId, dados) => {
     const viagem = await viagemRepository.criar({
         usuarioId,
         destino,
+        destinoMeta,
         moeda,
         dataPrevista,
         metaId,
@@ -121,10 +214,13 @@ const editarViagem = async (usuarioId, viagemId, dados) => {
 
     const payload = {};
 
-    if (dados.destino !== undefined) {
-        const destino = String(dados.destino ?? '').trim();
-        if (!destino) throw new AppError('Informe o destino da viagem', 400);
-        payload.destino = destino;
+    if (dados.destino !== undefined || dados.destinoMeta !== undefined) {
+        const resolved = await resolverDestinoPayload({
+            destino: dados.destino,
+            destinoMeta: dados.destinoMeta,
+        });
+        payload.destino = resolved.destino;
+        payload.destinoMeta = resolved.destinoMeta;
     }
 
     if (dados.moeda !== undefined) {
@@ -361,9 +457,28 @@ const excluirObservacao = async (usuarioId, viagemId, observacaoId) => {
     return mapViagem(viagem);
 };
 
-const obterMediaPassagem = async (usuarioId, viagemId) => {
+const obterMediaPassagem = async (usuarioId, viagemId, origemId) => {
     const viagem = await buscarViagem(viagemId, usuarioId);
-    return tripFlightPriceService.obterMediaPassagemPorViagem(viagem);
+    return tripFlightPriceService.obterMediaPassagemPorViagem(viagem, origemId);
+};
+
+const listarOrigensViagem = async () => ({ origens: listTripOrigins() });
+
+const listarDestinosViagem = async ({ q, limit } = {}) => {
+    const parsedLimit = Math.min(Math.max(Number(limit) || 20, 1), 50);
+    const query = String(q ?? '').trim();
+
+    const places = await geonamesProvider.searchPlaces(query, { limit: parsedLimit });
+    const destinos = places
+        .map((place) => tripDestinationResolver.resolveFromGeoNamesPlace(place))
+        .filter(Boolean)
+        .map(({ destinoMeta, ...entry }) => entry);
+
+    return {
+        destinos,
+        total: geonamesProvider.hasCredentials() ? null : countTripDestinations(),
+        source: geonamesProvider.hasCredentials() ? 'geonames' : 'catalog',
+    };
 };
 
 const obterViagem = async (usuarioId, viagemId) => {
@@ -383,6 +498,8 @@ module.exports = {
     listarViagens,
     obterViagem,
     obterMediaPassagem,
+    listarOrigensViagem,
+    listarDestinosViagem,
     obterResumoPagina,
     criarViagem,
     editarViagem,

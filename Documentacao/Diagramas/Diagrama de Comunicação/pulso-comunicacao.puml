@@ -1,0 +1,47 @@
+@startuml pulso-comunicacao
+' Pulso — Diagrama de Comunicação
+' Cenário: Registrar transação de despesa
+' Versão: 1.0 | Data: 2026-06-09
+
+skinparam linetype ortho
+
+object ":TransactionsPage" as Page
+object ":transactionService" as TService
+object ":api (Axios)" as Api
+object ":authMiddleware" as Auth
+object ":transactionController" as Ctrl
+object ":transactionService\n(API)" as Svc
+object ":transactionRepository" as Repo
+object ":Prisma Client" as Prisma
+object ":Categoria" as Cat
+object ":Transacao" as Tx
+object ":NotificacaoService" as Notif
+
+Page --> TService : 1: submeterFormulario(dados)
+TService --> Api : 2: POST /transacoes\n+ Bearer JWT
+Api --> Auth : 3: validarToken()
+Auth --> Ctrl : 4: create(req)
+Ctrl --> Svc : 5: criar(usuarioId, payload)
+Svc --> Cat : 6: validarCategoria()
+Svc --> Svc : 7: validarRecursoCategoria()\n(RN-038..045)
+Svc --> Repo : 8: create(transacao)
+Repo --> Prisma : 9: transacao.create()
+Prisma --> Tx : 10: persistir
+Tx --> Repo : 11: entidade
+Repo --> Svc : 12: transacao
+Svc --> Notif : 13: notificarSeAplicavel()
+Notif --> Page : 14: (opcional) alerta
+Svc --> Ctrl : 15: resultado
+Ctrl --> Api : 16: 201 JSON
+Api --> TService : 17: response
+TService --> Page : 18: atualizarLista()
+
+note right of Svc
+  Regras:
+  - valor > 0
+  - VT só em Transporte
+  - VR só em Alimentação
+  - VA em Alimentação/Compras
+end note
+
+@enduml

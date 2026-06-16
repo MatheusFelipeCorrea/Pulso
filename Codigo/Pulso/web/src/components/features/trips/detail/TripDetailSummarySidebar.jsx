@@ -4,7 +4,8 @@ import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { TRIP_EXPENSE_CATEGORY_COLORS } from '@/utils/tripExpenseCategories.js'
 import { formatTripRateUpdatedAt } from '@/utils/tripDetailUtils.js'
 import { TripDetailCategoryBadge } from './TripDetailCategoryBadge.jsx'
-import { TripFlightPriceInsight } from './TripFlightPriceInsight.jsx'
+import { TripOriginPicker } from './TripOriginPicker.jsx'
+import { TripTransportPriceInsights } from './TripTransportPriceInsights.jsx'
 
 function formatForeignAmount(value, moeda) {
   const amount = Number(value)
@@ -31,6 +32,9 @@ export function TripDetailSummarySidebar({
   breakdown = [],
   mediaPassagem = null,
   mediaPassagemLoading = false,
+  tripOriginId,
+  tripOriginOptions = [],
+  onTripOriginChange,
 }) {
   const rateLabel =
     moeda === 'BRL'
@@ -71,7 +75,14 @@ export function TripDetailSummarySidebar({
           ) : null}
         </div>
 
-        <TripFlightPriceInsight loading={mediaPassagemLoading} data={mediaPassagem} />
+        <TripOriginPicker
+          value={tripOriginId}
+          onChange={onTripOriginChange}
+          options={tripOriginOptions}
+          disabled={mediaPassagemLoading}
+        />
+
+        <TripTransportPriceInsights loading={mediaPassagemLoading} data={mediaPassagem} />
 
         {breakdown.length > 0 ? (
           <>

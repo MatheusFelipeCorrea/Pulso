@@ -12,8 +12,8 @@ Documento de referência das entidades do banco de dados do **Pulso**.
 | Camada | Situação |
 |--------|----------|
 | **Prisma** | 30 modelos mapeados (todas as áreas do produto) |
-| **API em uso** | `Usuario`, `TokenRenovacao`, `ConfiguracaoUsuario`, `Categoria`, `Transacao`, `Tag`, `TransacaoTag`, `VendaVt`, `UsoVt`, `Orcamento`, `Notificacao`, `Lembrete`, `Sequencia` |
-| **Pendente na API** | Metas, viagens, grupos, IA, gamificação completa, etc. |
+| **API em uso** | Auth, transações, categorias, tags, VT, orçamento, notificações, lembretes, calendário, **dividas**, **metas**, **viagens**, **moedas** |
+| **Pendente na API** | Grupos, IA (chat/insights), gamificação completa, relatórios |
 
 Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`, `configuracoes_usuario`).
 

@@ -23,6 +23,12 @@ export function TripDetailExpensesSection({
 
       <div className="trip-detail-page__table-wrap">
         <table className="trip-detail-page__table">
+          <colgroup>
+            <col className="trip-detail-page__col-category" />
+            <col className="trip-detail-page__col-description" />
+            <col className="trip-detail-page__col-value" />
+            <col className="trip-detail-page__col-actions" />
+          </colgroup>
           <thead>
             <tr>
               <th>Categoria</th>
@@ -80,9 +86,11 @@ export function TripDetailExpensesSection({
           {despesas.length > 0 ? (
             <tfoot>
               <tr>
-                <td colSpan={2}>Total estimado</td>
+                <td colSpan={2} className="trip-detail-page__table-total-label">
+                  Total estimado
+                </td>
                 <td className="trip-detail-page__table-total">{formatCurrency(totalBrl)}</td>
-                <td />
+                <td className="trip-detail-page__table-actions-foot" />
               </tr>
             </tfoot>
           ) : null}

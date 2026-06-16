@@ -1,4 +1,5 @@
 import { TRIP_COUNTRY_ENTRIES } from './tripCountryImages.js'
+import { TRIP_BRAZIL_CITY_ENTRIES, TRIP_BRAZIL_GENERIC_IMAGE } from './tripBrazilCityCatalog.js'
 import { fetchWikipediaThumbnails } from './tripWikipediaImage.js'
 
 const IMAGE_SIZE = 'w=320&h=420&fit=crop&q=80'
@@ -15,30 +16,7 @@ const CITY_ENTRIES = [
   { keywords: ['orlando', 'disney'], url: unsplash('1566073771259-6a8506099945') },
   { keywords: ['londres', 'london'], url: unsplash('1513635269975-59663e0ac1ad') },
   { keywords: ['nova york', 'new york', 'manhattan'], url: unsplash('1496442226666-8d4d0e62e6e9') },
-  {
-    keywords: [
-      'rio de janeiro',
-      'rio',
-      'são paulo',
-      'sao paulo',
-      'macaé',
-      'macae',
-      'salvador',
-      'fortaleza',
-      'recife',
-      'florianópolis',
-      'florianopolis',
-      'belo horizonte',
-      'brasília',
-      'brasilia',
-      'curitiba',
-      'manaus',
-      'natal',
-      'joão pessoa',
-      'joao pessoa',
-    ],
-    url: unsplash('1483729558449-99ef09a8c325'),
-  },
+  { keywords: ['rio de janeiro'], url: unsplash('1483729558449-99ef09a8c325') },
   { keywords: ['roma', 'rome'], url: unsplash('1552832230-c0197dd311b5') },
   { keywords: ['barcelona', 'madri', 'madrid'], url: unsplash('1583422409516-2895a77efded') },
   { keywords: ['lisboa'], url: unsplash('1555881400-74d7acaacd8b') },
@@ -86,7 +64,7 @@ const CURRENCY_DEFAULT_IMAGES = {
   ARS: unsplash('1559827260-dc66d52bef19'),
   AUD: unsplash('1506973035872-a19ec8bdb8df'),
   BOB: unsplash('1526392060635-9d65b163cf6e'),
-  BRL: unsplash('1483729558449-99ef09a8c325'),
+  BRL: TRIP_BRAZIL_GENERIC_IMAGE,
   CAD: unsplash('1519831353900-9a5817d4d633'),
   CHF: unsplash('1530122034175-a5e1e288bebb'),
   CLP: unsplash('1584489674699-c47f3310a485'),
@@ -148,39 +126,55 @@ export function parseDestinationParts(destino) {
   return [...unique]
 }
 
-function keywordMatches(normalizedDestino, keyword, { exact = false } = {}) {
+function keywordMatches(token, keyword) {
   const normalizedKeyword = normalizeDestinationText(keyword)
   if (!normalizedKeyword) return false
 
-  if (exact) return normalizedDestino === normalizedKeyword
-
-  if (normalizedKeyword.length <= 2) {
-    const pattern = new RegExp(`(^|[\\s,])${normalizedKeyword}($|[\\s,])`)
-    return pattern.test(normalizedDestino)
+  if (normalizedKeyword.length <= 3) {
+    const pattern = new RegExp(`(^|[\\s,-])${normalizedKeyword}($|[\\s,-])`)
+    return pattern.test(token)
   }
 
-  return normalizedDestino.includes(normalizedKeyword)
+  return token.includes(normalizedKeyword)
 }
 
-function findKeywordEntry(entries, normalizedDestino, { exact = false } = {}) {
-  return entries.find((entry) =>
-    entry.keywords.some((keyword) => keywordMatches(normalizedDestino, keyword, { exact }))
-  )
+function findBestKeywordEntry(entries, destino) {
+  const normalized = normalizeDestinationText(destino)
+  if (!normalized) return null
+
+  const parts = normalized.split(/[,;/|]+/).map((part) => part.trim()).filter(Boolean)
+  const tokens = [...new Set([normalized, ...parts])]
+
+  let bestEntry = null
+  let bestScore = 0
+
+  for (const entry of entries) {
+    for (const keyword of entry.keywords) {
+      for (const token of tokens) {
+        if (!keywordMatches(token, keyword)) continue
+
+        const score = normalizeDestinationText(keyword).length
+        if (score > bestScore) {
+          bestScore = score
+          bestEntry = entry
+        }
+      }
+    }
+  }
+
+  return bestEntry
 }
 
 function findCityImage(normalizedDestino) {
-  const exact = findKeywordEntry(CITY_ENTRIES, normalizedDestino, { exact: true })
-  if (exact) return exact.url
+  const brEntry = findBestKeywordEntry(TRIP_BRAZIL_CITY_ENTRIES, normalizedDestino)
+  if (brEntry) return brEntry.url
 
-  const partial = findKeywordEntry(CITY_ENTRIES, normalizedDestino)
-  return partial?.url ?? null
+  const intlEntry = findBestKeywordEntry(CITY_ENTRIES, normalizedDestino)
+  return intlEntry?.url ?? null
 }
 
 function findCountryMatch(normalizedDestino) {
-  const exact = findKeywordEntry(TRIP_COUNTRY_ENTRIES, normalizedDestino, { exact: true })
-  if (exact) return exact
-
-  return findKeywordEntry(TRIP_COUNTRY_ENTRIES, normalizedDestino) ?? null
+  return findBestKeywordEntry(TRIP_COUNTRY_ENTRIES, normalizedDestino)
 }
 
 function findCountryImage(normalizedDestino) {
@@ -196,9 +190,13 @@ export function collectWikipediaTitles(destino) {
   const parts = parseDestinationParts(destino)
   const titles = []
 
+  const brEntry = findBestKeywordEntry(TRIP_BRAZIL_CITY_ENTRIES, destino)
+  if (brEntry?.wikiTitles) {
+    titles.push(...brEntry.wikiTitles)
+  }
+
   parts.forEach((part) => {
-    const normalizedPart = normalizeDestinationText(part)
-    const countryMatch = findCountryMatch(normalizedPart)
+    const countryMatch = findCountryMatch(normalizeDestinationText(part))
     if (countryMatch?.wikiTitles) {
       titles.push(...countryMatch.wikiTitles)
     }
@@ -208,9 +206,14 @@ export function collectWikipediaTitles(destino) {
   return [...new Set(titles.filter(Boolean))]
 }
 
-export function getTripDestinationImage(destino, moeda) {
+export function getTripDestinationImage(destino, moeda, destinoMeta) {
   const normalizedDestino = normalizeDestinationText(destino)
   const code = String(moeda ?? '').toUpperCase()
+
+  if (destinoMeta?.label) {
+    const metaImage = findCityImage(normalizeDestinationText(destinoMeta.label))
+    if (metaImage) return metaImage
+  }
 
   if (normalizedDestino) {
     const cityImage = findCityImage(normalizedDestino)
@@ -232,8 +235,13 @@ export function getTripDestinationImageFallback(destino, moeda) {
   return TRIP_FALLBACK_IMAGE
 }
 
-export async function resolveTripDestinationImage(destino, moeda) {
+export async function resolveTripDestinationImage(destino, moeda, destinoMeta) {
   const normalizedDestino = normalizeDestinationText(destino)
+
+  if (destinoMeta?.label) {
+    const metaImage = findCityImage(normalizeDestinationText(destinoMeta.label))
+    if (metaImage) return metaImage
+  }
 
   if (normalizedDestino) {
     const cityImage = findCityImage(normalizedDestino)

@@ -55,6 +55,7 @@ const mapViagem = (viagem) => {
     return {
         id: viagem.id,
         destino: viagem.destino,
+        destinoMeta: viagem.destinoMeta ?? null,
         moeda: viagem.moeda,
         dataPrevista: viagem.dataPrevista?.toISOString?.() ?? viagem.dataPrevista,
         metaId: viagem.metaId,

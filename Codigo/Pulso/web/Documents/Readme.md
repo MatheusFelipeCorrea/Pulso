@@ -34,16 +34,19 @@ Interface do **Pulso** com React + Vite, Tailwind CSS v4, Redux (auth) e design 
 | Área | Status |
 |------|--------|
 | Páginas legais (`/termos`, `/privacidade`) | ✅ |
-| Homepage / landing (`/`) | ⏳ Prototipação pendente (placeholder mínimo) |
+| Homepage / landing (`/`) | ✅ |
 | Auth (login, registro, OAuth, reset, verify) | ✅ |
 | Layout autenticado (MainLayout + Sidebar) | ✅ |
 | Design System + demo `/design-system` | ✅ |
 | **Transações** (`/transactions`) | ✅ |
 | **Vale Transporte** (`/transport-voucher`) | ✅ |
 | **Orçamento mensal** (`/budget`) | ✅ |
-| **Calendário financeiro** (`/calendar`) | 🟡 Parcial — integração com IA pendente |
+| **Calendário financeiro** (`/calendar`) | 🟡 Parcial — IA na tela pendente |
+| **Dívidas** (`/debts`) | ✅ |
+| **Metas** (`/goals`) | ✅ |
+| **Viagens** (`/trips`, `/trips/:id`) | ✅ |
 | **Notificações** (sino no layout) | ✅ |
-| Dashboard, metas, viagens, etc. | 🔜 Placeholder (`InDevelopmentPage`) |
+| Dashboard, insights, chatbot, grupos, perfil, … | 🔜 `InDevelopmentPage` |
 
 ---
 
@@ -139,7 +142,7 @@ Documentação: `src/design-system/README.md`
 
 | Rota | Página |
 |------|--------|
-| `/` | Landing (placeholder — prototipação pendente) |
+| `/` | Landing pública |
 | `/login`, `/register` | Auth |
 | `/forgot-password`, `/reset-password/:token` | Recuperação de senha |
 | `/verify-email/:token` | Verificação de email |
@@ -155,7 +158,11 @@ Documentação: `src/design-system/README.md`
 | `/transport-voucher` | **Vale Transporte** |
 | `/budget` | **Orçamento mensal** |
 | `/calendar` | **Calendário financeiro** |
-| `/dashboard`, `/goals`, `/trips`, … | `InDevelopmentPage` |
+| `/debts` | **Dívidas** |
+| `/goals` | **Metas** |
+| `/trips` | **Viagens** (lista) |
+| `/trips/:id` | **Detalhe da viagem** (despesas, moedas, passagens) |
+| `/dashboard`, `/insights`, `/chatbot`, … | `InDevelopmentPage` |
 
 Lista completa de paths: `src/config/appRoutes.js`  
 Menu lateral: `src/config/sidebarNavigation.js`
@@ -371,8 +378,10 @@ VITE_GOOGLE_CLIENT_ID=seu_client_id.apps.googleusercontent.com
 
 ## 🗺️ Roadmap
 
-Epics e critérios de aceite: `.github/plans/cards/`
+**Entregue:** transações, VT, orçamento, calendário, dívidas, metas, viagens (com insights de transporte e moedas).
 
-Módulos ainda em placeholder (dashboard, metas, viagens, insights, etc.) seguem o plano de produto em `.github/plans/cards/`.
+**Pendente:** dashboard, perfil/settings, insights IA, chatbot, gamificação, grupos, relatórios, divisão de despesas.
 
-**Calendário:** integração com IA (Gemini) na tela ainda pendente.
+Prioridades sugeridas: [Documentacao/Analise-Produto.md](../../../../Documentacao/Analise-Produto.md)
+
+Epics: `.github/plans/cards/`

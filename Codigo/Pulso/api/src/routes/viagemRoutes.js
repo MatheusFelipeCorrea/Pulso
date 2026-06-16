@@ -12,16 +12,20 @@ const {
     observacaoBodySchema,
     editarObservacaoSchema,
     observacaoIdParamSchema,
+    mediaPassagemQuerySchema,
+    destinosQuerySchema,
 } = require('../schemas/viagemSchemas');
 
 const router = express.Router();
 
 router.get('/resumo', authMiddleware, viagemController.obterResumo);
+router.get('/origens', authMiddleware, viagemController.listarOrigensViagem);
+router.get('/destinos', authMiddleware, validateMiddleware(destinosQuerySchema), viagemController.listarDestinosViagem);
 router.get('/', authMiddleware, viagemController.listar);
 router.get(
     '/:id/media-passagem',
     authMiddleware,
-    validateMiddleware(viagemIdParamSchema),
+    validateMiddleware(mediaPassagemQuerySchema),
     viagemController.obterMediaPassagem
 );
 router.get('/:id', authMiddleware, validateMiddleware(viagemIdParamSchema), viagemController.obter);

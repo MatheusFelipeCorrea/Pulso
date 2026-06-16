@@ -23,6 +23,25 @@ const criarViagemSchema = z.object({
 
         destino: z.string().trim().min(1).max(120),
 
+        destinoMeta: z
+            .object({
+                source: z.enum(['geonames', 'catalog']).optional(),
+                geonameId: z.number().int().positive().nullable().optional(),
+                catalogId: z.string().trim().min(1).max(64),
+                iata: z.string().trim().min(3).max(3),
+                label: z.string().trim().min(1).max(80),
+                region: z.string().trim().max(80).nullable().optional(),
+                countryCode: z.string().trim().min(2).max(2),
+                countryName: z.string().trim().min(1).max(80),
+                moedaSugerida: z.string().trim().toUpperCase().length(3),
+                domestic: z.boolean(),
+                lat: z.number().nullable().optional(),
+                lng: z.number().nullable().optional(),
+                hubIata: z.string().trim().length(3).optional(),
+            })
+            .nullable()
+            .optional(),
+
         moeda: z.string().trim().toUpperCase().length(3),
 
         dataPrevista: z.union([z.string(), z.date()]),
@@ -42,6 +61,19 @@ const editarViagemSchema = z.object({
         .object({
 
             destino: z.string().trim().min(1).max(120).optional(),
+
+            destinoMeta: z
+                .object({
+                    catalogId: z.string().trim().min(1).max(64),
+                    iata: z.string().trim().min(3).max(3),
+                    label: z.string().trim().min(1).max(80),
+                    countryCode: z.string().trim().min(2).max(2),
+                    countryName: z.string().trim().min(1).max(80),
+                    moedaSugerida: z.string().trim().toUpperCase().length(3),
+                    domestic: z.boolean(),
+                })
+                .nullable()
+                .optional(),
 
             moeda: z.string().trim().toUpperCase().length(3).optional(),
 
@@ -211,6 +243,22 @@ const observacaoIdParamSchema = z.object({
 
 });
 
+const mediaPassagemQuerySchema = z.object({
+    params: z.object({
+        id: z.string().cuid(),
+    }),
+    query: z.object({
+        origem: z.string().trim().toUpperCase().max(4).optional(),
+    }),
+});
+
+const destinosQuerySchema = z.object({
+    query: z.object({
+        q: z.string().trim().max(80).optional(),
+        limit: z.coerce.number().int().min(1).max(50).optional(),
+    }),
+});
+
 
 
 module.exports = {
@@ -232,7 +280,8 @@ module.exports = {
     editarObservacaoSchema,
 
     observacaoIdParamSchema,
-
+    mediaPassagemQuerySchema,
+    destinosQuerySchema,
 };
 
 

@@ -1,6 +1,17 @@
 const AppError = require('../utils/appError');
+const duffelProvider = require('../providers/duffelProvider');
 const amadeusProvider = require('../providers/amadeusProvider');
-const { DEFAULT_ORIGIN, resolveDestinationAirport } = require('../constants/tripDestinationAirports');
+const { resolveTripOrigin } = require('../constants/tripOrigins');
+const { getFlightFallback } = require('../constants/tripTransportRoutes');
+const {
+    resolveDestinationAirport,
+    buildBusInsight,
+    buildTrainInsight,
+} = require('../constants/tripDestinationAirports');
+const {
+    getSeasonalAdjustment,
+    applySeasonalPrice,
+} = require('../constants/tripSeasonalPricing');
 
 const addDays = (date, days) => {
     const next = new Date(date);
@@ -26,23 +37,50 @@ const buildTravelDates = (dataPrevista) => {
     };
 };
 
-const obterMediaPassagem = async ({ destino, dataPrevista }) => {
-    const destination = resolveDestinationAirport(destino);
+const obterMediaPassagem = async ({ destino, destinoMeta, dataPrevista, origemId }) => {
+    const origin = resolveTripOrigin(origemId);
+    const destination = resolveDestinationAirport(destino, destinoMeta);
+
     if (!destination) {
         return {
             disponivel: false,
             mensagem: 'Ainda não temos estimativa de passagens para este destino.',
+            origemId: origin.id,
+            origem: origin.label,
+            onibus: { disponivel: false },
+            trem: { disponivel: false, destino: null },
         };
     }
 
     const { departureDate, returnDate } = buildTravelDates(dataPrevista);
-    let valorMedioBrl = destination.fallbackBrl;
+    const departure = new Date(departureDate);
+    const returning = new Date(returnDate);
+    const domestic = Boolean(destination.domestic);
+
+    let valorMedioBrl = getFlightFallback(origin, destination);
     let fonte = 'estimativa';
 
-    if (amadeusProvider.hasCredentials()) {
+    if (duffelProvider.hasCredentials()) {
+        try {
+            const liveAverage = await duffelProvider.fetchAverageRoundTripPrice({
+                origin: origin.code,
+                destination: destination.iata,
+                departureDate,
+                returnDate,
+            });
+            if (liveAverage) {
+                valorMedioBrl = liveAverage;
+                fonte = 'duffel';
+            }
+        } catch {
+            // mantém estimativa regional
+        }
+    }
+
+    if (fonte === 'estimativa' && amadeusProvider.hasCredentials()) {
         try {
             const liveAverage = await amadeusProvider.fetchAverageRoundTripPrice({
-                origin: DEFAULT_ORIGIN.code,
+                origin: origin.code,
                 destination: destination.iata,
                 departureDate,
                 returnDate,
@@ -56,13 +94,30 @@ const obterMediaPassagem = async ({ destino, dataPrevista }) => {
         }
     }
 
-    const tipoViagem = destination.domestic ? 'doméstica' : 'internacional';
+    const flightSeason =
+        fonte === 'estimativa'
+            ? getSeasonalAdjustment({
+                  departureDate: departure,
+                  returnDate: returning,
+                  mode: 'flight',
+                  domestic,
+              })
+            : { fator: 1, periodo: null, tendencia: 'neutra' };
+
+    if (fonte === 'estimativa') {
+        valorMedioBrl = applySeasonalPrice(valorMedioBrl, flightSeason);
+    }
+
+    const tipoViagem = domestic ? 'doméstica' : 'internacional';
+    const baseFlightMessage = `Saindo de ${origin.label} · ida e volta`;
 
     return {
         disponivel: true,
         destino: destination.label,
-        origem: DEFAULT_ORIGIN.label,
-        aeroportoOrigem: DEFAULT_ORIGIN.code,
+        origemId: origin.id,
+        origem: origin.label,
+        origemCidade: origin.cidade,
+        aeroportoOrigem: origin.code,
         aeroportoDestino: destination.iata,
         valorMedioBrl,
         moeda: 'BRL',
@@ -70,18 +125,29 @@ const obterMediaPassagem = async ({ destino, dataPrevista }) => {
         tipoViagem,
         idaVolta: true,
         atualizadoEm: new Date().toISOString(),
-        mensagem: `Valor médio de passagem aérea ${tipoViagem} ida e volta saindo de ${DEFAULT_ORIGIN.label} para ${destination.label}.`,
+        ajusteSazonal: flightSeason.periodo ? flightSeason : null,
+        mensagem: baseFlightMessage,
+        onibus: buildBusInsight(destination, origin, {
+            departureDate: departure,
+            returnDate: returning,
+        }),
+        trem: buildTrainInsight(destination, origin, {
+            departureDate: departure,
+            returnDate: returning,
+        }),
     };
 };
 
-const obterMediaPassagemPorViagem = async (viagem) => {
+const obterMediaPassagemPorViagem = async (viagem, origemId) => {
     if (!viagem?.destino) {
         throw new AppError('Viagem inválida', 400);
     }
 
     return obterMediaPassagem({
         destino: viagem.destino,
+        destinoMeta: viagem.destinoMeta,
         dataPrevista: viagem.dataPrevista,
+        origemId,
     });
 };
 

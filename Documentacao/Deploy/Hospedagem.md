@@ -68,6 +68,16 @@ O `vercel.json` na raiz já define install, build e output.
 | `FRONTEND_URL` | `https://seu-app.vercel.app` |
 | `CRON_SECRET` | `openssl rand -hex 32` |
 
+### Opcionais (viagens / passagens)
+
+| Variável | Uso |
+|----------|-----|
+| `GEONAMES_USERNAME` | Busca global de destinos |
+| `DUFFEL_ACCESS_TOKEN` | Cotações ao vivo de voo (sandbox `duffel_test_…`) |
+| `AMADEUS_CLIENT_ID` / `AMADEUS_CLIENT_SECRET` | Fallback de voo (contas novas podem não ter acesso) |
+
+Sem essas chaves, o módulo de viagens usa estimativas sazonais (avião, ônibus, trem onde há ferrovia).
+
 **Preview branches:** adicione URLs preview no `CORS_ORIGIN` separadas por vírgula, ou use a URL fixa do ambiente de staging.
 
 ---

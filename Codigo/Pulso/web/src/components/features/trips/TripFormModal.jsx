@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Calendar,
   CircleDollarSign,
@@ -15,17 +15,19 @@ import {
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
 import { FormFieldLabel } from '@/design-system/components/forms/FormFieldLabel/FormFieldLabel.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
-import { InputText } from '@/design-system/components/inputs/InputText/InputText.jsx'
 import { DatePicker } from '@/design-system/components/pickers/DatePicker/DatePicker.jsx'
 import { Select } from '@/design-system/components/selects/Select/Select.jsx'
 import { Toggle } from '@/design-system/components/forms/Toggle/Toggle.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { CurrencySearchPicker } from '@/components/features/trips/CurrencySearchPicker.jsx'
+import { DestinationSearchPicker } from '@/components/features/trips/DestinationSearchPicker.jsx'
 import * as moedaService from '@/services/moedaService.js'
+import * as viagemService from '@/services/viagemService.js'
 
 const emptyForm = () => ({
   destino: '',
+  destinoMeta: null,
   moeda: 'BRL',
   dataPrevista: null,
   vincularMeta: false,
@@ -62,6 +64,8 @@ export function TripFormModal({
   const [form, setForm] = useState(emptyForm)
   const [error, setError] = useState('')
   const [cotacao, setCotacao] = useState(null)
+  const [destinosTotal, setDestinosTotal] = useState(null)
+  const [destinosLoading, setDestinosLoading] = useState(false)
   const isEdit = Boolean(viagem)
   const isDomesticCurrency = form.moeda === 'BRL'
 
@@ -81,6 +85,7 @@ export function TripFormModal({
     if (viagem) {
       setForm({
         destino: viagem.destino ?? '',
+        destinoMeta: viagem.destinoMeta ?? null,
         moeda: viagem.moeda ?? 'USD',
         dataPrevista: viagem.dataPrevista ? new Date(viagem.dataPrevista) : null,
         vincularMeta: defaultVincularMeta || Boolean(viagem.metaId),
@@ -90,6 +95,76 @@ export function TripFormModal({
       setForm(emptyForm())
     }
   }, [open, viagem, defaultVincularMeta])
+
+  useEffect(() => {
+    if (!open) return undefined
+
+    let active = true
+    setDestinosLoading(true)
+
+    viagemService
+      .listarDestinosViagem({ limit: 1 })
+      .then((data) => {
+        if (!active) return
+        setDestinosTotal(data.total ?? data.destinos?.length ?? null)
+      })
+      .catch(() => {
+        if (active) setDestinosTotal(null)
+      })
+      .finally(() => {
+        if (active) setDestinosLoading(false)
+      })
+
+    return () => {
+      active = false
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (!open || !viagem?.destino || form.destinoMeta?.catalogId) return
+
+    let active = true
+    const seed = viagem.destino.split(',')[0]?.trim() || viagem.destino
+
+    viagemService
+      .listarDestinosViagem({ q: seed, limit: 10 })
+      .then((data) => {
+        if (!active) return
+
+        const match =
+          data.destinos?.find((item) => item.destino === viagem.destino) ??
+          data.destinos?.find((item) => item.label === seed)
+
+        if (!match) return
+
+        setForm((prev) => ({
+          ...prev,
+          destino: match.destino,
+          destinoMeta: {
+            source: match.source ?? (match.geonameId ? 'geonames' : 'catalog'),
+            geonameId: match.geonameId ?? null,
+            catalogId: match.id,
+            iata: match.iata,
+            label: match.label,
+            region: match.subtitle?.split(',')[0]?.trim() || null,
+            countryCode: match.countryCode,
+            countryName: match.countryName,
+            moedaSugerida: match.moedaSugerida,
+            domestic: match.domestic,
+          },
+        }))
+      })
+      .catch(() => {})
+
+    return () => {
+      active = false
+    }
+  }, [open, viagem, form.destinoMeta?.catalogId])
+
+  const searchDestinos = useCallback(async (query) => {
+    const data = await viagemService.listarDestinosViagem({ q: query, limit: 20 })
+    return data.destinos ?? []
+  }, [])
 
   useEffect(() => {
     if (!open || !form.moeda || form.moeda === 'BRL') {
@@ -117,8 +192,8 @@ export function TripFormModal({
     event.preventDefault()
     setError('')
 
-    if (!form.destino.trim()) {
-      setError('Informe o destino da viagem.')
+    if (!form.destinoMeta?.catalogId && !form.destinoMeta?.geonameId) {
+      setError('Selecione um destino da lista de sugestões.')
       return
     }
     if (!form.dataPrevista) {
@@ -132,6 +207,7 @@ export function TripFormModal({
 
     const payload = {
       destino: form.destino.trim(),
+      destinoMeta: form.destinoMeta,
       moeda: form.moeda,
       dataPrevista: form.dataPrevista.toISOString(),
       metaId: form.vincularMeta ? form.metaId : null,
@@ -156,16 +232,30 @@ export function TripFormModal({
         </header>
 
         <div className="trip-form__body">
-          <div className="trip-form__field">
-            <InputText
+          <div className="trip-form__field trip-form__field--destination">
+            <DestinationSearchPicker
+              destino={form.destino}
+              destinoMeta={form.destinoMeta}
+              loading={destinosLoading}
+              totalDestinos={destinosTotal}
+              onSearch={searchDestinos}
+              onChange={({ destino, destinoMeta, moedaSugerida }) =>
+                setForm((prev) => ({
+                  ...prev,
+                  destino,
+                  destinoMeta,
+                  moeda:
+                    moedaSugerida && catalog.some((item) => item.code === moedaSugerida)
+                      ? moedaSugerida
+                      : prev.moeda,
+                }))
+              }
               label={
                 <FormFieldLabel icon={Globe} tone="purple">
                   Destino
                 </FormFieldLabel>
               }
-              value={form.destino}
-              onChange={(event) => setForm((prev) => ({ ...prev, destino: event.target.value }))}
-              placeholder="Ex: Buenos Aires, Argentina"
+              placeholder="Ex: Vitória, Buenos Aires, Paris..."
             />
           </div>
 

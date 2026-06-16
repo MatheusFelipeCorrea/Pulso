@@ -128,8 +128,33 @@ const excluirObservacao = async (req, res, next) => {
 
 const obterMediaPassagem = async (req, res, next) => {
     try {
-        const mediaPassagem = await viagemService.obterMediaPassagem(req.user.id, req.params.id);
+        const mediaPassagem = await viagemService.obterMediaPassagem(
+            req.user.id,
+            req.params.id,
+            req.query.origem
+        );
         res.status(200).json(mediaPassagem);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const listarOrigensViagem = async (req, res, next) => {
+    try {
+        const result = await viagemService.listarOrigensViagem();
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const listarDestinosViagem = async (req, res, next) => {
+    try {
+        const result = await viagemService.listarDestinosViagem({
+            q: req.query.q,
+            limit: req.query.limit,
+        });
+        res.status(200).json(result);
     } catch (error) {
         next(error);
     }
@@ -140,6 +165,8 @@ module.exports = {
     obter,
     obterResumo,
     obterMediaPassagem,
+    listarOrigensViagem,
+    listarDestinosViagem,
     criar,
     editar,
     excluir,

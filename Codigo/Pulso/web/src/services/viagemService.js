@@ -1,7 +1,26 @@
 import api from './api.js'
 
-export async function obterMediaPassagem(viagemId, options = {}) {
-  const { data } = await api.get(`/viagens/${viagemId}/media-passagem`, options)
+export async function listarOrigensViagem(options = {}) {
+  const { data } = await api.get('/viagens/origens', options)
+  return data
+}
+
+export async function listarDestinosViagem({ q, limit, ...options } = {}) {
+  const { data } = await api.get('/viagens/destinos', {
+    ...options,
+    params: {
+      ...(q ? { q } : {}),
+      ...(limit ? { limit } : {}),
+    },
+  })
+  return data
+}
+
+export async function obterMediaPassagem(viagemId, { origem, ...options } = {}) {
+  const { data } = await api.get(`/viagens/${viagemId}/media-passagem`, {
+    ...options,
+    params: origem ? { origem } : undefined,
+  })
   return data
 }
 

@@ -426,6 +426,7 @@ model Viagem {
   id           String   @id @default(cuid())
   usuarioId    String   @map("usuario_id")
   destino      String   @db.VarChar(120)
+  destinoMeta  Json?    @map("destino_meta")
   moeda        String   @db.VarChar(3)
   dataPrevista DateTime @map("data_prevista")
   metaId       String?  @map("meta_id")

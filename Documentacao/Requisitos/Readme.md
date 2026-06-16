@@ -11,11 +11,13 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 136 | 47 | ~35% |
-| Requisitos Não Funcionais | 15 | 6 | ~40% |
-| **Total** | **151** | **53** | **~35%** |
+| Requisitos Funcionais | 136 | 67 | ~49% |
+| Requisitos Não Funcionais | 15 | 8 | ~53% |
+| **Total** | **151** | **75** | **~50%** |
 
-Contagem considera apenas requisitos **implementados e utilizáveis** no código atual. Módulos entregues: auth, transações (incl. categorias personalizadas), vale transporte, orçamento, calendário/lembretes (incl. Google Calendar bidirecional parcial), **dívidas/empréstimos**, homepage pública e notificações (orçamento + lembretes + dívidas).
+Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, transações, VT, orçamento, calendário/lembretes, dívidas, **metas**, **viagens + moedas**, homepage e notificações (orçamento, lembretes, dívidas).
+
+**Fora da lista de RF (entregue):** busca global de destinos (GeoNames), estimativas de passagem com ajuste sazonal, integração opcional Duffel/Amadeus, observações na viagem.
 
 ---
 
@@ -26,8 +28,8 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | 🔐 Autenticação | 6 | 6 | ✅ |
 | 📊 Dashboard | 8 | 0 |  |
 | 💳 Transações | 11 | 11 | ✅ |
-| 🎯 Metas | 7 | 0 |  |
-| 🌍 Viagens e Moedas | 11 | 0 |  |
+| 🎯 Metas | 7 | 6 | 🟡 |
+| 🌍 Viagens e Moedas | 11 | 11 | ✅ |
 | 🤖 Insights | 7 | 0 |  |
 | 💬 Chatbot | 5 | 0 |  |
 | 📅 Lembretes | 5 | 5 | ✅ |
@@ -98,12 +100,12 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-026 | O sistema deve permitir criar metas com nome, valor-alvo, prazo e descrição opcional | 🔴 Essencial |
-| - [ ] | RF-027 | O sistema deve permitir registrar aportes manuais em cada meta | 🔴 Essencial |
-| - [ ] | RF-028 | O sistema deve exibir o progresso da meta com barra visual e percentual | 🔴 Essencial |
-| - [ ] | RF-029 | O sistema deve calcular e sugerir quanto guardar por mês/semana para atingir a meta no prazo | 🟡 Importante |
-| - [ ] | RF-030 | O sistema deve permitir categorizar metas como curto prazo ou longo prazo | 🟡 Importante |
-| - [ ] | RF-031 | O sistema deve permitir pausar, editar e concluir metas | 🟡 Importante |
+| - [x] | RF-026 | O sistema deve permitir criar metas com nome, valor-alvo, prazo e descrição opcional | 🔴 Essencial |
+| - [x] | RF-027 | O sistema deve permitir registrar aportes manuais em cada meta | 🔴 Essencial |
+| - [x] | RF-028 | O sistema deve exibir o progresso da meta com barra visual e percentual | 🔴 Essencial |
+| - [x] | RF-029 | O sistema deve calcular e sugerir quanto guardar por mês/semana para atingir a meta no prazo | 🟡 Importante |
+| - [x] | RF-030 | O sistema deve permitir categorizar metas como curto prazo ou longo prazo | 🟡 Importante |
+| - [x] | RF-031 | O sistema deve permitir pausar, editar e concluir metas | 🟡 Importante |
 | - [ ] | RF-032 | O sistema deve notificar quando uma meta for atingida | 🟢 Desejável |
 
 ---
@@ -112,17 +114,17 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-033 | O sistema deve exibir cotações em tempo real das principais moedas (USD, EUR, GBP, ARS, etc.) | 🔴 Essencial |
-| - [ ] | RF-034 | O sistema deve permitir converter um valor em BRL para qualquer moeda disponível e vice-versa | 🔴 Essencial |
-| - [ ] | RF-035 | O sistema deve exibir gráfico de histórico de cotação de uma moeda selecionada | 🟡 Importante |
-| - [ ] | RF-036 | O sistema deve permitir salvar moedas favoritas para acesso rápido | 🟢 Desejável |
-| - [ ] | RF-037 | O sistema deve permitir criar um planejamento de viagem com nome do destino, moeda local e data prevista | 🔴 Essencial |
-| - [ ] | RF-038 | O sistema deve permitir adicionar pretensões de gastos por categoria dentro da viagem (transporte, hospedagem, alimentação, passeios, compras) | 🔴 Essencial |
-| - [ ] | RF-039 | O sistema deve calcular o custo total da viagem somando todas as pretensões cadastradas | 🔴 Essencial |
-| - [ ] | RF-040 | O sistema deve converter o custo total da viagem para BRL com base na cotação atual da moeda do destino | 🔴 Essencial |
-| - [ ] | RF-041 | O sistema deve permitir editar e remover pretensões individuais dentro da viagem | 🟡 Importante |
-| - [ ] | RF-042 | O sistema deve permitir criar múltiplas viagens simultâneas | 🟡 Importante |
-| - [ ] | RF-043 | O sistema deve vincular uma viagem a uma meta financeira existente para acompanhar o progresso | 🟢 Desejável |
+| - [x] | RF-033 | O sistema deve exibir cotações em tempo real das principais moedas (USD, EUR, GBP, ARS, etc.) | 🔴 Essencial |
+| - [x] | RF-034 | O sistema deve permitir converter um valor em BRL para qualquer moeda disponível e vice-versa | 🔴 Essencial |
+| - [x] | RF-035 | O sistema deve exibir gráfico de histórico de cotação de uma moeda selecionada | 🟡 Importante |
+| - [x] | RF-036 | O sistema deve permitir salvar moedas favoritas para acesso rápido | 🟢 Desejável |
+| - [x] | RF-037 | O sistema deve permitir criar um planejamento de viagem com nome do destino, moeda local e data prevista | 🔴 Essencial |
+| - [x] | RF-038 | O sistema deve permitir adicionar pretensões de gastos por categoria dentro da viagem (transporte, hospedagem, alimentação, passeios, compras) | 🔴 Essencial |
+| - [x] | RF-039 | O sistema deve calcular o custo total da viagem somando todas as pretensões cadastradas | 🔴 Essencial |
+| - [x] | RF-040 | O sistema deve converter o custo total da viagem para BRL com base na cotação atual da moeda do destino | 🔴 Essencial |
+| - [x] | RF-041 | O sistema deve permitir editar e remover pretensões individuais dentro da viagem | 🟡 Importante |
+| - [x] | RF-042 | O sistema deve permitir criar múltiplas viagens simultâneas | 🟡 Importante |
+| - [x] | RF-043 | O sistema deve vincular uma viagem a uma meta financeira existente para acompanhar o progresso | 🟢 Desejável |
 
 ---
 
@@ -346,16 +348,18 @@ Contagem considera apenas requisitos **implementados e utilizáveis** no código
 | RF-018 | CRUD de categorias personalizadas com **ícone e cor** (padrão Lucide + paleta). UI em Transações → **Categorias** |
 | RF-123 | Lógica em `fixedIncomeUtils.js`: marcador azul no grid + lista no painel do dia conforme `configuracoes_usuario` (valor/dia por tipo). VA/VR só CLT/Estagiário; VT conforme `modoUso`/`vtHabilitado`. **Coleta dos dados:** onboarding (RF-075); sem tela de config manual por enquanto |
 | RF-064 / RF-065 | **Removidos** — intervalo entre vendas de VT e contador regressivo de venda não fazem mais parte do escopo |
-| RF-076 | Toggle claro/escuro via `useTheme()` no **mobile**; tela Configurações ainda não existe |
-| RF-103 / RF-104 | `modoUso` usado na API de VT; UI de perfil/configurações ainda pendente |
-| Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts` |
+| RF-076 | Toggle claro/escuro na **landing** (`PublicHeader`); área autenticada ainda sem controle na sidebar — tela Configurações pendente |
+| RF-103 / RF-104 | `modoUso` no cadastro/onboarding e na API de VT; sidebar já oculta VT conforme modo (`filterSidebarByUser`); tela de perfil/configurações ainda pendente |
+| Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips` |
+| Metas (RF-026–031) | CRUD, aportes, insight de aporte mensal, pausar/concluir, vínculo com viagem; falta notificação `META_ATINGIDA` (RF-032) |
+| Viagens (RF-033–043) | Moedas (cotações, conversor, histórico, favoritas), CRUD de viagens, despesas por categoria, total em BRL, observações, busca GeoNames, estimativas de passagem (avião/ônibus/trem) com ajuste sazonal; Duffel/Amadeus opcionais |
 | Dívidas (RF-126–132) | CRUD em `/debts` com tabs Me devem / Eu devo / Quitadas; resumo consolidado; filtros (busca, valor, DateRangePicker); job `DIVIDA_COBRANCA` (vence hoje / em 2 dias); limpeza automática de quitadas após 180 dias |
 | Notificações | Orçamento (`ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO`) + **lembretes** (`LEMBRETE_VENCIMENTO`) + **dívidas** (`DIVIDA_COBRANCA`) via jobs diários + sino no layout |
 | Google Calendar | Sync Pulso → Google na criação/edição; **importação Google → Pulso** ao abrir o mês e após sync manual; marcar pago remove evento |
 | Lembretes recorrentes | UI “Repetir todo mês” enviada ao backend; job diário gera instâncias mensais |
 | Tags | Criar na digitação + listar no catálogo — **sem editar/excluir** (suficiente para MVP; ver observação abaixo) |
 | Calendário + IA | Tela entregue; integração com IA (Gemini) na página do calendário **pendente** |
-| Banco completo | Schema Prisma com 30+ entidades; API expõe auth, transações, categorias, VT, orçamento, lembretes, calendário, **dividas** e notificações |
+| Banco completo | Schema Prisma com 30+ entidades; API expõe auth, transações, VT, orçamento, lembretes, calendário, dívidas, **metas**, **viagens**, **moedas** e notificações |
 
 ### Implementações técnicas fora da lista de RF (dívida / melhorias futuras)
 

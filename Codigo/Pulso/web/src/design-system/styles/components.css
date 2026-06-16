@@ -1067,6 +1067,69 @@
   transition: width 100ms linear;
 }
 
+/* ── ProgressBar ───────────────────────────────────────────── */
+
+.ds-progress-root {
+  width: 100%;
+}
+
+.ds-progress-root [role='progressbar'] {
+  display: block;
+  background: var(--ds-color-progress-track);
+}
+
+.ds-progress__track--sm {
+  height: 4px;
+}
+
+.ds-progress__track--md {
+  height: 8px;
+}
+
+.ds-progress__track--lg {
+  height: 12px;
+}
+
+.ds-progress__fill--primary {
+  background: var(--ds-color-primary);
+}
+
+.ds-progress__fill--success {
+  background: var(--ds-color-success);
+}
+
+.ds-progress__fill--warning {
+  background: var(--ds-color-warning);
+}
+
+.ds-progress__fill--danger {
+  background: var(--ds-color-danger);
+}
+
+.ds-progress__fill--info {
+  background: var(--ds-color-info);
+}
+
+.ds-progress-label--primary {
+  color: var(--ds-color-primary);
+}
+
+.ds-progress-label--success {
+  color: var(--ds-color-success);
+}
+
+.ds-progress-label--warning {
+  color: var(--ds-color-warning);
+}
+
+.ds-progress-label--danger {
+  color: var(--ds-color-danger);
+}
+
+.ds-progress-label--info {
+  color: var(--ds-color-info);
+}
+
 /* ── EmptyState ────────────────────────────────────────────── */
 
 .ds-empty-default {

@@ -23,6 +23,15 @@ describe('tripDestinationImages', () => {
     expect(image).not.toContain('1488646953014')
   })
 
+  it('nao confunde Vitória (ES) com Rio de Janeiro', () => {
+    const vitoria = getTripDestinationImage('Vitória, Espírito Santo', 'BRL')
+    const rio = getTripDestinationImage('Rio de Janeiro', 'BRL')
+
+    expect(vitoria).toContain('1571019613454')
+    expect(rio).toContain('1483729558449')
+    expect(vitoria).not.toBe(rio)
+  })
+
   it('resolve imagem por país', () => {
     const image = getTripDestinationImage('Japão', 'JPY')
     expect(image).toContain('1542051841857')

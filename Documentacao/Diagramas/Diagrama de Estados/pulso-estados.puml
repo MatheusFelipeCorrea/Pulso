@@ -1,0 +1,85 @@
+@startuml pulso-estados-meta
+' Pulso — Estados: Meta Financeira
+' Versão: 1.0 | Data: 2026-06-09
+
+[*] --> ATIVA : criar meta
+
+ATIVA --> PAUSADA : pausar
+PAUSADA --> ATIVA : retomar
+
+ATIVA --> CONCLUIDA : valorAtual >= valorAlvo\nou concluir manualmente
+PAUSADA --> CONCLUIDA : atingir valor alvo
+
+ATIVA --> CANCELADA : cancelar
+PAUSADA --> CANCELADA : cancelar
+
+CONCLUIDA --> [*]
+CANCELADA --> [*]
+
+note right of CONCLUIDA
+  concluidaEm preenchido
+  Notificação META_ATINGIDA
+end note
+
+@enduml
+
+@startuml pulso-estados-divida
+' Pulso — Estados: Dívida / Empréstimo
+
+[*] --> ABERTA : registrar dívida
+
+state ABERTA {
+  [*] --> PARCIAL : pagamento parcial
+  PARCIAL --> PARCIAL : novo pagamento
+  PARCIAL --> QUITADA : saldo = 0
+  [*] --> QUITADA : quitar integral
+}
+
+ABERTA --> QUITADA : quitar total
+QUITADA --> [*]
+
+note right of ABERTA
+  quitada = false
+  saldo = valor - soma(pagamentos)
+end note
+
+@enduml
+
+@startuml pulso-estados-lembrete
+' Pulso — Estados: Lembrete
+
+[*] --> PENDENTE : criar lembrete
+
+PENDENTE --> PAGO : marcar como pago
+PENDENTE --> VENCIDO : dataVencimento < hoje\n&& !pago
+VENCIDO --> PAGO : marcar como pago
+
+PAGO --> [*]
+
+state PENDENTE {
+  PENDENTE : sincronizado Google?\n(googleEventId)
+}
+
+note bottom of PENDENTE
+  Job de recorrência mensal
+  gera novo lembrete quando
+  repetirMensal = true
+end note
+
+@enduml
+
+@startuml pulso-estados-transacao-recorrente
+' Pulso — Estados: Transação Recorrente
+
+[*] --> MESTRE : criar com recorrente=true
+
+MESTRE --> MESTRE : editar regra RRULE
+MESTRE --> OCORRENCIA_GERADA : job diário\ngerar lançamento filho
+OCORRENCIA_GERADA --> OCORRENCIA_GERADA : editar ocorrência
+MESTRE --> CANCELADA : excluir série\n(excluirFuturas=true)
+OCORRENCIA_GERADA --> EXCLUIDA : excluir ocorrência
+
+CANCELADA --> [*]
+EXCLUIDA --> [*]
+
+@enduml
