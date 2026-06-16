@@ -1,6 +1,5 @@
 # Pulso
 
-[![WakaTime](https://wakatime.com/badge/github/MatheusFelipeCorrea/Pulso.svg)](https://wakatime.com/badge/github/MatheusFelipeCorrea/Pulso)
 
 Aplicativo de gestão financeira pessoal — receitas, despesas, metas, viagens, gamificação e insights com IA.
 
