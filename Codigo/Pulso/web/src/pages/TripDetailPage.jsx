@@ -13,6 +13,7 @@ import { TripObservationFormModal } from '@/components/features/trips/TripObserv
 import { DeleteTripExpenseModal } from '@/components/features/trips/DeleteTripExpenseModal.jsx'
 import { DeleteTripObservationModal } from '@/components/features/trips/DeleteTripObservationModal.jsx'
 import { TripFormModal } from '@/components/features/trips/TripFormModal.jsx'
+import { formatTripDestinationDisplay } from '@/utils/tripDestinationDisplay.js'
 import { GoalFormModal } from '@/components/features/goals/GoalFormModal.jsx'
 import * as moedaService from '@/services/moedaService.js'
 import * as metaService from '@/services/metaService.js'
@@ -325,7 +326,9 @@ export default function TripDetailPage() {
             <ArrowLeft size={14} aria-hidden />
             Viagens
           </Link>
-          <h1 className="trip-detail-page__title">Viagem para {viagem.destino}</h1>
+          <h1 className="trip-detail-page__title">
+            Viagem para {formatTripDestinationDisplay(viagem.destino, viagem.destinoMeta)}
+          </h1>
           <p className="trip-detail-page__subtitle">
             Gerencie observações e pretensões de gastos, acompanhe a média de passagens aéreas
             e receba insights inteligentes para planejar melhor sua viagem.

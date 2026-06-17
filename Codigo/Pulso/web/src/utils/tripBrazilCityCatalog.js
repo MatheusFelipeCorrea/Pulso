@@ -18,8 +18,7 @@ export const TRIP_BRAZIL_CITY_ENTRIES = [
   },
   {
     keywords: ['macae', 'macaé'],
-    url: unsplash('1483729558449-99ef09a8c325'),
-    wikiTitles: ['Macaé'],
+    wikiTitles: ['Macaé (Rio de Janeiro)', 'Macaé, Rio de Janeiro'],
   },
   {
     keywords: ['belo horizonte'],
@@ -28,7 +27,7 @@ export const TRIP_BRAZIL_CITY_ENTRIES = [
   },
   {
     keywords: ['vitoria', 'vitória', 'espirito santo', 'espírito santo', 'vila velha'],
-    url: unsplash('1571019613454-1cb2f99b2d8b'),
+    url: unsplash('1585208733896-02b1ebfd1f05'),
     wikiTitles: ['Vitória, Espírito Santo', 'Vitória (Espírito Santo)'],
   },
   {

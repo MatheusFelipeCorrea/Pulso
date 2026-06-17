@@ -19,6 +19,9 @@ import {
   resolveTripDestinationImage,
   TRIP_FALLBACK_IMAGE,
 } from '@/utils/tripDestinationImages.js'
+import { repairWikiThumbUrl } from '@/utils/tripWikipediaImage.js'
+import { formatTripDestinationDisplay } from '@/utils/tripDestinationDisplay.js'
+import { TripDestinationTitle } from '@/components/features/trips/TripDestinationTitle.jsx'
 
 function formatTripDate(iso) {
   if (!iso) return ''
@@ -32,17 +35,27 @@ export function TripCard({ viagem, catalogMap = {}, onDetails, onEdit, onDelete 
     [viagem.destino, viagem.moeda, viagem.destinoMeta]
   )
   const [imageSrc, setImageSrc] = useState(coverImage)
+  const [imageLoading, setImageLoading] = useState(!coverImage)
   const [imageAttempt, setImageAttempt] = useState(0)
 
   useEffect(() => {
+    if (viagem.destinoMeta?.coverImageUrl) {
+      setImageSrc(repairWikiThumbUrl(viagem.destinoMeta.coverImageUrl))
+      setImageLoading(false)
+      setImageAttempt(0)
+      return undefined
+    }
+
     let cancelled = false
 
-    setImageSrc(coverImage)
+    setImageSrc(null)
+    setImageLoading(true)
     setImageAttempt(0)
 
     resolveTripDestinationImage(viagem.destino, viagem.moeda, viagem.destinoMeta).then((resolvedImage) => {
-      if (!cancelled && resolvedImage && resolvedImage !== coverImage) {
-        setImageSrc(resolvedImage)
+      if (!cancelled) {
+        setImageSrc(resolvedImage || TRIP_FALLBACK_IMAGE)
+        setImageLoading(false)
       }
     })
 
@@ -52,8 +65,17 @@ export function TripCard({ viagem, catalogMap = {}, onDetails, onEdit, onDelete 
   }, [coverImage, viagem.destino, viagem.moeda, viagem.destinoMeta])
 
   const handleImageError = () => {
+    if (imageSrc && /\/420px-/.test(imageSrc)) {
+      const repaired = imageSrc.replace(/\/420px-/, '/330px-')
+      if (repaired !== imageSrc) {
+        setImageSrc(repaired)
+        setImageAttempt((attempt) => attempt + 1)
+        return
+      }
+    }
+
     if (imageAttempt === 0) {
-      const fallback = getTripDestinationImageFallback(viagem.destino, viagem.moeda)
+      const fallback = getTripDestinationImageFallback()
       if (fallback && fallback !== imageSrc) {
         setImageSrc(fallback)
         setImageAttempt(1)
@@ -66,6 +88,8 @@ export function TripCard({ viagem, catalogMap = {}, onDetails, onEdit, onDelete 
       setImageAttempt(2)
     }
   }
+
+  const destinationLabel = formatTripDestinationDisplay(viagem.destino, viagem.destinoMeta)
 
   const grouped = viagem.despesas?.reduce((acc, item) => {
     const current = acc[item.categoria] ?? 0
@@ -85,19 +109,27 @@ export function TripCard({ viagem, catalogMap = {}, onDetails, onEdit, onDelete 
 
   return (
     <article className="trip-card">
-      <div className="trip-card__media">
-        <img
-          src={imageSrc}
-          alt=""
-          loading="lazy"
-          decoding="async"
-          referrerPolicy="no-referrer"
-          onError={handleImageError}
-        />
+      <div className={`trip-card__media${imageLoading ? ' trip-card__media--loading' : ''}`}>
+        {imageSrc ? (
+          <img
+            src={imageSrc}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            referrerPolicy="no-referrer"
+            onError={handleImageError}
+          />
+        ) : null}
       </div>
 
       <div className="trip-card__info">
-        <h3>{viagem.destino}</h3>
+        <TripDestinationTitle
+          as="h3"
+          className="trip-card__destination"
+          destino={viagem.destino}
+          destinoMeta={viagem.destinoMeta}
+          stacked
+        />
         <span className="trip-card__badge">Planejada</span>
         <p className="trip-card__date">
           <Calendar size={13} aria-hidden />
@@ -164,7 +196,7 @@ export function TripCard({ viagem, catalogMap = {}, onDetails, onEdit, onDelete 
         <button
           type="button"
           className="trip-card__action-btn trip-card__action-btn--edit"
-          aria-label={`Editar viagem ${viagem.destino}`}
+          aria-label={`Editar viagem ${destinationLabel}`}
           onClick={() => onEdit?.(viagem)}
         >
           <Pencil size={15} />
@@ -172,7 +204,7 @@ export function TripCard({ viagem, catalogMap = {}, onDetails, onEdit, onDelete 
         <button
           type="button"
           className="trip-card__action-btn trip-card__action-btn--delete"
-          aria-label={`Excluir viagem ${viagem.destino}`}
+          aria-label={`Excluir viagem ${destinationLabel}`}
           onClick={() => onDelete?.(viagem)}
         >
           <Trash2 size={15} />

@@ -19,9 +19,8 @@ function normalizeText(value) {
         .trim();
 }
 
-function formatBrazilDestino(label, region) {
-    if (!region || label === region) return `${label}, Brasil`;
-    return `${label}, ${region}, Brasil`;
+function formatBrazilDestino(label) {
+    return `${label}, Brasil`;
 }
 
 function buildSearchText(entry) {
@@ -38,7 +37,7 @@ function buildSearchText(entry) {
 }
 
 function buildBrazilCatalogEntry(raw) {
-    const destino = formatBrazilDestino(raw.label, raw.region);
+    const destino = formatBrazilDestino(raw.label);
     const fallbackBrl = raw.fallbackBrl ?? getHubFallbackBrl(raw.iata);
 
     const entry = {

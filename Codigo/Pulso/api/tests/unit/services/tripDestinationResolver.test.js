@@ -14,7 +14,7 @@ describe('tripDestinationResolver', () => {
             source: 'geonames',
         });
 
-        expect(resolved.destino).toBe('Gramado, Rio Grande do Sul, Brasil');
+        expect(resolved.destino).toBe('Gramado, Brasil');
         expect(resolved.moedaSugerida).toBe('BRL');
         expect(resolved.domestic).toBe(true);
         expect(resolved.iata).toBe('POA');
@@ -22,7 +22,7 @@ describe('tripDestinationResolver', () => {
         expect(resolved.destinoMeta.source).toBe('geonames');
     });
 
-    it('padroniza destino internacional', () => {
+    it('padroniza destino internacional sem região redundante', () => {
         const label = formatDestinoLabel({
             name: 'Barcelona',
             region: 'Catalonia',
@@ -30,8 +30,22 @@ describe('tripDestinationResolver', () => {
             countryName: 'Spain',
         });
 
-        expect(label).toContain('Barcelona');
-        expect(label).toContain('Espanha');
+        expect(label).toBe('Barcelona, Espanha');
+    });
+
+    it('evita região que contém o nome da cidade (ex.: Buenos Aires)', () => {
+        const resolved = resolveFromGeoNamesPlace({
+            geonameId: 3435910,
+            name: 'Buenos Aires',
+            countryCode: 'AR',
+            countryName: 'Argentina',
+            adminName1: 'Ciudad Autónoma de Buenos Aires',
+            lat: -34.61315,
+            lng: -58.37723,
+            source: 'geonames',
+        });
+
+        expect(resolved.destino).toBe('Buenos Aires, Argentina');
     });
 
     it('evita repetir cidade como região (ex.: Tóquio)', () => {

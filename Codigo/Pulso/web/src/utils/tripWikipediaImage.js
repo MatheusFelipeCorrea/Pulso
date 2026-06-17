@@ -1,6 +1,10 @@
 const WIKI_CACHE = new Map()
 const WIKI_LANGS = ['pt', 'en']
-const WIKI_STORAGE_KEY = 'pulso:trip-wiki-images:v1'
+const WIKI_STORAGE_KEY = 'pulso:trip-wiki-images:v4'
+
+/** Rejeita clubes, artistas e páginas que não são lugar. */
+const REJECTED_PLACE_TEXT =
+  /(clube de futebol|football club|soccer club|esporte clube|time de futebol|álbum |banda |série de |filme |personagem |jogador de |cantor |cantora )/i
 
 let storageLoaded = false
 
@@ -41,25 +45,53 @@ function normalizeCacheKey(value) {
     .trim()
 }
 
-function resizeWikiThumbnail(url, width = 320) {
+function resizeWikiThumbnail(url, maxWidth) {
   if (!url) return null
-  return url.replace(/\/(\d+)px-/, `/${width}px-`)
+  const match = url.match(/\/(\d+)px-/)
+  if (!match || !maxWidth) return url
+
+  const current = Number(match[1])
+  if (maxWidth >= current) return url
+
+  return url.replace(/\/(\d+)px-/, `/${maxWidth}px-`)
+}
+
+export function repairWikiThumbUrl(url) {
+  if (!url || typeof url !== 'string') return url
+  if (!/\/420px-/.test(url)) return url
+  return url.replace(/\/420px-/, '/330px-')
+}
+
+export function isPlaceWikiSummary(data) {
+  if (!data || data.type === 'disambiguation') return false
+  if (!data.thumbnail?.source) return false
+  if (/(Flag_of|flag_of|Bandeira_de|bandeira_de|Coat_of_arms|\/flags\/)/i.test(data.thumbnail.source)) return false
+
+  const text = `${data.title ?? ''} ${data.description ?? ''}`
+  if (REJECTED_PLACE_TEXT.test(text)) return false
+
+  return true
 }
 
 async function fetchWikiSummary(lang, title) {
   const encodedTitle = encodeURIComponent(String(title).trim())
   const url = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodedTitle}`
   const response = await fetch(url, {
-    headers: { Accept: 'application/json' },
+    headers: {
+      Accept: 'application/json',
+      'User-Agent': 'PulsoApp/1.0 (viagens@pulso.local)',
+    },
   })
 
   if (!response.ok) return null
 
   const data = await response.json()
-  return resizeWikiThumbnail(data.thumbnail?.source)
+  if (!isPlaceWikiSummary(data)) return null
+
+  return data.thumbnail.source
 }
 
-export async function fetchWikipediaThumbnail(title) {
+export async function fetchPlaceThumbnail(title) {
   const cacheKey = normalizeCacheKey(title)
   if (!cacheKey) return null
 
@@ -87,11 +119,17 @@ export async function fetchWikipediaThumbnail(title) {
   return null
 }
 
-export async function fetchWikipediaThumbnails(titles) {
+export async function fetchPlaceThumbnails(titles) {
   const uniqueTitles = [...new Set(titles.filter(Boolean))]
   for (const title of uniqueTitles) {
-    const thumbnail = await fetchWikipediaThumbnail(title)
+    const thumbnail = await fetchPlaceThumbnail(title)
     if (thumbnail) return thumbnail
   }
   return null
 }
+
+/** @deprecated use fetchPlaceThumbnail */
+export const fetchWikipediaThumbnail = fetchPlaceThumbnail
+
+/** @deprecated use fetchPlaceThumbnails */
+export const fetchWikipediaThumbnails = fetchPlaceThumbnails

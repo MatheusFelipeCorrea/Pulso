@@ -10,6 +10,7 @@ const { listTripDestinations, countTripDestinations, getCatalogEntry, buildDesti
 const { resolveDestinationAirport } = require('../constants/tripDestinationAirports');
 const geonamesProvider = require('../providers/geonamesProvider');
 const tripDestinationResolver = require('./tripDestinationResolver');
+const { attachCoverImage } = require('./tripDestinationImageService');
 const {
     formatDateOnly,
     parseVencimentoDate,
@@ -85,8 +86,26 @@ const buscarViagem = async (viagemId, usuarioId) => {
     return viagem;
 };
 
+const hydrateCoverImage = async (viagem, usuarioId) => {
+    const baseMeta =
+        viagem.destinoMeta && typeof viagem.destinoMeta === 'object' ? viagem.destinoMeta : {};
+
+    if (baseMeta.coverImageUrl && !/\/420px-/.test(baseMeta.coverImageUrl)) return;
+
+    const enriched = await attachCoverImage(baseMeta, viagem.destino);
+    if (!enriched?.coverImageUrl) return;
+
+    if (enriched.coverImageUrl === baseMeta.coverImageUrl) return;
+
+    await viagemRepository.atualizar(viagem.id, usuarioId, { destinoMeta: enriched });
+    viagem.destinoMeta = enriched;
+};
+
 const listarViagens = async (usuarioId) => {
     const viagens = await viagemRepository.listarPorUsuario(usuarioId);
+
+    await Promise.all(viagens.map((viagem) => hydrateCoverImage(viagem, usuarioId)));
+
     return viagens.map(mapViagem);
 };
 
@@ -192,7 +211,8 @@ const resolverDestinoPayload = async (dados) => {
 };
 
 const criarViagem = async (usuarioId, dados) => {
-    const { destino, destinoMeta } = await resolverDestinoPayload(dados);
+    const { destino, destinoMeta: destinoMetaBase } = await resolverDestinoPayload(dados);
+    const destinoMeta = await attachCoverImage(destinoMetaBase, destino);
     const moeda = validarMoeda(dados.moeda);
     const dataPrevista = validarDataFutura(dados.dataPrevista);
     const metaId = await validarMetaVinculo(usuarioId, dados.metaId ?? null);
@@ -220,7 +240,7 @@ const editarViagem = async (usuarioId, viagemId, dados) => {
             destinoMeta: dados.destinoMeta,
         });
         payload.destino = resolved.destino;
-        payload.destinoMeta = resolved.destinoMeta;
+        payload.destinoMeta = await attachCoverImage(resolved.destinoMeta, resolved.destino);
     }
 
     if (dados.moeda !== undefined) {
@@ -483,6 +503,7 @@ const listarDestinosViagem = async ({ q, limit } = {}) => {
 
 const obterViagem = async (usuarioId, viagemId) => {
     const viagem = await buscarViagem(viagemId, usuarioId);
+    await hydrateCoverImage(viagem, usuarioId);
     return mapViagem(viagem);
 };
 

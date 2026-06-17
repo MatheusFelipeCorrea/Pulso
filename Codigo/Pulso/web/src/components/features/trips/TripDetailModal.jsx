@@ -5,6 +5,7 @@ import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { TRIP_EXPENSE_CATEGORY_MAP } from '@/utils/tripExpenseCategories.js'
+import { formatTripDestinationDisplay } from '@/utils/tripDestinationDisplay.js'
 import { TripExpenseFormModal } from './TripExpenseFormModal.jsx'
 
 export function TripDetailModal({
@@ -46,7 +47,7 @@ export function TripDetailModal({
         <div className="trip-detail">
           <header className="trip-detail__header">
             <div>
-              <h2>{viagem.destino}</h2>
+              <h2>{formatTripDestinationDisplay(viagem.destino, viagem.destinoMeta)}</h2>
               <p>Pretensões de gastos e progresso da viagem</p>
             </div>
             <IconButton variant="ghost" size="sm" ariaLabel="Fechar" icon={<X size={18} />} onClick={onClose} />

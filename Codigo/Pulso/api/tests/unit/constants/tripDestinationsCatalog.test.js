@@ -15,7 +15,7 @@ describe('tripDestinationsCatalog', () => {
             iata: 'VIX',
             countryCode: 'BR',
             moedaSugerida: 'BRL',
-            destino: 'Vitória, Espírito Santo, Brasil',
+            destino: 'Vitória, Brasil',
         });
     });
 
@@ -39,6 +39,6 @@ describe('tripDestinationsCatalog', () => {
             label: 'Vitória',
             domestic: true,
         });
-        expect(getCatalogEntry(meta.catalogId)?.destino).toBe('Vitória, Espírito Santo, Brasil');
+        expect(getCatalogEntry(meta.catalogId)?.destino).toBe('Vitória, Brasil');
     });
 });

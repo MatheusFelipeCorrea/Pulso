@@ -6,6 +6,14 @@ const {
     toPublicCatalogEntry,
 } = require('../constants/tripDestinationsCatalog');
 
+function normalizeText(value) {
+    return String(value ?? '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+}
+
 function formatRegionName(region, countryCode) {
     const value = String(region ?? '').trim();
     if (!value) return '';
@@ -18,13 +26,16 @@ function formatRegionName(region, countryCode) {
 }
 
 function shouldIncludeRegion(city, region, country) {
-    const normalizedCity = String(city ?? '').trim().toLowerCase();
-    const normalizedRegion = String(region ?? '').trim().toLowerCase();
-    const normalizedCountry = String(country ?? '').trim().toLowerCase();
+    const normalizedCity = normalizeText(city);
+    const normalizedRegion = normalizeText(region);
+    const normalizedCountry = normalizeText(country);
 
     if (!normalizedRegion) return false;
     if (normalizedRegion === normalizedCity) return false;
     if (normalizedRegion === normalizedCountry) return false;
+    if (normalizedRegion.includes(normalizedCity) || normalizedCity.includes(normalizedRegion)) {
+        return false;
+    }
 
     return true;
 }
@@ -32,18 +43,6 @@ function shouldIncludeRegion(city, region, country) {
 function formatDestinoLabel({ name, region, countryCode, countryName }) {
     const city = String(name ?? '').trim();
     const country = getCountryMeta(countryCode).countryName || countryName || countryCode;
-    const state = formatRegionName(region, countryCode);
-
-    if (countryCode === 'BR') {
-        if (!shouldIncludeRegion(city, state, country)) {
-            return `${city}, Brasil`;
-        }
-        return `${city}, ${state}, Brasil`;
-    }
-
-    if (shouldIncludeRegion(city, state, country)) {
-        return `${city}, ${state}, ${country}`;
-    }
 
     return `${city}, ${country}`;
 }

@@ -21,6 +21,7 @@ import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { CurrencyFlag } from '@/components/features/trips/CurrencyFlag.jsx'
 import { buildTripExpenseCategorySelectOptions } from '@/utils/tripExpenseCategorySelect.jsx'
 import { formatTripDetailDate } from '@/utils/tripDetailUtils.js'
+import { formatTripDestinationDisplay } from '@/utils/tripDestinationDisplay.js'
 
 const DESCRIPTION_MAX = 100
 
@@ -103,7 +104,7 @@ export function TripExpenseFormModal({
             <div className="trip-expense-form__context">
               <span>
                 <Globe size={14} aria-hidden />
-                {viagem.destino}
+                {formatTripDestinationDisplay(viagem.destino, viagem.destinoMeta)}
               </span>
               <span>
                 <CurrencyFlag code={viagem.moeda} size={14} />
