@@ -50,4 +50,24 @@ describe('tagService', () => {
             cor: '#22C55E',
         });
     });
+
+    it('edita tag existente', async () => {
+        tagRepository.buscarPorId.mockResolvedValue({ id: 'tag-1', nome: 'Casa' });
+        tagRepository.atualizar.mockResolvedValue({ id: 'tag-1', nome: 'Moradia' });
+
+        const result = await tagService.editarTag('usr-1', 'tag-1', { nome: 'Moradia' });
+
+        expect(tagRepository.buscarPorId).toHaveBeenCalledWith('tag-1', 'usr-1');
+        expect(tagRepository.atualizar).toHaveBeenCalledWith('tag-1', 'usr-1', { nome: 'Moradia' });
+        expect(result.nome).toBe('Moradia');
+    });
+
+    it('exclui tag existente', async () => {
+        tagRepository.buscarPorId.mockResolvedValue({ id: 'tag-1', nome: 'Casa' });
+        tagRepository.excluir.mockResolvedValue({ count: 1 });
+
+        await tagService.excluirTag('usr-1', 'tag-1');
+
+        expect(tagRepository.excluir).toHaveBeenCalledWith('tag-1', 'usr-1');
+    });
 });

@@ -616,9 +616,31 @@
 }
 
 .notification-bell__panel {
-  max-height: 480px;
-  overflow: auto;
+  max-height: none;
+  overflow: visible;
   box-shadow: var(--ds-shadow-lg, 0 16px 40px rgb(0 0 0 / 0.12));
+}
+
+.notification-bell__live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .notification-bell__dropdown {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 56px;
+    width: auto;
+  }
 }
 
 .main-layout__toolbar {

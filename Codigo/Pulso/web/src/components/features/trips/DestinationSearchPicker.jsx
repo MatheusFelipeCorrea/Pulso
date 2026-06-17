@@ -1,6 +1,13 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import { Check, MapPin, Search } from 'lucide-react'
+import { Check, MapPin, Plane, Search } from 'lucide-react'
 import { InputText } from '@/design-system/components/inputs/InputText/InputText.jsx'
+
+function formatTripDate(iso) {
+  if (!iso) return ''
+  const date = new Date(iso)
+  if (Number.isNaN(date.getTime())) return ''
+  return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })
+}
 
 export function DestinationSearchPicker({
   destino = '',
@@ -13,6 +20,9 @@ export function DestinationSearchPicker({
   loading = false,
   totalDestinos = null,
   placeholder = 'Busque cidade ou país...',
+  existingTrips = [],
+  linkedTripId = null,
+  onSelectExistingTrip,
 }) {
   const listboxId = useId()
   const containerRef = useRef(null)
@@ -35,6 +45,21 @@ export function DestinationSearchPicker({
       }
     )
   }, [destinoMeta, suggestions, destino])
+
+  const matchingTrips = useMemo(() => {
+    if (!existingTrips.length) return []
+    const term = query.trim().toLowerCase()
+    const filtered = term
+      ? existingTrips.filter((trip) => trip.destino?.toLowerCase().includes(term))
+      : existingTrips
+    return filtered.slice(0, 6)
+  }, [existingTrips, query])
+
+  const dropdownItems = useMemo(() => {
+    const items = matchingTrips.map((trip) => ({ type: 'trip', trip }))
+    suggestions.forEach((entry) => items.push({ type: 'destination', entry }))
+    return items
+  }, [matchingTrips, suggestions])
 
   useEffect(() => {
     setQuery(destino || selectedEntry?.destino || '')
@@ -92,11 +117,12 @@ export function DestinationSearchPicker({
 
   useEffect(() => {
     setHighlightIndex(0)
-  }, [query, suggestions, open])
+  }, [query, dropdownItems, open])
 
   const handleSelect = (entry) => {
     setQuery(entry.destino)
     setOpen(false)
+    onSelectExistingTrip?.(null)
     onChange?.({
       destino: entry.destino,
       destinoMeta: {
@@ -115,6 +141,12 @@ export function DestinationSearchPicker({
     })
   }
 
+  const handleSelectTrip = (trip) => {
+    setQuery(trip.destino)
+    setOpen(false)
+    onSelectExistingTrip?.(trip)
+  }
+
   const handleInputChange = (event) => {
     const nextQuery = event.target.value
     setQuery(nextQuery)
@@ -122,8 +154,10 @@ export function DestinationSearchPicker({
 
     if (!nextQuery.trim()) {
       setSuggestions([])
+      onSelectExistingTrip?.(null)
       onChange?.({ destino: '', destinoMeta: null, moedaSugerida: null })
-    } else if (selectedEntry && nextQuery !== selectedEntry.destino) {
+    } else if ((selectedEntry && nextQuery !== selectedEntry.destino) || linkedTripId) {
+      onSelectExistingTrip?.(null)
       onChange?.({ destino: nextQuery, destinoMeta: null, moedaSugerida: null })
     }
   }
@@ -134,21 +168,24 @@ export function DestinationSearchPicker({
       return
     }
 
-    if (!open || suggestions.length === 0) return
+    if (!open || dropdownItems.length === 0) return
 
     if (event.key === 'ArrowDown') {
       event.preventDefault()
-      setHighlightIndex((index) => (index + 1) % suggestions.length)
+      setHighlightIndex((index) => (index + 1) % dropdownItems.length)
     }
 
     if (event.key === 'ArrowUp') {
       event.preventDefault()
-      setHighlightIndex((index) => (index - 1 + suggestions.length) % suggestions.length)
+      setHighlightIndex((index) => (index - 1 + dropdownItems.length) % dropdownItems.length)
     }
 
-    if (event.key === 'Enter' && suggestions[highlightIndex]) {
+    if (event.key === 'Enter') {
+      const item = dropdownItems[highlightIndex]
+      if (!item) return
       event.preventDefault()
-      handleSelect(suggestions[highlightIndex])
+      if (item.type === 'trip') handleSelectTrip(item.trip)
+      else handleSelect(item.entry)
     }
 
     if (event.key === 'Escape') {
@@ -156,14 +193,19 @@ export function DestinationSearchPicker({
     }
   }
 
-  const showDropdown = open && query.trim().length > 0 && !loading
+  const showDropdown =
+    open && !loading && (query.trim().length > 0 || matchingTrips.length > 0)
   const helperText = loading
     ? 'Carregando destinos...'
-    : selectedEntry
-      ? `${selectedEntry.label} · ${selectedEntry.subtitle}`
-      : totalDestinos
-        ? `Busque cidades e países do mundo`
-        : 'Digite e selecione um destino da lista'
+    : linkedTripId
+      ? 'Viagem existente selecionada'
+      : selectedEntry
+        ? `${selectedEntry.label} · ${selectedEntry.subtitle}`
+        : existingTrips.length > 0
+          ? 'Vincule uma viagem existente ou busque um novo destino'
+          : totalDestinos
+            ? `Busque cidades e países do mundo`
+            : 'Digite e selecione um destino da lista'
 
   return (
     <div className={`trip-destination-picker ${className}`.trim()} ref={containerRef}>
@@ -179,6 +221,7 @@ export function DestinationSearchPicker({
             setQuery('')
             setOpen(false)
             setSuggestions([])
+            onSelectExistingTrip?.(null)
             onChange?.({ destino: '', destinoMeta: null, moedaSugerida: null })
           }}
           placeholder={placeholder}
@@ -202,14 +245,49 @@ export function DestinationSearchPicker({
                 <Search size={22} aria-hidden />
                 <p>Buscando destinos...</p>
               </div>
-            ) : suggestions.length === 0 ? (
+            ) : dropdownItems.length === 0 ? (
               <div className="trip-destination-picker__empty">
                 <MapPin size={22} aria-hidden />
                 <p>Nenhum destino encontrado</p>
                 <span>Tente outro nome de cidade ou país.</span>
               </div>
             ) : (
-              suggestions.map((entry, index) => {
+              dropdownItems.map((item, index) => {
+                if (item.type === 'trip') {
+                  const trip = item.trip
+                  const selected = trip.id === linkedTripId
+                  const highlighted = index === highlightIndex
+
+                  return (
+                    <button
+                      key={`trip-${trip.id}`}
+                      type="button"
+                      role="option"
+                      aria-selected={selected}
+                      className={`trip-destination-picker__option trip-destination-picker__option--trip${
+                        selected ? ' trip-destination-picker__option--selected' : ''
+                      }${highlighted ? ' trip-destination-picker__option--highlighted' : ''}`}
+                      onMouseDown={(event) => event.preventDefault()}
+                      onClick={() => handleSelectTrip(trip)}
+                      onMouseEnter={() => setHighlightIndex(index)}
+                    >
+                      <span className="trip-destination-picker__option-icon" aria-hidden>
+                        <Plane size={16} />
+                      </span>
+                      <span className="trip-destination-picker__option-copy">
+                        <strong>{trip.destino}</strong>
+                        <span>
+                          Minha viagem · {formatTripDate(trip.dataPrevista)} · {trip.moeda}
+                        </span>
+                      </span>
+                      {selected ? (
+                        <Check size={16} className="trip-destination-picker__option-check" aria-hidden />
+                      ) : null}
+                    </button>
+                  )
+                }
+
+                const entry = item.entry
                 const selected = entry.id === destinoMeta?.catalogId
                 const highlighted = index === highlightIndex
 

@@ -10,6 +10,7 @@
 | [Regras de Negocio/RegrasDeNegocio.md](./Regras%20de%20Negocio/RegrasDeNegocio.md) | Regras de negócio (modos de uso, VT, benefícios) |
 | [Roadmap/Roadmap.md](./Roadmap/Roadmap.md) | Fases de implementação |
 | [Analise-Produto.md](./Analise-Produto.md) | Gaps, oportunidades e prioridades sugeridas |
+| [Modulos/Grupos.md](./Modulos/Grupos.md) | Módulo Grupos — API, UI e gaps de usabilidade |
 
 ## Engenharia
 

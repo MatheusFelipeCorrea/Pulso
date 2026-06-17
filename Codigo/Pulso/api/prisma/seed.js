@@ -343,16 +343,218 @@ function vtStatusLabel(modoUso, vtHabilitado) {
     return 'opt-in pendente';
 }
 
+const MACAE_DESTINO_META = {
+    catalogId: 'BR-GIG-macae',
+    iata: 'GIG',
+    label: 'Macaé',
+    region: 'Rio de Janeiro',
+    countryCode: 'BR',
+    countryName: 'Brasil',
+    moedaSugerida: 'BRL',
+    domestic: true,
+};
+
+async function seedGruposDemo(usuariosPorEmail) {
+    const matheus = usuariosPorEmail['matheusfelipecorreasilva@hotmail.com'];
+    const maria = usuariosPorEmail['demo.clt@pulso.app'];
+    const pedro = usuariosPorEmail['demo.pf@pulso.app'];
+    const paulo = usuariosPorEmail['demo.pj.vt@pulso.app'];
+    const patricia = usuariosPorEmail['demo.pj.optin@pulso.app'];
+
+    if (!matheus || !maria || !pedro) {
+        console.log('⚠️  Seed de grupos ignorado — usuários demo incompletos');
+        return;
+    }
+
+    const demos = [
+        {
+            codigo: 'PULSO-MC26',
+            nome: 'Viagem Macaé 2026',
+            descricao: 'Planejamento da viagem em grupo para Macaé — demo completa',
+            destino: 'Macaé - RJ',
+            destinoMeta: MACAE_DESTINO_META,
+            dataViagem: new Date(2026, 7, 15, 12, 0, 0),
+            membros: [
+                { usuarioId: matheus.id, papel: 'ADMIN' },
+                { usuarioId: maria.id, papel: 'MEMBRO' },
+                { usuarioId: pedro.id, papel: 'MEMBRO' },
+            ],
+            despesas: [
+                { usuarioId: matheus.id, categoria: 'TRANSPORTE', descricao: 'Vai dirigir', valorEstimado: 200 },
+                { usuarioId: matheus.id, categoria: 'HOSPEDAGEM', descricao: '1/3 do airbnb', valorEstimado: 250 },
+                { usuarioId: maria.id, categoria: 'HOSPEDAGEM', descricao: '1/3 do airbnb', valorEstimado: 250 },
+                { usuarioId: maria.id, categoria: 'ALIMENTACAO', descricao: 'Compras e refeições', valorEstimado: 300 },
+                { usuarioId: pedro.id, categoria: 'HOSPEDAGEM', descricao: '1/3 do airbnb', valorEstimado: 250 },
+                { usuarioId: pedro.id, categoria: 'PASSEIOS', descricao: 'Ingressos', valorEstimado: 400 },
+            ],
+            meta: {
+                nome: 'Juntar R$ 1.650 pra viagem',
+                valorAlvo: 1650,
+                valorAtual: 1020,
+                prazo: new Date(2026, 7, 1, 12, 0, 0),
+                aportes: [
+                    { usuarioId: matheus.id, valor: 300, data: new Date(2026, 5, 10, 10, 0, 0) },
+                    { usuarioId: maria.id, valor: 320, data: new Date(2026, 5, 12, 14, 30, 0) },
+                    { usuarioId: pedro.id, valor: 400, data: new Date(2026, 5, 15, 9, 15, 0) },
+                ],
+            },
+            mensagens: [
+                {
+                    usuarioId: maria.id,
+                    conteudo: 'Já reservei o airbnb, dividimos em 3!',
+                    criadoEm: new Date(2026, 5, 8, 9, 42, 0),
+                },
+                {
+                    usuarioId: pedro.id,
+                    conteudo: 'Show! Eu cuido dos passeios.',
+                    criadoEm: new Date(2026, 5, 8, 12, 0, 0),
+                },
+                {
+                    usuarioId: matheus.id,
+                    conteudo: 'Fechado, coloquei o carro de transporte na planilha.',
+                    criadoEm: new Date(2026, 5, 8, 21, 27, 0),
+                },
+            ],
+        },
+    ];
+
+    if (paulo && patricia) {
+        demos.push({
+            codigo: 'PULSO-NE26',
+            nome: 'Férias Nordeste 2026',
+            descricao: 'Grupo maior para testar scroll de membros e pretensões',
+            destino: 'Salvador - BA',
+            destinoMeta: {
+                catalogId: 'BR-SSA-salvador',
+                iata: 'SSA',
+                label: 'Salvador',
+                region: 'Bahia',
+                countryCode: 'BR',
+                countryName: 'Brasil',
+                moedaSugerida: 'BRL',
+                domestic: true,
+            },
+            dataViagem: new Date(2026, 11, 20, 12, 0, 0),
+            membros: [
+                { usuarioId: matheus.id, papel: 'ADMIN' },
+                { usuarioId: maria.id, papel: 'MEMBRO' },
+                { usuarioId: pedro.id, papel: 'MEMBRO' },
+                { usuarioId: paulo.id, papel: 'MEMBRO' },
+                { usuarioId: patricia.id, papel: 'MEMBRO' },
+            ],
+            despesas: [
+                { usuarioId: matheus.id, categoria: 'TRANSPORTE', descricao: 'Passagem aérea', valorEstimado: 890 },
+                { usuarioId: matheus.id, categoria: 'HOSPEDAGEM', descricao: 'Hotel 4 noites', valorEstimado: 1200 },
+                { usuarioId: maria.id, categoria: 'TRANSPORTE', descricao: 'Passagem aérea', valorEstimado: 920 },
+                { usuarioId: maria.id, categoria: 'ALIMENTACAO', descricao: 'Restaurantes', valorEstimado: 450 },
+                { usuarioId: pedro.id, categoria: 'HOSPEDAGEM', descricao: 'Hotel 4 noites', valorEstimado: 1200 },
+                { usuarioId: pedro.id, categoria: 'PASSEIOS', descricao: 'Pelourinho + praia', valorEstimado: 380 },
+                { usuarioId: paulo.id, categoria: 'TRANSPORTE', descricao: 'Uber aeroporto', valorEstimado: 120 },
+                { usuarioId: paulo.id, categoria: 'COMPRAS', descricao: 'Souvenirs', valorEstimado: 200 },
+                { usuarioId: patricia.id, categoria: 'HOSPEDAGEM', descricao: 'Hotel 4 noites', valorEstimado: 1200 },
+                { usuarioId: patricia.id, categoria: 'ENTRETENIMENTO', descricao: 'Shows', valorEstimado: 350 },
+            ],
+            meta: {
+                nome: 'Caixinha da viagem',
+                valorAlvo: 8000,
+                valorAtual: 2450,
+                prazo: new Date(2026, 11, 1, 12, 0, 0),
+                aportes: [
+                    { usuarioId: matheus.id, valor: 500, data: new Date(2026, 4, 5, 11, 0, 0) },
+                    { usuarioId: maria.id, valor: 450, data: new Date(2026, 4, 8, 16, 0, 0) },
+                    { usuarioId: pedro.id, valor: 600, data: new Date(2026, 4, 10, 9, 0, 0) },
+                    { usuarioId: paulo.id, valor: 400, data: new Date(2026, 4, 12, 13, 0, 0) },
+                    { usuarioId: patricia.id, valor: 500, data: new Date(2026, 4, 14, 18, 0, 0) },
+                ],
+            },
+            mensagens: [
+                {
+                    usuarioId: paulo.id,
+                    conteudo: 'Alguém já olhou passagem pra dezembro?',
+                    criadoEm: new Date(2026, 4, 20, 8, 15, 0),
+                },
+                {
+                    usuarioId: matheus.id,
+                    conteudo: 'Bora fechar hotel essa semana!',
+                    criadoEm: new Date(2026, 4, 20, 10, 30, 0),
+                },
+            ],
+        });
+    }
+
+    console.log('\n👥 Grupos demo');
+
+    for (const demo of demos) {
+        const existente = await prisma.grupo.findUnique({
+            where: { codigoConvite: demo.codigo },
+        });
+
+        if (existente) {
+            console.log(`   ⏭️  ${demo.nome} (${demo.codigo}) já existe`);
+            continue;
+        }
+
+        await prisma.grupo.create({
+            data: {
+                nome: demo.nome,
+                descricao: demo.descricao,
+                codigoConvite: demo.codigo,
+                criadorId: matheus.id,
+                membros: {
+                    create: demo.membros,
+                },
+                viagens: {
+                    create: {
+                        destino: demo.destino,
+                        destinoMeta: demo.destinoMeta,
+                        moeda: 'BRL',
+                        dataPrevista: demo.dataViagem,
+                        despesas: {
+                            create: demo.despesas.map((item) => ({
+                                adicionadoPorId: item.usuarioId,
+                                categoria: item.categoria,
+                                descricao: item.descricao,
+                                valorEstimado: item.valorEstimado,
+                            })),
+                        },
+                    },
+                },
+                metas: {
+                    create: {
+                        nome: demo.meta.nome,
+                        valorAlvo: demo.meta.valorAlvo,
+                        valorAtual: demo.meta.valorAtual,
+                        prazo: demo.meta.prazo,
+                        status: 'ATIVA',
+                        aportes: {
+                            create: demo.meta.aportes,
+                        },
+                    },
+                },
+                mensagens: {
+                    create: demo.mensagens,
+                },
+            },
+        });
+
+        console.log(
+            `   ✅ ${demo.nome} (${demo.codigo}) — ${demo.membros.length} membros, ${demo.despesas.length} pretensões`
+        );
+    }
+}
+
 async function main() {
     console.log('🌱 Iniciando seed...\n');
 
     const senhaHash = await bcrypt.hash(SEED_SENHA, 12);
+    const usuariosPorEmail = {};
 
     for (const perfil of SEED_USUARIOS) {
         console.log(`👤 ${perfil.nome}`);
         console.log(`   ${perfil.email} | ${perfil.modoUso} | VT: ${vtStatusLabel(perfil.modoUso, perfil.config.vtHabilitado)}`);
 
         const usuario = await upsertSeedUsuario(perfil, senhaHash);
+        usuariosPorEmail[perfil.email] = usuario;
         const categorias = await seedCategorias(usuario.id);
         const byName = (nome, tipo) =>
             categorias.find((c) => c.nome === nome && c.tipo === tipo);
@@ -372,6 +574,8 @@ async function main() {
         console.log(`   → ${perfil.descricao}\n`);
     }
 
+    await seedGruposDemo(usuariosPorEmail);
+
     console.log('═══════════════════════════════════════════════════════════');
     console.log(`🔑 Senha de todos os usuários: ${SEED_SENHA}`);
     console.log(`📅 Período VT demo: ${periodoAtual()}`);
@@ -381,6 +585,10 @@ async function main() {
         console.log(`  • ${p.email}`);
         console.log(`    ${p.modoUso} | VT ${vtStatusLabel(p.modoUso, p.config.vtHabilitado)} — ${p.descricao}`);
     }
+    console.log('');
+    console.log('Grupos demo (login como matheusfelipecorreasilva@hotmail.com):');
+    console.log('  • Viagem Macaé 2026 — código PULSO-MC26');
+    console.log('  • Férias Nordeste 2026 — código PULSO-NE26 (5 membros)');
 }
 
 main()

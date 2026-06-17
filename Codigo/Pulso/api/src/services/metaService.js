@@ -1,3 +1,5 @@
+const notificationService = require('./notificationService');
+const gamificationService = require('./gamificationService');
 const AppError = require('../utils/appError');
 const metaRepository = require('../repositories/metaRepository');
 const { mapMeta } = require('../utils/metaMapper');
@@ -198,6 +200,8 @@ const criarMeta = async (usuarioId, dados) => {
         prioridade: dados.prioridade ?? null,
     });
 
+    await gamificationService.processarAposCriarMeta(usuarioId);
+
     return mapMeta({ ...meta, aportes: [] });
 };
 
@@ -292,7 +296,18 @@ const registrarAporte = async (usuarioId, metaId, dados) => {
     });
 
     const aportes = [aporte, ...meta.aportes];
+    const antesConclusao = metaAtualizada.status;
     metaAtualizada = await sincronizarConclusao({ ...metaAtualizada, aportes });
+
+    if (antesConclusao !== 'CONCLUIDA' && metaAtualizada.status === 'CONCLUIDA') {
+        await notificationService.criarNotificacao(usuarioId, {
+            tipo: 'META_ATINGIDA',
+            titulo: 'Meta atingida',
+            mensagem: `Meta "${metaAtualizada.nome}" concluída!`,
+            linkAcao: '/goals',
+            metadados: { metaId: metaAtualizada.id, escopo: 'PESSOAL' },
+        });
+    }
 
     return {
         meta: mapMeta(metaAtualizada),

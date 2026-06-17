@@ -3,6 +3,7 @@ const duffelProvider = require('../providers/duffelProvider');
 const amadeusProvider = require('../providers/amadeusProvider');
 const { resolveTripOrigin } = require('../constants/tripOrigins');
 const { getFlightFallback } = require('../constants/tripTransportRoutes');
+const { getHubByIata } = require('../constants/tripAirportHubs');
 const {
     resolveDestinationAirport,
     buildBusInsight,
@@ -24,6 +25,28 @@ const formatIsoDate = (date) => {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+};
+
+const normalizeLabel = (value) =>
+    String(value ?? '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+
+const buildHubReferencia = (destination) => {
+    const hub = getHubByIata(destination.iata);
+    const hubLabel = hub?.label ?? destination.iata;
+
+    if (normalizeLabel(destination.label) === normalizeLabel(hubLabel)) {
+        return null;
+    }
+
+    return {
+        destino: destination.label,
+        hub: hubLabel,
+        iata: destination.iata,
+    };
 };
 
 const buildTravelDates = (dataPrevista) => {
@@ -110,6 +133,7 @@ const obterMediaPassagem = async ({ destino, destinoMeta, dataPrevista, origemId
 
     const tipoViagem = domestic ? 'doméstica' : 'internacional';
     const baseFlightMessage = `Saindo de ${origin.label} · ida e volta`;
+    const hubReferencia = buildHubReferencia(destination);
 
     return {
         disponivel: true,
@@ -119,6 +143,7 @@ const obterMediaPassagem = async ({ destino, destinoMeta, dataPrevista, origemId
         origemCidade: origin.cidade,
         aeroportoOrigem: origin.code,
         aeroportoDestino: destination.iata,
+        hubReferencia,
         valorMedioBrl,
         moeda: 'BRL',
         fonte,

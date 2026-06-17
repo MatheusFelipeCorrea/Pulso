@@ -13,7 +13,8 @@ Documento de referência das entidades do banco de dados do **Pulso**.
 |--------|----------|
 | **Prisma** | 30 modelos mapeados (todas as áreas do produto) |
 | **API em uso** | Auth, transações, categorias, tags, VT, orçamento, notificações, lembretes, calendário, **dividas**, **metas**, **viagens**, **moedas** |
-| **Pendente na API** | Grupos, IA (chat/insights), gamificação completa, relatórios |
+| **Implementado na API** | Auth, transações, VT, orçamento, lembretes, calendário, dívidas, metas, viagens, moedas, **grupos (parcial)** |
+| **Pendente na API** | IA (chat/insights), gamificação completa, relatórios; grupos: gerenciar membros, notificações |
 
 Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`, `configuracoes_usuario`).
 

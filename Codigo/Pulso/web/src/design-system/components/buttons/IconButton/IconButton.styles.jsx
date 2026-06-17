@@ -18,6 +18,7 @@ export const iconButtonVariants = cva(
       variant: {
         primary: 'iconbtn-primary',
         secondary: 'iconbtn-secondary',
+        outline: 'iconbtn-outline',
         ghost: 'iconbtn-ghost',
         danger: 'iconbtn-danger',
         success: 'iconbtn-success',

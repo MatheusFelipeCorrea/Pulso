@@ -13,8 +13,9 @@ Fases **concluídas ou em uso**:
 - Fase 2 — Layouts + Sidebar
 - Fase 3 — Autenticação
 - Fase 4 (parcial) — Transações, VT, orçamento, dívidas, metas, viagens
+- Fase 7 (parcial) — **Grupos** (lista + detalhe + API; gaps em membros/metas/chat)
 
-**Próximo foco sugerido:** Dashboard + perfil/settings + IA (ver [Analise-Produto.md](../Analise-Produto.md)).
+**Próximo foco sugerido:** fechar gaps de Grupos + Dashboard + perfil/settings (ver [Analise-Produto.md](../Analise-Produto.md) e [Modulos/Grupos.md](../Modulos/Grupos.md)).
 
 ---
 
@@ -412,24 +413,32 @@ Fases **concluídas ou em uso**:
 
 ---
 
-## Fase 7 — Social (Grupos)
+## Fase 7 — Social (Grupos) 🟡 Parcial (jun/2026)
 
 ```
-- [ ] Backend: CRUD grupos + membros
-- [ ] Backend: gerar código de convite
-- [ ] Backend: viagens de grupo + pretensões por membro
-- [ ] Backend: metas de grupo + aportes por membro
-- [ ] Backend: chat do grupo
-- [ ] Frontend: tela Grupos (lista)
-- [ ] Frontend: tela Detalhe do Grupo
-- [ ] Modal: novo grupo
-- [ ] Modal: entrar no grupo
-- [ ] Modal: convidar
-- [ ] Modal: meta do grupo
-- [ ] Modal: aporte no grupo
-- [ ] Cálculo: total por membro
-- [ ] Ações: sair do grupo, excluir (admin)
+- [x] Backend: CRUD grupos + membros (entrada/saída)
+- [x] Backend: gerar código de convite
+- [x] Backend: viagens de grupo + pretensões por membro
+- [x] Backend: metas de grupo + aportes por membro
+- [x] Backend: chat do grupo (POST mensagem; últimas 100 no detalhe)
+- [x] Frontend: tela Grupos (lista)
+- [x] Frontend: tela Detalhe do Grupo (4 cards)
+- [x] Modal: novo grupo
+- [x] Modal: entrar no grupo
+- [x] Modal: convidar
+- [x] Modal: meta do grupo
+- [x] Modal: aporte no grupo
+- [x] Cálculo: total por membro (pretensões)
+- [x] Ações: sair do grupo, excluir (admin) — no header
+- [ ] Backend + UI: gerenciar membros (remover, papel, transferir admin)
+- [ ] UI: editar nome/descrição do grupo
+- [ ] Meta concluída automaticamente (RN-119)
+- [ ] Notificações GRUPO_ATIVIDADE (RN-120)
+- [ ] Chat tempo real / paginação
+- [ ] Viagem pessoal → vincular grupo (TripFormModal)
 ```
+
+Ver gaps: [Modulos/Grupos.md](../Modulos/Grupos.md).
 
 ---
 

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import * as notificationService from '@/services/notificationService.js'
 
 const POLL_MS = 30_000
+const PAGE_SIZE = 20
 
 export function useNotificationCount({ enabled = true } = {}) {
   const [quantidade, setQuantidade] = useState(0)
@@ -33,42 +34,78 @@ export function useNotificationCount({ enabled = true } = {}) {
   return { quantidade, loading, reload, setQuantidade }
 }
 
-export function useNotificationList({ enabled = true, lida = false, limite = 10 } = {}) {
+export function useNotificationList({ enabled = true, lida = false, limite = PAGE_SIZE } = {}) {
   const [notificacoes, setNotificacoes] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [pagina, setPagina] = useState(1)
+  const [paginas, setPaginas] = useState(1)
+  const [total, setTotal] = useState(0)
 
-  const reload = useCallback(async (signal) => {
-    if (!enabled) return
-    setLoading(true)
-    try {
-      const data = await notificationService.listarNotificacoes({ lida, limite }, { signal })
-      setNotificacoes(
-        data.map((item) => ({
-          id: item.id,
-          type: item.tipo,
-          title: item.titulo,
-          description: item.mensagem ?? '',
-          timestamp: item.criadoEm,
-          read: item.lida,
-          linkAcao: item.linkAcao,
-          metadata: item.metadados,
-        }))
-      )
-    } catch (err) {
-      if (signal?.aborted || err.code === 'ERR_CANCELED') return
-    } finally {
-      if (!signal?.aborted) setLoading(false)
-    }
-  }, [enabled, lida, limite])
+  const reload = useCallback(
+    async (signal, { page = 1, append = false } = {}) => {
+      if (!enabled) return
+      if (append) setLoadingMore(true)
+      else setLoading(true)
+
+      try {
+        const data = await notificationService.listarNotificacoes(
+          { lida, limite, pagina: page },
+          { signal }
+        )
+
+        setPagina(data.pagina)
+        setPaginas(data.paginas)
+        setTotal(data.total)
+
+        setNotificacoes((prev) =>
+          append ? [...prev, ...data.notificacoes] : data.notificacoes
+        )
+      } catch (err) {
+        if (signal?.aborted || err.code === 'ERR_CANCELED') return
+      } finally {
+        if (!signal?.aborted) {
+          setLoading(false)
+          setLoadingMore(false)
+        }
+      }
+    },
+    [enabled, lida, limite]
+  )
+
+  const loadMore = useCallback(() => {
+    if (loadingMore || pagina >= paginas) return
+    reload(undefined, { page: pagina + 1, append: true })
+  }, [loadingMore, pagina, paginas, reload])
+
+  const reset = useCallback(() => {
+    setPagina(1)
+    setPaginas(1)
+    setTotal(0)
+    setNotificacoes([])
+  }, [])
 
   useEffect(() => {
     if (!enabled) return undefined
     const controller = new AbortController()
-    reload(controller.signal)
+    reset()
+    reload(controller.signal, { page: 1, append: false })
     return () => controller.abort()
-  }, [enabled, reload])
+  }, [enabled, lida, limite, reload, reset])
 
-  return { notificacoes, loading, reload, setNotificacoes }
+  const hasMore = pagina < paginas
+
+  return {
+    notificacoes,
+    loading,
+    loadingMore,
+    reload,
+    loadMore,
+    hasMore,
+    total,
+    setNotificacoes,
+    reset,
+  }
 }
 
 export function useNotificationToasts({ enabled = true, onToast } = {}) {
@@ -84,14 +121,29 @@ export function useNotificationToasts({ enabled = true, onToast } = {}) {
       lastPollRef.current = new Date().toISOString()
 
       try {
-        const data = await notificationService.listarNotificacoes({ lida: false, limite: 10 })
-        for (const item of data) {
-          if (new Date(item.criadoEm) < new Date(since)) continue
+        const { notificacoes } = await notificationService.listarNotificacoes({
+          lida: false,
+          limite: PAGE_SIZE,
+          pagina: 1,
+        })
 
-          if (item.tipo === 'ALERTA_ORCAMENTO') {
-            onToast({ variant: 'warning', title: item.titulo, message: item.mensagem })
-          } else if (item.tipo === 'ORCAMENTO_ESTOURADO') {
-            onToast({ variant: 'error', title: item.titulo, message: item.mensagem })
+        for (const item of notificacoes) {
+          if (new Date(item.timestamp) < new Date(since)) continue
+
+          if (item.type === 'ALERTA_ORCAMENTO') {
+            onToast({ variant: 'warning', title: item.title, message: item.description })
+          } else if (item.type === 'ORCAMENTO_ESTOURADO') {
+            onToast({ variant: 'error', title: item.title, message: item.description })
+          } else if (item.type === 'RECEITA_REGISTRADA') {
+            onToast({ variant: 'success', title: item.title, message: item.description })
+          } else if (item.type === 'DESPESA_REGISTRADA') {
+            onToast({ variant: 'info', title: item.title, message: item.description })
+          } else if (item.type === 'META_ATINGIDA' || item.type === 'CONQUISTA') {
+            onToast({ variant: 'success', title: item.title, message: item.description })
+          } else if (item.type === 'STREAK' || item.type === 'INSIGHT_IA') {
+            onToast({ variant: 'info', title: item.title, message: item.description })
+          } else if (item.type === 'GRUPO_ATIVIDADE') {
+            onToast({ variant: 'info', title: item.title, message: item.description })
           }
         }
       } catch {

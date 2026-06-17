@@ -1538,14 +1538,18 @@ body:has(.auth-page) .ds-toast-container {
   color: #a78bfa;
 }
 
-/* Botão primário fixo roxo #7C3AED como no protótipo */
+/* Botão primário — tokens globais do DS */
 .auth-card .btn-primary {
-  background-color: #7c3aed !important;
+  background-color: var(--ds-color-button-primary) !important;
   color: #fff;
 }
 
 .auth-card .btn-primary:hover:not(:disabled) {
-  background-color: #6d28d9 !important;
+  background-color: var(--ds-color-button-primary-hover) !important;
+}
+
+.auth-card .btn-primary:active:not(:disabled) {
+  background-color: var(--ds-color-button-primary-active) !important;
 }
 
 .auth-card .btn-primary:disabled {

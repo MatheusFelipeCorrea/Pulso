@@ -36,11 +36,13 @@ Schema `Conquista`, `Sequencia`, seed básico — sem API, sem `/achievements`, 
 
 **Sugestão:** streak ao registrar transação + 3 conquistas iniciais (primeira meta, 7 dias seguidos, orçamento no verde).
 
-### 5. Grupos sociais
+### 5. Grupos — entregue parcialmente (jun/2026)
 
-Prisma completo (`Grupo`, `ViagemGrupo`, …), seletor de grupo **desabilitado** no formulário de viagem.
+**Implementado:** `/groups` e `/groups/:id` com 16 rotas API — criar, convidar, entrar, viagem compartilhada, pretensões, metas, aportes, chat básico, estimativas de passagem, seed demo (Macaé + Nordeste).
 
-**Sugestão:** epic separado após dashboard + perfil; alto esforço, alto valor social.
+**Ainda falta para MVP social completo:** gerenciar membros (RF-100), editar nome do grupo, múltiplas metas na UI, chat em tempo real, notificações de grupo.
+
+**Detalhe:** [Modulos/Grupos.md](./Modulos/Grupos.md).
 
 ### 6. Documentação e testes defasados
 
@@ -75,7 +77,7 @@ Requisitos e READMEs foram revisados em jun/2026. `viagemService` ainda com pouc
 
 ### Longo prazo
 
-11. **Grupos** — viagem compartilhada, despesas divididas, meta coletiva.
+11. **Grupos — fechar gaps** — membros, metas múltiplas, chat realtime (ver Modulos/Grupos.md).
 12. **Divisão de despesas** e **planejamento de compra** — ainda só na sidebar.
 13. **Criptografia** dos tokens Google em repouso.
 14. **Rate limit global** (RNF-004) além de auth.
@@ -89,7 +91,7 @@ Requisitos e READMEs foram revisados em jun/2026. `viagemService` ainda com pouc
 | 3 | Meta atingida + polish viagens | Fecha loop metas/viagens |
 | 4 | Gemini insights MVP | Diferencial prometido na landing |
 | 5 | Gamificação mínima | Engajamento com schema pronto |
-| 6 | Grupos | Epic social |
+| 6 | Grupos — gerenciar membros + polish | Fecha RF-100 e fricções do módulo já lançado |
 
 ## Lógicas que já funcionam bem (manter)
 

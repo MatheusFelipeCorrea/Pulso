@@ -1,6 +1,6 @@
 const SOUTH_AMERICA_BUS_IATA = new Set(['EZE', 'MVD', 'ASU', 'SCL', 'LIM', 'BOG']);
 
-/** Estimativas ida (ou ida e volta doméstica) por rota origem:destino */
+/** Estimativas por trecho (ida) em BRL — doméstico é exibido como ida e volta (×2) */
 const BUS_ROUTE_ESTIMATES = {
     'GRU:EZE': { convencional: 580, buser: null },
     'GIG:EZE': { convencional: 690, buser: null },
@@ -62,6 +62,13 @@ const FLIGHT_ROUTE_OVERRIDES = {
 
 function routeKey(originId, destIata) {
     return `${originId}:${destIata}`;
+}
+
+/** Converte preço de um trecho no total exibido (ida e volta = ×2). */
+function toDisplayedBusPrice(oneWayBrl, idaVolta) {
+    if (oneWayBrl == null) return null;
+    const total = idaVolta ? oneWayBrl * 2 : oneWayBrl;
+    return Math.round(total * 10) / 10;
 }
 
 function getFlightFallback(origin, destination) {
@@ -186,6 +193,7 @@ function getTrainRouteEstimate(origin, destination) {
 
 module.exports = {
     SOUTH_AMERICA_BUS_IATA,
+    toDisplayedBusPrice,
     getFlightFallback,
     getBusRouteEstimate,
     getTrainRouteEstimate,

@@ -17,15 +17,52 @@ describe('tripFlightPriceService', () => {
         expect(result.trem.disponivel).toBe(false);
     });
 
+    it('retorna hub de referência quando destino usa aeroporto vizinho', async () => {
+        const result = await obterMediaPassagem({
+            destino: 'Macaé, Rio de Janeiro, Brasil',
+            destinoMeta: {
+                catalogId: 'BR-GIG-macae',
+                iata: 'GIG',
+                label: 'Macaé',
+                countryCode: 'BR',
+                countryName: 'Brasil',
+                moedaSugerida: 'BRL',
+                domestic: true,
+            },
+            dataPrevista: '2026-03-10',
+            origemId: 'GRU',
+        });
+
+        expect(result.hubReferencia).toEqual({
+            destino: 'Macaé',
+            hub: 'Rio de Janeiro',
+            iata: 'GIG',
+        });
+    });
+
     it('retorna ônibus com Buser em destinos domésticos', async () => {
         const result = await obterMediaPassagem({
             destino: 'Rio de Janeiro',
-            dataPrevista: '2026-08-01',
+            dataPrevista: '2026-03-10',
             origemId: 'GRU',
         });
 
         expect(result.onibus.buserDisponivel).toBe(true);
+        expect(result.onibus.idaVolta).toBe(true);
+        expect(result.onibus.valorBuserBrl).toBe(179.8);
+        expect(result.onibus.valorConvencionalBrl).toBe(290);
         expect(result.onibus.valorBuserBrl).toBeLessThan(result.onibus.valorConvencionalBrl);
+    });
+
+    it('mantém ônibus internacional só de ida', async () => {
+        const result = await obterMediaPassagem({
+            destino: 'Argentina',
+            dataPrevista: '2026-03-10',
+            origemId: 'GRU',
+        });
+
+        expect(result.onibus.idaVolta).toBe(false);
+        expect(result.onibus.valorConvencionalBrl).toBe(580);
     });
 
     it('ajusta estimativa em férias de julho', async () => {

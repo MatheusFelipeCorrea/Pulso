@@ -11,11 +11,11 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 136 | 67 | ~49% |
+| Requisitos Funcionais | 136 | 80 | ~59% |
 | Requisitos Não Funcionais | 15 | 8 | ~53% |
-| **Total** | **151** | **75** | **~50%** |
+| **Total** | **151** | **88** | **~58%** |
 
-Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, transações, VT, orçamento, calendário/lembretes, dívidas, **metas**, **viagens + moedas**, homepage e notificações (orçamento, lembretes, dívidas).
+Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, transações, VT, orçamento, calendário/lembretes, dívidas, **metas**, **viagens + moedas**, **grupos (parcial)**, homepage e notificações (orçamento, lembretes, dívidas).
 
 **Fora da lista de RF (entregue):** busca global de destinos (GeoNames), estimativas de passagem com ajuste sazonal, integração opcional Duffel/Amadeus, observações na viagem.
 
@@ -38,7 +38,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | 👤 Perfil e Configurações | 8 | 0 | 🟡 |
 | 🎮 Gamificação | 7 | 0 |  |
 | 🏠 Homepage | 4 | 4 | ✅ |
-| 👥 Grupos | 15 | 0 |  |
+| 👥 Grupos | 15 | 14 | 🟡 |
 | ⚙️ Não Funcionais | 15 | 6 | 🟡 |
 | 📊 Orçamento Mensal | 6 | 6 | ✅ |
 | 💸 Divisão de Despesas | 6 | 0 |  |
@@ -245,23 +245,27 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 
 ## 👥 Módulo 13 — Grupos
 
+> Detalhamento técnico e gaps: [Modulos/Grupos.md](../Modulos/Grupos.md)
+
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-088 | O sistema deve permitir criar um grupo com nome e descrição | 🔴 Essencial |
-| - [ ] | RF-089 | O sistema deve gerar um link/código de convite para o grupo | 🔴 Essencial |
-| - [ ] | RF-090 | O sistema deve permitir entrar em um grupo via link/código de convite | 🔴 Essencial |
-| - [ ] | RF-091 | O sistema deve permitir que o criador do grupo defina um papel para cada membro (admin ou membro) | 🟡 Importante |
-| - [ ] | RF-092 | O sistema deve permitir vincular uma viagem ao grupo para planejamento compartilhado | 🔴 Essencial |
-| - [ ] | RF-093 | O sistema deve permitir que membros do grupo adicionem pretensões de gastos na viagem compartilhada | 🔴 Essencial |
-| - [ ] | RF-094 | O sistema deve calcular o custo total da viagem do grupo somando pretensões de todos os membros | 🔴 Essencial |
-| - [ ] | RF-095 | O sistema deve exibir quanto cada membro deve contribuir para a viagem | 🟡 Importante |
-| - [ ] | RF-096 | O sistema deve permitir criar metas financeiras compartilhadas no grupo | 🟡 Importante |
-| - [ ] | RF-097 | O sistema deve permitir que cada membro faça aportes individuais na meta do grupo | 🟡 Importante |
-| - [ ] | RF-098 | O sistema deve manter os perfis e finanças pessoais completamente separados dos dados do grupo | 🔴 Essencial |
-| - [ ] | RF-099 | O sistema deve permitir o membro sair do grupo a qualquer momento | 🔴 Essencial |
-| - [ ] | RF-100 | O sistema deve permitir o admin remover membros do grupo | 🟡 Importante |
-| - [ ] | RF-101 | O sistema deve exibir um painel do grupo com resumo das viagens e metas compartilhadas | 🟡 Importante |
-| - [ ] | RF-102 | O sistema deve permitir chat/mensagens dentro do grupo | 🟢 Desejável |
+| - [x] | RF-088 | O sistema deve permitir criar um grupo com nome e descrição | 🔴 Essencial |
+| - [x] | RF-089 | O sistema deve gerar um link/código de convite para o grupo | 🔴 Essencial |
+| - [x] | RF-090 | O sistema deve permitir entrar em um grupo via link/código de convite | 🔴 Essencial |
+| - [x] | RF-091 | O sistema deve permitir que o criador do grupo defina um papel para cada membro (admin ou membro) | 🟡 Importante |
+| - [x] | RF-092 | O sistema deve permitir vincular uma viagem ao grupo para planejamento compartilhado | 🔴 Essencial |
+| - [x] | RF-093 | O sistema deve permitir que membros do grupo adicionem pretensões de gastos na viagem compartilhada | 🔴 Essencial |
+| - [x] | RF-094 | O sistema deve calcular o custo total da viagem do grupo somando pretensões de todos os membros | 🔴 Essencial |
+| - [~] | RF-095 | O sistema deve exibir quanto cada membro deve contribuir para a viagem | 🟡 Importante |
+| - [x] | RF-096 | O sistema deve permitir criar metas financeiras compartilhadas no grupo | 🟡 Importante |
+| - [x] | RF-097 | O sistema deve permitir que cada membro faça aportes individuais na meta do grupo | 🟡 Importante |
+| - [x] | RF-098 | O sistema deve manter os perfis e finanças pessoais completamente separados dos dados do grupo | 🔴 Essencial |
+| - [x] | RF-099 | O sistema deve permitir o membro sair do grupo a qualquer momento | 🔴 Essencial |
+| - [x] | RF-100 | O sistema deve permitir o admin remover membros do grupo | 🟡 Importante |
+| - [x] | RF-101 | O sistema deve exibir um painel do grupo com resumo das viagens e metas compartilhadas | 🟡 Importante |
+| - [~] | RF-102 | O sistema deve permitir chat/mensagens dentro do grupo | 🟢 Desejável |
+
+**Legenda extra:** `[~]` = parcial (funciona com limitações documentadas em Modulos/Grupos.md).
 
 ---
 ## 📊 Módulo 14 — Orçamento Mensal
@@ -350,7 +354,8 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | RF-064 / RF-065 | **Removidos** — intervalo entre vendas de VT e contador regressivo de venda não fazem mais parte do escopo |
 | RF-076 | Toggle claro/escuro na **landing** (`PublicHeader`); área autenticada ainda sem controle na sidebar — tela Configurações pendente |
 | RF-103 / RF-104 | `modoUso` no cadastro/onboarding e na API de VT; sidebar já oculta VT conforme modo (`filterSidebarByUser`); tela de perfil/configurações ainda pendente |
-| Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips` |
+| Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips`, **`/groups`**, **`/groups/:id`** |
+| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros, editar grupo, metas múltiplas, meta concluída (RN-119), notificações GRUPO_ATIVIDADE/META_ATINGIDA, chat com polling 30s — ver [Modulos/Grupos.md](../Modulos/Grupos.md) |
 | Metas (RF-026–031) | CRUD, aportes, insight de aporte mensal, pausar/concluir, vínculo com viagem; falta notificação `META_ATINGIDA` (RF-032) |
 | Viagens (RF-033–043) | Moedas (cotações, conversor, histórico, favoritas), CRUD de viagens, despesas por categoria, total em BRL, observações, busca GeoNames, estimativas de passagem (avião/ônibus/trem) com ajuste sazonal; Duffel/Amadeus opcionais |
 | Dívidas (RF-126–132) | CRUD em `/debts` com tabs Me devem / Eu devo / Quitadas; resumo consolidado; filtros (busca, valor, DateRangePicker); job `DIVIDA_COBRANCA` (vence hoje / em 2 dias); limpeza automática de quitadas após 180 dias |

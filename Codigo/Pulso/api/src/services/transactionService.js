@@ -2,6 +2,9 @@ const AppError = require('../utils/appError');
 const transactionRepository = require('../repositories/transactionRepository');
 const categoryRepository = require('../repositories/categoryRepository');
 const tagRepository = require('../repositories/tagRepository');
+const notificationService = require('./notificationService');
+const gamificationService = require('./gamificationService');
+const insightService = require('./insightService');
 const prisma = require('../config/database');
 const { validarRecursoCategoria } = require('../utils/recursoCategoriaRules');
 const { mapTransacao } = require('../utils/transactionMapper');
@@ -15,10 +18,13 @@ const startOfDay = (date) => {
 const incrementarStreak = async (usuarioId) => {
     const hoje = startOfDay(new Date());
     const sequencia = await prisma.sequencia.findUnique({ where: { usuarioId } });
-    if (!sequencia) return;
+    if (!sequencia) return { antes: 0, depois: 0 };
 
+    const anterior = sequencia.sequenciaAtual;
     const ultima = sequencia.ultimaAtividade ? startOfDay(sequencia.ultimaAtividade) : null;
-    if (ultima && ultima.getTime() === hoje.getTime()) return;
+    if (ultima && ultima.getTime() === hoje.getTime()) {
+        return { antes: anterior, depois: anterior };
+    }
 
     let novaSequencia = 1;
     if (ultima) {
@@ -35,6 +41,31 @@ const incrementarStreak = async (usuarioId) => {
             sequenciaAtual: novaSequencia,
             maiorSequencia: Math.max(sequencia.maiorSequencia, novaSequencia),
             ultimaAtividade: new Date(),
+        },
+    });
+
+    return { antes: anterior, depois: novaSequencia };
+};
+
+const formatCurrencyBr = (valor) =>
+    Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+const notificarTransacaoRegistrada = async (usuarioId, transacao, categoria) => {
+    const tipo = transacao.tipo === 'RECEITA' ? 'RECEITA_REGISTRADA' : 'DESPESA_REGISTRADA';
+    const sinal = transacao.tipo === 'RECEITA' ? '+' : '-';
+    const descricao = transacao.descricao || categoria.nome;
+    const valorFmt = formatCurrencyBr(transacao.valor);
+
+    await notificationService.criarNotificacao(usuarioId, {
+        tipo,
+        titulo: tipo === 'RECEITA_REGISTRADA' ? 'Receita registrada' : 'Despesa registrada',
+        mensagem: `${descricao}: ${sinal}${valorFmt}`,
+        linkAcao: '/transactions',
+        metadados: {
+            transacaoId: transacao.id,
+            categoriaId: categoria.id,
+            valor: Number(transacao.valor).toFixed(2),
+            tipo: transacao.tipo,
         },
     });
 };
@@ -160,9 +191,14 @@ const criarTransacao = async (usuarioId, dados) => {
         );
     }
 
-    await incrementarStreak(usuarioId);
+    const streak = await incrementarStreak(usuarioId);
 
     const completa = await transactionRepository.buscarPorId(transacao.id, usuarioId);
+
+    await notificarTransacaoRegistrada(usuarioId, completa, categoria);
+    await gamificationService.processarAposTransacao(usuarioId, streak.antes, streak.depois);
+    await insightService.tentarGerarInsightAposTransacao(usuarioId);
+
     return mapTransacao(completa);
 };
 

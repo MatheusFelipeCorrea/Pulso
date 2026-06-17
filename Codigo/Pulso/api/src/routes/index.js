@@ -12,6 +12,7 @@ const debtRoutes = require('./debtRoutes');
 const metaRoutes = require('./metaRoutes');
 const moedaRoutes = require('./moedaRoutes');
 const viagemRoutes = require('./viagemRoutes');
+const grupoRoutes = require('./grupoRoutes');
 const cronRoutes = require('./cronRoutes');
 
 const router = express.Router();
@@ -29,6 +30,7 @@ router.use('/dividas', debtRoutes);
 router.use('/metas', metaRoutes);
 router.use('/moedas', moedaRoutes);
 router.use('/viagens', viagemRoutes);
+router.use('/grupos', grupoRoutes);
 router.use('/cron', cronRoutes);
 
 module.exports = router;

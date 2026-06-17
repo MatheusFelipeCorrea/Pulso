@@ -4,14 +4,33 @@ const axiosConfig = (options = {}) => ({
   signal: options.signal,
 })
 
-export async function listarNotificacoes({ lida, limite = 10, pagina = 1 } = {}, options = {}) {
+function mapNotificacao(item) {
+  return {
+    id: item.id,
+    type: item.tipo,
+    title: item.titulo,
+    description: item.mensagem ?? '',
+    timestamp: item.criadoEm,
+    read: item.lida,
+    linkAcao: item.linkAcao,
+    metadata: item.metadados,
+  }
+}
+
+export async function listarNotificacoes({ lida, limite = 20, pagina = 1 } = {}, options = {}) {
   const params = new URLSearchParams()
   if (lida === true || lida === false) params.set('lida', String(lida))
   if (limite) params.set('limite', String(limite))
   if (pagina) params.set('pagina', String(pagina))
 
-  const { data } = await api.get(`/notificacoes?${params.toString()}`, axiosConfig(options))
-  return data
+  const response = await api.get(`/notificacoes?${params.toString()}`, axiosConfig(options))
+
+  return {
+    notificacoes: (response.data ?? []).map(mapNotificacao),
+    total: Number(response.headers['x-total-count'] ?? response.data?.length ?? 0),
+    paginas: Number(response.headers['x-total-pages'] ?? 1),
+    pagina: Number(response.headers['x-current-page'] ?? pagina),
+  }
 }
 
 export async function contarNaoLidas(options = {}) {

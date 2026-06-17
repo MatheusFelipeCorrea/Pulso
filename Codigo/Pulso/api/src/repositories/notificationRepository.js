@@ -7,7 +7,7 @@ const buscarPorId = async (id, usuarioId) =>
         where: { id, usuarioId },
     });
 
-const listar = async (usuarioId, { lida, limite = 10, pagina = 1 } = {}) => {
+const listar = async (usuarioId, { lida, limite = 20, pagina = 1 } = {}) => {
     const where = { usuarioId };
     if (lida === true || lida === false) {
         where.lida = lida;
@@ -65,6 +65,18 @@ const contarNaoLidas = async (usuarioId) =>
     prisma.notificacao.count({
         where: { usuarioId, lida: false },
     });
+
+const excluirLidasAntigas = async (dias = 30) => {
+    const limite = new Date();
+    limite.setDate(limite.getDate() - dias);
+
+    return prisma.notificacao.deleteMany({
+        where: {
+            lida: true,
+            criadoEm: { lt: limite },
+        },
+    });
+};
 
 const buscarDuplicadaLembrete = async (usuarioId, tipo, lembreteId, dataAlerta) => {
     const items = await prisma.notificacao.findMany({
@@ -125,6 +137,7 @@ module.exports = {
     marcarComoLida,
     marcarTodasLidas,
     contarNaoLidas,
+    excluirLidasAntigas,
     buscarDuplicadaLembrete,
     buscarDuplicadaDivida,
     buscarDuplicadaOrcamento,

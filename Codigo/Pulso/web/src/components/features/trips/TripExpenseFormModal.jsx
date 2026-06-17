@@ -41,6 +41,7 @@ export function TripExpenseFormModal({
   viagem = null,
   despesa = null,
   totalAtual = 0,
+  previewTotalLabel = 'Total da viagem com esta pretensão:',
   submitting = false,
 }) {
   const [form, setForm] = useState(emptyForm)
@@ -169,7 +170,7 @@ export function TripExpenseFormModal({
               <Eye size={15} aria-hidden />
               Preview
             </p>
-            <span>Total da viagem com esta pretensão:</span>
+            <span>{previewTotalLabel}</span>
             <strong>{formatCurrency(previewTotal)}</strong>
           </div>
 

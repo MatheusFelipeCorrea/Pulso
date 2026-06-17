@@ -24,6 +24,7 @@ import './styles/transport.css'
 import './styles/debts.css'
 import './styles/goals.css'
 import './styles/trips.css'
+import './styles/groups.css'
 import './styles/landing.css'
 
 createRoot(document.getElementById('root')).render(

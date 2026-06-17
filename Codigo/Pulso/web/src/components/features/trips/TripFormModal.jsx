@@ -32,6 +32,9 @@ const emptyForm = () => ({
   dataPrevista: null,
   vincularMeta: false,
   metaId: null,
+  viagemVinculadaId: null,
+  vincularGrupo: false,
+  grupoId: null,
 })
 
 function formatRateValue(value) {
@@ -60,14 +63,19 @@ export function TripFormModal({
   deleting = false,
   onCreateGoal,
   defaultVincularMeta = false,
+  groupMode = false,
+  grupo = null,
+  existingTrips = [],
+  grupos = [],
 }) {
   const [form, setForm] = useState(emptyForm)
   const [error, setError] = useState('')
   const [cotacao, setCotacao] = useState(null)
   const [destinosTotal, setDestinosTotal] = useState(null)
   const [destinosLoading, setDestinosLoading] = useState(false)
-  const isEdit = Boolean(viagem)
+  const isEdit = Boolean(viagem) && !groupMode
   const isDomesticCurrency = form.moeda === 'BRL'
+  const memberCount = grupo?.quantidadeMembros ?? grupo?.membros?.length ?? 0
 
   const metaOptions = useMemo(
     () =>
@@ -79,10 +87,19 @@ export function TripFormModal({
     [metas]
   )
 
+  const grupoOptions = useMemo(
+    () =>
+      (grupos ?? []).map((g) => ({
+        value: g.id,
+        label: g.nome,
+      })),
+    [grupos]
+  )
+
   useEffect(() => {
     if (!open) return
     setError('')
-    if (viagem) {
+    if (viagem && !groupMode) {
       setForm({
         destino: viagem.destino ?? '',
         destinoMeta: viagem.destinoMeta ?? null,
@@ -90,11 +107,12 @@ export function TripFormModal({
         dataPrevista: viagem.dataPrevista ? new Date(viagem.dataPrevista) : null,
         vincularMeta: defaultVincularMeta || Boolean(viagem.metaId),
         metaId: viagem.metaId ?? null,
+        viagemVinculadaId: null,
       })
     } else {
       setForm(emptyForm())
     }
-  }, [open, viagem, defaultVincularMeta])
+  }, [open, viagem, defaultVincularMeta, groupMode])
 
   useEffect(() => {
     if (!open) return undefined
@@ -188,20 +206,43 @@ export function TripFormModal({
 
   const selectedMeta = metas.find((meta) => meta.id === form.metaId)
 
+  const handleSelectExistingTrip = (trip) => {
+    if (!trip) {
+      setForm((prev) => ({ ...prev, viagemVinculadaId: null }))
+      return
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      destino: trip.destino ?? '',
+      destinoMeta: trip.destinoMeta ?? null,
+      moeda: trip.moeda ?? prev.moeda,
+      dataPrevista: trip.dataPrevista ? new Date(trip.dataPrevista) : null,
+      viagemVinculadaId: trip.id,
+      vincularMeta: false,
+      metaId: null,
+    }))
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault()
     setError('')
 
-    if (!form.destinoMeta?.catalogId && !form.destinoMeta?.geonameId) {
-      setError('Selecione um destino da lista de sugestões.')
+    if (!form.viagemVinculadaId && !form.destinoMeta?.catalogId && !form.destinoMeta?.geonameId) {
+      setError('Selecione um destino da lista de sugestões ou uma viagem existente.')
       return
     }
     if (!form.dataPrevista) {
       setError('Selecione a data prevista.')
       return
     }
-    if (form.vincularMeta && !form.metaId) {
+    if (!groupMode && form.vincularMeta && !form.metaId) {
       setError('Selecione uma meta para vincular.')
+      return
+    }
+
+    if (!groupMode && form.vincularGrupo && !form.grupoId) {
+      setError('Selecione um grupo para vincular.')
       return
     }
 
@@ -210,7 +251,9 @@ export function TripFormModal({
       destinoMeta: form.destinoMeta,
       moeda: form.moeda,
       dataPrevista: form.dataPrevista.toISOString(),
-      metaId: form.vincularMeta ? form.metaId : null,
+      metaId: !groupMode && form.vincularMeta ? form.metaId : null,
+      viagemId: form.viagemVinculadaId ?? null,
+      grupoId: !groupMode && form.vincularGrupo ? form.grupoId : null,
     }
 
     try {
@@ -225,8 +268,19 @@ export function TripFormModal({
       <form className="trip-form" onSubmit={handleSubmit} noValidate>
         <header className="trip-form__header">
           <div>
-            <h2>{isEdit ? 'Editar Viagem' : 'Nova Viagem'}</h2>
-            <p>Planeje sua próxima aventura</p>
+            <h2>
+              {groupMode ? 'Vincular viagem ao grupo' : isEdit ? 'Editar Viagem' : 'Nova Viagem'}
+            </h2>
+            {groupMode && grupo ? (
+              <p className="trip-form__group-context">
+                <Users size={14} aria-hidden />
+                <span>
+                  {grupo.nome} • {memberCount} {memberCount === 1 ? 'membro' : 'membros'}
+                </span>
+              </p>
+            ) : (
+              <p>Planeje sua próxima aventura</p>
+            )}
           </div>
           <IconButton variant="ghost" size="sm" ariaLabel="Fechar" icon={<X size={18} />} onClick={onClose} />
         </header>
@@ -239,6 +293,9 @@ export function TripFormModal({
               loading={destinosLoading}
               totalDestinos={destinosTotal}
               onSearch={searchDestinos}
+              existingTrips={groupMode ? existingTrips : []}
+              linkedTripId={form.viagemVinculadaId}
+              onSelectExistingTrip={groupMode ? handleSelectExistingTrip : undefined}
               onChange={({ destino, destinoMeta, moedaSugerida }) =>
                 setForm((prev) => ({
                   ...prev,
@@ -252,10 +309,14 @@ export function TripFormModal({
               }
               label={
                 <FormFieldLabel icon={Globe} tone="purple">
-                  Destino
+                  {groupMode ? 'Destino da viagem' : 'Destino'}
                 </FormFieldLabel>
               }
-              placeholder="Ex: Vitória, Buenos Aires, Paris..."
+              placeholder={
+                groupMode
+                  ? 'Vincule uma viagem existente ou busque um destino...'
+                  : 'Ex: Vitória, Buenos Aires, Paris...'
+              }
             />
           </div>
 
@@ -263,7 +324,14 @@ export function TripFormModal({
             <CurrencySearchPicker
               catalog={catalog}
               value={form.moeda}
-              onChange={(moeda) => setForm((prev) => ({ ...prev, moeda }))}
+              onChange={(moeda) =>
+                setForm((prev) => ({
+                  ...prev,
+                  moeda,
+                  viagemVinculadaId:
+                    groupMode && prev.viagemVinculadaId ? null : prev.viagemVinculadaId,
+                }))
+              }
               exclude={[]}
               listMaxHeight="11rem"
               label={
@@ -309,71 +377,104 @@ export function TripFormModal({
                 </FormFieldLabel>
               }
               value={form.dataPrevista}
-              onChange={(date) => setForm((prev) => ({ ...prev, dataPrevista: date }))}
+              onChange={(date) =>
+                setForm((prev) => ({
+                  ...prev,
+                  dataPrevista: date,
+                  viagemVinculadaId:
+                    groupMode && prev.viagemVinculadaId ? null : prev.viagemVinculadaId,
+                }))
+              }
               minDate={new Date()}
               placeholder="Selecione uma data futura"
             />
           </div>
 
-          <section className="trip-form__section">
-            <div className="trip-form__toggle-row">
-              <FormFieldLabel icon={Link2} tone="purple">
-                Vincular a uma meta financeira? <span className="trip-form__optional">(opcional)</span>
-              </FormFieldLabel>
-              <Toggle
-                checked={form.vincularMeta}
-                onChange={(checked) =>
-                  setForm((prev) => ({
-                    ...prev,
-                    vincularMeta: checked,
-                    metaId: checked ? prev.metaId : null,
-                  }))
-                }
-              />
-            </div>
+          {!groupMode ? (
+            <>
+              <section className="trip-form__section">
+                <div className="trip-form__toggle-row">
+                  <FormFieldLabel icon={Link2} tone="purple">
+                    Vincular a uma meta financeira?{' '}
+                    <span className="trip-form__optional">(opcional)</span>
+                  </FormFieldLabel>
+                  <Toggle
+                    checked={form.vincularMeta}
+                    onChange={(checked) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        vincularMeta: checked,
+                        metaId: checked ? prev.metaId : null,
+                      }))
+                    }
+                  />
+                </div>
 
-            {form.vincularMeta ? (
-              <div className="trip-form__nested">
-                <Select
-                  value={form.metaId}
-                  onChange={(metaId) => setForm((prev) => ({ ...prev, metaId }))}
-                  options={metaOptions}
-                  placeholder="Selecione uma meta"
-                />
+                {form.vincularMeta ? (
+                  <div className="trip-form__nested">
+                    <Select
+                      value={form.metaId}
+                      onChange={(metaId) => setForm((prev) => ({ ...prev, metaId }))}
+                      options={metaOptions}
+                      placeholder="Selecione uma meta"
+                    />
 
-                {selectedMeta ? (
-                  <div className="trip-form__meta-card">
-                    <Target size={16} aria-hidden className="trip-form__meta-card-icon" />
-                    <div>
-                      <strong>{selectedMeta.nome}</strong>
-                      <span>
-                        {formatCurrency(selectedMeta.valorAtual)} de{' '}
-                        {formatCurrency(selectedMeta.valorAlvo)} (
-                        {Math.round(Number(selectedMeta.percentual))}%)
-                      </span>
-                    </div>
+                    {selectedMeta ? (
+                      <div className="trip-form__meta-card">
+                        <Target size={16} aria-hidden className="trip-form__meta-card-icon" />
+                        <div>
+                          <strong>{selectedMeta.nome}</strong>
+                          <span>
+                            {formatCurrency(selectedMeta.valorAtual)} de{' '}
+                            {formatCurrency(selectedMeta.valorAlvo)} (
+                            {Math.round(Number(selectedMeta.percentual))}%)
+                          </span>
+                        </div>
+                      </div>
+                    ) : null}
+
+                    <button type="button" className="trip-form__dashed-btn" onClick={onCreateGoal}>
+                      <Plus size={14} aria-hidden />
+                      Criar nova meta para esta viagem
+                    </button>
                   </div>
                 ) : null}
+              </section>
 
-                <button type="button" className="trip-form__dashed-btn" onClick={onCreateGoal}>
-                  <Plus size={14} aria-hidden />
-                  Criar nova meta para esta viagem
-                </button>
-              </div>
-            ) : null}
-          </section>
+              <section className="trip-form__section trip-form__section--muted">
+                <div className="trip-form__toggle-row">
+                  <FormFieldLabel icon={Users} tone="purple">
+                    Esta viagem é de um grupo? <span className="trip-form__optional">(opcional)</span>
+                  </FormFieldLabel>
+                  <Toggle
+                    checked={form.vincularGrupo}
+                    disabled={!grupoOptions.length}
+                    onChange={(checked) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        vincularGrupo: checked,
+                        grupoId: checked ? prev.grupoId : null,
+                      }))
+                    }
+                  />
+                </div>
 
-          <section className="trip-form__section trip-form__section--muted">
-            <div className="trip-form__toggle-row">
-              <FormFieldLabel icon={Users} tone="purple">
-                Esta viagem é de um grupo? <span className="trip-form__optional">(opcional)</span>
-              </FormFieldLabel>
-              <Toggle checked={false} disabled onChange={() => {}} />
-            </div>
-
-            <Select disabled value={null} onChange={() => {}} options={[]} placeholder="Selecione um grupo" />
-            <p className="trip-form__hint">Você poderá convidar membros após criar a viagem.</p>
-          </section>
+                {form.vincularGrupo ? (
+                  <Select
+                    value={form.grupoId}
+                    onChange={(value) => setForm((prev) => ({ ...prev, grupoId: value }))}
+                    options={grupoOptions}
+                    placeholder="Selecione um grupo"
+                  />
+                ) : null}
+                <p className="trip-form__hint">
+                  {grupoOptions.length
+                    ? 'A viagem será compartilhada com os membros do grupo selecionado.'
+                    : 'Participe de um grupo para vincular viagens compartilhadas.'}
+                </p>
+              </section>
+            </>
+          ) : null}
 
           {error ? <p className="trip-form__error">{error}</p> : null}
         </div>
@@ -396,7 +497,7 @@ export function TripFormModal({
               </Button>
             ) : null}
             <Button type="submit" variant="primary" loading={submitting}>
-              {isEdit ? 'Salvar alterações' : 'Criar Viagem'}
+              {groupMode ? 'Vincular viagem' : isEdit ? 'Salvar alterações' : 'Criar Viagem'}
             </Button>
           </div>
         </footer>

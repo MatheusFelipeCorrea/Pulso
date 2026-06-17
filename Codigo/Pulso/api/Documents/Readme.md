@@ -47,7 +47,8 @@ Servidor **Node.js + Express** com arquitetura em camadas (routes → controller
 | **Viagens** (CRUD, despesas, observações, destinos, passagens) | ✅ |
 | **Moedas** (cotações AwesomeAPI, favoritas, conversor) | ✅ |
 | GeoNames / Duffel / Amadeus (passagens) | 🟡 Opcional — estimativas sazonais sem API |
-| Insights, chatbot, gamificação, grupos, relatórios | 🔜 Schema Prisma · sem rotas |
+| **Grupos** (CRUD, convite, viagem, metas, chat) | 🟡 Parcial — ver gaps |
+| Insights, chatbot, gamificação, relatórios | 🔜 Schema Prisma · sem rotas |
 
 Prefixo global: **`/api`**
 
@@ -399,9 +400,31 @@ GEMINI_API_KEY=...                 # opcional — ainda sem uso no código
 
 ---
 
+## 👥 Grupos — detalhes
+
+Prefixo: **`/api/grupos`** (todas 🔒).
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/preview` | Prévia por código |
+| POST | `/entrar` | Entrar no grupo |
+| GET/POST | `/` | Listar / criar |
+| GET/PATCH/DELETE | `/:id` | Detalhe / editar / excluir |
+| POST | `/:id/sair` | Sair |
+| POST | `/:id/viagem` | Vincular viagem |
+| GET | `/:id/viagem/media-passagem` | Estimativas de transporte |
+| POST/PATCH/DELETE | `/:id/viagem/despesas[/:despesaId]` | Pretensões |
+| POST | `/:id/metas` | Criar metas (lote) |
+| POST | `/:id/metas/:metaId/aportes` | Aporte |
+| POST | `/:id/mensagens` | Chat |
+
+Gaps: sem remover membro, sem alterar papel, meta não auto-conclui. Ver [Documentacao/Modulos/Grupos.md](../../../../Documentacao/Modulos/Grupos.md).
+
+---
+
 ## 🗺️ Roadmap (não implementado)
 
-Módulos com **schema Prisma** mas **sem API/UI** hoje: grupos, gamificação completa, chatbot, insights IA, relatórios, divisão de despesas, planejamento de compra.
+Módulos com **schema Prisma** mas **sem API/UI completa** hoje: gamificação, chatbot, insights IA, relatórios, divisão de despesas, planejamento de compra. **Grupos:** API/UI principais entregues; pendências listadas em Modulos/Grupos.md.
 
 **Próximos passos sugeridos:** ver [Documentacao/Analise-Produto.md](../../../../Documentacao/Analise-Produto.md).
 

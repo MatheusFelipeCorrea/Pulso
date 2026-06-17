@@ -19,18 +19,35 @@ export function NotificationBell() {
   toastRef.current = toast
   const [open, setOpen] = useState(false)
   const [markingReadId, setMarkingReadId] = useState(null)
+  const [liveMessage, setLiveMessage] = useState('')
   const rootRef = useRef(null)
+  const panelRef = useRef(null)
+  const triggerRef = useRef(null)
 
   const { quantidade, reload: reloadCount, setQuantidade } = useNotificationCount()
-  const { notificacoes, loading, reload: reloadList } = useNotificationList({
+  const {
+    notificacoes,
+    loading,
+    loadingMore,
+    reload: reloadList,
+    loadMore,
+    hasMore,
+    total,
+    setNotificacoes,
+    reset,
+  } = useNotificationList({
     enabled: open,
     lida: false,
-    limite: 10,
+    limite: 20,
   })
 
   const handleNotificationToast = useCallback(({ variant, title, message }) => {
-    if (variant === 'warning') toastRef.current.warning(message ?? title)
-    else if (variant === 'error') toastRef.current.error(message ?? title)
+    const text = message ?? title
+    setLiveMessage(text)
+    if (variant === 'warning') toastRef.current.warning(text)
+    else if (variant === 'error') toastRef.current.error(text)
+    else if (variant === 'success') toastRef.current.success(text)
+    else toastRef.current.info(text)
   }, [])
 
   useNotificationToasts({ onToast: handleNotificationToast })
@@ -44,13 +61,30 @@ export function NotificationBell() {
       }
     }
 
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        setOpen(false)
+        triggerRef.current?.focus()
+      }
+    }
+
     document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleEscape)
+    panelRef.current?.focus()
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleEscape)
+    }
   }, [open])
 
   const handleToggle = () => {
-    setOpen((value) => !value)
-    if (!open) reloadList()
+    setOpen((value) => {
+      const next = !value
+      if (next) reloadList()
+      else reset()
+      return next
+    })
   }
 
   const handleMarkRead = async (id) => {
@@ -59,7 +93,7 @@ export function NotificationBell() {
     try {
       await notificationService.marcarComoLida(id)
       setQuantidade((prev) => Math.max(0, prev - 1))
-      await reloadList()
+      setNotificacoes((prev) => prev.filter((n) => n.id !== id))
       reloadCount()
     } catch (err) {
       toast.error(err.response?.data?.message ?? 'Erro ao marcar notificação')
@@ -73,6 +107,7 @@ export function NotificationBell() {
       try {
         await notificationService.marcarComoLida(notification.id)
         setQuantidade((prev) => Math.max(0, prev - 1))
+        setNotificacoes((prev) => prev.filter((n) => n.id !== notification.id))
       } catch (err) {
         toast.error(err.response?.data?.message ?? 'Erro ao marcar notificação')
         return
@@ -80,6 +115,7 @@ export function NotificationBell() {
     }
 
     setOpen(false)
+    reset()
     const route = resolveNotificationRoute(notification)
     if (route) navigate(route)
   }
@@ -88,7 +124,8 @@ export function NotificationBell() {
     try {
       await notificationService.marcarTodasLidas()
       setQuantidade(0)
-      reloadList()
+      setNotificacoes([])
+      reset()
       reloadCount()
       toast.success('Todas as notificações foram marcadas como lidas')
     } catch (err) {
@@ -98,26 +135,43 @@ export function NotificationBell() {
 
   return (
     <div className="notification-bell" ref={rootRef}>
+      <div className="notification-bell__live" aria-live="polite" aria-atomic="true">
+        {liveMessage}
+      </div>
+
       <div className="notification-bell__trigger">
         <IconButton
+          ref={triggerRef}
           variant="ghost"
           size="md"
-          ariaLabel="Notificações"
+          ariaLabel={`Notificações${quantidade > 0 ? `, ${quantidade} não lidas` : ''}`}
+          aria-expanded={open}
+          aria-haspopup="dialog"
           icon={<Bell size={20} />}
           onClick={handleToggle}
         />
         {quantidade > 0 ? (
-          <span className="notification-bell__badge" aria-label={`${quantidade} não lidas`}>
+          <span className="notification-bell__badge" aria-hidden="true">
             {quantidade > 9 ? '9+' : quantidade}
           </span>
         ) : null}
       </div>
 
       {open ? (
-        <div className="notification-bell__dropdown">
+        <div
+          ref={panelRef}
+          className="notification-bell__dropdown"
+          role="dialog"
+          aria-label="Painel de notificações"
+          tabIndex={-1}
+        >
           <NotificationPanel
             notifications={notificacoes}
             loading={loading}
+            loadingMore={loadingMore}
+            hasMore={hasMore}
+            total={total}
+            onLoadMore={loadMore}
             onMarkRead={handleMarkRead}
             onMarkAllRead={handleMarkAll}
             onView={handleView}

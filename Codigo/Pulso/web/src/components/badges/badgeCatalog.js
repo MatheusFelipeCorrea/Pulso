@@ -45,8 +45,8 @@ export const PULSO_BADGE_CATALOG = {
   'perfil.pj': { label: 'PJ/Freelancer', icon: 'Laptop', variant: 'cyan' },
   'perfil.pf': { label: 'Pessoa Física', icon: 'User', variant: 'neutral' },
 
-  'grupo.admin': { label: 'Admin', icon: 'Crown', variant: 'primary' },
-  'grupo.membro': { label: 'Membro', icon: 'User', variant: 'neutral' },
+  'grupo.admin': { label: 'Admin', icon: 'Crown', variant: 'warning' },
+  'grupo.membro': { label: 'Membro', icon: 'User', variant: 'primary' },
 
   'sync.sincronizado': { label: 'Sincronizado', icon: 'CalendarCheck', variant: 'success' },
   'sync.pendente': { label: 'Pendente', icon: 'Hourglass', variant: 'warning' },

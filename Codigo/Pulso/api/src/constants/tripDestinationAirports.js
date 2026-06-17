@@ -1,6 +1,6 @@
 const { DEFAULT_ORIGIN, resolveTripOrigin } = require('./tripOrigins');
 const { buildDestinationAirports, normalizeText } = require('./tripDestinationsCatalog');
-const { getBusRouteEstimate, getTrainRouteEstimate } = require('./tripTransportRoutes');
+const { getBusRouteEstimate, getTrainRouteEstimate, toDisplayedBusPrice } = require('./tripTransportRoutes');
 const {
     getSeasonalAdjustment,
     applySeasonalPrice,
@@ -143,10 +143,16 @@ function buildBusInsight(destination, originInput, travelDates = {}) {
 
     if (estimate) {
         const buserDisponivel = estimate.buser != null;
-        const valorConvencionalBrl = applySeasonalPrice(estimate.convencional, busSeason);
+        const idaVolta = domestic;
+        const valorConvencionalBrl = toDisplayedBusPrice(
+            applySeasonalPrice(estimate.convencional, busSeason),
+            idaVolta
+        );
         const valorBuserBrl =
-            estimate.buser != null ? applySeasonalPrice(estimate.buser, busSeason) : null;
-        const baseMessage = `Saindo de ${origin.busOrigin}${domestic ? ' · ida e volta' : ' · ida'}`;
+            estimate.buser != null
+                ? toDisplayedBusPrice(applySeasonalPrice(estimate.buser, busSeason), idaVolta)
+                : null;
+        const baseMessage = `Saindo de ${origin.busOrigin}${idaVolta ? ' · ida e volta' : ' · ida'}`;
 
         return {
             disponivel: true,
@@ -157,7 +163,7 @@ function buildBusInsight(destination, originInput, travelDates = {}) {
             valorBuserBrl,
             buserDisponivel,
             fonte: 'estimativa',
-            idaVolta: domestic,
+            idaVolta,
             ajusteSazonal: busSeason.periodo ? busSeason : null,
             mensagem: baseMessage,
         };

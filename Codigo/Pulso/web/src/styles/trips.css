@@ -977,6 +977,18 @@
   color: var(--ds-color-text-secondary);
 }
 
+.trip-form__group-context {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ds-color-text-secondary);
+}
+
+.trip-form__group-context svg {
+  color: var(--ds-color-primary-light);
+  flex-shrink: 0;
+}
+
 .trip-form__body {
   display: flex;
   flex-direction: column;
@@ -2763,6 +2775,11 @@
 
 .trip-destination-picker__option--selected {
   background: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
+}
+
+.trip-destination-picker__option--trip .trip-destination-picker__option-icon {
+  background: color-mix(in srgb, var(--ds-color-warning) 18%, transparent);
+  color: var(--ds-color-warning);
 }
 
 .trip-destination-picker__option-icon {
