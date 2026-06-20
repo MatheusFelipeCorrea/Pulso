@@ -57,4 +57,6 @@ module.exports = {
     CORS_ORIGIN: process.env.CORS_ORIGIN,
     FRONTEND_URL: process.env.FRONTEND_URL,
     CRON_SECRET: process.env.CRON_SECRET,
+    BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
+    API_PUBLIC_URL: process.env.API_PUBLIC_URL,
 };

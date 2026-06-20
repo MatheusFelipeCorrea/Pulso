@@ -10,3 +10,6 @@ node_modules/
 !.env.example
 !**/.env.example
 .vercel
+
+# Uploads locais (dev)
+Codigo/Pulso/api/uploads/

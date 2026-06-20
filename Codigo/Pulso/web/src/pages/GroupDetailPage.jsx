@@ -257,14 +257,16 @@ export default function GroupDetailPage() {
     }
   }
 
-  const handleChangeImage = async ({ urlImagem }) => {
+  const handleChangeImage = async ({ urlImagem, file }) => {
     setImageSubmitting(true)
     try {
-      const data = await grupoService.editarGrupo(id, { urlImagem })
+      const data = file
+        ? await grupoService.enviarImagemGrupo(id, file)
+        : await grupoService.editarGrupo(id, { urlImagem })
       applyGrupo(data)
       setImageOpen(false)
       toastRef.current.success(
-        urlImagem ? 'Imagem do grupo atualizada!' : 'Imagem da viagem restaurada!'
+        file || urlImagem ? 'Foto do grupo atualizada!' : 'Foto da viagem restaurada!'
       )
     } catch (err) {
       toastRef.current.error(err.response?.data?.message ?? 'Erro ao atualizar imagem')

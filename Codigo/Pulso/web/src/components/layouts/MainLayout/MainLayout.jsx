@@ -6,11 +6,13 @@ import { useIsDesktop } from '@/design-system/hooks/useMediaQuery'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { NotificationBell } from '@/components/layouts/NotificationBell/NotificationBell.jsx'
 import { UserMenu } from '@/components/layouts/UserMenu/UserMenu.jsx'
+import { useUserSync } from '@/hooks/useUserSync.js'
 
 export function MainLayout() {
   const isDesktop = useIsDesktop()
   const sidebarState = useSidebarState()
   const { isCollapsed, mobileOpen, openMobile, closeMobile } = sidebarState
+  useUserSync()
 
   return (
     <div

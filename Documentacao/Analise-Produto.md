@@ -4,101 +4,81 @@
 
 ## O que já é sólido
 
-- **Core financeiro:** auth (email + Google), transações com recorrência, categorias, tags, orçamento com alertas.
+- **Core financeiro:** auth (email + Google), transações com recorrência, categorias, **tags (CRUD)**, orçamento com alertas.
 - **Operacional:** vale transporte por `modoUso`, calendário + lembretes + sync Google Calendar.
 - **Planejamento:** metas com aportes, dívidas com pagamentos parciais, viagens com despesas/observações.
-- **Viagens (diferencial):** busca GeoNames, estimativas sazonais (avião/ônibus/trem), cotação Duffel opcional, conversor de moedas.
-- **Qualidade:** testes extensos na API (services, jobs, providers) e boa cobertura em utils/services do web.
+- **Viagens (diferencial):** GeoNames, estimativas sazonais, Duffel opcional, conversor de moedas.
+- **Grupos (social):** lista + detalhe, membros, viagem compartilhada, pretensões, metas, aportes, chat paginado, notificações de grupo — ver [Modulos/Grupos.md](./Modulos/Grupos.md).
+- **Notificações:** sino paginado (20 + “Ver mais”), retenção 30d lidas, tipos RECEITA/DESPESA/STREAK/CONQUISTA/INSIGHT (MVP rule-based).
+- **Qualidade:** testes extensos na API e boa cobertura em utils/services do web.
 
 ## Gaps principais
 
 ### 1. Navegação vs realidade
 
-A sidebar lista **todos** os módulos, mas `/dashboard` (rota padrão) e vários itens ainda abrem `InDevelopmentPage`. O usuário cai em placeholder ao explorar o menu.
+A sidebar lista módulos que ainda abrem `InDevelopmentPage`: `/dashboard`, `/purchase-planning`, **`/expense-split`**, `/reports`, `/insights`, `/chatbot`, `/achievements`, `/profile`, `/settings`.
 
-**Sugestão:** entregar dashboard mínimo ou esconder links não prontos até lançar.
+**Sugestão:** dashboard mínimo ou ocultar links até lançar.
 
 ### 2. Perfil e configurações
 
-`modoUso` (Estagiário/CLT/PJ/PF), renda fixa, VA/VR/VT e preferências existem no banco mas **não têm tela**. VT e regras de benefício dependem disso.
+`modoUso`, renda fixa, VA/VR/VT e preferências existem no banco mas **não têm tela**. VT depende disso.
 
-**Sugestão:** `/settings` com modo de uso + renda + tema + exclusão de conta (RF-073–077, RF-103–104).
+**Sugestão:** `/settings` (RF-073–077, RF-103–104).
 
-### 3. IA prometida, não implementada
+### 3. IA prometida, parcial
 
-`GEMINI_API_KEY` no `.env`, modelos `MensagemChat` e `HistoricoScore`, landing citando insights — **zero provider** no `api/src`.
+Landing + enum `INSIGHT_IA`. Hoje: regra simples na API (maior gasto do mês). **Gemini** e chatbot (`MensagemChat`) ainda sem provider.
 
-**Sugestão (MVP):** insights mensais no dashboard (“gastou X% a mais em alimentação”) antes do chatbot completo.
+### 4. Gamificação — backend sim, UI não
 
-### 4. Gamificação órfã
+API: streak/conquistas ao registrar transação/meta; notificações apontam para `/achievements` (placeholder).
 
-Schema `Conquista`, `Sequencia`, seed básico — sem API, sem `/achievements`, sem notificação `CONQUISTA` / `STREAK`.
+**Sugestão:** tela mínima de conquistas + streak.
 
-**Sugestão:** streak ao registrar transação + 3 conquistas iniciais (primeira meta, 7 dias seguidos, orçamento no verde).
+### 5. Divisão de despesas (`/expense-split`)
 
-### 5. Grupos — entregue parcialmente (jun/2026)
+Módulo **não implementado** (RF-115–120). O detalhe do grupo tem **MVP RF-095** (pretensão + divisão igual, só UI). Quando `/expense-split` existir, **vincular** ou migrar essa lógica — não duplicar split bill no card de viagem.
 
-**Implementado:** `/groups` e `/groups/:id` com 16 rotas API — criar, convidar, entrar, viagem compartilhada, pretensões, metas, aportes, chat básico, estimativas de passagem, seed demo (Macaé + Nordeste).
+### 6. Grupos — gaps reais restantes
 
-**Ainda falta para MVP social completo:** gerenciar membros (RF-100), editar nome do grupo, múltiplas metas na UI, chat em tempo real, notificações de grupo.
+| Gap | Prioridade |
+|-----|------------|
+| Upload de imagem (arquivo) | Alta |
+| UX clara de foto no criar/editar | Alta |
+| Chat tempo real | Média |
+| RF-095 completo via expense-split | Média (após módulo) |
+| Testes E2E grupos | Média |
 
-**Detalhe:** [Modulos/Grupos.md](./Modulos/Grupos.md).
-
-### 6. Documentação e testes defasados
-
-Requisitos e READMEs foram revisados em jun/2026. `viagemService` ainda com poucos testes de integração.
+Detalhe: [Modulos/Grupos.md](./Modulos/Grupos.md).
 
 ### 7. Integrações opcionais
 
 | Integração | Gap |
 |------------|-----|
-| Duffel live | Conta + token `duffel_live_` para preços reais |
-| GeoNames | Ativar “Free Web Services” na conta |
-| Tags | Sem editar/excluir (aceitável no MVP) |
-| `META_ATINGIDA` | Enum existe; job/notificação não dispara |
-
-## Funcionalidades legais para implementar
-
-### Curto prazo (reuso máximo do que existe)
-
-1. **Dashboard** — cards: saldo do mês, orçamento, meta mais próxima, próxima viagem, lembretes.
-2. **Notificação de meta atingida** — ao cruzar 100% em `metaService`.
-3. **Links externos de passagem** — ClickBus/Buser/Google Flights com origem/destino/data (sem scrape).
-4. **Histórico de cotação na viagem** — salvar snapshot semanal da estimativa aérea para ver tendência.
-5. **Perfil/settings** — destrava VT e onboarding de renda fixa.
-
-### Médio prazo
-
-6. **Relatórios** — PDF/CSV (deps já instaladas: `recharts`, `@react-pdf/renderer`, `papaparse`).
-7. **Insights Gemini** — resumo mensal + alertas (“categoria X estourou 2 meses seguidos”).
-8. **Chatbot contextual** — perguntas sobre saldo, metas e viagem ativa.
-9. **Gamificação leve** — conquistas + desafio mensal.
-10. **Tags CRUD** — editar/excluir se usuários pedirem.
-
-### Longo prazo
-
-11. **Grupos — fechar gaps** — membros, metas múltiplas, chat realtime (ver Modulos/Grupos.md).
-12. **Divisão de despesas** e **planejamento de compra** — ainda só na sidebar.
-13. **Criptografia** dos tokens Google em repouso.
-14. **Rate limit global** (RNF-004) além de auth.
+| Duffel live | Token `duffel_live_` |
+| GeoNames | Ativar “Free Web Services” |
+| Storage de imagens | Upload grupo/perfil |
+| Tokens Google | Criptografia em repouso |
 
 ## Prioridade sugerida
 
 | # | Entrega | Por quê |
 |---|---------|---------|
-| 1 | Dashboard | Primeira tela após login deixa de ser placeholder |
-| 2 | Perfil / `modoUso` | Desbloqueia regras já codificadas |
-| 3 | Meta atingida + polish viagens | Fecha loop metas/viagens |
-| 4 | Gemini insights MVP | Diferencial prometido na landing |
-| 5 | Gamificação mínima | Engajamento com schema pronto |
-| 6 | Grupos — gerenciar membros + polish | Fecha RF-100 e fricções do módulo já lançado |
+| 1 | Dashboard | Primeira tela útil pós-login |
+| 2 | Perfil / `modoUso` | Desbloqueia VT e onboarding |
+| 3 | Upload imagem grupo | Fricção social alta |
+| 4 | `/achievements` mínimo | Fecha loop notificações gamificação |
+| 5 | Gemini insights MVP | Diferencial landing |
+| 6 | **`/expense-split`** | RF-095 completo + sidebar coerente |
 
 ## Lógicas que já funcionam bem (manter)
 
-- Estimativas de transporte com **ajuste sazonal** por data da viagem (sem depender de API paga).
-- **Fallback em camadas:** Duffel → Amadeus → estimativa regional.
-- **GeoNames + catálogo** híbrido para destinos.
-- Jobs de orçamento, lembretes e dívidas com notificações no sino.
+- Estimativas de transporte com ajuste sazonal.
+- Fallback Duffel → Amadeus → estimativa regional.
+- GeoNames + catálogo híbrido.
+- Jobs orçamento, lembretes, dívidas, limpeza notificações.
+- Grupos: fallback imagem viagem → capa destino.
 
 ---
 

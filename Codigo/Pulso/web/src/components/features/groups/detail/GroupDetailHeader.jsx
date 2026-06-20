@@ -1,4 +1,4 @@
-import { LogOut, Trash2, ArrowLeft, Copy, Pencil } from 'lucide-react'
+import { LogOut, Trash2, ArrowLeft, Copy, Pencil, Camera } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { PulsoBadgeByKind } from '@/components/badges/PulsoBadge.jsx'
@@ -27,14 +27,24 @@ export function GroupDetailHeader({
       </Link>
 
       <header className="group-detail-page__hero group-detail-page__hero-panel">
-        <GroupThumbnail
-          nome={grupo.nome}
-          src={imagem}
-          size="sm"
-          className="group-detail-page__thumb"
-          editable={canEditImage}
-          onEdit={() => onChangeImage?.()}
-        />
+        <div className="group-detail-page__thumb-wrap">
+          <GroupThumbnail
+            nome={grupo.nome}
+            src={imagem}
+            size="sm"
+            className="group-detail-page__thumb"
+          />
+          {canEditImage ? (
+            <button
+              type="button"
+              className="group-detail-page__change-photo"
+              onClick={() => onChangeImage?.()}
+            >
+              <Camera size={13} aria-hidden />
+              Alterar foto
+            </button>
+          ) : null}
+        </div>
         <div className="group-detail-page__hero-copy">
           <div className="group-detail-page__title-row">
             <h1 className="group-detail-page__title">{grupo.nome}</h1>

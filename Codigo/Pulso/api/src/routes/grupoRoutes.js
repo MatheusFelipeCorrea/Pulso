@@ -2,6 +2,7 @@ const express = require('express');
 const grupoController = require('../controllers/grupoController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const validateMiddleware = require('../middlewares/validateMiddleware');
+const { handleGrupoImageUpload } = require('../middlewares/grupoImageUploadMiddleware');
 const {
     criarGrupoSchema,
     editarGrupoSchema,
@@ -35,6 +36,14 @@ router.post('/', authMiddleware, validateMiddleware(criarGrupoSchema), grupoCont
 router.get('/:id', authMiddleware, validateMiddleware(grupoIdParamSchema), grupoController.obter);
 
 router.patch('/:id', authMiddleware, validateMiddleware(editarGrupoSchema), grupoController.editar);
+
+router.post(
+    '/:id/imagem',
+    authMiddleware,
+    validateMiddleware(grupoIdParamSchema),
+    handleGrupoImageUpload,
+    grupoController.enviarImagem
+);
 
 router.delete('/:id', authMiddleware, validateMiddleware(grupoIdParamSchema), grupoController.excluir);
 

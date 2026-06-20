@@ -79,10 +79,13 @@ export default function GroupsPage() {
     }
   }
 
-  const handleCreate = async (payload) => {
+  const handleCreate = async ({ nome, descricao, imagemFile }) => {
     setCreating(true)
     try {
-      const grupo = await grupoService.criarGrupo(payload)
+      let grupo = await grupoService.criarGrupo({ nome, descricao })
+      if (imagemFile) {
+        grupo = await grupoService.enviarImagemGrupo(grupo.id, imagemFile)
+      }
       toastRef.current.success('Grupo criado com sucesso!')
       setCreateOpen(false)
       await recarregar()

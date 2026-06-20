@@ -1,4 +1,5 @@
 const AppError = require('../utils/appError');
+const { storeGrupoImage } = require('./grupoImageStorageService');
 const grupoRepository = require('../repositories/grupoRepository');
 const viagemRepository = require('../repositories/viagemRepository');
 const { attachCoverImage } = require('./tripDestinationImageService');
@@ -146,6 +147,14 @@ const editarGrupo = async (usuarioId, grupoId, dados) => {
     }
 
     await grupoRepository.atualizar(grupoId, payload);
+    const grupo = await buscarGrupoDoUsuario(grupoId, usuarioId);
+    return mapGrupoDetalhe(grupo, usuarioId);
+};
+
+const enviarImagemGrupo = async (usuarioId, grupoId, file) => {
+    await buscarMembroAdmin(grupoId, usuarioId);
+    const urlImagem = await storeGrupoImage(grupoId, file);
+    await grupoRepository.atualizar(grupoId, { urlImagem });
     const grupo = await buscarGrupoDoUsuario(grupoId, usuarioId);
     return mapGrupoDetalhe(grupo, usuarioId);
 };
@@ -641,6 +650,7 @@ module.exports = {
     obterGrupo,
     criarGrupo,
     editarGrupo,
+    enviarImagemGrupo,
     excluirGrupo,
     sairDoGrupo,
     removerMembroGrupo,

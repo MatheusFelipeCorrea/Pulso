@@ -14,6 +14,7 @@ const moedaRoutes = require('./moedaRoutes');
 const viagemRoutes = require('./viagemRoutes');
 const grupoRoutes = require('./grupoRoutes');
 const cronRoutes = require('./cronRoutes');
+const syncRoutes = require('./syncRoutes');
 
 const router = express.Router();
 
@@ -32,5 +33,6 @@ router.use('/moedas', moedaRoutes);
 router.use('/viagens', viagemRoutes);
 router.use('/grupos', grupoRoutes);
 router.use('/cron', cronRoutes);
+router.use('/sync', syncRoutes);
 
 module.exports = router;

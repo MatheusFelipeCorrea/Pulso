@@ -6,18 +6,21 @@ import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { InputText } from '@/design-system/components/inputs/InputText/InputText.jsx'
 import { Textarea } from '@/design-system/components/inputs/Textarea/Textarea.jsx'
+import { GroupImagePicker } from '@/components/features/groups/GroupImagePicker.jsx'
 
 const DESCRIPTION_MAX = 500
 
 export function CreateGroupModal({ open, onClose, onSubmit, loading }) {
   const [nome, setNome] = useState('')
   const [descricao, setDescricao] = useState('')
+  const [imagemFile, setImagemFile] = useState(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
     if (!open) return
     setNome('')
     setDescricao('')
+    setImagemFile(null)
     setError('')
   }, [open])
 
@@ -32,6 +35,7 @@ export function CreateGroupModal({ open, onClose, onSubmit, loading }) {
     await onSubmit?.({
       nome: trimmed,
       descricao: descricao.trim() || null,
+      imagemFile,
     })
   }
 
@@ -44,6 +48,15 @@ export function CreateGroupModal({ open, onClose, onSubmit, loading }) {
         </header>
 
         <div className="group-create-modal__body">
+          <section className="group-create-modal__photo" aria-label="Foto do grupo">
+            <GroupImagePicker
+              nome={nome.trim() || 'Grupo'}
+              file={imagemFile}
+              onFileChange={setImagemFile}
+              helperText="Opcional agora. Se vincular uma viagem depois, a foto do destino aparece automaticamente."
+            />
+          </section>
+
           <InputText
             label={
               <FormFieldLabel icon={Users} tone="purple">

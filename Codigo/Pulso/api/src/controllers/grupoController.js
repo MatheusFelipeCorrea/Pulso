@@ -36,6 +36,15 @@ const editar = async (req, res, next) => {
     }
 };
 
+const enviarImagem = async (req, res, next) => {
+    try {
+        const grupo = await grupoService.enviarImagemGrupo(req.user.id, req.params.id, req.file);
+        res.status(200).json(grupo);
+    } catch (error) {
+        next(error);
+    }
+};
+
 const excluir = async (req, res, next) => {
     try {
         await grupoService.excluirGrupo(req.user.id, req.params.id);
@@ -226,6 +235,7 @@ module.exports = {
     obter,
     criar,
     editar,
+    enviarImagem,
     excluir,
     sair,
     preview,

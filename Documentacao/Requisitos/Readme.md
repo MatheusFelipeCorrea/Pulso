@@ -15,7 +15,7 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | Requisitos Não Funcionais | 15 | 8 | ~53% |
 | **Total** | **151** | **88** | **~58%** |
 
-Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, transações, VT, orçamento, calendário/lembretes, dívidas, **metas**, **viagens + moedas**, **grupos (parcial)**, homepage e notificações (orçamento, lembretes, dívidas).
+Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, transações, VT, orçamento, calendário/lembretes, dívidas, **metas**, **viagens + moedas**, **grupos**, homepage e notificações (orçamento, lembretes, dívidas, transações, gamificação MVP, insights rule-based).
 
 **Fora da lista de RF (entregue):** busca global de destinos (GeoNames), estimativas de passagem com ajuste sazonal, integração opcional Duffel/Amadeus, observações na viagem.
 
@@ -265,6 +265,8 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [x] | RF-101 | O sistema deve exibir um painel do grupo com resumo das viagens e metas compartilhadas | 🟡 Importante |
 | - [~] | RF-102 | O sistema deve permitir chat/mensagens dentro do grupo | 🟢 Desejável |
 
+**RF-095 (parcial):** toggle *Por pretensão* / *Divisão igual* no card viagem (UI + `localStorage`). Split custom e acerto de contas → módulo **Divisão de Despesas** (`/expense-split`, RF-115–120), a vincular depois.
+
 **Legenda extra:** `[~]` = parcial (funciona com limitações documentadas em Modulos/Grupos.md).
 
 ---
@@ -355,14 +357,14 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | RF-076 | Toggle claro/escuro na **landing** (`PublicHeader`); área autenticada ainda sem controle na sidebar — tela Configurações pendente |
 | RF-103 / RF-104 | `modoUso` no cadastro/onboarding e na API de VT; sidebar já oculta VT conforme modo (`filterSidebarByUser`); tela de perfil/configurações ainda pendente |
 | Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips`, **`/groups`**, **`/groups/:id`** |
-| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros, editar grupo, metas múltiplas, meta concluída (RN-119), notificações GRUPO_ATIVIDADE/META_ATINGIDA, chat com polling 30s — ver [Modulos/Grupos.md](../Modulos/Grupos.md) |
-| Metas (RF-026–031) | CRUD, aportes, insight de aporte mensal, pausar/concluir, vínculo com viagem; falta notificação `META_ATINGIDA` (RF-032) |
+| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros, editar grupo, metas múltiplas, RN-119, notificações GRUPO/META, chat paginado + polling, viagem pessoal→grupo, RF-095 MVP (divisão igual UI) — [Modulos/Grupos.md](../Modulos/Grupos.md) |
+| Metas (RF-026–031) | CRUD, aportes, pausar/concluir, vínculo viagem; `META_ATINGIDA` pessoal e grupo |
 | Viagens (RF-033–043) | Moedas (cotações, conversor, histórico, favoritas), CRUD de viagens, despesas por categoria, total em BRL, observações, busca GeoNames, estimativas de passagem (avião/ônibus/trem) com ajuste sazonal; Duffel/Amadeus opcionais |
 | Dívidas (RF-126–132) | CRUD em `/debts` com tabs Me devem / Eu devo / Quitadas; resumo consolidado; filtros (busca, valor, DateRangePicker); job `DIVIDA_COBRANCA` (vence hoje / em 2 dias); limpeza automática de quitadas após 180 dias |
-| Notificações | Orçamento (`ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO`) + **lembretes** (`LEMBRETE_VENCIMENTO`) + **dívidas** (`DIVIDA_COBRANCA`) via jobs diários + sino no layout |
+| Notificações | Orçamento, lembretes, dívidas, transações (RECEITA/DESPESA), streak/conquista, insight MVP, grupos — sino paginado (20), retenção 30d lidas |
 | Google Calendar | Sync Pulso → Google na criação/edição; **importação Google → Pulso** ao abrir o mês e após sync manual; marcar pago remove evento |
 | Lembretes recorrentes | UI “Repetir todo mês” enviada ao backend; job diário gera instâncias mensais |
-| Tags | Criar na digitação + listar no catálogo — **sem editar/excluir** (suficiente para MVP; ver observação abaixo) |
+| Tags | CRUD em Transações → **Tags**; criação sob demanda na transação |
 | Calendário + IA | Tela entregue; integração com IA (Gemini) na página do calendário **pendente** |
 | Banco completo | Schema Prisma com 30+ entidades; API expõe auth, transações, VT, orçamento, lembretes, calendário, dívidas, **metas**, **viagens**, **moedas** e notificações |
 
@@ -374,7 +376,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | Tokens Google em repouso | JSON sem criptografia (schema prevê criptografia) |
 | Cron Vercel (Hobby) | Jobs diários 1×/dia; orçamento local roda a cada 20 min |
 | Cobertura de testes (RNF-015) | API ~95% linhas / ~94% statements (Jest); Web ~97% linhas (Vitest) — services, utils, jobs, middlewares |
-| Tags CRUD completo | Opcional pós-MVP; criação sob demanda cobre o fluxo atual |
+| Tags CRUD completo | Entregue (jun/2026); merge de duplicatas opcional pós-MVP |
 
 ### Tags — posicionamento (jun/2026)
 

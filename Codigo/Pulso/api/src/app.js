@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const passport = require('./config/passport');
@@ -25,6 +26,17 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(passport.initialize());
+
+// Uploads locais (dev) — produção usa Vercel Blob
+if (!process.env.VERCEL) {
+    app.use(
+        '/api/uploads/grupos',
+        express.static(path.join(__dirname, '../uploads/grupos'), {
+            maxAge: '7d',
+            immutable: true,
+        })
+    );
+}
 
 // Health check
 app.get('/api/health', (req, res) => {

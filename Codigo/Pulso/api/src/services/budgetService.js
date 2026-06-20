@@ -214,41 +214,55 @@ const criarNotificacaoOrcamento = async ({
     });
 };
 
+const verificarLimitesUsuarioENotificar = async (usuarioId, mesReferencia = null) => {
+    const mes = mesReferencia ?? mesReferenciaFromQuery(mesAtualString());
+    const total = await budgetRepository.contarPorUsuarioEMes(usuarioId, mes);
+    if (total === 0) {
+        return { criadas: 0, skipped: true };
+    }
+
+    const status = await obterStatusOrcamento(usuarioId, { mes: mesReferenciaToQuery(mes) });
+    let criadas = 0;
+
+    for (const categoria of status.categorias) {
+        if (categoria.percentualUsado >= 100) {
+            const notif = await criarNotificacaoOrcamento({
+                usuarioId,
+                tipo: 'ORCAMENTO_ESTOURADO',
+                categoriaNome: categoria.categoriaNome,
+                gastoValor: categoria.gastoValor,
+                limiteValor: categoria.limiteValor,
+                categoriaId: categoria.categoriaId,
+                mesReferencia: mes,
+                percentual: Math.round(categoria.percentualUsado),
+            });
+            if (notif) criadas += 1;
+        } else if (categoria.percentualUsado >= 80) {
+            const notif = await criarNotificacaoOrcamento({
+                usuarioId,
+                tipo: 'ALERTA_ORCAMENTO',
+                categoriaNome: categoria.categoriaNome,
+                gastoValor: categoria.gastoValor,
+                limiteValor: categoria.limiteValor,
+                categoriaId: categoria.categoriaId,
+                mesReferencia: mes,
+                percentual: Math.round(categoria.percentualUsado),
+            });
+            if (notif) criadas += 1;
+        }
+    }
+
+    return { criadas, skipped: false };
+};
+
 const verificarLimitesENotificar = async () => {
     const mesReferencia = mesReferenciaFromQuery(mesAtualString());
     const usuarioIds = await budgetRepository.buscarUsuariosComOrcamentoNoMes(mesReferencia);
     let criadas = 0;
 
     for (const usuarioId of usuarioIds) {
-        const status = await obterStatusOrcamento(usuarioId, { mes: mesReferenciaToQuery(mesReferencia) });
-
-        for (const categoria of status.categorias) {
-            if (categoria.percentualUsado >= 100) {
-                const notif = await criarNotificacaoOrcamento({
-                    usuarioId,
-                    tipo: 'ORCAMENTO_ESTOURADO',
-                    categoriaNome: categoria.categoriaNome,
-                    gastoValor: categoria.gastoValor,
-                    limiteValor: categoria.limiteValor,
-                    categoriaId: categoria.categoriaId,
-                    mesReferencia,
-                    percentual: Math.round(categoria.percentualUsado),
-                });
-                if (notif) criadas += 1;
-            } else if (categoria.percentualUsado >= 80) {
-                const notif = await criarNotificacaoOrcamento({
-                    usuarioId,
-                    tipo: 'ALERTA_ORCAMENTO',
-                    categoriaNome: categoria.categoriaNome,
-                    gastoValor: categoria.gastoValor,
-                    limiteValor: categoria.limiteValor,
-                    categoriaId: categoria.categoriaId,
-                    mesReferencia,
-                    percentual: Math.round(categoria.percentualUsado),
-                });
-                if (notif) criadas += 1;
-            }
-        }
+        const resultado = await verificarLimitesUsuarioENotificar(usuarioId, mesReferencia);
+        criadas += resultado.criadas;
     }
 
     return { criadas, usuariosVerificados: usuarioIds.length };
@@ -261,4 +275,5 @@ module.exports = {
     removerOrcamento,
     copiarOrcamento,
     verificarLimitesENotificar,
+    verificarLimitesUsuarioENotificar,
 };

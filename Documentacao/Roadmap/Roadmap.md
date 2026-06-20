@@ -13,7 +13,7 @@ Fases **concluídas ou em uso**:
 - Fase 2 — Layouts + Sidebar
 - Fase 3 — Autenticação
 - Fase 4 (parcial) — Transações, VT, orçamento, dívidas, metas, viagens
-- Fase 7 (parcial) — **Grupos** (lista + detalhe + API; gaps em membros/metas/chat)
+- Fase 7 (quase fechada) — **Grupos** (ver gaps em [Modulos/Grupos.md](../Modulos/Grupos.md))
 
 **Próximo foco sugerido:** fechar gaps de Grupos + Dashboard + perfil/settings (ver [Analise-Produto.md](../Analise-Produto.md) e [Modulos/Grupos.md](../Modulos/Grupos.md)).
 
@@ -413,29 +413,22 @@ Fases **concluídas ou em uso**:
 
 ---
 
-## Fase 7 — Social (Grupos) 🟡 Parcial (jun/2026)
+## Fase 7 — Social (Grupos) 🟡 Quase fechado (jun/2026)
 
 ```
-- [x] Backend: CRUD grupos + membros (entrada/saída)
-- [x] Backend: gerar código de convite
+- [x] Backend: CRUD grupos + membros (entrada/saída, papéis)
 - [x] Backend: viagens de grupo + pretensões por membro
 - [x] Backend: metas de grupo + aportes por membro
-- [x] Backend: chat do grupo (POST mensagem; últimas 100 no detalhe)
-- [x] Frontend: tela Grupos (lista)
-- [x] Frontend: tela Detalhe do Grupo (4 cards)
-- [x] Modal: novo grupo
-- [x] Modal: entrar no grupo
-- [x] Modal: convidar
-- [x] Modal: meta do grupo
-- [x] Modal: aporte no grupo
-- [x] Cálculo: total por membro (pretensões)
-- [x] Ações: sair do grupo, excluir (admin) — no header
-- [ ] Backend + UI: gerenciar membros (remover, papel, transferir admin)
-- [ ] UI: editar nome/descrição do grupo
-- [ ] Meta concluída automaticamente (RN-119)
-- [ ] Notificações GRUPO_ATIVIDADE (RN-120)
-- [ ] Chat tempo real / paginação
-- [ ] Viagem pessoal → vincular grupo (TripFormModal)
+- [x] Backend: chat (POST + GET /mensagens paginado)
+- [x] Frontend: lista + detalhe (4 cards, ícones)
+- [x] Modais: criar, entrar, convidar, gerenciar membros, editar, metas, aporte, imagem (URL)
+- [x] RF-095 MVP: toggle pretensão / divisão igual (UI; split completo → Fase expense-split)
+- [x] Viagem pessoal → grupo (TripFormModal)
+- [x] Notificações GRUPO_ATIVIDADE / META_ATINGIDA
+- [x] RN-119 meta concluída automaticamente
+- [ ] Upload de imagem (arquivo jpg/png)
+- [ ] Chat tempo real (WebSocket/SSE)
+- [ ] Vincular RF-095 ao módulo /expense-split (após Fase 15)
 ```
 
 Ver gaps: [Modulos/Grupos.md](../Modulos/Grupos.md).

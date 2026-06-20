@@ -20,6 +20,15 @@ export async function editarGrupo(id, payload) {
   return data
 }
 
+export async function enviarImagemGrupo(id, file) {
+  const formData = new FormData()
+  formData.append('imagem', file)
+  const { data } = await api.post(`/grupos/${id}/imagem`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return data
+}
+
 export async function excluirGrupo(id) {
   await api.delete(`/grupos/${id}`)
 }
