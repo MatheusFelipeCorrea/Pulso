@@ -219,6 +219,7 @@ model Usuario {
   orcamentos          Orcamento[]
   notificacoes        Notificacao[]
   dividas             Divida[]
+  itensPlanejamentoCompra ItemPlanejamentoCompra[]
 
   @@index([email])
   @@index([tokenVerificacaoEmail])
@@ -329,6 +330,7 @@ model Transacao {
   pai       Transacao?     @relation("TransacoesFilhas", fields: [paiId], references: [id], onDelete: SetNull)
   filhas    Transacao[]    @relation("TransacoesFilhas")
   tags      TransacaoTag[]
+  itemPlanejamentoCompra ItemPlanejamentoCompra?
 
   @@index([usuarioId, data(sort: Desc)])
   @@index([usuarioId, categoriaId])
@@ -391,6 +393,7 @@ model Meta {
   usuario Usuario      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   aportes AporteMeta[]
   viagens Viagem[]
+  itensPlanejamentoCompra ItemPlanejamentoCompra[]
 
   @@index([usuarioId, status])
   @@index([usuarioId, prazo])
@@ -837,6 +840,50 @@ model PagamentoDivida {
 
   @@index([dividaId, dataPagamento(sort: Desc)])
   @@map("pagamentos_divida")
+}
+
+// ==========================================
+// PLANEJAMENTO DE COMPRA
+// ==========================================
+
+enum StatusItemCompra {
+  DESEJADO
+  COMPRADO
+}
+
+enum CategoriaItemCompra {
+  TECNOLOGIA
+  ELETRONICOS
+  ACESSORIOS
+  OUTROS
+}
+
+model ItemPlanejamentoCompra {
+  id              String              @id @default(cuid())
+  usuarioId       String              @map("usuario_id")
+  nome            String              @db.VarChar(120)
+  valorEstimado   Decimal             @db.Decimal(12, 2) @map("valor_estimado")
+  prioridade      Prioridade          @default(MEDIA)
+  categoria       CategoriaItemCompra @default(OUTROS)
+  observacoes     String?             @db.VarChar(300)
+  linkProduto     String?             @map("link_produto") @db.VarChar(500)
+  imagemUrl       String?             @map("imagem_url") @db.VarChar(2048)
+  simularParcelas Boolean             @default(true) @map("simular_parcelas")
+  parcelas        Int                 @default(12)
+  metaId          String?             @map("meta_id")
+  status          StatusItemCompra    @default(DESEJADO)
+  compradoEm      DateTime?           @map("comprado_em")
+  transacaoId     String?             @unique @map("transacao_id")
+  criadoEm        DateTime            @default(now()) @map("criado_em")
+  atualizadoEm    DateTime            @updatedAt @map("atualizado_em")
+
+  usuario   Usuario    @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  meta      Meta?      @relation(fields: [metaId], references: [id], onDelete: SetNull)
+  transacao Transacao? @relation(fields: [transacaoId], references: [id], onDelete: SetNull)
+
+  @@index([usuarioId, status])
+  @@index([usuarioId, criadoEm(sort: Desc)])
+  @@map("itens_planejamento_compra")
 }
 
 // ==========================================

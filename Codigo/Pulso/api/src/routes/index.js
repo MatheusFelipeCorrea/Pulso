@@ -13,6 +13,7 @@ const metaRoutes = require('./metaRoutes');
 const moedaRoutes = require('./moedaRoutes');
 const viagemRoutes = require('./viagemRoutes');
 const grupoRoutes = require('./grupoRoutes');
+const purchasePlanningRoutes = require('./purchasePlanningRoutes');
 const cronRoutes = require('./cronRoutes');
 const syncRoutes = require('./syncRoutes');
 
@@ -32,6 +33,7 @@ router.use('/metas', metaRoutes);
 router.use('/moedas', moedaRoutes);
 router.use('/viagens', viagemRoutes);
 router.use('/grupos', grupoRoutes);
+router.use('/planejamento-compra', purchasePlanningRoutes);
 router.use('/cron', cronRoutes);
 router.use('/sync', syncRoutes);
 

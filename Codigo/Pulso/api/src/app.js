@@ -36,6 +36,13 @@ if (!process.env.VERCEL) {
             immutable: true,
         })
     );
+    app.use(
+        '/api/uploads/compras',
+        express.static(path.join(__dirname, '../uploads/compras'), {
+            maxAge: '7d',
+            immutable: true,
+        })
+    );
 }
 
 // Health check
