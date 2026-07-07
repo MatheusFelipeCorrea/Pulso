@@ -23,15 +23,14 @@ import { Select } from '@/design-system/components/selects/Select/Select.jsx'
 import { DatePicker } from '@/design-system/components/pickers/DatePicker/DatePicker.jsx'
 import { SpinnerDots } from '@/design-system/components/feedback/Spinner/SpinnerDots.jsx'
 import { inferirTipoMeta } from '@/utils/goalBalanceUtils.js'
-import { PRIORIDADE_OPTIONS } from '@/utils/purchasePlanningUtils.js'
+import { PRIORIDADE_OPTIONS, capitalizeNomeItem } from '@/utils/purchasePlanningUtils.js'
 import { PurchaseItemImagePicker } from '@/components/features/purchase-planning/PurchaseItemImagePicker.jsx'
+import {
+  GOAL_LINK_TABS,
+  GoalLinkModeToggle,
+} from '@/components/features/purchase-planning/GoalLinkModeToggle.jsx'
 import * as metaService from '@/services/metaService.js'
 import * as purchasePlanningService from '@/services/purchasePlanningService.js'
-
-const GOAL_TABS = {
-  EXISTING: 'existing',
-  CREATE: 'create',
-}
 
 const emptyForm = () => ({
   nome: '',
@@ -50,7 +49,7 @@ const emptyForm = () => ({
     valorAlvo: 0,
     prazo: null,
   },
-  goalTab: GOAL_TABS.EXISTING,
+  goalTab: GOAL_LINK_TABS.EXISTING,
 })
 
 export function PurchaseItemFormModal({
@@ -106,7 +105,7 @@ export function PurchaseItemFormModal({
           valorAlvo: Number(item.valorEstimado) || 0,
           prazo: null,
         },
-        goalTab: GOAL_TABS.EXISTING,
+        goalTab: GOAL_LINK_TABS.EXISTING,
       })
     } else {
       setForm(emptyForm())
@@ -173,11 +172,11 @@ export function PurchaseItemFormModal({
     }
 
     if (form.vincularMeta && !isEdit) {
-      if (form.goalTab === GOAL_TABS.EXISTING && !form.metaId) {
+      if (form.goalTab === GOAL_LINK_TABS.EXISTING && !form.metaId) {
         setError('Selecione uma meta ou desative o vínculo.')
         return
       }
-      if (form.goalTab === GOAL_TABS.CREATE && !form.criarMeta.prazo) {
+      if (form.goalTab === GOAL_LINK_TABS.CREATE && !form.criarMeta.prazo) {
         setError('Informe o prazo da nova meta.')
         return
       }
@@ -187,7 +186,7 @@ export function PurchaseItemFormModal({
     const imagem = form.imagemUrl.trim()
 
     const payload = {
-      nome: form.nome.trim(),
+      nome: capitalizeNomeItem(form.nome.trim()),
       valorEstimado: form.valorEstimado,
       prioridade: form.prioridade,
       observacoes: form.observacoes.trim() || null,
@@ -200,7 +199,7 @@ export function PurchaseItemFormModal({
 
     if (!isEdit && form.vincularMeta) {
       payload.vincularMeta = true
-      if (form.goalTab === GOAL_TABS.EXISTING) {
+      if (form.goalTab === GOAL_LINK_TABS.EXISTING) {
         payload.metaId = form.metaId
       } else {
         payload.criarMeta = {
@@ -314,7 +313,7 @@ export function PurchaseItemFormModal({
           </div>
 
           {!isEdit ? (
-            <section className="pp-form__goal-section">
+            <div className="pp-form__goal-fields">
               <Toggle
                 checked={form.vincularMeta}
                 onChange={(vincularMeta) => updateForm({ vincularMeta })}
@@ -324,33 +323,21 @@ export function PurchaseItemFormModal({
 
               {form.vincularMeta ? (
                 <>
-                  <div className="pp-form__tabs" role="tablist" aria-label="Modo de vínculo">
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={form.goalTab === GOAL_TABS.EXISTING}
-                      className={form.goalTab === GOAL_TABS.EXISTING ? 'is-active' : ''}
-                      onClick={() => updateForm({ goalTab: GOAL_TABS.EXISTING })}
-                    >
-                      Meta existente
-                    </button>
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={form.goalTab === GOAL_TABS.CREATE}
-                      className={form.goalTab === GOAL_TABS.CREATE ? 'is-active' : ''}
-                      onClick={() => updateForm({ goalTab: GOAL_TABS.CREATE })}
-                    >
-                      Criar nova
-                    </button>
-                  </div>
+                  <GoalLinkModeToggle
+                    value={form.goalTab}
+                    onChange={(goalTab) => updateForm({ goalTab })}
+                  />
 
-                  {form.goalTab === GOAL_TABS.EXISTING ? (
+                  {form.goalTab === GOAL_LINK_TABS.EXISTING ? (
                     loadingMetas ? (
                       <SpinnerDots center label="Carregando metas..." />
                     ) : (
                       <Select
-                        label="Meta"
+                        label={
+                          <FormFieldLabel icon={Target} tone="purple">
+                            Meta
+                          </FormFieldLabel>
+                        }
                         options={metaOptions}
                         value={form.metaId}
                         onChange={(metaId) => updateForm({ metaId })}
@@ -413,7 +400,7 @@ export function PurchaseItemFormModal({
                   )}
                 </>
               ) : null}
-            </section>
+            </div>
           ) : null}
 
           {error ? <p className="pp-form__error">{error}</p> : null}

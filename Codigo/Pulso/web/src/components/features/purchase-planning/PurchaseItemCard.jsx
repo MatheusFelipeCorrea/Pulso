@@ -17,6 +17,7 @@ import {
   COMPROMETIMENTO_COLORS,
   COMPROMETIMENTO_NIVEL,
   PRIORIDADE_LABELS,
+  capitalizeNomeItem,
   formatComprometimentoPercentual,
   formatMesesParaComprar,
   getCategoryIconConfig,
@@ -67,6 +68,7 @@ export function PurchaseItemCard({
   const meta = item.meta
   const percentualMeta = meta ? Math.round(Number(meta.percentual) || 0) : 0
   const mesesLabel = formatMesesParaComprar(item.mesesParaComprar)
+  const semSobraMensal = item.mesesParaComprar == null
   const [imageError, setImageError] = useState(false)
   const showPhoto = item.imagemUrl && !imageError
 
@@ -95,13 +97,24 @@ export function PurchaseItemCard({
         </div>
 
         <div className="pp-item-card__info">
-          <h3>{item.nome}</h3>
+          <h3>{capitalizeNomeItem(item.nome)}</h3>
           <PriorityTag prioridade={item.prioridade} />
           <strong className="pp-item-card__value">{formatCurrency(item.valorEstimado)}</strong>
-          <p className="pp-item-card__savings">
-            Com sua sobra atual ({formatCurrency(sobraMensal)}/mês), pode comprar em{' '}
-            <span className="pp-item-card__savings-highlight">~{mesesLabel}</span>
-          </p>
+          <div className="pp-item-card__savings">
+            <span className="pp-item-card__savings-line">
+              Sobra atual: <strong>{formatCurrency(sobraMensal)}/mês</strong>
+            </span>
+            <span className="pp-item-card__savings-line">
+              {semSobraMensal ? (
+                <span className="pp-item-card__savings-highlight">Sem sobra mensal</span>
+              ) : (
+                <>
+                  Compra à vista em{' '}
+                  <span className="pp-item-card__savings-highlight">~{mesesLabel}</span>
+                </>
+              )}
+            </span>
+          </div>
         </div>
       </div>
 

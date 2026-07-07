@@ -1,6 +1,7 @@
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
+import { capitalizeNomeItem } from '@/utils/purchasePlanningUtils.js'
 
 export function PurchaseRecentTable({ comprados = [] }) {
   if (!comprados.length) {
@@ -25,7 +26,7 @@ export function PurchaseRecentTable({ comprados = [] }) {
         <tbody>
           {comprados.map((item) => (
             <tr key={item.id}>
-              <td className="pp-recent__name">{item.nome}</td>
+              <td className="pp-recent__name">{capitalizeNomeItem(item.nome)}</td>
               <td>{item.categoriaLabel ?? item.categoria}</td>
               <td>{formatCurrency(item.valorEstimado)}</td>
               <td>

@@ -68,3 +68,9 @@ export function formatComprometimentoPercentual(percentual) {
 export function shouldShowImpactAlert(mediaImpactoRenda) {
   return Number(mediaImpactoRenda ?? 0) > 20
 }
+
+export function capitalizeNomeItem(nome) {
+  const texto = String(nome ?? '').trim()
+  if (!texto) return texto
+  return texto.charAt(0).toLocaleUpperCase('pt-BR') + texto.slice(1)
+}

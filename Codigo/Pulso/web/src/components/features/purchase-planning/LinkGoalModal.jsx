@@ -5,8 +5,8 @@ import {
   Calendar,
   CircleDollarSign,
   Link2,
+  Package,
   Plus,
-  Target,
   X,
 } from 'lucide-react'
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
@@ -15,21 +15,21 @@ import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { InputText } from '@/design-system/components/inputs/InputText/InputText.jsx'
 import { InputMoney } from '@/design-system/components/inputs/InputMoney/InputMoney.jsx'
-import { InputNumber } from '@/design-system/components/inputs/InputNumber/InputNumber.jsx'
-import { Textarea } from '@/design-system/components/inputs/Textarea/Textarea.jsx'
 import { Toggle } from '@/design-system/components/forms/Toggle/Toggle.jsx'
 import { Select } from '@/design-system/components/selects/Select/Select.jsx'
 import { DatePicker } from '@/design-system/components/pickers/DatePicker/DatePicker.jsx'
 import { SpinnerDots } from '@/design-system/components/feedback/Spinner/SpinnerDots.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { inferirTipoMeta } from '@/utils/goalBalanceUtils.js'
-import { PRIORIDADE_OPTIONS } from '@/utils/purchasePlanningUtils.js'
+import {
+  capitalizeNomeItem,
+  PRIORIDADE_LABELS,
+} from '@/utils/purchasePlanningUtils.js'
+import {
+  GOAL_LINK_TABS,
+  GoalLinkModeToggle,
+} from '@/components/features/purchase-planning/GoalLinkModeToggle.jsx'
 import * as metaService from '@/services/metaService.js'
-
-const TABS = {
-  EXISTING: 'existing',
-  CREATE: 'create',
-}
 
 const emptyCreateMeta = () => ({
   nome: '',
@@ -44,7 +44,7 @@ export function LinkGoalModal({
   item,
   submitting = false,
 }) {
-  const [tab, setTab] = useState(TABS.EXISTING)
+  const [tab, setTab] = useState(GOAL_LINK_TABS.EXISTING)
   const [metas, setMetas] = useState([])
   const [loadingMetas, setLoadingMetas] = useState(false)
   const [metaId, setMetaId] = useState(null)
@@ -69,7 +69,7 @@ export function LinkGoalModal({
 
   useEffect(() => {
     if (!open) return
-    setTab(TABS.EXISTING)
+    setTab(GOAL_LINK_TABS.EXISTING)
     setMetaId(null)
     setAjustarMetaValor(true)
     setCriarMeta({
@@ -88,18 +88,19 @@ export function LinkGoalModal({
     () =>
       metas.map((meta) => ({
         value: meta.id,
-        label: `${meta.nome} · ${formatCurrency(meta.valorAlvo)}`,
+        label: meta.nome,
       })),
     [metas]
   )
 
   const selectedMeta = metas.find((meta) => meta.id === metaId)
+  const itemNome = capitalizeNomeItem(item?.nome)
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     setError('')
 
-    if (tab === TABS.EXISTING) {
+    if (tab === GOAL_LINK_TABS.EXISTING) {
       if (!metaId) {
         setError('Selecione uma meta para vincular.')
         return
@@ -110,7 +111,7 @@ export function LinkGoalModal({
     }
 
     const payload =
-      tab === TABS.EXISTING
+      tab === GOAL_LINK_TABS.EXISTING
         ? { metaId, ajustarMetaValor }
         : {
             ajustarMetaValor,
@@ -132,121 +133,115 @@ export function LinkGoalModal({
   if (!item) return null
 
   return (
-    <Modal isOpen={open} onClose={onClose} size="md" className="pp-link-goal-modal">
-      <form className="pp-link-goal-form" onSubmit={handleSubmit} noValidate>
-        <header className="pp-link-goal-form__header">
+    <Modal isOpen={open} onClose={onClose} size="md" className="pp-form-modal">
+      <form className="pp-form" onSubmit={handleSubmit} noValidate>
+        <header className="pp-form__header">
           <div>
             <h2>Vincular meta</h2>
-            <p>
-              Associe <strong>{item.nome}</strong> a uma meta financeira para acompanhar o progresso.
-            </p>
           </div>
           <IconButton variant="ghost" size="sm" ariaLabel="Fechar" icon={<X size={18} />} onClick={onClose} />
         </header>
 
-        <div className="pp-link-goal-form__tabs" role="tablist" aria-label="Modo de vínculo">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={tab === TABS.EXISTING}
-            className={tab === TABS.EXISTING ? 'is-active' : ''}
-            onClick={() => setTab(TABS.EXISTING)}
-          >
-            Meta existente
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={tab === TABS.CREATE}
-            className={tab === TABS.CREATE ? 'is-active' : ''}
-            onClick={() => setTab(TABS.CREATE)}
-          >
-            Criar nova meta
-          </button>
-        </div>
+        <div className="pp-form__body">
+          <div className="pp-link-goal-item">
+            <span className="pp-link-goal-item__icon" aria-hidden>
+              <Package size={18} />
+            </span>
+            <div className="pp-link-goal-item__copy">
+              <strong>
+                {itemNome} — {formatCurrency(item.valorEstimado)}
+              </strong>
+            </div>
+            {item.prioridade ? (
+              <span className={`pp-link-goal-item__priority pp-link-goal-item__priority--${item.prioridade.toLowerCase()}`}>
+                {PRIORIDADE_LABELS[item.prioridade]}
+              </span>
+            ) : null}
+          </div>
 
-        <div className="pp-link-goal-form__body">
-          {tab === TABS.EXISTING ? (
-            loadingMetas ? (
-              <SpinnerDots center label="Carregando metas..." />
-            ) : metaOptions.length ? (
-              <>
-                <FormFieldLabel htmlFor="pp-link-meta-select" required>
-                  Selecione a meta
-                </FormFieldLabel>
-                <Select
-                  id="pp-link-meta-select"
-                  options={metaOptions}
-                  value={metaId}
-                  onChange={setMetaId}
-                  placeholder="Escolha uma meta ativa..."
-                />
-                {selectedMeta ? (
-                  <p className="pp-link-goal-form__hint">
-                    Progresso atual: {formatCurrency(selectedMeta.valorAtual)} de{' '}
-                    {formatCurrency(selectedMeta.valorAlvo)} (
-                    {Math.round(Number(selectedMeta.percentual) || 0)}%)
-                  </p>
-                ) : null}
-              </>
+          <GoalLinkModeToggle value={tab} onChange={setTab} />
+
+          {tab === GOAL_LINK_TABS.EXISTING ? (
+              loadingMetas ? (
+                <SpinnerDots center label="Carregando metas..." />
+              ) : metaOptions.length ? (
+                <>
+                  <Select
+                    label="Meta"
+                    options={metaOptions}
+                    value={metaId}
+                    onChange={setMetaId}
+                    placeholder="Selecione uma meta ativa..."
+                    required
+                  />
+                  {selectedMeta ? (
+                    <p className="pp-form__hint">
+                      Progresso atual: {formatCurrency(selectedMeta.valorAtual)} de{' '}
+                      {formatCurrency(selectedMeta.valorAlvo)} (
+                      {Math.round(Number(selectedMeta.percentual) || 0)}%)
+                    </p>
+                  ) : null}
+                </>
+              ) : (
+                <p className="pp-form__hint">
+                  Nenhuma meta ativa encontrada. Use a aba &quot;Criar nova meta&quot;.
+                </p>
+              )
             ) : (
-              <p className="pp-link-goal-form__empty">
-                Nenhuma meta ativa encontrada. Use a aba &quot;Criar nova meta&quot;.
-              </p>
-            )
-          ) : (
-            <>
-              <InputText
-                label={
-                  <FormFieldLabel icon={Target} tone="purple">
-                    Nome da meta
-                  </FormFieldLabel>
-                }
-                value={criarMeta.nome}
-                onChange={(event) =>
-                  setCriarMeta((prev) => ({ ...prev, nome: event.target.value }))
-                }
-                placeholder="Ex.: Comprar notebook"
-              />
-              <InputMoney
-                label={
-                  <FormFieldLabel icon={CircleDollarSign} tone="green">
-                    Valor alvo
-                  </FormFieldLabel>
-                }
-                value={criarMeta.valorAlvo}
-                onChange={(valorAlvo) => setCriarMeta((prev) => ({ ...prev, valorAlvo }))}
-              />
-              <DatePicker
-                label={
-                  <FormFieldLabel icon={Calendar} tone="blue">
-                    Prazo
-                  </FormFieldLabel>
-                }
-                value={criarMeta.prazo}
-                onChange={(prazo) => setCriarMeta((prev) => ({ ...prev, prazo }))}
-                minDate={new Date()}
-                placeholder="Selecione a data"
-              />
+              <>
+                <InputText
+                  label={
+                    <FormFieldLabel icon={Target} tone="purple">
+                      Nome da meta
+                    </FormFieldLabel>
+                  }
+                  value={criarMeta.nome}
+                  onChange={(event) =>
+                    setCriarMeta((prev) => ({ ...prev, nome: event.target.value }))
+                  }
+                  placeholder="Ex.: Comprar notebook"
+                />
+                <InputMoney
+                  label={
+                    <FormFieldLabel icon={CircleDollarSign} tone="green">
+                      Valor alvo
+                    </FormFieldLabel>
+                  }
+                  value={criarMeta.valorAlvo}
+                  onChange={(valorAlvo) => setCriarMeta((prev) => ({ ...prev, valorAlvo }))}
+                />
+                <DatePicker
+                  label={
+                    <FormFieldLabel icon={Calendar} tone="blue">
+                      Prazo
+                    </FormFieldLabel>
+                  }
+                  value={criarMeta.prazo}
+                  onChange={(prazo) => setCriarMeta((prev) => ({ ...prev, prazo }))}
+                  minDate={new Date()}
+                  placeholder="Selecione a data"
+                />
                 {criarMeta.prazo ? (
-                  <p className="pp-link-goal-form__hint">
+                  <p className="pp-form__hint">
                     Prazo: {format(criarMeta.prazo, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
                   </p>
                 ) : null}
-            </>
-          )}
+              </>
+            )}
 
-          <Toggle
-            checked={ajustarMetaValor}
-            onChange={setAjustarMetaValor}
-            label="Ajustar valor alvo da meta"
-            description={`Atualizar meta para ${formatCurrency(item.valorEstimado)} (valor do item).`}
-          />
+            {tab === GOAL_LINK_TABS.EXISTING ? (
+              <Toggle
+                checked={ajustarMetaValor}
+                onChange={setAjustarMetaValor}
+                label="Ajustar valor alvo da meta"
+                description={`Atualizar meta para ${formatCurrency(item.valorEstimado)} (valor do item).`}
+              />
+            ) : null}
 
-          {error ? <p className="pp-link-goal-form__error">{error}</p> : null}
+          {error ? <p className="pp-form__error">{error}</p> : null}
         </div>
 
-        <footer className="pp-link-goal-form__footer">
+        <footer className="pp-form__footer">
           <Button type="button" variant="secondary" onClick={onClose}>
             Cancelar
           </Button>
@@ -254,9 +249,9 @@ export function LinkGoalModal({
             type="submit"
             variant="primary"
             loading={submitting}
-            leftIcon={tab === TABS.CREATE ? <Plus size={16} /> : <Link2 size={16} />}
+            leftIcon={tab === GOAL_LINK_TABS.CREATE ? <Plus size={16} /> : <Link2 size={16} />}
           >
-            {tab === TABS.CREATE ? 'Criar e vincular' : 'Vincular meta'}
+            {tab === GOAL_LINK_TABS.CREATE ? 'Criar e vincular' : 'Vincular'}
           </Button>
         </footer>
       </form>

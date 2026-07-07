@@ -18,8 +18,14 @@ const { todayInTimezone } = require('../utils/dateTimezone');
 const { resolvePurchaseItemImage } = require('./purchaseItemImageService');
 const { storePurchaseItemImage } = require('./purchaseItemImageStorageService');
 
-const validarNome = (nome) => {
+const capitalizeNomeItem = (nome) => {
     const texto = String(nome ?? '').trim();
+    if (!texto) return texto;
+    return texto.charAt(0).toLocaleUpperCase('pt-BR') + texto.slice(1);
+};
+
+const validarNome = (nome) => {
+    const texto = capitalizeNomeItem(nome);
     if (!texto) throw new AppError('Nome do item é obrigatório', 400);
     if (texto.length > 120) throw new AppError('Nome deve ter no máximo 120 caracteres', 400);
     return texto;
