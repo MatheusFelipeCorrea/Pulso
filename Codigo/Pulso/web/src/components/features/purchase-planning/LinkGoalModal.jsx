@@ -7,6 +7,7 @@ import {
   Link2,
   Package,
   Plus,
+  Target,
   X,
 } from 'lucide-react'
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
@@ -29,6 +30,7 @@ import {
   GOAL_LINK_TABS,
   GoalLinkModeToggle,
 } from '@/components/features/purchase-planning/GoalLinkModeToggle.jsx'
+import { getGoalIcon } from '@/utils/goalIconRules.js'
 import * as metaService from '@/services/metaService.js'
 
 const emptyCreateMeta = () => ({
@@ -86,10 +88,15 @@ export function LinkGoalModal({
 
   const metaOptions = useMemo(
     () =>
-      metas.map((meta) => ({
-        value: meta.id,
-        label: meta.nome,
-      })),
+      metas.map((meta) => {
+        const Icon = getGoalIcon(meta.nome)
+        return {
+          value: meta.id,
+          label: meta.nome,
+          icon: <Icon size={14} aria-hidden />,
+          trailingText: formatCurrency(meta.valorAlvo),
+        }
+      }),
     [metas]
   )
 
@@ -159,15 +166,15 @@ export function LinkGoalModal({
             ) : null}
           </div>
 
-          <GoalLinkModeToggle value={tab} onChange={setTab} />
-
-          {tab === GOAL_LINK_TABS.EXISTING ? (
+          <GoalLinkModeToggle
+            value={tab}
+            onChange={setTab}
+            existingSlot={
               loadingMetas ? (
                 <SpinnerDots center label="Carregando metas..." />
               ) : metaOptions.length ? (
                 <>
                   <Select
-                    label="Meta"
                     options={metaOptions}
                     value={metaId}
                     onChange={setMetaId}
@@ -181,62 +188,62 @@ export function LinkGoalModal({
                       {Math.round(Number(selectedMeta.percentual) || 0)}%)
                     </p>
                   ) : null}
+                  <Toggle
+                    checked={ajustarMetaValor}
+                    onChange={setAjustarMetaValor}
+                    label="Ajustar valor alvo da meta"
+                    description={`Atualizar meta para ${formatCurrency(item.valorEstimado)} (valor do item).`}
+                  />
                 </>
               ) : (
                 <p className="pp-form__hint">
-                  Nenhuma meta ativa encontrada. Use a aba &quot;Criar nova meta&quot;.
+                  Nenhuma meta ativa encontrada. Use a opção &quot;Criar nova meta&quot;.
                 </p>
               )
-            ) : (
-              <>
-                <InputText
-                  label={
-                    <FormFieldLabel icon={Target} tone="purple">
-                      Nome da meta
-                    </FormFieldLabel>
-                  }
-                  value={criarMeta.nome}
-                  onChange={(event) =>
-                    setCriarMeta((prev) => ({ ...prev, nome: event.target.value }))
-                  }
-                  placeholder="Ex.: Comprar notebook"
-                />
-                <InputMoney
-                  label={
-                    <FormFieldLabel icon={CircleDollarSign} tone="green">
-                      Valor alvo
-                    </FormFieldLabel>
-                  }
-                  value={criarMeta.valorAlvo}
-                  onChange={(valorAlvo) => setCriarMeta((prev) => ({ ...prev, valorAlvo }))}
-                />
-                <DatePicker
-                  label={
-                    <FormFieldLabel icon={Calendar} tone="blue">
-                      Prazo
-                    </FormFieldLabel>
-                  }
-                  value={criarMeta.prazo}
-                  onChange={(prazo) => setCriarMeta((prev) => ({ ...prev, prazo }))}
-                  minDate={new Date()}
-                  placeholder="Selecione a data"
-                />
-                {criarMeta.prazo ? (
-                  <p className="pp-form__hint">
-                    Prazo: {format(criarMeta.prazo, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
-                  </p>
-                ) : null}
-              </>
-            )}
+            }
+          />
 
-            {tab === GOAL_LINK_TABS.EXISTING ? (
-              <Toggle
-                checked={ajustarMetaValor}
-                onChange={setAjustarMetaValor}
-                label="Ajustar valor alvo da meta"
-                description={`Atualizar meta para ${formatCurrency(item.valorEstimado)} (valor do item).`}
+          {tab === GOAL_LINK_TABS.CREATE ? (
+            <>
+              <InputText
+                label={
+                  <FormFieldLabel icon={Target} tone="purple">
+                    Nome da meta
+                  </FormFieldLabel>
+                }
+                value={criarMeta.nome}
+                onChange={(event) =>
+                  setCriarMeta((prev) => ({ ...prev, nome: event.target.value }))
+                }
+                placeholder="Ex.: Comprar notebook"
               />
-            ) : null}
+              <InputMoney
+                label={
+                  <FormFieldLabel icon={CircleDollarSign} tone="green">
+                    Valor alvo
+                  </FormFieldLabel>
+                }
+                value={criarMeta.valorAlvo}
+                onChange={(valorAlvo) => setCriarMeta((prev) => ({ ...prev, valorAlvo }))}
+              />
+              <DatePicker
+                label={
+                  <FormFieldLabel icon={Calendar} tone="blue">
+                    Prazo
+                  </FormFieldLabel>
+                }
+                value={criarMeta.prazo}
+                onChange={(prazo) => setCriarMeta((prev) => ({ ...prev, prazo }))}
+                minDate={new Date()}
+                placeholder="Selecione a data"
+              />
+              {criarMeta.prazo ? (
+                <p className="pp-form__hint">
+                  Prazo: {format(criarMeta.prazo, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                </p>
+              ) : null}
+            </>
+          ) : null}
 
           {error ? <p className="pp-form__error">{error}</p> : null}
         </div>

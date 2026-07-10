@@ -12,6 +12,7 @@ import { PurchaseItemCard } from '@/components/features/purchase-planning/Purcha
 import { PurchaseItemFormModal } from '@/components/features/purchase-planning/PurchaseItemFormModal.jsx'
 import { LinkGoalModal } from '@/components/features/purchase-planning/LinkGoalModal.jsx'
 import { PurchaseRecentTable } from '@/components/features/purchase-planning/PurchaseRecentTable.jsx'
+import { PurchaseHistoryModal } from '@/components/features/purchase-planning/PurchaseHistoryModal.jsx'
 import { shouldShowImpactAlert } from '@/utils/purchasePlanningUtils.js'
 import * as purchasePlanningService from '@/services/purchasePlanningService.js'
 
@@ -38,6 +39,9 @@ export default function PurchasePlanningPage() {
   const [buyOpen, setBuyOpen] = useState(false)
   const [buyTarget, setBuyTarget] = useState(null)
   const [buyingId, setBuyingId] = useState(null)
+
+  const [historyOpen, setHistoryOpen] = useState(false)
+  const [historyTarget, setHistoryTarget] = useState(null)
 
   const carregarPainel = useCallback(async (signal) => {
     setLoading(true)
@@ -175,6 +179,11 @@ export default function PurchasePlanningPage() {
     }
   }
 
+  const abrirHistorico = (item) => {
+    setHistoryTarget(item)
+    setHistoryOpen(true)
+  }
+
   const resumo = painel.resumo
   const itens = painel.itens ?? []
   const comprados = painel.comprados ?? []
@@ -201,7 +210,6 @@ export default function PurchasePlanningPage() {
           <section className="purchase-planning-page__section">
             <div className="purchase-planning-page__panel-head">
               <h2>Itens desejados</h2>
-              <span>{itens.length} {itens.length === 1 ? 'item' : 'itens'}</span>
             </div>
 
             {loading ? (
@@ -241,9 +249,8 @@ export default function PurchasePlanningPage() {
           <section className="purchase-planning-page__panel purchase-planning-page__panel--recent">
             <div className="purchase-planning-page__panel-head">
               <h2>Comprados recentemente</h2>
-              <span>{comprados.length} registrados</span>
             </div>
-            <PurchaseRecentTable comprados={comprados} />
+            <PurchaseRecentTable comprados={comprados} onViewDetails={abrirHistorico} />
           </section>
         </div>
 
@@ -259,6 +266,7 @@ export default function PurchasePlanningPage() {
         onSubmit={handleSalvar}
         item={selected}
         submitting={submitting}
+        rendaMensal={resumo?.rendaMensal}
       />
 
       <LinkGoalModal
@@ -308,6 +316,15 @@ export default function PurchasePlanningPage() {
         cancelLabel="Cancelar"
         tone="primary"
         loading={Boolean(buyingId)}
+      />
+
+      <PurchaseHistoryModal
+        open={historyOpen}
+        onClose={() => {
+          setHistoryOpen(false)
+          setHistoryTarget(null)
+        }}
+        item={historyTarget}
       />
     </div>
   )

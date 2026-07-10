@@ -130,6 +130,9 @@ export function UpcomingReminders({ items = [], onEdit, onDelete, onMarkPaid }) 
                     </td>
                     <td>
                       {format(parseISO(item.dataVencimento), 'dd/MM/yyyy', { locale: ptBR })}
+                      {item.horaLembrete ? (
+                        <span className="calendar-upcoming__time"> · {item.horaLembrete}</span>
+                      ) : null}
                     </td>
                     <td>
                       <Badge variant={countdownVariant(item.diasAteVencimento)} size="sm">

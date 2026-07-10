@@ -18,6 +18,7 @@ const listarDesejados = async (usuarioId) =>
 const listarComprados = async (usuarioId, limite = 5) =>
     prisma.itemPlanejamentoCompra.findMany({
         where: { usuarioId, status: 'COMPRADO' },
+        include: { meta: true, transacao: true },
         orderBy: { compradoEm: 'desc' },
         take: limite,
     });

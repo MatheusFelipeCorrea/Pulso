@@ -745,6 +745,31 @@
   color: var(--ds-color-text-secondary);
 }
 
+.group-invite-modal__qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--ds-color-border);
+}
+
+.group-invite-modal__qr img {
+  border-radius: 10px;
+  border: 1px solid var(--ds-color-border);
+  background: #fff;
+  padding: 8px;
+}
+
+.group-invite-modal__qr-caption {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ds-color-text-secondary);
+}
+
 .group-invite-modal__share-main {
   border: 1px solid var(--ds-color-border) !important;
   color: var(--ds-color-text) !important;
@@ -2166,8 +2191,16 @@
   min-height: 0;
 }
 
-.group-detail-goal__cta {
+.group-detail-goal__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
   margin-top: auto;
+  margin-bottom: auto;
+}
+
+.group-detail-goal__cta {
   flex-shrink: 0;
 }
 
@@ -2194,22 +2227,28 @@
 
 .group-detail-goal__head {
   display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.35;
+  align-items: center;
+  gap: 12px;
   color: var(--ds-color-text);
 }
 
-.group-detail-goal__head svg {
-  color: var(--ds-color-button-primary);
+.group-detail-goal__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   flex-shrink: 0;
-  margin-top: 1px;
+  color: var(--ds-color-primary);
+  background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
 }
 
-.group-detail-goal__head span {
+.group-detail-goal__name {
   min-width: 0;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
 }
 
 .group-detail-goal__progress {
@@ -2691,6 +2730,8 @@
   border: 1px solid var(--ds-color-border);
   border-radius: 14px;
   background: var(--ds-color-input-bg, var(--ds-color-surface));
+  --ds-color-select-border: var(--ds-color-input-border);
+  --ds-color-textarea-border: var(--ds-color-input-border);
 }
 
 .group-goals-modal__block-head {

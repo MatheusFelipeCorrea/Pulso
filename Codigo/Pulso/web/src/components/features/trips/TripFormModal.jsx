@@ -22,6 +22,7 @@ import { IconButton } from '@/design-system/components/buttons/IconButton/IconBu
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { CurrencySearchPicker } from '@/components/features/trips/CurrencySearchPicker.jsx'
 import { DestinationSearchPicker } from '@/components/features/trips/DestinationSearchPicker.jsx'
+import { getGoalIcon } from '@/utils/goalIconRules.js'
 import * as moedaService from '@/services/moedaService.js'
 import * as viagemService from '@/services/viagemService.js'
 
@@ -79,11 +80,14 @@ export function TripFormModal({
 
   const metaOptions = useMemo(
     () =>
-      metas.map((meta) => ({
-        value: meta.id,
-        label: meta.nome,
-        icon: <Target size={14} aria-hidden className="trip-form__meta-option-icon" />,
-      })),
+      metas.map((meta) => {
+        const Icon = getGoalIcon(meta.nome)
+        return {
+          value: meta.id,
+          label: meta.nome,
+          icon: <Icon size={14} aria-hidden className="trip-form__meta-option-icon" />,
+        }
+      }),
     [metas]
   )
 

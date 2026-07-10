@@ -205,6 +205,7 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 | RN-098 | Lembrete recorrente gera novo lembrete automaticamente no próximo mês |
 | RN-099 | Ao "Marcar como pago" no lembrete: NÃO gera transação automática (apenas muda status) |
 | RN-100 | Calendário financeiro mostra SOMENTE transações já registradas + lembretes futuros |
+| RN-169 | Horário do lembrete é configurável pelo usuário (`horaLembrete`, padrão `10:00`) — usado no evento sincronizado com o Google Agenda |
 
 ---
 

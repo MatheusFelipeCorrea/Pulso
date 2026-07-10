@@ -1,7 +1,14 @@
 const { z } = require('zod');
 
 const prioridadeSchema = z.enum(['ALTA', 'MEDIA', 'BAIXA']);
-const categoriaSchema = z.enum(['TECNOLOGIA', 'ELETRONICOS', 'ACESSORIOS', 'OUTROS']);
+const categoriaSchema = z.enum([
+    'ELETRONICOS',
+    'CASA_ELETRODOMESTICOS',
+    'VESTUARIO',
+    'VEICULO',
+    'ACESSORIOS',
+    'OUTROS',
+]);
 
 const criarMetaInlineSchema = z.object({
     nome: z.string().trim().max(100).optional(),

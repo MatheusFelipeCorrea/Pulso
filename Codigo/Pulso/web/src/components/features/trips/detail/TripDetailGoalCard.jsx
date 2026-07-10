@@ -13,7 +13,9 @@ export function TripDetailGoalCard({ meta, onLinkGoal, totalPlanejadoBrl = 0 }) 
       <section className="trip-detail-page__card trip-detail-page__goal">
         <div className="trip-detail-page__goal-head trip-detail-page__goal-head--placeholder">
           <div className="trip-detail-page__goal-title">
-            <Target size={18} aria-hidden className="trip-detail-page__goal-icon" />
+            <div className="trip-detail-page__goal-icon">
+              <Target size={16} aria-hidden />
+            </div>
             <div>
               <span>Meta vinculada</span>
             </div>
@@ -46,7 +48,9 @@ export function TripDetailGoalCard({ meta, onLinkGoal, totalPlanejadoBrl = 0 }) 
     <section className="trip-detail-page__card trip-detail-page__goal trip-detail-page__goal--linked">
       <div className="trip-detail-page__goal-head">
         <div className="trip-detail-page__goal-title">
-          <Target size={18} aria-hidden className="trip-detail-page__goal-icon" />
+          <div className="trip-detail-page__goal-icon">
+            <Target size={16} aria-hidden />
+          </div>
           <div>
             <span>Meta vinculada</span>
             <strong>{meta.nome}</strong>

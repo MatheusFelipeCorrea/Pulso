@@ -27,6 +27,7 @@ export const PULSO_BADGE_CATALOG = {
   'recurso.va': { label: 'VA', icon: 'Apple', variant: 'success' },
   'recurso.vr': { label: 'VR', icon: 'Utensils', variant: 'orange' },
   'recurso.vt': { label: 'VT', icon: 'Bus', variant: 'info' },
+  'recurso.poupanca': { label: 'Poupança', icon: 'PiggyBank', variant: 'cyan' },
 
   'meta-status.ativa': { label: 'Ativa', icon: 'Play', variant: 'primary' },
   'meta-status.pausada': { label: 'Pausada', icon: 'Pause', variant: 'warning' },

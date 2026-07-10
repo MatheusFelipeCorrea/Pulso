@@ -11,22 +11,17 @@ function formatActivityWhen(iso) {
   return format(date, 'dd/MM/yyyy', { locale: ptBR })
 }
 
-export function GoalRecentActivity({ items = [], onViewAll }) {
+export function GoalRecentActivity({ items = [] }) {
   return (
     <>
       <div className="goals-sidebar__activity-head">
         <h2>Atividade recente</h2>
-        {onViewAll && items.length > 0 ? (
-          <button type="button" className="goals-sidebar__activity-link" onClick={onViewAll}>
-            Ver todas
-          </button>
-        ) : null}
       </div>
 
       {items.length === 0 ? (
         <p className="goals-sidebar__empty">Nenhuma atividade recente.</p>
       ) : (
-        <ul className="goals-sidebar__activity">
+        <ul className="goals-sidebar__activity goals-sidebar__activity--scroll">
         {items.map((item) => {
           const isConcluida = item.tipo === 'meta_concluida'
 

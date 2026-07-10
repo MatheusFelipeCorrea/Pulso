@@ -9,6 +9,7 @@ const mapLembrete = (lembrete) => {
         titulo: lembrete.titulo,
         valor: lembrete.valor != null ? Number(lembrete.valor).toFixed(2) : null,
         dataVencimento: lembrete.dataVencimento.toISOString(),
+        horaLembrete: lembrete.horaLembrete ?? '10:00',
         antecedencia: lembrete.antecedencia,
         antecedenciaLabel: ANTECEDENCIA_LABELS[lembrete.antecedencia] ?? lembrete.antecedencia,
         categoria,

@@ -1,8 +1,9 @@
 import { format, parseISO } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { Pencil, Trash2 } from 'lucide-react'
+import { ArrowLeftRight, Pencil, RefreshCw, Trash2 } from 'lucide-react'
 import { PulsoBadge } from '@/components/badges/PulsoBadge.jsx'
 import { badgeKindFromRecurso } from '@/components/badges/enumMappers'
+import { getBadgeDefinition } from '@/components/badges/badgeCatalog.js'
 import { resolveBadgeIcon } from '@/components/badges/iconRegistry.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
@@ -28,24 +29,36 @@ function groupByDate(transacoes) {
 
 function TransactionRow({ transacao, onEdit, onDelete }) {
   const isReceita = transacao.tipo === 'RECEITA'
+  const isTransferencia = transacao.tipo === 'TRANSFERENCIA'
   const recursoKind = badgeKindFromRecurso(transacao.recurso)
   const categoriaIcon = resolveBadgeIcon(transacao.categoria?.icone ?? 'Tag', { size: 18 })
+
+  const recursoOrigemLabel = getBadgeDefinition(recursoKind)?.label ?? transacao.recurso
+  const recursoDestinoLabel =
+    getBadgeDefinition(badgeKindFromRecurso(transacao.recursoDestino))?.label ?? transacao.recursoDestino
 
   return (
     <div className="tx-item">
       <div
         className="tx-item__icon"
-        style={{
-          backgroundColor: `color-mix(in srgb, ${transacao.categoria?.cor ?? '#7C3AED'} 18%, transparent)`,
-          color: transacao.categoria?.cor ?? '#7C3AED',
-        }}
+        style={
+          isTransferencia
+            ? { backgroundColor: 'color-mix(in srgb, #3B82F6 18%, transparent)', color: '#3B82F6' }
+            : {
+                backgroundColor: `color-mix(in srgb, ${transacao.categoria?.cor ?? '#7C3AED'} 18%, transparent)`,
+                color: transacao.categoria?.cor ?? '#7C3AED',
+              }
+        }
       >
-        {categoriaIcon}
+        {isTransferencia ? <ArrowLeftRight size={18} /> : categoriaIcon}
       </div>
 
       <div className="tx-item__body">
         <div className="tx-item__main">
-          <p className="tx-item__title">{transacao.descricao || transacao.categoria?.nome}</p>
+          <p className="tx-item__title">
+            {transacao.descricao ||
+              (isTransferencia ? `${recursoOrigemLabel} → ${recursoDestinoLabel}` : transacao.categoria?.nome)}
+          </p>
           {recursoKind ? (
             <div className="tx-item__badge">
               <PulsoBadge kind={recursoKind} size="sm" />
@@ -55,11 +68,25 @@ function TransactionRow({ transacao, onEdit, onDelete }) {
       </div>
 
       <div className="tx-item__aside">
-        <p className={cn('tx-item__amount', isReceita ? 'tx-item__amount--income' : 'tx-item__amount--expense')}>
-          {isReceita ? '+' : '-'} {formatCurrency(Number(transacao.valor))}
+        <p
+          className={cn(
+            'tx-item__amount',
+            isTransferencia
+              ? 'tx-item__amount--transfer'
+              : isReceita
+                ? 'tx-item__amount--income'
+                : 'tx-item__amount--expense'
+          )}
+        >
+          {isTransferencia ? '' : isReceita ? '+' : '-'} {formatCurrency(Number(transacao.valor))}
         </p>
 
         <div className="tx-item__actions">
+          {transacao.recorrente || transacao.paiId ? (
+            <span className="tx-item__recurring" title="Transação recorrente" aria-label="Transação recorrente">
+              <RefreshCw size={14} />
+            </span>
+          ) : null}
           <IconButton
             variant="ghost"
             size="sm"
@@ -81,7 +108,11 @@ function TransactionRow({ transacao, onEdit, onDelete }) {
 }
 
 export function TransactionList({ transacoes = [], loading, onEdit, onDelete }) {
-  if (loading) {
+  // Só troca a lista por um spinner de tela cheia quando ainda não há nada pra mostrar
+  // (primeira carga). Trocar de página/filtro com uma lista já visível apenas esmaece
+  // o conteúdo — substituir tudo por um spinner solto encolhe a altura da página e
+  // faz o navegador "pular" o scroll para o topo.
+  if (loading && !transacoes.length) {
     return (
       <div className="tx-list__loading" aria-busy="true">
         <SpinnerDots center label="Carregando transações..." />
@@ -102,7 +133,7 @@ export function TransactionList({ transacoes = [], loading, onEdit, onDelete }) 
   const groups = groupByDate(transacoes)
 
   return (
-    <div className="tx-list">
+    <div className={cn('tx-list', loading && 'tx-list--refreshing')} aria-busy={loading || undefined}>
       {groups.map((group) => (
         <section key={group.key} className="tx-list__group">
           <h3 className="tx-list__date">{group.label}</h3>

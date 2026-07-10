@@ -1419,9 +1419,15 @@
 }
 
 .trip-detail-page__goal-icon {
-  color: var(--ds-color-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
   flex-shrink: 0;
-  margin-top: 2px;
+  color: var(--ds-color-primary);
+  background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
 }
 
 .trip-detail-page__goal-btn {
@@ -1484,6 +1490,11 @@
   margin: 12px 0 0;
   font-size: 12px;
   color: var(--ds-color-text-secondary);
+}
+
+.trip-detail-page__goal-tip svg {
+  color: var(--ds-color-warning);
+  flex-shrink: 0;
 }
 
 .trip-detail-page__goal-empty.ds-empty-default {
@@ -2682,6 +2693,15 @@
 .trip-currency-picker__list {
   flex: none;
   min-height: 10rem;
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--ds-color-border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.trip-currency-picker__search {
+  padding: 10px;
 }
 
 .trip-form__field--currency .trip-currency-picker__list {
@@ -2703,6 +2723,11 @@
 .trip-currency-picker__option:last-child {
   border-bottom-left-radius: calc(var(--ds-radius-md) - 1px);
   border-bottom-right-radius: calc(var(--ds-radius-md) - 1px);
+}
+
+.trip-currency-picker__option:first-child,
+.trip-currency-picker__option:last-child {
+  border-radius: 0;
 }
 
 .trip-favorite-picker__empty,

@@ -17,56 +17,60 @@ function MetaBlock({ meta, membros, onContribute, concluida = false }) {
 
   return (
     <div className={`group-detail-goal__block${concluida ? ' group-detail-goal__block--done' : ''}`}>
-      <div className="group-detail-goal__head">
-        <Target size={16} aria-hidden />
-        <span>{meta.nome}</span>
-        {concluida ? <span className="group-detail-goal__done-badge">Concluída</span> : null}
-      </div>
-
-      <div
-        className={`group-detail-goal__body${aporteScroll ? ' group-detail-goal__body--scrollable' : ''}`}
-      >
-        <div className="group-detail-goal__summary">
-          <div className="group-detail-goal__progress">
-            <ProgressBar
-              value={progressoAtual}
-              max={valorAlvo || 1}
-              variant={concluida ? 'success' : 'primary'}
-              size="lg"
-              showLabel
-            />
-            <p className="group-detail-goal__raised">
-              <span className="group-detail-goal__raised-line">
-                Arrecadado: <strong>{formatCurrency(meta.valorAtual)}</strong>
-              </span>
-              <span className="group-detail-goal__raised-line">
-                de <strong>{formatCurrency(meta.valorAlvo)}</strong>
-              </span>
-            </p>
-          </div>
-        </div>
-
-        <ul
-          className={`group-detail-goal__aportes${aporteScroll ? ' group-detail-goal__aportes--scroll' : ''}`}
+      <div className="group-detail-goal__content">
+        <div
+          className={`group-detail-goal__body${aporteScroll ? ' group-detail-goal__body--scrollable' : ''}`}
         >
-          {aportes.map((aporte) => (
-            <li key={aporte.usuarioId}>
-              <Avatar
-                name={formatGrupoMembroDisplayNome(aporte.nome, aporte.souEu)}
-                src={aporte.urlAvatar}
-                size="sm"
-                fallback="color"
+          <div className="group-detail-goal__summary">
+            <div className="group-detail-goal__head">
+              <div className="group-detail-goal__icon">
+                <Target size={18} aria-hidden />
+              </div>
+              <span className="group-detail-goal__name">{meta.nome}</span>
+              {concluida ? <span className="group-detail-goal__done-badge">Concluída</span> : null}
+            </div>
+
+            <div className="group-detail-goal__progress">
+              <ProgressBar
+                value={progressoAtual}
+                max={valorAlvo || 1}
+                variant={concluida ? 'success' : 'primary'}
+                size="lg"
+                showLabel
               />
-              <span>{formatGrupoMembroDisplayNome(aporte.nome, aporte.souEu)}</span>
-              <strong>{formatCurrency(aporte.total)}</strong>
-              {aporte.completo ? (
-                <Check size={16} className="group-detail-goal__check" aria-label="Aporte registrado" />
-              ) : (
-                <span className="group-detail-goal__pending" aria-hidden />
-              )}
-            </li>
-          ))}
-        </ul>
+              <p className="group-detail-goal__raised">
+                <span className="group-detail-goal__raised-line">
+                  Arrecadado: <strong>{formatCurrency(meta.valorAtual)}</strong>
+                </span>
+                <span className="group-detail-goal__raised-line">
+                  de <strong>{formatCurrency(meta.valorAlvo)}</strong>
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <ul
+            className={`group-detail-goal__aportes${aporteScroll ? ' group-detail-goal__aportes--scroll' : ''}`}
+          >
+            {aportes.map((aporte) => (
+              <li key={aporte.usuarioId}>
+                <Avatar
+                  name={formatGrupoMembroDisplayNome(aporte.nome, aporte.souEu)}
+                  src={aporte.urlAvatar}
+                  size="sm"
+                  fallback="color"
+                />
+                <span>{formatGrupoMembroDisplayNome(aporte.nome, aporte.souEu)}</span>
+                <strong>{formatCurrency(aporte.total)}</strong>
+                {aporte.completo ? (
+                  <Check size={16} className="group-detail-goal__check" aria-label="Aporte registrado" />
+                ) : (
+                  <span className="group-detail-goal__pending" aria-hidden />
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       {!concluida ? (

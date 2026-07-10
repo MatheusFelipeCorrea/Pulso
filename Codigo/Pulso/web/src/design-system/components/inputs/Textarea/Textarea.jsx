@@ -68,7 +68,6 @@ export const Textarea = forwardRef(
             focused: isFocused && !hasError,
             error: hasError,
             disabled,
-            hoverable: !isFocused && !hasError && !disabled,
           })}
         >
           <textarea

@@ -277,15 +277,15 @@ Fases **concluídas ou em uso**:
 - [ ] Alertas (80% e 100%+)
 ```
 
-### 4.6 — Calendário Financeiro + Lembretes
+### 4.6 — Calendário Financeiro + Lembretes ✅
 ```
-- [ ] Backend: CRUD lembretes
-- [ ] Backend: Google Calendar sync (provider)
-- [ ] Frontend: tela calendário (grid mensal)
-- [ ] Frontend: painel de detalhe do dia
-- [ ] Frontend: lista de lembretes
-- [ ] Modal: novo/editar lembrete
-- [ ] Cron job: lembrete sync (cada 6h)
+- [x] Backend: CRUD lembretes
+- [x] Backend: Google Calendar sync (provider)
+- [x] Frontend: tela calendário (grid mensal)
+- [x] Frontend: painel de detalhe do dia
+- [x] Frontend: lista de lembretes
+- [x] Modal: novo/editar lembrete (com horário configurável, não só data)
+- [x] Cron job: lembrete sync (cada 6h)
 ```
 
 ---
@@ -344,15 +344,15 @@ Fases **concluídas ou em uso**:
 - [ ] Saldo consolidado
 ```
 
-### 5.6 — Planejamento de Compra
+### 5.6 — Planejamento de Compra ✅
 ```
-- [ ] Backend: CRUD itens
-- [ ] Frontend: tela planejamento
-- [ ] Modal: novo item
-- [ ] Modal: vincular meta
-- [ ] Simulação de parcelamento
-- [ ] Cálculo de comprometimento de renda
-- [ ] Ação "Comprei!"
+- [x] Backend: CRUD itens
+- [x] Frontend: tela planejamento
+- [x] Modal: novo item
+- [x] Modal: vincular meta
+- [x] Simulação de parcelamento
+- [x] Cálculo de comprometimento de renda
+- [x] Ação "Comprei!"
 ```
 
 ### 5.7 — Relatórios
@@ -421,12 +421,12 @@ Fases **concluídas ou em uso**:
 - [x] Backend: metas de grupo + aportes por membro
 - [x] Backend: chat (POST + GET /mensagens paginado)
 - [x] Frontend: lista + detalhe (4 cards, ícones)
-- [x] Modais: criar, entrar, convidar, gerenciar membros, editar, metas, aporte, imagem (URL)
-- [x] RF-095 MVP: toggle pretensão / divisão igual (UI; split completo → Fase expense-split)
+- [x] Modais: criar, entrar, convidar (com QR code), gerenciar membros, editar, metas, aporte, imagem (upload de arquivo)
+- [x] RF-095 MVP: toggle pretensão / divisão igual (UI, persistido no localStorage por grupo; split completo → Fase expense-split)
 - [x] Viagem pessoal → grupo (TripFormModal)
 - [x] Notificações GRUPO_ATIVIDADE / META_ATINGIDA
 - [x] RN-119 meta concluída automaticamente
-- [ ] Upload de imagem (arquivo jpg/png)
+- [x] Upload de imagem (arquivo jpg/png)
 - [ ] Chat tempo real (WebSocket/SSE)
 - [ ] Vincular RF-095 ao módulo /expense-split (após Fase 15)
 ```

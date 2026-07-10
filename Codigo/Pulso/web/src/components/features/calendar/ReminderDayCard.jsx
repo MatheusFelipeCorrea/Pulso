@@ -1,4 +1,4 @@
-import { Calendar, Check, CheckCircle2, Hourglass, Pencil, Trash2 } from 'lucide-react'
+import { Calendar, Check, CheckCircle2, Clock, Hourglass, Pencil, Trash2 } from 'lucide-react'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { getReminderCategoryMeta, ReminderCategoryIcon } from '@/utils/reminderCategories.jsx'
@@ -53,6 +53,12 @@ export function ReminderDayCard({ item, onEdit, onDelete, onMarkPaid }) {
           <div className="calendar-reminder-card__meta">
             {hasPayment ? (
               <span className="calendar-reminder-card__value">{formatCurrency(item.valor)}</span>
+            ) : null}
+            {item.horaLembrete ? (
+              <span className="calendar-reminder-card__time">
+                <Clock size={12} aria-hidden />
+                {item.horaLembrete}
+              </span>
             ) : null}
             <ReminderStatusLine item={item} />
           </div>

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Bell, Calendar, CircleDollarSign, Hash, Paperclip, RefreshCw, Tag, X } from 'lucide-react'
+import { Bell, Calendar, CircleDollarSign, Clock, Hash, Paperclip, RefreshCw, Tag, X } from 'lucide-react'
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
 import { FormFieldLabel } from '@/design-system/components/forms/FormFieldLabel/FormFieldLabel.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
@@ -7,6 +7,7 @@ import { InputText } from '@/design-system/components/inputs/InputText/InputText
 import { InputMoney } from '@/design-system/components/inputs/InputMoney/InputMoney.jsx'
 import { Select } from '@/design-system/components/selects/Select/Select.jsx'
 import { DatePicker } from '@/design-system/components/pickers/DatePicker/DatePicker.jsx'
+import { TimePicker } from '@/design-system/components/pickers/TimePicker/TimePicker.jsx'
 import { Checkbox } from '@/design-system/components/forms/Checkbox/Checkbox.jsx'
 import { Toggle } from '@/design-system/components/forms/Toggle/Toggle.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
@@ -28,6 +29,7 @@ const emptyForm = (defaultDate = new Date(), googleConnected = false) => ({
   titulo: '',
   valor: 0,
   dataVencimento: defaultDate,
+  horaLembrete: '10:00',
   antecedencia: 'UM_DIA',
   categoria: 'FATURA_CARTAO',
   sincronizarGoogle: googleConnected,
@@ -71,6 +73,7 @@ export function ReminderFormModal({
         titulo: lembrete.titulo ?? '',
         valor: lembrete.valor != null ? Number(lembrete.valor) : 0,
         dataVencimento: vencimento,
+        horaLembrete: lembrete.horaLembrete ?? '10:00',
         antecedencia: lembrete.antecedencia ?? 'UM_DIA',
         categoria: lembrete.categoria ?? 'OUTRO',
         sincronizarGoogle: Boolean(lembrete.sincronizado),
@@ -108,6 +111,7 @@ export function ReminderFormModal({
       titulo: form.titulo.trim(),
       valor: form.valor > 0 ? form.valor : null,
       dataVencimento: form.dataVencimento.toISOString(),
+      horaLembrete: form.horaLembrete,
       antecedencia: form.antecedencia,
       categoria: form.categoria,
       sincronizarGoogle: googleConnected ? form.sincronizarGoogle : false,
@@ -190,6 +194,15 @@ export function ReminderFormModal({
               }}
               required
               error={fieldErrors.dataVencimento}
+            />
+            <TimePicker
+              label={
+                <FormFieldLabel icon={Clock} tone="blue">
+                  Horário do lembrete
+                </FormFieldLabel>
+              }
+              value={form.horaLembrete}
+              onChange={(value) => setForm((prev) => ({ ...prev, horaLembrete: value }))}
             />
           </div>
 

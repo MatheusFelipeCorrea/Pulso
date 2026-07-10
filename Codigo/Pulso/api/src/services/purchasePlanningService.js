@@ -11,6 +11,7 @@ const {
     inferirCategoria,
     CATEGORIA_LABELS,
     DICAS,
+    selecionarDicasDoDia,
 } = require('../utils/purchasePlanningUtils');
 const { intervaloDoMes, mesReferenciaFromQuery, mesAtualString } = require('../utils/monthUtils');
 const { inferirTipoMeta } = require('../utils/metaBalanceUtils');
@@ -124,7 +125,7 @@ const montarResumo = async (usuarioId, itens, contexto) => {
         rendaMensal: contexto.rendaMensal.toFixed(2),
         sobraMensal: contexto.sobraMensal.toFixed(2),
         categorias,
-        dicas: DICAS,
+        dicas: selecionarDicasDoDia(DICAS, 4, todayInTimezone()),
     };
 };
 

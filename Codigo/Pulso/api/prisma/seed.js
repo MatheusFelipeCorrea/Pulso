@@ -2,26 +2,38 @@
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 const { DEFAULT_CATEGORIES } = require('../src/constants/defaultCategories');
+const notificationService = require('../src/services/notificationService');
+const gamificationService = require('../src/services/gamificationService');
 
 const prisma = new PrismaClient();
 
 const SEED_SENHA = 'Pulso@123';
+const MATHEUS_EMAIL = 'matheusfelipecorreasilva@hotmail.com';
 
 /** Usuários demo — cobrem todos os modos de uso e estados de VT */
 const SEED_USUARIOS = [
     {
-        email: 'matheusfelipecorreasilva@hotmail.com',
+        email: MATHEUS_EMAIL,
         nome: 'Matheus Felipe (Estagiário)',
         modoUso: 'ESTAGIARIO',
         config: {
+            valorSalario: 1800,
+            diaSalario: 5,
+            valorVa: 400,
+            diaVa: 5,
+            valorVr: 550,
+            diaVr: 5,
             valorVt: 220,
             diaVt: 5,
             valorPadraoPassagem: 4.8,
             vtHabilitado: null,
+            limiteGastos: 1300,
+            rendaMensalPlanejada: 2200,
         },
         vtDemo: true,
-        transacoesDemo: true,
-        descricao: 'VT automático + demo completo (saldo 52)',
+        // transações e todo o resto das funcionalidades são populadas por seedDadosCompletos() (mega-seed)
+        transacoesDemo: false,
+        descricao: 'VT automático + dados completos em todas as funcionalidades (saldo VT 52)',
     },
     {
         email: 'demo.clt@pulso.app',
@@ -111,6 +123,14 @@ function periodoAtual() {
 function dataNoMes(dia, offsetMes = 0) {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth() + offsetMes, dia, 12, 0, 0, 0);
+}
+
+/** Data relativa a hoje (para dívidas/lembretes com prazo, não presa ao calendário do mês) */
+function emDias(offsetDias) {
+    const d = new Date();
+    d.setHours(12, 0, 0, 0);
+    d.setDate(d.getDate() + offsetDias);
+    return d;
 }
 
 async function upsertSeedUsuario({ email, nome, modoUso, config }, senhaHash) {
@@ -333,6 +353,629 @@ async function seedValeTransporte(usuarioId, byName) {
     }
 
     return true;
+}
+
+// ==========================================
+// SEED COMPLETO — matheusfelipecorreasilva@hotmail.com
+// Cobre toda funcionalidade já desenvolvida no Pulso (módulos entregues no
+// Documentacao/Requisitos/Readme.md). Cada sub-seed é idempotente (verifica
+// contagem antes de criar) para permitir rodar o script mais de uma vez.
+// ==========================================
+
+async function seedCategoriaPersonalizada(usuarioId) {
+    const existente = await prisma.categoria.findFirst({
+        where: { usuarioId, nome: 'Curso de Inglês', tipo: 'DESPESA' },
+    });
+    if (existente) return existente;
+
+    const categoria = await prisma.categoria.create({
+        data: {
+            usuarioId,
+            nome: 'Curso de Inglês',
+            icone: 'GraduationCap',
+            cor: '#0EA5E9',
+            tipo: 'DESPESA',
+            padrao: false,
+        },
+    });
+
+    console.log('   ✅ Categoria personalizada: Curso de Inglês (RF-018)');
+    return categoria;
+}
+
+async function seedTagsDemo(usuarioId) {
+    const existentes = await prisma.tag.findMany({ where: { usuarioId } });
+    if (existentes.length > 0) return Object.fromEntries(existentes.map((t) => [t.nome, t]));
+
+    const definicoes = [
+        { nome: 'Essencial', icone: 'CheckCircle', cor: '#10B981' },
+        { nome: 'Trabalho', icone: 'Briefcase', cor: '#3B82F6' },
+        { nome: 'Impulsivo', icone: 'Flame', cor: '#EF4444' },
+        { nome: 'Faculdade', icone: 'GraduationCap', cor: '#6366F1' },
+    ];
+
+    const tags = await Promise.all(
+        definicoes.map((t) => prisma.tag.create({ data: { ...t, usuarioId } }))
+    );
+
+    console.log(`   ✅ ${tags.length} tags`);
+    return Object.fromEntries(tags.map((t) => [t.nome, t]));
+}
+
+/** Cria uma transação e (opcionalmente) vincula tags — usado quando precisamos do id de volta */
+async function criarTx(data, tagIds = []) {
+    const transacao = await prisma.transacao.create({ data });
+    if (tagIds.length) {
+        await prisma.transacaoTag.createMany({
+            data: tagIds.map((tagId) => ({ transacaoId: transacao.id, tagId })),
+        });
+    }
+    return transacao;
+}
+
+/** RF-015 a RF-025, RF-140 (transferência) e RF-141 (histórico p/ sugestão de categoria) */
+async function seedTransacoesCompletas(usuarioId, byName, tagsPorNome) {
+    // Guard específico (não pelo count total) — RF-059/RF-061 (VT) já criam algumas
+    // transações de receita antes desta função rodar, então count>0 sempre seria verdadeiro.
+    const jaRodou = await prisma.transacao.findFirst({
+        where: { usuarioId, descricao: 'Bolsa estágio' },
+    });
+    if (jaRodou) return false;
+
+    const base = (tipo, extra) => ({ usuarioId, tipo, recorrente: false, regraRecorrencia: null, ...extra });
+
+    // Receitas (RF-015) — salário dos últimos 3 meses + extras no mês atual
+    for (const offsetMes of [-2, -1, 0]) {
+        await criarTx(base('RECEITA', {
+            categoriaId: byName('Salário', 'RECEITA').id,
+            recurso: 'DINHEIRO',
+            valor: 1800,
+            descricao: 'Bolsa estágio',
+            data: dataNoMes(5, offsetMes),
+        }));
+    }
+    await criarTx(
+        base('RECEITA', {
+            categoriaId: byName('Freelance', 'RECEITA').id,
+            recurso: 'DINHEIRO',
+            valor: 350,
+            descricao: 'Freela de design',
+            data: dataNoMes(6, 0),
+        }),
+        [tagsPorNome.Trabalho.id]
+    );
+    await criarTx(base('RECEITA', {
+        categoriaId: byName('Investimentos', 'RECEITA').id,
+        recurso: 'DINHEIRO',
+        valor: 45.32,
+        descricao: 'Rendimento CDB',
+        data: dataNoMes(2, 0),
+    }));
+
+    // Despesas (RF-016/RF-017/RF-025 recurso x categoria) — 3 meses de histórico
+    const despesasPorMes = {
+        '-2': [
+            { categoriaId: byName('Alimentação', 'DESPESA').id, recurso: 'VR', valor: 24.9, descricao: 'Almoço no RU', dia: 3 },
+            { categoriaId: byName('Alimentação', 'DESPESA').id, recurso: 'VR', valor: 22.5, descricao: 'Almoço no RU', dia: 16 },
+            { categoriaId: byName('Alimentação', 'DESPESA').id, recurso: 'DINHEIRO', valor: 68, descricao: 'Jantar com amigos', dia: 18 },
+            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'VT', valor: 28.8, descricao: 'Passagens da semana', dia: 6 },
+            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'DINHEIRO', valor: 32, descricao: 'Uber pro trampo', dia: 14 },
+            { categoriaId: byName('Compras', 'DESPESA').id, recurso: 'VA', valor: 95.4, descricao: 'Mercado', dia: 9 },
+            { categoriaId: byName('Lazer', 'DESPESA').id, recurso: 'DINHEIRO', valor: 45, descricao: 'Cinema', dia: 21 },
+            { categoriaId: byName('Saúde', 'DESPESA').id, recurso: 'DINHEIRO', valor: 38, descricao: 'Farmácia', dia: 25 },
+        ],
+        '-1': [
+            { categoriaId: byName('Alimentação', 'DESPESA').id, recurso: 'VR', valor: 26, descricao: 'Almoço no RU', dia: 3 },
+            { categoriaId: byName('Alimentação', 'DESPESA').id, recurso: 'VR', valor: 23.9, descricao: 'Almoço no RU', dia: 16 },
+            { categoriaId: byName('Alimentação', 'DESPESA').id, recurso: 'DINHEIRO', valor: 74, descricao: 'Jantar com amigos', dia: 18 },
+            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'VT', valor: 28.8, descricao: 'Passagens da semana', dia: 6 },
+            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'DINHEIRO', valor: 30, descricao: 'Uber pro trampo', dia: 14 },
+            { categoriaId: byName('Compras', 'DESPESA').id, recurso: 'VA', valor: 102.1, descricao: 'Mercado', dia: 9 },
+            { categoriaId: byName('Educação', 'DESPESA').id, recurso: 'DINHEIRO', valor: 120, descricao: 'Mensalidade curso de inglês', dia: 20, tags: ['Faculdade'] },
+            { categoriaId: byName('Compras', 'DESPESA').id, recurso: 'DINHEIRO', valor: 189.9, descricao: 'Tênis novo', dia: 22, tags: ['Impulsivo'] },
+            { categoriaId: byName('Lazer', 'DESPESA').id, recurso: 'DINHEIRO', valor: 50, descricao: 'Cinema', dia: 21 },
+            { categoriaId: byName('Saúde', 'DESPESA').id, recurso: 'DINHEIRO', valor: 41, descricao: 'Farmácia', dia: 25 },
+        ],
+        0: [
+            { categoriaId: byName('Alimentação', 'DESPESA').id, recurso: 'VR', valor: 25.5, descricao: 'Almoço no RU', dia: 3 },
+            { categoriaId: byName('Alimentação', 'DESPESA').id, recurso: 'VR', valor: 24, descricao: 'Almoço no RU', dia: 7 },
+            { categoriaId: byName('Alimentação', 'DESPESA').id, recurso: 'DINHEIRO', valor: 62, descricao: 'Jantar com amigos', dia: 8 },
+            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'VT', valor: 28.8, descricao: 'Passagens da semana', dia: 6 },
+            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'DINHEIRO', valor: 18, descricao: 'Uber pro trampo', dia: 4 },
+            { categoriaId: byName('Compras', 'DESPESA').id, recurso: 'VA', valor: 88, descricao: 'Mercado', dia: 2 },
+            { categoriaId: byName('Educação', 'DESPESA').id, recurso: 'DINHEIRO', valor: 120, descricao: 'Mensalidade curso de inglês', dia: 8, tags: ['Faculdade'] },
+            { categoriaId: byName('Lazer', 'DESPESA').id, recurso: 'DINHEIRO', valor: 40, descricao: 'Cinema', dia: 1 },
+            { categoriaId: byName('Saúde', 'DESPESA').id, recurso: 'DINHEIRO', valor: 35, descricao: 'Farmácia', dia: 7 },
+        ],
+    };
+
+    for (const [offsetMes, itens] of Object.entries(despesasPorMes)) {
+        for (const item of itens) {
+            const { dia, tags = [], ...resto } = item;
+            await criarTx(
+                base('DESPESA', { ...resto, data: dataNoMes(dia, Number(offsetMes)) }),
+                tags.map((nome) => tagsPorNome[nome].id)
+            );
+        }
+    }
+
+    // Contas essenciais (tag "Essencial")
+    await criarTx(
+        base('DESPESA', {
+            categoriaId: byName('Moradia', 'DESPESA').id,
+            recurso: 'DINHEIRO',
+            valor: 650,
+            descricao: 'Aluguel do quarto',
+            data: dataNoMes(6, 0),
+        }),
+        [tagsPorNome.Essencial.id]
+    );
+
+    // RF-140 — transferência entre recursos (Dinheiro → Poupança), fora dos totais de receita/despesa
+    await criarTx(base('TRANSFERENCIA', {
+        categoriaId: null,
+        recurso: 'DINHEIRO',
+        recursoDestino: 'POUPANCA',
+        valor: 300,
+        descricao: 'Guardando pra reserva',
+        data: dataNoMes(6, 0),
+    }));
+
+    // RF-020/RF-021 — transação recorrente (mãe) já com "filhas" geradas nos meses seguintes
+    const categoriaAssinaturas = byName('Serviços e Assinaturas', 'DESPESA').id;
+    const mae = await criarTx(base('DESPESA', {
+        categoriaId: categoriaAssinaturas,
+        recurso: 'DINHEIRO',
+        valor: 21.9,
+        descricao: 'Assinatura Spotify',
+        data: dataNoMes(10, -2),
+        recorrente: true,
+        regraRecorrencia: 'FREQ=MONTHLY;INTERVAL=1',
+    }));
+    await prisma.transacao.create({
+        data: base('DESPESA', {
+            categoriaId: categoriaAssinaturas,
+            recurso: 'DINHEIRO',
+            valor: 21.9,
+            descricao: 'Assinatura Spotify',
+            data: dataNoMes(10, -1),
+            paiId: mae.id,
+        }),
+    });
+    await prisma.transacao.create({
+        data: base('DESPESA', {
+            categoriaId: categoriaAssinaturas,
+            recurso: 'DINHEIRO',
+            valor: 21.9,
+            descricao: 'Assinatura Spotify',
+            data: dataNoMes(5, 0),
+            paiId: mae.id,
+        }),
+    });
+
+    console.log('   ✅ ~30 transações em 3 meses (receitas, despesas, 1 transferência, 1 recorrente com filhas, tags)');
+    return true;
+}
+
+/** RF-026 a RF-031, RF-043 (vínculo viagem), RF-137 (vínculo planejamento de compra) */
+async function seedMetasCompletas(usuarioId) {
+    const count = await prisma.meta.count({ where: { usuarioId } });
+    if (count > 0) return null;
+
+    const reserva = await prisma.meta.create({
+        data: {
+            usuarioId,
+            nome: 'Reserva de Emergência',
+            tipo: 'CURTO_PRAZO',
+            status: 'ATIVA',
+            prioridade: 'ALTA',
+            valorAlvo: 3000,
+            valorAtual: 1200,
+            prazo: dataNoMes(1, 6),
+            descricao: 'Guardar o equivalente a alguns meses de gasto',
+            aportes: {
+                create: [
+                    { valor: 400, data: dataNoMes(10, -2) },
+                    { valor: 400, data: dataNoMes(10, -1) },
+                    { valor: 400, data: dataNoMes(6, 0) },
+                ],
+            },
+        },
+    });
+
+    await prisma.meta.create({
+        data: {
+            usuarioId,
+            nome: 'Trocar de carro',
+            tipo: 'LONGO_PRAZO',
+            status: 'PAUSADA',
+            prioridade: 'BAIXA',
+            valorAlvo: 25000,
+            valorAtual: 2000,
+            prazo: dataNoMes(1, 36),
+            aportes: { create: [{ valor: 2000, data: dataNoMes(15, -2) }] },
+        },
+    });
+
+    const notebook = await prisma.meta.create({
+        data: {
+            usuarioId,
+            nome: 'Notebook novo',
+            tipo: 'CURTO_PRAZO',
+            status: 'CONCLUIDA',
+            prioridade: 'MEDIA',
+            valorAlvo: 4500,
+            valorAtual: 4500,
+            prazo: dataNoMes(28, -1),
+            concluidaEm: dataNoMes(20, -1),
+            aportes: {
+                create: [
+                    { valor: 2000, data: dataNoMes(5, -2) },
+                    { valor: 2500, data: dataNoMes(20, -1) },
+                ],
+            },
+        },
+    });
+
+    await prisma.meta.create({
+        data: {
+            usuarioId,
+            nome: 'Curso de inglês',
+            tipo: 'CURTO_PRAZO',
+            status: 'ATIVA',
+            prioridade: 'MEDIA',
+            valorAlvo: 1200,
+            valorAtual: 300,
+            prazo: dataNoMes(1, 4),
+            aportes: { create: [{ valor: 300, data: dataNoMes(8, 0) }] },
+        },
+    });
+
+    const bonito = await prisma.meta.create({
+        data: {
+            usuarioId,
+            nome: 'Viagem para Bonito',
+            tipo: 'CURTO_PRAZO',
+            status: 'ATIVA',
+            prioridade: 'MEDIA',
+            valorAlvo: 2500,
+            valorAtual: 800,
+            prazo: dataNoMes(1, 5),
+            aportes: {
+                create: [
+                    { valor: 400, data: dataNoMes(12, -1) },
+                    { valor: 400, data: dataNoMes(4, 0) },
+                ],
+            },
+        },
+    });
+
+    console.log('   ✅ 5 metas pessoais (ativa, pausada, concluída, vínculo compra e viagem)');
+    return { reserva, notebook, bonito };
+}
+
+/** RF-133 a RF-138 */
+async function seedPlanejamentoCompraCompleto(usuarioId, categorias, metaNotebookId) {
+    const count = await prisma.itemPlanejamentoCompra.count({ where: { usuarioId } });
+    if (count > 0) return false;
+
+    const categoriaTecnologia = categorias.find((c) => c.nome === 'Tecnologia' && c.tipo === 'DESPESA');
+
+    // RF-138 — item comprado gera automaticamente a transação vinculada
+    const transacaoNotebook = await prisma.transacao.create({
+        data: {
+            usuarioId,
+            tipo: 'DESPESA',
+            recurso: 'DINHEIRO',
+            categoriaId: categoriaTecnologia.id,
+            valor: 4500,
+            descricao: 'Compra: Notebook Dell Inspiron',
+            data: dataNoMes(20, -1),
+            recorrente: false,
+            regraRecorrencia: null,
+        },
+    });
+
+    await prisma.itemPlanejamentoCompra.create({
+        data: {
+            usuarioId,
+            nome: 'Notebook Dell Inspiron',
+            valorEstimado: 4500,
+            prioridade: 'MEDIA',
+            categoria: 'ELETRONICOS',
+            simularParcelas: true,
+            parcelas: 10,
+            metaId: metaNotebookId,
+            status: 'COMPRADO',
+            compradoEm: dataNoMes(20, -1),
+            transacaoId: transacaoNotebook.id,
+        },
+    });
+
+    await prisma.itemPlanejamentoCompra.createMany({
+        data: [
+            { usuarioId, nome: 'iPhone 15', valorEstimado: 5500, prioridade: 'ALTA', categoria: 'ELETRONICOS', simularParcelas: true, parcelas: 10 },
+            { usuarioId, nome: 'Sofá novo', valorEstimado: 2200, prioridade: 'MEDIA', categoria: 'CASA_ELETRODOMESTICOS', simularParcelas: true, parcelas: 6 },
+            { usuarioId, nome: 'Tênis de corrida', valorEstimado: 450, prioridade: 'BAIXA', categoria: 'VESTUARIO', simularParcelas: true, parcelas: 3 },
+        ],
+    });
+
+    console.log('   ✅ 4 itens de planejamento de compra (1 comprado com transação vinculada)');
+    return true;
+}
+
+/** RF-033 a RF-043 — viagens pessoais, despesas por categoria, observações e moedas favoritas */
+async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
+    const count = await prisma.viagem.count({ where: { usuarioId } });
+    if (count > 0) return false;
+
+    await prisma.viagem.create({
+        data: {
+            usuarioId,
+            destino: 'Bonito - MS',
+            moeda: 'BRL',
+            dataPrevista: dataNoMes(10, 5),
+            metaId: metaBonitoId,
+            despesas: {
+                create: [
+                    { categoria: 'TRANSPORTE', descricao: 'Passagem aérea', valorEstimado: 850 },
+                    { categoria: 'HOSPEDAGEM', descricao: 'Pousada 5 noites', valorEstimado: 1200 },
+                    { categoria: 'PASSEIOS', descricao: 'Gruta do Lago Azul + flutuação', valorEstimado: 600 },
+                    { categoria: 'ALIMENTACAO', descricao: 'Restaurantes', valorEstimado: 400 },
+                ],
+            },
+            observacoes: {
+                create: [
+                    {
+                        titulo: 'Checklist de viagem',
+                        tipo: 'CHECKLIST',
+                        checklist: [
+                            { item: 'Reservar passeios com antecedência', feito: true },
+                            { item: 'Levar protetor solar biodegradável', feito: false },
+                            { item: 'Confirmar pousada', feito: false },
+                        ],
+                    },
+                    {
+                        titulo: 'Dica de amigo',
+                        tipo: 'DICA',
+                        conteudo: 'Vale muito a pena reservar a Gruta do Lago Azul com 2 meses de antecedência!',
+                    },
+                ],
+            },
+        },
+    });
+
+    await prisma.viagem.create({
+        data: {
+            usuarioId,
+            destino: 'Paris - França',
+            moeda: 'EUR',
+            dataPrevista: dataNoMes(1, 8),
+            despesas: {
+                create: [
+                    { categoria: 'TRANSPORTE', descricao: 'Passagem aérea internacional', valorEstimado: 4200 },
+                    { categoria: 'HOSPEDAGEM', descricao: 'Hostel 6 noites', valorEstimado: 1500 },
+                    { categoria: 'DOCUMENTACAO', descricao: 'Seguro viagem', valorEstimado: 250 },
+                    { categoria: 'PASSEIOS', descricao: 'Museus e passeios', valorEstimado: 500 },
+                ],
+            },
+            observacoes: {
+                create: [
+                    {
+                        titulo: 'Documentos necessários',
+                        tipo: 'DOCUMENTOS',
+                        conteudo: 'Passaporte válido, seguro viagem, reserva de hotel',
+                    },
+                ],
+            },
+        },
+    });
+
+    await prisma.moedaFavorita.createMany({
+        data: [
+            { usuarioId, codigo: 'USD' },
+            { usuarioId, codigo: 'EUR' },
+            { usuarioId, codigo: 'ARS' },
+        ],
+    });
+
+    console.log('   ✅ 2 viagens pessoais (Bonito vinculada a meta, Paris internacional) + 3 moedas favoritas');
+    return true;
+}
+
+/** RF-054 a RF-058, RF-121 a RF-125 */
+async function seedLembretesCompletos(usuarioId) {
+    const count = await prisma.lembrete.count({ where: { usuarioId } });
+    if (count > 0) return false;
+
+    await prisma.lembrete.createMany({
+        data: [
+            { usuarioId, titulo: 'Fatura do cartão', categoria: 'FATURA_CARTAO', valor: 890, dataVencimento: dataNoMes(15, 0), antecedencia: 'TRES_DIAS', pago: false },
+            { usuarioId, titulo: 'Internet', categoria: 'INTERNET', valor: 99.9, dataVencimento: dataNoMes(20, 0), antecedencia: 'UM_DIA', pago: true, repetirMensal: true, diaRecorrencia: 20 },
+            { usuarioId, titulo: 'Assinatura Spotify', categoria: 'STREAMING', valor: 21.9, dataVencimento: dataNoMes(10, 0), antecedencia: 'NO_DIA', pago: true, repetirMensal: true, diaRecorrencia: 10 },
+            { usuarioId, titulo: 'Academia', categoria: 'ACADEMIA', valor: 89.9, dataVencimento: dataNoMes(5, 0), antecedencia: 'UM_DIA', pago: true, repetirMensal: true, diaRecorrencia: 5 },
+            { usuarioId, titulo: 'IPVA', categoria: 'IPVA', valor: 450, dataVencimento: emDias(20), antecedencia: 'CINCO_DIAS', pago: false },
+            { usuarioId, titulo: 'Aniversário da mãe', categoria: 'ANIVERSARIO', dataVencimento: emDias(10), antecedencia: 'UMA_SEMANA', pago: false },
+            { usuarioId, titulo: 'Plano de saúde', categoria: 'PLANO_SAUDE', valor: 210, dataVencimento: emDias(-3), antecedencia: 'TRES_DIAS', pago: false },
+        ],
+    });
+
+    console.log('   ✅ 7 lembretes (pagos, pendentes, recorrentes e 1 atrasado)');
+    return true;
+}
+
+/** RF-109 a RF-114 */
+async function seedOrcamentoCompleto(usuarioId, byName) {
+    const count = await prisma.orcamento.count({ where: { usuarioId } });
+    if (count > 0) return false;
+
+    const limites = [
+        { nome: 'Alimentação', limite: 500 },
+        { nome: 'Transporte', limite: 150 },
+        { nome: 'Lazer', limite: 100 },
+        { nome: 'Compras', limite: 300 },
+        { nome: 'Saúde', limite: 150 },
+    ];
+
+    await prisma.orcamento.createMany({
+        data: limites.flatMap(({ nome, limite }) => [
+            { usuarioId, categoriaId: byName(nome, 'DESPESA').id, mesReferencia: dataNoMes(1, 0), limiteValor: limite },
+            { usuarioId, categoriaId: byName(nome, 'DESPESA').id, mesReferencia: dataNoMes(1, -1), limiteValor: limite },
+        ]),
+    });
+
+    console.log('   ✅ Orçamento em 5 categorias (mês atual e anterior)');
+    return true;
+}
+
+/** RF-126 a RF-132 */
+async function seedDividasCompletas(usuarioId) {
+    const count = await prisma.divida.count({ where: { usuarioId } });
+    if (count > 0) return false;
+
+    await prisma.divida.create({
+        data: {
+            usuarioId,
+            direcao: 'ME_DEVEM',
+            nomePessoa: 'João Silva',
+            valor: 300,
+            dataEmprestimo: dataNoMes(5, -1),
+            prazoDevolucao: emDias(10),
+            quitada: false,
+            observacao: 'Emprestei pra ele pagar a faculdade',
+        },
+    });
+
+    await prisma.divida.create({
+        data: {
+            usuarioId,
+            direcao: 'ME_DEVEM',
+            nomePessoa: 'Ana Costa',
+            valor: 150,
+            dataEmprestimo: dataNoMes(8, -2),
+            prazoDevolucao: dataNoMes(8, -1),
+            quitada: false,
+        },
+    });
+
+    await prisma.divida.create({
+        data: {
+            usuarioId,
+            direcao: 'EU_DEVO',
+            nomePessoa: 'Pedro Lima',
+            valor: 500,
+            dataEmprestimo: dataNoMes(3, -2),
+            prazoDevolucao: dataNoMes(3, 0),
+            quitada: true,
+            dataQuitacao: dataNoMes(3, 0),
+            pagamentos: { create: [{ valor: 500, dataPagamento: dataNoMes(3, 0) }] },
+        },
+    });
+
+    await prisma.divida.create({
+        data: {
+            usuarioId,
+            direcao: 'EU_DEVO',
+            nomePessoa: 'Maria (cartão emprestado)',
+            valor: 200,
+            dataEmprestimo: dataNoMes(2, 0),
+            prazoDevolucao: emDias(30),
+            quitada: false,
+            pagamentos: { create: [{ valor: 80, dataPagamento: dataNoMes(4, 0) }] },
+        },
+    });
+
+    console.log('   ✅ 4 dívidas (2 a receber — 1 vencendo, 1 atrasada; 2 a pagar — 1 quitada, 1 parcial)');
+    return true;
+}
+
+/** Amostra de notificações de vários tipos (lidas e não lidas) */
+async function seedNotificacoesCompletas(usuarioId, categorias) {
+    const count = await prisma.notificacao.count({ where: { usuarioId } });
+    if (count > 0) return false;
+
+    const alimentacao = categorias.find((c) => c.nome === 'Alimentação' && c.tipo === 'DESPESA');
+
+    await notificationService.criarNotificacao(usuarioId, {
+        tipo: 'RECEITA_REGISTRADA',
+        titulo: 'Receita registrada',
+        mensagem: 'Bolsa estágio: +R$ 1.800,00',
+        linkAcao: '/transactions',
+    });
+    await notificationService.criarNotificacao(usuarioId, {
+        tipo: 'TRANSFERENCIA_REGISTRADA',
+        titulo: 'Transferência registrada',
+        mensagem: 'Guardando pra reserva: R$ 300,00',
+        linkAcao: '/transactions',
+    });
+    await notificationService.criarNotificacao(usuarioId, {
+        tipo: 'ALERTA_ORCAMENTO',
+        titulo: 'Alerta orçamento (80%)',
+        mensagem: 'Você já usou 82% do orçamento de Alimentação este mês',
+        linkAcao: '/budget',
+        metadados: { categoriaId: alimentacao.id, mesReferencia: periodoAtual() },
+    });
+    await notificationService.criarNotificacao(usuarioId, {
+        tipo: 'LEMBRETE_VENCIMENTO',
+        titulo: 'Lembrete/vencimento',
+        mensagem: 'IPVA vence em 5 dias',
+        linkAcao: '/calendar',
+    });
+    await notificationService.criarNotificacao(usuarioId, {
+        tipo: 'DIVIDA_COBRANCA',
+        titulo: 'Dívida/cobrança',
+        mensagem: 'João Silva: dívida vence em 3 dias',
+        linkAcao: '/debts',
+    });
+    await notificationService.criarNotificacao(usuarioId, {
+        tipo: 'GRUPO_ATIVIDADE',
+        titulo: 'Grupo (atividade)',
+        mensagem: 'Maria adicionou uma nova pretensão na Viagem Macaé 2026',
+        linkAcao: '/groups',
+    });
+    await notificationService.criarNotificacao(usuarioId, {
+        tipo: 'INSIGHT_IA',
+        titulo: 'Insight IA',
+        mensagem: 'Seus gastos com Alimentação aumentaram 12% em relação ao mês passado',
+        linkAcao: '/dashboard',
+    });
+
+    console.log('   ✅ 7 notificações de exemplo (vários tipos)');
+    return true;
+}
+
+/** RF-079, RF-080, RF-081 — streak, xp e conquistas (via gamificationService, mesma lógica do app) */
+async function seedGamificacaoCompleta(usuarioId) {
+    await prisma.sequencia.update({
+        where: { usuarioId },
+        data: { sequenciaAtual: 12, maiorSequencia: 21, nivel: 'CONSCIENTE', ultimaAtividade: new Date() },
+    });
+
+    for (const codigo of ['PRIMEIRA_TRANSACAO', 'STREAK_7', 'PRIMEIRA_META']) {
+        await gamificationService.desbloquearConquista(usuarioId, codigo);
+    }
+
+    console.log('   ✅ Streak (12 dias, recorde 21) + 3 conquistas desbloqueadas');
+}
+
+/** Orquestra todo o mega-seed de Matheus, na ordem de dependência entre os módulos */
+async function seedDadosCompletos(usuario, categoriasIniciais) {
+    console.log('\n   🚀 Populando dados completos de todas as funcionalidades...');
+
+    const categoriaPersonalizada = await seedCategoriaPersonalizada(usuario.id);
+    const categorias = [...categoriasIniciais, categoriaPersonalizada];
+    const byName = (nome, tipo) => categorias.find((c) => c.nome === nome && c.tipo === tipo);
+
+    const tagsPorNome = await seedTagsDemo(usuario.id);
+    const metas = await seedMetasCompletas(usuario.id);
+    await seedTransacoesCompletas(usuario.id, byName, tagsPorNome);
+    await seedPlanejamentoCompraCompleto(usuario.id, categorias, metas?.notebook?.id ?? null);
+    await seedViagensPessoaisCompletas(usuario.id, metas?.bonito?.id ?? null);
+    await seedLembretesCompletos(usuario.id);
+    await seedOrcamentoCompleto(usuario.id, byName);
+    await seedDividasCompletas(usuario.id);
+    await seedNotificacoesCompletas(usuario.id, categorias);
+    await seedGamificacaoCompleta(usuario.id);
 }
 
 function vtStatusLabel(modoUso, vtHabilitado) {
@@ -569,6 +1212,10 @@ async function main() {
             await seedReceitaVtMensal(usuario.id, byName, valorVt);
             await seedValeTransporte(usuario.id, byName);
             console.log('   📊 Saldo VT esperado: Recebido 220 | Usado 48 | Vendido 120 | Saldo 52');
+        }
+
+        if (perfil.email === MATHEUS_EMAIL) {
+            await seedDadosCompletos(usuario, categorias);
         }
 
         console.log(`   → ${perfil.descricao}\n`);

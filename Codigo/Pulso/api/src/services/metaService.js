@@ -154,8 +154,8 @@ const calcularResumo = async (usuarioId) => {
     const [metas, contadores, aportes, conclusoes] = await Promise.all([
         metaRepository.listarTodasComAportes(usuarioId),
         metaRepository.contarPorStatus(usuarioId),
-        metaRepository.listarAtividadeRecente(usuarioId, 8),
-        metaRepository.listarConclusoesRecentes(usuarioId, 8),
+        metaRepository.listarAtividadeRecente(usuarioId, 15),
+        metaRepository.listarConclusoesRecentes(usuarioId, 15),
     ]);
 
     const atividadeRecente = [
@@ -177,7 +177,7 @@ const calcularResumo = async (usuarioId) => {
         })),
     ]
         .sort((a, b) => new Date(b.data) - new Date(a.data))
-        .slice(0, 5);
+        .slice(0, 15);
 
     return {
         ...montarResumo(metas),

@@ -1,5 +1,6 @@
-import { useCallback } from 'react'
-import { Copy, Crown, Link2, RefreshCw, Share2, Upload, Users, X } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
+import QRCode from 'qrcode'
+import { Copy, Crown, Link2, QrCode, RefreshCw, Share2, Upload, Users, X } from 'lucide-react'
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
@@ -21,6 +22,24 @@ export function InviteGroupModal({ open, grupo, onClose, onCopyCode, isAdmin, on
   const inviteLink = grupo?.codigoConvite ? buildGrupoInviteLink(grupo.codigoConvite) : ''
   const inviteLinkDisplay = formatGrupoInviteLinkDisplay(grupo?.codigoConvite || inviteLink)
   const memberCount = grupo?.quantidadeMembros ?? membros.length
+  const [qrDataUrl, setQrDataUrl] = useState('')
+
+  useEffect(() => {
+    if (!inviteLink) return undefined
+
+    let cancelado = false
+    QRCode.toDataURL(inviteLink, { margin: 1, width: 176, color: { dark: '#1F1147' } })
+      .then((url) => {
+        if (!cancelado) setQrDataUrl(url)
+      })
+      .catch(() => {
+        if (!cancelado) setQrDataUrl('')
+      })
+
+    return () => {
+      cancelado = true
+    }
+  }, [inviteLink])
 
   const copyCode = useCallback(() => {
     if (!grupo?.codigoConvite) return
@@ -125,6 +144,16 @@ export function InviteGroupModal({ open, grupo, onClose, onCopyCode, isAdmin, on
               </Button>
             ) : null}
             <p className="group-invite-modal__invite-hint">Compartilhe este código com quem deseja convidar</p>
+
+            {inviteLink && qrDataUrl ? (
+              <div className="group-invite-modal__qr">
+                <img src={qrDataUrl} alt="QR code para entrar no grupo" width={132} height={132} />
+                <span className="group-invite-modal__qr-caption">
+                  <QrCode size={13} aria-hidden />
+                  Ou aponte a câmera para entrar direto
+                </span>
+              </div>
+            ) : null}
           </div>
         </section>
 

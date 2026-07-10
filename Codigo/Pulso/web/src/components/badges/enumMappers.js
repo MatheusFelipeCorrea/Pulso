@@ -8,6 +8,7 @@ const RECURSO_KIND = {
   VA: 'recurso.va',
   VR: 'recurso.vr',
   VT: 'recurso.vt',
+  POUPANCA: 'recurso.poupanca',
 }
 
 const META_STATUS_KIND = {

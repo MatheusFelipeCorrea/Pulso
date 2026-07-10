@@ -65,7 +65,10 @@ const listarPorUsuario = async (usuarioId, filtros, { pagina = 1, limite = 10 } 
         prisma.transacao.findMany({
             where,
             include: includeRelacionamentos,
-            orderBy: { data: 'desc' },
+            // desempate por criadoEm/id: várias transações no mesmo dia têm `data` idêntica
+            // (mesmo timestamp), e sem um critério de desempate estável a paginação
+            // duplicava/pulava linhas entre páginas
+            orderBy: [{ data: 'desc' }, { criadoEm: 'desc' }, { id: 'desc' }],
             skip,
             take: limitNum,
         }),
@@ -136,6 +139,14 @@ const listarRecorrentesMae = async () =>
         include: includeRelacionamentos,
     });
 
+const listarDescricoesPorTipo = async (usuarioId, tipo, limite = 300) =>
+    prisma.transacao.findMany({
+        where: { usuarioId, tipo, descricao: { not: null }, categoriaId: { not: null } },
+        select: { descricao: true, categoriaId: true },
+        orderBy: { data: 'desc' },
+        take: limite,
+    });
+
 module.exports = {
     buildWhere,
     listarPorUsuario,
@@ -148,4 +159,5 @@ module.exports = {
     excluir,
     excluirRecorrentesFilhas,
     listarRecorrentesMae,
+    listarDescricoesPorTipo,
 };

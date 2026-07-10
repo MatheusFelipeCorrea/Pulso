@@ -7,6 +7,7 @@ const {
     editarTransacaoSchema,
     listarTransacoesQuerySchema,
     excluirTransacaoSchema,
+    sugerirCategoriaQuerySchema,
 } = require('../schemas/transactionSchemas');
 
 const router = express.Router();
@@ -15,6 +16,13 @@ router.get(
     '/filtros',
     authMiddleware,
     transactionController.obterOpcoesFiltro
+);
+
+router.get(
+    '/sugestao-categoria',
+    authMiddleware,
+    validateMiddleware(sugerirCategoriaQuerySchema),
+    transactionController.sugerirCategoria
 );
 
 router.get(

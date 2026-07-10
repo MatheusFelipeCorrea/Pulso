@@ -1,0 +1,22 @@
+web:
+  - changed-files:
+      - any-glob-to-any-file: 'Codigo/Pulso/web/**'
+
+api:
+  - changed-files:
+      - any-glob-to-any-file: 'Codigo/Pulso/api/**'
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'Documentacao/**'
+          - '**/*.md'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/**'
+
+database:
+  - changed-files:
+      - any-glob-to-any-file: 'Codigo/Pulso/api/prisma/**'

@@ -277,11 +277,7 @@ export default function GoalsPage() {
           </div>
         </div>
 
-        <GoalSidebar
-          resumo={resumo}
-          loading={loadingResumo}
-          onViewAllActivity={() => handleTabChange(GOAL_TABS.TODAS)}
-        />
+        <GoalSidebar resumo={resumo} loading={loadingResumo} />
       </div>
 
       <GoalFormModal

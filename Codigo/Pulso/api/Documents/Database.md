@@ -3,7 +3,7 @@
 Documento de referência das entidades do banco de dados do **Pulso**.
 
 > **Fonte de verdade:** `Codigo/Pulso/api/prisma/schema.prisma`  
-> **Última revisão:** junho/2026 — alinhado ao schema Prisma 5.x (PostgreSQL / Neon)
+> **Última revisão:** julho/2026 — alinhado ao schema Prisma 5.x (PostgreSQL / Neon)
 
 ---
 
@@ -11,10 +11,10 @@ Documento de referência das entidades do banco de dados do **Pulso**.
 
 | Camada | Situação |
 |--------|----------|
-| **Prisma** | 30 modelos mapeados (todas as áreas do produto) |
-| **API em uso** | Auth, transações, categorias, tags, VT, orçamento, notificações, lembretes, calendário, **dividas**, **metas**, **viagens**, **moedas** |
-| **Implementado na API** | Auth, transações, VT, orçamento, lembretes, calendário, dívidas, metas, viagens, moedas, **grupos (parcial)** |
-| **Pendente na API** | IA (chat/insights), gamificação completa, relatórios; grupos: gerenciar membros, notificações |
+| **Prisma** | 34 modelos no schema · 31 documentados abaixo — faltam `Divida`, `PagamentoDivida`, `ObservacaoViagem` |
+| **API em uso** | Auth, transações, categorias, tags, VT, orçamento, notificações, lembretes, calendário, **dividas**, **metas**, **viagens**, **moedas**, **planejamento de compra** |
+| **Implementado na API** | Auth, transações, VT, orçamento, lembretes, calendário, dívidas, metas, viagens, moedas, planejamento de compra, **grupos (parcial)** |
+| **Pendente na API** | IA (chat/insights), gamificação completa, relatórios; grupos: chat em tempo real, split completo (`/expense-split`) |
 
 Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`, `configuracoes_usuario`).
 
@@ -35,6 +35,7 @@ Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`,
 - [🧳 DespesaViagem](#-despesaviagem)
 - [💱 MoedaFavorita](#-moedafavorita)
 - [📅 Lembrete](#-lembrete)
+- [🛒 ItemPlanejamentoCompra](#-itemplanejamentocompra)
 - [🚌 VendaVt](#-vendavt)
 - [🎫 UsoVt](#-usovt)
 - [🔥 Sequencia](#-sequencia)
@@ -155,9 +156,10 @@ Receitas e despesas. Tabela: `transacoes`
 |---|---|---|---|
 | `id` | String | ✅ | Identificador |
 | `usuarioId` | String (FK) | ✅ | Dono |
-| `categoriaId` | String (FK) | ✅ | Categoria vinculada |
-| `tipo` | Enum | ✅ | `RECEITA` ou `DESPESA` |
-| `recurso` | Enum | ✅ | `DINHEIRO`, `VA`, `VR`, `VT` |
+| `categoriaId` | String (FK) | ❌ | Categoria vinculada — nula em transferências (RF-140) |
+| `tipo` | Enum | ✅ | `RECEITA`, `DESPESA` ou `TRANSFERENCIA` |
+| `recurso` | Enum | ✅ | `DINHEIRO`, `VA`, `VR`, `VT`, `POUPANCA` |
+| `recursoDestino` | Enum | ❌ | Recurso de destino — usado apenas quando `tipo = TRANSFERENCIA` (RF-140) |
 | `valor` | Decimal(12,2) | ✅ | Valor (sempre > 0) |
 | `descricao` | VarChar(255) | ❌ | Descrição livre |
 | `data` | DateTime | ✅ | Data da transação |
@@ -171,6 +173,8 @@ Receitas e despesas. Tabela: `transacoes`
 - ❌ `VT` só com categoria Transporte (despesas)
 - ❌ `VR` só com Alimentação; `VA` com Alimentação ou Compras
 - ✅ Valor sempre > 0
+- **Transferência (RF-140):** `tipo = TRANSFERENCIA` exige `recursoDestino` diferente de `recurso` e não tem `categoriaId`; excluída dos totais de receita/despesa (`calcularAgregados`/`montarResumo`) e dos marcadores do Calendário
+- **Sugestão de categoria (RF-141):** endpoint `GET /transacoes/sugestao-categoria` compara a descrição informada com o histórico do usuário (mesmo `tipo`) via similaridade de bigramas (`categorySuggestionUtils.js`), sem persistir nada
 
 ---
 
@@ -290,12 +294,42 @@ Lembretes de contas a pagar (sincronizáveis com Google Calendar).
 | `titulo` | VarChar(120) | ✅ | Título do lembrete |
 | `valor` | Decimal(12,2) | ❌ | Valor opcional |
 | `dataVencimento` | DateTime | ✅ | Data de vencimento |
-| `antecedencia` | Enum | ✅ | `NO_DIA`, `UM_DIA`, `TRES_DIAS` |
+| `horaLembrete` | String | ✅ | Horário (`HH:MM`, padrão `10:00`) usado no evento sincronizado com o Google Agenda |
+| `antecedencia` | Enum | ✅ | `NO_DIA`, `UM_DIA`, `TRES_DIAS`, `CINCO_DIAS`, `UMA_SEMANA` |
 | `categoria` | Enum | ✅ | `CategoriaLembrete` (ex.: `ALUGUEL`, `LUZ`, `FATURA_CARTAO`, `OUTRO`) |
 | `pago` | Boolean | ✅ | Já foi pago? |
 | `googleEventId` | String | ❌ | ID do evento no Calendar |
 | `sincronizado` | Boolean | ✅ | Sincronizado com Google? |
+| `repetirMensal` | Boolean | ✅ | Recria o lembrete automaticamente todo mês |
+| `diaRecorrencia` | Int | ❌ | Dia do mês (1–28) para a recorrência |
 | `criadoEm` / `atualizadoEm` | DateTime | ✅ | Timestamps |
+
+---
+
+## 🛒 ItemPlanejamentoCompra
+
+Itens de uma lista de desejos, com simulação de parcelamento e vínculo opcional a uma meta. Tabela: `itens_planejamento_compra`
+
+| Campo | Tipo | Obrigatório | Descrição |
+|---|---|---|---|
+| `id` | String | ✅ | Identificador |
+| `usuarioId` | String (FK) | ✅ | Dono |
+| `nome` | VarChar(120) | ✅ | Nome do item desejado |
+| `valorEstimado` | Decimal(12,2) | ✅ | Valor estimado do item |
+| `prioridade` | Enum | ✅ | `Prioridade` (`ALTA`, `MEDIA`, `BAIXA`) |
+| `categoria` | Enum | ✅ | `CategoriaItemCompra`, inferida automaticamente pelo nome (default `OUTROS`) |
+| `observacoes` | VarChar(300) | ❌ | Notas livres |
+| `linkProduto` | VarChar(500) | ❌ | Link da loja |
+| `imagemUrl` | VarChar(2048) | ❌ | Imagem (upload próprio ou sugerida) |
+| `simularParcelas` | Boolean | ✅ | Se deve simular parcelamento |
+| `parcelas` | Int | ✅ | Quantidade de parcelas simuladas (padrão 12) |
+| `metaId` | String (FK) | ❌ | Meta vinculada, opcional |
+| `status` | Enum | ✅ | `StatusItemCompra` (`DESEJADO`, `COMPRADO`) |
+| `compradoEm` | DateTime | ❌ | Quando foi marcado como comprado |
+| `transacaoId` | String (FK, único) | ❌ | Transação gerada ao marcar "Comprei!" |
+| `criadoEm` / `atualizadoEm` | DateTime | ✅ | Timestamps |
+
+**Regra de comprometimento (RN-090/RN-091):** `parcela ÷ renda_mensal × 100` — ≤20% saudável, 21–30% atenção, >30% arriscado.
 
 ---
 
@@ -593,7 +627,8 @@ Alertas in-app para o usuário. Tabela: `notificacoes`
 | 9 | 🎮 Gamificação | Sequencia, Conquista, ConquistaUsuario, DesafioMensal | 4 |
 | 10 | 🤖 IA | MensagemChat, HistoricoScore | 2 |
 | 11 | 👥 Grupos | Grupo, MembroGrupo, ViagemGrupo, DespesaViagemGrupo, MetaGrupo, AporteMetaGrupo, MensagemChatGrupo | 7 |
-| | | **TOTAL** | **30** |
+| 12 | 🛒 Planejamento de Compra | ItemPlanejamentoCompra | 1 |
+| | | **TOTAL** | **31** |
 
 ---
 
@@ -602,20 +637,22 @@ Alertas in-app para o usuário. Tabela: `notificacoes`
 | Enum | Valores |
 |---|---|
 | `ProvedorAuth` | `EMAIL`, `GOOGLE` |
-| `TipoTransacao` | `RECEITA`, `DESPESA` |
-| `TipoRecurso` | `DINHEIRO`, `VA`, `VR`, `VT` |
+| `TipoTransacao` | `RECEITA`, `DESPESA`, `TRANSFERENCIA` |
+| `TipoRecurso` | `DINHEIRO`, `VA`, `VR`, `VT`, `POUPANCA` |
 | `StatusMeta` | `ATIVA`, `PAUSADA`, `CONCLUIDA`, `CANCELADA` |
 | `TipoMeta` | `CURTO_PRAZO`, `LONGO_PRAZO` |
 | `TipoCategoria` | `RECEITA`, `DESPESA` |
 | `CategoriaDespesaViagem` | `TRANSPORTE`, `HOSPEDAGEM`, `ALIMENTACAO`, `PASSEIOS`, `COMPRAS`, `OUTROS` |
 | `Tema` | `CLARO`, `ESCURO` |
-| `AntecedenciaLembrete` | `NO_DIA`, `UM_DIA`, `TRES_DIAS` |
+| `AntecedenciaLembrete` | `NO_DIA`, `UM_DIA`, `TRES_DIAS`, `CINCO_DIAS`, `UMA_SEMANA` |
+| `CategoriaItemCompra` | `ELETRONICOS`, `CASA_ELETRODOMESTICOS`, `VESTUARIO`, `VEICULO`, `ACESSORIOS`, `OUTROS` |
+| `StatusItemCompra` | `DESEJADO`, `COMPRADO` |
 | `PapelGrupo` | `ADMIN`, `MEMBRO` |
 | `NivelFinanceiro` | `INICIANTE`, `CONSCIENTE`, `ESTRATEGISTA`, `INVESTIDOR` |
 | `ModoUso` | `ESTAGIARIO`, `CLT`, `PJ`, `PESSOA_FISICA` |
 | `Prioridade` | `ALTA`, `MEDIA`, `BAIXA` |
 | `CategoriaLembrete` | `ALUGUEL`, `CONDOMINIO`, `IPTU`, `LUZ`, `AGUA`, `GAS`, `INTERNET`, `FATURA_CARTAO`, `OUTRO`, … (ver schema) |
-| `TipoNotificacao` | `RECEITA_REGISTRADA`, `DESPESA_REGISTRADA`, `META_ATINGIDA`, `ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO` |
+| `TipoNotificacao` | `RECEITA_REGISTRADA`, `DESPESA_REGISTRADA`, `TRANSFERENCIA_REGISTRADA`, `META_ATINGIDA`, `ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO` |
 
 ---
 
@@ -624,12 +661,14 @@ Alertas in-app para o usuário. Tabela: `notificacoes`
 ```
 Usuario (1) ──── (1) ConfiguracaoUsuario
   (1) ──── (1) Sequencia
-  (1) ──── (N) Transacao ──── (N) Categoria
+  (1) ──── (N) Transacao ──── (0:1) Categoria [nula em TRANSFERENCIA]
                         └──── (N:N) Tag
   (1) ──── (N) Meta ──── (N) AporteMeta
                     └──── (0:1) Viagem
   (1) ──── (N) Viagem ──── (N) DespesaViagem
   (1) ──── (N) Lembrete
+  (1) ──── (N) ItemPlanejamentoCompra ──── (0:1) Meta
+                                     └──── (0:1) Transacao
   (1) ──── (N) Orcamento ──── (N) Categoria
   (1) ──── (N) Notificacao
   (1) ──── (N) VendaVt, UsoVt

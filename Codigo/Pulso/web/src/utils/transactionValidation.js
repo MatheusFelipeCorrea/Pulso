@@ -30,3 +30,12 @@ export function validarRecursoCategoria(recurso, categoriaNome, tipo) {
 
   return null
 }
+
+/** Valida a transferência entre recursos no cliente (RF-140, espelha backend) */
+export function validarTransferencia(recurso, recursoDestino) {
+  if (!recurso || !recursoDestino) return null
+  if (recurso === recursoDestino) {
+    return 'Recurso de destino deve ser diferente do recurso de origem'
+  }
+  return null
+}

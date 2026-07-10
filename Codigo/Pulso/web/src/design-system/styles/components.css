@@ -121,6 +121,77 @@
   opacity: 0.5;
 }
 
+/* ── Textarea ───────────────────────────────────────────────── */
+
+.ds-textarea-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-textarea-border);
+  background-color: var(--ds-color-textarea-bg);
+  transition:
+    border-color var(--ds-transition-fast),
+    box-shadow var(--ds-transition-fast);
+}
+
+.ds-textarea-container:not(.ds-textarea-container--focused):not(.ds-textarea-container--error):not(.ds-textarea-container--disabled):hover {
+  border-color: var(--ds-color-text-secondary);
+}
+
+.ds-textarea-container--focused {
+  border-color: var(--ds-color-input-focus);
+  box-shadow: 0 0 0 1px var(--ds-color-input-focus);
+}
+
+.ds-textarea-container--error {
+  border-color: var(--ds-color-danger);
+  box-shadow: none;
+}
+
+.ds-textarea-container--disabled {
+  cursor: not-allowed;
+  background-color: var(--ds-color-input-disabled);
+  opacity: 0.5;
+}
+
+.ds-textarea-field {
+  display: block;
+  width: 100%;
+  min-height: 100px;
+  max-height: 300px;
+  background: transparent;
+  padding: 0.75rem 1rem;
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-relaxed);
+  color: var(--ds-color-text);
+  outline: none;
+}
+
+.ds-textarea-field::placeholder {
+  color: var(--ds-color-placeholder);
+}
+
+.ds-textarea-field:disabled {
+  cursor: not-allowed;
+}
+
+.ds-textarea-field--has-counter {
+  padding-bottom: 2rem;
+}
+
+.ds-textarea-field--resize-none {
+  resize: none;
+}
+
+.ds-textarea-field--resize-vertical {
+  resize: vertical;
+}
+
+.ds-textarea-field--resize-both {
+  resize: both;
+}
+
 /* ── Select & Picker ───────────────────────────────────────── */
 
 .ds-select-container,
@@ -347,6 +418,35 @@
 .ds-select-option__icon svg {
   width: 1rem;
   height: 1rem;
+}
+
+/* TimePicker options (coluna de hora/minuto/período) */
+.ds-time-option {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0;
+  margin-bottom: 0.125rem;
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background: transparent;
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-color-text);
+  cursor: pointer;
+  transition:
+    background-color var(--ds-transition-fast),
+    color var(--ds-transition-fast);
+}
+
+.ds-time-option:hover {
+  background-color: var(--ds-color-picker-cell-hover);
+}
+
+.ds-time-option[data-selected='true'] {
+  background-color: var(--ds-color-primary);
+  color: #fff;
 }
 
 /* MonthPicker cells */
@@ -800,6 +900,40 @@
 }
 
 .ds-checkbox-box svg {
+  animation: ds-check-pop 150ms ease;
+}
+
+/* ── Radio ─────────────────────────────────────────────────── */
+
+.ds-radio-circle {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--ds-color-control-border);
+  background-color: var(--ds-color-input-bg);
+  transition:
+    border-color var(--ds-transition-fast),
+    box-shadow var(--ds-transition-fast);
+}
+
+.ds-radio-circle[data-checked='true'] {
+  border-color: var(--ds-color-primary);
+}
+
+.ds-radio-circle[data-disabled='true'] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ds-radio-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--ds-color-primary);
   animation: ds-check-pop 150ms ease;
 }
 

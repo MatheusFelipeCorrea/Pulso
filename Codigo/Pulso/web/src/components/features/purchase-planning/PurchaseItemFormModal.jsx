@@ -3,8 +3,10 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import {
   Calendar,
+  CalendarClock,
   CircleDollarSign,
   Link2,
+  MessageSquare,
   Package,
   Plus,
   Target,
@@ -22,13 +24,16 @@ import { Toggle } from '@/design-system/components/forms/Toggle/Toggle.jsx'
 import { Select } from '@/design-system/components/selects/Select/Select.jsx'
 import { DatePicker } from '@/design-system/components/pickers/DatePicker/DatePicker.jsx'
 import { SpinnerDots } from '@/design-system/components/feedback/Spinner/SpinnerDots.jsx'
+import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { inferirTipoMeta } from '@/utils/goalBalanceUtils.js'
 import { PRIORIDADE_OPTIONS, capitalizeNomeItem } from '@/utils/purchasePlanningUtils.js'
 import { PurchaseItemImagePicker } from '@/components/features/purchase-planning/PurchaseItemImagePicker.jsx'
+import { PurchaseInstallmentGauge } from '@/components/features/purchase-planning/PurchaseInstallmentGauge.jsx'
 import {
   GOAL_LINK_TABS,
   GoalLinkModeToggle,
 } from '@/components/features/purchase-planning/GoalLinkModeToggle.jsx'
+import { getGoalIcon } from '@/utils/goalIconRules.js'
 import * as metaService from '@/services/metaService.js'
 import * as purchasePlanningService from '@/services/purchasePlanningService.js'
 
@@ -41,7 +46,7 @@ const emptyForm = () => ({
   linkProduto: '',
   imagemUrl: '',
   simularParcelas: true,
-  parcelas: 12,
+  parcelas: 0,
   vincularMeta: false,
   metaId: null,
   criarMeta: {
@@ -58,6 +63,7 @@ export function PurchaseItemFormModal({
   onSubmit,
   item = null,
   submitting = false,
+  rendaMensal = 0,
 }) {
   const [form, setForm] = useState(emptyForm)
   const [imageFile, setImageFile] = useState(null)
@@ -120,10 +126,15 @@ export function PurchaseItemFormModal({
 
   const metaOptions = useMemo(
     () =>
-      metas.map((meta) => ({
-        value: meta.id,
-        label: meta.nome,
-      })),
+      metas.map((meta) => {
+        const Icon = getGoalIcon(meta.nome)
+        return {
+          value: meta.id,
+          label: meta.nome,
+          icon: <Icon size={14} aria-hidden />,
+          trailingText: formatCurrency(meta.valorAlvo),
+        }
+      }),
     [metas]
   )
 
@@ -263,7 +274,11 @@ export function PurchaseItemFormModal({
 
           <Textarea
             className="pp-form__notes"
-            label="Observações"
+            label={
+              <FormFieldLabel icon={MessageSquare} tone="blue">
+                Observações
+              </FormFieldLabel>
+            }
             value={form.observacoes}
             onChange={(event) => updateForm({ observacoes: event.target.value })}
             placeholder="Detalhes, cor, loja preferida..."
@@ -294,21 +309,32 @@ export function PurchaseItemFormModal({
             fonte={imageFonte}
           />
 
-          <div className="pp-form__toggle-row">
+          <div className="pp-form__installment">
             <Toggle
               checked={form.simularParcelas}
               onChange={(simularParcelas) => updateForm({ simularParcelas })}
-              label="Simular parcelamento"
+              label={
+                <FormFieldLabel icon={CalendarClock} tone="yellow">
+                  Simulação de parcelamento
+                </FormFieldLabel>
+              }
               description="Calcula o impacto das parcelas na sua renda."
             />
             {form.simularParcelas ? (
-              <InputNumber
-                label="Parcelas"
-                value={form.parcelas}
-                onChange={(parcelas) => updateForm({ parcelas })}
-                min={1}
-                max={48}
-              />
+              <>
+                <InputNumber
+                  label="Número de parcelas"
+                  value={form.parcelas}
+                  onChange={(parcelas) => updateForm({ parcelas })}
+                  min={1}
+                  max={48}
+                />
+                <PurchaseInstallmentGauge
+                  valorEstimado={form.valorEstimado}
+                  parcelas={form.parcelas}
+                  rendaMensal={rendaMensal}
+                />
+              </>
             ) : null}
           </div>
 
@@ -317,7 +343,11 @@ export function PurchaseItemFormModal({
               <Toggle
                 checked={form.vincularMeta}
                 onChange={(vincularMeta) => updateForm({ vincularMeta })}
-                label="Vincular a uma meta"
+                label={
+                  <FormFieldLabel icon={Link2} tone="purple">
+                    Vincular a uma meta
+                  </FormFieldLabel>
+                }
                 description="Acompanhe o progresso da compra com uma meta financeira."
               />
 
@@ -326,25 +356,21 @@ export function PurchaseItemFormModal({
                   <GoalLinkModeToggle
                     value={form.goalTab}
                     onChange={(goalTab) => updateForm({ goalTab })}
+                    existingSlot={
+                      loadingMetas ? (
+                        <SpinnerDots center label="Carregando metas..." />
+                      ) : (
+                        <Select
+                          options={metaOptions}
+                          value={form.metaId}
+                          onChange={(metaId) => updateForm({ metaId })}
+                          placeholder="Selecione uma meta ativa..."
+                        />
+                      )
+                    }
                   />
 
-                  {form.goalTab === GOAL_LINK_TABS.EXISTING ? (
-                    loadingMetas ? (
-                      <SpinnerDots center label="Carregando metas..." />
-                    ) : (
-                      <Select
-                        label={
-                          <FormFieldLabel icon={Target} tone="purple">
-                            Meta
-                          </FormFieldLabel>
-                        }
-                        options={metaOptions}
-                        value={form.metaId}
-                        onChange={(metaId) => updateForm({ metaId })}
-                        placeholder="Selecione uma meta ativa..."
-                      />
-                    )
-                  ) : (
+                  {form.goalTab === GOAL_LINK_TABS.CREATE ? (
                     <>
                       <InputText
                         label={
@@ -397,7 +423,7 @@ export function PurchaseItemFormModal({
                         </p>
                       ) : null}
                     </>
-                  )}
+                  ) : null}
                 </>
               ) : null}
             </div>

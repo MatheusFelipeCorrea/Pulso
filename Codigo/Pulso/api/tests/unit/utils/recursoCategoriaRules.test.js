@@ -15,6 +15,10 @@ describe('recursoCategoriaRules', () => {
         ).not.toThrow();
     });
 
+    it('não valida transferências (RF-140, sem categoria)', () => {
+        expect(() => validarRecursoCategoria('VT', null, 'TRANSFERENCIA')).not.toThrow();
+    });
+
     it('não valida quando recurso é DINHEIRO', () => {
         expect(() =>
             validarRecursoCategoria('DINHEIRO', { nome: 'Qualquer' }, 'DESPESA')

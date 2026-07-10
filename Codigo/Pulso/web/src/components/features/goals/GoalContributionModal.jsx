@@ -72,25 +72,30 @@ export function GoalContributionModal({ open, onClose, onSubmit, submitting = fa
         </header>
 
         <div className="goal-contribution-form__body">
-          <div className="goal-contribution-form__meta">
-            <GoalIcon nome={meta.nome} status={meta.status} />
-            <div>
-              <strong>{meta.nome}</strong>
-              <span>Progresso atual</span>
+          <div className="goal-contribution-form__meta-card">
+            <div className="goal-contribution-form__meta">
+              <GoalIcon nome={meta.nome} status={meta.status} />
+              <div>
+                <strong>{meta.nome}</strong>
+                <span className="goal-contribution-form__meta-subtitle">Progresso atual</span>
+              </div>
+            </div>
+
+            <div className="goal-contribution-form__progress-block">
+              <p className="goal-contribution-form__progress-headline goal-contribution-form__progress-headline--success">
+                {formatCurrency(saldo.valorAtual)}{' '}
+                <span>de {formatCurrency(saldo.valorAlvo)} ({Math.round(saldo.percentual)}%)</span>
+              </p>
+              <ProgressBar value={saldo.valorAtual} max={saldo.valorAlvo} variant="success" size="lg" />
+              <div className="goal-contribution-form__progress-range goal-contribution-form__progress-range--success">
+                <span>{formatCurrency(saldo.valorAtual)}</span>
+                <span>{formatCurrency(saldo.valorAlvo)}</span>
+              </div>
             </div>
           </div>
 
-          <ProgressBar
-            value={saldo.valorAtual}
-            max={saldo.valorAlvo}
-            variant="success"
-            size="lg"
-            layout="labeled"
-            showLabel
-            label={`${formatCurrency(saldo.valorAtual)} de ${formatCurrency(saldo.valorAlvo)} (${Math.round(saldo.percentual)}%)`}
-          />
-
           <InputMoney
+            className="goal-contribution-form__valor-input"
             label={
               <FormFieldLabel icon={CircleDollarSign} tone="green">
                 Valor do aporte
@@ -114,20 +119,21 @@ export function GoalContributionModal({ open, onClose, onSubmit, submitting = fa
 
           {preview ? (
             <section className="goal-contribution-form__preview">
-              <h3>
-                <Eye size={16} aria-hidden />
+              <FormFieldLabel icon={Eye} tone="purple">
                 Preview
-              </h3>
+              </FormFieldLabel>
               <p>Após este aporte:</p>
-              <ProgressBar
-                value={preview.novoAtual}
-                max={saldo.valorAlvo}
-                variant="primary"
-                size="lg"
-                layout="labeled"
-                showLabel
-                label={`${formatCurrency(preview.novoAtual)} de ${formatCurrency(saldo.valorAlvo)} (${Math.round(preview.percentual)}%)`}
-              />
+              <div className="goal-contribution-form__progress-block">
+                <p className="goal-contribution-form__progress-headline goal-contribution-form__progress-headline--success">
+                  {formatCurrency(preview.novoAtual)}{' '}
+                  <span>de {formatCurrency(saldo.valorAlvo)} ({Math.round(preview.percentual)}%)</span>
+                </p>
+                <ProgressBar value={preview.novoAtual} max={saldo.valorAlvo} variant="primary" size="lg" />
+                <div className="goal-contribution-form__progress-range goal-contribution-form__progress-range--primary">
+                  <span>{formatCurrency(preview.novoAtual)}</span>
+                  <span>{formatCurrency(saldo.valorAlvo)}</span>
+                </div>
+              </div>
               <p className="goal-contribution-form__remaining">
                 <Clock size={14} aria-hidden />
                 Faltam {formatCurrency(preview.novoRestante)} para concluir sua meta

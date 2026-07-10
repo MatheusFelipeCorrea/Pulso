@@ -21,6 +21,7 @@ import { GroupDetailTripCard } from '@/components/features/groups/detail/GroupDe
 import * as grupoService from '@/services/grupoService.js'
 import * as moedaService from '@/services/moedaService.js'
 import * as viagemService from '@/services/viagemService.js'
+import { mesclarMensagensChat } from '@/utils/groupDetailUtils.js'
 
 export default function GroupDetailPage() {
   const { id } = useParams()
@@ -110,9 +111,9 @@ export default function GroupDetailPage() {
     const syncChat = async () => {
       try {
         const data = await grupoService.listarMensagensGrupo(id, { pagina: 1, limite: 20 })
-        setChatMensagens(data.mensagens ?? [])
-        setChatPagina(data.pagina ?? 1)
-        setChatPaginas(data.paginas ?? 1)
+        const recentes = data.mensagens ?? []
+        setChatMensagens((prev) => mesclarMensagensChat(prev, recentes))
+        setChatPaginas((prev) => Math.max(data.paginas ?? 1, prev))
       } catch {
         // silencioso
       }

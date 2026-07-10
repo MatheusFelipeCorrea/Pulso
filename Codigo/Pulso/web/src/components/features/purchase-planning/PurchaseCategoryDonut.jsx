@@ -1,10 +1,8 @@
-import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { CATEGORIA_SEGMENTS } from '@/utils/purchasePlanningUtils.js'
 
 export function PurchaseCategoryDonut({ categorias = {} }) {
   const values = CATEGORIA_SEGMENTS.map((segment) => ({
     ...segment,
-    quantidade: categorias[segment.key]?.quantidade ?? 0,
     total: Number(categorias[segment.key]?.total ?? 0),
   }))
 
@@ -54,16 +52,19 @@ export function PurchaseCategoryDonut({ categorias = {} }) {
       </div>
 
       <div className="pp-donut__legend">
-        {values.map((item) => (
-          <div key={item.key} className="pp-donut__legend-row">
-            <span className="pp-donut__dot" style={{ background: item.color }} />
-            <span className="pp-donut__legend-label">
-              {item.label} ({item.quantidade})
-            </span>
-            <strong>{formatCurrency(item.total)}</strong>
-          </div>
-        ))}
+        {values.map((item) => {
+          const percentual = sum > 0 ? Math.round((item.total / sum) * 100) : 0
+          return (
+            <div key={item.key} className="pp-donut__legend-row">
+              <span className="pp-donut__dot" style={{ background: item.color }} />
+              <span className="pp-donut__legend-label">{item.label}</span>
+              <strong>{percentual}%</strong>
+            </div>
+          )
+        })}
       </div>
+
+      <p className="pp-donut__caption">Baseado no valor total dos itens desejados</p>
     </div>
   )
 }

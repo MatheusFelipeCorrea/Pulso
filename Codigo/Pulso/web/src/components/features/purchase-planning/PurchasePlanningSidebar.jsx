@@ -1,12 +1,15 @@
 import {
-  BarChart3,
+  CheckCircle2,
+  FileText,
   Lightbulb,
-  PieChart,
 } from 'lucide-react'
-import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { SpinnerDots } from '@/design-system/components/feedback/Spinner/SpinnerDots.jsx'
-import { formatComprometimentoPercentual } from '@/utils/purchasePlanningUtils.js'
+import {
+  COMPROMETIMENTO_COLORS,
+  formatComprometimentoPercentual,
+  getComprometimentoNivel,
+} from '@/utils/purchasePlanningUtils.js'
 import { PurchaseCategoryDonut } from './PurchaseCategoryDonut.jsx'
 
 export function PurchasePlanningSidebar({ resumo, loading }) {
@@ -19,25 +22,28 @@ export function PurchasePlanningSidebar({ resumo, loading }) {
   }
 
   const dicas = resumo?.dicas ?? []
+  const impactoNivel = getComprometimentoNivel(resumo?.mediaImpactoRenda ?? 0)
 
   return (
     <aside className="pp-sidebar">
       <section className="pp-sidebar__card">
         <h2>
-          <PieChart size={16} aria-hidden />
+          <FileText size={16} aria-hidden />
           Resumo do planejamento
         </h2>
         <dl className="pp-sidebar__stats">
           <div>
-            <dt>Total desejado</dt>
-            <dd>{formatCurrency(resumo?.totalValor ?? 0)}</dd>
+            <dt>Total dos itens desejados</dt>
+            <dd className="pp-value-accent">{formatCurrency(resumo?.totalValor ?? 0)}</dd>
           </div>
           <div>
             <dt>Impacto médio na renda</dt>
-            <dd>{formatComprometimentoPercentual(resumo?.mediaImpactoRenda ?? 0)}</dd>
+            <dd style={{ color: COMPROMETIMENTO_COLORS[impactoNivel] }}>
+              {formatComprometimentoPercentual(resumo?.mediaImpactoRenda ?? 0)}
+            </dd>
           </div>
           <div>
-            <dt>Itens na lista</dt>
+            <dt>Qtde. de itens</dt>
             <dd>
               {resumo?.totalItens ?? 0} {(resumo?.totalItens ?? 0) === 1 ? 'item' : 'itens'}
             </dd>
@@ -46,10 +52,7 @@ export function PurchasePlanningSidebar({ resumo, loading }) {
       </section>
 
       <section className="pp-sidebar__card pp-sidebar__card--highlight">
-        <h2>
-          <BarChart3 size={16} aria-hidden />
-          Breakdown por categoria
-        </h2>
+        <h2>Breakdown por categoria</h2>
         <PurchaseCategoryDonut categorias={resumo?.categorias ?? {}} />
       </section>
 
@@ -60,15 +63,13 @@ export function PurchasePlanningSidebar({ resumo, loading }) {
             Dicas inteligentes
           </h2>
           <ul className="pp-sidebar__tips">
-            {dicas.slice(0, 3).map((dica) => (
-              <li key={dica.id}>{dica.texto}</li>
+            {dicas.map((dica) => (
+              <li key={dica.id}>
+                <CheckCircle2 size={14} aria-hidden />
+                <span>{dica.texto}</span>
+              </li>
             ))}
           </ul>
-          {dicas.length > 3 ? (
-            <Button type="button" variant="secondary" size="sm" className="pp-sidebar__tips-btn" disabled>
-              Ver todas as dicas
-            </Button>
-          ) : null}
         </section>
       ) : null}
     </aside>

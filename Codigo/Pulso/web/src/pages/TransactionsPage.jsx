@@ -157,6 +157,7 @@ export default function TransactionsPage() {
         tipo: payload.tipo,
         categoriaId: payload.categoriaId,
         recurso: payload.recurso,
+        recursoDestino: payload.recursoDestino,
         valor: payload.valor,
         descricao: payload.descricao,
         data: payload.data,

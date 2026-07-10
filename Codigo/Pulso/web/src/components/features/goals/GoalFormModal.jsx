@@ -30,7 +30,7 @@ const emptyForm = () => ({
   nome: '',
   valorAlvo: 0,
   prazo: null,
-  tipo: 'CURTO_PRAZO',
+  tipo: null,
   descricao: '',
 })
 
@@ -183,43 +183,50 @@ export function GoalFormModal({
               </FormFieldLabel>
             </legend>
             <div className="goal-form__tipo-options">
-              <button
-                type="button"
-                className={`goal-form__tipo-card${form.tipo === 'CURTO_PRAZO' ? ' is-active' : ''}`}
-                onClick={() => handleTipoChange('CURTO_PRAZO')}
-              >
-                <Zap size={18} aria-hidden />
-                <span>Curto prazo</span>
-                <small>até 6 meses</small>
-              </button>
-              <button
-                type="button"
-                className={`goal-form__tipo-card${form.tipo === 'LONGO_PRAZO' ? ' is-active' : ''}`}
-                onClick={() => handleTipoChange('LONGO_PRAZO')}
-              >
-                <Target size={18} aria-hidden />
-                <span>Longo prazo</span>
-                <small>mais de 6 meses</small>
-              </button>
+              <label className={`goal-form__tipo-option${form.tipo === 'CURTO_PRAZO' ? ' is-active' : ''}`}>
+                <input
+                  type="radio"
+                  name="goal-form-tipo"
+                  checked={form.tipo === 'CURTO_PRAZO'}
+                  onChange={() => handleTipoChange('CURTO_PRAZO')}
+                />
+                <Zap size={16} aria-hidden />
+                <span>
+                  Curto prazo <small>(até 6 meses)</small>
+                </span>
+              </label>
+              <label className={`goal-form__tipo-option${form.tipo === 'LONGO_PRAZO' ? ' is-active' : ''}`}>
+                <input
+                  type="radio"
+                  name="goal-form-tipo"
+                  checked={form.tipo === 'LONGO_PRAZO'}
+                  onChange={() => handleTipoChange('LONGO_PRAZO')}
+                />
+                <Target size={16} aria-hidden />
+                <span>
+                  Longo prazo <small>(mais de 6 meses)</small>
+                </span>
+              </label>
             </div>
           </fieldset>
 
           <section className="goal-form__preview">
-            <h3>
-              <Eye size={16} aria-hidden />
+            <FormFieldLabel icon={Eye} tone="purple">
               Preview
-            </h3>
+            </FormFieldLabel>
             {form.valorAlvo > 0 && form.prazo ? (
-              <>
-                <PiggyBank size={42} className="goal-form__preview-icon" aria-hidden />
-                <p>
-                  Se guardar <strong>{formatCurrency(previewMensal)}/mês</strong>, atinge em{' '}
-                  <strong>{previewMeses} {previewMeses === 1 ? 'mês' : 'meses'}</strong>.
-                </p>
-                <small>Este cálculo é uma estimativa.</small>
-              </>
+              <div className="goal-form__preview-content">
+                <PiggyBank size={44} className="goal-form__preview-icon" aria-hidden />
+                <div className="goal-form__preview-text">
+                  <p>
+                    Se guardar <strong>{formatCurrency(previewMensal)}/mês</strong>, atinge em{' '}
+                    <strong>{previewMeses} {previewMeses === 1 ? 'mês' : 'meses'}</strong>
+                  </p>
+                  <small>Este cálculo é uma estimativa.</small>
+                </div>
+              </div>
             ) : (
-              <p className="goal-form__preview-empty">
+              <p className="goal-form__preview-hint">
                 Preencha o valor alvo e o prazo para ver sua simulação.
               </p>
             )}

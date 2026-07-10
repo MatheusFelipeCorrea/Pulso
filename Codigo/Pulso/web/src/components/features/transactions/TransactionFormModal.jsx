@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   AlignLeft,
+  ArrowLeftRight,
   Calendar,
   CalendarClock,
   CircleDollarSign,
   Heart,
   RefreshCw,
+  Sparkles,
   Tag,
   Tags,
   Trash2,
@@ -22,11 +24,15 @@ import { DatePicker } from '@/design-system/components/pickers/DatePicker/DatePi
 import { TagsInput } from '@/design-system/components/selects/TagsInput/TagsInput.jsx'
 import { Checkbox } from '@/design-system/components/forms/Checkbox/Checkbox.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
-import { validarRecursoCategoria } from '@/utils/transactionValidation.js'
+import { validarRecursoCategoria, validarTransferencia } from '@/utils/transactionValidation.js'
 import { REQUIRED_FIELD_ERROR } from '@/utils/formValidation.js'
 import { buildRecurrenceRule } from '@/utils/transactionRecurrence.js'
+import { sugerirCategoria } from '@/services/transactionService.js'
 import { cn } from '@/design-system/utils/cn.js'
 import { tagSuggestions, categoriaToSelectOption, recursoSelectOptions, toSelectOptions } from '@/utils/filterOptions.js'
+
+const SUGESTAO_DEBOUNCE_MS = 400
+const SUGESTAO_DESCRICAO_MINIMA = 3
 
 const emptyForm = () => ({
   tipo: 'DESPESA',
@@ -35,6 +41,7 @@ const emptyForm = () => ({
   categoriaId: null,
   descricao: '',
   recurso: null,
+  recursoDestino: null,
   tagIds: [],
   tagLabels: [],
   recorrente: false,
@@ -55,6 +62,7 @@ export function TransactionFormModal({
 }) {
   const [form, setForm] = useState(emptyForm)
   const [fieldErrors, setFieldErrors] = useState({})
+  const [categoriaAutoSugerida, setCategoriaAutoSugerida] = useState(false)
 
   const categorias = opcoes?.categorias ?? []
   const tagsCatalog = opcoes?.tags ?? []
@@ -62,9 +70,12 @@ export function TransactionFormModal({
   const frequenciaOptions = toSelectOptions(opcoes?.formulario?.frequencias)
   const ateQuandoOptions = toSelectOptions(opcoes?.formulario?.ateQuando)
 
+  const isTransferencia = form.tipo === 'TRANSFERENCIA'
+
   useEffect(() => {
     if (!open) return
     setFieldErrors({})
+    setCategoriaAutoSugerida(false)
 
     if (mode === 'edit' && transacao) {
       setForm({
@@ -74,6 +85,7 @@ export function TransactionFormModal({
         categoriaId: transacao.categoria?.id ?? null,
         descricao: transacao.descricao ?? '',
         recurso: transacao.recurso,
+        recursoDestino: transacao.recursoDestino ?? null,
         tagIds: transacao.tags?.map((t) => t.id) ?? [],
         tagLabels: transacao.tags?.map((t) => t.nome) ?? [],
         recorrente: transacao.recorrente ?? false,
@@ -101,14 +113,33 @@ export function TransactionFormModal({
     return validarRecursoCategoria(form.recurso, categoriaSelecionada?.nome, form.tipo)
   }, [form.categoriaId, form.recurso, form.tipo, categoriaSelecionada?.nome])
 
+  const transferenciaError = useMemo(() => {
+    if (!isTransferencia) return null
+    return validarTransferencia(form.recurso, form.recursoDestino)
+  }, [isTransferencia, form.recurso, form.recursoDestino])
+
+  const recursoOrigemOptions = useMemo(
+    () => (isTransferencia ? recursoOptions.filter((o) => o.value !== form.recursoDestino) : recursoOptions),
+    [recursoOptions, isTransferencia, form.recursoDestino]
+  )
+  const recursoDestinoOptions = useMemo(
+    () => recursoOptions.filter((o) => o.value !== form.recurso),
+    [recursoOptions, form.recurso]
+  )
+
   const updateForm = (patch) => {
     setForm((prev) => {
       const next = { ...prev, ...patch }
       if (patch.tipo && patch.tipo !== prev.tipo) {
         next.categoriaId = null
+        next.recursoDestino = null
       }
       return next
     })
+
+    if ('tipo' in patch) {
+      setCategoriaAutoSugerida(false)
+    }
 
     const touchedFields = Object.keys(patch)
     if (touchedFields.length > 0) {
@@ -121,6 +152,38 @@ export function TransactionFormModal({
       })
     }
   }
+
+  const handleCategoriaChange = (categoriaId) => {
+    updateForm({ categoriaId })
+    setCategoriaAutoSugerida(false)
+  }
+
+  // RF-141 — sugere a categoria com base no histórico de descrições do usuário
+  useEffect(() => {
+    if (!open || mode !== 'create' || isTransferencia) return
+    if (form.categoriaId && !categoriaAutoSugerida) return
+
+    const descricao = form.descricao.trim()
+    if (descricao.length < SUGESTAO_DESCRICAO_MINIMA) return
+
+    let cancelado = false
+    const timer = setTimeout(async () => {
+      try {
+        const { categoriaId } = await sugerirCategoria({ tipo: form.tipo, descricao })
+        if (!cancelado && categoriaId) {
+          setForm((prev) => ({ ...prev, categoriaId }))
+          setCategoriaAutoSugerida(true)
+        }
+      } catch {
+        // sugestão é apenas um auxílio; falhas na busca não devem travar o formulário
+      }
+    }, SUGESTAO_DEBOUNCE_MS)
+
+    return () => {
+      cancelado = true
+      clearTimeout(timer)
+    }
+  }, [open, mode, isTransferencia, form.descricao, form.tipo, form.categoriaId, categoriaAutoSugerida])
 
   const addTagByName = (nome) => {
     const trimmed = nome.trim()
@@ -148,21 +211,27 @@ export function TransactionFormModal({
     const nextFieldErrors = {}
     if (!form.valor || form.valor <= 0) nextFieldErrors.valor = REQUIRED_FIELD_ERROR
     if (!form.data) nextFieldErrors.data = REQUIRED_FIELD_ERROR
-    if (!form.categoriaId) nextFieldErrors.categoriaId = REQUIRED_FIELD_ERROR
     if (!form.recurso) nextFieldErrors.recurso = REQUIRED_FIELD_ERROR
+
+    if (isTransferencia) {
+      if (!form.recursoDestino) nextFieldErrors.recursoDestino = REQUIRED_FIELD_ERROR
+    } else if (!form.categoriaId) {
+      nextFieldErrors.categoriaId = REQUIRED_FIELD_ERROR
+    }
 
     if (Object.keys(nextFieldErrors).length > 0) {
       setFieldErrors(nextFieldErrors)
       return
     }
 
-    if (recursoError) return
+    if (isTransferencia ? transferenciaError : recursoError) return
 
     setFieldErrors({})
     onSubmit?.({
       tipo: form.tipo,
-      categoriaId: form.categoriaId,
+      categoriaId: isTransferencia ? undefined : form.categoriaId,
       recurso: form.recurso,
+      recursoDestino: isTransferencia ? form.recursoDestino : undefined,
       valor: form.valor,
       descricao: form.descricao || undefined,
       data: form.data.toISOString(),
@@ -218,15 +287,32 @@ export function TransactionFormModal({
             </button>
             <button
               type="button"
-              className={cn('tx-form__toggle-btn', !isReceita && 'tx-form__toggle-btn--active tx-form__toggle-btn--expense')}
+              className={cn('tx-form__toggle-btn', form.tipo === 'DESPESA' && 'tx-form__toggle-btn--active tx-form__toggle-btn--expense')}
               onClick={() => updateForm({ tipo: 'DESPESA' })}
             >
-              <Heart size={18} fill={!isReceita ? 'currentColor' : 'none'} />
+              <Heart size={18} fill={form.tipo === 'DESPESA' ? 'currentColor' : 'none'} />
               Despesa
+            </button>
+            <button
+              type="button"
+              className={cn('tx-form__toggle-btn', isTransferencia && 'tx-form__toggle-btn--active tx-form__toggle-btn--transfer')}
+              onClick={() => updateForm({ tipo: 'TRANSFERENCIA' })}
+            >
+              <ArrowLeftRight size={18} />
+              Transferência
             </button>
           </div>
 
-          <div className={cn('tx-form__money', isReceita ? 'tx-form__money--income' : 'tx-form__money--expense')}>
+          <div
+            className={cn(
+              'tx-form__money',
+              isTransferencia
+                ? 'tx-form__money--transfer'
+                : isReceita
+                  ? 'tx-form__money--income'
+                  : 'tx-form__money--expense'
+            )}
+          >
             <InputMoney
               label={
                 <FormFieldLabel icon={CircleDollarSign} tone="green">
@@ -253,20 +339,43 @@ export function TransactionFormModal({
               required
               error={fieldErrors.data}
             />
-            <Select
-              label={
-                <FormFieldLabel icon={Tag} tone="blue">
-                  Categoria
-                </FormFieldLabel>
-              }
-              value={form.categoriaId}
-              onChange={(v) => updateForm({ categoriaId: v })}
-              options={categoriaOptions}
-              placeholder="Selecione uma categoria"
-              required
-              error={fieldErrors.categoriaId}
-            />
+            {isTransferencia ? (
+              <Select
+                label={
+                  <FormFieldLabel icon={ArrowLeftRight} tone="blue">
+                    Recurso de destino
+                  </FormFieldLabel>
+                }
+                value={form.recursoDestino}
+                onChange={(v) => updateForm({ recursoDestino: v })}
+                options={recursoDestinoOptions}
+                placeholder="Selecione o recurso"
+                error={transferenciaError || fieldErrors.recursoDestino}
+                required
+              />
+            ) : (
+              <Select
+                label={
+                  <FormFieldLabel icon={Tag} tone="blue">
+                    Categoria
+                  </FormFieldLabel>
+                }
+                value={form.categoriaId}
+                onChange={handleCategoriaChange}
+                options={categoriaOptions}
+                placeholder="Selecione uma categoria"
+                required
+                error={fieldErrors.categoriaId}
+              />
+            )}
           </div>
+
+          {!isTransferencia && categoriaAutoSugerida && form.categoriaId ? (
+            <p className="tx-form__suggestion-hint">
+              <Sparkles size={12} style={{ display: 'inline', marginRight: 4 }} />
+              Categoria sugerida automaticamente
+            </p>
+          ) : null}
 
           <InputText
             label={
@@ -287,9 +396,9 @@ export function TransactionFormModal({
             }
             value={form.recurso}
             onChange={(v) => updateForm({ recurso: v })}
-            options={recursoOptions}
+            options={recursoOrigemOptions}
             placeholder="Selecione o recurso"
-            error={recursoError || fieldErrors.recurso}
+            error={(isTransferencia ? null : recursoError) || fieldErrors.recurso}
             required
           />
 

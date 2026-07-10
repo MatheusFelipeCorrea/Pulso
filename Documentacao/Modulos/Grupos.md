@@ -1,6 +1,6 @@
 # 👥 Módulo Grupos — estado e gaps
 
-> **Junho/2026** — alinhado ao código em `Codigo/Pulso/web` e `Codigo/Pulso/api`.
+> **Julho/2026** — alinhado ao código em `Codigo/Pulso/web` e `Codigo/Pulso/api`.
 
 ## O que está entregue
 
@@ -60,9 +60,9 @@ Ao vincular viagem **sem** foto customizada, a capa do destino passa a aparecer 
 | `/groups/:id` | Detalhe — 4 cards com ícones + header |
 | `/groups/join/:codigo` | Redirect para entrar |
 
-**Modais:** convite, editar grupo, gerenciar membros, viagem, pretensão, metas (múltiplas), aporte, imagem (URL), excluir, sair.
+**Modais:** convite (link + WhatsApp + Instagram + **QR code**), editar grupo, gerenciar membros, viagem, pretensão, metas (múltiplas), aporte, imagem (upload de arquivo), excluir, sair.
 
-**Chat:** sync ~10s + “Carregar mensagens anteriores” (`GET /mensagens`, 20 por página). Detalhe do grupo também faz polling geral ~30s.
+**Chat:** sync ~10s + “Carregar mensagens anteriores” (`GET /mensagens`, 20 por página) — o sync mescla por id em vez de substituir a lista, então histórico já carregado não desaparece a cada poll. Detalhe do grupo também faz polling geral ~30s.
 
 **Viagem pessoal → grupo:** `TripFormModal` em `/trips` — toggle opcional para vincular a um grupo após criar.
 

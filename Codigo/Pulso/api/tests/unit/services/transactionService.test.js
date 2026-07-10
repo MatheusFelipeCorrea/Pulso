@@ -10,11 +10,21 @@ jest.mock('../../../src/utils/recursoCategoriaRules', () => ({
 jest.mock('../../../src/utils/transactionMapper', () => ({
     mapTransacao: jest.fn((tx) => ({ ...tx, mapped: true })),
 }));
+jest.mock('../../../src/services/notificationService', () => ({
+    criarNotificacao: jest.fn(),
+}));
+jest.mock('../../../src/services/gamificationService', () => ({
+    processarAposTransacao: jest.fn(),
+}));
+jest.mock('../../../src/services/insightService', () => ({
+    tentarGerarInsightAposTransacao: jest.fn(),
+}));
 
 const transactionRepository = require('../../../src/repositories/transactionRepository');
 const categoryRepository = require('../../../src/repositories/categoryRepository');
 const tagRepository = require('../../../src/repositories/tagRepository');
 const prisma = require('../../../src/config/database');
+const notificationService = require('../../../src/services/notificationService');
 const transactionService = require('../../../src/services/transactionService');
 
 describe('transactionService', () => {
@@ -165,6 +175,123 @@ describe('transactionService', () => {
         transactionRepository.buscarPorId.mockResolvedValue(null);
         await expect(transactionService.excluirTransacao('u1', 'tx404')).rejects.toMatchObject({
             statusCode: 404,
+        });
+    });
+
+    it('resumo ignora transferências (RF-140)', async () => {
+        transactionRepository.calcularAgregados.mockResolvedValue([
+            { tipo: 'RECEITA', _sum: { valor: 100 }, _count: { id: 1 } },
+            { tipo: 'DESPESA', _sum: { valor: 40 }, _count: { id: 1 } },
+            { tipo: 'TRANSFERENCIA', _sum: { valor: 500 }, _count: { id: 1 } },
+        ]);
+
+        const result = await transactionService.calcularResumo('u1', {});
+        expect(result).toEqual({
+            receitas: { total: '100.00', quantidade: 1 },
+            despesas: { total: '40.00', quantidade: 1 },
+            saldo: '60.00',
+        });
+    });
+
+    it('cria transferência entre recursos sem categoria (RF-140)', async () => {
+        transactionRepository.criar.mockResolvedValue({ id: 'tx1' });
+        transactionRepository.buscarPorId.mockResolvedValue({
+            id: 'tx1',
+            tipo: 'TRANSFERENCIA',
+            recurso: 'DINHEIRO',
+            recursoDestino: 'POUPANCA',
+            valor: 200,
+        });
+        tagRepository.buscarPorIds.mockResolvedValue([]);
+        prisma.sequencia.findUnique.mockResolvedValue(null);
+
+        const result = await transactionService.criarTransacao('u1', {
+            tipo: 'TRANSFERENCIA',
+            recurso: 'DINHEIRO',
+            recursoDestino: 'POUPANCA',
+            valor: 200,
+            data: '2026-01-10',
+            recorrente: false,
+        });
+
+        expect(categoryRepository.buscarPorId).not.toHaveBeenCalled();
+        expect(transactionRepository.criar).toHaveBeenCalledWith(
+            expect.objectContaining({
+                categoriaId: null,
+                tipo: 'TRANSFERENCIA',
+                recurso: 'DINHEIRO',
+                recursoDestino: 'POUPANCA',
+            })
+        );
+        expect(notificationService.criarNotificacao).toHaveBeenCalledWith(
+            'u1',
+            expect.objectContaining({ tipo: 'TRANSFERENCIA_REGISTRADA' })
+        );
+        expect(result).toMatchObject({ id: 'tx1', mapped: true });
+    });
+
+    it('rejeita transferência com recurso de destino igual ao de origem', async () => {
+        await expect(
+            transactionService.criarTransacao('u1', {
+                tipo: 'TRANSFERENCIA',
+                recurso: 'DINHEIRO',
+                recursoDestino: 'DINHEIRO',
+                valor: 200,
+                data: '2026-01-10',
+                recorrente: false,
+            })
+        ).rejects.toMatchObject({ statusCode: 400 });
+    });
+
+    it('edita transação para transferência e limpa a categoria', async () => {
+        transactionRepository.buscarPorId
+            .mockResolvedValueOnce({
+                id: 'tx1',
+                tipo: 'DESPESA',
+                categoriaId: 'c1',
+                recurso: 'DINHEIRO',
+                recursoDestino: null,
+                recorrente: false,
+            })
+            .mockResolvedValueOnce({ id: 'tx1' });
+        transactionRepository.atualizar.mockResolvedValue(undefined);
+
+        await transactionService.editarTransacao('u1', 'tx1', {
+            tipo: 'TRANSFERENCIA',
+            recursoDestino: 'POUPANCA',
+        });
+
+        expect(categoryRepository.buscarPorId).not.toHaveBeenCalled();
+        expect(transactionRepository.atualizar).toHaveBeenCalledWith('tx1', {
+            tipo: 'TRANSFERENCIA',
+            recursoDestino: 'POUPANCA',
+            categoriaId: null,
+        });
+    });
+
+    it('edita transferência de volta para despesa e limpa o recurso de destino', async () => {
+        transactionRepository.buscarPorId
+            .mockResolvedValueOnce({
+                id: 'tx1',
+                tipo: 'TRANSFERENCIA',
+                categoriaId: null,
+                recurso: 'DINHEIRO',
+                recursoDestino: 'POUPANCA',
+                recorrente: false,
+            })
+            .mockResolvedValueOnce({ id: 'tx1' });
+        categoryRepository.buscarPorId.mockResolvedValue({ id: 'c1', tipo: 'DESPESA' });
+        transactionRepository.atualizar.mockResolvedValue(undefined);
+
+        await transactionService.editarTransacao('u1', 'tx1', {
+            tipo: 'DESPESA',
+            categoriaId: 'c1',
+        });
+
+        expect(transactionRepository.atualizar).toHaveBeenCalledWith('tx1', {
+            tipo: 'DESPESA',
+            categoriaId: 'c1',
+            recursoDestino: null,
         });
     });
 });

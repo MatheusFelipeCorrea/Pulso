@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import {
+  getModoDivisaoSalvo,
+  salvarModoDivisao,
+} from '@/utils/groupDetailUtils.js'
 import { Coins, Globe, Link2, Plane, Plus } from 'lucide-react'
 import { GroupDetailSectionTitle } from './GroupDetailSectionTitle.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
@@ -26,7 +30,12 @@ export function GroupDetailTripCard({
   onAddExpense,
   onEditExpense,
 }) {
-  const [modoDivisao, setModoDivisao] = useState('PRETENSAO')
+  const [modoDivisao, setModoDivisaoState] = useState(() => getModoDivisaoSalvo(grupoId))
+
+  const setModoDivisao = (modo) => {
+    setModoDivisaoState(modo)
+    salvarModoDivisao(grupoId, modo)
+  }
 
   const handleAdd = () => {
     if (!viagem) return

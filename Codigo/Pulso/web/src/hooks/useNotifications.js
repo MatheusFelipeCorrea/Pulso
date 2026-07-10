@@ -138,6 +138,8 @@ export function useNotificationToasts({ enabled = true, onToast } = {}) {
             onToast({ variant: 'success', title: item.title, message: item.description })
           } else if (item.type === 'DESPESA_REGISTRADA') {
             onToast({ variant: 'info', title: item.title, message: item.description })
+          } else if (item.type === 'TRANSFERENCIA_REGISTRADA') {
+            onToast({ variant: 'info', title: item.title, message: item.description })
           } else if (item.type === 'META_ATINGIDA' || item.type === 'CONQUISTA') {
             onToast({ variant: 'success', title: item.title, message: item.description })
           } else if (item.type === 'STREAK' || item.type === 'INSIGHT_IA') {

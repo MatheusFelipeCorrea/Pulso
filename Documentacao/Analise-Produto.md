@@ -1,6 +1,6 @@
 # Análise de produto — gaps e oportunidades
 
-> **Junho/2026** — visão baseada no código em `Codigo/Pulso/` e no schema Prisma.
+> **Julho/2026** — visão baseada no código em `Codigo/Pulso/` e no schema Prisma.
 
 ## O que já é sólido
 
@@ -42,10 +42,10 @@ Módulo **não implementado** (RF-115–120). O detalhe do grupo tem **MVP RF-09
 
 ### 6. Grupos — gaps reais restantes
 
+Upload de imagem (arquivo) e UX de foto no criar/editar **já foram entregues** — ver [Modulos/Grupos.md](./Modulos/Grupos.md). Restam:
+
 | Gap | Prioridade |
 |-----|------------|
-| Upload de imagem (arquivo) | Alta |
-| UX clara de foto no criar/editar | Alta |
 | Chat tempo real | Média |
 | RF-095 completo via expense-split | Média (após módulo) |
 | Testes E2E grupos | Média |
@@ -58,7 +58,7 @@ Detalhe: [Modulos/Grupos.md](./Modulos/Grupos.md).
 |------------|-----|
 | Duffel live | Token `duffel_live_` |
 | GeoNames | Ativar “Free Web Services” |
-| Storage de imagens | Upload grupo/perfil |
+| Storage de imagens | Upload de perfil (grupo já usa multer) |
 | Tokens Google | Criptografia em repouso |
 
 ## Prioridade sugerida
@@ -67,10 +67,9 @@ Detalhe: [Modulos/Grupos.md](./Modulos/Grupos.md).
 |---|---------|---------|
 | 1 | Dashboard | Primeira tela útil pós-login |
 | 2 | Perfil / `modoUso` | Desbloqueia VT e onboarding |
-| 3 | Upload imagem grupo | Fricção social alta |
-| 4 | `/achievements` mínimo | Fecha loop notificações gamificação |
-| 5 | Gemini insights MVP | Diferencial landing |
-| 6 | **`/expense-split`** | RF-095 completo + sidebar coerente |
+| 3 | `/achievements` mínimo | Fecha loop notificações gamificação |
+| 4 | Gemini insights MVP | Diferencial landing |
+| 5 | **`/expense-split`** | RF-095 completo + sidebar coerente |
 
 ## Lógicas que já funcionam bem (manter)
 

@@ -27,6 +27,7 @@ const camposAfetamSync = (body) =>
     body.titulo != null ||
     body.valor !== undefined ||
     body.dataVencimento != null ||
+    body.horaLembrete != null ||
     body.antecedencia != null ||
     body.categoria != null;
 
@@ -85,6 +86,7 @@ const criarLembrete = async (usuarioId, body) => {
         titulo: body.titulo.trim(),
         valor: body.valor ?? null,
         dataVencimento,
+        horaLembrete: body.horaLembrete ?? '10:00',
         antecedencia: body.antecedencia ?? 'UM_DIA',
         categoria: normalizeCategoria(body.categoria ?? 'OUTRO'),
         sincronizado: false,
@@ -114,6 +116,7 @@ const atualizarLembrete = async (usuarioId, id, body) => {
     if (body.titulo != null) data.titulo = body.titulo.trim();
     if (body.valor !== undefined) data.valor = body.valor;
     if (body.dataVencimento != null) data.dataVencimento = parseVencimentoDate(body.dataVencimento);
+    if (body.horaLembrete != null) data.horaLembrete = body.horaLembrete;
     if (body.antecedencia != null) data.antecedencia = body.antecedencia;
     if (body.categoria != null) data.categoria = normalizeCategoria(body.categoria);
     if (body.pago !== undefined) data.pago = Boolean(body.pago);

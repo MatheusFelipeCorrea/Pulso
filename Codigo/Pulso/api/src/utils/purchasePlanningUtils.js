@@ -37,21 +37,29 @@ const calcMesesParaComprar = (valorRestante, sobraMensal) => {
 
 const inferirCategoria = (nome) => {
     const texto = String(nome ?? '').toLowerCase();
-    if (/(notebook|laptop|macbook|pc gamer|computador|tablet|monitor)/.test(texto)) {
-        return 'TECNOLOGIA';
+    if (/(\bcarro\b|moto(cicleta)?|bicicleta|\bbike\b|patinete|scooter|capacete|\bpneu\b)/.test(texto)) {
+        return 'VEICULO';
     }
-    if (/(iphone|celular|smartphone|tv|console|playstation|xbox)/.test(texto)) {
+    if (/(roupa|camisa|camiseta|blusa|cal[çc]a|vestido|t[êe]nis|sapato|sapatilha|jaqueta|casaco|bolsa|mochila)/.test(texto)) {
+        return 'VESTUARIO';
+    }
+    if (/(geladeira|fog[ãa]o|micro-?ondas|lavadora|m[áa]quina de lavar|aspirador|ar[- ]condicionado|ventilador|sof[áa]|colch[ãa]o|guarda-?roupa|estante|panela|liquidificador|cafeteira)/.test(texto)) {
+        return 'CASA_ELETRODOMESTICOS';
+    }
+    if (/(notebook|laptop|macbook|pc gamer|computador|tablet|monitor|iphone|celular|smartphone|\btv\b|console|playstation|xbox|c[âa]mera|drone)/.test(texto)) {
         return 'ELETRONICOS';
     }
-    if (/(fone|headphone|mouse|teclado|capa|carregador|acess)/.test(texto)) {
+    if (/(fone|headphone|mouse|teclado|\bcapa\b|carregador|acess)/.test(texto)) {
         return 'ACESSORIOS';
     }
     return 'OUTROS';
 };
 
 const CATEGORIA_LABELS = {
-    TECNOLOGIA: 'Tecnologia',
     ELETRONICOS: 'Eletrônicos',
+    CASA_ELETRODOMESTICOS: 'Casa & Eletrodomésticos',
+    VESTUARIO: 'Vestuário',
+    VEICULO: 'Veículo',
     ACESSORIOS: 'Acessórios',
     OUTROS: 'Outros',
 };
@@ -73,7 +81,53 @@ const DICAS = [
     id: 'avista',
     texto: 'Comprar à vista costuma sair mais barato que parcelar com juros.',
   },
+  {
+    id: 'espera',
+    texto: 'Espere alguns dias antes de decidir uma compra por impulso.',
+  },
+  {
+    id: 'comparar',
+    texto: 'Compare preços em diferentes lojas antes de finalizar a compra.',
+  },
+  {
+    id: 'guardar',
+    texto: 'Guarde parte do valor todo mês até atingir o total da compra.',
+  },
+  {
+    id: 'necessidade',
+    texto: 'Avalie se o item é realmente necessário ou apenas um desejo passageiro.',
+  },
+  {
+    id: 'promocao',
+    texto: 'Itens de baixa prioridade podem esperar por uma promoção.',
+  },
+  {
+    id: 'revisar',
+    texto: 'Revise sua lista de desejos periodicamente e remova o que não faz mais sentido.',
+  },
+  {
+    id: 'parcelamento-longo',
+    texto: 'Parcelamentos longos aumentam o risco de comprometer meses futuros.',
+  },
+  {
+    id: 'prazo',
+    texto: 'Defina um prazo realista para evitar compras precipitadas.',
+  },
 ];
+
+const diaDoAno = (dataReferencia) => {
+    const [ano, mes, dia] = String(dataReferencia).split('-').map(Number);
+    const inicioAno = Date.UTC(ano, 0, 1);
+    const dataAtual = Date.UTC(ano, (mes || 1) - 1, dia || 1);
+    return Math.floor((dataAtual - inicioAno) / 86400000);
+};
+
+const selecionarDicasDoDia = (dicas, quantidade, dataReferencia) => {
+    if (!dicas.length) return [];
+    const qtd = Math.min(quantidade, dicas.length);
+    const inicio = diaDoAno(dataReferencia) % dicas.length;
+    return Array.from({ length: qtd }, (_, i) => dicas[(inicio + i) % dicas.length]);
+};
 
 module.exports = {
     roundMoney,
@@ -85,4 +139,5 @@ module.exports = {
     inferirCategoria,
     CATEGORIA_LABELS,
     DICAS,
+    selecionarDicasDoDia,
 };

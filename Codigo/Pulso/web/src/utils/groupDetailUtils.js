@@ -24,6 +24,43 @@ export function getExpenseCategoryLabel(categoria) {
   return TRIP_EXPENSE_CATEGORY_MAP[categoria]?.tableLabel ?? categoria
 }
 
+const MODO_DIVISAO_STORAGE_PREFIX = 'pulso:grupo:modoDivisao:'
+const MODOS_DIVISAO_VALIDOS = ['PRETENSAO', 'IGUAL']
+
+/** Modo de divisão de despesas (pretensão/igual) escolhido pelo usuário, por grupo. */
+export function getModoDivisaoSalvo(grupoId) {
+  if (!grupoId || typeof window === 'undefined') return 'PRETENSAO'
+  try {
+    const salvo = window.localStorage.getItem(`${MODO_DIVISAO_STORAGE_PREFIX}${grupoId}`)
+    return MODOS_DIVISAO_VALIDOS.includes(salvo) ? salvo : 'PRETENSAO'
+  } catch {
+    return 'PRETENSAO'
+  }
+}
+
+export function salvarModoDivisao(grupoId, modo) {
+  if (!grupoId || typeof window === 'undefined') return
+  try {
+    window.localStorage.setItem(`${MODO_DIVISAO_STORAGE_PREFIX}${grupoId}`, modo)
+  } catch {
+    // localStorage indisponível (modo privado/quota) — ignora
+  }
+}
+
+/**
+ * Combina o histórico já carregado (incluindo páginas antigas trazidas via
+ * "carregar mensagens anteriores") com o lote mais recente do polling, sem
+ * descartar mensagens antigas que não vieram na página 1.
+ */
+export function mesclarMensagensChat(atuais, recentes) {
+  const porId = new Map(atuais.map((mensagem) => [mensagem.id, mensagem]))
+  recentes.forEach((mensagem) => porId.set(mensagem.id, mensagem))
+
+  return Array.from(porId.values()).sort(
+    (a, b) => new Date(a.criadoEm) - new Date(b.criadoEm)
+  )
+}
+
 export function mergeMetaAportes(meta, membros) {
   if (!meta) return []
   const map = new Map((meta.aportesPorMembro ?? []).map((item) => [item.usuarioId, item]))

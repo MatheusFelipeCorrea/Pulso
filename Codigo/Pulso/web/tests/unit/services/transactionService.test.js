@@ -17,6 +17,7 @@ import {
   excluirTransacao,
   obterOpcoesFiltro,
   obterResumo,
+  sugerirCategoria,
 } from '@/services/transactionService.js'
 
 describe('services/transactionService', () => {
@@ -94,5 +95,17 @@ describe('services/transactionService', () => {
     expect(api.delete).toHaveBeenCalledWith('/transacoes/1', {
       params: { excluirFuturas: 'true' },
     })
+  })
+
+  it('sugere categoria com base em tipo e descrição (RF-141)', async () => {
+    api.get.mockResolvedValueOnce({ data: { categoriaId: 'cat-1' } })
+
+    const result = await sugerirCategoria({ tipo: 'DESPESA', descricao: 'Uber pro trampo' })
+
+    expect(api.get).toHaveBeenCalledWith(
+      '/transacoes/sugestao-categoria?tipo=DESPESA&descricao=Uber+pro+trampo',
+      { signal: undefined }
+    )
+    expect(result).toEqual({ categoriaId: 'cat-1' })
   })
 })

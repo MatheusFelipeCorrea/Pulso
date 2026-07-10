@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { validarRecursoCategoria } from '@/utils/transactionValidation.js'
+import { validarRecursoCategoria, validarTransferencia } from '@/utils/transactionValidation.js'
 
 describe('validarRecursoCategoria', () => {
   it('retorna null para tipo diferente de despesa ou recurso DINHEIRO', () => {
@@ -24,5 +24,22 @@ describe('validarRecursoCategoria', () => {
       'VT só pode ser usado em despesas de Transporte'
     )
     expect(validarRecursoCategoria('VT', 'Transporte', 'DESPESA')).toBeNull()
+  })
+})
+
+describe('validarTransferencia', () => {
+  it('retorna null quando recurso e destino ainda não foram escolhidos', () => {
+    expect(validarTransferencia(null, null)).toBeNull()
+    expect(validarTransferencia('DINHEIRO', null)).toBeNull()
+  })
+
+  it('retorna null quando origem e destino são diferentes', () => {
+    expect(validarTransferencia('DINHEIRO', 'POUPANCA')).toBeNull()
+  })
+
+  it('retorna erro quando origem e destino são iguais', () => {
+    expect(validarTransferencia('DINHEIRO', 'DINHEIRO')).toBe(
+      'Recurso de destino deve ser diferente do recurso de origem'
+    )
   })
 })
