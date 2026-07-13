@@ -44,18 +44,23 @@ describe('hooks/useNotifications', () => {
   })
 
   it('mapeia lista de notificações para formato do app', async () => {
-    notificationService.listarNotificacoes.mockResolvedValue([
-      {
-        id: 'n1',
-        tipo: 'ALERTA_ORCAMENTO',
-        titulo: 'Orçamento',
-        mensagem: 'Quase no limite',
-        criadoEm: '2026-06-12T10:00:00.000Z',
-        lida: false,
-        linkAcao: '/orcamentos',
-        metadados: { categoriaId: 'c1' },
-      },
-    ])
+    notificationService.listarNotificacoes.mockResolvedValue({
+      notificacoes: [
+        {
+          id: 'n1',
+          type: 'ALERTA_ORCAMENTO',
+          title: 'Orçamento',
+          description: 'Quase no limite',
+          timestamp: '2026-06-12T10:00:00.000Z',
+          read: false,
+          linkAcao: '/orcamentos',
+          metadata: { categoriaId: 'c1' },
+        },
+      ],
+      total: 1,
+      paginas: 1,
+      pagina: 1,
+    })
 
     const { result } = renderHook(() => useNotificationList({ lida: false, limite: 5 }), {
       reactStrictMode: false,
@@ -92,29 +97,34 @@ describe('hooks/useNotifications', () => {
     const now = new Date()
     const futureIso = new Date(now.getTime() + 2000).toISOString()
 
-    notificationService.listarNotificacoes.mockResolvedValue([
-      {
-        id: 'n1',
-        tipo: 'ALERTA_ORCAMENTO',
-        titulo: 'Alerta',
-        mensagem: 'Atenção',
-        criadoEm: futureIso,
-      },
-      {
-        id: 'n2',
-        tipo: 'ORCAMENTO_ESTOURADO',
-        titulo: 'Estourou',
-        mensagem: 'Passou do limite',
-        criadoEm: futureIso,
-      },
-      {
-        id: 'n3',
-        tipo: 'OUTRO',
-        titulo: 'Outro',
-        mensagem: 'Sem toast',
-        criadoEm: futureIso,
-      },
-    ])
+    notificationService.listarNotificacoes.mockResolvedValue({
+      notificacoes: [
+        {
+          id: 'n1',
+          type: 'ALERTA_ORCAMENTO',
+          title: 'Alerta',
+          description: 'Atenção',
+          timestamp: futureIso,
+        },
+        {
+          id: 'n2',
+          type: 'ORCAMENTO_ESTOURADO',
+          title: 'Estourou',
+          description: 'Passou do limite',
+          timestamp: futureIso,
+        },
+        {
+          id: 'n3',
+          type: 'OUTRO',
+          title: 'Outro',
+          description: 'Sem toast',
+          timestamp: futureIso,
+        },
+      ],
+      total: 3,
+      paginas: 1,
+      pagina: 1,
+    })
 
     renderHook(() => useNotificationToasts({ onToast }), { reactStrictMode: false })
     await act(async () => {

@@ -66,6 +66,14 @@ function resizeWikiThumbnail(url, maxWidth) {
     return url.replace(/\/(\d+)px-/, `/${maxWidth}px-`);
 }
 
+const WIKI_THUMB_WIDTH = 420;
+
+function normalizeWikiThumbWidth(url, width = WIKI_THUMB_WIDTH) {
+    if (!url) return url;
+    if (!/\/(\d+)px-/.test(url)) return url;
+    return url.replace(/\/(\d+)px-/, `/${width}px-`);
+}
+
 function isBrokenCoverUrl(url) {
     return typeof url === 'string' && /\/420px-/.test(url);
 }
@@ -91,7 +99,7 @@ async function fetchWikiSummary(lang, title) {
     const data = await response.json();
     if (!isPlaceWikiSummary(data)) return null;
 
-    return data.thumbnail.source;
+    return normalizeWikiThumbWidth(data.thumbnail.source);
 }
 
 async function fetchPlaceThumbnail(title) {

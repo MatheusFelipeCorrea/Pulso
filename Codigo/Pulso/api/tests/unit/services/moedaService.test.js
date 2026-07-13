@@ -62,22 +62,29 @@ describe('moedaService', () => {
     });
 
     it('monta histórico com pontos vindos apenas com timestamp', async () => {
-        awesomeApiProvider.fetchHistoryForCurrency.mockResolvedValue([
-            { date: '2026-05-11', bid: 4.9, ask: 4.91 },
-            { date: '2026-05-12', bid: 5.0, ask: 5.01 },
-            { date: '2026-06-14', bid: 5.05, ask: 5.06 },
-        ]);
-        awesomeApiProvider.getRateForCode.mockResolvedValue({
-            code: 'USD',
-            bid: 5.0565,
-            ask: 5.0665,
-            updatedAt: '2026-06-14T18:00:00.000Z',
-        });
+        jest.useFakeTimers();
+        jest.setSystemTime(new Date('2026-06-14T12:00:00.000Z'));
 
-        const result = await moedaService.obterHistorico('USD', 30);
+        try {
+            awesomeApiProvider.fetchHistoryForCurrency.mockResolvedValue([
+                { date: '2026-05-11', bid: 4.9, ask: 4.91 },
+                { date: '2026-05-12', bid: 5.0, ask: 5.01 },
+                { date: '2026-06-14', bid: 5.05, ask: 5.06 },
+            ]);
+            awesomeApiProvider.getRateForCode.mockResolvedValue({
+                code: 'USD',
+                bid: 5.0565,
+                ask: 5.0665,
+                updatedAt: '2026-06-14T18:00:00.000Z',
+            });
 
-        expect(result.pontos).toHaveLength(3);
-        expect(result.resumo.atual).toBe('5.0565');
-        expect(result.atualizadoEm).toBe('2026-06-14T18:00:00.000Z');
+            const result = await moedaService.obterHistorico('USD', 30);
+
+            expect(result.pontos).toHaveLength(3);
+            expect(result.resumo.atual).toBe('5.0565');
+            expect(result.atualizadoEm).toBe('2026-06-14T18:00:00.000Z');
+        } finally {
+            jest.useRealTimers();
+        }
     });
 });
