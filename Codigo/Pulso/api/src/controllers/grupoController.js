@@ -36,6 +36,19 @@ const editar = async (req, res, next) => {
     }
 };
 
+const atualizarModoDivisao = async (req, res, next) => {
+    try {
+        const grupo = await grupoService.atualizarModoDivisao(
+            req.user.id,
+            req.params.id,
+            req.body.modoDivisao
+        );
+        res.status(200).json(grupo);
+    } catch (error) {
+        next(error);
+    }
+};
+
 const enviarImagem = async (req, res, next) => {
     try {
         const grupo = await grupoService.enviarImagemGrupo(req.user.id, req.params.id, req.file);
@@ -235,6 +248,7 @@ module.exports = {
     obter,
     criar,
     editar,
+    atualizarModoDivisao,
     enviarImagem,
     excluir,
     sair,

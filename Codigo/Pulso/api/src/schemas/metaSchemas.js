@@ -59,6 +59,12 @@ const listarMetasQuerySchema = z.object({
     }),
 });
 
+const sugestaoReservaEmergenciaQuerySchema = z.object({
+    query: z.object({
+        meses: z.coerce.number().int().positive().max(60).optional(),
+    }),
+});
+
 const metaIdParamSchema = z.object({
     params: z.object({ id: z.string().min(1) }),
 });
@@ -75,6 +81,7 @@ module.exports = {
     editarMetaSchema,
     registrarAporteSchema,
     listarMetasQuerySchema,
+    sugestaoReservaEmergenciaQuerySchema,
     metaIdParamSchema,
     aporteIdParamSchema,
 };

@@ -123,6 +123,7 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 | RN-058 | O orçamento NÃO bloqueia o registro de transação (apenas alerta) |
 | RN-059 | Se orçamento total definido > renda, exibir warning permanente |
 | RN-060 | Categorias sem limite definido não geram alertas |
+| RN-170 | Rollover é ativável por categoria; quando ativo, a sobra positiva (limite − gasto) do mês anterior soma-se automaticamente ao limite do mês seguinte no momento em que o orçamento daquele mês é criado (edição manual de uma categoria nova no mês ou "copiar do mês anterior"); sobra negativa (estouro) não é herdada; ativar/desativar o toggle não retroage sobre o limite de um mês já criado |
 
 ---
 

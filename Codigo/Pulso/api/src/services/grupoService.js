@@ -151,6 +151,13 @@ const editarGrupo = async (usuarioId, grupoId, dados) => {
     return mapGrupoDetalhe(grupo, usuarioId);
 };
 
+const atualizarModoDivisao = async (usuarioId, grupoId, modoDivisao) => {
+    await buscarGrupoDoUsuario(grupoId, usuarioId);
+    await grupoRepository.atualizar(grupoId, { modoDivisao });
+    const grupo = await buscarGrupoDoUsuario(grupoId, usuarioId);
+    return mapGrupoDetalhe(grupo, usuarioId);
+};
+
 const enviarImagemGrupo = async (usuarioId, grupoId, file) => {
     await buscarMembroAdmin(grupoId, usuarioId);
     const urlImagem = await storeGrupoImage(grupoId, file);
@@ -650,6 +657,7 @@ module.exports = {
     obterGrupo,
     criarGrupo,
     editarGrupo,
+    atualizarModoDivisao,
     enviarImagemGrupo,
     excluirGrupo,
     sairDoGrupo,

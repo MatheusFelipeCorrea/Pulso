@@ -6,6 +6,7 @@ const { handleGrupoImageUpload } = require('../middlewares/grupoImageUploadMiddl
 const {
     criarGrupoSchema,
     editarGrupoSchema,
+    atualizarModoDivisaoSchema,
     grupoIdParamSchema,
     entrarGrupoSchema,
     previewGrupoQuerySchema,
@@ -36,6 +37,13 @@ router.post('/', authMiddleware, validateMiddleware(criarGrupoSchema), grupoCont
 router.get('/:id', authMiddleware, validateMiddleware(grupoIdParamSchema), grupoController.obter);
 
 router.patch('/:id', authMiddleware, validateMiddleware(editarGrupoSchema), grupoController.editar);
+
+router.patch(
+    '/:id/modo-divisao',
+    authMiddleware,
+    validateMiddleware(atualizarModoDivisaoSchema),
+    grupoController.atualizarModoDivisao
+);
 
 router.post(
     '/:id/imagem',

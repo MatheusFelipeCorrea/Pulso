@@ -105,6 +105,19 @@ export default function GroupDetailPage() {
     setChatMensagens(data.mensagens ?? [])
   }
 
+  const handleModoDivisaoChange = async (modo) => {
+    const modoAnterior = grupo?.modoDivisao ?? 'PRETENSAO'
+    if (modoAnterior === modo) return
+
+    setGrupo((prev) => (prev ? { ...prev, modoDivisao: modo } : prev))
+    try {
+      await grupoService.atualizarModoDivisaoGrupo(id, modo)
+    } catch (err) {
+      setGrupo((prev) => (prev ? { ...prev, modoDivisao: modoAnterior } : prev))
+      toastRef.current.error(err.response?.data?.message ?? 'Não foi possível salvar o modo de divisão')
+    }
+  }
+
   useEffect(() => {
     if (!id) return undefined
 
@@ -120,7 +133,9 @@ export default function GroupDetailPage() {
     }
 
     syncChat()
-    const interval = setInterval(syncChat, 10000)
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') syncChat()
+    }, 3000)
     return () => clearInterval(interval)
   }, [id])
 
@@ -446,6 +461,8 @@ export default function GroupDetailPage() {
           grupoId={grupo.id}
           viagem={grupo.viagem}
           membros={grupo.membros}
+          modoDivisao={grupo.modoDivisao}
+          onModoDivisaoChange={handleModoDivisaoChange}
           onLinkTrip={() => setTripOpen(true)}
           onAddExpense={openNewExpense}
           onEditExpense={openEditExpense}

@@ -197,6 +197,7 @@ const mapGrupoResumo = (grupo, usuarioAtualId) => {
 
 const mapGrupoDetalhe = (grupo, usuarioAtualId) => ({
     ...mapGrupoResumo(grupo, usuarioAtualId),
+    modoDivisao: grupo.modoDivisao ?? 'PRETENSAO',
     membros: (grupo.membros ?? []).map((m) => mapMembro(m, usuarioAtualId)),
     viagem: mapViagemGrupo(grupo.viagens?.[0] ?? null),
     metasLista: (grupo.metas ?? []).map((m) => mapMetaGrupo(m)),

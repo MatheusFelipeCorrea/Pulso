@@ -19,6 +19,7 @@ const salvarOrcamentosSchema = z.object({
                 z.object({
                     categoriaId: z.string().min(1),
                     limiteValor: z.number().positive('Limite deve ser maior que zero'),
+                    rolloverAtivo: z.boolean().optional().default(false),
                 })
             )
             .default([]),

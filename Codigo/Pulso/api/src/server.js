@@ -11,6 +11,7 @@ const { runReminderRecurrenceJob } = require('./jobs/reminderRecurrenceJob');
 const { runDebtAlertJob } = require('./jobs/debtAlertJob');
 const { runDebtCleanupJob } = require('./jobs/debtCleanupJob');
 const { runNotificationCleanup } = require('./jobs/notificationCleanupJob');
+const { runChatCleanupJob } = require('./jobs/chatCleanupJob');
 
 const startTokenCleanupScheduler = () => {
     if (env.NODE_ENV === 'test') {
@@ -161,6 +162,26 @@ const startNotificationCleanupScheduler = () => {
     logger.info('🔔 Agendador de limpeza de notificações ativo (diário 03:30 BRT)');
 };
 
+const startChatCleanupScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule(
+        '0 4 * * *',
+        async () => {
+            try {
+                await runChatCleanupJob();
+            } catch (error) {
+                logger.error(`Falha no job de limpeza de chat de grupo: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🧹 Agendador de limpeza de chat de grupo ativo (diário 04:00 BRT)');
+};
+
 const start = async () => {
     try {
         // Testa conexão com o banco
@@ -177,6 +198,7 @@ const start = async () => {
             startDebtCleanupScheduler();
             startDebtAlertScheduler();
             startNotificationCleanupScheduler();
+            startChatCleanupScheduler();
         } else {
             logger.info('⏭️  Cron local desativado (ambiente Vercel)');
         }

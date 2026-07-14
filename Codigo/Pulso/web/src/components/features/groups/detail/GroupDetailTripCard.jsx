@@ -1,8 +1,3 @@
-import { useState } from 'react'
-import {
-  getModoDivisaoSalvo,
-  salvarModoDivisao,
-} from '@/utils/groupDetailUtils.js'
 import { Coins, Globe, Link2, Plane, Plus } from 'lucide-react'
 import { GroupDetailSectionTitle } from './GroupDetailSectionTitle.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
@@ -26,17 +21,12 @@ export function GroupDetailTripCard({
   grupoId,
   viagem,
   membros = [],
+  modoDivisao = 'PRETENSAO',
+  onModoDivisaoChange,
   onLinkTrip,
   onAddExpense,
   onEditExpense,
 }) {
-  const [modoDivisao, setModoDivisaoState] = useState(() => getModoDivisaoSalvo(grupoId))
-
-  const setModoDivisao = (modo) => {
-    setModoDivisaoState(modo)
-    salvarModoDivisao(grupoId, modo)
-  }
-
   const handleAdd = () => {
     if (!viagem) return
     onAddExpense?.()
@@ -210,7 +200,7 @@ export function GroupDetailTripCard({
                       role="tab"
                       aria-selected={modoDivisao === 'PRETENSAO'}
                       className={modoDivisao === 'PRETENSAO' ? 'is-active' : ''}
-                      onClick={() => setModoDivisao('PRETENSAO')}
+                      onClick={() => onModoDivisaoChange?.('PRETENSAO')}
                     >
                       Por pretensão
                     </button>
@@ -219,7 +209,7 @@ export function GroupDetailTripCard({
                       role="tab"
                       aria-selected={modoDivisao === 'IGUAL'}
                       className={modoDivisao === 'IGUAL' ? 'is-active' : ''}
-                      onClick={() => setModoDivisao('IGUAL')}
+                      onClick={() => onModoDivisaoChange?.('IGUAL')}
                     >
                       Divisão igual
                     </button>

@@ -1,5 +1,5 @@
 jest.mock('../../../src/repositories/notificationRepository', () => ({
-    excluirLidasAntigas: jest.fn(),
+    excluirAntigas: jest.fn(),
 }));
 jest.mock('../../../src/utils/logger', () => ({ info: jest.fn() }));
 
@@ -11,12 +11,12 @@ describe('notificationCleanupJob', () => {
         jest.clearAllMocks();
     });
 
-    it('remove notificações lidas com mais de 30 dias', async () => {
-        notificationRepository.excluirLidasAntigas.mockResolvedValueOnce({ count: 3 });
+    it('remove notificações com mais de 30 dias, lidas ou não', async () => {
+        notificationRepository.excluirAntigas.mockResolvedValueOnce({ count: 3 });
 
         const summary = await runNotificationCleanup();
 
-        expect(notificationRepository.excluirLidasAntigas).toHaveBeenCalledWith(30);
+        expect(notificationRepository.excluirAntigas).toHaveBeenCalledWith(30);
         expect(summary.removidas).toBe(3);
         expect(summary.diasRetencao).toBe(30);
     });

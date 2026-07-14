@@ -7,6 +7,7 @@ const {
     editarMetaSchema,
     registrarAporteSchema,
     listarMetasQuerySchema,
+    sugestaoReservaEmergenciaQuerySchema,
     metaIdParamSchema,
     aporteIdParamSchema,
 } = require('../schemas/metaSchemas');
@@ -14,6 +15,13 @@ const {
 const router = express.Router();
 
 router.get('/resumo', authMiddleware, metaController.obterResumo);
+
+router.get(
+    '/sugestao-reserva-emergencia',
+    authMiddleware,
+    validateMiddleware(sugestaoReservaEmergenciaQuerySchema),
+    metaController.sugerirReservaEmergencia
+);
 
 router.get(
     '/',

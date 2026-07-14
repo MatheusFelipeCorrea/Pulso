@@ -71,6 +71,29 @@ describe('budgetService', () => {
         ]);
     });
 
+    it('repassa rolloverAtivo e valorRollover no status do orçamento', async () => {
+        budgetRepository.buscarPorUsuarioEMes.mockResolvedValue([
+            {
+                id: 'o1',
+                categoriaId: 'c1',
+                limiteValor: 300,
+                rolloverAtivo: true,
+                valorRollover: 200,
+                categoria: { nome: 'Mercado', icone: 'Cart', cor: '#000' },
+                mesReferencia: new Date('2026-02-01T00:00:00.000Z'),
+            },
+        ]);
+        budgetRepository.calcularGastosPorCategoria.mockResolvedValue({ c1: 100 });
+        prisma.configuracaoUsuario.findUnique.mockResolvedValue(null);
+        categoryRepository.listarPorUsuario.mockResolvedValue([]);
+
+        const result = await budgetService.obterStatusOrcamento('u1', { mes: '2026-02' });
+
+        expect(result.categorias[0]).toEqual(
+            expect.objectContaining({ rolloverAtivo: true, valorRollover: 200 })
+        );
+    });
+
     it('salva vazio removendo orçamentos fora da lista', async () => {
         budgetRepository.deletarForaDaLista.mockResolvedValue(undefined);
 
@@ -131,6 +154,7 @@ describe('budgetService', () => {
 
     it('salva orçamentos válidos e remove fora da lista', async () => {
         prisma.categoria.findMany.mockResolvedValue([{ id: 'c1' }, { id: 'c2' }]);
+        budgetRepository.buscarPorUsuarioEMes.mockResolvedValue([]);
         budgetRepository.upsert
             .mockResolvedValueOnce({
                 id: 'o1',
@@ -155,10 +179,120 @@ describe('budgetService', () => {
         });
 
         expect(result.orcamentos).toHaveLength(2);
+        expect(budgetRepository.upsert).toHaveBeenCalledWith(
+            expect.objectContaining({ categoriaId: 'c1', limiteValor: 100, rolloverAtivo: false, valorRollover: 0 })
+        );
         expect(budgetRepository.deletarForaDaLista).toHaveBeenCalledWith(
             'u1',
             expect.any(Date),
             ['c1', 'c2']
+        );
+    });
+
+    it('infla o limite com a sobra do mês anterior ao criar categoria nova com rollover ativo', async () => {
+        prisma.categoria.findMany.mockResolvedValue([{ id: 'c1' }]);
+        budgetRepository.buscarPorUsuarioEMes
+            .mockResolvedValueOnce([]) // mês atual: categoria ainda não tem orçamento
+            .mockResolvedValueOnce([
+                { categoriaId: 'c1', limiteValor: 500, rolloverAtivo: true },
+            ]); // mês anterior
+        budgetRepository.calcularGastosPorCategoria.mockResolvedValue({ c1: 300 });
+        budgetRepository.upsert.mockResolvedValueOnce({
+            id: 'o1',
+            categoriaId: 'c1',
+            limiteValor: 300,
+            mesReferencia: new Date('2026-02-01T00:00:00.000Z'),
+        });
+        budgetRepository.deletarForaDaLista.mockResolvedValue(undefined);
+
+        await budgetService.salvarOrcamentos('u1', {
+            mesReferencia: '2026-02-01',
+            limites: [{ categoriaId: 'c1', limiteValor: 100, rolloverAtivo: true }],
+        });
+
+        expect(budgetRepository.upsert).toHaveBeenCalledWith(
+            expect.objectContaining({
+                categoriaId: 'c1',
+                limiteValor: 300,
+                rolloverAtivo: true,
+                valorRollover: 200,
+            })
+        );
+    });
+
+    it('não infla o limite quando o mês anterior não tinha rollover ativo', async () => {
+        prisma.categoria.findMany.mockResolvedValue([{ id: 'c1' }]);
+        budgetRepository.buscarPorUsuarioEMes
+            .mockResolvedValueOnce([])
+            .mockResolvedValueOnce([
+                { categoriaId: 'c1', limiteValor: 500, rolloverAtivo: false },
+            ]);
+        budgetRepository.calcularGastosPorCategoria.mockResolvedValue({ c1: 300 });
+        budgetRepository.upsert.mockResolvedValueOnce({
+            id: 'o1',
+            categoriaId: 'c1',
+            limiteValor: 100,
+            mesReferencia: new Date('2026-02-01T00:00:00.000Z'),
+        });
+        budgetRepository.deletarForaDaLista.mockResolvedValue(undefined);
+
+        await budgetService.salvarOrcamentos('u1', {
+            mesReferencia: '2026-02-01',
+            limites: [{ categoriaId: 'c1', limiteValor: 100, rolloverAtivo: true }],
+        });
+
+        expect(budgetRepository.upsert).toHaveBeenCalledWith(
+            expect.objectContaining({ limiteValor: 100, valorRollover: 0 })
+        );
+    });
+
+    it('não infla o limite quando o mês anterior estourou (sobra negativa)', async () => {
+        prisma.categoria.findMany.mockResolvedValue([{ id: 'c1' }]);
+        budgetRepository.buscarPorUsuarioEMes
+            .mockResolvedValueOnce([])
+            .mockResolvedValueOnce([
+                { categoriaId: 'c1', limiteValor: 500, rolloverAtivo: true },
+            ]);
+        budgetRepository.calcularGastosPorCategoria.mockResolvedValue({ c1: 600 });
+        budgetRepository.upsert.mockResolvedValueOnce({
+            id: 'o1',
+            categoriaId: 'c1',
+            limiteValor: 100,
+            mesReferencia: new Date('2026-02-01T00:00:00.000Z'),
+        });
+        budgetRepository.deletarForaDaLista.mockResolvedValue(undefined);
+
+        await budgetService.salvarOrcamentos('u1', {
+            mesReferencia: '2026-02-01',
+            limites: [{ categoriaId: 'c1', limiteValor: 100, rolloverAtivo: true }],
+        });
+
+        expect(budgetRepository.upsert).toHaveBeenCalledWith(
+            expect.objectContaining({ limiteValor: 100, valorRollover: 0 })
+        );
+    });
+
+    it('não recalcula o rollover ao editar um mês que já possui orçamento', async () => {
+        prisma.categoria.findMany.mockResolvedValue([{ id: 'c1' }]);
+        budgetRepository.buscarPorUsuarioEMes.mockResolvedValueOnce([
+            { categoriaId: 'c1', limiteValor: 300, rolloverAtivo: true, valorRollover: 200 },
+        ]);
+        budgetRepository.upsert.mockResolvedValueOnce({
+            id: 'o1',
+            categoriaId: 'c1',
+            limiteValor: 350,
+            mesReferencia: new Date('2026-02-01T00:00:00.000Z'),
+        });
+        budgetRepository.deletarForaDaLista.mockResolvedValue(undefined);
+
+        await budgetService.salvarOrcamentos('u1', {
+            mesReferencia: '2026-02-01',
+            limites: [{ categoriaId: 'c1', limiteValor: 350, rolloverAtivo: true }],
+        });
+
+        expect(budgetRepository.calcularGastosPorCategoria).not.toHaveBeenCalled();
+        expect(budgetRepository.upsert).toHaveBeenCalledWith(
+            expect.objectContaining({ limiteValor: 350, rolloverAtivo: true, valorRollover: 0 })
         );
     });
 

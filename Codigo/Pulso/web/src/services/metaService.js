@@ -35,6 +35,16 @@ export async function obterResumo(options = {}) {
   return data
 }
 
+export async function sugerirReservaEmergencia({ meses } = {}, options = {}) {
+  const params = new URLSearchParams()
+  if (meses) params.set('meses', String(meses))
+  const { data } = await api.get(
+    `/metas/sugestao-reserva-emergencia?${params.toString()}`,
+    axiosConfig(options)
+  )
+  return data
+}
+
 export async function criarMeta(payload, options = {}) {
   const { data } = await api.post('/metas', payload, axiosConfig(options))
   return data

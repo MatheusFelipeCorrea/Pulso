@@ -20,6 +20,11 @@ export async function editarGrupo(id, payload) {
   return data
 }
 
+export async function atualizarModoDivisaoGrupo(id, modoDivisao) {
+  const { data } = await api.patch(`/grupos/${id}/modo-divisao`, { modoDivisao })
+  return data
+}
+
 export async function enviarImagemGrupo(id, file) {
   const formData = new FormData()
   formData.append('imagem', file)

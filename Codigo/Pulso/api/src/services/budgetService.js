@@ -4,6 +4,7 @@ const budgetRepository = require('../repositories/budgetRepository');
 const categoryRepository = require('../repositories/categoryRepository');
 const notificationService = require('./notificationService');
 const { mapOrcamento, calcularStatusCategoria } = require('../utils/budgetMapper');
+const { calcularValorRollover } = require('../utils/budgetRolloverUtils');
 const {
     mesReferenciaFromQuery,
     mesReferenciaFromBody,
@@ -58,6 +59,8 @@ const obterStatusOrcamento = async (usuarioId, query) => {
             restanteValor,
             percentualUsado: Math.round(percentualUsado * 10) / 10,
             status: calcularStatusCategoria(percentualUsado),
+            rolloverAtivo: orcamento.rolloverAtivo,
+            valorRollover: Number(orcamento.valorRollover),
         };
     });
 
@@ -122,13 +125,49 @@ const salvarOrcamentos = async (usuarioId, body) => {
     const categoriaIds = limites.map((item) => item.categoriaId);
     await validarCategoriasDoUsuario(usuarioId, categoriaIds);
 
+    const existentes = await budgetRepository.buscarPorUsuarioEMes(usuarioId, mesReferencia);
+    const existentesMap = new Map(existentes.map((item) => [item.categoriaId, item]));
+
+    const precisaRollover = limites.some(
+        (item) => item.rolloverAtivo && !existentesMap.has(item.categoriaId)
+    );
+
+    let orcamentosAnterioresMap = new Map();
+    let gastosAnterioresMap = {};
+    if (precisaRollover) {
+        const mesAnteriorRef = mesAnterior(mesReferencia);
+        const [orcamentosAnteriores, gastos] = await Promise.all([
+            budgetRepository.buscarPorUsuarioEMes(usuarioId, mesAnteriorRef),
+            budgetRepository.calcularGastosPorCategoria(usuarioId, mesAnteriorRef),
+        ]);
+        orcamentosAnterioresMap = new Map(
+            orcamentosAnteriores.map((item) => [item.categoriaId, item])
+        );
+        gastosAnterioresMap = gastos;
+    }
+
     const orcamentos = [];
     for (const item of limites) {
+        const jaExiste = existentesMap.has(item.categoriaId);
+        const rolloverAtivo = Boolean(item.rolloverAtivo);
+        let limiteValor = item.limiteValor;
+        let valorRollover = 0;
+
+        if (!jaExiste && rolloverAtivo) {
+            valorRollover = calcularValorRollover(
+                orcamentosAnterioresMap.get(item.categoriaId),
+                gastosAnterioresMap[item.categoriaId]
+            );
+            limiteValor += valorRollover;
+        }
+
         const orcamento = await budgetRepository.upsert({
             usuarioId,
             categoriaId: item.categoriaId,
             mesReferencia,
-            limiteValor: item.limiteValor,
+            limiteValor,
+            rolloverAtivo,
+            valorRollover,
         });
         orcamentos.push(mapOrcamento(orcamento));
     }

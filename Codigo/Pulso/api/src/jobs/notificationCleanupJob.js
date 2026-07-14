@@ -4,11 +4,10 @@ const logger = require('../utils/logger');
 const DIAS_RETENCAO_LIDAS = 30;
 
 /**
- * Remove notificações lidas com mais de 30 dias (RN-121).
- * Não lidas nunca são removidas automaticamente.
+ * Remove notificações com mais de 30 dias, lidas ou não.
  */
 const runNotificationCleanup = async () => {
-    const resultado = await notificationRepository.excluirLidasAntigas(DIAS_RETENCAO_LIDAS);
+    const resultado = await notificationRepository.excluirAntigas(DIAS_RETENCAO_LIDAS);
 
     const summary = {
         diasRetencao: DIAS_RETENCAO_LIDAS,
@@ -16,7 +15,7 @@ const runNotificationCleanup = async () => {
     };
 
     if (summary.removidas > 0) {
-        logger.info('Limpeza de notificações lidas concluída', summary);
+        logger.info('Limpeza de notificações concluída', summary);
     }
 
     return summary;

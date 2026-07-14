@@ -1,4 +1,5 @@
 jest.mock('../../../src/repositories/metaRepository');
+jest.mock('../../../src/repositories/transactionRepository');
 jest.mock('../../../src/services/notificationService', () => ({
     criarNotificacao: jest.fn(),
 }));
@@ -7,6 +8,7 @@ jest.mock('../../../src/services/gamificationService', () => ({
 }));
 
 const metaRepository = require('../../../src/repositories/metaRepository');
+const transactionRepository = require('../../../src/repositories/transactionRepository');
 const metaService = require('../../../src/services/metaService');
 
 const metaBase = (overrides = {}) => ({
@@ -116,6 +118,36 @@ describe('metaService', () => {
 
         expect(result.meta.status).toBe('CONCLUIDA');
         expect(result.meta.valorRestante).toBe('0.00');
+    });
+
+    it('sugere valor de reserva de emergência com base no gasto médio mensal', async () => {
+        transactionRepository.calcularAgregados.mockResolvedValue([
+            { tipo: 'DESPESA', _sum: { valor: 3000 }, _count: { id: 10 } },
+        ]);
+
+        const result = await metaService.sugerirReservaEmergencia('usr-1', {});
+
+        expect(transactionRepository.calcularAgregados).toHaveBeenCalledWith('usr-1', {
+            dataInicio: new Date(2026, 2, 1),
+            dataFim: new Date(2026, 5, 0, 23, 59, 59, 999),
+            tipo: 'DESPESA',
+        });
+        expect(result.mediaGastoMensal).toBe('1000.00');
+        expect(result.meses).toBe(6);
+        expect(result.valorSugerido).toBe('6000.00');
+        expect(result.mesesHistoricoAnalisado).toBe(3);
+    });
+
+    it('sugere reserva de emergência com quantidade de meses customizada', async () => {
+        transactionRepository.calcularAgregados.mockResolvedValue([
+            { tipo: 'DESPESA', _sum: { valor: 1500 }, _count: { id: 4 } },
+        ]);
+
+        const result = await metaService.sugerirReservaEmergencia('usr-1', { meses: 3 });
+
+        expect(result.mediaGastoMensal).toBe('500.00');
+        expect(result.meses).toBe(3);
+        expect(result.valorSugerido).toBe('1500.00');
     });
 
     it('bloqueia aporte acima do saldo restante', async () => {

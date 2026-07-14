@@ -11,9 +11,9 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 195 | 82 | ~42% |
-| Requisitos Não Funcionais | 15 | 8 | ~53% |
-| **Total** | **210** | **90** | **~43%** |
+| Requisitos Funcionais | 195 | 87 | ~45% |
+| Requisitos Não Funcionais | 16 | 10 | ~63% |
+| **Total** | **211** | **97** | **~46%** |
 
 Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, transações, VT, orçamento, calendário/lembretes, dívidas, **metas**, **viagens + moedas**, **grupos**, homepage e notificações (orçamento, lembretes, dívidas, transações, gamificação MVP, insights rule-based).
 
@@ -30,7 +30,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | 🔐 Autenticação | 6 | 6 | ✅ |
 | 📊 Dashboard | 9 | 0 |  |
 | 💳 Transações | 13 | 13 | ✅ |
-| 🎯 Metas | 8 | 6 | 🟡 |
+| 🎯 Metas | 8 | 8 | ✅ |
 | 🌍 Viagens e Moedas | 11 | 11 | ✅ |
 | 🤖 Insights | 9 | 0 |  |
 | 💬 Chatbot | 5 | 0 |  |
@@ -40,9 +40,9 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | 👤 Perfil e Configurações | 13 | 0 | 🟡 |
 | 🎮 Gamificação | 7 | 0 |  |
 | 🏠 Homepage | 4 | 4 | ✅ |
-| 👥 Grupos | 15 | 14 | 🟡 |
-| ⚙️ Não Funcionais | 15 | 8 | 🟡 |
-| 📊 Orçamento Mensal | 7 | 6 | 🟡 |
+| 👥 Grupos | 15 | 15 | ✅ |
+| ⚙️ Não Funcionais | 16 | 10 | 🟡 |
+| 📊 Orçamento Mensal | 7 | 7 | ✅ |
 | 💸 Divisão de Despesas | 6 | 0 |  |
 | 📅 Calendário Financeiro | 5 | 5 | ✅ |
 | 🤝 Dívidas Pessoais | 7 | 7 | ✅ |
@@ -118,8 +118,8 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [x] | RF-029 | O sistema deve calcular e sugerir quanto guardar por mês/semana para atingir a meta no prazo | 🟡 Importante |
 | - [x] | RF-030 | O sistema deve permitir categorizar metas como curto prazo ou longo prazo | 🟡 Importante |
 | - [x] | RF-031 | O sistema deve permitir pausar, editar e concluir metas | 🟡 Importante |
-| - [ ] | RF-032 | O sistema deve notificar quando uma meta for atingida | 🟢 Desejável |
-| - [ ] | RF-142 | O sistema deve oferecer uma meta especial de "Reserva de Emergência", sugerindo o valor-alvo com base em X meses do gasto médio mensal do usuário | 🟡 Importante |
+| - [x] | RF-032 | O sistema deve notificar quando uma meta for atingida | 🟢 Desejável |
+| - [x] | RF-142 | O sistema deve oferecer uma meta especial de "Reserva de Emergência", sugerindo o valor-alvo com base em X meses do gasto médio mensal do usuário | 🟡 Importante |
 
 ---
 
@@ -271,18 +271,18 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [x] | RF-092 | O sistema deve permitir vincular uma viagem ao grupo para planejamento compartilhado | 🔴 Essencial |
 | - [x] | RF-093 | O sistema deve permitir que membros do grupo adicionem pretensões de gastos na viagem compartilhada | 🔴 Essencial |
 | - [x] | RF-094 | O sistema deve calcular o custo total da viagem do grupo somando pretensões de todos os membros | 🔴 Essencial |
-| - [~] | RF-095 | O sistema deve exibir quanto cada membro deve contribuir para a viagem | 🟡 Importante |
+| - [x] | RF-095 | O sistema deve exibir quanto cada membro deve contribuir para a viagem | 🟡 Importante |
 | - [x] | RF-096 | O sistema deve permitir criar metas financeiras compartilhadas no grupo | 🟡 Importante |
 | - [x] | RF-097 | O sistema deve permitir que cada membro faça aportes individuais na meta do grupo | 🟡 Importante |
 | - [x] | RF-098 | O sistema deve manter os perfis e finanças pessoais completamente separados dos dados do grupo | 🔴 Essencial |
 | - [x] | RF-099 | O sistema deve permitir o membro sair do grupo a qualquer momento | 🔴 Essencial |
 | - [x] | RF-100 | O sistema deve permitir o admin remover membros do grupo | 🟡 Importante |
 | - [x] | RF-101 | O sistema deve exibir um painel do grupo com resumo das viagens e metas compartilhadas | 🟡 Importante |
-| - [~] | RF-102 | O sistema deve permitir chat/mensagens dentro do grupo | 🟢 Desejável |
+| - [x] | RF-102 | O sistema deve permitir chat/mensagens dentro do grupo | 🟢 Desejável |
 
-**RF-095 (parcial):** toggle *Por pretensão* / *Divisão igual* no card viagem (UI + `localStorage`). Split custom e acerto de contas → módulo **Divisão de Despesas** (`/expense-split`, RF-115–120), a vincular depois.
+**RF-095:** toggle *Por pretensão* / *Divisão igual* no card viagem, persistido no servidor (`grupos.modo_divisao`). "Quem paga quem" (acerto de contas) e split custom por % → módulo **Divisão de Despesas** (`/expense-split`, RF-115–120), a vincular depois.
 
-**Legenda extra:** `[~]` = parcial (funciona com limitações documentadas em Modulos/Grupos.md).
+**RF-102:** chat com polling rápido (~3s, pausado quando a aba não está visível). WebSocket tradicional não é viável enquanto a API rodar como funções serverless na Vercel — ver detalhe em Modulos/Grupos.md.
 
 > **Nota (jul/2026):** a infraestrutura de Grupos (membros, convites, papéis, notificações, chat) será **reaproveitada** pelo Modo Casal/Família (Módulo 23) via um "tipo" de espaço (`VIAGEM` vs `FAMILIA`).
 
@@ -297,7 +297,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [x] | RF-112 | O sistema deve alertar quando o gasto estourar o limite de uma categoria | 🔴 Essencial |
 | - [x] | RF-113 | O sistema deve permitir editar os limites de orçamento a qualquer momento | 🟡 Importante |
 | - [x] | RF-114 | O sistema deve exibir um resumo visual de quanto ainda pode gastar por categoria no mês | 🔴 Essencial |
-| - [ ] | RF-150 | O sistema deve permitir "rollover" de orçamento: o valor não gasto de uma categoria acumula no limite do mês seguinte (ativável por categoria) | 🟡 Importante |
+| - [x] | RF-150 | O sistema deve permitir "rollover" de orçamento: o valor não gasto de uma categoria acumula no limite do mês seguinte (ativável por categoria) | 🟡 Importante |
 ---
 ## 💸 Módulo 15 — Divisão de Despesas
 
@@ -482,7 +482,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 |---|---|---|---|---|
 | - [ ] | RNF-001 | O sistema deve responder a qualquer requisição em no máximo 2 segundos em condições normais | Performance | 🔴 Essencial |
 | - [x] | RNF-002 | O sistema deve armazenar senhas com hash bcrypt com salt rounds ≥ 12 | Segurança | 🔴 Essencial |
-| - [ ] | RNF-003 | Toda comunicação deve ser feita via HTTPS | Segurança | 🔴 Essencial |
+| - [x] | RNF-003 | Toda comunicação deve ser feita via HTTPS | Segurança | 🔴 Essencial |
 | - [ ] | RNF-004 | O sistema deve implementar rate limiting para prevenir abuso de APIs (máx. 100 req/min por usuário) | Segurança | 🔴 Essencial |
 | - [x] | RNF-005 | O sistema deve validar e sanitizar toda entrada de dados no backend para prevenir SQL Injection e XSS | Segurança | 🔴 Essencial |
 | - [x] | RNF-006 | O front-end deve ser responsivo e funcional em telas de 360px até 1920px | Usabilidade | 🔴 Essencial |
@@ -495,8 +495,13 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [x] | RNF-013 | Os tokens JWT devem expirar em 15 minutos com refresh token de 7 dias | Segurança | 🔴 Essencial |
 | - [x] | RNF-014 | O sistema deve implementar CORS configurado apenas para origens permitidas | Segurança | 🔴 Essencial |
 | - [x] | RNF-015 | O sistema deve manter cobertura mínima de 85% de testes unitários nas camadas de serviço, podendo ser superior | Qualidade | 🔴 Essencial |
+| - [x] | RNF-016 | Todo valor monetário deve ser armazenado como decimal de precisão fixa (nunca float/double), para evitar erros de arredondamento em rateios, parcelas e câmbio | Confiabilidade | 🔴 Essencial |
 
 > **⚠️ Tensão free tier (jul/2026):** RNF-001 (≤2s "sempre"), RNF-007 (500 simultâneos) e RNF-009 (95% uptime) são **aspiracionais** no free tier (Vercel Hobby + Neon com autosuspend/cold start). Documentado como limite conhecido; metas serão revisadas se/quando houver upgrade de infra.
+>
+> **RNF-003:** Vercel provisiona TLS e força HTTPS automaticamente em todos os domínios (produção e preview); não há configuração própria a fazer.
+>
+> **RNF-016:** já cumprida desde o schema inicial — todo campo monetário no Prisma usa `Decimal @db.Decimal(12,2)` (nunca `Float`), inclusive em rateios/parcelas/câmbio.
 
 ---
 
@@ -522,7 +527,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | OCR de cupons | **Descartado** — custo/complexidade sem retorno para o escopo gratuito |
 | Open Banking | **Descartado** — custo de integração/certificação incompatível com projeto gratuito; substituído pelo módulo de Importação (OFX/CSV) |
 | Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips`, **`/groups`**, **`/groups/:id`** |
-| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros, editar grupo, metas múltiplas, RN-119, notificações GRUPO/META, chat paginado + polling, viagem pessoal→grupo, RF-095 MVP (divisão igual UI) — [Modulos/Grupos.md](../Modulos/Grupos.md) |
+| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros, editar grupo, metas múltiplas, RN-119, notificações GRUPO/META, chat paginado + polling (~3s), viagem pessoal→grupo, RF-095 (toggle *Por pretensão*/*Divisão igual* persistido em `grupos.modo_divisao`) — acerto de contas ("quem paga quem") fica no módulo **Divisão de Despesas** (RF-115–120), ainda não construído — [Modulos/Grupos.md](../Modulos/Grupos.md) |
 | Metas (RF-026–031) | CRUD, aportes, pausar/concluir, vínculo viagem; `META_ATINGIDA` pessoal e grupo |
 | Viagens (RF-033–043) | Moedas (cotações, conversor, histórico, favoritas), CRUD de viagens, despesas por categoria, total em BRL, observações, busca GeoNames, estimativas de passagem (avião/ônibus/trem) com ajuste sazonal; Duffel/Amadeus opcionais |
 | Dívidas (RF-126–132) | CRUD em `/debts` com tabs Me devem / Eu devo / Quitadas; resumo consolidado; filtros (busca, valor, DateRangePicker); job `DIVIDA_COBRANCA` (vence hoje / em 2 dias); limpeza automática de quitadas após 180 dias |

@@ -29,6 +29,14 @@ const calcValorMensalSugerido = (meta) => {
     return roundMoney(valorRestante / diffMesesAte(meta.prazo));
 };
 
+const MESES_RESERVA_EMERGENCIA_PADRAO = 6;
+
+const calcSugestaoReservaEmergencia = (mediaGastoMensal, meses = MESES_RESERVA_EMERGENCIA_PADRAO) => {
+    const media = Math.max(0, Number(mediaGastoMensal) || 0);
+    const mesesNum = Math.max(1, Number(meses) || MESES_RESERVA_EMERGENCIA_PADRAO);
+    return roundMoney(media * mesesNum);
+};
+
 const metaEstaVencida = (meta) => {
     if (meta.status === 'CONCLUIDA' || meta.status === 'CANCELADA') return false;
     const hoje = todayInTimezone();
@@ -46,6 +54,8 @@ module.exports = {
     inferirTipoMeta,
     calcProgressoMeta,
     calcValorMensalSugerido,
+    calcSugestaoReservaEmergencia,
+    MESES_RESERVA_EMERGENCIA_PADRAO,
     metaEstaVencida,
     podeReceberAporte,
     estaConcluida,

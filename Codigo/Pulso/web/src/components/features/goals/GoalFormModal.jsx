@@ -6,6 +6,8 @@ import {
   FileText,
   Pencil,
   PiggyBank,
+  Shield,
+  Sparkles,
   Target,
   Trash2,
   X,
@@ -19,12 +21,14 @@ import { InputMoney } from '@/design-system/components/inputs/InputMoney/InputMo
 import { Textarea } from '@/design-system/components/inputs/Textarea/Textarea.jsx'
 import { DatePicker } from '@/design-system/components/pickers/DatePicker/DatePicker.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
+import { SpinnerDots } from '@/design-system/components/feedback/Spinner/SpinnerDots.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import {
   calcMesesAtePrazo,
   calcValorMensalSugerido,
   inferirTipoMeta,
 } from '@/utils/goalBalanceUtils.js'
+import * as metaService from '@/services/metaService.js'
 
 const emptyForm = () => ({
   nome: '',
@@ -45,11 +49,14 @@ export function GoalFormModal({
 }) {
   const [form, setForm] = useState(emptyForm)
   const [error, setError] = useState('')
+  const [sugerindoReserva, setSugerindoReserva] = useState(false)
+  const [reservaInfo, setReservaInfo] = useState(null)
   const isEdit = Boolean(meta)
 
   useEffect(() => {
     if (!open) return
     setError('')
+    setReservaInfo(null)
     if (meta) {
       setForm({
         nome: meta.nome ?? '',
@@ -62,6 +69,30 @@ export function GoalFormModal({
       setForm(emptyForm())
     }
   }, [open, meta])
+
+  const handleUsarReservaEmergencia = async () => {
+    setSugerindoReserva(true)
+    setError('')
+    try {
+      const sugestao = await metaService.sugerirReservaEmergencia()
+      const prazoSugerido = new Date()
+      prazoSugerido.setMonth(prazoSugerido.getMonth() + 12)
+
+      setForm((prev) => ({
+        ...prev,
+        nome: prev.nome.trim() || 'Reserva de Emergência',
+        valorAlvo: Number(sugestao.valorSugerido) || prev.valorAlvo,
+        tipo: 'LONGO_PRAZO',
+        prazo: prev.prazo ?? prazoSugerido,
+        descricao: prev.descricao || 'Fundo para imprevistos e emergências financeiras.',
+      }))
+      setReservaInfo(sugestao)
+    } catch (err) {
+      setError(err.response?.data?.message ?? 'Não foi possível calcular a sugestão.')
+    } finally {
+      setSugerindoReserva(false)
+    }
+  }
 
   const previewMensal = useMemo(() => {
     if (!form.prazo || !form.valorAlvo) return 0
@@ -121,6 +152,34 @@ export function GoalFormModal({
         </header>
 
         <div className="goal-form__body">
+          {!isEdit ? (
+            <button
+              type="button"
+              className="goal-form__emergency-suggestion"
+              onClick={handleUsarReservaEmergencia}
+              disabled={sugerindoReserva}
+            >
+              <span className="goal-form__emergency-icon" aria-hidden>
+                <Shield size={18} />
+              </span>
+              <div className="goal-form__emergency-copy">
+                <strong>Criar Reserva de Emergência</strong>
+                <span>Preenchemos nome e valor com base no seu gasto médio mensal</span>
+              </div>
+              {sugerindoReserva ? (
+                <SpinnerDots />
+              ) : (
+                <Sparkles size={16} className="goal-form__emergency-sparkles" aria-hidden />
+              )}
+            </button>
+          ) : null}
+
+          {reservaInfo ? (
+            <p className="goal-form__emergency-hint">
+              Sugestão: {reservaInfo.meses} meses de gasto médio ({formatCurrency(reservaInfo.mediaGastoMensal)}/mês).
+            </p>
+          ) : null}
+
           <InputText
             label={
               <FormFieldLabel icon={Pencil} tone="purple">

@@ -2,12 +2,15 @@ const notificationService = require('./notificationService');
 const gamificationService = require('./gamificationService');
 const AppError = require('../utils/appError');
 const metaRepository = require('../repositories/metaRepository');
+const transactionRepository = require('../repositories/transactionRepository');
 const { mapMeta } = require('../utils/metaMapper');
 const {
     roundMoney,
     inferirTipoMeta,
     calcProgressoMeta,
     calcValorMensalSugerido,
+    calcSugestaoReservaEmergencia,
+    MESES_RESERVA_EMERGENCIA_PADRAO,
     podeReceberAporte,
     metaEstaVencida,
 } = require('../utils/metaBalanceUtils');
@@ -186,6 +189,36 @@ const calcularResumo = async (usuarioId) => {
     };
 };
 
+const MESES_HISTORICO_GASTO_MEDIO = 3;
+
+const sugerirReservaEmergencia = async (usuarioId, { meses = MESES_RESERVA_EMERGENCIA_PADRAO } = {}) => {
+    const hoje = new Date();
+    const inicioMesAtual = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    const dataInicio = new Date(
+        inicioMesAtual.getFullYear(),
+        inicioMesAtual.getMonth() - MESES_HISTORICO_GASTO_MEDIO,
+        1
+    );
+    const dataFim = new Date(inicioMesAtual.getFullYear(), inicioMesAtual.getMonth(), 0, 23, 59, 59, 999);
+
+    const agregados = await transactionRepository.calcularAgregados(usuarioId, {
+        dataInicio,
+        dataFim,
+        tipo: 'DESPESA',
+    });
+
+    const totalDespesas = agregados.reduce((acc, item) => acc + Number(item._sum.valor ?? 0), 0);
+    const mediaGastoMensal = roundMoney(totalDespesas / MESES_HISTORICO_GASTO_MEDIO);
+    const valorSugerido = calcSugestaoReservaEmergencia(mediaGastoMensal, meses);
+
+    return {
+        mediaGastoMensal: mediaGastoMensal.toFixed(2),
+        meses: Math.max(1, Number(meses) || MESES_RESERVA_EMERGENCIA_PADRAO),
+        valorSugerido: valorSugerido.toFixed(2),
+        mesesHistoricoAnalisado: MESES_HISTORICO_GASTO_MEDIO,
+    };
+};
+
 const criarMeta = async (usuarioId, dados) => {
     const prazo = validarPrazoFuturo(dados.prazo);
     const tipo = dados.tipo ?? inferirTipoMeta(prazo);
@@ -358,6 +391,7 @@ const excluirMeta = async (usuarioId, metaId) => {
 module.exports = {
     listarMetas,
     calcularResumo,
+    sugerirReservaEmergencia,
     criarMeta,
     editarMeta,
     registrarAporte,

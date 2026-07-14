@@ -443,7 +443,7 @@
 
 .budget-edit-modal__row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(148px, 176px) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(148px, 176px) auto auto;
   gap: 12px;
   align-items: center;
   padding: 10px 12px;
@@ -469,12 +469,34 @@
   border-radius: 8px;
 }
 
+.budget-edit-modal__cat-name-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .budget-edit-modal__cat-name {
   font-size: 14px;
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.budget-edit-modal__rollover-hint {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ds-color-info);
+  white-space: nowrap;
+}
+
+.budget-edit-modal__rollover {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ds-color-text-secondary);
+  flex-shrink: 0;
 }
 
 .budget-edit-modal__money .ds-input-wrapper {
@@ -772,7 +794,7 @@
     grid-template-columns: 1fr auto;
     grid-template-areas:
       'cat remove'
-      'money money';
+      'money rollover';
   }
 
   .budget-edit-modal__cat {
@@ -781,6 +803,11 @@
 
   .budget-edit-modal__money {
     grid-area: money;
+  }
+
+  .budget-edit-modal__rollover {
+    grid-area: rollover;
+    justify-self: end;
   }
 
   .budget-edit-modal__remove {

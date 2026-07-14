@@ -62,30 +62,31 @@ Ao vincular viagem **sem** foto customizada, a capa do destino passa a aparecer 
 
 **Modais:** convite (link + WhatsApp + Instagram + **QR code**), editar grupo, gerenciar membros, viagem, pretensão, metas (múltiplas), aporte, imagem (upload de arquivo), excluir, sair.
 
-**Chat:** sync ~10s + “Carregar mensagens anteriores” (`GET /mensagens`, 20 por página) — o sync mescla por id em vez de substituir a lista, então histórico já carregado não desaparece a cada poll. Detalhe do grupo também faz polling geral ~30s.
+**Chat:** sync ~3s (pausa quando a aba não está visível, via `document.visibilityState`) + “Carregar mensagens anteriores” (`GET /mensagens`, 20 por página) — o sync mescla por id em vez de substituir a lista, então histórico já carregado não desaparece a cada poll. Detalhe do grupo também faz polling geral ~30s.
+
+> **Por que polling e não WebSocket:** a API roda como funções serverless na Vercel em produção (`vercel.json` + adapter Neon em `database.js`), que não sustenta conexões WebSocket persistentes. Polling rápido (~3s) é o caminho compatível com esse runtime sem depender de um serviço gerenciado (Pusher/Ably/Supabase Realtime). Se a API migrar para um servidor persistente (VPS/Railway) ou um desses serviços for integrado, dá pra trocar por push real.
 
 **Viagem pessoal → grupo:** `TripFormModal` em `/trips` — toggle opcional para vincular a um grupo após criar.
 
 ---
 
-## RF-095 — Divisão na viagem do grupo (MVP)
+## RF-095 — Divisão na viagem do grupo
 
-Toggle no rodapé do card **Viagem do grupo** (estado salvo no `localStorage` por grupo):
+Toggle no rodapé do card **Viagem do grupo**, persistido no servidor (`grupos.modo_divisao`, `PATCH /grupos/:id/modo-divisao` — qualquer membro pode alterar):
 
 | Modo | Comportamento |
 |------|----------------|
 | **Por pretensão** | Exibe o total que cada membro **declarou** que pretende gastar (“deve”). |
 | **Divisão igual** | `parteIgual = totalGrupo ÷ membros`. Para cada um: `pretensão − parteIgual` → **crédito** (verde) ou **deve**. |
 
-**Limitações do MVP (não confundir com `/expense-split`):**
+**Limitações (não confundir com `/expense-split`):**
 
-- Cálculo **só na UI** — não persiste no servidor (preferência local).
 - Não gera “quem paga quem” (acerto de contas).
 - Não há % customizada por membro.
 
 **Roadmap:** o módulo **Divisão de Despesas** (`/expense-split`, RF-115–120) trará split bill completo; depois de codado, fará sentido **vincular** ou substituir este toggle no detalhe do grupo. Até lá, o toggle cobre o planejamento rápido da viagem compartilhada.
 
-Implementação: `web/src/utils/groupDetailUtils.js` → `calcularSaldosViagem`.
+Implementação: `api/src/services/grupoService.js` → `atualizarModoDivisao`; `web/src/utils/groupDetailUtils.js` → `calcularSaldosViagem`.
 
 ---
 
@@ -100,14 +101,14 @@ Implementação: `web/src/utils/groupDetailUtils.js` → `calcularSaldosViagem`.
 | RF-092 | ✅ | Vincular viagem (+ viagem pessoal → grupo em `/trips`) |
 | RF-093 | ✅ | Pretensões por membro |
 | RF-094 | ✅ | Total do grupo |
-| RF-095 | 🟡 | MVP: pretensão + divisão igual (UI). Split custom → `/expense-split` |
+| RF-095 | ✅ | Pretensão + divisão igual, persistido no servidor. Split custom (quem paga quem) → `/expense-split` |
 | RF-096 | ✅ | Metas compartilhadas (até 5) |
 | RF-097 | ✅ | Aportes + seletor de meta |
 | RF-098 | ✅ | Dados pessoais isolados |
 | RF-099 | ✅ | Sair (lista + detalhe) |
 | RF-100 | ✅ | Admin remover / gerenciar membros |
 | RF-101 | ✅ | Painel 4 cards + ícones |
-| RF-102 | 🟡 | Chat com polling + paginação (sem WebSocket) |
+| RF-102 | ✅ | Chat com polling rápido (~3s) + paginação. WebSocket não é viável no runtime serverless atual (ver nota acima) |
 
 ---
 
@@ -125,9 +126,7 @@ Implementação: `web/src/utils/groupDetailUtils.js` → `calcularSaldosViagem`.
 
 | Gap | Detalhe |
 |-----|---------|
-| **Chat tempo real** | WebSocket ou SSE (hoje polling) |
-| **RF-095 completo** | Delegar ao módulo `/expense-split` quando existir |
-| **Modo divisão no servidor** | Opcional: salvar preferência no perfil ou no grupo |
+| **RF-095 completo (split custom)** | "Quem paga quem" → delegar ao módulo `/expense-split` quando existir |
 | **Testes E2E grupos** | Playwright em `web/e2e/groups.spec.js` (login demo + modal criar) |
 
 ### Baixa / depois
@@ -140,6 +139,7 @@ Implementação: `web/src/utils/groupDetailUtils.js` → `calcularSaldosViagem`.
 ### Fora de escopo imediato
 
 - **Vincular toggle do grupo → `/expense-split`:** só após o módulo global existir (sidebar hoje é placeholder).
+- **Chat via WebSocket/SSE nativo:** inviável enquanto a API rodar como funções serverless na Vercel. Só faz sentido se a API migrar para um processo persistente (VPS/Railway) ou se um serviço gerenciado (Pusher/Ably/Supabase Realtime) for integrado — nenhuma das duas está planejada agora.
 
 ---
 

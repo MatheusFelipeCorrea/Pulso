@@ -23,6 +23,15 @@ const obterResumo = async (req, res, next) => {
     }
 };
 
+const sugerirReservaEmergencia = async (req, res, next) => {
+    try {
+        const sugestao = await metaService.sugerirReservaEmergencia(req.user.id, req.query);
+        res.status(200).json(sugestao);
+    } catch (error) {
+        next(error);
+    }
+};
+
 const criar = async (req, res, next) => {
     try {
         const meta = await metaService.criarMeta(req.user.id, req.body);
@@ -75,6 +84,7 @@ const excluir = async (req, res, next) => {
 module.exports = {
     listar,
     obterResumo,
+    sugerirReservaEmergencia,
     criar,
     editar,
     registrarAporte,

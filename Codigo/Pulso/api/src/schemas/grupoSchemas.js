@@ -25,6 +25,15 @@ const editarGrupoSchema = z.object({
         }),
 });
 
+const atualizarModoDivisaoSchema = z.object({
+    params: z.object({ id: z.string().min(1) }),
+    body: z.object({
+        modoDivisao: z.enum(['PRETENSAO', 'IGUAL'], {
+            message: 'Modo de divisão deve ser PRETENSAO ou IGUAL',
+        }),
+    }),
+});
+
 const grupoIdParamSchema = z.object({
     params: z.object({ id: z.string().min(1) }),
 });
@@ -228,6 +237,7 @@ const listarMensagensGrupoSchema = z.object({
 module.exports = {
     criarGrupoSchema,
     editarGrupoSchema,
+    atualizarModoDivisaoSchema,
     grupoIdParamSchema,
     entrarGrupoSchema,
     previewGrupoQuerySchema,

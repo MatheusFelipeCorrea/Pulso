@@ -322,6 +322,19 @@ const listarMensagens = async (grupoId, { pagina = 1, limite = 20 } = {}) => {
 const contarMensagens = async (grupoId) =>
     prisma.mensagemChatGrupo.count({ where: { grupoId } });
 
+const excluirMensagensAntigas = async (diasLimite = 180) => {
+    const limite = new Date();
+    limite.setDate(limite.getDate() - diasLimite);
+
+    const resultado = await prisma.mensagemChatGrupo.deleteMany({
+        where: {
+            criadoEm: { lt: limite },
+        },
+    });
+
+    return resultado.count;
+};
+
 module.exports = {
     listarPorUsuario,
     buscarPorId,
@@ -351,4 +364,5 @@ module.exports = {
     criarMensagemChat,
     listarMensagens,
     contarMensagens,
+    excluirMensagensAntigas,
 };

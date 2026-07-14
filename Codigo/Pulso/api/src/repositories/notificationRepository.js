@@ -66,13 +66,12 @@ const contarNaoLidas = async (usuarioId) =>
         where: { usuarioId, lida: false },
     });
 
-const excluirLidasAntigas = async (dias = 30) => {
+const excluirAntigas = async (dias = 30) => {
     const limite = new Date();
     limite.setDate(limite.getDate() - dias);
 
     return prisma.notificacao.deleteMany({
         where: {
-            lida: true,
             criadoEm: { lt: limite },
         },
     });
@@ -137,7 +136,7 @@ module.exports = {
     marcarComoLida,
     marcarTodasLidas,
     contarNaoLidas,
-    excluirLidasAntigas,
+    excluirAntigas,
     buscarDuplicadaLembrete,
     buscarDuplicadaDivida,
     buscarDuplicadaOrcamento,
