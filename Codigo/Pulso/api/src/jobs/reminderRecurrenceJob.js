@@ -55,15 +55,50 @@ const gerarInstanciasMensais = async () => {
     return { criadas, templates: templates.length };
 };
 
+/**
+ * "Repetir a cada N dias até marcar como pago" — avança a data de vencimento
+ * enquanto o lembrete estiver vencido e não pago, para que o job de alertas
+ * (reminderAlertService, baseado em dataVencimento - antecedência) volte a notificar.
+ */
+const avancarRepeticaoPorDias = async () => {
+    const hoje = new Date();
+    const candidatos = await prisma.lembrete.findMany({
+        where: {
+            repetirCadaDias: { not: null },
+            pago: false,
+            dataVencimento: { lt: hoje },
+        },
+    });
+
+    let avancados = 0;
+    for (const lembrete of candidatos) {
+        let novaData = new Date(lembrete.dataVencimento);
+        const passoMs = lembrete.repetirCadaDias * 24 * 60 * 60 * 1000;
+        while (novaData.getTime() < hoje.getTime()) {
+            novaData = new Date(novaData.getTime() + passoMs);
+        }
+
+        await prisma.lembrete.update({
+            where: { id: lembrete.id },
+            data: { dataVencimento: novaData },
+        });
+        avancados += 1;
+    }
+
+    return { avancados, candidatos: candidatos.length };
+};
+
 const runReminderRecurrenceJob = async () => {
     const resultado = await gerarInstanciasMensais();
+    const repeticao = await avancarRepeticaoPorDias();
     logger.info(
-        `🔁 Job lembretes recorrentes: ${resultado.criadas} instância(s) criada(s) (${resultado.templates} templates)`
+        `🔁 Job lembretes recorrentes: ${resultado.criadas} instância(s) criada(s) (${resultado.templates} templates), ${repeticao.avancados} lembrete(s) com repetição por dias avançado(s)`
     );
-    return resultado;
+    return { ...resultado, repeticaoPorDias: repeticao };
 };
 
 module.exports = {
     runReminderRecurrenceJob,
     gerarInstanciasMensais,
+    avancarRepeticaoPorDias,
 };

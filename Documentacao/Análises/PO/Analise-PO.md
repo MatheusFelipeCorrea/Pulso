@@ -1,169 +1,161 @@
 # 📑 Relatório de Análise — Sistema Pulso
-**Papel:** PO Sênior / Eng. de Requisitos · Foco em UX + Arquitetura
-**Base:** README (código jun/2026 · planejamento jul/2026)
+**Papel:** PO Sênior / Eng. de Requisitos · Foco em regras de negócio, fluxos e usabilidade
+**Base:** README (`Documentacao/Requisitos/Readme.md`, código alinhado jun/2026) cruzado com o código real em `Codigo/Pulso` na branch `Sprint-5` (15/jul/2026), incluindo o trabalho ainda não commitado do módulo Divisão de Despesas e as mudanças em Lembretes/Cron.
+
+> Este relatório substitui a versão anterior deste arquivo. Os achados foram verificados linha a linha no código (não apenas no README) por meio de auditorias dirigidas aos módulos que mudaram nesta sprint (Divisão de Despesas, Lembretes/Cron, Autenticação) e à verificação do estado real de Dashboard e Perfil/Configurações.
 
 ---
 
-## 🎯 Sumário Executivo — Top 7 Riscos
-
-Antes do detalhamento, estes são os pontos que, se não resolvidos, geram retrabalho ou bugs de dados difíceis de reverter:
+## 🎯 Sumário Executivo — Top 10 Riscos
 
 | # | Risco | Impacto | Onde |
 |---|---|---|---|
-| 1 | **Cartão de crédito: competência vs. caixa não definido** — compra parcelada conta como despesa quando? Ao comprar ou ao pagar a fatura? | 🔴 Alto — risco de **contabilização dupla** | Mód. 21 |
-| 2 | **Tipos de recurso inconsistentes** — `POUPANCA` (RF-140) entregue, mas Dashboard/Onboarding ainda listam só dinheiro/VA/VR/VT | 🔴 Alto — dados incompletos | RF-008, 152 |
-| 3 | **Contradição: rateio proporcional à renda (RF-176) exige ver a renda alheia × preservar privacidade (RF-177)** | 🔴 Alto — regra impossível como está | Mód. 23 |
-| 4 | **"Quem deve a quem" fragmentado em 3 módulos** (Grupos RF-095, Divisão RF-115-120, Família RF-179) | 🟡 Médio — inconsistência de saldo | Mód. 13/15/23 |
-| 5 | **Ausência total de requisitos de LGPD/consentimento/precisão monetária** | 🔴 Alto — compliance + bug financeiro | Geral |
-| 6 | **Free tier × ambição** — 500 usuários simultâneos + Gemini free tier + chat por polling + push | 🟡 Médio — estouro de quota | RNF-007, Mód. 06/22 |
-| 7 | **Grupos marcado ✅, mas acerto de contas depende do Mód. 15 (não feito)** | 🟡 Médio — "pronto" incompleto | RF-095 |
+| 1 | **RNF-002 marcado ✅ mas é falso**: bcrypt está com `SALT_ROUNDS = 10`, não ≥12 | 🔴 Alto — segurança / compliance da própria documentação | `authService.js:18` |
+| 2 | **Lembrete de cobrança pode ficar órfão e nunca é encerrado** quando a divisão é excluída ou o participante paga | 🔴 Alto — usuário recebe cobrança de dívida já quitada/inexistente | `expenseSplitService.js`, model `Lembrete` |
+| 3 | **Loop infinito em job de cron** se `repetirCadaDias = 0` chegar ao banco (hoje só mitigado por um schema Zod que não cobre todas as rotas de escrita) | 🔴 Alto — travaria `/api/cron/daily` inteiro (bloqueia limpeza de notificações, chat, expense-split e transações recorrentes) | `reminderRecurrenceJob.js:76-79` |
+| 4 | **Editar uma divisão de despesa reenviando participantes reverte pagamentos já marcados** para PENDENTE silenciosamente | 🔴 Alto — perda de dado financeiro / inconsistência de saldo | `expenseSplitService.js` (editarDivisao → substituirParticipantes) |
+| 5 | **README diverge do código em pontos que ele mesmo documentou nesta sprint**: (a) vínculo `Lembrete.divisaoParticipanteId` (FK) foi trocado por M2M sem atualizar a nota do Módulo 15; (b) nota "RF-103/104: `modoUso` no cadastro/onboarding" não corresponde ao código — não há campo de modo de uso no cadastro | 🟡 Médio — documentação não é fonte confiável para decisões futuras | Módulo 15, Módulo 10 |
+| 6 | **Refresh token sem rotação nem detecção de reuse** — token vazado é válido por até 30 dias sem qualquer sinal de comprometimento | 🟡 Médio — janela longa de exposição | `authService.js:270-286` |
+| 7 | **Rate limiting real é 5 req/min por IP em 4 rotas**, não "100 req/min por usuário" como o RNF-004 propõe, e não cobre `/refresh`, `/logout`, `/reset-password`, `/verify-email`, OAuth | 🟡 Médio — brute-force contornável, rota de auth mais sensível sem proteção | `middlewares/authRateLimit.js`, `routes/authRoutes.js` |
+| 8 | **Perfil e Configurações está 100% vazio** (`Profile.jsx` e `userRoutes.js` sem uma linha de código) — não existe forma de trocar `modoUso`, editar dados ou excluir conta | 🔴 Alto — bloqueia RF-074/077/103/104 e é pré-requisito de outros módulos futuros (Onboarding, Freelancer/CLT) | Módulo 10 |
+| 9 | **Dashboard tem componentes de UI prontos e órfãos** (`BalanceCards`, `CategoryChart`, `HealthScore` etc.) sem nenhuma página consumindo, sem integração com API, sem testes | 🟡 Médio — esforço já investido não entrega valor; risco de retrabalho/descarte | Módulo 02 |
+| 10 | **Tokens Google armazenados em texto puro**, apesar do comentário no schema dizer "criptografado em repouso" — achado da análise anterior, ainda não resolvido | 🔴 Alto — vazamento expõe agenda do usuário; risco LGPD | `schema.prisma:259`, `googleCalendarService.js` |
 
 ---
 
-## 1️⃣ Análise de Requisitos e Regras de Negócio
+## 1️⃣ [Gaps Encontrados] — Divergências entre README e Código
 
-### 1.1 Ambiguidades e requisitos vagos
+### 1.1 Status marcado ✅ que não resiste à leitura do código
 
-| Req. | Problema | Recomendação |
-|---|---|---|
-| **RF-142** | "X meses do gasto médio" — X não definido; **cold start**: usuário novo não tem histórico de gasto | Definir default (ex: 6 meses), tornar configurável, e fallback quando não há histórico |
-| **RF-104** | "adaptar interface conforme modo" é vago. Freelancer vê VA/VR/VT? A nota diz "VA/VR só CLT/Estagiário; VT conforme modo" — mas não há **matriz explícita** | Criar tabela definitiva: `Modo × Recursos/Features visíveis` |
-| **RF-025** | Só bloqueia "alimentação com VT". E o inverso (transporte com VA)? Vale para **categorias customizadas** (RF-018)? | Definir a matriz completa `Recurso × Categorias permitidas` e o comportamento com categorias custom |
-| **RF-048 vs RF-014** | Score aparece em Insights (cálculo) e Dashboard (exibição) — são o mesmo? | Declarar RF-014 como **dependente** de RF-048; não duplicar lógica |
-| **RF-047** | "seu VA acaba dia 22" pressupõe burn-rate diário, mas VA reseta mensalmente | Definir se a previsão respeita o ciclo de recarga mensal |
-| **RF-145** | "separando do saldo disponível" — é segregação **virtual** ou transferência real p/ `POUPANCA`? | Definir; se real, reusar RF-140 |
-| **RF-159** | "aprendendo com ajustes" — a implementação (coef. de Dice) é **similaridade**, não aprendizado | Alinhar expectativa: é dicionário de regras + similaridade, não ML |
-| **RF-192** | Alíquota IPVA varia por estado, tipo de veículo e isenções (idade/PCD) | Documentar escopo (só carro? ignora isenções?) |
+| Item README | O que o README diz | O que o código faz | Veredito |
+|---|---|---|---|
+| **RNF-002** ✅ | "hash bcrypt com salt rounds ≥ 12" | `SALT_ROUNDS = 10` (`authService.js:18`, usado nas linhas 53 e 369) | ❌ **Falso** — rebaixar para 🟡 ou corrigir o código |
+| **RNF-013** ✅ | "JWT expiram em 15 minutos, refresh de 7 dias" | Confirmado: `ACCESS_TOKEN_TTL='15m'`, `REFRESH_TOKEN_TTL_MS=7d` (30d com "lembrar-me") | ✅ Correto |
+| **RF-006** ✅ | "logout com invalidação de sessão" | Logout revoga o **refresh token** no banco (`authRepository.js:57-71`), mas o **access token JWT continua válido** até expirar (não há blacklist) | 🟡 Parcial — aceitável dado o TTL curto, mas vale documentar a limitação |
+| **RNF-004** (já marcado ⏳ corretamente) | "apenas rotas de auth" têm rate limit | Confirmado, mas mais estreito ainda: só `/register`, `/login`, `/forgot-password`, `/resend-verification` (5/min por IP). `middlewares/rateLimitMiddleware.js` existe mas está **vazio/morto** | Nota do README subestima a lacuna — atualizar |
+| **RF-095 / Grupos** ✅ | "toggle Por pretensão/Divisão igual persistido" | Confirmado no código, mas a nota já reconhece que "quem paga quem" real depende do Módulo 15 | Consistente com o README — sem gap aqui |
 
-### 1.2 Contradições
+### 1.2 Notas do README que já estão desatualizadas por causa do trabalho desta sprint
 
-| Itens | Contradição | Ação |
-|---|---|---|
-| **RF-176 × RF-177** | Dividir proporcional à renda exige expor a renda; mas o req. pede preservar privacidade individual | Decidir: ou renda declarada explicitamente para rateio (opt-in), ou só divisão igualitária/por peso manual |
-| **RF-075 × RF-020/021** | Renda fixa (config) e transação recorrente podem gerar **o mesmo salário duas vezes** | Definir fonte única de verdade para receitas fixas |
-| **RNF-001/007/009 × free tier** | Já reconhecido como aspiracional | ✔️ Ótima autoconsciência — **reescrever o RNF** excluindo cold start, não deixar como meta "falsa" |
-| **RNF-004 (100 req/min) × RNF-007 (500 simultâneos) × Gemini free tier** | 500 usuários no chatbot/insights estouram RPM/RPD do Gemini Flash | Definir quota por usuário + fila + fallback rule-based explícito |
-| **RF-098 × RF-176** | Separação estrita pessoal/compartilhado vs. rateio que precisa cruzar dados | Ver item 1.2 linha 1 |
+- **Nota do Módulo 15 (linha 313 do README)**: descreve o vínculo do lembrete de cobrança como `Lembrete.divisaoParticipanteId` (FK escalar). O código hoje usa uma **relação M2M implícita** (`_DivisaoParticipanteToLembrete`), criada pela migração `20260715130000_lembrete_divisao_m2m`, que **substituiu** a migração anterior (`20260714163000`) que de fato criava a FK descrita no README. A nota precisa ser reescrita para refletir a M2M — e mais importante, o comportamento de "quem cuida do lembrete quando a divisão é excluída" mudou de `ON DELETE SET NULL` (lembrete preservado, mas sinalizado como órfão via campo nulo) para uma junção `ON DELETE CASCADE` que **remove só a linha de junção e deixa o `Lembrete` inteiramente intacto e ativo** — pior para o usuário, pois o lembrete nem sinaliza que perdeu a referência (ver 3.3).
+- **Nota do Módulo 10 (linha 519 do README)**: "`modoUso` no cadastro/onboarding e na API de VT; sidebar já oculta VT conforme modo". A leitura de `modoUso` na API de VT está correta (`authService.js:212-227`), mas **não existe nenhum campo de `modoUso` no cadastro** — nem em `Register.jsx`, nem nos schemas de registro do backend. Toda conta nasce com `@default(CLT)` no Prisma. Ou seja, hoje **nenhum usuário real consegue ser "Estagiário" ou "Freelancer"** — todos são CLT por padrão, sem terem escolhido. Isso invalida silenciosamente qualquer teste manual de RF-103/104 feito achando que o seletor existe.
+- **Cron / GitHub Actions**: o README já marca isso como "planejado", então não é um gap de status — mas vale registrar que **nenhum workflow em `.github/workflows/` chama os endpoints de cron** ainda; só existem `ci.yml`, `labeler.yml`, `security.yml`. O `cronAuthMiddleware` (Bearer `CRON_SECRET`) já está pronto para receber essa migração quando ela vier.
 
-### 1.3 Edge cases não mapeados (alto valor)
+### 1.3 "Pronto" que é raso ou frágil
 
-| Área | Caso não coberto |
-|---|---|
-| **Cartão (Mód. 21)** | **Pagamento parcial / rotativo** — realidade dominante no Brasil, ausente. Só há "marcar como paga" (RF-167) |
-| **Cartão** | Estorno/chargeback; compra parcelada cancelada; parcelas já lançadas em faturas futuras |
-| **Moedas (RF-040)** | Cache **diário** para **ARS** (hiperinflação) pode dar erro grosseiro; e falha da API de cotação? |
-| **Grupos** | **Único admin sai/exclui conta** → grupo órfão. Não há transferência de propriedade nem "excluir grupo" |
-| **Conta (RF-077)** | Exclusão de conta com dívidas ativas, sendo admin de grupo, ou com saldo em split — cascata indefinida |
-| **Recorrentes (RF-021)** | Usuário inativo 3 meses: gera retroativo tudo de uma vez? |
-| **Edição recorrente** | Editar/excluir recorrência afeta instâncias **passadas** ou só futuras? |
-| **VT (RF-066)** | `usado + vendido > recebido` → saldo negativo permitido? Para onde vai o dinheiro recebido na venda (RF-061/063)? Vira receita? |
-| **Categorias (RF-018)** | Excluir categoria com transações vinculadas → órfãs |
-| **Import (RF-158)** | Duplicata **legítima** (2 cafés iguais no mesmo dia) marcada como dupe — falso positivo |
-| **Import** | Falha no meio da gravação em lote → rollback? |
-| **Metas** | Excluir meta vinculada a viagem (RF-043)/veículo (RF-197)/compra (RF-137) — cascata |
-| **Veículo (RF-190)** | **Cold start da depreciação**: veículo recém-cadastrado não tem histórico FIPE → como estimar depreciação no dia 1? |
-| **Google Calendar (RF-057)** | Desativar integração → eventos já sincronizados ficam órfãos no Google |
-
-### 1.4 Categorias de requisitos AUSENTES (gap crítico)
-
-> Não encontrei nenhum requisito sobre estes temas — recomendo criá-los antes de escalar:
-
-- **LGPD / Privacidade:** consentimento, política de privacidade, **envio de dados financeiros ao Gemini** (Google) precisa de base legal + aviso ao usuário, portabilidade de dados, direito ao esquecimento (só há RF-077 exclusão, sem export completo — RF-072 CSV é "desejável").
-- **Precisão monetária:** nenhum requisito exige uso de **inteiros (centavos) ou decimal** em vez de float. Em finanças isso é regra de ouro — **explicitar** para evitar erros de arredondamento em rateios/parcelas/câmbio.
-- **Auditoria / integridade:** histórico financeiro deve ser imutável/auditável? Log de alterações?
-- **Segurança de tokens de terceiros:** já anotado como dívida (tokens Google em texto puro) — deveria ser um RNF formal.
+- **Divisão de Despesas (✅ 6/6)**: as regras felizes descritas nos RF-115 a RF-120 estão implementadas e testadas, mas a robustez frente a edição/exclusão é frágil (ver seção 3). O módulo está "pronto" no sentido de MVP funcional, não no sentido de "seguro contra estados inconsistentes".
+- **Dashboard (🔲 0/9 no README, mas com trabalho invisível já feito)**: o README reporta corretamente 0% de conclusão, porém esconde que já existe uma pasta inteira de componentes (`BalanceCards`, `CategoryChart`, `GoalsProgress`, `HealthScore`, `IncomeExpenseChart`, `RecentTransactions`, `ResourceBalanceCard`, `ResourceCard`) sem nenhum consumidor — nem a página `Dashboard.jsx` (vazia) os importa. Isso é um gap de **rastreabilidade de esforço**: alguém já começou o módulo e o trabalho não está refletido em lugar nenhum do progresso, correndo risco de ficar esquecido ou reescrito do zero por outra pessoa.
+- **Perfil e Configurações (🟡 0/13 no README)**: a legenda 🟡 sugere "parcial (UI ou backend incompleto)", mas na prática é **zero**: `Profile.jsx` vazio, `userRoutes.js` vazio, nenhuma rota de usuário registrada. Deveria ser ⏳, não 🟡 — o status visual está mais otimista do que a realidade.
+- **POUPANCA (RF-140, ✅)**: o recurso existe no enum e é usado em transações/transferências, mas **não aparece em nenhum resumo de saldo** (nem no `resourceConfig.js` órfão do dashboard, nem em `TransactionSummaryCards.jsx`). Continua sendo o mesmo gap já apontado na análise anterior — ainda não resolvido.
 
 ---
 
-## 2️⃣ Avaliação de Usabilidade (UX)
+## 2️⃣ [Fluxos e Usabilidade]
 
-### Pontos de atrito cognitivo
+### 2.1 Fricções identificadas nesta rodada
 
-| Ponto | Atrito | Melhoria sugerida |
+| Fluxo | Problema | Sugestão |
 |---|---|---|
-| **Recursos VA/VR/VT/POUPANCA** | Usuário leigo não distingue VA (alimentação) de VR (refeição) | Labels claros + tooltip/ícone + glossário no onboarding |
-| **Modo rígido (RF-103)** | Realidade não cabe em 3 caixas: **CLT + freela**, estudante sem renda, aposentado, PJ | Considerar **feature-toggles** em vez de modo único, ou permitir modo híbrido |
-| **Cartão — modelo mental** | Confusão entre "gastei R$500 no cartão" e "meu saldo em conta" | UI que separe visualmente **fatura (a pagar)** de **saldo (dinheiro real)** |
-| **Veículo — custo mensal (RF-190)** | "Meu carro custa R$2.000/mês?" (depreciação invisível assusta) | **Breakdown explícito**: caixa (combustível/manutenção) vs. depreciação (não desembolsada) |
-| **Quick-add via chatbot (RF-139)** | Abrir chat p/ registrar gasto simples é mais pesado que um form | Quick-add estruturado com NL como **opção**, sempre com **preview/confirmação** antes de salvar |
-| **Calendário (RF-122)** | Diferenciação **só por cor** (verde/vermelho/roxo) falha para daltônicos | Adicionar ícones/padrões (WCAG) |
-| **Gráficos (paleta 8 cores)** | Cores próximas confundem daltônicos | Testar em simulador de daltonismo; usar rótulos diretos |
-| **Notificações multi-canal** | Sino + Push + Telegram + Discord + Email = **fadiga e duplicação** | **Central única** de preferências de notificação por evento × canal |
-| **Tema (RF-076)** | Toggle só na landing; some ao entrar (autenticado pendente) | Persistir preferência; prioritizar toggle na sidebar |
-| **25 módulos** | Sobrecarga de navegação | Progressive disclosure + dashboard customizável (já no roadmap) |
+| **Editar despesa dividida** | O modal de edição (`ExpenseSplitFormModal.jsx`) não exibe o status de pagamento dos participantes atuais — o usuário não tem como saber, ao editar, que está prestes a reverter um pagamento já confirmado | Exibir badge "já pago" ao lado de cada participante no formulário de edição; bloquear ou exigir confirmação explícita ao remover/alterar alguém que já pagou |
+| **Validação de soma personalizada** | O formulário de divisão personalizada não valida em tempo real se a soma bate com o total — só descobre no erro 400 do backend após submit | Validação client-side reativa (soma parcial exibida enquanto o usuário digita, com o restante a distribuir destacado) |
+| **Lembrete de cobrança duplicado** | Clicar "enviar lembrete de cobrança" (RF-120) mais de uma vez para o mesmo participante não é bloqueado — gera múltiplos eventos no calendário/Google Agenda para a mesma cobrança | Desabilitar o botão ou trocar o label para "lembrete já criado" após o primeiro clique |
+| **Tema escuro inacessível após login** | O toggle de tema só existe na landing pública e na tela de demo do design system — desaparece assim que o usuário entra no app autenticado | Adicionar o toggle na sidebar/MainLayout (isso já era um risco levantado na análise anterior, ainda não resolvido) |
+| **Modo de uso invisível no cadastro** | Como não há campo de `modoUso` no signup, o usuário nunca é perguntado "Estagiário, CLT ou Freelancer?" — a interface some funcionalidades (ex: VT) sem que o usuário entenda por quê, já que ele nunca fez essa escolha conscientemente | Priorizar RF-103 no cadastro ou no onboarding antes de expandir mais módulos dependentes de `modoUso` |
 
-### Melhorias de acessibilidade
-- **RNF-010 mira só WCAG 2.1 nível A.** O padrão prático é **AA** (contraste 4.5:1, foco visível). Verificar contraste de `#7C3AED`/`#A78BFA` sobre fundos.
-- Garantir **undo** em ações destrutivas (excluir transação, sair de grupo).
-- **Empty states guiados** em todos os módulos (crítico pós-onboarding-pulado).
+### 2.2 Becos sem saída (novos, além dos já mapeados na análise anterior)
+
+- **Cobrança "fantasma"**: se o organizador cria um lembrete de cobrança e depois o participante paga (via `marcarParticipantePago`), o lembrete permanece ativo no calendário e sincronizado com o Google Agenda — o usuário recebe uma notificação de cobrança de algo já quitado, sem qualquer ação disponível para reconciliar isso além de excluir o lembrete manualmente (se souber que ele existe).
+- **Divisão excluída com lembrete pendente**: excluir uma divisão de despesas não avisa o organizador que existe(m) lembrete(s) de cobrança vinculados que vão sobreviver soltos no calendário. Não há um passo de confirmação do tipo "esta divisão tem 2 lembretes de cobrança ativos — deseja removê-los também?".
 
 ---
 
-## 3️⃣ Validação dos Fluxos de Usuário
+## 3️⃣ [Regras de Negócio] — O que está bom, o que está frágil
 
-### 🚧 Becos sem saída (dead ends)
+### 3.1 O que está bom
 
-| Fluxo | Beco | Correção |
-|---|---|---|
-| **Onboarding pulado (RF-154)** | Dashboard 100% zerado → usuário perdido | Empty states com CTAs ("Adicione seu 1º gasto", "Importe extrato") |
-| **Grupo com 1 admin** | Admin sai/exclui conta → grupo travado | Auto-promoção de membro ou transferência de propriedade + fluxo "excluir grupo" |
-| **Chatbot fora de escopo (RF-052)** | Recusa seca = frustração | Redirecionar com sugestão ("Só falo de finanças — quer ver seu resumo?") |
-| **Venda de VT (RF-061)** | Valor recebido não tem destino claro no saldo | Definir se gera receita e em qual recurso |
-| **Família — rateio proporcional (RF-176)** | Sem fluxo para coletar renda preservando privacidade | Definir input de renda opt-in (ver 1.2) |
+- **Precisão monetária no rateio (RNF-016)**: `expenseSplitUtils.js` implementa divisão em centavos inteiros com distribuição determinística do resto (ex.: R$100/3 → `33.34/33.33/33.33`, sempre na mesma ordem), testado e replicado de forma idêntica no frontend. Isso confirma que a nota do README sobre RNF-016 já cumprida é real, e o novo módulo segue o padrão corretamente.
+- **Validações de valor** (total > 0, soma personalizada = total, pagador precisa existir na lista, mínimo de 2 participantes) estão implementadas no **backend** (Zod + service), não só no frontend — correto por design.
+- **Recorrência mensal de lembretes (`repetirMensal`)** já resolve corretamente o edge case "editar afeta só o futuro, excluir preserva o passado" apontado na análise anterior: cada instância é uma cópia independente, e o template usa `onDelete: SetNull`, então apagar o template não deleta instâncias já geradas.
+- **Segurança do endpoint de cron**: `cronAuthMiddleware` exige `Bearer CRON_SECRET`, retorna 401/503 adequadamente — pronto para quando a migração a GitHub Actions acontecer.
+- **Recuperação de senha**: token de 32 bytes, TTL de 1h, uso único (zerado após consumo), resposta genérica que não revela se o e-mail existe — bem implementado.
 
-### 🔁 Redundâncias / transições confusas
+### 3.2 O que está frágil — Divisão de Despesas
 
-| Situação | Observação |
-|---|---|
-| **Compra parcelada** aparece em RF-135 (Planejamento), RF-162 (Cartão) e roadmap (financiamentos) | Unificar a **matemática de parcelamento** em um serviço único |
-| **RF-138** (marcar item comprado → transação) não conversa com Cartão (RF-162) | Se compra for no cartão, deve rotear para o fluxo de fatura, não virar despesa à vista |
-| **Fatura paga (RF-167)** vs. compras já lançadas no orçamento | Definir reconciliação para não contar 2× |
-| **Import → correção de categoria** alimenta RF-141/159 | ✔️ **Loop bem fechado**, mantenha |
+1. **Nomes duplicados de participantes não são checados.** Se dois participantes tiverem o mesmo nome do pagador, ambos são marcados `PAGO` na criação, o que pode quitar a divisão prematuramente via `sincronizarStatusDivisao`.
+2. **Editar reenviando `participantes` reverte pagamentos.** `substituirParticipantes` faz `deleteMany` + `createMany`, recalculando status apenas a partir de quem é o pagador atual — qualquer pagamento manual anterior de outro participante é apagado silenciosamente. Nenhum teste cobre esse cenário.
+3. **Editar só `valorTotal` sem reenviar participantes não recalcula os valores individuais** — brecha de API que viola RNF-016 se algum cliente futuro (ou uma chamada direta via Postman/integração) fizer esse PATCH parcial. Hoje mitigado só porque o frontend sempre reenvia a lista completa.
+4. **Lembrete de cobrança nunca é sincronizado com o pagamento** — nem quando o participante paga, nem quando a divisão é excluída.
+5. **Sem checagem de lembrete duplicado** ao clicar "cobrar" mais de uma vez para o mesmo participante.
+
+**Proposta de correções concretas:**
+- Adicionar validação de nomes únicos (case-insensitive, trim) em `construirParticipantes`.
+- Em `editarDivisao`, preservar o status `PAGO` de participantes cujo nome já constava como pago antes do `substituirParticipantes` (merge, não replace destrutivo) — ou, no mínimo, bloquear a edição se algum participante já pagou e exigir um fluxo de "ajuste" separado.
+- Em `marcarParticipantePago`, atualizar (ou remover) o(s) `Lembrete`(s) vinculados ao participante (ex.: marcar `pago=true` no lembrete).
+- Em `excluirDivisao`, antes do cascade, buscar e cancelar/excluir os lembretes vinculados aos participantes da divisão (ou perguntar ao usuário).
+- Em `criarLembreteCobranca`, checar se já existe um lembrete ativo para aquele `participanteId` antes de criar outro.
+
+### 3.3 O que está frágil — Lembretes / Cron
+
+1. **Loop potencialmente infinito**: `avancarRepeticaoPorDias` usa um `while` sem limite de iterações; se `repetirCadaDias` chegar como `0` ao banco, o passo em milissegundos é `0` e o loop nunca termina, travando toda a rota `/api/cron/daily` (que também dispara limpeza de notificações, chat, expense-split e transações recorrentes na mesma chamada). A proteção hoje é só um `z.coerce.number().int().positive()` no schema da rota de expense-split — a rota genérica de lembretes nem declara o campo, então a proteção é incidental, não uma constraint de banco.
+   **Correção proposta:** adicionar `CHECK (repetir_cada_dias > 0)` no schema/migration, e um teto de iterações (`while` com contador máximo, ex. 1000) como defesa em profundidade.
+2. **`repetirCadaDias` não tem histórico de ocorrências** (diferente do `repetirMensal`) — é uma única linha mutável, sem instâncias passadas registradas. Se o objetivo é ter paridade de comportamento entre os dois tipos de recorrência, vale documentar essa diferença como intencional ou unificar o modelo.
+
+### 3.4 O que está frágil — Autenticação
+
+1. **`SALT_ROUNDS = 10`**, não ≥12 (ver item 1 do sumário executivo).
+2. **Refresh token sem rotação/single-use** — mesmo token pode ser reapresentado indefinidamente até expirar ou logout explícito; sem detecção de reuse de token revogado.
+3. **Rate limit não cobre `/refresh`, `/logout`, `/reset-password/:token`, `/verify-email/:token`, rotas OAuth** — superfície de brute-force/abuso maior do que o README sugere.
+4. **Enumeração de e-mail** em `POST /register` (409 explícito "e-mail já cadastrado") e em `resendVerificationEmail` (404/400 distintos).
+5. **Tokens Google em texto puro** apesar do comentário `// criptografado em repouso` no schema — nenhuma função de encrypt/decrypt existe no código que lê/grava `tokensGoogle`.
+
+**Proposta de correções concretas:**
+- Subir `SALT_ROUNDS` para 12 (reavaliar custo de CPU em produção, mas é o valor documentado).
+- Implementar rotação de refresh token (novo token a cada refresh, invalidando o anterior) com detecção de reuse (se um token já revogado for reapresentado, revogar toda a "família" de tokens daquele usuário/dispositivo).
+- Estender rate limiting às rotas sensíveis restantes; remover ou implementar de fato `rateLimitMiddleware.js` (hoje é código morto).
+- Resposta genérica no registro (não confirmar/negar existência do e-mail de forma tão explícita) — ou aceitar o trade-off de UX conscientemente e documentar.
+- Implementar criptografia simétrica (ex. AES-GCM com chave em variável de ambiente) para `tokensGoogle` antes de qualquer uso em produção com usuários reais — é o achado de maior risco LGPD ainda em aberto desde a análise anterior.
+
+### 3.5 Riscos herdados da análise anterior que **continuam válidos** (não resolvidos nesta sprint)
+
+- Competência vs. caixa não definida para o futuro módulo de Cartão de Crédito (Mód. 21, ainda não iniciado).
+- Contradição RF-176 × RF-177 (rateio proporcional à renda vs. privacidade) no futuro Modo Casal/Família — ainda não iniciado, mas vale resolver **antes** de começar, já que reaproveitará a mesma base de "espaços compartilhados" de Grupos.
+- Ausência de requisitos formais de LGPD (consentimento, portabilidade, esquecimento) e de um RNF explícito de criptografia de tokens de terceiros.
+- Tensão free tier (RNF-001/007/009) — sem mudança.
+- "Quem deve a quem" fragmentado entre Grupos (RF-095), Divisão de Despesas (RF-115-120) e futuro Módulo Família (RF-179) — a integração entre o toggle de Grupos e o novo módulo de Divisão de Despesas, mencionada no README como "a vincular depois", **continua não vinculada**.
 
 ---
 
-## 4️⃣ Plano de Ação (por Status)
+## 4️⃣ [Plano de Ação]
 
-### 4.1 Itens ✅ "Prontos" / 🟡 "Em andamento" — riscos imediatos a revisar
+### 4.1 Correções imediatas (bugs/segurança, antes de qualquer nova feature)
 
-| Item | Risco | Ação |
-|---|---|---|
-| **Grupos (✅)** | RF-095 é só "divisão igual MVP"; acerto de contas depende do Mód. 15 (não feito) | Rebaixar para 🟡 ou documentar claramente o gap no card do progresso |
-| **Grupos — chat polling 3s** | Em serverless (Vercel), cada poll = invocação → estoura free tier com poucos usuários | Aumentar intervalo/backoff; considerar pausa agressiva; monitorar quota |
-| **Viagens (✅) — ARS** | Cache diário para moeda hiperinflacionária engana o usuário | Alerta de "cotação pode estar desatualizada" para moedas voláteis |
-| **RNF-003 (HTTPS) marcado ❌** | Vercel já entrega HTTPS automático — provavelmente **já satisfeito** | Verificar e marcar; não é dívida real |
-| **RNF-004 (rate limit só em auth)** | Chatbot/insights sem limite → estoura Gemini | **Bloqueante** antes de lançar Mód. 06 |
-| **Tokens Google em texto puro** | Vazamento = acesso a agenda do usuário; risco LGPD | Priorizar criptografia em repouso (schema já prevê) |
-| **RF-140 `POUPANCA` (✅)** | Dashboard/Onboarding ainda ignoram o recurso | Incluir na definição do Dashboard antes de codar |
-| **Perfil marcado 🟡 com 0/13** | Inconsistência: legenda 🟡 = parcial, mas nenhum RF concluído | Alinhar status; o "parcial" real é `modoUso` no signup sem tela de config |
+1. **Corrigir `SALT_ROUNDS` para 12** em `authService.js:18` — trivial, alto valor de segurança e de honestidade documental (RNF-002).
+2. **Adicionar teto de iterações e validação `> 0`** em `avancarRepeticaoPorDias` (`reminderRecurrenceJob.js`) e constraint de banco para `repetirCadaDias` — evita travar o cron inteiro.
+3. **Sincronizar `Lembrete` de cobrança com o ciclo de vida da divisão**: marcar/excluir o lembrete quando o participante paga ou quando a divisão é excluída (`expenseSplitService.js` → `marcarParticipantePago`, `excluirDivisao`).
+4. **Bloquear ou proteger a edição de divisão pós-pagamento**: preservar status de pagamento em `editarDivisao`/`substituirParticipantes`, ou exigir confirmação explícita quando houver reversão de status.
+5. **Checar lembrete duplicado** antes de criar um novo em `criarLembreteCobranca`.
+6. **Atualizar a nota do Módulo 15 no README** para refletir o desenho M2M real (`_DivisaoParticipanteToLembrete`), substituindo a menção à FK `divisaoParticipanteId`.
 
-### 4.2 Itens ⏳ "A Fazer" — como estruturar antes de codar
+### 4.2 Curto prazo (antes de expandir o roadmap jul/2026)
 
-| Módulo | Pré-requisito de definição (fazer ANTES do código) |
-|---|---|
-| **10 · Perfil/Config** | 🔑 **Desbloqueador** — contém modoUso (RF-103/104), renda fixa (RF-075), exclusão (RF-077), tema (RF-076). Muitos módulos dependem dele. **Priorizar.** Hoje o usuário não consegue **trocar** o modo escolhido no signup |
-| **21 · Cartão** | Resolver **competência vs. caixa** + modelar **máquina de estados da fatura** (aberta→fechada→paga/parcial/rotativo). É o módulo mais complexo — fazer **spike de modelagem de dados** primeiro |
-| **02 · Dashboard** | Definir **contrato de agregação** consumindo todos os módulos; incluir POUPANCA + cartão; declarar dependência do score (RF-048) |
-| **06 · Insights/Chatbot** | Definir **orçamento de quota Gemini**, cache, rate limit, fronteira rule-based × LLM, **consentimento LGPD** para enviar dados financeiros ao Google, sanitização de prompt (RF-052) |
-| **15 · Divisão de Despesas** | Construir como **serviço de "ledger/acerto" compartilhado** reutilizável por Grupos (RF-095) e Família (RF-179) — não como silo |
-| **23 · Família** | Reusar motor de espaços de Grupos; **resolver RF-176 × RF-177** antes de tudo |
-| **20 · Importação** | Definir lib de parse, detecção de encoding/delimitador, estratégia de hash de dedupe, **limite de linhas por import**, rollback em falha, scanning de arquivo |
-| **19 · Onboarding** | **Depende de Perfil + Importação** — construir esses dois primeiro |
-| **25 · Veículos/FIPE** | Resolver **cold start da depreciação**; definir cache FIPE; é grande (13 RF) — fatiar em A/B/C/D como já está |
-| **22 · Bots** | Segurança do token de pareamento (RF-173); reusar parser NL do chatbot; mapear user externo→Pulso |
-| **24 · PWA/Push** | Estratégia de cache do service worker; VAPID; **dedupe de notificação** com sino/email/bot |
+7. **Corrigir o status do Módulo 10 no README** de 🟡 para ⏳ (0/13 real, sem UI nem backend).
+8. **Priorizar Perfil e Configurações** (RF-103/104 primeiro): sem campo de `modoUso` no cadastro, nenhum usuário real testa os modos Estagiário/Freelancer — é pré-requisito para Onboarding (Mód. 19) e para os RFs específicos de Freelancer/CLT (RF-145-149).
+9. **Decidir o destino dos componentes órfãos do Dashboard**: reaproveitar (`BalanceCards`, `CategoryChart` etc. já existem, faltando só a página + integração com API) ou descartar deliberadamente — hoje é esforço invisível e sem dono.
+10. **Estender rate limiting** a `/refresh`, `/logout`, `/reset-password/:token`, `/verify-email/:token` e implementar rotação de refresh token.
+11. **Criptografar `tokensGoogle` em repouso** antes de qualquer exposição a usuários reais fora do time de desenvolvimento.
+12. **Vincular o toggle de Grupos (RF-095) ao módulo de Divisão de Despesas** — hoje são dois sistemas de rateio paralelos sem integração, como o próprio README já registra como pendência.
 
-### 4.3 Sequência de desenvolvimento sugerida
+### 4.3 Sequência sugerida (atualiza a sequência da análise anterior)
 
 ```
-1. Perfil/Config (10)  ──►  desbloqueia modo, renda fixa, tema, exclusão
-2. Dashboard (02)      ──►  entrega valor imediato, valida agregações
-3. Importação (20)     ──►  resolve cold start de dados
-4. Onboarding (19)     ──►  amarra 10 + 20
-5. Cartão (21)         ──►  maior gap BR; exige spike de dados antes
-6. Relatórios (09)     ──►  reaproveita agregações do Dashboard
-7. Insights/Chatbot (06) ► só após rate limit (RNF-004) + consentimento LGPD
-8. Divisão (15) → Família (23) → serviço de acerto unificado
+1. Correções de segurança/robustez desta sprint (4.1, itens 1-6) — baixo esforço, alto risco se ignorados
+2. Perfil/Configurações (Mód. 10)          ──► desbloqueia modoUso, renda fixa, tema, exclusão de conta
+3. Dashboard (Mód. 02)                     ──► reaproveita componentes já construídos
+4. Integração Grupos × Divisão de Despesas (RF-095 × RF-115-120)
+5. Importação de Dados (Mód. 20) → Onboarding (Mód. 19)
+6. Cartão de Crédito (Mód. 21) — maior gap BR, exige spike de modelagem antes de codar
+7. Insights/Chatbot (Mód. 06) — só após rate limiting global + consentimento LGPD
+8. Modo Casal/Família (Mód. 23) — resolver RF-176 × RF-177 antes de iniciar
 9. PWA/Push (24) · Bots (22) · Gamificação (11) · Veículos (25)
 ```
 
@@ -171,440 +163,22 @@ Antes do detalhamento, estes são os pontos que, se não resolvidos, geram retra
 
 ## ✅ Pontos fortes a preservar
 
-- **Autoconsciência de custo/free tier** excepcional (notas jul/2026) — raro e valioso.
-- **Reuso arquitetural** Grupos → Família via `tipo` de espaço — decisão sólida.
-- **Cobertura de testes ~95%** já acima do RNF-015.
-- **Loop de aprendizado** Import ↔ RF-141/159 bem desenhado.
-- Rastreabilidade de requisitos removidos (RF-064/065) e descartados (Open Banking/OCR/WhatsApp) — documentação madura.
+- **Precisão monetária (RNF-016)** aplicada corretamente e de forma consistente no novo módulo de Divisão de Despesas — mesmo padrão determinístico do backend replicado no frontend.
+- **Reuso de utilitários** entre Dívidas Pessoais e Divisão de Despesas (`formatPersonName`, `roundMoney`) — evita duplicação e inconsistência de formatação.
+- **Segurança do cron já pronta** para a migração futura a GitHub Actions (`cronAuthMiddleware` bem implementado).
+- **Recorrência mensal de lembretes** trata corretamente o edge case passado/futuro que a análise anterior apontava como não mapeado.
+- **Recuperação de senha** bem implementada (token único, TTL curto, sem enumeração de e-mail).
+- **Cobertura de testes alta** nos módulos novos (ainda que concentrada em caminho feliz — ver 3.2).
 
 ---
 
-# 📝 User Stories com Critérios de Aceite (Gherkin)
+## ❓ Perguntas para validar antes de fechar decisões
 
-> Ordenadas pela sequência de desenvolvimento recomendada. Formato: **User Story** + cenários em Gherkin (`Dado / Quando / Então`). Inclui os edge cases mapeados na análise.
-
----
-
-## Épico 1 · Perfil e Configurações (Módulo 10) 🔑 Desbloqueador
-
-### US-10.1 — Alterar modo de uso após o cadastro (RF-103/104)
-> **Como** usuário que escolheu um modo no cadastro,
-> **quero** trocar meu modo de uso (Estagiário/CLT/Freelancer) nas configurações,
-> **para que** a interface reflita minha situação atual sem precisar recriar a conta.
-
-```
-gherkin
-Cenário: Trocar de Estagiário para CLT
-Dado que estou logado com modoUso = "Estagiário"
-E acesso a tela de Configurações
-Quando seleciono o modo "CLT" e confirmo
-Então o sistema salva modoUso = "CLT"
-E a sidebar passa a ocultar o menu de Vale Transporte
-E as features de 13º/férias (RF-148) ficam visíveis
-
-Cenário: Aviso ao trocar de modo com dados existentes
-Dado que possuo transações de VT registradas
-Quando troco para um modo que não exibe VT
-Então o sistema exibe aviso "Seus dados de VT serão ocultados, mas não apagados"
-E as transações permanecem no banco
-
-Cenário: Matriz de visibilidade por modo
-Dado o modo selecionado
-Então o sistema aplica a matriz canônica:
-  | Modo        | Salário | VA | VR | VT | Poupança | PJ/PF | 13º/Férias | Impostos |
-  | Estagiário  | sim     | sim| sim| sim| sim      | não   | não        | não      |
-  | CLT         | sim     | sim| sim| não| sim      | não   | sim        | não      |
-  | Freelancer  | sim     | não| não| não| sim      | sim   | não        | sim      |
-```
-
-### US-10.2 — Configurar receitas fixas mensais (RF-075) — fonte única de verdade
-> **Como** usuário,
-> **quero** cadastrar minhas receitas fixas (salário, VA, VR, VT) com valor e dia,
-> **para que** o sistema preencha automaticamente sem gerar duplicidade com transações recorrentes.
-
-```
-gherkin
-Cenário: Cadastrar salário fixo
-Dado que estou em Configurações → Receitas Fixas
-Quando informo "Salário" = R$ 3.000,00 e dia = 5
-Então o sistema registra a receita fixa
-E o dia 5 aparece destacado no Calendário (RF-123)
-
-Cenário: Prevenir salário duplicado (RF-075 × RF-020/021)
-Dado que já existe uma receita fixa de salário para o mês
-Quando uma transação recorrente de mesma origem tentar gerar receita no mesmo mês
-Então o sistema não cria o lançamento duplicado
-E registra a receita fixa como fonte única de verdade
-```
-
-### US-10.3 — Alternar tema claro/escuro na área autenticada (RF-076)
-```
-gherkin
-Cenário: Persistir preferência de tema
-Dado que estou logado
-Quando ativo o tema escuro na sidebar
-Então a preferência é salva no meu perfil
-E ao reabrir a sessão em qualquer dispositivo o tema escuro é mantido
-```
-
-### US-10.4 — Excluir conta e dados associados (RF-077) — cascata definida
-```
-gherkin
-Cenário: Bloqueio quando sou único admin de grupo
-Dado que sou o único admin de um ou mais grupos
-Quando solicito exclusão de conta
-Então o sistema impede a exclusão
-E exige que eu transfira a propriedade ou exclua os grupos primeiro
-
-Cenário: Exclusão com dívidas/splits em aberto
-Dado que tenho dívidas ativas ou saldos em divisão de despesas
-Quando confirmo a exclusão
-Então o sistema exibe o impacto e exige dupla confirmação
-E, ao confirmar, anonimiza minhas referências em espaços compartilhados
-E remove definitivamente meus dados pessoais
-
-Cenário: Exportação antes de excluir (LGPD)
-Dado que iniciei o fluxo de exclusão
-Quando avanço
-Então o sistema me oferece exportar todos os meus dados antes de apagar
-```
+1. O lembrete de cobrança (RF-120) deveria ser **automaticamente cancelado** quando o participante paga, ou o organizador deve fazer isso manualmente por design (ex.: para manter um "recibo" no calendário)?
+2. Editar uma divisão de despesas depois que alguém já pagou deveria ser **bloqueado**, ou existe um cenário legítimo de correção pós-pagamento que precise de um fluxo dedicado (ex.: "reabrir e recalcular")?
+3. `modoUso` deve ser perguntado **no cadastro** (fricção dia 1) ou **no onboarding** (Mód. 19, ainda não construído)? Isso muda a prioridade entre Perfil e Onboarding.
+4. Existe prazo/pressão para reduzir `SALT_ROUNDS` de 12 para 10 (custo de CPU em free tier) ou foi apenas um débito técnico não intencional?
 
 ---
 
-## Épico 2 · Dashboard (Módulo 02)
-
-### US-02.1 — Saldos por tipo de recurso incluindo POUPANCA (RF-008 / RF-140)
-> **Como** usuário,
-> **quero** ver meu saldo separado por recurso (dinheiro, VA, VR, VT, poupança),
-> **para** entender de onde posso gastar.
-
-```
-gherkin
-Cenário: Exibir todos os recursos ativos
-Dado que possuo saldos em dinheiro, VA e poupança
-Quando abro o Dashboard
-Então vejo um card por recurso com o saldo correto
-E o card de POUPANCA é exibido (não pode ser ignorado)
-
-Cenário: Recurso oculto por modo de uso
-Dado que meu modoUso não exibe VT
-Quando abro o Dashboard
-Então o card de VT não é exibido
-Mas seu saldo permanece preservado no banco
-
-Cenário: Transferência não afeta receita/despesa
-Dado que fiz uma transferência de dinheiro → poupança (RF-140)
-Quando o Dashboard calcula receitas e despesas do mês
-Então a transferência não é contabilizada em nenhum dos dois totais
-```
-
-### US-02.2 — Empty state guiado (dead end de onboarding pulado)
-```
-gherkin
-Cenário: Dashboard sem dados
-Dado que sou um usuário novo que pulou o onboarding
-Quando abro o Dashboard
-Então cada seção exibe um empty state com CTA
-E vejo botões "Adicionar 1º gasto", "Importar extrato" e "Configurar renda fixa"
-```
-
----
-
-## Épico 3 · Importação de Dados (Módulo 20)
-
-### US-20.1 — Importar extrato com preview editável (RF-155/157)
-```
-gherkin
-Cenário: Upload OFX válido
-Dado que envio um arquivo OFX de extrato bancário
-Quando o sistema faz o parse
-Então exibo um preview com data, valor, descrição e categoria sugerida por linha
-E posso editar qualquer campo antes de confirmar
-
-Cenário: CSV de formato desconhecido (RF-160)
-Dado que envio um CSV sem cabeçalho reconhecido
-Quando o parser não identifica as colunas
-Então o sistema me permite mapear manualmente data, valor e descrição
-```
-
-### US-20.2 — Detecção de duplicatas com tratamento de falso positivo (RF-158)
-```
-gherkin
-Cenário: Marcar duplicata provável
-Dado que uma transação importada tem mesma data, valor e descrição de uma existente
-Quando o preview é gerado
-Então a linha é sinalizada como "possível duplicata"
-E vem desmarcada para importação por padrão
-
-Cenário: Duplicata legítima (2 cafés iguais no mesmo dia)
-Dado que uma linha foi marcada como possível duplicata
-Quando eu a marco manualmente como "não é duplicata"
-Então ela é incluída normalmente na importação
-```
-
-### US-20.3 — Gravação em lote atômica (edge case: falha no meio)
-```
-gherkin
-Cenário: Falha durante a gravação em lote
-Dado que confirmei a importação de 200 transações
-Quando ocorre um erro na transação de número 120
-Então nenhuma das 200 é persistida (rollback total)
-E o sistema informa o erro e permite tentar novamente
-```
-
----
-
-## Épico 4 · Onboarding (Módulo 19)
-
-### US-19.1 — Wizard com duas rotas de carga inicial (RF-151/154)
-```
-gherkin
-Cenário: Rota manual de saldos
-Dado que é meu primeiro login
-Quando o wizard inicia
-Então escolho "Informar saldos manualmente"
-E informo saldo por recurso (incluindo POUPANCA)
-E o Dashboard passa a refletir esses saldos
-
-Cenário: Rota de importação
-Dado que estou no wizard
-Quando escolho "Importar extrato"
-Então sou levado ao fluxo do Módulo 20 (US-20.1)
-
-Cenário: Pular onboarding
-Dado que estou no wizard
-Quando clico em "Pular"
-Então caio no Dashboard com empty states guiados (US-02.2)
-```
-
----
-
-## Épico 5 · Cartão de Crédito e Faturas (Módulo 21) — 🔴 mais complexo
-
-> **Decisão obrigatória antes de codar:** adotar **regime de competência para o orçamento/categoria** (a parcela impacta o mês em que ocorre) e **regime de caixa para o saldo em conta** (só sai dinheiro quando a fatura é paga). Isto evita a **contabilização dupla**.
-
-### US-21.1 — Cadastrar cartão (RF-161)
-```
-gherkin
-Cenário: Criar cartão
-Dado que estou no módulo Cartões
-Quando informo nome, limite, dia de fechamento e dia de vencimento
-Então o cartão é criado com fatura corrente "aberta"
-```
-
-### US-21.2 — Compra parcelada aloca parcelas nas faturas certas (RF-162/163/164)
-```
-gherkin
-Cenário: Compra parcelada em 3x
-Dado um cartão com fechamento dia 20
-Quando registro uma compra de R$ 300 em 3x no dia 15
-Então são geradas 3 parcelas de R$ 100
-E cada parcela é alocada na fatura do mês correspondente
-E o limite disponível é reduzido em R$ 300 imediatamente (RF-165)
-
-Cenário: Competência vs. caixa (evitar dupla contagem)
-Dado que a compra parcelada foi registrada
-Quando o orçamento por categoria é calculado
-Então cada parcela impacta o mês da sua competência
-Mas o saldo em conta só é reduzido quando a fatura for paga (US-21.4)
-```
-
-### US-21.3 — Pagamento parcial / rotativo (edge case dominante no Brasil)
-```
-gherkin
-Cenário: Pagamento parcial da fatura
-Dado uma fatura fechada de R$ 1.000
-Quando pago apenas R$ 400
-Então o sistema registra R$ 400 como despesa no recurso escolhido
-E o saldo devedor de R$ 600 entra em rotativo na próxima fatura
-E o sistema sinaliza incidência de juros a informar
-
-Cenário: Estorno de compra parcelada
-Dado uma compra parcelada com parcelas futuras já alocadas
-Quando registro o estorno
-Então as parcelas futuras não pagas são removidas das faturas
-E o limite é restituído proporcionalmente
-```
-
-### US-21.4 — Pagar fatura sem duplicar despesa (RF-167)
-```
-gherkin
-Cenário: Marcar fatura como paga
-Dado uma fatura fechada de R$ 1.000
-Quando marco como paga usando o recurso "dinheiro"
-Então é registrada uma única saída de R$ 1.000 do saldo em conta
-E as compras individuais já lançadas não são contabilizadas novamente no saldo
-```
-
-### US-21.5 — Roteamento de compra planejada para o cartão (RF-138 × RF-162)
-```
-gherkin
-Cenário: Item comprado no cartão
-Dado um item do Planejamento de Compra marcado como "comprado"
-Quando escolho pagar com um cartão de crédito
-Então a transação segue o fluxo de fatura (não vira despesa à vista)
-```
-
----
-
-## Épico 6 · Insights e Chatbot (Módulo 06) — só após RNF-004 + LGPD
-
-### US-06.1 — Consentimento LGPD para uso de IA (requisito ausente — criar)
-```
-gherkin
-Cenário: Primeiro uso do chatbot/insights com IA
-Dado que nunca aceitei o uso de IA
-Quando abro o chatbot ou peço um insight gerado por LLM
-Então o sistema exibe um aviso sobre envio de dados ao provedor de IA (Gemini)
-E só prossegue após meu consentimento explícito
-E registro do consentimento é armazenado com data
-```
-
-### US-06.2 — Rate limit e fallback rule-based (RNF-004 × Gemini free tier)
-```
-gherkin
-Cenário: Usuário excede a cota de IA
-Dado que atingi meu limite de chamadas de IA no período
-Quando envio outra pergunta ao chatbot
-Então o sistema informa o limite atingido
-E oferece a resposta rule-based quando disponível
-
-Cenário: Resumo mensal cacheado
-Dado que meu resumo mensal já foi gerado neste mês
-Quando reabro a tela de insights
-Então o resumo é servido do cache (não gera nova chamada de IA)
-```
-
-### US-06.3 — Chatbot fora de escopo redireciona (RF-052) — sem dead end
-```
-gherkin
-Cenário: Pergunta fora de finanças
-Dado que pergunto algo não financeiro ao chatbot
-Quando o sistema detecta que está fora do escopo
-Então recusa educadamente
-E sugere uma ação financeira ("Posso mostrar seu resumo do mês?")
-```
-
----
-
-## Épico 7 · Serviço Unificado de Acerto de Contas (Módulos 13/15/23)
-
-> Construir como **um único ledger de acerto** reutilizável por Grupos (RF-095), Divisão (RF-115-120) e Família (RF-179) — evita a fragmentação apontada no risco #4.
-
-### US-15.1 — Registrar despesa compartilhada e calcular saldos (RF-115/116/119)
-```
-gherkin
-Cenário: Divisão igualitária
-Dado uma despesa de R$ 120 entre 3 participantes
-Quando registro com divisão igual
-Então cada participante deve R$ 40
-E o saldo consolidado exibe quanto me devem e quanto eu devo
-
-Cenário: Precisão monetária em rateio (requisito ausente — criar)
-Dado uma despesa de R$ 100 dividida entre 3 pessoas
-Quando o sistema calcula as partes
-Então usa aritmética de centavos (inteiros), nunca float
-E distribui o centavo residual de forma determinística (ex: 33,34 / 33,33 / 33,33)
-```
-
-### US-23.1 — Rateio proporcional à renda preservando privacidade (RF-176 × RF-177)
-> Resolve a contradição: renda usada apenas como **peso opt-in**, sem expor o valor.
-
-```
-gherkin
-Cenário: Peso de rateio sem expor renda
-Dado um espaço Família com rateio "proporcional à renda"
-Quando cada membro informa sua renda de forma privada (opt-in)
-Então o sistema calcula apenas o percentual de rateio de cada um
-E nenhum membro vê o valor da renda do outro
-E apenas o percentual/valor devido é exibido
-
-Cenário: Membro recusa informar renda
-Dado que um membro não deu opt-in de renda
-Quando o espaço tenta usar rateio proporcional
-Então o sistema faz fallback para divisão igualitária
-E avisa que o rateio proporcional está indisponível
-```
-
----
-
-## Épico 8 · Grupos — correções de dead end (Módulo 13)
-
-### US-13.1 — Evitar grupo órfão (edge case: único admin sai)
-```
-gherkin
-Cenário: Único admin tenta sair
-Dado que sou o único admin de um grupo com outros membros
-Quando tento sair
-Então o sistema exige que eu promova outro membro a admin antes
-Ou ofereça a opção de excluir o grupo
-
-Cenário: Excluir grupo
-Dado que sou admin
-Quando escolho excluir o grupo
-Então todos os membros são notificados
-E os dados compartilhados do grupo são removidos, preservando as finanças pessoais (RF-098)
-```
-
----
-
-## Épico 9 · Veículos & FIPE (Módulo 25)
-
-### US-25.1 — Cold start da depreciação (edge case RF-190)
-```
-gherkin
-Cenário: Veículo recém-cadastrado sem histórico FIPE
-Dado que acabei de cadastrar um veículo
-E ainda não há histórico mensal de FIPE
-Quando o custo mensal médio é calculado
-Então a depreciação usa uma estimativa de mercado por faixa/idade como fallback
-E o sistema sinaliza "estimativa provisória até formar histórico"
-
-Cenário: Breakdown de custo (UX RF-190)
-Dado um veículo com gastos registrados
-Quando visualizo o custo mensal médio
-Então vejo separado: desembolso em caixa (combustível/manutenção/IPVA diluído)
-E depreciação estimada (valor não desembolsado)
-```
-
----
-
-## Épico transversal · Requisitos Não Funcionais ausentes (criar)
-
-### RNF-NOVO-1 — Precisão monetária
-```
-gherkin
-Cenário: Armazenamento de valores
-Dado qualquer valor monetário no sistema
-Então é armazenado como inteiro (centavos) ou decimal de precisão fixa
-E nunca como ponto flutuante (float/double)
-```
-
-### RNF-NOVO-2 — Criptografia de tokens de terceiros
-```
-gherkin
-Cenário: Token do Google em repouso
-Dado que conectei minha conta Google
-Quando o token é persistido
-Então é armazenado criptografado em repouso
-E nunca em texto puro
-```
-
-### RNF-NOVO-3 — LGPD: portabilidade e esquecimento
-```
-gherkin
-Cenário: Exportar todos os dados
-Dado que solicito meus dados
-Quando confirmo
-Então recebo um arquivo com todas as minhas informações financeiras
-
-Cenário: Direito ao esquecimento
-Dado que excluo minha conta (RF-077)
-Então todos os meus dados pessoais são removidos ou anonimizados de forma irreversível
-```
-
----
-
-**Próximo passo sugerido:** priorizar o Épico 1 (Perfil/Config) e o Épico 5 (Cartão) para refinamento em sprint, pois são, respectivamente, o **desbloqueador** e o **maior risco de dados** do roadmap. Posso detalhar tarefas técnicas (subtasks) e o modelo de dados da fatura do cartão se quiser.
-```
-`
+**Próximo passo sugerido:** tratar a seção 4.1 (6 correções) antes de comitar o módulo de Divisão de Despesas, já que são bugs de consistência de dado financeiro — exatamente o tipo de problema mais caro de corrigir depois que há usuários reais com histórico.

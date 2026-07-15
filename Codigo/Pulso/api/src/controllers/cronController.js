@@ -5,6 +5,7 @@ const { runDebtAlertJob } = require('../jobs/debtAlertJob');
 const { runDebtCleanupJob } = require('../jobs/debtCleanupJob');
 const { runNotificationCleanup } = require('../jobs/notificationCleanupJob');
 const { runChatCleanupJob } = require('../jobs/chatCleanupJob');
+const { runExpenseSplitCleanupJob } = require('../jobs/expenseSplitCleanupJob');
 const { runTokenCleanup } = require('../jobs/tokenCleanupJob');
 const { runRecurringTransactions } = require('../jobs/recurringTransactions');
 const logger = require('../utils/logger');
@@ -40,6 +41,7 @@ const daily = async (req, res, next) => {
         const debtCleanup = await runDebtCleanupJob();
         const notificationCleanup = await runNotificationCleanup();
         const chatCleanup = await runChatCleanupJob();
+        const expenseSplitCleanup = await runExpenseSplitCleanupJob();
         await runRecurringTransactions();
 
         res.status(200).json({
@@ -51,6 +53,7 @@ const daily = async (req, res, next) => {
             debtCleanup,
             notificationCleanup,
             chatCleanup,
+            expenseSplitCleanup,
             recurringReminders,
             recurring: true,
         });

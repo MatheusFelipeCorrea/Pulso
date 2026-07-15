@@ -19,6 +19,7 @@ const mapLembrete = (lembrete) => {
         sincronizado: lembrete.sincronizado,
         repetirMensal: Boolean(lembrete.repetirMensal),
         diaRecorrencia: lembrete.diaRecorrencia ?? null,
+        repetirCadaDias: lembrete.repetirCadaDias ?? null,
         lembreteTemplateId: lembrete.lembreteTemplateId ?? null,
         criadoEm: lembrete.criadoEm.toISOString(),
         atualizadoEm: lembrete.atualizadoEm.toISOString(),

@@ -30,6 +30,7 @@ import GroupsPage from './pages/GroupsPage.jsx'
 import GroupDetailPage from './pages/GroupDetailPage.jsx'
 import GroupJoinRedirect from './pages/GroupJoinRedirect.jsx'
 import PurchasePlanningPage from './pages/PurchasePlanningPage.jsx'
+import ExpenseSplitPage from './pages/ExpenseSplitPage.jsx'
 
 function App() {
   return (
@@ -82,6 +83,7 @@ function App() {
               <Route path="groups" element={<GroupsPage />} />
               <Route path="groups/:id" element={<GroupDetailPage />} />
               <Route path="purchase-planning" element={<PurchasePlanningPage />} />
+              <Route path="expense-split" element={<ExpenseSplitPage />} />
               {APP_ROUTE_PATHS.filter(
                 (path) =>
                   path !== '/transactions' &&
@@ -92,7 +94,8 @@ function App() {
                   path !== '/goals' &&
                   path !== '/trips' &&
                   path !== '/groups' &&
-                  path !== '/purchase-planning'
+                  path !== '/purchase-planning' &&
+                  path !== '/expense-split'
               ).map((path) => (
                 <Route
                   key={path}

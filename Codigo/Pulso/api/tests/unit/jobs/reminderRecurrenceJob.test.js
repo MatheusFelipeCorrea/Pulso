@@ -3,12 +3,17 @@ jest.mock('../../../src/config/database', () => ({
         findMany: jest.fn(),
         findFirst: jest.fn(),
         create: jest.fn(),
+        update: jest.fn(),
     },
 }));
 jest.mock('../../../src/utils/logger', () => ({ info: jest.fn() }));
 
 const prisma = require('../../../src/config/database');
-const { gerarInstanciasMensais, runReminderRecurrenceJob } = require('../../../src/jobs/reminderRecurrenceJob');
+const {
+    gerarInstanciasMensais,
+    runReminderRecurrenceJob,
+    avancarRepeticaoPorDias,
+} = require('../../../src/jobs/reminderRecurrenceJob');
 
 describe('reminderRecurrenceJob', () => {
     beforeEach(() => {
@@ -41,7 +46,11 @@ describe('reminderRecurrenceJob', () => {
         jest.spyOn(require('../../../src/jobs/reminderRecurrenceJob'), 'gerarInstanciasMensais');
         prisma.lembrete.findMany.mockResolvedValue([]);
 
-        await expect(runReminderRecurrenceJob()).resolves.toEqual({ criadas: 0, templates: 0 });
+        await expect(runReminderRecurrenceJob()).resolves.toEqual({
+            criadas: 0,
+            templates: 0,
+            repeticaoPorDias: { avancados: 0, candidatos: 0 },
+        });
     });
 
     it('pula template quando instância já existe no mês', async () => {
@@ -84,5 +93,38 @@ describe('reminderRecurrenceJob', () => {
         await gerarInstanciasMensais();
         expect(prisma.lembrete.create).toHaveBeenCalled();
         jest.useRealTimers();
+    });
+
+    describe('avancarRepeticaoPorDias', () => {
+        it('avança a dataVencimento de um lembrete vencido e não pago até ultrapassar hoje', async () => {
+            jest.useFakeTimers().setSystemTime(new Date('2026-07-15T12:00:00.000Z'));
+            prisma.lembrete.findMany.mockResolvedValue([
+                {
+                    id: 'l1',
+                    repetirCadaDias: 3,
+                    pago: false,
+                    dataVencimento: new Date('2026-07-08T12:00:00.000Z'),
+                },
+            ]);
+            prisma.lembrete.update.mockResolvedValue({});
+
+            const result = await avancarRepeticaoPorDias();
+
+            expect(result).toEqual({ avancados: 1, candidatos: 1 });
+            expect(prisma.lembrete.update).toHaveBeenCalledWith({
+                where: { id: 'l1' },
+                data: { dataVencimento: new Date('2026-07-17T12:00:00.000Z') },
+            });
+            jest.useRealTimers();
+        });
+
+        it('não mexe em nada quando não há lembretes com repetição vencidos', async () => {
+            prisma.lembrete.findMany.mockResolvedValue([]);
+
+            const result = await avancarRepeticaoPorDias();
+
+            expect(result).toEqual({ avancados: 0, candidatos: 0 });
+            expect(prisma.lembrete.update).not.toHaveBeenCalled();
+        });
     });
 });

@@ -91,6 +91,7 @@ const criarLembrete = async (usuarioId, body) => {
         categoria: normalizeCategoria(body.categoria ?? 'OUTRO'),
         sincronizado: false,
         googleEventId: null,
+        repetirCadaDias: body.repetirCadaDias ?? null,
         ...recorrencia,
     });
 

@@ -11,9 +11,9 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 195 | 87 | ~45% |
+| Requisitos Funcionais | 195 | 93 | ~48% |
 | Requisitos Não Funcionais | 16 | 10 | ~63% |
-| **Total** | **211** | **97** | **~46%** |
+| **Total** | **211** | **103** | **~49%** |
 
 Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, transações, VT, orçamento, calendário/lembretes, dívidas, **metas**, **viagens + moedas**, **grupos**, homepage e notificações (orçamento, lembretes, dívidas, transações, gamificação MVP, insights rule-based).
 
@@ -43,7 +43,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | 👥 Grupos | 15 | 15 | ✅ |
 | ⚙️ Não Funcionais | 16 | 10 | 🟡 |
 | 📊 Orçamento Mensal | 7 | 7 | ✅ |
-| 💸 Divisão de Despesas | 6 | 0 |  |
+| 💸 Divisão de Despesas | 6 | 6 | ✅ |
 | 📅 Calendário Financeiro | 5 | 5 | ✅ |
 | 🤝 Dívidas Pessoais | 7 | 7 | ✅ |
 | 🛒 Planejamento de Compra | 6 | 6 | ✅ |
@@ -303,12 +303,14 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-115 | O sistema deve permitir registrar uma despesa compartilhada informando valor total e participantes | 🔴 Essencial |
-| - [ ] | RF-116 | O sistema deve calcular automaticamente quanto cada participante deve | 🔴 Essencial |
-| - [ ] | RF-117 | O sistema deve permitir divisão igualitária ou por valores personalizados | 🟡 Importante |
-| - [ ] | RF-118 | O sistema deve permitir marcar quem já pagou sua parte | 🔴 Essencial |
-| - [ ] | RF-119 | O sistema deve exibir saldo consolidado (quanto me devem vs quanto eu devo) | 🟡 Importante |
-| - [ ] | RF-120 | O sistema deve permitir enviar lembrete de cobrança para participantes do grupo | 🟢 Desejável |
+| - [x] | RF-115 | O sistema deve permitir registrar uma despesa compartilhada informando valor total e participantes | 🔴 Essencial |
+| - [x] | RF-116 | O sistema deve calcular automaticamente quanto cada participante deve | 🔴 Essencial |
+| - [x] | RF-117 | O sistema deve permitir divisão igualitária ou por valores personalizados | 🟡 Importante |
+| - [x] | RF-118 | O sistema deve permitir marcar quem já pagou sua parte | 🔴 Essencial |
+| - [x] | RF-119 | O sistema deve exibir saldo consolidado (quanto me devem vs quanto eu devo) | 🟡 Importante |
+| - [x] | RF-120 | O sistema deve permitir enviar lembrete de cobrança para participantes do grupo | 🟢 Desejável |
+
+**Notas:** módulo standalone (`/expense-split`), participantes por nome livre (mesmo padrão de Dívidas Pessoais — sem exigir conta Pulso); rateio igual usa aritmética de centavos determinística (RNF-016); "lembrete de cobrança" (RN-086) cria um `Lembrete` de calendário real pro organizador (autolembrete), vinculado ao participante via `Lembrete.divisaoParticipanteId`. Integração com o toggle de RF-095 (Grupos) fica para depois, como já documentado em [Modulos/Grupos.md](../Modulos/Grupos.md).
 ---
 ## 📅 Módulo 16 — Calendário Financeiro
 

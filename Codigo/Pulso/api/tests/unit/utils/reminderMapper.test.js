@@ -35,6 +35,7 @@ describe('reminderMapper', () => {
             sincronizado: true,
             repetirMensal: true,
             diaRecorrencia: 10,
+            repetirCadaDias: null,
             lembreteTemplateId: 'tpl-1',
             criadoEm: '2026-06-01T12:00:00.000Z',
             atualizadoEm: '2026-06-02T12:00:00.000Z',
