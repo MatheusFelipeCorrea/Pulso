@@ -76,6 +76,20 @@ describe('services/api', () => {
     expect(result).toEqual(retryResponse)
   })
 
+  it('persiste o refresh token rotacionado retornado pelo backend', async () => {
+    localStorage.setItem('refreshToken', 'refresh-antigo')
+    const originalRequest = { url: '/transacoes', headers: {} }
+    const error = { response: { status: 401 }, config: originalRequest }
+    mocked.mockApiInstance.mockResolvedValueOnce({ data: { ok: true } })
+    axios.post.mockResolvedValueOnce({
+      data: { accessToken: 'novo-token', refreshToken: 'refresh-novo' },
+    })
+
+    await mocked.responseErrorInterceptor(error)
+
+    expect(localStorage.getItem('refreshToken')).toBe('refresh-novo')
+  })
+
   it('limpa tokens e redireciona para login sem refresh token', async () => {
     localStorage.setItem('accessToken', 'token-antigo')
     const error = {

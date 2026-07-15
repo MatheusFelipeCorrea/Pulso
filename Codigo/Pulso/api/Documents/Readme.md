@@ -365,6 +365,7 @@ GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
 GOOGLE_CALLBACK_URL=http://localhost:3333/api/auth/google/callback
 GOOGLE_CALENDAR_CALLBACK_URL=http://localhost:3333/api/calendario/google/callback
+GOOGLE_TOKENS_ENCRYPTION_KEY=...  # hex 64 chars — openssl rand -hex 32 (criptografia AES-256-GCM dos tokens Google em repouso)
 SMTP_HOST=...
 SMTP_PORT=587
 SMTP_USER=...
@@ -422,9 +423,33 @@ Gaps: sem remover membro, sem alterar papel, meta não auto-conclui. Ver [Docume
 
 ---
 
+## 💸 Divisão de Despesas — detalhes
+
+Prefixo: **`/api/divisoes`** (todas 🔒; página do frontend em `/expense-split`). Participantes por nome livre (mesmo padrão de Dívidas Pessoais — sem exigir conta Pulso).
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/resumo` | Saldo consolidado (quanto me devem vs quanto eu devo) |
+| GET | `/ativas` | Divisões ativas |
+| GET | `/historico` | Divisões quitadas (paginado) |
+| POST | `/` | Criar divisão (igual ou personalizada) |
+| PATCH | `/:id` | Editar — **bloqueado** se já houver pagamento manual registrado ou a divisão estiver quitada |
+| PATCH | `/:id/participantes/:participanteId/pagar` | Marcar participante como pago |
+| PATCH | `/:id/participantes/:participanteId/despagar` | Desfazer pagamento |
+| POST | `/:id/lembrete` | Criar lembrete de cobrança (RF-120) para 1+ participantes pendentes |
+| DELETE | `/:id` | Excluir — bloqueado se quitada; remove os lembretes de cobrança vinculados |
+
+**Regras de negócio:** rateio em aritmética de centavos determinística (RNF-016); nomes de participantes únicos (case-insensitive) e diferentes de "Você"; divisão some automaticamente para "Quitada" quando todos pagam (e reabre se algum pagamento for desfeito); lembrete de cobrança é cancelado automaticamente quando todos os participantes que ele cobre já pagaram, e um mesmo participante não pode ter dois lembretes ativos simultâneos.
+
+**Limpeza automática:** job diário remove divisões quitadas há mais de 180 dias (`jobs/expenseSplitCleanupJob.js`).
+
+Implementação: `controllers/expenseSplitController.js`, `services/expenseSplitService.js`, `repositories/expenseSplitRepository.js`.
+
+---
+
 ## 🗺️ Roadmap (não implementado)
 
-Módulos com **schema Prisma** mas **sem API/UI completa** hoje: gamificação, chatbot, insights IA, relatórios, divisão de despesas, planejamento de compra. **Grupos:** API/UI principais entregues; pendências listadas em Modulos/Grupos.md.
+Módulos com **schema Prisma** mas **sem API/UI completa** hoje: gamificação, chatbot, insights IA, relatórios, planejamento de compra. **Grupos:** API/UI principais entregues; pendências listadas em Modulos/Grupos.md. **Divisão de Despesas:** API/UI entregues; integração com o toggle de rateio de Grupos (RF-095) ainda pendente.
 
 **Próximos passos sugeridos:** ver [Documentacao/Analise-Produto.md](../../../../Documentacao/Analise-Produto.md).
 

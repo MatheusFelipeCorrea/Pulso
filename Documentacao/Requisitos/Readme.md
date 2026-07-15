@@ -310,7 +310,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [x] | RF-119 | O sistema deve exibir saldo consolidado (quanto me devem vs quanto eu devo) | 🟡 Importante |
 | - [x] | RF-120 | O sistema deve permitir enviar lembrete de cobrança para participantes do grupo | 🟢 Desejável |
 
-**Notas:** módulo standalone (`/expense-split`), participantes por nome livre (mesmo padrão de Dívidas Pessoais — sem exigir conta Pulso); rateio igual usa aritmética de centavos determinística (RNF-016); "lembrete de cobrança" (RN-086) cria um `Lembrete` de calendário real pro organizador (autolembrete), vinculado ao participante via `Lembrete.divisaoParticipanteId`. Integração com o toggle de RF-095 (Grupos) fica para depois, como já documentado em [Modulos/Grupos.md](../Modulos/Grupos.md).
+**Notas:** módulo standalone (`/expense-split`), participantes por nome livre (mesmo padrão de Dívidas Pessoais — sem exigir conta Pulso); rateio igual usa aritmética de centavos determinística (RNF-016); "lembrete de cobrança" (RN-086) cria um `Lembrete` de calendário real pro organizador (autolembrete), vinculado a 1+ participantes via relação N:N (`Lembrete.divisaoParticipantes`, tabela `_DivisaoParticipanteToLembrete`) — um único lembrete pode cobrir vários participantes pendentes de uma mesma divisão. O lembrete é cancelado automaticamente quando todos os participantes que ele cobre quitam suas partes, e é excluído junto se a divisão for excluída antes de ser quitada. Integração com o toggle de RF-095 (Grupos) fica para depois, como já documentado em [Modulos/Grupos.md](../Modulos/Grupos.md).
 ---
 ## 📅 Módulo 16 — Calendário Financeiro
 

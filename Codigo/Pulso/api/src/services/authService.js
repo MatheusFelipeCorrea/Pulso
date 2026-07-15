@@ -15,7 +15,7 @@ const {
 const SENHA_FORTE_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
-const SALT_ROUNDS = 10;
+const SALT_ROUNDS = 12;
 const TOKEN_VERIFICACAO_TTL_MS = 24 * 60 * 60 * 1000;
 const TOKEN_RESET_TTL_MS = 60 * 60 * 1000;
 
@@ -270,7 +270,18 @@ const loginUser = async ({ email, senha, lembrarMe = false }) => {
 const refreshAccessToken = async (refreshToken) => {
     const stored = await authRepository.findRefreshToken(refreshToken);
 
-    if (!stored || stored.revogado || stored.expiraEm < new Date()) {
+    if (!stored) {
+        throw new AppError('Sessão expirada. Faça login novamente.', 401);
+    }
+
+    if (stored.revogado) {
+        // Reapresentação de um refresh token já revogado (rotação single-use) sinaliza
+        // possível token roubado — revoga toda a sessão do usuário por segurança.
+        await authRepository.revokeAllRefreshTokensForUser(stored.usuarioId);
+        throw new AppError('Sessão expirada. Faça login novamente.', 401);
+    }
+
+    if (stored.expiraEm < new Date()) {
         throw new AppError('Sessão expirada. Faça login novamente.', 401);
     }
 
@@ -280,8 +291,19 @@ const refreshAccessToken = async (refreshToken) => {
         throw new AppError('Sessão expirada. Faça login novamente.', 401);
     }
 
+    // Rotação: o refresh token apresentado é revogado e substituído por um novo,
+    // de uso único, mantendo a mesma janela de expiração original da sessão.
+    await authRepository.revokeRefreshToken(refreshToken);
+    const novoRefreshToken = createRefreshTokenValue();
+    await authRepository.createRefreshToken({
+        usuarioId: usuario.id,
+        token: novoRefreshToken,
+        expiraEm: stored.expiraEm,
+    });
+
     return {
         accessToken: signAccessToken(usuario),
+        refreshToken: novoRefreshToken,
     };
 };
 

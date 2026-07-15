@@ -53,6 +53,11 @@ api.interceptors.response.use(
                 })
 
                 localStorage.setItem('accessToken', data.accessToken)
+                // O refresh token é rotacionado (single-use) a cada chamada — o antigo é
+                // revogado no backend, então é preciso persistir o novo para o próximo refresh.
+                if (data.refreshToken) {
+                    localStorage.setItem('refreshToken', data.refreshToken)
+                }
                 originalRequest.headers.Authorization = `Bearer ${data.accessToken}`
 
                 return api(originalRequest)

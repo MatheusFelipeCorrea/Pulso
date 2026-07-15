@@ -16,7 +16,7 @@
 
 ### 1. Navegação vs realidade
 
-A sidebar lista módulos que ainda abrem `InDevelopmentPage`: `/dashboard`, `/purchase-planning`, **`/expense-split`**, `/reports`, `/insights`, `/chatbot`, `/achievements`, `/profile`, `/settings`.
+A sidebar lista módulos que ainda abrem `InDevelopmentPage`: `/dashboard`, `/reports`, `/insights`, `/chatbot`, `/achievements`, `/profile`, `/settings`.
 
 **Sugestão:** dashboard mínimo ou ocultar links até lançar.
 
@@ -36,9 +36,9 @@ API: streak/conquistas ao registrar transação/meta; notificações apontam par
 
 **Sugestão:** tela mínima de conquistas + streak.
 
-### 5. Divisão de despesas (`/expense-split`)
+### 5. Divisão de despesas (`/expense-split`) ✅
 
-Módulo **não implementado** (RF-115–120). O detalhe do grupo tem **MVP RF-095** (pretensão + divisão igual, só UI). Quando `/expense-split` existir, **vincular** ou migrar essa lógica — não duplicar split bill no card de viagem.
+Módulo **implementado** (RF-115–120): CRUD de divisões, rateio igual/personalizado com centavos determinísticos, marcar/desmarcar pago, saldo consolidado, lembrete de cobrança. O detalhe do grupo continua com o **MVP RF-095** (pretensão + divisão igual, só UI) em paralelo — a **integração/migração** dessa lógica para o módulo global ainda não foi feita (não duplicar split bill no card de viagem).
 
 ### 6. Grupos — gaps reais restantes
 
@@ -47,7 +47,7 @@ Upload de imagem (arquivo) e UX de foto no criar/editar **já foram entregues** 
 | Gap | Prioridade |
 |-----|------------|
 | Chat tempo real | Média |
-| RF-095 completo via expense-split | Média (após módulo) |
+| RF-095 completo via expense-split (módulo já disponível, falta integrar) | Média |
 | Testes E2E grupos | Média |
 
 Detalhe: [Modulos/Grupos.md](./Modulos/Grupos.md).

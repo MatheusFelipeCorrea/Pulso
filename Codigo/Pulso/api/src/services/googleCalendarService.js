@@ -3,6 +3,7 @@ const prisma = require('../config/database');
 const AppError = require('../utils/appError');
 const env = require('../config/env');
 const { createOAuthClient } = require('../utils/googleOAuth');
+const { encryptTokens, decryptTokens } = require('../utils/googleTokenCrypto');
 
 const googleCalendarSync = require('./googleCalendarSyncService');
 
@@ -25,8 +26,7 @@ const buildRedirectUri = (req) => {
 
 const getOAuthClient = (redirectUri) => createOAuthClient(redirectUri);
 
-const parseTokens = (tokensGoogle) =>
-    typeof tokensGoogle === 'string' ? JSON.parse(tokensGoogle) : tokensGoogle;
+const parseTokens = (tokensGoogle) => decryptTokens(tokensGoogle);
 
 const obterEmailContaGoogle = async (tokensGoogle) => {
     if (!tokensGoogle) return null;
@@ -112,12 +112,12 @@ const processarCallback = async (code, usuarioId, redirectUri) => {
         create: {
             usuarioId,
             googleCalendarAtivo: true,
-            tokensGoogle: tokens,
+            tokensGoogle: encryptTokens(tokens),
             googleCalendarEmail,
         },
         update: {
             googleCalendarAtivo: true,
-            tokensGoogle: tokens,
+            tokensGoogle: encryptTokens(tokens),
             googleCalendarEmail,
         },
     });

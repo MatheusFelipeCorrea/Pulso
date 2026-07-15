@@ -3,6 +3,7 @@ const prisma = require('../config/database');
 const AppError = require('../utils/appError');
 const env = require('../config/env');
 const { createOAuthClient } = require('../utils/googleOAuth');
+const { encryptTokens, decryptTokens } = require('../utils/googleTokenCrypto');
 const { ANTECEDENCIA_MINUTOS, HORA_PADRAO_LEMBRETE } = require('../utils/reminderAntecedencia');
 const { CATEGORIA_LABELS } = require('../constants/reminderCategories');
 const {
@@ -20,8 +21,7 @@ const getRedirectUri = () =>
 
 const getOAuthClient = () => createOAuthClient(getRedirectUri());
 
-const parseTokens = (tokensGoogle) =>
-    typeof tokensGoogle === 'string' ? JSON.parse(tokensGoogle) : tokensGoogle;
+const parseTokens = (tokensGoogle) => decryptTokens(tokensGoogle);
 
 const mapGoogleError = (error) => {
     if (error instanceof AppError) return error;
@@ -88,7 +88,7 @@ const getCalendarApi = async (usuarioId) => {
         const merged = { ...parseTokens(config.tokensGoogle), ...tokens };
         await prisma.configuracaoUsuario.update({
             where: { usuarioId },
-            data: { tokensGoogle: merged },
+            data: { tokensGoogle: encryptTokens(merged) },
         });
     });
 

@@ -12,6 +12,7 @@ const requiredVars = [
     'GOOGLE_CLIENT_ID',
     'GOOGLE_CLIENT_SECRET',
     'GOOGLE_CALLBACK_URL',
+    'GOOGLE_TOKENS_ENCRYPTION_KEY',
     'CORS_ORIGIN',
     'FRONTEND_URL',
 ];
@@ -48,6 +49,7 @@ module.exports = {
                   '/api/calendario/google/callback'
               )
             : undefined),
+    GOOGLE_TOKENS_ENCRYPTION_KEY: process.env.GOOGLE_TOKENS_ENCRYPTION_KEY,
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_PORT: process.env.SMTP_PORT,

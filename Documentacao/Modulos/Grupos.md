@@ -84,7 +84,7 @@ Toggle no rodapé do card **Viagem do grupo**, persistido no servidor (`grupos.m
 - Não gera “quem paga quem” (acerto de contas).
 - Não há % customizada por membro.
 
-**Roadmap:** o módulo **Divisão de Despesas** (`/expense-split`, RF-115–120) trará split bill completo; depois de codado, fará sentido **vincular** ou substituir este toggle no detalhe do grupo. Até lá, o toggle cobre o planejamento rápido da viagem compartilhada.
+**Roadmap:** o módulo **Divisão de Despesas** (`/expense-split`, API `/api/divisoes`, RF-115–120) já está implementado como módulo standalone, com split bill completo (rateio igual/personalizado, "quem paga quem", lembrete de cobrança). Falta apenas **vincular** ou substituir este toggle no detalhe do grupo por ele. Até lá, o toggle cobre o planejamento rápido da viagem compartilhada.
 
 Implementação: `api/src/services/grupoService.js` → `atualizarModoDivisao`; `web/src/utils/groupDetailUtils.js` → `calcularSaldosViagem`.
 
@@ -101,7 +101,7 @@ Implementação: `api/src/services/grupoService.js` → `atualizarModoDivisao`; 
 | RF-092 | ✅ | Vincular viagem (+ viagem pessoal → grupo em `/trips`) |
 | RF-093 | ✅ | Pretensões por membro |
 | RF-094 | ✅ | Total do grupo |
-| RF-095 | ✅ | Pretensão + divisão igual, persistido no servidor. Split custom (quem paga quem) → `/expense-split` |
+| RF-095 | ✅ | Pretensão + divisão igual, persistido no servidor. Split custom (quem paga quem) já existe em `/expense-split` (standalone) — integração com este toggle pendente |
 | RF-096 | ✅ | Metas compartilhadas (até 5) |
 | RF-097 | ✅ | Aportes + seletor de meta |
 | RF-098 | ✅ | Dados pessoais isolados |
@@ -126,7 +126,7 @@ Implementação: `api/src/services/grupoService.js` → `atualizarModoDivisao`; 
 
 | Gap | Detalhe |
 |-----|---------|
-| **RF-095 completo (split custom)** | "Quem paga quem" → delegar ao módulo `/expense-split` quando existir |
+| **RF-095 completo (split custom)** | "Quem paga quem" já existe em `/expense-split` (standalone) — falta vincular/delegar a partir do detalhe do grupo |
 | **Testes E2E grupos** | Playwright em `web/e2e/groups.spec.js` (login demo + modal criar) |
 
 ### Baixa / depois
@@ -138,7 +138,7 @@ Implementação: `api/src/services/grupoService.js` → `atualizarModoDivisao`; 
 
 ### Fora de escopo imediato
 
-- **Vincular toggle do grupo → `/expense-split`:** só após o módulo global existir (sidebar hoje é placeholder).
+- **Vincular toggle do grupo → `/expense-split`:** o módulo global já existe e está na sidebar; falta o trabalho de integração em si (ligar participantes do grupo aos participantes da divisão).
 - **Chat via WebSocket/SSE nativo:** inviável enquanto a API rodar como funções serverless na Vercel. Só faz sentido se a API migrar para um processo persistente (VPS/Railway) ou se um serviço gerenciado (Pusher/Ably/Supabase Realtime) for integrado — nenhuma das duas está planejada agora.
 
 ---

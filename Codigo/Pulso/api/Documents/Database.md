@@ -11,10 +11,10 @@ Documento de referência das entidades do banco de dados do **Pulso**.
 
 | Camada | Situação |
 |--------|----------|
-| **Prisma** | 34 modelos no schema · 31 documentados abaixo — faltam `Divida`, `PagamentoDivida`, `ObservacaoViagem` |
-| **API em uso** | Auth, transações, categorias, tags, VT, orçamento, notificações, lembretes, calendário, **dividas**, **metas**, **viagens**, **moedas**, **planejamento de compra** |
-| **Implementado na API** | Auth, transações, VT, orçamento, lembretes, calendário, dívidas, metas, viagens, moedas, planejamento de compra, **grupos (parcial)** |
-| **Pendente na API** | IA (chat/insights), gamificação completa, relatórios; grupos: chat em tempo real, split completo (`/expense-split`) |
+| **Prisma** | 36 modelos no schema · 33 documentados abaixo — faltam `Divida`, `PagamentoDivida`, `ObservacaoViagem` |
+| **API em uso** | Auth, transações, categorias, tags, VT, orçamento, notificações, lembretes, calendário, **dividas**, **metas**, **viagens**, **moedas**, **planejamento de compra**, **grupos**, **divisão de despesas** |
+| **Implementado na API** | Auth, transações, VT, orçamento, lembretes, calendário, dívidas, metas, viagens, moedas, planejamento de compra, **grupos**, **divisão de despesas** |
+| **Pendente na API** | IA (chat/insights), gamificação completa, relatórios; grupos: chat em tempo real |
 
 Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`, `configuracoes_usuario`).
 
@@ -51,6 +51,8 @@ Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`,
 - [🎯 MetaGrupo](#-metagrupo)
 - [💵 AporteMetaGrupo](#-aportemetagrupo)
 - [💬 MensagemChatGrupo](#-mensagemchatgrupo)
+- [💸 Divisao](#-divisao)
+- [🙋 DivisaoParticipante](#-divisaoparticipante)
 - [📊 Orcamento](#-orcamento)
 - [🔔 Notificacao](#-notificacao)
 - [📊 Resumo Geral](#-resumo-geral)
@@ -121,9 +123,9 @@ Controle de sessões ativas (refresh tokens). Tabela: `tokens_renovacao`
 |---|---|---|
 | `id` | String | Identificador |
 | `usuarioId` | String (FK) | Dono |
-| `token` | String único | Valor do refresh token (hasheado) |
-| `expiraEm` | DateTime | Quando expira (7 dias) |
-| `revogado` | Boolean | Se foi invalidado |
+| `token` | String único | Valor do refresh token (texto puro — não hasheado) |
+| `expiraEm` | DateTime | Quando expira (7 dias, ou 30 dias com "lembrar-me") |
+| `revogado` | Boolean | Se foi invalidado — rotação single-use: cada `/auth/refresh` revoga o token apresentado e emite um novo; reapresentar um token já revogado revoga toda a sessão do usuário (proteção contra reuse) |
 | `criadoEm` | DateTime | Criação |
 | `revogadoEm` | DateTime | Quando foi revogado |
 
@@ -577,6 +579,49 @@ Chat interno do grupo.
 
 ---
 
+## 💸 Divisao
+
+Despesa compartilhada com participantes por nome livre (sem exigir conta Pulso — mesmo padrão de Dívidas Pessoais). Tabela: `divisoes`
+
+| Campo | Tipo | Obrigatório | Descrição |
+|---|---|---|---|
+| `id` | String | ✅ | Identificador |
+| `usuarioId` | String (FK) | ✅ | Organizador (dono do registro) |
+| `titulo` | VarChar(120) | ✅ | Ex: "Jantar no Outback" |
+| `valorTotal` | Decimal(12,2) | ✅ | Valor total da despesa |
+| `tipo` | Enum | ✅ | `TipoRateioDivisao`: `IGUAL` ou `PERSONALIZADA` |
+| `status` | Enum | ✅ | `StatusDivisao`: `ATIVA` ou `QUITADA` |
+| `data` | Date | ✅ | Data da despesa |
+| `icone` | VarChar(40) | ❌ | Ícone Lucide |
+| `cor` | VarChar(20) | ❌ | Cor do card |
+| `observacao` | VarChar(250) | ❌ | Notas livres |
+| `quitadaEm` | DateTime | ❌ | Quando todos os participantes pagaram |
+| `criadoEm` / `atualizadoEm` | DateTime | ✅ | Timestamps |
+
+**Regras:** rateio em aritmética de centavos determinística (RNF-016); passa para `QUITADA` automaticamente quando todos os participantes ficam `PAGO`, e reabre se algum pagamento for desfeito; edição de participantes/valores bloqueada se já houver pagamento manual registrado; exclusão bloqueada se quitada (limpeza automática após 180 dias via `expenseSplitCleanupJob`).
+
+---
+
+## 🙋 DivisaoParticipante
+
+Cada pessoa envolvida em uma `Divisao`, incluindo o organizador (linha com `ehOrganizador = true`, exibida como "Você"). Tabela: `divisao_participantes`
+
+| Campo | Tipo | Obrigatório | Descrição |
+|---|---|---|---|
+| `id` | String | ✅ | Identificador |
+| `divisaoId` | String (FK) | ✅ | Divisão à qual pertence |
+| `nome` | VarChar(120) | ✅ | Nome livre, único (case-insensitive) por divisão e diferente de "Você" |
+| `valor` | Decimal(12,2) | ✅ | Parte do participante nesta divisão |
+| `ehOrganizador` | Boolean | ✅ | `true` para a linha do próprio usuário dono |
+| `pagouAConta` | Boolean | ✅ | Se foi quem adiantou o valor total |
+| `status` | Enum | ✅ | `StatusParticipanteDivisao`: `PENDENTE` ou `PAGO` |
+| `dataPagamento` | DateTime | ❌ | Quando foi marcado como pago |
+| `criadoEm` / `atualizadoEm` | DateTime | ✅ | Timestamps |
+
+**Relação com Lembrete:** N:N (`divisaoParticipantes` ↔ `Lembrete.divisaoParticipantes`, tabela de junção `_DivisaoParticipanteToLembrete`, `ON DELETE CASCADE` nos dois lados) — um único lembrete de cobrança (RF-120) pode cobrir 1+ participantes pendentes. O lembrete é cancelado automaticamente quando todos os participantes que ele cobre já pagaram, e removido junto se a `Divisao` for excluída.
+
+---
+
 ## 📊 Orcamento
 
 Limite mensal por categoria de despesa. Tabela: `orcamentos`
@@ -628,7 +673,8 @@ Alertas in-app para o usuário. Tabela: `notificacoes`
 | 10 | 🤖 IA | MensagemChat, HistoricoScore | 2 |
 | 11 | 👥 Grupos | Grupo, MembroGrupo, ViagemGrupo, DespesaViagemGrupo, MetaGrupo, AporteMetaGrupo, MensagemChatGrupo | 7 |
 | 12 | 🛒 Planejamento de Compra | ItemPlanejamentoCompra | 1 |
-| | | **TOTAL** | **31** |
+| 13 | 💸 Divisão de Despesas | Divisao, DivisaoParticipante | 2 |
+| | | **TOTAL** | **33** |
 
 ---
 
@@ -651,6 +697,9 @@ Alertas in-app para o usuário. Tabela: `notificacoes`
 | `NivelFinanceiro` | `INICIANTE`, `CONSCIENTE`, `ESTRATEGISTA`, `INVESTIDOR` |
 | `ModoUso` | `ESTAGIARIO`, `CLT`, `PJ`, `PESSOA_FISICA` |
 | `Prioridade` | `ALTA`, `MEDIA`, `BAIXA` |
+| `TipoRateioDivisao` | `IGUAL`, `PERSONALIZADA` |
+| `StatusDivisao` | `ATIVA`, `QUITADA` |
+| `StatusParticipanteDivisao` | `PENDENTE`, `PAGO` |
 | `CategoriaLembrete` | `ALUGUEL`, `CONDOMINIO`, `IPTU`, `LUZ`, `AGUA`, `GAS`, `INTERNET`, `FATURA_CARTAO`, `OUTRO`, … (ver schema) |
 | `TipoNotificacao` | `RECEITA_REGISTRADA`, `DESPESA_REGISTRADA`, `TRANSFERENCIA_REGISTRADA`, `META_ATINGIDA`, `ALERTA_ORCAMENTO`, `ORCAMENTO_ESTOURADO` |
 
@@ -678,6 +727,7 @@ Usuario (1) ──── (1) ConfiguracaoUsuario
   (1) ──── (N) MensagemChat
   (1) ──── (N) HistoricoScore
   (N:N) ── Grupo (via MembroGrupo)
+  (1) ──── (N) Divisao ──── (N) DivisaoParticipante ──── (N:N) Lembrete
 
 Grupo ──── (N) ViagemGrupo ──── (N) DespesaViagemGrupo
 ──── (N) MetaGrupo ──── (N) AporteMetaGrupo
@@ -695,6 +745,6 @@ Grupo ──── (N) ViagemGrupo ──── (N) DespesaViagemGrupo
 - **Cores:** hex `#RRGGBB` (7 caracteres)
 - **Ícones:** string com nome Lucide (ex: `UtensilsCrossed`, `Banknote`) — ver `web/src/components/badges/iconRegistry.jsx`
 - **Moedas:** ISO 4217, 3 letras (`USD`, `BRL`, `EUR`)
-- **Tokens Google:** criptografar em repouso antes de persistir em `tokensGoogle`
+- **Tokens Google:** criptografados em repouso (AES-256-GCM, `utils/googleTokenCrypto.js`) antes de persistir em `tokensGoogle` — chave via env `GOOGLE_TOKENS_ENCRYPTION_KEY`
 - **Recorrência:** `regraRecorrencia` armazena JSON (`frequencia`, `ateQuando`, `dataFim`), não RRULE RFC 5545
 - **Nomes de tabela:** ver `@@map` em cada model no schema Prisma

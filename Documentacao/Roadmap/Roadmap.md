@@ -334,14 +334,15 @@ Fases **concluídas ou em uso**:
 - [ ] Alertas de vencimento
 ```
 
-### 5.5 — Divisão de Despesas
+### 5.5 — Divisão de Despesas ✅
 ```
-- [ ] Backend: CRUD divisões + participantes
-- [ ] Frontend: tela divisões
-- [ ] Modal: nova divisão
-- [ ] Modal: lembrete de cobrança
-- [ ] Cálculo igualitário e personalizado
-- [ ] Saldo consolidado
+- [x] Backend: CRUD divisões + participantes
+- [x] Frontend: tela divisões
+- [x] Modal: nova divisão
+- [x] Modal: lembrete de cobrança
+- [x] Cálculo igualitário e personalizado
+- [x] Saldo consolidado
+- [ ] Vincular ao toggle RF-095 de Grupos (ver Fase 7)
 ```
 
 ### 5.6 — Planejamento de Compra ✅
@@ -413,7 +414,7 @@ Fases **concluídas ou em uso**:
 
 ---
 
-## Fase 7 — Social (Grupos) 🟡 Quase fechado (jun/2026)
+## Fase 7 — Social (Grupos) ✅ (jul/2026)
 
 ```
 - [x] Backend: CRUD grupos + membros (entrada/saída, papéis)
@@ -422,13 +423,13 @@ Fases **concluídas ou em uso**:
 - [x] Backend: chat (POST + GET /mensagens paginado)
 - [x] Frontend: lista + detalhe (4 cards, ícones)
 - [x] Modais: criar, entrar, convidar (com QR code), gerenciar membros, editar, metas, aporte, imagem (upload de arquivo)
-- [x] RF-095 MVP: toggle pretensão / divisão igual (UI, persistido no localStorage por grupo; split completo → Fase expense-split)
+- [x] RF-095 MVP: toggle pretensão / divisão igual (UI, persistido no servidor por grupo)
 - [x] Viagem pessoal → grupo (TripFormModal)
 - [x] Notificações GRUPO_ATIVIDADE / META_ATINGIDA
 - [x] RN-119 meta concluída automaticamente
 - [x] Upload de imagem (arquivo jpg/png)
 - [ ] Chat tempo real (WebSocket/SSE)
-- [ ] Vincular RF-095 ao módulo /expense-split (após Fase 15)
+- [ ] Vincular RF-095 ao módulo /expense-split (Fase 5.5 — já disponível, falta a integração em si)
 ```
 
 Ver gaps: [Modulos/Grupos.md](../Modulos/Grupos.md).

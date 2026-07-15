@@ -14,6 +14,7 @@ Esse endpoint roda **todos** os jobs pesados de uma vez:
 - Recorrência de lembretes
 - Limpeza de dívidas quitadas
 - Limpeza de notificações
+- Limpeza de divisões de despesas quitadas (180 dias)
 - Transações recorrentes
 
 ## Mitigações implementadas

@@ -123,6 +123,23 @@ const vincularLembreteAParticipantes = async (lembreteId, participanteIds) =>
         },
     });
 
+/** Lembretes de cobrança (ainda não pagos) vinculados a algum dos participantes informados. */
+const listarLembretesAtivosDeParticipantes = async (participanteIds) =>
+    prisma.lembrete.findMany({
+        where: {
+            pago: false,
+            divisaoParticipantes: { some: { id: { in: participanteIds } } },
+        },
+        include: { divisaoParticipantes: true },
+    });
+
+/** Todos os lembretes de cobrança (pagos ou não) vinculados a qualquer participante da divisão. */
+const listarLembretesDaDivisao = async (divisaoId) =>
+    prisma.lembrete.findMany({
+        where: { divisaoParticipantes: { some: { divisaoId } } },
+        select: { id: true },
+    });
+
 module.exports = {
     criar,
     buscarPorId,
@@ -139,4 +156,6 @@ module.exports = {
     buscarParticipante,
     atualizarParticipante,
     vincularLembreteAParticipantes,
+    listarLembretesAtivosDeParticipantes,
+    listarLembretesDaDivisao,
 };

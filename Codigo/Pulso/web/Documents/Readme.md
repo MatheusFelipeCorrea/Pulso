@@ -45,8 +45,10 @@ Interface do **Pulso** com React + Vite, Tailwind CSS v4, Redux (auth) e design 
 | **Dívidas** (`/debts`) | ✅ |
 | **Metas** (`/goals`) | ✅ |
 | **Viagens** (`/trips`, `/trips/:id`) | ✅ |
+| **Grupos** (`/groups`, `/groups/:id`) | ✅ |
+| **Divisão de Despesas** (`/expense-split`) | ✅ |
 | **Notificações** (sino no layout) | ✅ |
-| Dashboard, insights, chatbot, grupos, perfil, … | 🔜 `InDevelopmentPage` |
+| Dashboard, insights, chatbot, perfil, … | 🔜 `InDevelopmentPage` |
 
 ---
 
@@ -85,8 +87,13 @@ Pulso/web/
 │   │   │   ├── budget/          ← orçamento mensal
 │   │   │   ├── calendar/        ← calendário + lembretes + Google Calendar
 │   │   │   ├── dashboard/       ← NotificationPanel (sino)
+│   │   │   ├── debts/           ← dívidas pessoais
+│   │   │   ├── expense-split/   ← divisão de despesas
+│   │   │   ├── goals/           ← metas financeiras
+│   │   │   ├── groups/          ← grupos (viagens/metas compartilhadas)
 │   │   │   ├── transactions/
-│   │   │   └── transport/       ← vale transporte
+│   │   │   ├── transport/       ← vale transporte
+│   │   │   └── trips/           ← viagens + moedas
 │   │   ├── layouts/
 │   │   │   ├── MainLayout/
 │   │   │   ├── AuthLayout/
@@ -162,7 +169,10 @@ Documentação: `src/design-system/README.md`
 | `/goals` | **Metas** |
 | `/trips` | **Viagens** (lista) |
 | `/trips/:id` | **Detalhe da viagem** (despesas, moedas, passagens) |
-| `/dashboard`, `/insights`, `/chatbot`, … | `InDevelopmentPage` |
+| `/groups` | **Grupos** (lista) |
+| `/groups/:id` | **Detalhe do grupo** (membros, viagem, metas, chat) |
+| `/expense-split` | **Divisão de Despesas** |
+| `/dashboard`, `/insights`, `/chatbot`, `/profile`, … | `InDevelopmentPage` |
 
 Lista completa de paths: `src/config/appRoutes.js`  
 Menu lateral: `src/config/sidebarNavigation.js`
@@ -275,6 +285,59 @@ Configuração única em `sidebarNavigation.js` (`SIDEBAR_NAV` + `SIDEBAR_NAV_FO
 
 ---
 
+## 👥 Módulo Grupos (implementado)
+
+**Páginas:** `pages/GroupsPage.jsx` (lista), `pages/GroupDetailPage.jsx` (detalhe), `pages/GroupJoinRedirect.jsx` (entrar via link de convite)
+
+**Componentes** (`components/features/groups/`, ~25 arquivos):
+
+| Arquivo | Função |
+|---------|--------|
+| `CreateGroupModal.jsx` / `EditGroupModal.jsx` / `DeleteGroupModal.jsx` | CRUD do grupo |
+| `GroupImagePicker.jsx` / `ChangeGroupImageModal.jsx` | Upload/troca de imagem |
+| `InviteGroupModal.jsx` / `JoinGroupModal.jsx` / `JoinGroupForm/` | Convite e entrada por código |
+| `ManageGroupMembersModal.jsx` / `LeaveGroupModal.jsx` | Gerenciar membros / sair |
+| `CreateGroupGoalsModal.jsx` / `GroupContributionModal.jsx` | Metas compartilhadas e aportes |
+| `GroupList.jsx`, `GroupCard/`, `detail/`, `GroupDetail/`, `GroupTrip/`, `GroupGoal/`, `GroupMembers/` | Listagem e subcomponentes do detalhe (viagem, metas, membros, chat) |
+
+**Dados:**
+
+- `GET/POST /grupos`, `GET/PATCH/DELETE /grupos/:id`, `GET /grupos/preview`, `POST /grupos/entrar`
+- `POST /grupos/:id/sair`, `POST /grupos/:id/viagem`, `POST/PATCH/DELETE /grupos/:id/viagem/despesas[/:despesaId]`
+- `POST /grupos/:id/metas`, `POST /grupos/:id/metas/:metaId/aportes`, `POST /grupos/:id/mensagens` (chat, polling ~3s)
+
+**Service:** `services/grupoService.js`
+
+**Pendente:** RF-095 completo (split custom "quem paga quem" já existe em `/expense-split`, mas ainda não vinculado ao toggle do grupo) — ver [Documentacao/Modulos/Grupos.md](../../../../Documentacao/Modulos/Grupos.md).
+
+**Estilos:** `styles/groups.css`
+
+---
+
+## 💸 Módulo Divisão de Despesas (implementado)
+
+**Página:** `pages/ExpenseSplitPage.jsx`
+
+**Componentes** (`components/features/expense-split/`):
+
+| Arquivo | Função |
+|---------|--------|
+| `ExpenseSplitSummaryCards.jsx` | Saldo consolidado (me devem / eu devo) |
+| `ExpenseSplitCard.jsx` | Card de divisão ativa |
+| `ExpenseSplitFormModal.jsx` | Criar/editar (rateio igual ou personalizado) |
+| `ExpenseSplitDetailsModal.jsx` | Detalhe — marcar/desmarcar participante como pago |
+| `ExpenseSplitReminderModal.jsx` | Criar lembrete de cobrança (RF-120) |
+| `ExpenseSplitHistoryRow.jsx` | Linha do histórico de divisões quitadas |
+| `DeleteExpenseSplitModal.jsx` | Exclusão |
+
+**Dados:** `services/expenseSplitService.js` → `GET /divisoes/ativas`, `/divisoes/historico`, `/divisoes/resumo`, `POST /divisoes`, `PATCH /divisoes/:id`, `PATCH /divisoes/:id/participantes/:participanteId/pagar|despagar`, `POST /divisoes/:id/lembrete`, `DELETE /divisoes/:id`
+
+**Regras de UI:** participantes por nome livre (sem exigir conta Pulso); edição de participantes/valores é bloqueada no backend se já houver pagamento manual registrado nessa divisão.
+
+**Estilos:** `styles/expense-split.css`
+
+---
+
 ## 🔐 Autenticação
 
 - JWT access + refresh (`services/authService.js`, `store/slices/authSlice.js`)
@@ -309,6 +372,8 @@ Slices de transações, metas, etc. estão comentados em `store/index.js` — pr
 | `reminderService.js` | `/lembretes/*` |
 | `notificationService.js` | `/notificacoes/*` |
 | `transportService.js` | `/transporte/*` |
+| `grupoService.js` | `/grupos/*` |
+| `expenseSplitService.js` | `/divisoes/*` |
 
 ### Hooks (implementados)
 
@@ -342,9 +407,17 @@ import './styles/legal.css'
 import './styles/pulso-components.css'
 import './styles/sidebar.css'
 import './styles/transactions.css'
+import './styles/categories.css'
 import './styles/budget.css'
 import './styles/calendar.css'
 import './styles/transport.css'
+import './styles/debts.css'
+import './styles/goals.css'
+import './styles/trips.css'
+import './styles/groups.css'
+import './styles/purchase-planning.css'
+import './styles/expense-split.css'
+import './styles/landing.css'
 ```
 
 ---
@@ -378,9 +451,9 @@ VITE_GOOGLE_CLIENT_ID=seu_client_id.apps.googleusercontent.com
 
 ## 🗺️ Roadmap
 
-**Entregue:** transações, VT, orçamento, calendário, dívidas, metas, viagens (com insights de transporte e moedas).
+**Entregue:** transações, VT, orçamento, calendário, dívidas, metas, viagens (com insights de transporte e moedas), grupos, divisão de despesas.
 
-**Pendente:** dashboard, perfil/settings, insights IA, chatbot, gamificação, grupos, relatórios, divisão de despesas.
+**Pendente:** dashboard, perfil/settings, insights IA, chatbot, gamificação, relatórios.
 
 Prioridades sugeridas: [Documentacao/Analise-Produto.md](../../../../Documentacao/Analise-Produto.md)
 

@@ -36,6 +36,19 @@ const construirParticipantes = ({ tipo, valorTotal, participantes, pagoPor, valo
         nome: formatPersonName(item.nome),
         ehOrganizador: false,
     }));
+
+    const nomesVistos = new Set();
+    for (const item of outros) {
+        const chave = item.nome.toLowerCase();
+        if (chave === 'você' || nomesVistos.has(chave)) {
+            throw new AppError(
+                'Os nomes dos participantes devem ser únicos e diferentes de "Você"',
+                400
+            );
+        }
+        nomesVistos.add(chave);
+    }
+
     const todos = [...outros, { nome: 'Você', ehOrganizador: true }];
 
     let valores;
@@ -188,10 +201,30 @@ const criarDivisao = async (usuarioId, dados) => {
     return mapDivisao(divisao);
 };
 
+/** Alguém além de quem pagou a conta original já quitou manualmente sua parte (marcarParticipantePago). */
+const possuiPagamentoManual = (divisao) =>
+    (divisao.participantes ?? []).some((p) => !p.pagouAConta && p.status === 'PAGO');
+
 const editarDivisao = async (usuarioId, divisaoId, dados) => {
     const divisao = await buscarDivisaoOuFalhar(divisaoId, usuarioId);
     if (divisao.status === 'QUITADA') {
         throw new AppError('Não é possível editar uma divisão já quitada', 400);
+    }
+
+    const substituiParticipantes = dados.participantes !== undefined;
+
+    if (dados.valorTotal !== undefined && !substituiParticipantes) {
+        throw new AppError(
+            'Para alterar o valor total é preciso reenviar a lista de participantes, para recalcular os valores de cada um',
+            400
+        );
+    }
+
+    if (substituiParticipantes && possuiPagamentoManual(divisao)) {
+        throw new AppError(
+            'Não é possível alterar participantes ou valores: já existe pagamento registrado nesta divisão. Desfaça os pagamentos primeiro ou crie uma nova divisão.',
+            400
+        );
     }
 
     const payload = {};
@@ -201,7 +234,6 @@ const editarDivisao = async (usuarioId, divisaoId, dados) => {
     if (dados.cor !== undefined) payload.cor = dados.cor;
     if (dados.observacao !== undefined) payload.observacao = dados.observacao?.trim() || null;
 
-    const substituiParticipantes = dados.participantes !== undefined;
     if (substituiParticipantes) {
         const valorTotal = dados.valorTotal !== undefined ? roundMoney(dados.valorTotal) : Number(divisao.valorTotal);
         payload.valorTotal = valorTotal;
@@ -218,7 +250,6 @@ const editarDivisao = async (usuarioId, divisaoId, dados) => {
         await expenseSplitRepository.atualizar(divisaoId, usuarioId, payload);
         await expenseSplitRepository.substituirParticipantes(divisaoId, linhas);
     } else {
-        if (dados.valorTotal !== undefined) payload.valorTotal = roundMoney(dados.valorTotal);
         await expenseSplitRepository.atualizar(divisaoId, usuarioId, payload);
     }
 
@@ -232,6 +263,25 @@ const buscarParticipanteOuFalhar = (divisao, participanteId) => {
         throw new AppError('Participante não encontrado', 404);
     }
     return participante;
+};
+
+/**
+ * Cancela (marca como pago) os lembretes de cobrança vinculados a um participante que já
+ * está totalmente quitado, mas só quando TODOS os demais participantes cobertos pelo mesmo
+ * lembrete (RN-086 permite 1 lembrete para N participantes) também já pagaram — senão o
+ * lembrete continua servindo para cobrar quem ainda deve.
+ */
+const cancelarLembretesQuitados = async (usuarioId, participanteId) => {
+    const lembretes = await expenseSplitRepository.listarLembretesAtivosDeParticipantes([participanteId]);
+
+    for (const lembrete of lembretes) {
+        const todosQuitados = lembrete.divisaoParticipantes.every(
+            (p) => p.pagouAConta || p.status === 'PAGO'
+        );
+        if (todosQuitados) {
+            await reminderService.marcarComoPago(usuarioId, lembrete.id);
+        }
+    }
 };
 
 const marcarParticipantePago = async (usuarioId, divisaoId, participanteId) => {
@@ -249,6 +299,8 @@ const marcarParticipantePago = async (usuarioId, divisaoId, participanteId) => {
         status: 'PAGO',
         dataPagamento: new Date(),
     });
+
+    await cancelarLembretesQuitados(usuarioId, participanteId);
 
     const atualizada = await buscarDivisaoOuFalhar(divisaoId, usuarioId);
     return sincronizarStatusDivisao(atualizada);
@@ -282,6 +334,14 @@ const excluirDivisao = async (usuarioId, divisaoId) => {
             400
         );
     }
+
+    // Sem isso, o lembrete de cobrança (RF-120) sobrevive órfão no calendário/Google Agenda,
+    // cobrando uma divisão que deixou de existir.
+    const lembretes = await expenseSplitRepository.listarLembretesDaDivisao(divisaoId);
+    for (const lembrete of lembretes) {
+        await reminderService.removerLembrete(usuarioId, lembrete.id);
+    }
+
     await expenseSplitRepository.excluir(divisaoId, usuarioId);
 };
 
@@ -306,6 +366,20 @@ const criarLembreteCobranca = async (usuarioId, divisaoId, participanteIds, dado
             `${formatPersonName(invalido.nome)} já pagou (ou pagou a conta) e não precisa de lembrete`,
             400
         );
+    }
+
+    const lembretesExistentes = await expenseSplitRepository.listarLembretesAtivosDeParticipantes(participanteIds);
+    if (lembretesExistentes.length > 0) {
+        const idsComLembrete = new Set(
+            lembretesExistentes.flatMap((l) => l.divisaoParticipantes.map((p) => p.id))
+        );
+        const participanteComLembrete = participantes.find((p) => idsComLembrete.has(p.id));
+        if (participanteComLembrete) {
+            throw new AppError(
+                `${formatPersonName(participanteComLembrete.nome)} já tem um lembrete de cobrança pendente`,
+                400
+            );
+        }
     }
 
     const valorSelecionado = roundMoney(participantes.reduce((acc, p) => acc + Number(p.valor), 0));

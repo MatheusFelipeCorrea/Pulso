@@ -34,9 +34,19 @@ router.post(
     authController.login
 );
 
-router.post('/refresh', validateMiddleware(refreshSchema), authController.refresh);
+router.post(
+    '/refresh',
+    authSensitiveRateLimit,
+    validateMiddleware(refreshSchema),
+    authController.refresh
+);
 
-router.post('/logout', validateMiddleware(logoutSchema), authController.logout);
+router.post(
+    '/logout',
+    authSensitiveRateLimit,
+    validateMiddleware(logoutSchema),
+    authController.logout
+);
 
 router.get('/me', authMiddleware, authController.me);
 
@@ -49,18 +59,21 @@ router.post(
 
 router.get(
     '/reset-password/:token',
+    authSensitiveRateLimit,
     validateMiddleware(resetPasswordTokenSchema),
     authController.validateResetToken
 );
 
 router.post(
     '/reset-password/:token',
+    authSensitiveRateLimit,
     validateMiddleware(resetPasswordSchema),
     authController.resetPassword
 );
 
 router.get(
     '/verify-email/:token',
+    authSensitiveRateLimit,
     validateMiddleware(verifyEmailSchema),
     authController.verifyEmail
 );
