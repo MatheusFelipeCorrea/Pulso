@@ -28,7 +28,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@googleapis/calendar": "^9.8.0",
+    "@googleapis/calendar": "^15.0.0",
     "@googleapis/oauth2": "^5.0.1",
     "@neondatabase/serverless": "^0.9.5",
     "@prisma/adapter-neon": "^5.22.0",
