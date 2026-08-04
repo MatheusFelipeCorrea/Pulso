@@ -18,6 +18,7 @@ import TermsOfUse from './pages/TermsOfUse'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import InDevelopmentPage from './pages/InDevelopmentPage'
 import LandingPage from './pages/LandingPage'
+import DashboardPage from './pages/DashboardPage'
 import TransactionsPage from './pages/TransactionsPage'
 import TransportVoucherPage from './pages/TransportVoucherPage'
 import BudgetPage from './pages/BudgetPage'
@@ -71,6 +72,7 @@ function App() {
           {/* App autenticado — sidebar + placeholders */}
           <Route element={<ProtectedRoute />}>
             <Route element={<MainLayout />}>
+              <Route path="dashboard" element={<DashboardPage />} />
               <Route path="transactions" element={<TransactionsPage />} />
               <Route path="transport-voucher" element={<TransportVoucherPage />} />
               <Route path="budget" element={<BudgetPage />} />
@@ -86,6 +88,7 @@ function App() {
               <Route path="expense-split" element={<ExpenseSplitPage />} />
               {APP_ROUTE_PATHS.filter(
                 (path) =>
+                  path !== '/dashboard' &&
                   path !== '/transactions' &&
                   path !== '/transport-voucher' &&
                   path !== '/budget' &&
