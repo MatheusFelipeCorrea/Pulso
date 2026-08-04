@@ -1,4 +1,4 @@
-const { rateLimit } = require('express-rate-limit');
+const { rateLimit, ipKeyGenerator } = require('express-rate-limit');
 
 const rateLimitResponse = {
     status: 'error',
@@ -11,7 +11,7 @@ const grupoInviteCodeRateLimit = rateLimit({
     max: 20,
     standardHeaders: true,
     legacyHeaders: false,
-    keyGenerator: (req) => req.user?.id ?? req.ip,
+    keyGenerator: (req) => req.user?.id ?? ipKeyGenerator(req.ip),
     message: rateLimitResponse,
 });
 

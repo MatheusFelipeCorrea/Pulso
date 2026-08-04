@@ -1,4 +1,6 @@
-import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/defaultAuthenticatedRoute.js'import { useEffect } from 'react'
+import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/defaultAuthenticatedRoute.js'
+import { useEffect } from 'react'
+import { Navigate } from 'react-router-dom'
 import { useAppSelector } from '@/store/hooks'
 import { PublicHeader } from '@/components/features/landing/PublicHeader.jsx'
 import { LandingHero } from '@/components/features/landing/LandingHero.jsx'
