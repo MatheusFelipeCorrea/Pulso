@@ -36,17 +36,18 @@ export const resetPassword = async ({ token, senha, confirmarSenha }) => {
   return response.data
 }
 
-export const refresh = async (refreshToken) => {
-  const response = await api.post('/auth/refresh', { refreshToken })
+export const refresh = async () => {
+  const response = await api.post('/auth/refresh')
   return response.data
 }
 
 export const logout = async () => {
-  const refreshToken = localStorage.getItem('refreshToken')
+  await api.post('/auth/logout')
+}
 
-  if (refreshToken) {
-    await api.post('/auth/logout', { refreshToken })
-  }
+export const exchangeOAuth = async (exchange) => {
+  const response = await api.post('/auth/oauth/exchange', { exchange })
+  return response.data
 }
 
 export const getMe = async () => {
@@ -68,15 +69,8 @@ export const loginWithGoogle = () => {
   window.location.href = `${getApiBaseUrl()}/auth/google`
 }
 
-export const storeAuthTokens = ({ accessToken, refreshToken }) => {
-  localStorage.setItem('accessToken', accessToken)
+/** @deprecated Sessão em cookies httpOnly — mantido para compatibilidade de chamadas existentes */
+export const storeAuthTokens = () => {}
 
-  if (refreshToken) {
-    localStorage.setItem('refreshToken', refreshToken)
-  }
-}
-
-export const clearAuthTokens = () => {
-  localStorage.removeItem('accessToken')
-  localStorage.removeItem('refreshToken')
-}
+/** @deprecated Cookies httpOnly são limpos pelo backend em logout */
+export const clearAuthTokens = () => {}

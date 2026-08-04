@@ -40,6 +40,7 @@ export default function GoalsPage() {
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [deleting, setDeleting] = useState(false)
+  const [deletingAporteId, setDeletingAporteId] = useState(null)
 
   const apiFiltros = useMemo(
     () => buildApiFiltros(tabAtiva, filtrosAplicados),
@@ -179,6 +180,25 @@ export default function GoalsPage() {
     setDeleteOpen(true)
   }
 
+  const handleExcluirAporte = async (aporte) => {
+    if (!selected) return
+    setDeletingAporteId(aporte.id)
+    try {
+      const metaAtualizada = await metaService.excluirAporte(selected.id, aporte.id)
+      setSelected(metaAtualizada)
+      toast.success(
+        metaAtualizada.status === 'ATIVA'
+          ? 'Aporte removido. Meta reaberta.'
+          : 'Aporte removido.'
+      )
+      await recarregarTudo()
+    } catch (err) {
+      toast.error(err.response?.data?.message ?? 'Erro ao remover aporte')
+    } finally {
+      setDeletingAporteId(null)
+    }
+  }
+
   const confirmarExcluir = async () => {
     if (!deleteTarget) return
     setDeleting(true)
@@ -288,6 +308,8 @@ export default function GoalsPage() {
         }}
         onSubmit={handleSalvar}
         onDelete={abrirExcluir}
+        onDeleteAporte={handleExcluirAporte}
+        deletingAporteId={deletingAporteId}
         meta={selected}
         submitting={submitting}
         deleting={deleting}

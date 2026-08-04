@@ -118,15 +118,60 @@ describe('transactionService', () => {
         });
     });
 
-    it('exclui mãe recorrente com futuras quando solicitado', async () => {
-        transactionRepository.buscarPorId.mockResolvedValue({ id: 'mae', recorrente: true, paiId: null });
-        transactionRepository.excluirRecorrentesFilhas.mockResolvedValue(undefined);
-        transactionRepository.excluir.mockResolvedValue(undefined);
+    it('encerra série recorrente preservando histórico quando excluirFuturas na mãe', async () => {
+        transactionRepository.buscarPorId.mockResolvedValue({
+            id: 'mae',
+            recorrente: true,
+            paiId: null,
+            regraRecorrencia: 'FREQ=MONTHLY',
+            data: new Date('2026-01-01'),
+        });
+        transactionRepository.excluirRecorrentesFilhasAPartirDe.mockResolvedValue(undefined);
+        transactionRepository.encerrarRecorrencia.mockResolvedValue(undefined);
 
         await transactionService.excluirTransacao('u1', 'mae', true);
 
-        expect(transactionRepository.excluirRecorrentesFilhas).toHaveBeenCalledWith('mae');
-        expect(transactionRepository.excluir).toHaveBeenCalledWith('mae');
+        expect(transactionRepository.excluirRecorrentesFilhasAPartirDe).toHaveBeenCalledWith(
+            'mae',
+            expect.any(Date)
+        );
+        expect(transactionRepository.encerrarRecorrencia).toHaveBeenCalledWith(
+            'mae',
+            expect.stringContaining('UNTIL=')
+        );
+        expect(transactionRepository.excluir).not.toHaveBeenCalled();
+    });
+
+    it('encerra série a partir da data da filha quando excluirFuturas', async () => {
+        const dataCorte = '2026-03-15T03:00:00.000Z';
+        transactionRepository.buscarPorId
+            .mockResolvedValueOnce({
+                id: 'filha',
+                recorrente: false,
+                paiId: 'mae',
+                data: new Date(dataCorte),
+            })
+            .mockResolvedValueOnce({
+                id: 'mae',
+                recorrente: true,
+                paiId: null,
+                regraRecorrencia: 'FREQ=MONTHLY',
+                data: new Date('2026-01-01'),
+            });
+        transactionRepository.excluirRecorrentesFilhasAPartirDe.mockResolvedValue(undefined);
+        transactionRepository.encerrarRecorrencia.mockResolvedValue(undefined);
+
+        await transactionService.excluirTransacao('u1', 'filha', true, dataCorte);
+
+        expect(transactionRepository.excluirRecorrentesFilhasAPartirDe).toHaveBeenCalledWith(
+            'mae',
+            expect.any(Date)
+        );
+        expect(transactionRepository.encerrarRecorrencia).toHaveBeenCalledWith(
+            'mae',
+            expect.stringContaining('UNTIL=20260314')
+        );
+        expect(transactionRepository.excluir).not.toHaveBeenCalled();
     });
 
     it('edita transação e atualiza tags quando informado', async () => {

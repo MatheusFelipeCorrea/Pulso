@@ -2,8 +2,8 @@
 
 Documento de rastreamento de todos os requisitos funcionais e não funcionais do sistema **Pulso**.
 
-> **Última revisão:** código alinhado a junho/2026 · planejamento de expansão jul/2026.  
-> Documentação técnica: [Frontend](../../Codigo/Pulso/web/Documents/Readme.md) · [API](../../Codigo/Pulso/api/Documents/Readme.md) · [Banco de dados](../../Codigo/Pulso/api/Documents/Database.md)
+> **Última revisão:** código alinhado a **ago/2026** (correções PO) · planejamento jul/2026.  
+> Auditoria PO: [Análises/PO/00-Sumario-Executivo.md](../Análises/PO/00-Sumario-Executivo.md) · Técnico: [Frontend](../../Codigo/Pulso/web/Documents/Readme.md) · [API](../../Codigo/Pulso/api/Documents/Readme.md) · [Banco](../../Codigo/Pulso/api/Documents/Database.md)
 
 ---
 
@@ -139,7 +139,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [x] | RF-042 | O sistema deve permitir criar múltiplas viagens simultâneas | 🟡 Importante |
 | - [x] | RF-043 | O sistema deve vincular uma viagem a uma meta financeira existente para acompanhar o progresso | 🟢 Desejável |
 
-> **Nota (jul/2026):** RF-033 teve o termo "tempo real" trocado por "atualizadas" — fonte gratuita (AwesomeAPI/Frankfurter) com **cache diário**, evitando dependência de API paga de cotação tick-a-tick.
+> **Nota (jul/2026):** RF-033 usa fonte gratuita (AwesomeAPI/Frankfurter) com **cache de 5 minutos por instância** (memória local). Em serverless o cache efetivo pode ser menor — ver achado T5. Termo "tempo real" foi removido.
 
 ---
 
@@ -182,8 +182,9 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [x] | RF-056 | O sistema deve sincronizar lembretes criados como eventos no Google Calendar | 🔴 Essencial |
 | - [x] | RF-057 | O sistema deve permitir o usuário ativar/desativar a integração com Google Agenda a qualquer momento | 🔴 Essencial |
 | - [x] | RF-058 | O sistema deve permitir configurar antecedência do lembrete (1 dia antes, no dia, etc.) | 🟡 Importante |
+| - [x] | RF-058b | O sistema deve importar alterações feitas no Google Calendar de volta para o Pulso (título, data) ao abrir o mês ou após sync manual | 🟡 Importante |
 
----
+> **Nota (ago/2026):** RF-058b formaliza a importação Google → Pulso já implementada em `importarAlteracoesDoGoogle`. Correção RF-NOVO-G1: falha de sync na **criação** preserva o lembrete com `sincronizado: false` (RN-097).
 
 ## 🚌 Módulo 08 — Gestão de Vale Transporte
 
@@ -195,6 +196,8 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [x] | RF-062 | O sistema deve manter um histórico de vendas de VT com todos os detalhes registrados | 🟡 Importante |
 | - [x] | RF-063 | O sistema deve calcular a diferença entre valor nominal e valor recebido na venda (perda/ganho) | 🟡 Importante |
 | - [x] | RF-066 | O sistema deve exibir saldo atual de VT (recebido – usado – vendido) | 🟡 Importante |
+
+> **Nota (ago/2026):** CLT pode registrar venda de VT com **aviso** (decisão B — RN-013/040/045). PJ/Pessoa Física continuam bloqueados. Saldo protegido por transação Serializable.
 
 ---
 
@@ -524,12 +527,12 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | RF-180–184 (PWA/Push) | Base PWA (manifest + service worker) habilita instalação e Web Push (VAPID, gratuito); envio de eventos usa os jobs do GitHub Actions |
 | RF-185–197 (Veículos/FIPE) | Tabela FIPE via BrasilAPI/Parallelum (gratuita) com cache mensal; custo mensal médio (RF-190) = média histórica de gastos + depreciação mensal derivada do histórico FIPE (RF-187); despesas do veículo podem espelhar em Transações; vencimentos e manutenção por km reutilizam Calendário/Lembretes/Push |
 | Cron / jobs agendados | **Migração planejada Vercel Cron (Hobby, 1×/dia) → GitHub Actions** (schedule grátis, múltiplas execuções/dia) chamando endpoints protegidos — resolve imprecisão de RF-047/111/132/166/183/194 |
-| Cotações (RF-033) | Fonte gratuita (AwesomeAPI/Frankfurter) com cache diário; termo "tempo real" removido |
+| Cotações (RF-033) | Fonte gratuita (AwesomeAPI/Frankfurter) com cache de **5 minutos** por instância (memória); ver T5 para cache compartilhado futuro |
 | Bots (RF-169–173) | Telegram + Discord (Bot APIs gratuitas); WhatsApp/Evolution **descartado** |
 | OCR de cupons | **Descartado** — custo/complexidade sem retorno para o escopo gratuito |
 | Open Banking | **Descartado** — custo de integração/certificação incompatível com projeto gratuito; substituído pelo módulo de Importação (OFX/CSV) |
-| Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips`, **`/groups`**, **`/groups/:id`** |
-| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros, editar grupo, metas múltiplas, RN-119, notificações GRUPO/META, chat paginado + polling (~3s), viagem pessoal→grupo, RF-095 (toggle *Por pretensão*/*Divisão igual* persistido em `grupos.modo_divisao`) — acerto de contas ("quem paga quem") fica no módulo **Divisão de Despesas** (RF-115–120), ainda não construído — [Modulos/Grupos.md](../Modulos/Grupos.md) |
+| Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips`, **`/groups`**, **`/groups/:id`**, **`/expense-split`**, **`/purchase-planning`** |
+| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros, editar grupo, metas múltiplas, RN-119, notificações GRUPO/META, chat paginado + polling (~3s), viagem pessoal→grupo, RF-095 (toggle *Por pretensão*/*Divisão igual*), **rate limit** em preview/entrar — acerto de contas completo em **`/expense-split`** (RF-115–120) — [Modulos/Grupos.md](../Modulos/Grupos.md) |
 | Metas (RF-026–031) | CRUD, aportes, pausar/concluir, vínculo viagem; `META_ATINGIDA` pessoal e grupo |
 | Viagens (RF-033–043) | Moedas (cotações, conversor, histórico, favoritas), CRUD de viagens, despesas por categoria, total em BRL, observações, busca GeoNames, estimativas de passagem (avião/ônibus/trem) com ajuste sazonal; Duffel/Amadeus opcionais |
 | Dívidas (RF-126–132) | CRUD em `/debts` com tabs Me devem / Eu devo / Quitadas; resumo consolidado; filtros (busca, valor, DateRangePicker); job `DIVIDA_COBRANCA` (vence hoje / em 2 dias); limpeza automática de quitadas após 180 dias |
@@ -544,8 +547,11 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 
 | Item | Situação |
 |------|----------|
-| Rate limiting global (RNF-004) | Apenas rotas de auth |
-| Tokens Google em repouso | JSON sem criptografia (schema prevê criptografia) |
+| Rate limiting global (RNF-004) | Auth + **preview/entrar de Grupos** (`grupoInviteCodeRateLimit`, 20/min por usuário) |
+| Renda mensal unificada | `userFinanceUtils.obterRendaMensalPlanejada` — Orçamento + Planejamento de Compra |
+| Pós-login | `DEFAULT_AUTHENTICATED_ROUTE` = `/transactions` (Dashboard ainda placeholder) |
+| Migrations pendentes deploy | `viagens_meta_id_unique`, `viagem_grupo_grupo_id_unique`, `categoria_grupo_beneficio` |
+| Tokens Google em repouso | ✅ AES-256-GCM implementado (`api/src/utils/googleTokenCrypto.js`) |
 | Cron Vercel (Hobby) → GitHub Actions | Migração planejada; hoje jobs diários 1×/dia; orçamento local roda a cada 20 min |
 | Cobertura de testes (RNF-015) | API ~95% linhas / ~94% statements (Jest); Web ~97% linhas (Vitest) — services, utils, jobs, middlewares |
 | Tags CRUD completo | Entregue (jun/2026); merge de duplicatas opcional pós-MVP |

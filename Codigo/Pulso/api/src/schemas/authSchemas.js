@@ -46,13 +46,19 @@ const loginSchema = z.object({
 
 const refreshSchema = z.object({
     body: z.object({
-        refreshToken: z.string().min(1, 'Refresh token é obrigatório'),
+        refreshToken: z.string().min(1).optional(),
     }),
 });
 
 const logoutSchema = z.object({
     body: z.object({
-        refreshToken: z.string().min(1, 'Refresh token é obrigatório'),
+        refreshToken: z.string().min(1).optional(),
+    }),
+});
+
+const oauthExchangeSchema = z.object({
+    body: z.object({
+        exchange: z.string().min(1, 'Código de sessão OAuth é obrigatório'),
     }),
 });
 
@@ -93,6 +99,7 @@ module.exports = {
     loginSchema,
     refreshSchema,
     logoutSchema,
+    oauthExchangeSchema,
     forgotPasswordSchema,
     resetPasswordTokenSchema,
     resetPasswordSchema,

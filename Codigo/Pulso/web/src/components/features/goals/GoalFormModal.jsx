@@ -29,6 +29,7 @@ import {
   inferirTipoMeta,
 } from '@/utils/goalBalanceUtils.js'
 import * as metaService from '@/services/metaService.js'
+import { GoalAportesSection } from './GoalAportesSection.jsx'
 
 const emptyForm = () => ({
   nome: '',
@@ -43,6 +44,8 @@ export function GoalFormModal({
   onClose,
   onSubmit,
   onDelete,
+  onDeleteAporte,
+  deletingAporteId = null,
   submitting = false,
   deleting = false,
   meta = null,
@@ -290,6 +293,14 @@ export function GoalFormModal({
               </p>
             )}
           </section>
+
+          {isEdit ? (
+            <GoalAportesSection
+              meta={meta}
+              onDeleteAporte={onDeleteAporte}
+              deletingAporteId={deletingAporteId}
+            />
+          ) : null}
 
           {error ? <p className="goal-form__error">{error}</p> : null}
         </div>

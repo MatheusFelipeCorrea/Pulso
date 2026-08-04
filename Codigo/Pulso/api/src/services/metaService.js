@@ -361,19 +361,17 @@ const excluirAporte = async (usuarioId, metaId, aporteId) => {
         throw new AppError('Aporte não encontrado', 404);
     }
 
-    if (meta.status === 'CONCLUIDA') {
-        throw new AppError('Remova aportes antes de reabrir uma meta concluída', 400);
-    }
-
     await metaRepository.excluirAporte(aporteId);
 
     const novoValorAtual = Math.max(0, roundMoney(Number(meta.valorAtual) - Number(aporte.valor)));
     const aportes = meta.aportes.filter((item) => item.id !== aporteId);
+    const { valorRestante } = calcProgressoMeta({ ...meta, valorAtual: novoValorAtual });
+    const aindaConcluida = valorRestante <= 0;
 
-    let metaAtualizada = await metaRepository.atualizar(metaId, usuarioId, {
+    const metaAtualizada = await metaRepository.atualizar(metaId, usuarioId, {
         valorAtual: novoValorAtual,
-        status: meta.status === 'CONCLUIDA' ? 'ATIVA' : meta.status,
-        concluidaEm: null,
+        status: aindaConcluida ? 'CONCLUIDA' : meta.status === 'CONCLUIDA' ? 'ATIVA' : meta.status,
+        concluidaEm: aindaConcluida ? meta.concluidaEm : null,
     });
 
     return mapMeta({ ...metaAtualizada, aportes });

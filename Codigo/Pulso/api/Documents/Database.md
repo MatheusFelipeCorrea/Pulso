@@ -3,7 +3,7 @@
 Documento de referência das entidades do banco de dados do **Pulso**.
 
 > **Fonte de verdade:** `Codigo/Pulso/api/prisma/schema.prisma`  
-> **Última revisão:** julho/2026 — alinhado ao schema Prisma 5.x (PostgreSQL / Neon)
+> **Última revisão:** ago/2026 — alinhado ao schema Prisma 5.x (PostgreSQL / Neon)
 
 ---
 
@@ -117,17 +117,31 @@ Preferências e receitas fixas recorrentes do usuário. Tabela: `configuracoes_u
 
 ## 🔑 TokenRenovacao
 
-Controle de sessões ativas (refresh tokens). Tabela: `tokens_renovacao`
+Controle de sessões ativas (refresh tokens opacos). Tabela: `tokens_renovacao`
+
+### Arquitetura de sessão (RN-134, RN-135, RN-136)
+
+| Camada | Comportamento |
+|--------|----------------|
+| **Cliente (browser)** | Cookies `pulso_access` (JWT, ~15 min) e `pulso_refresh` (`httpOnly`, `Secure` em prod, `SameSite=none` prod / `lax` dev, `path=/api`). Front usa `withCredentials` — **não** persiste tokens em `localStorage`. Implementação: `utils/authCookies.js`. |
+| **Transporte alternativo** | Header `Authorization: Bearer` (access) ou body `refreshToken` em `/auth/refresh` e `/auth/logout` — fallback para scripts/OAuth exchange; fluxo normal do SPA é só cookie. |
+| **Banco (`tokens_renovacao`)** | Valor opaco do refresh (96 hex chars, `crypto.randomBytes(48)`) armazenado **em texto** em `token` — lookup por igualdade exata, como ID de sessão. **Não é hasheado** (diferente de senha). Mitigação: cookie `httpOnly` + rotação single-use + revogação em reuse. |
+| **Rotação** | Cada `POST /auth/refresh` revoga o token apresentado e emite outro, mantendo `expiraEm` original da sessão. |
+| **Reuse detectado** | Reapresentar refresh já revogado → `revokeAllRefreshTokensForUser` (logout global da sessão). |
+| **Logout** | `POST /auth/logout` revoga o refresh atual e limpa cookies. |
+| **Troca de senha** | Invalida todos os refresh tokens do usuário (RN-136). |
 
 | Campo | Tipo | Descrição |
 |---|---|---|
 | `id` | String | Identificador |
 | `usuarioId` | String (FK) | Dono |
-| `token` | String único | Valor do refresh token (texto puro — não hasheado) |
-| `expiraEm` | DateTime | Quando expira (7 dias, ou 30 dias com "lembrar-me") |
-| `revogado` | Boolean | Se foi invalidado — rotação single-use: cada `/auth/refresh` revoga o token apresentado e emite um novo; reapresentar um token já revogado revoga toda a sessão do usuário (proteção contra reuse) |
+| `token` | String único | Valor opaco do refresh (texto no banco — ver tabela acima) |
+| `expiraEm` | DateTime | 7 dias (padrão) ou 30 dias com "Lembrar-me" no login |
+| `revogado` | Boolean | Se foi invalidado (rotação, logout ou reuse) |
 | `criadoEm` | DateTime | Criação |
 | `revogadoEm` | DateTime | Quando foi revogado |
+
+> **Endurecimento futuro (opcional):** persistir apenas hash (ex.: SHA-256) do refresh no banco exigiria alterar `authRepository.findRefreshToken` / rotação — hoje não implementado; cookie `httpOnly` + rotação cobrem o risco principal para MVP.
 
 ---
 
@@ -143,6 +157,7 @@ Categorias de receitas/despesas por usuário. Tabela: `categorias`
 | `cor` | VarChar(7) | ✅ | Hex `#RRGGBB` (default `#7C3AED`) |
 | `tipo` | Enum | ✅ | `RECEITA` ou `DESPESA` |
 | `padrao` | Boolean | ✅ | `true` = categoria do catálogo inicial (RN-165) |
+| `grupoBeneficio` | Enum? | ❌ | `ALIMENTACAO`, `COMPRAS`, `TRANSPORTE` — compatibilidade VA/VR/VT (RF-NOVO-C2); null = sem grupo |
 | `usuarioId` | String | ❌ | FK do dono (null permitido no schema; seed usa id do usuário) |
 | `criadoEm` | DateTime | ✅ | Timestamp |
 
@@ -746,5 +761,6 @@ Grupo ──── (N) ViagemGrupo ──── (N) DespesaViagemGrupo
 - **Ícones:** string com nome Lucide (ex: `UtensilsCrossed`, `Banknote`) — ver `web/src/components/badges/iconRegistry.jsx`
 - **Moedas:** ISO 4217, 3 letras (`USD`, `BRL`, `EUR`)
 - **Tokens Google:** criptografados em repouso (AES-256-GCM, `utils/googleTokenCrypto.js`) antes de persistir em `tokensGoogle` — chave via env `GOOGLE_TOKENS_ENCRYPTION_KEY`
+- **Refresh tokens (sessão):** transporte em cookie `httpOnly` (`pulso_refresh`); persistência opaca em `tokens_renovacao.token` (texto, não hash) — ver seção [TokenRenovacao](#-tokenrenovacao)
 - **Recorrência:** `regraRecorrencia` armazena JSON (`frequencia`, `ateQuando`, `dataFim`), não RRULE RFC 5545
 - **Nomes de tabela:** ver `@@map` em cada model no schema Prisma

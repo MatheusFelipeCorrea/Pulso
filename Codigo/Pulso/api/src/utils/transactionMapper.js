@@ -11,6 +11,7 @@ const mapCategoria = (categoria) => ({
     icone: categoria.icone,
     cor: categoria.cor,
     tipo: categoria.tipo,
+    grupoBeneficio: categoria.grupoBeneficio ?? null,
 });
 
 const mapTransacao = (transacao) => ({

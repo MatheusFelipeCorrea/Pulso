@@ -1,4 +1,5 @@
 const prisma = require('../config/database');
+const AppError = require('../utils/appError');
 
 const usuarioSelect = {
     id: true,
@@ -175,17 +176,37 @@ const criarViagem = async (grupoId, dados) =>
 
 const criarMetas = async (grupoId, metas) =>
     prisma.$transaction(
-        metas.map((meta) =>
-            prisma.metaGrupo.create({
-                data: {
-                    grupoId,
-                    nome: meta.nome,
-                    valorAlvo: meta.valorAlvo,
-                    prazo: meta.prazo,
-                    descricao: meta.descricao ?? null,
-                },
-            })
-        )
+        async (tx) => {
+            const ativas = await tx.metaGrupo.count({
+                where: { grupoId, status: 'ATIVA' },
+            });
+            if (ativas + metas.length > 5) {
+                const restam = Math.max(0, 5 - ativas);
+                throw new AppError(
+                    restam === 0
+                        ? 'O grupo já possui o máximo de 5 metas ativas'
+                        : `Só é possível ter 5 metas ativas (restam ${restam})`,
+                    400
+                );
+            }
+
+            const created = [];
+            for (const meta of metas) {
+                created.push(
+                    await tx.metaGrupo.create({
+                        data: {
+                            grupoId,
+                            nome: meta.nome,
+                            valorAlvo: meta.valorAlvo,
+                            prazo: meta.prazo,
+                            descricao: meta.descricao ?? null,
+                        },
+                    })
+                );
+            }
+            return created;
+        },
+        { isolationLevel: 'Serializable' }
     );
 
 const buscarMetaDoGrupo = async (grupoId, metaGrupoId) =>

@@ -295,10 +295,20 @@ Catálogo, cotações ao vivo (AwesomeAPI), histórico, conversor e moedas favor
 
 ## 🔐 Autenticação
 
-- Access token (curta duração) + refresh token (rotativo)
-- Senha com bcrypt (salt 12)
-- Conta email exige verificação antes do login
-- Google OAuth cria ou vincula usuário existente
+Sessão JWT + refresh rotativo (RN-134–136). Detalhes de persistência: [Documents/Database.md](./Database.md#-tokenrenovacao).
+
+| Aspecto | Implementação |
+|---------|-----------------|
+| Access token | JWT ~15 min — cookie `pulso_access` (`httpOnly`) ou header `Authorization` |
+| Refresh token | Opaco 96 hex — cookie `pulso_refresh` (`httpOnly`); no banco em `tokens_renovacao` (texto, lookup direto) |
+| Rotação | Single-use: cada refresh revoga o anterior e emite novo |
+| Reuse | Refresh revogado reapresentado → logout global (`revokeAllRefreshTokensForUser`) |
+| Front | `withCredentials: true` em `api.js`; mutex no interceptor evita refresh concorrente |
+| OAuth Google | Exchange via `POST /auth/oauth/exchange` após redirect (`?exchange=`) |
+| Senha | bcrypt (salt 12); verificação de email obrigatória antes do login |
+| Rate limit | Por rota em `authRateLimit.js` (login, register, refresh, reset, etc.) |
+
+Cookies: `utils/authCookies.js` · Lógica: `services/authService.js` · Repositório: `repositories/authRepository.js`
 
 ---
 

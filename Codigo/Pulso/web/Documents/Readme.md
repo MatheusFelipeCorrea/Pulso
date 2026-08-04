@@ -172,7 +172,10 @@ Documentação: `src/design-system/README.md`
 | `/groups` | **Grupos** (lista) |
 | `/groups/:id` | **Detalhe do grupo** (membros, viagem, metas, chat) |
 | `/expense-split` | **Divisão de Despesas** |
+| `/purchase-planning` | **Planejamento de Compra** |
 | `/dashboard`, `/insights`, `/chatbot`, `/profile`, … | `InDevelopmentPage` |
+
+Pós-login/OAuth/GuestRoute: destino padrão **`/transactions`** (`src/config/defaultAuthenticatedRoute.js`).
 
 Lista completa de paths: `src/config/appRoutes.js`  
 Menu lateral: `src/config/sidebarNavigation.js`

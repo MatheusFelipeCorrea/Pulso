@@ -1,4 +1,4 @@
-# Pulso — Frontend
+﻿# Pulso — Frontend
 
 Interface web do **Pulso**, construída com React + Vite, design system próprio e Tailwind CSS v4.
 
@@ -30,10 +30,13 @@ Abre em `http://localhost:5173`. A API deve estar em `http://localhost:3333/api`
 - **Dívidas** — empréstimos e cobranças com pagamentos parciais
 - **Metas** — CRUD, aportes, progresso e sugestão de aporte mensal
 - **Viagens** — planejamento, despesas, moedas, busca de destinos, estimativas de passagem
-- **Notificações** — sino no layout (orçamento, lembretes, dívidas)
+- **Grupos** — criar/entrar, viagem compartilhada, metas, chat, divisão por pretensão
+- **Divisão de Despesas** (`/expense-split`) — rateio e acerto de contas
+- **Planejamento de Compra** (`/purchase-planning`) — lista de desejos e prazo estimado
+- **Notificações** — sino no layout (orçamento, lembretes, dívidas, grupos, metas)
 - Termos de uso e política de privacidade
 - Demo do design system em `/design-system`
 
 ## Em desenvolvimento (placeholder)
 
-`/dashboard`, `/insights`, `/chatbot`, `/achievements`, `/groups`, `/reports`, `/settings` e demais rotas do menu ainda exibem **“Em desenvolvimento”**.
+Pós-login o destino padrão é **`/transactions`** (`DEFAULT_AUTHENTICATED_ROUTE`). Placeholders no menu: `/dashboard`, `/reports`, `/insights`, `/chatbot`, `/achievements`, `/profile`, `/settings`.

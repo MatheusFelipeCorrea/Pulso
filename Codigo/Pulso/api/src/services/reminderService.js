@@ -104,8 +104,11 @@ const criarLembrete = async (usuarioId, body) => {
         const atualizado = await reminderRepository.atualizar(lembrete.id, syncData);
         return mapLembreteComContagem(atualizado);
     } catch (error) {
-        await reminderRepository.deletar(lembrete.id);
-        throw error;
+        return mapLembreteComContagem({
+            ...lembrete,
+            sincronizado: false,
+            googleEventId: null,
+        });
     }
 };
 

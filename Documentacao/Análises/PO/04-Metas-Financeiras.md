@@ -14,7 +14,7 @@
 4. [💡 Novos Requisitos Propostos](#4-novos-requisitos-propostos)
 5. [Plano de Ação Priorizado](#5-plano-de-ação-priorizado)
 
-**Resumo executivo:** este é o módulo com a implementação mais madura encontrada até agora na auditoria — README marca **✅ 8/8**, e o código confere ponto a ponto, com bom tratamento de estados (pausada/concluída/cancelada), cálculo correto de progresso e sugestão mensal, e vínculo bidirecional correto com Viagens (RN-073, `onDelete: SetNull`, verificado no schema). A auditoria encontrou **um defeito real e concreto**: a função de excluir um aporte (`excluirAporte`) **bloqueia a exclusão exatamente quando a meta está concluída**, mas a mensagem de erro exibida ao usuário diz o oposto — instrui a "remover aportes antes de reabrir uma meta concluída", uma ação que o próprio código impede de acontecer. Na prática, isso significa que **um aporte lançado por engano numa meta que já bateu o valor-alvo nunca pode ser corrigido/removido** — um beco sem saída de dados.
+**Resumo executivo:** este é o módulo com a implementação mais madura encontrada até agora na auditoria — README marca **✅ 8/8**, e o código confere ponto a ponto. O defeito de `excluirAporte` em meta concluída (**RF-NOVO-D1**) foi **corrigido**, com UI de histórico de aportes no modal de edição (**RF-NOVO-D2**).
 
 ---
 
@@ -98,12 +98,12 @@ A função **tem lógica pronta e correta logo depois do guard** para lidar com 
 
 ## 5. Plano de Ação Priorizado (Next Steps)
 
-| # | Ação | Por quê | Esforço estimado |
-|---|---|---|---|
-| 1 | 🔴 Corrigir o guard de `excluirAporte` (RF-NOVO-D1) | Beco sem saída real de dados — usuário não tem como corrigir um erro comum (aporte incorreto que bate a meta) | Baixo |
-| 2 | 🟡 Ajustar a mensagem de erro para não contradizer o comportamento, enquanto a correção do item 1 não sobe | Reduz confusão imediata | Trivial |
-| 3 | 🟢 Confirmar no frontend se RN-068 (alerta "Meta vencida") está de fato visível na tela de metas | Fechar a lacuna de verificação ponta-a-ponta deste módulo | Baixo (é só uma checagem) |
-| 4 | 🟢 Teste de regressão para o cenário de reabertura via exclusão de aporte (RNF-NOVO-D1) | Evita reincidência | Baixo |
+| # | Ação | Status |
+|---|---|---|
+| 1 | 🔴 Corrigir guard `excluirAporte` (RF-NOVO-D1) | ✅ Guard removido; reabertura via lógica existente |
+| 2 | 🟡 UI "corrigir aporte" (RF-NOVO-D2) | ✅ `GoalAportesSection` no modal de edição |
+| 3 | 🟢 Alerta "Meta vencida" (RN-068) | ✅ API + `goalStatusUtils` — validar visualmente |
+| 4 | 🟢 Testes de regressão (RNF-NOVO-D1) | ✅ `metaService.test.js` |
 
 ---
 

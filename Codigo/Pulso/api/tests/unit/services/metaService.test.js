@@ -162,4 +162,109 @@ describe('metaService', () => {
             statusCode: 400,
         });
     });
+
+    it('exclui aporte de meta concluída e reabre a meta', async () => {
+        metaRepository.buscarPorId.mockResolvedValue(
+            metaBase({
+                valorAlvo: 100,
+                valorAtual: 100,
+                status: 'CONCLUIDA',
+                concluidaEm: new Date('2026-06-10T12:00:00.000Z'),
+                aportes: [
+                    {
+                        id: 'ap-1',
+                        valor: 80,
+                        data: new Date('2026-05-10T12:00:00.000Z'),
+                        criadoEm: new Date('2026-05-10T12:00:00.000Z'),
+                    },
+                    {
+                        id: 'ap-2',
+                        valor: 20,
+                        data: new Date('2026-06-10T12:00:00.000Z'),
+                        criadoEm: new Date('2026-06-10T12:00:00.000Z'),
+                    },
+                ],
+            })
+        );
+        metaRepository.buscarAporte.mockResolvedValue({
+            id: 'ap-2',
+            valor: 20,
+            data: new Date('2026-06-10T12:00:00.000Z'),
+        });
+        metaRepository.excluirAporte.mockResolvedValue(undefined);
+        metaRepository.atualizar.mockResolvedValue(
+            metaBase({
+                valorAlvo: 100,
+                valorAtual: 80,
+                status: 'ATIVA',
+                concluidaEm: null,
+                aportes: [
+                    {
+                        id: 'ap-1',
+                        valor: 80,
+                        data: new Date('2026-05-10T12:00:00.000Z'),
+                        criadoEm: new Date('2026-05-10T12:00:00.000Z'),
+                    },
+                ],
+            })
+        );
+
+        const result = await metaService.excluirAporte('usr-1', 'meta-1', 'ap-2');
+
+        expect(metaRepository.excluirAporte).toHaveBeenCalledWith('ap-2');
+        expect(metaRepository.atualizar).toHaveBeenCalledWith('meta-1', 'usr-1', {
+            valorAtual: 80,
+            status: 'ATIVA',
+            concluidaEm: null,
+        });
+        expect(result.status).toBe('ATIVA');
+        expect(result.valorAtual).toBe('80.00');
+        expect(result.valorRestante).toBe('20.00');
+    });
+
+    it('exclui aporte de meta ativa sem alterar status', async () => {
+        metaRepository.buscarPorId.mockResolvedValue(
+            metaBase({
+                valorAlvo: 200,
+                valorAtual: 50,
+                status: 'ATIVA',
+                aportes: [
+                    {
+                        id: 'ap-1',
+                        valor: 50,
+                        data: new Date('2026-06-01T12:00:00.000Z'),
+                        criadoEm: new Date('2026-06-01T12:00:00.000Z'),
+                    },
+                ],
+            })
+        );
+        metaRepository.buscarAporte.mockResolvedValue({
+            id: 'ap-1',
+            valor: 50,
+            data: new Date('2026-06-01T12:00:00.000Z'),
+        });
+        metaRepository.excluirAporte.mockResolvedValue(undefined);
+        metaRepository.atualizar.mockResolvedValue(
+            metaBase({ valorAlvo: 200, valorAtual: 0, status: 'ATIVA', aportes: [] })
+        );
+
+        const result = await metaService.excluirAporte('usr-1', 'meta-1', 'ap-1');
+
+        expect(metaRepository.atualizar).toHaveBeenCalledWith('meta-1', 'usr-1', {
+            valorAtual: 0,
+            status: 'ATIVA',
+            concluidaEm: null,
+        });
+        expect(result.status).toBe('ATIVA');
+    });
+
+    it('rejeita excluir aporte inexistente', async () => {
+        metaRepository.buscarPorId.mockResolvedValue(metaBase());
+        metaRepository.buscarAporte.mockResolvedValue(null);
+
+        await expect(metaService.excluirAporte('usr-1', 'meta-1', 'ap-404')).rejects.toMatchObject({
+            statusCode: 404,
+            message: 'Aporte não encontrado',
+        });
+    });
 });

@@ -1,5 +1,10 @@
 const AppError = require('../utils/appError');
 const transactionRepository = require('../repositories/transactionRepository');
+const {
+    startOfDay,
+    calcularUntilAPartirDoCorte,
+    aplicarUntilNaRegra,
+} = require('../utils/recurrenceUtils');
 const categoryRepository = require('../repositories/categoryRepository');
 const tagRepository = require('../repositories/tagRepository');
 const notificationService = require('./notificationService');
@@ -8,12 +13,6 @@ const insightService = require('./insightService');
 const prisma = require('../config/database');
 const { validarRecursoCategoria } = require('../utils/recursoCategoriaRules');
 const { mapTransacao } = require('../utils/transactionMapper');
-
-const startOfDay = (date) => {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    return d;
-};
 
 const incrementarStreak = async (usuarioId) => {
     const hoje = startOfDay(new Date());
@@ -305,21 +304,38 @@ const editarTransacao = async (usuarioId, transacaoId, dados) => {
     return mapTransacao(atualizada);
 };
 
-const excluirTransacao = async (usuarioId, transacaoId, excluirFuturas = false) => {
+const excluirTransacao = async (usuarioId, transacaoId, excluirFuturas = false, dataCorte = null) => {
     const existente = await transactionRepository.buscarPorId(transacaoId, usuarioId);
     if (!existente) {
         throw new AppError('Transação não encontrada', 404);
     }
 
     const isMaeRecorrente = existente.recorrente && !existente.paiId;
+    const isFilhaRecorrente = Boolean(existente.paiId);
 
-    if (excluirFuturas && isMaeRecorrente) {
-        await transactionRepository.excluirRecorrentesFilhas(transacaoId);
+    if (!excluirFuturas || (!isMaeRecorrente && !isFilhaRecorrente)) {
         await transactionRepository.excluir(transacaoId);
         return;
     }
 
-    await transactionRepository.excluir(transacaoId);
+    const paiId = isMaeRecorrente ? existente.id : existente.paiId;
+    const mae =
+        isMaeRecorrente
+            ? existente
+            : await transactionRepository.buscarPorId(paiId, usuarioId);
+
+    if (!mae) {
+        throw new AppError('Transação recorrente não encontrada', 404);
+    }
+
+    const cutoff = startOfDay(dataCorte ? new Date(dataCorte) : new Date());
+
+    await transactionRepository.excluirRecorrentesFilhasAPartirDe(paiId, cutoff);
+
+    const untilDate = calcularUntilAPartirDoCorte(cutoff);
+    const novaRegra = aplicarUntilNaRegra(mae.regraRecorrencia, untilDate);
+
+    await transactionRepository.encerrarRecorrencia(paiId, novaRegra);
 };
 
 module.exports = {

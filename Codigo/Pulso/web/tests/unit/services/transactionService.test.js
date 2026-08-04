@@ -88,12 +88,12 @@ describe('services/transactionService', () => {
 
     await expect(criarTransacao({ valor: 10 })).resolves.toEqual({ id: '1' })
     await expect(atualizarTransacao('1', { valor: 10 })).resolves.toEqual({ id: '1', valor: 10 })
-    await excluirTransacao('1', true)
+    await excluirTransacao('1', true, '2026-03-15T03:00:00.000Z')
 
     expect(api.post).toHaveBeenCalledWith('/transacoes', { valor: 10 })
     expect(api.patch).toHaveBeenCalledWith('/transacoes/1', { valor: 10 })
     expect(api.delete).toHaveBeenCalledWith('/transacoes/1', {
-      params: { excluirFuturas: 'true' },
+      params: { excluirFuturas: 'true', dataCorte: '2026-03-15T03:00:00.000Z' },
     })
   })
 

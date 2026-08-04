@@ -2,11 +2,28 @@ const AppError = require('../../../src/utils/appError');
 const {
     validarRecursoCategoria,
     normalize,
+    inferirGrupoBeneficioPorNome,
+    resolverGrupoBeneficio,
 } = require('../../../src/utils/recursoCategoriaRules');
 
 describe('recursoCategoriaRules', () => {
     it('normalize remove acentos, aplica lowercase e trim', () => {
         expect(normalize('  ALIMENTAÇÃO  ')).toBe('alimentacao');
+    });
+
+    it('inferirGrupoBeneficioPorNome reconhece só aliases exatos óbvios', () => {
+        expect(inferirGrupoBeneficioPorNome('Mercado')).toBe('COMPRAS');
+        expect(inferirGrupoBeneficioPorNome('supermercado')).toBe('COMPRAS');
+        expect(inferirGrupoBeneficioPorNome('iFood')).toBe('ALIMENTACAO');
+        expect(inferirGrupoBeneficioPorNome('Uber')).toBe('TRANSPORTE');
+        expect(inferirGrupoBeneficioPorNome('Shopping')).toBeNull();
+        expect(inferirGrupoBeneficioPorNome('Meu Mercado')).toBeNull();
+    });
+
+    it('resolverGrupoBeneficio prioriza campo estrutural', () => {
+        expect(
+            resolverGrupoBeneficio({ nome: 'Shopping', grupoBeneficio: 'COMPRAS' })
+        ).toBe('COMPRAS');
     });
 
     it('não valida quando tipo não é DESPESA', () => {
@@ -25,7 +42,7 @@ describe('recursoCategoriaRules', () => {
         ).not.toThrow();
     });
 
-    it('aceita VA para Alimentação e Compras', () => {
+    it('aceita VA para Alimentação e Compras padrão', () => {
         expect(() =>
             validarRecursoCategoria('VA', { nome: 'Alimentação' }, 'DESPESA')
         ).not.toThrow();
@@ -34,31 +51,46 @@ describe('recursoCategoriaRules', () => {
         ).not.toThrow();
     });
 
+    it('aceita VA para categoria custom com grupoBeneficio', () => {
+        expect(() =>
+            validarRecursoCategoria('VA', { nome: 'Relógio', grupoBeneficio: 'COMPRAS' }, 'DESPESA')
+        ).not.toThrow();
+    });
+
+    it('aceita VA para alias exato Mercado sem grupo explícito', () => {
+        expect(() =>
+            validarRecursoCategoria('VA', { nome: 'Mercado' }, 'DESPESA')
+        ).not.toThrow();
+    });
+
+    it('rejeita VA em Shopping sem preset', () => {
+        expect(() =>
+            validarRecursoCategoria('VA', { nome: 'Shopping' }, 'DESPESA')
+        ).toThrow(/não aceita Vale Alimentação/);
+    });
+
     it('rejeita VA em categoria diferente', () => {
         expect(() =>
             validarRecursoCategoria('VA', { nome: 'Transporte' }, 'DESPESA')
         ).toThrow(AppError);
-        expect(() =>
-            validarRecursoCategoria('VA', { nome: 'Transporte' }, 'DESPESA')
-        ).toThrow('VA só pode ser usado em despesas de Alimentação ou Compras');
     });
 
     it('rejeita VR fora de Alimentação', () => {
         expect(() =>
             validarRecursoCategoria('VR', { nome: 'Compras' }, 'DESPESA')
-        ).toThrow('VR só pode ser usado em despesas de Alimentação');
+        ).toThrow(/não aceita Vale Refeição/);
     });
 
     it('rejeita VT em Alimentação', () => {
         expect(() =>
             validarRecursoCategoria('VT', { nome: 'Alimentação' }, 'DESPESA')
-        ).toThrow('Não é possível usar VT para despesas de alimentação');
+        ).toThrow(/VT não vale para alimentação/);
     });
 
     it('rejeita VT fora de Transporte', () => {
         expect(() =>
             validarRecursoCategoria('VT', { nome: 'Compras' }, 'DESPESA')
-        ).toThrow('VT só pode ser usado em despesas de Transporte');
+        ).toThrow(/não aceita Vale Transporte/);
     });
 
     it('aceita VT para Transporte', () => {

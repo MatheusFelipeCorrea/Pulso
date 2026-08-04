@@ -1,84 +1,68 @@
 # Análise de produto — gaps e oportunidades
 
-> **Julho/2026** — visão baseada no código em `Codigo/Pulso/` e no schema Prisma.
+> **Ago/2026** — visão baseada no código em `Codigo/Pulso/` e na [auditoria PO](./Análises/PO/00-Sumario-Executivo.md).
 
 ## O que já é sólido
 
-- **Core financeiro:** auth (email + Google), transações com recorrência, categorias, **tags (CRUD)**, orçamento com alertas.
-- **Operacional:** vale transporte por `modoUso`, calendário + lembretes + sync Google Calendar.
-- **Planejamento:** metas com aportes, dívidas com pagamentos parciais, viagens com despesas/observações.
-- **Viagens (diferencial):** GeoNames, estimativas sazonais, Duffel opcional, conversor de moedas.
-- **Grupos (social):** lista + detalhe, membros, viagem compartilhada, pretensões, metas, aportes, chat paginado, notificações de grupo — ver [Modulos/Grupos.md](./Modulos/Grupos.md).
-- **Notificações:** sino paginado (20 + “Ver mais”), retenção 30d lidas, tipos RECEITA/DESPESA/STREAK/CONQUISTA/INSIGHT (MVP rule-based).
-- **Qualidade:** testes extensos na API e boa cobertura em utils/services do web.
+- **Core financeiro:** auth (email + Google, cookies httpOnly), transações com recorrência, categorias com **`grupoBeneficio`**, tags, orçamento com alertas e flag `orcamentoExcedeRenda`.
+- **Operacional:** vale transporte (decisão B — CLT com aviso), calendário + lembretes + sync Google Calendar.
+- **Planejamento:** metas com aportes, dívidas, viagens, **planejamento de compra** (RN-088/093), **divisão de despesas** (`/expense-split`).
+- **Grupos (social):** ver [Modulos/Grupos.md](./Modulos/Grupos.md) — rate limit em códigos de convite.
+- **Entrada do produto:** pós-login vai para **`/transactions`** (não mais dashboard vazio).
+- **Landing:** badges Em breve/Beta nos módulos incompletos.
 
 ## Gaps principais
 
 ### 1. Navegação vs realidade
 
-A sidebar lista módulos que ainda abrem `InDevelopmentPage`: `/dashboard`, `/reports`, `/insights`, `/chatbot`, `/achievements`, `/profile`, `/settings`.
+A sidebar ainda lista módulos placeholder: `/dashboard`, `/reports`, `/insights`, `/chatbot`, `/achievements`, `/profile`, `/settings`.
 
-**Sugestão:** dashboard mínimo ou ocultar links até lançar.
+**Feito:** redirect pós-auth → `/transactions`.  
+**Pendente:** dashboard MVP ou ocultar/badge itens incompletos na sidebar.
 
 ### 2. Perfil e configurações
 
-`modoUso`, renda fixa, VA/VR/VT e preferências existem no banco mas **não têm tela**. VT depende disso.
+`modoUso`, renda fixa, VA/VR/VT e preferências existem no banco mas **não têm tela**. VT e calendário dependem disso.
 
 **Sugestão:** `/settings` (RF-073–077, RF-103–104).
 
 ### 3. IA prometida, parcial
 
-Landing + enum `INSIGHT_IA`. Hoje: regra simples na API (maior gasto do mês). **Gemini** e chatbot (`MensagemChat`) ainda sem provider.
+Landing honesta com badges; backend: regra simples (maior gasto). **Gemini** e chatbot ainda sem provider.
 
 ### 4. Gamificação — backend sim, UI não
 
-API: streak/conquistas ao registrar transação/meta; notificações apontam para `/achievements` (placeholder).
+API: streak/conquistas; `/achievements` ainda placeholder.
 
-**Sugestão:** tela mínima de conquistas + streak.
+### 5. Divisão de despesas ✅
 
-### 5. Divisão de despesas (`/expense-split`) ✅
+Módulo **implementado** (RF-115–120). Falta **integração** com toggle RF-095 no detalhe do grupo.
 
-Módulo **implementado** (RF-115–120): CRUD de divisões, rateio igual/personalizado com centavos determinísticos, marcar/desmarcar pago, saldo consolidado, lembrete de cobrança. O detalhe do grupo continua com o **MVP RF-095** (pretensão + divisão igual, só UI) em paralelo — a **integração/migração** dessa lógica para o módulo global ainda não foi feita (não duplicar split bill no card de viagem).
-
-### 6. Grupos — gaps reais restantes
-
-Upload de imagem (arquivo) e UX de foto no criar/editar **já foram entregues** — ver [Modulos/Grupos.md](./Modulos/Grupos.md). Restam:
+### 6. Grupos — gaps restantes
 
 | Gap | Prioridade |
 |-----|------------|
-| Chat tempo real | Média |
-| RF-095 completo via expense-split (módulo já disponível, falta integrar) | Média |
+| Integrar RF-095 ↔ `/expense-split` | Média |
+| Chat tempo real (WebSocket) | Média — inviável em serverless |
 | Testes E2E grupos | Média |
-
-Detalhe: [Modulos/Grupos.md](./Modulos/Grupos.md).
-
-### 7. Integrações opcionais
-
-| Integração | Gap |
-|------------|-----|
-| Duffel live | Token `duffel_live_` |
-| GeoNames | Ativar “Free Web Services” |
-| Storage de imagens | Upload de perfil (grupo já usa multer) |
-| Tokens Google | Criptografia em repouso |
 
 ## Prioridade sugerida
 
 | # | Entrega | Por quê |
 |---|---------|---------|
-| 1 | Dashboard | Primeira tela útil pós-login |
-| 2 | Perfil / `modoUso` | Desbloqueia VT e onboarding |
-| 3 | `/achievements` mínimo | Fecha loop notificações gamificação |
+| 1 | Dashboard mínimo | Primeira tela útil além de transações |
+| 2 | Perfil / `modoUso` | Desbloqueia VT, calendário, onboarding |
+| 3 | `/achievements` mínimo | Fecha loop gamificação |
 | 4 | Gemini insights MVP | Diferencial landing |
-| 5 | **`/expense-split`** | RF-095 completo + sidebar coerente |
+| 5 | Grupos ↔ expense-split | RF-095 completo |
 
 ## Lógicas que já funcionam bem (manter)
 
 - Estimativas de transporte com ajuste sazonal.
-- Fallback Duffel → Amadeus → estimativa regional.
-- GeoNames + catálogo híbrido.
-- Jobs orçamento, lembretes, dívidas, limpeza notificações.
-- Grupos: fallback imagem viagem → capa destino.
+- Rateio em centavos (divisão de despesas).
+- Jobs orçamento, lembretes, dívidas.
+- Rollover de orçamento (RN-170).
 
 ---
 
-*Atualize este documento quando um gap for fechado ou uma nova prioridade surgir.*
+*Atualize quando um gap for fechado. Correções PO: ago/2026.*

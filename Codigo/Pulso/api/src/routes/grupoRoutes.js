@@ -1,6 +1,7 @@
 const express = require('express');
 const grupoController = require('../controllers/grupoController');
 const authMiddleware = require('../middlewares/authMiddleware');
+const { grupoInviteCodeRateLimit } = require('../middlewares/grupoInviteRateLimit');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const { handleGrupoImageUpload } = require('../middlewares/grupoImageUploadMiddleware');
 const {
@@ -26,9 +27,9 @@ const {
 
 const router = express.Router();
 
-router.get('/preview', authMiddleware, validateMiddleware(previewGrupoQuerySchema), grupoController.preview);
+router.get('/preview', authMiddleware, grupoInviteCodeRateLimit, validateMiddleware(previewGrupoQuerySchema), grupoController.preview);
 
-router.post('/entrar', authMiddleware, validateMiddleware(entrarGrupoSchema), grupoController.entrar);
+router.post('/entrar', authMiddleware, grupoInviteCodeRateLimit, validateMiddleware(entrarGrupoSchema), grupoController.entrar);
 
 router.get('/', authMiddleware, grupoController.listar);
 

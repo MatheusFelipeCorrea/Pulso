@@ -27,7 +27,7 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 | RN-010 | O sistema deve calcular e exibir: Salário Bruto - Descontos = Salário Líquido |
 | RN-011 | CLT tem direito a 13º salário (sistema deve considerar como receita extra em Nov/Dez) |
 | RN-012 | CLT tem férias remuneradas (sistema deve permitir planejar o adicional de 1/3) |
-| RN-013 | VT de CLT é descontado em folha (6% do salário bruto), não pode ser vendido |
+| RN-013 | VT de CLT é descontado em folha (6% do salário bruto). No Pulso, registrar venda de VT é **permitido com aviso** — por conta e responsabilidade do usuário (pode ser irregular perante a empresa) |
 | RN-014 | FGTS (8%) não é descontado do salário mas deve ser informativo (patrimônio acumulado) |
 
 ### 💻 PJ / Freelancer
@@ -88,12 +88,12 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 |---|---|
 | RN-038 | VT só pode ser gasto em despesas da categoria "Transporte" |
 | RN-039 | Despesas de alimentação NUNCA podem usar recurso VT |
-| RN-040 | VT pode ser vendido (somente para modo Estagiário) |
+| RN-040 | VT pode ser vendido no Pulso: Estagiário sem restrição; CLT com aviso de possível irregularidade (RN-013/045) |
 | RN-041 | Ao vender VT, o valor recebido entra como receita do tipo "Dinheiro" |
 | RN-042 | O intervalo entre vendas de VT é configurável (padrão: 30 dias) |
 | RN-043 | O sistema deve bloquear nova venda antes do intervalo configurado |
 | RN-044 | Saldo VT = Recebido no mês - Usado - Vendido (nominal) |
-| RN-045 | CLT não pode vender VT (desconto de 6% em folha, uso obrigatório) |
+| RN-045 | CLT pode registrar venda de VT no Pulso com aviso explícito (desconto de 6% em folha; uso formalmente obrigatório na empresa — o Pulso não bloqueia, apenas alerta) |
 
 ---
 
@@ -151,7 +151,7 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 | RN-071 | A cotação exibida deve ter timestamp de quando foi consultada |
 | RN-072 | Viagem pode ser vinculada a UMA meta financeira (relação 1:1) |
 | RN-073 | Se meta vinculada for excluída, viagem perde o vínculo (não é excluída) |
-| RN-074 | Pretensões podem ser de 6 categorias: Transporte, Hospedagem, Alimentação, Passeios, Compras, Outros |
+| RN-074 | Pretensões podem ser de 10 categorias: Transporte, Hospedagem, Alimentação, Passeios, Compras, Documentação, Saúde, Emergências, Entretenimento, Outros |
 
 ---
 
@@ -268,13 +268,13 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 | RN-131 | Senha mínima: 8 caracteres, 1 número, 1 maiúscula |
 | RN-132 | Hash com bcrypt, salt rounds = 12 |
 | RN-133 | Access token expira em 15 minutos |
-| RN-134 | Refresh token expira em 7 dias (rotativo: cada refresh gera novo token) |
+| RN-134 | Refresh token expira em 7 dias (rotativo: cada refresh gera novo token). Com **"Lembrar-me"** marcado no login: 30 dias |
 | RN-135 | Refresh token é armazenado como httpOnly cookie |
 | RN-136 | Ao alterar senha: todos os refresh tokens são invalidados (logout global) |
 | RN-137 | Conta só é ativada após confirmação do email |
 | RN-138 | Login com Google: cria conta automaticamente se email não existe |
 | RN-139 | Login com Google: vincula à conta existente se email já cadastrado |
-| RN-140 | Após 5 tentativas de login falhas: bloquear por 15 minutos |
+| RN-140 | Rotas sensíveis de autenticação: rate-limit de **5 requisições por minuto por IP** (`authSensitiveRateLimit`). *Regra anterior de bloqueio por conta (5 falhas / 15 min) foi removida em 2026-06 — decisão consciente do time.* |
 | RN-141 | Token de recuperação de senha expira em 1 hora |
 | RN-142 | Exclusão de conta: remove TODOS os dados permanentemente (cascade) |
 | RN-143 | Exclusão de conta requer confirmação digitando "EXCLUIR" |

@@ -1,6 +1,7 @@
 # 👥 Módulo Grupos — estado e gaps
 
-> **Julho/2026** — alinhado ao código em `Codigo/Pulso/web` e `Codigo/Pulso/api`.
+> **Julho/2026** — alinhado ao código em `Codigo/Pulso/web` e `Codigo/Pulso/api`.  
+> **Correções ago/2026 (auditoria PO):** rate limit 20 req/min por usuário em `GET /preview` e `POST /entrar`; `@unique` em `ViagemGrupo.grupoId` (1 viagem por grupo); criação de metas em transação Serializable com recontagem atômica do limite de 5.
 
 ## O que está entregue
 

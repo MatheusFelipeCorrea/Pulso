@@ -5,7 +5,11 @@ export function deleteTransactionMessage(nome) {
 }
 
 export function deleteRecurringTransactionMessage(nome) {
-  return `A transação "${nome}" é recorrente. Como deseja excluir?`
+  return (
+    `A transação "${nome}" faz parte de uma série recorrente. ` +
+    'Escolha se deseja excluir só esta ocorrência ou encerrar a série a partir desta data. ' +
+    'O histórico anterior será mantido.'
+  )
 }
 
 export function deleteGoalMessage(nome) {

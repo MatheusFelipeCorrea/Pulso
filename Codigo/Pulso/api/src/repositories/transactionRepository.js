@@ -125,9 +125,26 @@ const excluir = async (transacaoId) => {
     await prisma.transacao.delete({ where: { id: transacaoId } });
 };
 
-const excluirRecorrentesFilhas = async (paiId) => {
-    await prisma.transacao.deleteMany({ where: { paiId } });
+const excluirRecorrentesFilhasAPartirDe = async (paiId, dataCorte) => {
+    const cutoff = new Date(dataCorte);
+    cutoff.setHours(0, 0, 0, 0);
+
+    await prisma.transacao.deleteMany({
+        where: {
+            paiId,
+            data: { gte: cutoff },
+        },
+    });
 };
+
+const encerrarRecorrencia = async (transacaoId, regraRecorrencia) =>
+    prisma.transacao.update({
+        where: { id: transacaoId },
+        data: {
+            recorrente: false,
+            regraRecorrencia,
+        },
+    });
 
 const listarRecorrentesMae = async () =>
     prisma.transacao.findMany({
@@ -157,7 +174,8 @@ module.exports = {
     buscarPorId,
     atualizar,
     excluir,
-    excluirRecorrentesFilhas,
+    excluirRecorrentesFilhasAPartirDe,
+    encerrarRecorrencia,
     listarRecorrentesMae,
     listarDescricoesPorTipo,
 };

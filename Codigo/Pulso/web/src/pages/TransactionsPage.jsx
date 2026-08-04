@@ -190,12 +190,16 @@ export default function TransactionsPage() {
     }
   }
 
-  const handleConfirmDelete = async ({ excluirFuturas, transacaoId }) => {
+  const handleConfirmDelete = async ({ excluirFuturas, dataCorte }) => {
     setDeleting(true)
     try {
-      const id = transacaoId ?? deleteTarget?.id
-      await transactionService.excluirTransacao(id, excluirFuturas)
-      toast.success('Transação excluída')
+      const id = deleteTarget?.id
+      await transactionService.excluirTransacao(id, excluirFuturas, dataCorte)
+      toast.success(
+        excluirFuturas
+          ? 'Recorrência encerrada. O histórico anterior foi mantido.'
+          : 'Transação excluída'
+      )
       setDeleteOpen(false)
       setModalOpen(false)
       setDeleteTarget(null)

@@ -47,7 +47,7 @@ A API tem **dois diretórios de teste em paralelo**:
 
 **O que isso muda:** a alegação de RNF-015 (~95% linhas/~94% statements) é **plausível e não foi refutada** por esta auditoria — ao contrário do que uma leitura apressada dos arquivos `.spec.js` vazios sugeriria. Dito isso, dois pontos concretos valem seguimento (detalhados na auditoria de NFR):
 - `gamificationService.js`, `insightService.js`, `googleCalendarService.js` e `googleCalendarSyncService.js` são **explicitamente excluídos** do `collectCoverageFrom` (via `!src/services/...`) — todos com conteúdo real e não triviais, então o "95%" é medido sobre um subconjunto que já exclui essas peças.
-- Não foi encontrado teste dedicado para `viagemService.js` (Módulo 05) nem `purchasePlanningService.js` (Módulo 18) na suíte real, apesar de nenhum dos dois estar na lista de exclusão — vale confirmar se há cobertura indireta ou se são pontos cegos reais.
+- Não foi encontrado teste dedicado para `viagemService.js` (Módulo 05) na suíte real — **`purchasePlanningService.test.js` adicionado (ago/2026)**; `viagemService` ainda sem teste dedicado.
 
 **Recomendação:** os 25 arquivos `.spec.js` vazios deveriam ser removidos (fazem parte da limpeza de T1) — sua mera existência já causou uma leitura incorreta nesta própria auditoria, o que é evidência direta do risco descrito em T1.
 
@@ -55,13 +55,17 @@ A API tem **dois diretórios de teste em paralelo**:
 
 ## T3 — Tokens de sessão em `localStorage`, não em cookie `httpOnly` como a documentação afirma
 
-Ver detalhe em [01-Autenticacao.md](./01-Autenticacao.md#3-diagnóstico-de-regras-de-negócio-e-validações). `RN-135` e o Roadmap (`Fase 3.2`) documentam `httpOnly cookie`; o código (`web/src/services/authService.js:71-82`, `web/src/services/api.js:14`) usa `localStorage.setItem('accessToken'/'refreshToken', ...)`. Isso vale para **todo módulo que depende de sessão autenticada** (ou seja, todos), então qualquer XSS em qualquer tela do sistema pode roubar a sessão inteira. Tratado como achado central do Módulo 01, mas citado aqui porque a superfície de risco é o app inteiro.
+> **✅ Corrigido (2026-06):** cookies `httpOnly` (`pulso_access` / `pulso_refresh`) no backend; front com `withCredentials`; OAuth via token de exchange de curta duração.
+
+Ver detalhe em [01-Autenticacao.md](./01-Autenticacao.md#3-diagnóstico-de-regras-de-negócio-e-validações). ~~`RN-135` e o Roadmap (`Fase 3.2`) documentam `httpOnly cookie`; o código usava `localStorage`.~~ Implementação alinhada à documentação.
 
 ---
 
 ## T5 — Caches e contadores em memória (`Map`/`MemoryStore`) não sobrevivem entre invocações serverless
 
 **Severidade: Média-Alta (afeta corretude de rate-limit e eficácia de cache; não derruba o sistema).**
+
+> **⏸️ Decisão (2026-06):** mantido como **best effort** por ora. Redis/Upstash recomendado quando houver tráfego relevante, incidente de abuso ou exigência de compliance — não bloqueia MVP.
 
 Encontrado duas vezes até agora, em módulos diferentes, o mesmo padrão: código que assume um processo Node de longa duração, mas roda como função serverless na Vercel (confirmado em `Modulos/Grupos.md` e `api/vercel.json`/`database.js`, que já documentam isso para o caso do chat/WebSocket):
 
@@ -78,7 +82,9 @@ Em ambos os casos, o estado vive na memória de uma instância de função serve
 
 ## T4 — Concorrência: múltiplos 401 simultâneos podem deslogar uma sessão válida
 
-Ver detalhe em [01-Autenticacao.md](./01-Autenticacao.md#3-diagnóstico-de-regras-de-negócio-e-validações). Como o refresh token é rotativo/single-use e o interceptor do axios não tem mutex/deduplicação, duas chamadas de API que expiram ao mesmo tempo (comum em telas que disparam vários `GET` em paralelo, ex.: um futuro Dashboard) disputam o mesmo refresh token — a segunda chamada recebe um token já revogado, o backend interpreta como possível roubo de token e revoga a sessão inteira. Vale para qualquer tela que dispare requisições paralelas, não só Auth.
+> **✅ Corrigido (2026-06):** mutex em `web/src/services/api.js` deduplica `POST /auth/refresh`.
+
+Ver detalhe em [01-Autenticacao.md](./01-Autenticacao.md#3-diagnóstico-de-regras-de-negócio-e-validações). ~~Como o refresh token é rotativo/single-use e o interceptor do axios não tinha mutex/deduplicação~~ — resolvido.
 
 ---
 
@@ -86,10 +92,12 @@ Ver detalhe em [01-Autenticacao.md](./01-Autenticacao.md#3-diagnóstico-de-regra
 
 **Severidade: Média-Alta (perda de dados do usuário; já confirmado em 2 módulos independentes).**
 
-Duas vezes até agora, em módulos sem relação direta um com o outro, o mesmo anti-padrão apareceu: uma operação principal é bem-sucedida (criar conta, criar lembrete), mas um efeito colateral **opcional/auxiliar** falha (enviar email de verificação, sincronizar com Google Calendar) — e o código reage **excluindo o recurso principal recém-criado** em vez de preservá-lo e apenas sinalizar a falha do efeito colateral:
+> **✅ Corrigido (2026-06)** nos dois casos confirmados abaixo.
 
-1. **Módulo 01 (Auth):** `registerUser` deleta o usuário se o envio do email de verificação falhar (`authService.js:83-100`).
-2. **Módulo 07 (Lembretes):** `criarLembrete` deleta o lembrete se a sincronização com o Google Calendar falhar (`reminderService.js:102-109`) — mesmo quando a causa é banal (Google desconectado), cenário que a própria regra de negócio (RN-097) diz que deveria ser tolerado.
+Duas vezes até agora, em módulos sem relação direta um com o outro, o mesmo anti-padrão apareceu: uma operação principal é bem-sucedida (criar conta, criar lembrete), mas um efeito colateral **opcional/auxiliar** falha (enviar email de verificação, sincronizar com Google Calendar) — e o código reagia **excluindo o recurso principal recém-criado** em vez de preservá-lo e apenas sinalizar a falha do efeito colateral:
+
+1. **Módulo 01 (Auth):** ~~`registerUser` deleta o usuário se o envio do email de verificação falhar~~ → conta mantida com `emailPendente: true`.
+2. **Módulo 07 (Lembretes):** ~~`criarLembrete` deleta o lembrete se a sincronização com o Google Calendar falhar~~ → lembrete preservado com `sincronizado: false`.
 
 Em ambos os casos, existe uma versão "correta" do mesmo tipo de tratamento em outro fluxo do mesmo módulo (reenvio de verificação não deleta a conta; edição de lembrete não deleta o lembrete) — sugerindo que não é uma escolha deliberada de arquitetura, e sim um padrão que se repete por hábito/cópia em fluxos de criação.
 
@@ -103,14 +111,14 @@ Em ambos os casos, existe uma versão "correta" do mesmo tipo de tratamento em o
 
 Quarta variação do mesmo anti-padrão de concorrência encontrada de forma independente em módulos sem relação entre si — uma regra de unicidade ou de saldo é garantida só por um `SELECT` de checagem antes de um `INSERT`/`UPDATE`, sem transação atômica nem constraint de banco:
 
-1. **Módulo 01 (Auth):** verificação de email duplicado antes de criar usuário — e, pior, o erro de constraint (`P2002`) resultante de uma corrida não é tratado, gerando 500 genérico em vez de 409.
-2. **Módulo 05 (Viagens):** vínculo 1:1 Viagem↔Meta sem `@unique` no schema.
-3. **Módulo 08 (VT):** checagem de saldo suficiente antes de registrar venda/uso — aqui o risco é o mais concreto dos quatro, podendo gerar saldo financeiro negativo de verdade.
-4. **Módulo 13 (Grupos):** "um grupo só pode ter uma viagem" e "máximo 5 metas ativas por grupo".
+1. **Módulo 01 (Auth):** ~~verificação de email duplicado antes de criar usuário — e, pior, o erro de constraint (`P2002`) resultante de uma corrida não é tratado~~ → **✅ P2002 → 409** implementado.
+2. **Módulo 05 (Viagens):** vínculo 1:1 Viagem↔Meta — **✅ `@unique(metaId)`** + migration + P2002→409.
+3. **Módulo 08 (VT):** ~~checagem de saldo~~ → **✅ transação serializável** — impede estouro de saldo VT (RN-044).
+4. **Módulo 13 (Grupos):** "uma viagem por grupo" — **✅ `@unique(grupoId)`** em `ViagemGrupo`; metas ativas — **✅ transação Serializable** em `criarMetas`.
 
-Em contraste, o Módulo 05 (moedas favoritas) mostra que o time **sabe** tratar isso corretamente quando lembra (`P2002` capturado e convertido em 409 amigável) — a inconsistência sugere que é uma questão de atenção pontual em cada endpoint, não de desconhecimento da técnica.
+> **Distinção importante:** **VT / VA / VR** = saldo de benefício com **piso zero** (não se gasta além do creditado). **DINHEIRO** = saldo de conta pode ser **negativo de propósito** (receitas − despesas em `transactionService`; cheque especial, cartão, etc.). A urgência de transação atômica em benefícios é **integridade do ledger**, não “evitar vermelho na conta”. VA/VR ainda não checam saldo ao lançar despesa — só categoria (`recursoCategoriaRules`).
 
-**Recomendação:** ao final da auditoria completa, revisar sistematicamente todo "verificar existência/limite antes de criar" no código em busca desse padrão, e priorizar por impacto financeiro real (VT e futuros módulos de saldo são os mais urgentes; vínculos 1:1 e limites de contagem são baixo risco prático hoje).
+**Recomendação:** priorizar por tipo de regra — (1) **benefícios** que não podem estourar (VT ✅; VA/VR se/quando houver módulo de saldo); (2) **conta corrente** — negativo permitido, sem bloqueio; (3) **unicidade** Viagens/Grupos — baixo risco, documentar ou 409 basta no MVP.
 
 ---
 

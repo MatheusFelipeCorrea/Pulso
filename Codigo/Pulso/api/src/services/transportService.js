@@ -13,10 +13,21 @@ const MSG_BLOQUEIO =
 const MSG_BLOQUEIO_PJ =
     'Habilite o Vale Transporte na tela de VT para usar esta funcionalidade.';
 const MSG_CLT_WARNING =
-    'CLT: VT é descontado em folha (6%). Venda pode gerar irregularidades.';
+    'CLT: VT é descontado em folha (6%) e a venda pode ser irregular perante a empresa. ' +
+    'Registro permitido por sua conta e responsabilidade.';
 
 const formatBRL = (valor) =>
     Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+const assertSaldoVtSuficiente = (error) => {
+    if (error?.code === 'INSUFFICIENT_VT_BALANCE') {
+        throw new AppError(
+            `Saldo insuficiente. Você tem apenas ${formatBRL(error.saldoRestante)} disponível.`,
+            400
+        );
+    }
+    throw error;
+};
 
 const toPositiveInt = (value, fallback) => {
     const n = Number.parseInt(String(value), 10);
@@ -99,15 +110,8 @@ const registrarVendaVt = async (usuarioId, dados) => {
         throw new AppError('Data da venda inválida', 400);
     }
 
-    const saldoAtual = await obterSaldoVt(usuarioId, periodoAtual());
-    const saldoNum = Number(saldoAtual.saldoRestante);
-
-    if (dados.valorNominal > saldoNum + 0.001) {
-        throw new AppError(
-            `Saldo insuficiente. Você tem apenas ${formatBRL(saldoNum)} disponível.`,
-            400
-        );
-    }
+    const ref = periodoAtual();
+    const { inicio, fim } = intervaloDoPeriodo(ref);
 
     const categoriaOutros = await categoryRepository.buscarPorNome(
         usuarioId,
@@ -118,32 +122,37 @@ const registrarVendaVt = async (usuarioId, dados) => {
         throw new AppError('Categoria "Outros" (receita) não encontrada', 500);
     }
 
-    const venda = await transportRepository.criarVendaComTransacao({
-        vendaData: {
-            usuarioId,
-            nomeComprador: dados.nomeComprador.trim(),
-            dataVenda,
-            valorNominal: dados.valorNominal,
-            valorRecebido: dados.valorRecebido,
-        },
-        transacaoData: {
-            usuarioId,
-            categoriaId: categoriaOutros.id,
-            tipo: 'RECEITA',
-            recurso: 'DINHEIRO',
-            valor: dados.valorRecebido,
-            descricao: `Venda de VT para ${dados.nomeComprador.trim()}`,
-            data: dataVenda,
-            recorrente: false,
-        },
-    });
-
-    const diferenca = dados.valorRecebido - dados.valorNominal;
-    const novoSaldoVt = saldoNum - dados.valorNominal;
+    let venda;
+    let novoSaldoVt;
+    try {
+        ({ venda, saldoRestante: novoSaldoVt } = await transportRepository.criarVendaComTransacao({
+            vendaData: {
+                usuarioId,
+                nomeComprador: dados.nomeComprador.trim(),
+                dataVenda,
+                valorNominal: dados.valorNominal,
+                valorRecebido: dados.valorRecebido,
+            },
+            transacaoData: {
+                usuarioId,
+                categoriaId: categoriaOutros.id,
+                tipo: 'RECEITA',
+                recurso: 'DINHEIRO',
+                valor: dados.valorRecebido,
+                descricao: `Venda de VT para ${dados.nomeComprador.trim()}`,
+                data: dataVenda,
+                recorrente: false,
+            },
+            inicio,
+            fim,
+        }));
+    } catch (error) {
+        assertSaldoVtSuficiente(error);
+    }
 
     const resposta = {
         ...mapVenda(venda),
-        diferenca: diferenca.toFixed(2),
+        diferenca: (dados.valorRecebido - dados.valorNominal).toFixed(2),
         novoSaldoVt: novoSaldoVt.toFixed(2),
     };
 
@@ -212,22 +221,26 @@ const registrarUsoVt = async (usuarioId, dados) => {
     }
 
     const totalUsado = dados.quantidade * dados.valorPorPassagem;
-    const saldoAtual = await obterSaldoVt(usuarioId, periodoAtual());
-    const saldoNum = Number(saldoAtual.saldoRestante);
+    const ref = periodoAtual();
+    const { inicio, fim } = intervaloDoPeriodo(ref);
 
-    if (totalUsado > saldoNum + 0.001) {
-        throw new AppError(
-            `Saldo insuficiente. Você tem apenas ${formatBRL(saldoNum)} disponível.`,
-            400
-        );
+    let uso;
+    let novoSaldoVt;
+    try {
+        ({ uso, saldoRestante: novoSaldoVt } = await transportRepository.criarUsoVtAtomico({
+            usoData: {
+                usuarioId,
+                quantidade: dados.quantidade,
+                valorPorPassagem: dados.valorPorPassagem,
+                data,
+            },
+            inicio,
+            fim,
+            totalUsado,
+        }));
+    } catch (error) {
+        assertSaldoVtSuficiente(error);
     }
-
-    const uso = await transportRepository.criarUsoVt({
-        usuarioId,
-        quantidade: dados.quantidade,
-        valorPorPassagem: dados.valorPorPassagem,
-        data,
-    });
 
     if (dados.salvarValorPadrao) {
         await transportRepository.atualizarValorPadraoPassagem(
@@ -242,7 +255,7 @@ const registrarUsoVt = async (usuarioId, dados) => {
         valorPorPassagem: Number(uso.valorPorPassagem).toFixed(2),
         data: uso.data.toISOString(),
         totalUsado: totalUsado.toFixed(2),
-        novoSaldoVt: (saldoNum - totalUsado).toFixed(2),
+        novoSaldoVt: novoSaldoVt.toFixed(2),
     };
 };
 

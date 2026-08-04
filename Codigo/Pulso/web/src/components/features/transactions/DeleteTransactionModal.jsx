@@ -37,7 +37,7 @@ export function DeleteTransactionModal({
             onClick: () =>
               onConfirm?.({
                 excluirFuturas: true,
-                transacaoId: transacao.paiId || transacao.id,
+                dataCorte: transacao.data,
               }),
           },
         ]}

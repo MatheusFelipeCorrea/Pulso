@@ -13,7 +13,7 @@ describe('transactionMapper', () => {
             tipo: 'DESPESA',
         };
 
-        expect(mapCategoria(categoria)).toEqual(categoria);
+        expect(mapCategoria(categoria)).toEqual({ ...categoria, grupoBeneficio: null });
     });
 
     it('mapTransacao mapeia categoria e tags', () => {
@@ -63,6 +63,7 @@ describe('transactionMapper', () => {
                 icone: 'bus',
                 cor: '#123456',
                 tipo: 'DESPESA',
+                grupoBeneficio: null,
             },
             tags: [
                 {

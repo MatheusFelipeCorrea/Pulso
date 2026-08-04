@@ -3,7 +3,7 @@ const debtRepository = require('../repositories/debtRepository');
 const { mapDivida } = require('../utils/debtMapper');
 const { mapPagamento } = require('../utils/debtPaymentMapper');
 const { formatPersonName } = require('../utils/personName');
-const { calcSaldoDivida, estaTotalmentePaga, isDividaQuitada, roundMoney } = require('../utils/debtBalanceUtils');
+const { calcSaldoDivida, estaTotalmentePaga, isDividaQuitada, roundMoney, calcSaldoFromPagamentos } = require('../utils/debtBalanceUtils');
 const {
     formatDateOnly,
     parseVencimentoDate,
@@ -92,6 +92,14 @@ const sincronizarQuitacao = async (divida) => {
     if (divida.quitada && pagamentos.length > 0) {
         const reaberta = await debtRepository.reabrir(divida.id, divida.usuarioId);
         return { ...reaberta, pagamentos };
+    }
+
+    if (divida.quitada && pagamentos.length === 0) {
+        const { valorRestante } = calcSaldoFromPagamentos(divida, pagamentos);
+        if (valorRestante > 0) {
+            const reaberta = await debtRepository.reabrir(divida.id, divida.usuarioId);
+            return { ...reaberta, pagamentos };
+        }
     }
 
     return divida;

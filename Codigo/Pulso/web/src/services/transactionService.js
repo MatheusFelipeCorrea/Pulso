@@ -67,8 +67,9 @@ export async function atualizarTransacao(id, payload) {
   return data
 }
 
-export async function excluirTransacao(id, excluirFuturas = false) {
-  await api.delete(`/transacoes/${id}`, {
-    params: { excluirFuturas: excluirFuturas ? 'true' : 'false' },
-  })
+export async function excluirTransacao(id, excluirFuturas = false, dataCorte = null) {
+  const params = { excluirFuturas: excluirFuturas ? 'true' : 'false' }
+  if (dataCorte) params.dataCorte = dataCorte
+
+  await api.delete(`/transacoes/${id}`, { params })
 }

@@ -14,7 +14,7 @@
 4. [💡 Novos Requisitos Propostos](#4-novos-requisitos-propostos)
 5. [Plano de Ação Priorizado](#5-plano-de-ação-priorizado)
 
-**Resumo executivo:** o README marca Transações como **✅ 13/13**, e a auditoria confirma que a funcionalidade central (CRUD, recorrência, filtros, tags, sugestão de categoria, transferência entre recursos) realmente funciona e está bem estruturada (validação em 3 camadas: Zod → service → regra de domínio). Mas a auditoria encontrou **dois defeitos concretos e reproduzíveis**, não cosméticos: (1) o botão "Excluir esta e futuras" de uma transação recorrente **apaga também o histórico passado** da série, não só as ocorrências futuras — contradizendo o próprio texto do botão; e (2) a validação de compatibilidade recurso×categoria (RN-032/035/038/039, ex.: "VT não pode em Alimentação") é feita comparando o **nome em texto** da categoria com 3 strings fixas (`"alimentacao"`, `"compras"`, `"transporte"`) — o que significa que **nenhuma categoria personalizada** (recurso RF-018, já entregue) pode ser usada com VA/VR/VT, mesmo quando semanticamente óbvia (ex. uma categoria custom chamada "Mercado" ou "Uber").
+**Resumo executivo:** o README marca Transações como **✅ 13/13**, e a auditoria confirma que a funcionalidade central (CRUD, recorrência, filtros, tags, sugestão de categoria, transferência entre recursos) realmente funciona e está bem estruturada. Os dois defeitos críticos identificados nesta auditoria (**RF-NOVO-C1** e **RF-NOVO-C2**) foram **corrigidos** — ver seções 2–5 com status atualizado.
 
 ---
 
@@ -24,12 +24,12 @@
 |---|---|---|---|
 | RF-015/016 | Registrar receita/despesa (valor, data, categoria, recurso/origem) | ✅ | Confirmado — `criarTransacaoSchema` (`transactionSchemas.js:6-43`) valida tudo; `transactionService.criarTransacao` aplica regras de domínio |
 | RF-017 | Categorias padrão | ✅ | Seed via `categoryService.seedCategoriasPadrao`, chamado em `registerUser`/`authenticateGoogle` |
-| RF-018 | Categorias personalizadas | ✅ | Confirmado, com ícone+cor (`categoryService.js`), mas ver gap crítico na seção 3 (incompatibilidade com VA/VR/VT) |
+| RF-018 | Categorias personalizadas | ✅ | Confirmado, com ícone+cor; **`grupoBeneficio`** permite VA/VR/VT em custom (RF-NOVO-C2 ✅) |
 | RF-019 | Tags livres | ✅ | Confirmado (`tagRepository`, `vincularTags`/`desvincularTags`) |
-| RF-020/021 | Recorrência configurável + geração automática | ✅ | Confirmado — `regraRecorrencia` (RRULE simplificada) + `jobs/recurringTransactions.js` roda diariamente e cria a ocorrência do dia. Suporta `FREQ=WEEKLY/MONTHLY/YEARLY` com `INTERVAL` e `UNTIL` |
-| RF-022 | Editar/excluir transações | ✅ | Confirmado, mas ver gap crítico do delete de recorrentes na seção 3 |
-| RF-023/024 | Filtros (período, categoria, tipo, recurso) + busca (descrição/tag) | ✅ | Confirmado, `transactionRepository.buildWhere` — bem implementado, inclusive com `OR` cobrindo descrição e nome de tag |
-| RF-025 | Bloquear despesas de Alimentação usando VT | ✅ | Confirmado **apenas para a categoria padrão "Transporte"/"Alimentação" literal** — ver gap crítico seção 3 |
+| RF-020/021 | Recorrência configurável + geração automática | ✅ | Confirmado — `regraRecorrencia` + `jobs/recurringTransactions.js` |
+| RF-022 | Editar/excluir transações | ✅ | Delete recorrente corrigido — RF-NOVO-C1 ✅ |
+| RF-023/024 | Filtros + busca | ✅ | Confirmado, `transactionRepository.buildWhere` |
+| RF-025 | Bloquear despesas de Alimentação usando VT | ✅ | Via `grupoBeneficio` / categorias padrão — não depende mais só do nome literal |
 | RF-140 | Transferência entre recursos, fora dos totais de receita/despesa | ✅ | Confirmado — `tipo: TRANSFERENCIA`, `categoriaId` nulo, excluído de `montarResumo` (só soma `RECEITA`/`DESPESA`) |
 | RF-141 | Sugestão de categoria por similaridade de descrição | ✅ | Não auditado em profundidade neste módulo (arquivo `categorySuggestionService.js` existe e tem conteúdo) — mencionar para futura verificação de precisão do algoritmo de Dice bigramas |
 
@@ -39,29 +39,25 @@ Todos os RFs "✅" do README de fato têm implementação real por trás (não s
 
 ## 2. Gaps de Usabilidade e Jornada do Usuário
 
-1. **"Excluir esta e futuras" não faz o que o texto promete.** Na UI (`DeleteTransactionModal.jsx:35-42`), o botão diz literalmente **"Excluir esta e futuras"**. No backend, esse fluxo chama `excluirRecorrentesFilhas(paiId)` (`transactionRepository.js:128-130`), que executa `deleteMany({ where: { paiId } })` **sem nenhum filtro de data** — ou seja, apaga **todas** as ocorrências já geradas da série, passadas e futuras, não só as futuras. Um usuário que tem 8 meses de histórico de "Aluguel" recorrente e clica "Excluir esta e futuras" pensando em parar a recorrência dali pra frente **perde o histórico financeiro dos 8 meses anteriores** sem aviso. Isso é uma perda de dados real, silenciosa, e diretamente contraditória com o texto do próprio botão.
-2. **Confirmação de exclusão não diferencia visualmente o risco.** O modal (`DeleteTransactionModal.jsx`) usa `variant="danger"` só no botão "Excluir esta e futuras", o que é correto, mas a mensagem (`deleteRecurringTransactionMessage`, não lida neste módulo mas referenciada) precisa deixar claríssimo que isso afeta o passado também — hoje, a julgar pelo nome da função/botão, o usuário não é avisado disso.
-3. **VA/VR/VT ficam "quebrados" silenciosamente ao criar categorias personalizadas para o mesmo propósito.** Um usuário que cria a categoria "Mercado" (em vez de usar a "Compras" padrão) ou "Uber"/"99" (em vez de "Transporte" padrão) **não consegue mais registrar despesas nessas categorias usando VA ou VT respectivamente** — o sistema rejeita com a mensagem genérica "VA só pode ser usado em despesas de Alimentação ou Compras" / "VT só pode ser usado em despesas de Transporte", que não deixa claro que o problema é o **nome exato** da categoria, não a categoria em si. Do ponto de vista do usuário, ele criou uma categoria mais específica (boa prática incentivada por RF-018) e foi "punido" com uma trava que parece um bug.
+1. ~~**"Excluir esta e futuras" não faz o que o texto promete.**~~ **✅ Corrigido (ago/2026)** — `excluirRecorrentesFilhasAPartirDe` + `UNTIL` na mãe; histórico passado preservado; `dataCorte` no front.
+2. **Confirmação de exclusão** — mensagens atualizadas; risco de perda de histórico eliminado com RF-NOVO-C1.
+3. ~~**VA/VR/VT ficam "quebrados" com categorias personalizadas.**~~ **✅ Corrigido (ago/2026)** — campo `grupoBeneficio` + presets no `CategoryFormModal`; mensagens de erro explicam o grupo (RF-NOVO-C2/C3).
 
 ---
 
 ## 3. Diagnóstico de Regras de Negócio e Validações
 
-### Achado crítico A — Exclusão de recorrentes ("futuras") apaga também o passado
+### Achado crítico A — Exclusão de recorrentes ("futuras") apagava o passado
 
-**Reprodução (leitura de código):** `transactionService.excluirTransacao(usuarioId, transacaoId, excluirFuturas=true)` → se a transação é a "mãe" de uma série (`existente.recorrente && !existente.paiId`) → chama `transactionRepository.excluirRecorrentesFilhas(transacaoId)`, que roda:
-```js
-prisma.transacao.deleteMany({ where: { paiId } }) // sem where.data
-```
-Isso apaga **toda e qualquer** transação-filha já gerada por essa mãe, independentemente de a `data` dela ser passada ou futura. Como o job `recurringTransactions.js` gera a ocorrência "de hoje" a cada execução diária (não pré-gera o futuro), toda transação-filha existente no momento da exclusão é, por definição, uma ocorrência **já passada ou de hoje** — ou seja, na prática, **hoje o botão "excluir futuras" apaga exatamente o oposto do que promete: apaga o passado, não o futuro** (porque não existem filhas "futuras" ainda geradas — elas só nascem no dia em que ocorrem).
-**Severidade:** Alta — perda de dados financeiros históricos sem aviso claro, e a funcionalidade faz o oposto semântico do texto exibido ao usuário (RN-052).
-**Correção sugerida:** ao excluir a "mãe" com `excluirFuturas=true`, o correto é (a) apagar apenas filhas com `data >= hoje` (se existirem), e (b) sempre marcar a mãe como não-recorrente/encerrada (ou aplicar um `UNTIL=hoje` na `regraRecorrencia`) em vez de deletá-la — preservando o histórico e impedindo novas gerações, que é o que RN-052 realmente pede.
+**Status: ✅ Corrigido (ago/2026 — RF-NOVO-C1).** `excluirRecorrentesFilhasAPartirDe(paiId, dataCorte)` + `UNTIL` na mãe; histórico passado preservado.
 
-### Achado crítico B — Validação recurso×categoria depende do texto do nome, não de uma propriedade estável
+*(Diagnóstico original: `excluirRecorrentesFilhas` sem filtro de data apagava todas as filhas — oposto semântico do botão "Excluir esta e futuras".)*
 
-**Reprodução:** `validarRecursoCategoria` (`recursoCategoriaRules.js:14-45`) normaliza (`normalize()`, remove acento/case) o `categoria.nome` e compara com literais fixos: `'alimentacao'`, `'compras'`, `'transporte'`. Não existe nenhum campo estrutural (ex.: `categoria.grupoSemantico` ou enum `CategoriaTipoRecurso`) que marque uma categoria personalizada como "compatível com VA" ou "compatível com VT" — a única forma de uma categoria ser aceita é ter exatamente esse nome (padrão, imutável — `atualizarCategoria` bloqueia edição de categoria `padrao: true`, `categoryService.js:39-41`).
-**Impacto real:** RF-018 (categorias personalizadas) e as regras VA/VR/VT (RN-032/035/038/039) são features que, combinadas, **não funcionam juntas** — qualquer categoria personalizada para gastos de comida/transporte trava o uso do benefício correspondente.
-**Severidade:** Média-Alta — não é um bug que quebra o sistema, mas neutraliza o valor de duas features que o README lista como 100% entregues quando usadas em conjunto (cenário realista: praticamente todo usuário brasileiro cria uma categoria tipo "iFood" ou "Uber").
+### Achado crítico B — Validação recurso×categoria dependia do nome
+
+**Status: ✅ Corrigido (ago/2026 — RF-NOVO-C2).** Campo `grupoBeneficio` + presets no form; `validarRecursoCategoria` usa grupo lógico.
+
+*(Diagnóstico original: comparação com literais `'alimentacao'`, `'compras'`, `'transporte'` — categorias custom incompatíveis com VA/VR/VT.)*
 
 ### Resiliência a estados extremos (demais itens verificados)
 
@@ -95,21 +91,21 @@ Isso apaga **toda e qualquer** transação-filha já gerada por essa mãe, indep
 
 ## 5. Plano de Ação Priorizado (Next Steps)
 
-| # | Ação | Por quê | Esforço estimado |
-|---|---|---|---|
-| 1 | 🔴 Corrigir a exclusão de recorrentes para não apagar histórico passado (RF-NOVO-C1) | Perda de dados financeiros real e silenciosa; contradiz o texto exibido ao usuário | Baixo-Médio |
-| 2 | 🔴 Desacoplar validação recurso×categoria do nome em texto (RF-NOVO-C2) | Hoje neutraliza a combinação de duas features "prontas" (categorias personalizadas + benefícios); vira uma reclamação recorrente de usuário assim que alguém criar uma categoria própria de comida/transporte | Médio |
-| 3 | 🟡 Melhorar mensagem de erro de recurso×categoria (RF-NOVO-C3) | Reduz confusão até a correção estrutural do item 2 estar pronta | Baixo |
-| 4 | 🟢 Testes de regressão para os dois achados críticos (RNF-NOVO-C1) | Evita reincidência | Baixo |
-| 5 | 🟢 Avaliar necessidade de concorrência otimista em edição (RNF-NOVO-C2) | Risco baixo hoje (uso single-user, não colaborativo nesta tela), mas registrar para não esquecer | Baixo, não urgente |
+| # | Ação | Status |
+|---|---|---|
+| 1 | 🔴 Corrigir exclusão de recorrentes (RF-NOVO-C1) | ✅ `excluirRecorrentesFilhasAPartirDe` + `UNTIL` na mãe; histórico preservado |
+| 2 | 🔴 Desacoplar validação recurso×categoria (RF-NOVO-C2) | ✅ `grupoBeneficio` + presets de intenção no form; inferência conservadora |
+| 3 | 🟡 Melhorar mensagens de erro VA/VR/VT (RF-NOVO-C3) | ✅ Mensagens explicam grupo e sugerem editar categoria |
+| 4 | 🟢 Testes de regressão (RNF-NOVO-C1) | ✅ `transactionService.test.js`, `recursoCategoriaRules.test.js` |
+| 5 | 🟢 Concorrência otimista em edição (RNF-NOVO-C2) | ⏸ Aceitável no MVP (decisão PO) |
 
 ---
 
-## ❓ Perguntas clarificadoras
+## ❓ Perguntas clarificadoras (respondidas)
 
-1. O comportamento atual de "excluir esta e futuras" apagar o histórico passado foi uma decisão consciente de simplificação (ex.: "encerrar a série = limpar tudo") ou é de fato um bug não percebido? Isso muda se o item #1 é uma correção urgente ou uma mudança de escopo a ser discutida.
-2. Vocês confirmam que RF-018 (categorias personalizadas) e as regras de VA/VR/VT deveriam funcionar juntas (ou seja, uma categoria customizada de comida deveria aceitar VA), ou a intenção sempre foi restringir VA/VR/VT só às categorias padrão do sistema?
-3. Existe alguma tela ou fluxo (não encontrado neste módulo) que avise o usuário quando a mesma transação está sendo editada por duas abas/dispositivos ao mesmo tempo? Se não, isso é aceitável para o estágio atual do produto?
+1. **Delete apagando histórico** — bug confirmado; corrigido em RF-NOVO-C1.
+2. **Custom + VA/VR/VT** — sim, por grupo lógico (`grupoBeneficio`); VT só transporte.
+3. **Edição simultânea em duas abas** — aceitável no MVP.
 
 ---
 

@@ -15,6 +15,7 @@ const {
 } = require('../utils/purchasePlanningUtils');
 const { intervaloDoMes, mesReferenciaFromQuery, mesAtualString } = require('../utils/monthUtils');
 const { inferirTipoMeta } = require('../utils/metaBalanceUtils');
+const { obterRendaMensalPlanejada } = require('../utils/userFinanceUtils');
 const { todayInTimezone } = require('../utils/dateTimezone');
 const { resolvePurchaseItemImage } = require('./purchaseItemImageService');
 const { storePurchaseItemImage } = require('./purchaseItemImageStorageService');
@@ -44,27 +45,11 @@ const buscarItem = async (id, usuarioId) => {
     return item;
 };
 
-const obterRendaMensal = async (usuarioId) => {
-    const config = await prisma.configuracaoUsuario.findUnique({
-        where: { usuarioId },
-        select: {
-            rendaMensalPlanejada: true,
-            valorSalario: true,
-            valorVa: true,
-            valorVr: true,
-        },
-    });
-    if (!config) return 0;
-    const renda =
-        config.rendaMensalPlanejada ??
-        Number(config.valorSalario ?? 0) +
-            Number(config.valorVa ?? 0) +
-            Number(config.valorVr ?? 0);
-    return roundMoney(renda);
-};
+const obterRendaMensal = obterRendaMensalPlanejada;
 
-const calcularSobraMensal = async (usuarioId) => {
-    const mesReferencia = mesReferenciaFromQuery(mesAtualString());
+const MESES_MEDIA_SOBRA = 3;
+
+const agregarReceitasDespesasMes = async (usuarioId, mesReferencia) => {
     const { inicio, fim } = intervaloDoMes(mesReferencia);
 
     const agregados = await prisma.transacao.groupBy({
@@ -84,10 +69,36 @@ const calcularSobraMensal = async (usuarioId) => {
         if (row.tipo === 'DESPESA') despesas += total;
     }
 
+    return {
+        receitas: roundMoney(receitas),
+        despesas: roundMoney(despesas),
+        sobra: roundMoney(receitas - despesas),
+    };
+};
+
+const calcularSobraMensal = async (usuarioId) => {
+    const mesAtual = mesReferenciaFromQuery(mesAtualString());
+    const meses = Array.from({ length: MESES_MEDIA_SOBRA }, (_, index) =>
+        new Date(mesAtual.getFullYear(), mesAtual.getMonth() - index, 1)
+    );
+
+    const resultados = await Promise.all(
+        meses.map((mes) => agregarReceitasDespesasMes(usuarioId, mes))
+    );
+
+    const sobraMedia = roundMoney(
+        resultados.reduce((acc, item) => acc + item.sobra, 0) / MESES_MEDIA_SOBRA
+    );
     const rendaMensal = await obterRendaMensal(usuarioId);
-    const baseRenda = rendaMensal > 0 ? rendaMensal : receitas;
-    const sobra = roundMoney(baseRenda - despesas);
-    return { rendaMensal: baseRenda, sobraMensal: Math.max(0, sobra), receitas, despesas };
+    const mesAtualDados = resultados[0];
+    const baseRenda = rendaMensal > 0 ? rendaMensal : mesAtualDados.receitas;
+
+    return {
+        rendaMensal: baseRenda,
+        sobraMensal: Math.max(0, sobraMedia),
+        receitas: mesAtualDados.receitas,
+        despesas: mesAtualDados.despesas,
+    };
 };
 
 const montarContexto = async (usuarioId) => calcularSobraMensal(usuarioId);
@@ -343,6 +354,16 @@ const marcarComprado = async (usuarioId, id, dados = {}) => {
         compradoEm: new Date(),
         transacaoId: transacao.id,
     });
+
+    if (item.metaId) {
+        const meta = await metaRepository.buscarPorId(item.metaId, usuarioId);
+        if (meta && meta.status !== 'CONCLUIDA' && meta.status !== 'CANCELADA') {
+            await metaRepository.atualizar(item.metaId, usuarioId, {
+                status: 'CONCLUIDA',
+                concluidaEm: new Date(),
+            });
+        }
+    }
 
     const contexto = await montarContexto(usuarioId);
     return mapItem(atualizado, contexto);

@@ -1,12 +1,15 @@
-import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { useAppSelector } from '@/store/hooks'
+import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/defaultAuthenticatedRoute.js'import { useAppSelector } from '@/store/hooks'
 
 export function ProtectedRoute() {
   const location = useLocation()
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
-  const hasToken = Boolean(localStorage.getItem('accessToken'))
+  const sessionChecked = useAppSelector((state) => state.auth.sessionChecked)
 
-  if (!isAuthenticated && !hasToken) {
+  if (!sessionChecked) {
+    return null
+  }
+
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />
   }
 
@@ -15,10 +18,14 @@ export function ProtectedRoute() {
 
 export function GuestRoute({ children }) {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
-  const hasToken = Boolean(localStorage.getItem('accessToken'))
+  const sessionChecked = useAppSelector((state) => state.auth.sessionChecked)
 
-  if (isAuthenticated || hasToken) {
-    return <Navigate to="/dashboard" replace />
+  if (!sessionChecked) {
+    return null
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to={DEFAULT_AUTHENTICATED_ROUTE} replace />
   }
 
   return children

@@ -50,6 +50,12 @@ enum TipoCategoria {
   DESPESA
 }
 
+enum GrupoBeneficioCategoria {
+  ALIMENTACAO
+  COMPRAS
+  TRANSPORTE
+}
+
 enum CategoriaDespesaViagem {
   TRANSPORTE
   HOSPEDAGEM
@@ -295,14 +301,15 @@ model TokenRenovacao {
 // ==========================================
 
 model Categoria {
-  id        String        @id @default(cuid())
-  nome      String        @db.VarChar(60)
-  icone     String?       @db.VarChar(40)
-  cor       String        @default("#7C3AED") @db.VarChar(7) // hex color (#RRGGBB)
-  tipo      TipoCategoria
-  padrao    Boolean       @default(false)
-  usuarioId String?       @map("usuario_id")
-  criadoEm  DateTime      @default(now()) @map("criado_em")
+  id              String                   @id @default(cuid())
+  nome            String                   @db.VarChar(60)
+  icone           String?                  @db.VarChar(40)
+  cor             String                   @default("#7C3AED") @db.VarChar(7) // hex color (#RRGGBB)
+  tipo            TipoCategoria
+  padrao          Boolean                  @default(false)
+  grupoBeneficio  GrupoBeneficioCategoria? @map("grupo_beneficio")
+  usuarioId       String?                  @map("usuario_id")
+  criadoEm        DateTime                 @default(now()) @map("criado_em")
 
   usuario        Usuario?        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   transacoes     Transacao[]
@@ -451,6 +458,7 @@ model Viagem {
   despesas     DespesaViagem[]
   observacoes  ObservacaoViagem[]
 
+  @@unique([metaId])
   @@index([usuarioId, dataPrevista])
   @@map("viagens")
 }
@@ -723,6 +731,7 @@ model ViagemGrupo {
   grupo    Grupo                @relation(fields: [grupoId], references: [id], onDelete: Cascade)
   despesas DespesaViagemGrupo[]
 
+  @@unique([grupoId])
   @@index([grupoId])
   @@map("viagens_grupo")
 }

@@ -2,6 +2,17 @@
 
 Índice da documentação de produto, requisitos e engenharia.
 
+## Auditoria PO (ago/2026)
+
+| Documento | Conteúdo |
+|-----------|----------|
+| [Análises/PO/00-Sumario-Executivo.md](./Análises/PO/00-Sumario-Executivo.md) | Síntese + correções aplicadas |
+| [Análises/PO/00-Achados-Transversais.md](./Análises/PO/00-Achados-Transversais.md) | T1–T7, índice dos 18 módulos |
+| [Análises/PO/01-…18-….md](./Análises/PO/) | Relatório por módulo implementado |
+| [Análises/PO/19-25-Modulos-Planejados.md](./Análises/PO/19-25-Modulos-Planejados.md) | Escopo futuro |
+| [Análises/Prompts/AnalisePO.md](./Análises/Prompts/AnalisePO.md) | Protocolo para novas auditorias PO |
+| [Análises/Prompts/](./Análises/Prompts/) | Prompts AppSec, Arquiteto, DevOps, Dev Sênior, Designer |
+
 ## Produto e planejamento
 
 | Documento | Conteúdo |

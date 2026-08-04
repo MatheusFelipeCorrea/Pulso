@@ -2,6 +2,7 @@ const { z } = require('zod');
 const { CATEGORY_ICONS, CATEGORY_COLORS } = require('../constants/categoryIcons');
 
 const tipoCategoriaEnum = z.enum(['RECEITA', 'DESPESA']);
+const grupoBeneficioEnum = z.enum(['ALIMENTACAO', 'COMPRAS', 'TRANSPORTE']);
 const iconeEnum = z.enum(CATEGORY_ICONS);
 const corEnum = z.enum(CATEGORY_COLORS);
 
@@ -11,6 +12,7 @@ const criarCategoriaSchema = z.object({
         tipo: tipoCategoriaEnum,
         icone: iconeEnum,
         cor: corEnum,
+        grupoBeneficio: grupoBeneficioEnum.nullable().optional(),
     }),
 });
 
@@ -22,6 +24,7 @@ const atualizarCategoriaSchema = z.object({
         nome: z.string().trim().min(1).max(60).optional(),
         icone: iconeEnum.optional(),
         cor: corEnum.optional(),
+        grupoBeneficio: grupoBeneficioEnum.nullable().optional(),
     }),
 });
 

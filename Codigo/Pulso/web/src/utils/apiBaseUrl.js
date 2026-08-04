@@ -1,16 +1,12 @@
 /**
  * URL base da API.
- * Produção (Vercel): /api na mesma origem.
- * Dev: localhost:3333 ou VITE_API_URL do .env.
+ * Produção e dev: /api na mesma origem (Vite proxy em dev, rewrite na Vercel).
+ * Override opcional via VITE_API_URL (ex.: testes ou API remota).
  */
 export function getApiBaseUrl() {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL.replace(/\/$/, '')
   }
 
-  if (import.meta.env.PROD) {
-    return '/api'
-  }
-
-  return 'http://localhost:3333/api'
+  return '/api'
 }

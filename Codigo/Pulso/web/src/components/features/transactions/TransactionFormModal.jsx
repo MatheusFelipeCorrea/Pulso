@@ -110,8 +110,8 @@ export function TransactionFormModal({
 
   const recursoError = useMemo(() => {
     if (!form.categoriaId || !form.recurso) return null
-    return validarRecursoCategoria(form.recurso, categoriaSelecionada?.nome, form.tipo)
-  }, [form.categoriaId, form.recurso, form.tipo, categoriaSelecionada?.nome])
+    return validarRecursoCategoria(form.recurso, categoriaSelecionada, form.tipo)
+  }, [form.categoriaId, form.recurso, form.tipo, categoriaSelecionada])
 
   const transferenciaError = useMemo(() => {
     if (!isTransferencia) return null

@@ -70,7 +70,8 @@ const excluirTransacao = async (req, res, next) => {
         await transactionService.excluirTransacao(
             req.user.id,
             req.params.id,
-            req.query.excluirFuturas
+            req.query.excluirFuturas,
+            req.query.dataCorte
         );
         res.status(204).send();
     } catch (error) {

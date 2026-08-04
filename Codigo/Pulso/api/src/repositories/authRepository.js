@@ -135,6 +135,15 @@ const deleteUser = async (id) => {
     return prisma.usuario.delete({ where: { id } });
 };
 
+const deleteUnverifiedEmailAccountsOlderThan = async (cutoffDate) =>
+    prisma.usuario.deleteMany({
+        where: {
+            verificado: false,
+            provedorAuth: 'EMAIL',
+            criadoEm: { lt: cutoffDate },
+        },
+    });
+
 module.exports = {
     createUser,
     findByEmail,
@@ -145,6 +154,7 @@ module.exports = {
     findByResetToken,
     updateUser,
     deleteUser,
+    deleteUnverifiedEmailAccountsOlderThan,
     createRefreshToken,
     findRefreshToken,
     revokeRefreshToken,

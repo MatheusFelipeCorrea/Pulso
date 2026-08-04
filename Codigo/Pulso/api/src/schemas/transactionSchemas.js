@@ -103,6 +103,10 @@ const excluirTransacaoSchema = z.object({
             .optional()
             .default('false')
             .transform((v) => v === 'true'),
+        dataCorte: z
+            .string()
+            .datetime({ offset: true })
+            .optional(),
     }),
 });
 

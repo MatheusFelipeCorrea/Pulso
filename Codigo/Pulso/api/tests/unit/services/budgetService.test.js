@@ -71,6 +71,46 @@ describe('budgetService', () => {
         ]);
     });
 
+    it('sinaliza orçamento acima da renda planejada (RN-059)', async () => {
+        budgetRepository.buscarPorUsuarioEMes.mockResolvedValue([
+            {
+                id: 'o1',
+                categoriaId: 'c1',
+                limiteValor: 6000,
+                categoria: { nome: 'Mercado', icone: 'Cart', cor: '#000' },
+                mesReferencia: new Date('2026-02-01T00:00:00.000Z'),
+            },
+        ]);
+        budgetRepository.calcularGastosPorCategoria.mockResolvedValue({ c1: 0 });
+        prisma.configuracaoUsuario.findUnique.mockResolvedValue({ rendaMensalPlanejada: 5000 });
+        categoryRepository.listarPorUsuario.mockResolvedValue([
+            { id: 'c1', nome: 'Mercado', icone: 'Cart', cor: '#000' },
+        ]);
+
+        const result = await budgetService.obterStatusOrcamento('u1', { mes: '2026-02' });
+        expect(result.resumo.orcamentoExcedeRenda).toBe(true);
+    });
+
+    it('não sinaliza excedente quando renda planejada é zero', async () => {
+        budgetRepository.buscarPorUsuarioEMes.mockResolvedValue([
+            {
+                id: 'o1',
+                categoriaId: 'c1',
+                limiteValor: 6000,
+                categoria: { nome: 'Mercado', icone: 'Cart', cor: '#000' },
+                mesReferencia: new Date('2026-02-01T00:00:00.000Z'),
+            },
+        ]);
+        budgetRepository.calcularGastosPorCategoria.mockResolvedValue({ c1: 0 });
+        prisma.configuracaoUsuario.findUnique.mockResolvedValue({ rendaMensalPlanejada: 0 });
+        categoryRepository.listarPorUsuario.mockResolvedValue([
+            { id: 'c1', nome: 'Mercado', icone: 'Cart', cor: '#000' },
+        ]);
+
+        const result = await budgetService.obterStatusOrcamento('u1', { mes: '2026-02' });
+        expect(result.resumo.orcamentoExcedeRenda).toBe(false);
+    });
+
     it('repassa rolloverAtivo e valorRollover no status do orçamento', async () => {
         budgetRepository.buscarPorUsuarioEMes.mockResolvedValue([
             {

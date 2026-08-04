@@ -73,21 +73,21 @@ describe('authService', () => {
             expect(result.email).toBe('a@b.com');
         });
 
-        it('remove usuário se envio de email falhar', async () => {
+        it('mantém usuário se envio de email falhar', async () => {
             authRepositoryMock.findByEmail.mockResolvedValue(null);
-            authRepositoryMock.createUser.mockResolvedValue({ id: 'new-user' });
+            authRepositoryMock.createUser.mockResolvedValue({ id: 'new-user', email: 'a@b.com' });
             emailProviderMock.sendVerificationEmail.mockRejectedValue(new Error('SMTP down'));
 
-            await expect(
-                authService.registerUser({
-                    nome: 'Teste',
-                    email: 'a@b.com',
-                    senha: validPassword,
-                    confirmarSenha: validPassword,
-                })
-            ).rejects.toBeInstanceOf(AppError);
+            const result = await authService.registerUser({
+                nome: 'Teste',
+                email: 'a@b.com',
+                senha: validPassword,
+                confirmarSenha: validPassword,
+            });
 
-            expect(authRepositoryMock.deleteUser).toHaveBeenCalledWith('new-user');
+            expect(authRepositoryMock.deleteUser).not.toHaveBeenCalled();
+            expect(result.emailPendente).toBe(true);
+            expect(result.email).toBe('a@b.com');
         });
     });
 
@@ -461,9 +461,7 @@ describe('authService', () => {
     });
 
     describe('buildGoogleCallbackRedirect', () => {
-        it('monta URL de sucesso com tokens', async () => {
-            authRepositoryMock.createRefreshToken.mockResolvedValue({});
-
+        it('monta URL de sucesso com token de exchange', async () => {
             const url = await authService.buildGoogleCallbackRedirect({
                 id: usuarioBase.id,
                 email: usuarioBase.email,
@@ -471,8 +469,7 @@ describe('authService', () => {
             });
 
             expect(url).toContain('/auth/callback');
-            expect(url).toContain('accessToken=');
-            expect(url).toContain('refreshToken=');
+            expect(url).toContain('exchange=');
         });
 
         it('monta URL de erro com mensagem', () => {

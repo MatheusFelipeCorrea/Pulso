@@ -5,6 +5,7 @@ const categoryRepository = require('../repositories/categoryRepository');
 const notificationService = require('./notificationService');
 const { mapOrcamento, calcularStatusCategoria } = require('../utils/budgetMapper');
 const { calcularValorRollover } = require('../utils/budgetRolloverUtils');
+const { obterRendaMensalPlanejada } = require('../utils/userFinanceUtils');
 const {
     mesReferenciaFromQuery,
     mesReferenciaFromBody,
@@ -16,17 +17,6 @@ const {
 
 const formatCurrency = (value) =>
     Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-const obterRendaMensalPlanejada = async (usuarioId) => {
-    const config = await prisma.configuracaoUsuario.findUnique({
-        where: { usuarioId },
-        select: { rendaMensalPlanejada: true, valorSalario: true },
-    });
-
-    if (!config) return 0;
-    const renda = config.rendaMensalPlanejada ?? config.valorSalario;
-    return Number(renda ?? 0);
-};
 
 const listarOrcamentos = async (usuarioId, query) => {
     const mesReferencia = mesReferenciaFromQuery(query.mes);
@@ -71,6 +61,8 @@ const obterStatusOrcamento = async (usuarioId, query) => {
     const restanteTotal = orcamentoTotal - gastoTotal;
     const percentualUsado =
         orcamentoTotal > 0 ? Math.round((gastoTotal / orcamentoTotal) * 1000) / 10 : 0;
+    const orcamentoExcedeRenda =
+        rendaMensalPlanejada > 0 && orcamentoTotal > rendaMensalPlanejada;
 
     const idsComOrcamento = new Set(orcamentos.map((item) => item.categoriaId));
     const categoriasSemOrcamento = categoriasDespesa
@@ -91,6 +83,7 @@ const obterStatusOrcamento = async (usuarioId, query) => {
             gastoTotal,
             restanteTotal,
             percentualUsado,
+            orcamentoExcedeRenda,
         },
         categorias: categoriasComOrcamento,
         categoriasSemOrcamento,
