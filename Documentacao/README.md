@@ -27,6 +27,7 @@
 
 | Documento | Conteúdo |
 |-----------|----------|
+| [Guia-Commits.md](./Guia-Commits.md) | Padrão de mensagens de commit (Conventional Commits + Refs) |
 | [Deploy/Hospedagem.md](./Deploy/Hospedagem.md) | Vercel, Neon, cron, variáveis |
 | [Diagramas/Readme.md](./Diagramas/Readme.md) | UML e diagramas de arquitetura |
 | [../Codigo/Pulso/api/Documents/](../Codigo/Pulso/api/Documents/) | API, banco, rotas |
