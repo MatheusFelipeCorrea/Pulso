@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowDownCircle, ArrowUpCircle, Layers, Tag, X } from 'lucide-react'
+import { ArrowDownCircle, ArrowUpCircle, Layers, Tag, Ticket, X } from 'lucide-react'
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
 import { FormFieldLabel } from '@/design-system/components/forms/FormFieldLabel/FormFieldLabel.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
@@ -7,6 +7,8 @@ import { InputText } from '@/design-system/components/inputs/InputText/InputText
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { CategoryIconPicker } from './CategoryIconPicker.jsx'
 import { resolveBadgeIcon } from '@/components/badges/iconRegistry.jsx'
+import { CATEGORIA_BENEFICIO_PRESETS } from '@/constants/categoryBeneficioGroups.js'
+import { REQUIRED_FIELD_ERROR, isRequiredValueEmpty } from '@/utils/formValidation.js'
 import { cn } from '@/design-system/utils/cn.js'
 
 const emptyForm = (tipo = 'DESPESA') => ({
@@ -14,6 +16,7 @@ const emptyForm = (tipo = 'DESPESA') => ({
   tipo,
   icone: 'Tag',
   cor: '#7C3AED',
+  grupoBeneficio: '',
 })
 
 export function CategoryFormModal({
@@ -27,18 +30,21 @@ export function CategoryFormModal({
   cores = [],
 }) {
   const [form, setForm] = useState(() => emptyForm(tipoPadrao))
+  const [fieldErrors, setFieldErrors] = useState({})
   const isEdit = Boolean(categoria)
   const isReceita = form.tipo === 'RECEITA'
   const previewNome = form.nome.trim() || 'Minha categoria'
 
   useEffect(() => {
     if (!open) return
+    setFieldErrors({})
     if (categoria) {
       setForm({
         nome: categoria.nome ?? '',
         tipo: categoria.tipo ?? 'DESPESA',
         icone: categoria.icone ?? 'Tag',
         cor: categoria.cor ?? '#7C3AED',
+        grupoBeneficio: categoria.grupoBeneficio ?? '',
       })
     } else {
       setForm(emptyForm(tipoPadrao))
@@ -47,18 +53,28 @@ export function CategoryFormModal({
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    if (!form.nome.trim()) return
-    await onSubmit?.({
+    if (isRequiredValueEmpty(form.nome)) {
+      setFieldErrors({ nome: REQUIRED_FIELD_ERROR })
+      return
+    }
+    setFieldErrors({})
+    const payload = {
       nome: form.nome.trim(),
       tipo: form.tipo,
       icone: form.icone,
       cor: form.cor,
-    })
+    }
+
+    if (form.tipo === 'DESPESA') {
+      payload.grupoBeneficio = form.grupoBeneficio || null
+    }
+
+    await onSubmit?.(payload)
   }
 
   return (
     <Modal isOpen={open} onClose={onClose} size="xl" className="category-modal category-modal--form">
-      <form className="category-form" onSubmit={handleSubmit}>
+      <form className="category-form" onSubmit={handleSubmit} noValidate>
         <header className="category-form__header">
           <div>
             <h2>{isEdit ? 'Editar categoria' : 'Nova categoria'}</h2>
@@ -97,9 +113,20 @@ export function CategoryFormModal({
               </FormFieldLabel>
             }
             value={form.nome}
-            onChange={(e) => setForm((prev) => ({ ...prev, nome: e.target.value }))}
+            onChange={(e) => {
+              const nome = e.target.value
+              setForm((prev) => ({ ...prev, nome }))
+              if (fieldErrors.nome) {
+                setFieldErrors((prev) => {
+                  const next = { ...prev }
+                  delete next.nome
+                  return next
+                })
+              }
+            }}
             placeholder="Ex: Assinaturas, Freelance extra..."
             required
+            error={fieldErrors.nome}
             maxLength={60}
           />
 
@@ -126,11 +153,50 @@ export function CategoryFormModal({
                     'category-form__tipo-btn',
                     isReceita && 'category-form__tipo-btn--active category-form__tipo-btn--income'
                   )}
-                  onClick={() => setForm((prev) => ({ ...prev, tipo: 'RECEITA' }))}
+                  onClick={() =>
+                    setForm((prev) => ({
+                      ...prev,
+                      tipo: 'RECEITA',
+                      grupoBeneficio: '',
+                    }))
+                  }
                 >
                   <ArrowUpCircle size={18} />
                   Receita
                 </button>
+              </div>
+            </div>
+          ) : null}
+
+          {!isReceita ? (
+            <div className="category-form__beneficio">
+              <FormFieldLabel icon={Ticket} tone="green" className="category-form__beneficio-label">
+                Tipo de gasto (vales)
+              </FormFieldLabel>
+              <p className="category-form__beneficio-intro">
+                Opcional. Define quais vales (VA, VR, VT) aparecem ao registrar despesa nesta categoria.
+              </p>
+              <div className="category-form__beneficio-presets" role="radiogroup" aria-label="Tipo de gasto para vales">
+                {CATEGORIA_BENEFICIO_PRESETS.map((preset) => {
+                  const selected = form.grupoBeneficio === preset.value
+                  return (
+                    <button
+                      key={preset.value || 'comum'}
+                      type="button"
+                      role="radio"
+                      aria-checked={selected}
+                      className={cn(
+                        'category-form__beneficio-preset',
+                        selected && 'category-form__beneficio-preset--active'
+                      )}
+                      onClick={() => setForm((prev) => ({ ...prev, grupoBeneficio: preset.value }))}
+                    >
+                      <span className="category-form__beneficio-preset-title">{preset.title}</span>
+                      <span className="category-form__beneficio-preset-desc">{preset.description}</span>
+                      <span className="category-form__beneficio-preset-hint">{preset.hint}</span>
+                    </button>
+                  )
+                })}
               </div>
             </div>
           ) : null}

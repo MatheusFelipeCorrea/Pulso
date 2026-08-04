@@ -28,6 +28,9 @@ describe('debtFilters', () => {
       ...DEFAULT_DEBT_FILTROS(),
       dataInicio: new Date(2026, 5, 1),
       dataFim: new Date(2026, 5, 30),
+      prazoInicio: new Date(2026, 6, 1),
+      prazoFim: new Date(2026, 6, 15),
+      status: 'vencida',
       busca: 'ana',
     }
 
@@ -36,11 +39,15 @@ describe('debtFilters', () => {
       busca: 'ana',
       dataInicio: '2026-06-01',
       dataFim: '2026-06-30',
+      prazoInicio: '2026-07-01',
+      prazoFim: '2026-07-15',
+      status: undefined,
     })
 
     expect(buildApiFiltros(DEBT_TABS.EU_DEVO, filtros)).toMatchObject({
       quitada: false,
       direcao: DEBT_TABS.EU_DEVO,
+      status: 'vencida',
     })
   })
 })

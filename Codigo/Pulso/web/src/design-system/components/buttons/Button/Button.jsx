@@ -19,7 +19,7 @@ import { buttonVariants } from './Button.styles.jsx'
  * ```
  * 
  * @param {object} props
- * @param {('primary'|'secondary'|'ghost'|'danger'|'success')} [props.variant='primary'] - Variante visual
+ * @param {('primary'|'secondary'|'outline'|'ghost'|'danger'|'success')} [props.variant='primary'] - Variante visual
  * @param {('sm'|'md'|'lg')} [props.size='md'] - Tamanho do botão
  * @param {boolean} [props.fullWidth=false] - Se deve ocupar 100% da largura
  * @param {boolean} [props.loading=false] - Exibe spinner e desabilita interação

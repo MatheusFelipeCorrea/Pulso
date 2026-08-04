@@ -16,6 +16,7 @@ import {
 import { loginSchema } from '@/schemas/authSchemas'
 import * as authService from '@/services/authService'
 import { setUser } from '@/store/slices/authSlice'
+import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/defaultAuthenticatedRoute.js'
 
 function GoogleIcon() {
   return (
@@ -92,13 +93,9 @@ export default function Login() {
 
     try {
       const result = await authService.login(data)
-      authService.storeAuthTokens({
-        accessToken: result.accessToken,
-        refreshToken: result.refreshToken,
-      })
       dispatch(setUser(result.user))
       toast.success(`Bem-vindo de volta, ${result.user.nome}!`)
-      navigate('/dashboard', { replace: true })
+      navigate(DEFAULT_AUTHENTICATED_ROUTE, { replace: true })
     } catch (error) {
       const message =
         error.response?.data?.message || 'Erro ao fazer login. Tente novamente.'

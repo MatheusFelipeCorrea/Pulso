@@ -65,7 +65,10 @@ const listarPorUsuario = async (usuarioId, filtros, { pagina = 1, limite = 10 } 
         prisma.transacao.findMany({
             where,
             include: includeRelacionamentos,
-            orderBy: { data: 'desc' },
+            // desempate por criadoEm/id: várias transações no mesmo dia têm `data` idêntica
+            // (mesmo timestamp), e sem um critério de desempate estável a paginação
+            // duplicava/pulava linhas entre páginas
+            orderBy: [{ data: 'desc' }, { criadoEm: 'desc' }, { id: 'desc' }],
             skip,
             take: limitNum,
         }),
@@ -122,9 +125,26 @@ const excluir = async (transacaoId) => {
     await prisma.transacao.delete({ where: { id: transacaoId } });
 };
 
-const excluirRecorrentesFilhas = async (paiId) => {
-    await prisma.transacao.deleteMany({ where: { paiId } });
+const excluirRecorrentesFilhasAPartirDe = async (paiId, dataCorte) => {
+    const cutoff = new Date(dataCorte);
+    cutoff.setHours(0, 0, 0, 0);
+
+    await prisma.transacao.deleteMany({
+        where: {
+            paiId,
+            data: { gte: cutoff },
+        },
+    });
 };
+
+const encerrarRecorrencia = async (transacaoId, regraRecorrencia) =>
+    prisma.transacao.update({
+        where: { id: transacaoId },
+        data: {
+            recorrente: false,
+            regraRecorrencia,
+        },
+    });
 
 const listarRecorrentesMae = async () =>
     prisma.transacao.findMany({
@@ -134,6 +154,14 @@ const listarRecorrentesMae = async () =>
             regraRecorrencia: { not: null },
         },
         include: includeRelacionamentos,
+    });
+
+const listarDescricoesPorTipo = async (usuarioId, tipo, limite = 300) =>
+    prisma.transacao.findMany({
+        where: { usuarioId, tipo, descricao: { not: null }, categoriaId: { not: null } },
+        select: { descricao: true, categoriaId: true },
+        orderBy: { data: 'desc' },
+        take: limite,
     });
 
 module.exports = {
@@ -146,6 +174,8 @@ module.exports = {
     buscarPorId,
     atualizar,
     excluir,
-    excluirRecorrentesFilhas,
+    excluirRecorrentesFilhasAPartirDe,
+    encerrarRecorrencia,
     listarRecorrentesMae,
+    listarDescricoesPorTipo,
 };

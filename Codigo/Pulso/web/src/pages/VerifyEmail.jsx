@@ -108,7 +108,7 @@ export default function VerifyEmail() {
             />
           </div>
 
-          <form onSubmit={handleResend} className="auth-verify-resend-form">
+          <form onSubmit={handleResend} className="auth-verify-resend-form" noValidate>
             <InputText
               type="email"
               placeholder="Seu email"

@@ -61,9 +61,11 @@ describe('transportService', () => {
 
     it('rejeita venda com saldo insuficiente', async () => {
         transportRepository.buscarConfiguracao.mockResolvedValue({ modoUso: 'CLT', vtHabilitado: true });
-        transportRepository.calcularRecebidoVt.mockResolvedValue(100);
-        transportRepository.calcularUsadoVt.mockResolvedValue({ total: 90, passagens: 10 });
-        transportRepository.calcularVendidoNominalVt.mockResolvedValue(5);
+        categoryRepository.buscarPorNome.mockResolvedValue({ id: 'cat-outros' });
+        const error = new Error('INSUFFICIENT_VT_BALANCE');
+        error.code = 'INSUFFICIENT_VT_BALANCE';
+        error.saldoRestante = 5;
+        transportRepository.criarVendaComTransacao.mockRejectedValue(error);
 
         await expect(
             transportService.registrarVendaVt('u1', {
@@ -77,16 +79,16 @@ describe('transportService', () => {
 
     it('registra venda para CLT com warning', async () => {
         transportRepository.buscarConfiguracao.mockResolvedValue({ modoUso: 'CLT', vtHabilitado: true });
-        transportRepository.calcularRecebidoVt.mockResolvedValue(500);
-        transportRepository.calcularUsadoVt.mockResolvedValue({ total: 100, passagens: 10 });
-        transportRepository.calcularVendidoNominalVt.mockResolvedValue(50);
         categoryRepository.buscarPorNome.mockResolvedValue({ id: 'cat-outros' });
         transportRepository.criarVendaComTransacao.mockResolvedValue({
-            id: 'v1',
-            dataVenda: new Date('2026-01-10T12:00:00.000Z'),
-            nomeComprador: 'João',
-            valorNominal: 50,
-            valorRecebido: 45,
+            venda: {
+                id: 'v1',
+                dataVenda: new Date('2026-01-10T12:00:00.000Z'),
+                nomeComprador: 'João',
+                valorNominal: 50,
+                valorRecebido: 45,
+            },
+            saldoRestante: 300,
         });
 
         const result = await transportService.registrarVendaVt('u1', {
@@ -132,14 +134,14 @@ describe('transportService', () => {
 
     it('registra uso de VT e salva valor padrão', async () => {
         transportRepository.buscarConfiguracao.mockResolvedValue({ modoUso: 'CLT', vtHabilitado: true });
-        transportRepository.calcularRecebidoVt.mockResolvedValue(300);
-        transportRepository.calcularUsadoVt.mockResolvedValue({ total: 100, passagens: 10 });
-        transportRepository.calcularVendidoNominalVt.mockResolvedValue(0);
-        transportRepository.criarUsoVt.mockResolvedValue({
-            id: 'uso1',
-            quantidade: 2,
-            valorPorPassagem: 5,
-            data: new Date('2026-01-10T12:00:00.000Z'),
+        transportRepository.criarUsoVtAtomico.mockResolvedValue({
+            uso: {
+                id: 'uso1',
+                quantidade: 2,
+                valorPorPassagem: 5,
+                data: new Date('2026-01-10T12:00:00.000Z'),
+            },
+            saldoRestante: 190,
         });
         transportRepository.atualizarValorPadraoPassagem.mockResolvedValue({});
 

@@ -27,10 +27,10 @@ ${OUTPUT_LANGUAGE="pt-BR|en"} <!-- Language for README content -->
 ## README Locations
 
 READMEs are located at:
-- Frontend: `[project]/web/Documents/README.md` (or `[project]/front/Documents/README.md`)
-- Backend: `[project]/api/Documents/README.md` (or `[project]/back/Documents/README.md`)
+- Frontend: `Documentacao/02-Engenharia/Web/Readme.md` (canonical; stub em `Codigo/Pulso/web/Documents/Readme.md` aponta para lá)
+- Backend: `Documentacao/02-Engenharia/API/Readme.md` (canonical; stub em `Codigo/Pulso/api/Documents/Readme.md` aponta para lá)
 
-${README_LOCATIONS == "Auto-detect" ? "Scan the repository to find README.md files inside Documents/ folders within sub-project directories. If the structure is different, ask the user for the correct paths." : "Use the paths provided by the user."}
+${README_LOCATIONS == "Auto-detect" ? "Scan the repository to find README.md files. Prefer `Documentacao/02-Engenharia/` over legacy `Codigo/Pulso/*/Documents/` stubs. If the structure is different, ask the user for the correct paths." : "Use the paths provided by the user."}
 
 ## Data Sources for Detection
 
@@ -128,7 +128,7 @@ Present the change report in this format:
 
 ### 📊 README Update Report
 
-**Frontend README** (`web/Documents/README.md`):
+**Frontend README** (`Documentacao/02-Engenharia/Web/Readme.md`):
 
 📁 Seções com mudanças:
 
@@ -146,7 +146,7 @@ Present the change report in this format:
 | Rotas | ➕ NOVO | Nova rota privada: /relatorios → Relatórios |
 | .env.example | Sem mudanças | ✅ |
 
-**Backend README** (`api/Documents/README.md`):
+**Backend README** (`Documentacao/02-Engenharia/API/Readme.md`):
 
 📁 Seções com mudanças:
 
@@ -340,8 +340,8 @@ This skill is designed to run approximately every 2 weeks. When running periodic
 ## Context Document Usage
 
 When available, also read:
-- **.github/docs/Project_Architecture_Blueprint.md** — to understand if architectural changes happened that should reflect in README descriptions
-- **.github/docs/exemplars.md** — to check if new exemplar files were added that should be noted
-- **.github/docs/Project_Folders_Structure_Blueprint.md** — to cross-reference folder structure accuracy
+- **`Documentacao/02-Engenharia/`** — arquitetura, módulos, deploy
+- **`Documentacao/04-Diagramas/`** — diagramas PlantUML
+- **`.github/plans/cards/`** — escopo e status dos epics
 
 These documents provide CONTEXT but the PRIMARY source for README updates is the ACTUAL CODEBASE — the real files that exist on disk."

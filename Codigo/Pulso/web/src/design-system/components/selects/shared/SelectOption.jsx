@@ -33,6 +33,11 @@ export const SelectOption = ({
       </span>
     ) : null}
     <span className="flex-1 truncate">{option.label}</span>
+    {option.trailingText ? (
+      <span className="shrink-0 text-xs text-[var(--ds-color-text-secondary)]">
+        {option.trailingText}
+      </span>
+    ) : null}
     {selected && showCheck && (
       <Check size={16} className="shrink-0 text-[var(--ds-color-primary-light)]" />
     )}

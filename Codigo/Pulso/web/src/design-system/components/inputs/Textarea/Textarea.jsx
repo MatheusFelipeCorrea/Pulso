@@ -68,7 +68,6 @@ export const Textarea = forwardRef(
             focused: isFocused && !hasError,
             error: hasError,
             disabled,
-            hoverable: !isFocused && !hasError && !disabled,
           })}
         >
           <textarea
@@ -77,7 +76,7 @@ export const Textarea = forwardRef(
             value={value}
             onChange={onChange}
             disabled={disabled}
-            required={required}
+            aria-required={required || undefined}
             maxLength={maxLength}
             placeholder={placeholder}
             aria-invalid={hasError || undefined}

@@ -1,6 +1,7 @@
 import {
   TrendingUp,
   TrendingDown,
+  ArrowLeftRight,
   PartyPopper,
   AlertTriangle,
   AlarmClock,
@@ -19,6 +20,7 @@ import {
 export const NOTIFICATION_TYPES = /** @type {const} */ ({
   RECEITA_REGISTRADA: 'RECEITA_REGISTRADA',
   DESPESA_REGISTRADA: 'DESPESA_REGISTRADA',
+  TRANSFERENCIA_REGISTRADA: 'TRANSFERENCIA_REGISTRADA',
   META_ATINGIDA: 'META_ATINGIDA',
   ALERTA_ORCAMENTO: 'ALERTA_ORCAMENTO',
   ORCAMENTO_ESTOURADO: 'ORCAMENTO_ESTOURADO',
@@ -36,6 +38,7 @@ export const NOTIFICATION_TYPES = /** @type {const} */ ({
 export const NOTIFICATION_DEFAULT_TITLES = {
   [NOTIFICATION_TYPES.RECEITA_REGISTRADA]: 'Receita registrada',
   [NOTIFICATION_TYPES.DESPESA_REGISTRADA]: 'Despesa registrada',
+  [NOTIFICATION_TYPES.TRANSFERENCIA_REGISTRADA]: 'Transferência registrada',
   [NOTIFICATION_TYPES.META_ATINGIDA]: 'Meta atingida',
   [NOTIFICATION_TYPES.ALERTA_ORCAMENTO]: 'Alerta orçamento (80%)',
   [NOTIFICATION_TYPES.ORCAMENTO_ESTOURADO]: 'Orçamento estourado',
@@ -58,6 +61,10 @@ export const notificationConfig = {
   [NOTIFICATION_TYPES.DESPESA_REGISTRADA]: {
     colorVar: '--ds-color-danger',
     icon: TrendingDown,
+  },
+  [NOTIFICATION_TYPES.TRANSFERENCIA_REGISTRADA]: {
+    colorVar: '--ds-color-info',
+    icon: ArrowLeftRight,
   },
   [NOTIFICATION_TYPES.META_ATINGIDA]: {
     colorVar: '--ds-color-primary',

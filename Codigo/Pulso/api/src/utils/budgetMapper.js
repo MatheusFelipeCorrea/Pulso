@@ -6,6 +6,8 @@ const mapOrcamento = (orcamento) => ({
     categoriaCor: orcamento.categoria?.cor,
     mesReferencia: orcamento.mesReferencia,
     limiteValor: Number(orcamento.limiteValor),
+    rolloverAtivo: orcamento.rolloverAtivo ?? false,
+    valorRollover: Number(orcamento.valorRollover ?? 0),
     criadoEm: orcamento.criadoEm,
     atualizadoEm: orcamento.atualizadoEm,
 });

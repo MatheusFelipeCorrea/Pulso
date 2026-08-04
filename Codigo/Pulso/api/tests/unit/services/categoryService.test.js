@@ -42,6 +42,7 @@ describe('categoryService', () => {
                 cor: '#10B981',
                 tipo: 'RECEITA',
                 padrao: true,
+                grupoBeneficio: null,
             },
             {
                 id: 'cat-2',
@@ -50,6 +51,7 @@ describe('categoryService', () => {
                 cor: '#3B82F6',
                 tipo: 'DESPESA',
                 padrao: false,
+                grupoBeneficio: null,
             },
         ]);
     });
@@ -104,6 +106,7 @@ describe('categoryService', () => {
             tipo: 'DESPESA',
             icone: 'Cart',
             cor: '#EF4444',
+            grupoBeneficio: null,
             padrao: false,
             usuarioId: 'usr-1',
         });
@@ -114,6 +117,7 @@ describe('categoryService', () => {
             icone: 'Cart',
             cor: '#EF4444',
             padrao: false,
+            grupoBeneficio: null,
         });
     });
 
@@ -200,6 +204,7 @@ describe('categoryService', () => {
             icone: 'Apple',
             cor: '#22C55E',
             padrao: false,
+            grupoBeneficio: null,
         });
     });
 

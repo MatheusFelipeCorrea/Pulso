@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority'
 /**
  * Button Variants usando CVA
  * 
- * 5 variantes: Primary, Secondary, Ghost, Danger, Success
+ * 6 variantes: Primary, Secondary, Outline, Ghost, Danger, Success
  * 3 tamanhos: Small (sm), Medium (md), Large (lg)
  * 5 estados: Default, Hover, Active, Disabled, Loading
  */
@@ -19,6 +19,7 @@ export const buttonVariants = cva(
       variant: {
         primary: 'btn-primary',
         secondary: 'btn-secondary',
+        outline: 'btn-outline',
         ghost: 'btn-ghost',
         danger: 'btn-danger',
         success: 'btn-success',

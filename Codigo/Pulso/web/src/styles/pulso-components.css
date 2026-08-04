@@ -206,8 +206,40 @@
 }
 
 .pulso-notification-panel__list {
-  max-height: 520px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pulso-notification-panel__list-wrap {
+  max-height: min(70vh, 520px);
   overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.pulso-notification-panel__more {
+  padding: var(--ds-space-3) var(--ds-space-5) var(--ds-space-4);
+  border-top: 1px solid var(--ds-color-border);
+}
+
+.pulso-notification-panel__more-btn {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-border);
+  background: var(--ds-color-surface);
+  color: var(--ds-color-primary);
+  font-size: 13px;
+  font-weight: var(--ds-font-weight-medium);
+  cursor: pointer;
+}
+
+.pulso-notification-panel__more-btn:hover:not(:disabled) {
+  background: var(--ds-color-hover);
+}
+
+.pulso-notification-panel__more-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 
 .pulso-notification-item {

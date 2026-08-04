@@ -17,6 +17,12 @@
   --ds-color-primary-dark: #5B21B6;
   --ds-color-primary-range: color-mix(in srgb, var(--ds-color-primary-light) 35%, transparent);
 
+  /* Botões roxos: principal no repouso, tom claro no hover */
+  --ds-color-button-primary: var(--ds-color-primary);
+  --ds-color-button-primary-hover: var(--ds-color-primary-light);
+  --ds-color-button-primary-active: #6D28D9;
+  --ds-color-button-primary-border: var(--ds-color-primary);
+
   /* ============================================================
      BACKGROUND E SUPERFÍCIE
      ============================================================ */
@@ -170,6 +176,12 @@
   --ds-color-primary-light: #C4B5FD;
   --ds-color-primary-dark: #7C3AED;
   --ds-color-primary-range: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+
+  /* Botões: roxo principal fixo (não usar o primary claro do tema escuro) */
+  --ds-color-button-primary: #7C3AED;
+  --ds-color-button-primary-hover: #A78BFA;
+  --ds-color-button-primary-active: #6D28D9;
+  --ds-color-button-primary-border: #7C3AED;
 
   /* BACKGROUND E SUPERFÍCIE */
   --ds-color-background: #09090B;

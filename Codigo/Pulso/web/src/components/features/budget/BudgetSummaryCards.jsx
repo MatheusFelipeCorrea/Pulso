@@ -1,4 +1,4 @@
-import { PiggyBank, TrendingDown, Wallet } from 'lucide-react'
+import { AlertTriangle, PiggyBank, TrendingDown, Wallet } from 'lucide-react'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { SpinnerDots } from '@/design-system/components/feedback/Spinner/SpinnerDots.jsx'
 
@@ -7,7 +7,7 @@ function formatPercentual(value = 0) {
   return Number.isInteger(rounded) ? `${rounded}%` : `${rounded.toFixed(1).replace('.', ',')}%`
 }
 
-export function BudgetSummaryCards({ resumo, loading }) {
+export function BudgetSummaryCards({ resumo, rendaMensalPlanejada = 0, loading }) {
   if (loading) {
     return (
       <section className="budget-summary budget-summary--loading">
@@ -47,6 +47,16 @@ export function BudgetSummaryCards({ resumo, loading }) {
   return (
     <section className="budget-summary">
       <h2 className="budget-summary__title">Visão geral do orçamento</h2>
+
+      {resumo?.orcamentoExcedeRenda ? (
+        <div className="budget-summary__warning" role="status">
+          <AlertTriangle size={16} aria-hidden />
+          <span>
+            Seu orçamento total ({formatCurrency(resumo.orcamentoTotal ?? 0)}) excede a renda
+            planejada ({formatCurrency(rendaMensalPlanejada)}).
+          </span>
+        </div>
+      ) : null}
 
       <div className="budget-summary__metrics">
         {metrics.map(({ key, label, value, icon: Icon, tone }) => (

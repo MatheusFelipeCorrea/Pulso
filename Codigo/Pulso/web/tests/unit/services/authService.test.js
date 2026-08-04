@@ -10,13 +10,14 @@ vi.mock('@/services/api.js', () => ({
 }))
 
 vi.mock('@/utils/apiBaseUrl.js', () => ({
-  getApiBaseUrl: vi.fn(() => 'http://localhost:3333/api'),
+  getApiBaseUrl: vi.fn(() => '/api'),
 }))
 
 import api from '@/services/api.js'
 import { getApiBaseUrl } from '@/utils/apiBaseUrl.js'
 import {
   clearAuthTokens,
+  exchangeOAuth,
   forgotPassword,
   getMe,
   login,
@@ -34,8 +35,10 @@ import {
 describe('services/authService', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    localStorage.clear()
-    window.location.href = 'http://localhost/'
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { href: 'http://localhost/' },
+    })
   })
 
   it('register remove aceitarTermos e retorna payload da API', async () => {
@@ -57,7 +60,7 @@ describe('services/authService', () => {
   })
 
   it('login normaliza dados e retorna resposta', async () => {
-    api.post.mockResolvedValueOnce({ data: { accessToken: 'token' } })
+    api.post.mockResolvedValueOnce({ data: { user: { id: 'u1' } } })
 
     const result = await login({
       identificador: '  user@email.com  ',
@@ -70,7 +73,7 @@ describe('services/authService', () => {
       senha: '123',
       lembrarMe: true,
     })
-    expect(result).toEqual({ accessToken: 'token' })
+    expect(result).toEqual({ user: { id: 'u1' } })
   })
 
   it('forgot/reset/verify usam endpoints corretos', async () => {
@@ -95,45 +98,41 @@ describe('services/authService', () => {
     expect(api.get).toHaveBeenCalledWith('/auth/verify-email/mail%2Ftoken')
   })
 
-  it('refresh, getMe e resendVerification retornam dados esperados', async () => {
-    api.post.mockResolvedValueOnce({ data: { accessToken: 'novo' } })
+  it('refresh, getMe, resendVerification e exchangeOAuth retornam dados esperados', async () => {
+    api.post.mockResolvedValueOnce({ data: { ok: true } })
     api.get.mockResolvedValueOnce({ data: { user: { id: 'u1' } } })
     api.post.mockResolvedValueOnce({ data: { enviado: true } })
+    api.post.mockResolvedValueOnce({ data: { user: { id: 'u2' } } })
 
-    await expect(refresh('r1')).resolves.toEqual({ accessToken: 'novo' })
+    await expect(refresh()).resolves.toEqual({ ok: true })
     await expect(getMe()).resolves.toEqual({ id: 'u1' })
     await expect(resendVerification('a@b.com')).resolves.toEqual({ enviado: true })
+    await expect(exchangeOAuth('exchange-token')).resolves.toEqual({ user: { id: 'u2' } })
 
-    expect(api.post).toHaveBeenCalledWith('/auth/refresh', { refreshToken: 'r1' })
+    expect(api.post).toHaveBeenCalledWith('/auth/refresh')
     expect(api.get).toHaveBeenCalledWith('/auth/me')
     expect(api.post).toHaveBeenCalledWith('/auth/resend-verification', { email: 'a@b.com' })
+    expect(api.post).toHaveBeenCalledWith('/auth/oauth/exchange', {
+      exchange: 'exchange-token',
+    })
   })
 
-  it('logout só chama endpoint quando houver refreshToken', async () => {
-    await logout()
-    expect(api.post).not.toHaveBeenCalled()
+  it('logout chama endpoint sem body', async () => {
+    api.post.mockResolvedValueOnce({ data: { message: 'ok' } })
 
-    localStorage.setItem('refreshToken', 'refresh-123')
     await logout()
-    expect(api.post).toHaveBeenCalledWith('/auth/logout', { refreshToken: 'refresh-123' })
+
+    expect(api.post).toHaveBeenCalledWith('/auth/logout')
   })
 
-  it('helper de tokens persiste e limpa localStorage', () => {
-    storeAuthTokens({ accessToken: 'a1', refreshToken: 'r1' })
-    expect(localStorage.getItem('accessToken')).toBe('a1')
-    expect(localStorage.getItem('refreshToken')).toBe('r1')
-
-    storeAuthTokens({ accessToken: 'a2' })
-    expect(localStorage.getItem('accessToken')).toBe('a2')
-    expect(localStorage.getItem('refreshToken')).toBe('r1')
-
-    clearAuthTokens()
-    expect(localStorage.getItem('accessToken')).toBeNull()
-    expect(localStorage.getItem('refreshToken')).toBeNull()
+  it('helpers de token são no-op com cookies httpOnly', () => {
+    expect(() => storeAuthTokens({ accessToken: 'a1' })).not.toThrow()
+    expect(() => clearAuthTokens()).not.toThrow()
   })
 
   it('loginWithGoogle resolve URL da API para redirecionamento', () => {
     loginWithGoogle()
     expect(getApiBaseUrl).toHaveBeenCalled()
+    expect(window.location.href).toBe('/api/auth/google')
   })
 })

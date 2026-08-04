@@ -40,9 +40,28 @@ const buscarOuCriar = async (usuarioId, nome, icone = 'Tag', cor = '#71717A') =>
     return criar(usuarioId, { nome, icone, cor });
 };
 
+const buscarPorId = async (id, usuarioId) =>
+    prisma.tag.findFirst({
+        where: { id, usuarioId },
+    });
+
+const atualizar = async (id, usuarioId, dados) =>
+    prisma.tag.update({
+        where: { id },
+        data: dados,
+    });
+
+const excluir = async (id, usuarioId) =>
+    prisma.tag.deleteMany({
+        where: { id, usuarioId },
+    });
+
 module.exports = {
     listarPorUsuario,
     buscarPorIds,
     criar,
     buscarOuCriar,
+    buscarPorId,
+    atualizar,
+    excluir,
 };

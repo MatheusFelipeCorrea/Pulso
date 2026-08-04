@@ -3,6 +3,7 @@ const prisma = require('../config/database');
 const AppError = require('../utils/appError');
 const env = require('../config/env');
 const { createOAuthClient } = require('../utils/googleOAuth');
+const { encryptTokens, decryptTokens } = require('../utils/googleTokenCrypto');
 const { ANTECEDENCIA_MINUTOS, HORA_PADRAO_LEMBRETE } = require('../utils/reminderAntecedencia');
 const { CATEGORIA_LABELS } = require('../constants/reminderCategories');
 const {
@@ -20,8 +21,7 @@ const getRedirectUri = () =>
 
 const getOAuthClient = () => createOAuthClient(getRedirectUri());
 
-const parseTokens = (tokensGoogle) =>
-    typeof tokensGoogle === 'string' ? JSON.parse(tokensGoogle) : tokensGoogle;
+const parseTokens = (tokensGoogle) => decryptTokens(tokensGoogle);
 
 const mapGoogleError = (error) => {
     if (error instanceof AppError) return error;
@@ -88,7 +88,7 @@ const getCalendarApi = async (usuarioId) => {
         const merged = { ...parseTokens(config.tokensGoogle), ...tokens };
         await prisma.configuracaoUsuario.update({
             where: { usuarioId },
-            data: { tokensGoogle: merged },
+            data: { tokensGoogle: encryptTokens(merged) },
         });
     });
 
@@ -178,8 +178,12 @@ const garantirCalendarioPulso = async (usuarioId) =>
 
 const buildEventBody = (lembrete) => {
     const startDate = formatDateOnly(lembrete.dataVencimento);
-    const hora = String(HORA_PADRAO_LEMBRETE).padStart(2, '0');
-    const horaFim = String(HORA_PADRAO_LEMBRETE + 1).padStart(2, '0');
+    const [horaInicio, minutoInicio] = (lembrete.horaLembrete || `${HORA_PADRAO_LEMBRETE}:00`)
+        .split(':')
+        .map(Number);
+    const hora = String(horaInicio).padStart(2, '0');
+    const minuto = String(minutoInicio).padStart(2, '0');
+    const horaFim = String(Math.min(horaInicio + 1, 23)).padStart(2, '0');
     const categoriaLabel = CATEGORIA_LABELS[lembrete.categoria] ?? lembrete.categoria;
     const valorTexto =
         lembrete.valor != null && Number(lembrete.valor) > 0
@@ -194,8 +198,8 @@ const buildEventBody = (lembrete) => {
     return {
         summary: lembrete.titulo,
         description: linhas.join('\n'),
-        start: { dateTime: `${startDate}T${hora}:00:00`, timeZone: TIMEZONE },
-        end: { dateTime: `${startDate}T${horaFim}:00:00`, timeZone: TIMEZONE },
+        start: { dateTime: `${startDate}T${hora}:${minuto}:00`, timeZone: TIMEZONE },
+        end: { dateTime: `${startDate}T${horaFim}:${minuto}:00`, timeZone: TIMEZONE },
         reminders: {
             useDefault: false,
             overrides: [{ method: 'popup', minutes: minutos }],

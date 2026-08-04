@@ -176,6 +176,69 @@
   color: #dc2626;
 }
 
+.category-form__beneficio-label {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.category-form__beneficio-intro {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ds-color-text-secondary);
+}
+
+.category-form__beneficio-presets {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.category-form__beneficio-preset {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid var(--ds-color-border);
+  border-radius: 12px;
+  background: transparent;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.category-form__beneficio-preset:hover:not(.category-form__beneficio-preset--active) {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 35%, var(--ds-color-border));
+}
+
+.category-form__beneficio-preset--active {
+  border-color: var(--ds-color-primary);
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+
+.category-form__beneficio-preset-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ds-color-text);
+}
+
+.category-form__beneficio-preset-desc {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ds-color-text);
+}
+
+.category-form__beneficio-preset-hint {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--ds-color-text-secondary);
+}
+
 /* —— Icon picker —— */
 .category-icon-picker {
   display: flex;

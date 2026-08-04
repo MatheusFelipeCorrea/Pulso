@@ -1,5 +1,6 @@
-import { Navigate } from 'react-router-dom'
+import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/defaultAuthenticatedRoute.js'
 import { useEffect } from 'react'
+import { Navigate } from 'react-router-dom'
 import { useAppSelector } from '@/store/hooks'
 import { PublicHeader } from '@/components/features/landing/PublicHeader.jsx'
 import { LandingHero } from '@/components/features/landing/LandingHero.jsx'
@@ -16,7 +17,7 @@ import { LandingFooter } from '@/components/features/landing/LandingFooter.jsx'
 
 export default function LandingPage() {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
-  const hasToken = Boolean(localStorage.getItem('accessToken'))
+  const sessionChecked = useAppSelector((state) => state.auth.sessionChecked)
 
   useEffect(() => {
     const hash = window.location.hash.replace('#', '')
@@ -27,8 +28,8 @@ export default function LandingPage() {
     return () => window.clearTimeout(timer)
   }, [])
 
-  if (isAuthenticated || hasToken) {
-    return <Navigate to="/dashboard" replace />
+  if (sessionChecked && isAuthenticated) {
+    return <Navigate to={DEFAULT_AUTHENTICATED_ROUTE} replace />
   }
 
   return (

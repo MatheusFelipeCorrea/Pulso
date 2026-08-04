@@ -11,10 +11,13 @@ const buildParams = (filtros = {}) => {
   if (filtros.quitada === true || filtros.quitada === false) {
     params.set('quitada', String(filtros.quitada))
   }
+  if (filtros.status) params.set('status', filtros.status)
   if (filtros.busca) params.set('busca', filtros.busca)
   if (filtros.ordenarValor) params.set('ordenarValor', filtros.ordenarValor)
   if (filtros.dataInicio) params.set('dataInicio', filtros.dataInicio)
   if (filtros.dataFim) params.set('dataFim', filtros.dataFim)
+  if (filtros.prazoInicio) params.set('prazoInicio', filtros.prazoInicio)
+  if (filtros.prazoFim) params.set('prazoFim', filtros.prazoFim)
   if (filtros.pagina) params.set('pagina', String(filtros.pagina))
   if (filtros.limite) params.set('limite', String(filtros.limite))
 
@@ -48,8 +51,23 @@ export async function atualizarDivida(id, payload, options = {}) {
   return data
 }
 
+export async function registrarPagamento(id, payload, options = {}) {
+  const { data } = await api.post(`/dividas/${id}/pagamentos`, payload, axiosConfig(options))
+  return data
+}
+
+export async function excluirPagamento(id, pagamentoId, options = {}) {
+  const { data } = await api.delete(`/dividas/${id}/pagamentos/${pagamentoId}`, axiosConfig(options))
+  return data
+}
+
 export async function quitarDivida(id, options = {}) {
   const { data } = await api.patch(`/dividas/${id}/quitar`, {}, axiosConfig(options))
+  return data
+}
+
+export async function reabrirDivida(id, options = {}) {
+  const { data } = await api.patch(`/dividas/${id}/reabrir`, {}, axiosConfig(options))
   return data
 }
 

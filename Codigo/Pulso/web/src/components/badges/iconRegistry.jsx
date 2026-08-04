@@ -45,6 +45,8 @@ import {
   CreditCard,
   Users,
   Building2,
+  PiggyBank,
+  ArrowLeftRight,
 } from 'lucide-react'
 
 /**
@@ -98,6 +100,8 @@ const ICON_REGISTRY = {
   CreditCard,
   Users,
   Building2,
+  PiggyBank,
+  ArrowLeftRight,
 }
 
 const ICON_SIZES = { sm: 12, md: 14, lg: 16 }

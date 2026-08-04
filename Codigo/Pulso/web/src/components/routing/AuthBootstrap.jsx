@@ -1,18 +1,15 @@
 import { useEffect } from 'react'
 import { useAppDispatch } from '@/store/hooks'
-import { setUser, clearUser } from '@/store/slices/authSlice'
-import { getMe, clearAuthTokens } from '@/services/authService'
+import { setUser, clearUser, setSessionChecked } from '@/store/slices/authSlice'
+import { getMe } from '@/services/authService'
 
 /**
- * Restaura sessão a partir do token salvo (GET /me).
+ * Restaura sessão a partir dos cookies httpOnly (GET /me).
  */
 export function AuthBootstrap({ children }) {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken')
-    if (!token) return
-
     let cancelled = false
 
     getMe()
@@ -20,10 +17,10 @@ export function AuthBootstrap({ children }) {
         if (!cancelled && user) dispatch(setUser(user))
       })
       .catch(() => {
-        if (!cancelled) {
-          clearAuthTokens()
-          dispatch(clearUser())
-        }
+        if (!cancelled) dispatch(clearUser())
+      })
+      .finally(() => {
+        if (!cancelled) dispatch(setSessionChecked())
       })
 
     return () => {

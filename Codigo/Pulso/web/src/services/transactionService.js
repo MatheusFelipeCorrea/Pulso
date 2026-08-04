@@ -50,6 +50,13 @@ export async function obterOpcoesFiltro(options = {}) {
   return data
 }
 
+/** RF-141 — sugestão de categoria com base no histórico de descrições do usuário */
+export async function sugerirCategoria({ tipo, descricao }, options = {}) {
+  const params = new URLSearchParams({ tipo, descricao })
+  const { data } = await api.get(`/transacoes/sugestao-categoria?${params.toString()}`, axiosConfig(options))
+  return data
+}
+
 export async function criarTransacao(payload) {
   const { data } = await api.post('/transacoes', payload)
   return data
@@ -60,8 +67,9 @@ export async function atualizarTransacao(id, payload) {
   return data
 }
 
-export async function excluirTransacao(id, excluirFuturas = false) {
-  await api.delete(`/transacoes/${id}`, {
-    params: { excluirFuturas: excluirFuturas ? 'true' : 'false' },
-  })
+export async function excluirTransacao(id, excluirFuturas = false, dataCorte = null) {
+  const params = { excluirFuturas: excluirFuturas ? 'true' : 'false' }
+  if (dataCorte) params.dataCorte = dataCorte
+
+  await api.delete(`/transacoes/${id}`, { params })
 }

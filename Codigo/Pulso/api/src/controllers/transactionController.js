@@ -1,5 +1,6 @@
 const transactionService = require('../services/transactionService');
 const transactionFilterService = require('../services/transactionFilterService');
+const categorySuggestionService = require('../services/categorySuggestionService');
 
 const listarTransacoes = async (req, res, next) => {
     try {
@@ -33,6 +34,15 @@ const obterOpcoesFiltro = async (req, res, next) => {
     }
 };
 
+const sugerirCategoria = async (req, res, next) => {
+    try {
+        const sugestao = await categorySuggestionService.sugerirCategoria(req.user.id, req.query);
+        res.status(200).json(sugestao);
+    } catch (error) {
+        next(error);
+    }
+};
+
 const criarTransacao = async (req, res, next) => {
     try {
         const transacao = await transactionService.criarTransacao(req.user.id, req.body);
@@ -60,7 +70,8 @@ const excluirTransacao = async (req, res, next) => {
         await transactionService.excluirTransacao(
             req.user.id,
             req.params.id,
-            req.query.excluirFuturas
+            req.query.excluirFuturas,
+            req.query.dataCorte
         );
         res.status(204).send();
     } catch (error) {
@@ -72,6 +83,7 @@ module.exports = {
     listarTransacoes,
     obterResumo,
     obterOpcoesFiltro,
+    sugerirCategoria,
     criarTransacao,
     editarTransacao,
     excluirTransacao,

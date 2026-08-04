@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Bell, Calendar, CircleDollarSign, Hash, Paperclip, RefreshCw, Tag, X } from 'lucide-react'
+import { Bell, Calendar, CircleDollarSign, Clock, Hash, Paperclip, RefreshCw, Tag, X } from 'lucide-react'
 import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
 import { FormFieldLabel } from '@/design-system/components/forms/FormFieldLabel/FormFieldLabel.jsx'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
@@ -7,9 +7,11 @@ import { InputText } from '@/design-system/components/inputs/InputText/InputText
 import { InputMoney } from '@/design-system/components/inputs/InputMoney/InputMoney.jsx'
 import { Select } from '@/design-system/components/selects/Select/Select.jsx'
 import { DatePicker } from '@/design-system/components/pickers/DatePicker/DatePicker.jsx'
+import { TimePicker } from '@/design-system/components/pickers/TimePicker/TimePicker.jsx'
 import { Checkbox } from '@/design-system/components/forms/Checkbox/Checkbox.jsx'
 import { Toggle } from '@/design-system/components/forms/Toggle/Toggle.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
+import { REQUIRED_FIELD_ERROR, isRequiredValueEmpty } from '@/utils/formValidation.js'
 import {
   buildReminderCategorySelectOptions,
   getReminderCategoryMeta,
@@ -27,6 +29,7 @@ const emptyForm = (defaultDate = new Date(), googleConnected = false) => ({
   titulo: '',
   valor: 0,
   dataVencimento: defaultDate,
+  horaLembrete: '10:00',
   antecedencia: 'UM_DIA',
   categoria: 'FATURA_CARTAO',
   sincronizarGoogle: googleConnected,
@@ -55,6 +58,7 @@ export function ReminderFormModal({
   googleConnected = false,
 }) {
   const [form, setForm] = useState(() => emptyForm(defaultDate))
+  const [fieldErrors, setFieldErrors] = useState({})
   const isEdit = Boolean(lembrete)
 
   const categoriaOptions = useMemo(() => buildReminderCategorySelectOptions(), [])
@@ -62,12 +66,14 @@ export function ReminderFormModal({
 
   useEffect(() => {
     if (!open) return
+    setFieldErrors({})
     if (lembrete) {
       const vencimento = new Date(lembrete.dataVencimento)
       setForm({
         titulo: lembrete.titulo ?? '',
         valor: lembrete.valor != null ? Number(lembrete.valor) : 0,
         dataVencimento: vencimento,
+        horaLembrete: lembrete.horaLembrete ?? '10:00',
         antecedencia: lembrete.antecedencia ?? 'UM_DIA',
         categoria: lembrete.categoria ?? 'OUTRO',
         sincronizarGoogle: Boolean(lembrete.sincronizado),
@@ -86,10 +92,26 @@ export function ReminderFormModal({
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+
+    const nextFieldErrors = {}
+    if (isRequiredValueEmpty(form.titulo)) {
+      nextFieldErrors.titulo = REQUIRED_FIELD_ERROR
+    }
+    if (!form.dataVencimento) {
+      nextFieldErrors.dataVencimento = REQUIRED_FIELD_ERROR
+    }
+
+    if (Object.keys(nextFieldErrors).length > 0) {
+      setFieldErrors(nextFieldErrors)
+      return
+    }
+
+    setFieldErrors({})
     await onSubmit?.({
       titulo: form.titulo.trim(),
       valor: form.valor > 0 ? form.valor : null,
       dataVencimento: form.dataVencimento.toISOString(),
+      horaLembrete: form.horaLembrete,
       antecedencia: form.antecedencia,
       categoria: form.categoria,
       sincronizarGoogle: googleConnected ? form.sincronizarGoogle : false,
@@ -100,7 +122,7 @@ export function ReminderFormModal({
 
   return (
     <Modal isOpen={open} onClose={onClose} size="xl" className="calendar-reminder-modal">
-      <form className="calendar-reminder-form" onSubmit={handleSubmit}>
+      <form className="calendar-reminder-form" onSubmit={handleSubmit} noValidate>
         <header className="calendar-reminder-form__header">
           <div>
             <h2>{isEdit ? 'Editar Lembrete' : 'Novo Lembrete'}</h2>
@@ -123,9 +145,20 @@ export function ReminderFormModal({
               </FormFieldLabel>
             }
             value={form.titulo}
-            onChange={(e) => setForm((prev) => ({ ...prev, titulo: e.target.value }))}
+            onChange={(e) => {
+              const titulo = e.target.value
+              setForm((prev) => ({ ...prev, titulo }))
+              if (fieldErrors.titulo) {
+                setFieldErrors((prev) => {
+                  const next = { ...prev }
+                  delete next.titulo
+                  return next
+                })
+              }
+            }}
             placeholder="Ex: Fatura do cartão"
             required
+            error={fieldErrors.titulo}
           />
 
           <div className="calendar-reminder-form__row">
@@ -145,14 +178,31 @@ export function ReminderFormModal({
                 </FormFieldLabel>
               }
               value={form.dataVencimento}
-              onChange={(value) =>
+              onChange={(value) => {
                 setForm((prev) => ({
                   ...prev,
                   dataVencimento: value,
                   diaRecorrencia: value.getDate(),
                 }))
-              }
+                if (fieldErrors.dataVencimento) {
+                  setFieldErrors((prev) => {
+                    const next = { ...prev }
+                    delete next.dataVencimento
+                    return next
+                  })
+                }
+              }}
               required
+              error={fieldErrors.dataVencimento}
+            />
+            <TimePicker
+              label={
+                <FormFieldLabel icon={Clock} tone="blue">
+                  Horário do lembrete
+                </FormFieldLabel>
+              }
+              value={form.horaLembrete}
+              onChange={(value) => setForm((prev) => ({ ...prev, horaLembrete: value }))}
             />
           </div>
 

@@ -17,6 +17,7 @@ import {
   excluirTransacao,
   obterOpcoesFiltro,
   obterResumo,
+  sugerirCategoria,
 } from '@/services/transactionService.js'
 
 describe('services/transactionService', () => {
@@ -87,12 +88,24 @@ describe('services/transactionService', () => {
 
     await expect(criarTransacao({ valor: 10 })).resolves.toEqual({ id: '1' })
     await expect(atualizarTransacao('1', { valor: 10 })).resolves.toEqual({ id: '1', valor: 10 })
-    await excluirTransacao('1', true)
+    await excluirTransacao('1', true, '2026-03-15T03:00:00.000Z')
 
     expect(api.post).toHaveBeenCalledWith('/transacoes', { valor: 10 })
     expect(api.patch).toHaveBeenCalledWith('/transacoes/1', { valor: 10 })
     expect(api.delete).toHaveBeenCalledWith('/transacoes/1', {
-      params: { excluirFuturas: 'true' },
+      params: { excluirFuturas: 'true', dataCorte: '2026-03-15T03:00:00.000Z' },
     })
+  })
+
+  it('sugere categoria com base em tipo e descrição (RF-141)', async () => {
+    api.get.mockResolvedValueOnce({ data: { categoriaId: 'cat-1' } })
+
+    const result = await sugerirCategoria({ tipo: 'DESPESA', descricao: 'Uber pro trampo' })
+
+    expect(api.get).toHaveBeenCalledWith(
+      '/transacoes/sugestao-categoria?tipo=DESPESA&descricao=Uber+pro+trampo',
+      { signal: undefined }
+    )
+    expect(result).toEqual({ categoriaId: 'cat-1' })
   })
 })

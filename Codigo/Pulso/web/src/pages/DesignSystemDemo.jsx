@@ -3,6 +3,8 @@ import { Edit, Trash, X, Plus, Check } from 'lucide-react'
 import { Button, IconButton } from '../design-system/components/buttons/index.js'
 import { Spinner, SpinnerDots, SpinnerFullscreen, useToast, Alert } from '../design-system/components/feedback/index.js'
 import { Tooltip } from '../design-system/components/data-display/index.js'
+import { NotificationPanel } from '../components/features/dashboard/NotificationPanel/NotificationPanel.jsx'
+import { NOTIFICATION_DEMO_ITEMS } from '../components/features/dashboard/NotificationPanel/notificationDemoData.js'
 
 /**
  * Página de demonstração do Design System
@@ -11,6 +13,8 @@ import { Tooltip } from '../design-system/components/data-display/index.js'
 export default function DesignSystemDemo() {
   const [darkMode, setDarkMode] = useState(false)
   const [loadingButtons, setLoadingButtons] = useState({})
+  const [demoNotifications, setDemoNotifications] = useState(NOTIFICATION_DEMO_ITEMS)
+  const [markingReadId, setMarkingReadId] = useState(null)
   const toast = useToast()
 
   // Toggle dark mode
@@ -31,6 +35,24 @@ export default function DesignSystemDemo() {
     }, 2000)
   }
 
+  const handleMarkDemoRead = (id) => {
+    setMarkingReadId(id)
+    setTimeout(() => {
+      setDemoNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+      )
+      setMarkingReadId(null)
+    }, 300)
+  }
+
+  const handleMarkAllDemoRead = () => {
+    setDemoNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
+  }
+
+  const handleViewDemoNotification = (notification) => {
+    toast.info(`Navegar para: ${notification.linkAcao ?? '(sem link)'} — ${notification.description}`)
+  }
+
   return (
     <div className="min-h-screen bg-[var(--ds-color-background)] text-[var(--ds-color-text)] p-8">
       {/* Header */}
@@ -43,6 +65,14 @@ export default function DesignSystemDemo() {
             <p className="text-[var(--ds-color-text-secondary)]">
               Biblioteca de componentes UI genéricos e reutilizáveis
             </p>
+            <nav className="flex flex-wrap gap-3 mt-4 text-sm">
+              <a href="#botoes" className="text-[var(--ds-color-primary)] hover:underline">Botões</a>
+              <a href="#notificacoes" className="text-[var(--ds-color-primary)] hover:underline font-semibold">
+                Notificações (13 tipos)
+              </a>
+              <a href="#spinners" className="text-[var(--ds-color-primary)] hover:underline">Spinners</a>
+              <a href="#tooltips" className="text-[var(--ds-color-primary)] hover:underline">Tooltips</a>
+            </nav>
           </div>
           <Button
             variant={darkMode ? 'secondary' : 'primary'}
@@ -57,7 +87,7 @@ export default function DesignSystemDemo() {
         {/* ============================================================
             SECTION: BUTTONS
             ============================================================ */}
-        <section>
+        <section id="botoes">
           <h2 className="text-2xl font-bold mb-6 text-[var(--ds-color-text)]">
             Botões
           </h2>
@@ -743,9 +773,50 @@ export default function DesignSystemDemo() {
         </section>
 
         {/* ============================================================
+            SECTION: NOTIFICAÇÕES
+            ============================================================ */}
+        <section id="notificacoes">
+          <h2 className="text-2xl font-bold mb-2 text-[var(--ds-color-text)]">
+            Notificações
+          </h2>
+          <p className="text-[var(--ds-color-text-secondary)] mb-6 max-w-3xl">
+            Preview dos 13 tipos de notificação do Pulso (claro/escuro). Teste marcar como lida,
+            marcar todas e o botão Ver. Tipos <strong>GRUPO_ATIVIDADE</strong> e{' '}
+            <strong>META_ATINGIDA</strong> são disparados pelo módulo de grupos e metas.
+          </p>
+
+          <div className="max-w-2xl">
+            <NotificationPanel
+              notifications={demoNotifications}
+              onMarkAllRead={handleMarkAllDemoRead}
+              onMarkRead={handleMarkDemoRead}
+              onView={handleViewDemoNotification}
+              markingReadId={markingReadId}
+            />
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setDemoNotifications(NOTIFICATION_DEMO_ITEMS)}
+            >
+              Resetar demo
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setDemoNotifications((prev) => prev.map((n) => ({ ...n, read: false })))}
+            >
+              Marcar todas como não lidas
+            </Button>
+          </div>
+        </section>
+
+        {/* ============================================================
             SECTION: TOOLTIP
             ============================================================ */}
-        <section>
+        <section id="tooltips">
           <h2 className="text-2xl font-bold mb-6 text-[var(--ds-color-text)]">
             Tooltip
           </h2>
@@ -808,7 +879,7 @@ export default function DesignSystemDemo() {
       {/* Footer */}
       <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-[var(--ds-color-border)]">
         <p className="text-center text-[var(--ds-color-text-secondary)] text-sm">
-          ✨ Design System implementado com sucesso! • Foundation: Tokens, Hooks, Utils • Componentes: Button, IconButton, Spinner (circular + dots + fullscreen), Toast (4 tipos + stacking), Alert (4 tipos inline), Tooltip
+          ✨ Design System • Notificações em <a href="#notificacoes" className="text-[var(--ds-color-primary)] underline">#notificacoes</a> • Button, Spinner, Toast, Alert, Tooltip
         </p>
       </div>
     </div>

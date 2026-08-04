@@ -9,7 +9,14 @@ const notificationRoutes = require('./notificationRoutes');
 const reminderRoutes = require('./reminderRoutes');
 const calendarRoutes = require('./calendarRoutes');
 const debtRoutes = require('./debtRoutes');
+const expenseSplitRoutes = require('./expenseSplitRoutes');
+const metaRoutes = require('./metaRoutes');
+const moedaRoutes = require('./moedaRoutes');
+const viagemRoutes = require('./viagemRoutes');
+const grupoRoutes = require('./grupoRoutes');
+const purchasePlanningRoutes = require('./purchasePlanningRoutes');
 const cronRoutes = require('./cronRoutes');
+const syncRoutes = require('./syncRoutes');
 
 const router = express.Router();
 
@@ -23,6 +30,13 @@ router.use('/notificacoes', notificationRoutes);
 router.use('/lembretes', reminderRoutes);
 router.use('/calendario', calendarRoutes);
 router.use('/dividas', debtRoutes);
+router.use('/divisoes', expenseSplitRoutes);
+router.use('/metas', metaRoutes);
+router.use('/moedas', moedaRoutes);
+router.use('/viagens', viagemRoutes);
+router.use('/grupos', grupoRoutes);
+router.use('/planejamento-compra', purchasePlanningRoutes);
 router.use('/cron', cronRoutes);
+router.use('/sync', syncRoutes);
 
 module.exports = router;

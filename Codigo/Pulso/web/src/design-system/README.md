@@ -297,7 +297,7 @@ Os componentes usam variáveis CSS ao invés de cores hardcoded. O projeto que c
 
 | Componente | Props principais | Descrição |
 |---|---|---|
-| Select | options, value, onChange, placeholder, error | Dropdown single-select; opções podem ter `icon`, `iconColor` |
+| Select | options, value, onChange, placeholder, error | Dropdown single-select; opções podem ter `icon`, `iconColor`, `trailingText` (texto à direita, antes do chevron) |
 | SelectSearch | options, value, onChange, searchPlaceholder | Dropdown com campo de busca |
 | MultiSelect | options, values, onChange, placeholder | Múltipla seleção sem busca |
 | MultiSelectSearch | options, values, onChange, searchPlaceholder | Múltipla seleção com busca |
@@ -365,7 +365,7 @@ Os componentes usam variáveis CSS ao invés de cores hardcoded. O projeto que c
 |---|---|---|
 | Toggle | checked, onChange, label, description, disabled | Switch on/off |
 | Checkbox | checked, onChange, label, indeterminate, error | Caixa de seleção |
-| Radio | value, selected, onChange, label, description | Botão de opção |
+| Radio | value, checked, onChange, label, description | Botão de opção |
 | FormField | label, error, required, description, children | Wrapper: label + input + error msg |
 
 ---

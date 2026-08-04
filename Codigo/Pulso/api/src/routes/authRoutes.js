@@ -4,7 +4,17 @@ const { ensureGoogleStrategy } = passport;
 const authController = require('../controllers/authController');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const authMiddleware = require('../middlewares/authMiddleware');
-const { authSensitiveRateLimit } = require('../middlewares/authRateLimit');
+const {
+    authRegisterRateLimit,
+    authLoginRateLimit,
+    authOAuthExchangeRateLimit,
+    authRefreshRateLimit,
+    authLogoutRateLimit,
+    authForgotPasswordRateLimit,
+    authResetPasswordRateLimit,
+    authVerifyEmailRateLimit,
+    authResendVerificationRateLimit,
+} = require('../middlewares/authRateLimit');
 const authService = require('../services/authService');
 const {
     registerSchema,
@@ -13,6 +23,7 @@ const {
     loginSchema,
     refreshSchema,
     logoutSchema,
+    oauthExchangeSchema,
     forgotPasswordSchema,
     resetPasswordTokenSchema,
     resetPasswordSchema,
@@ -22,52 +33,72 @@ const router = express.Router();
 
 router.post(
     '/register',
-    authSensitiveRateLimit,
+    authRegisterRateLimit,
     validateMiddleware(registerSchema),
     authController.register
 );
 
 router.post(
     '/login',
-    authSensitiveRateLimit,
+    authLoginRateLimit,
     validateMiddleware(loginSchema),
     authController.login
 );
 
-router.post('/refresh', validateMiddleware(refreshSchema), authController.refresh);
+router.post(
+    '/oauth/exchange',
+    authOAuthExchangeRateLimit,
+    validateMiddleware(oauthExchangeSchema),
+    authController.exchangeOAuth
+);
 
-router.post('/logout', validateMiddleware(logoutSchema), authController.logout);
+router.post(
+    '/refresh',
+    authRefreshRateLimit,
+    validateMiddleware(refreshSchema),
+    authController.refresh
+);
+
+router.post(
+    '/logout',
+    authLogoutRateLimit,
+    validateMiddleware(logoutSchema),
+    authController.logout
+);
 
 router.get('/me', authMiddleware, authController.me);
 
 router.post(
     '/forgot-password',
-    authSensitiveRateLimit,
+    authForgotPasswordRateLimit,
     validateMiddleware(forgotPasswordSchema),
     authController.forgotPassword
 );
 
 router.get(
     '/reset-password/:token',
+    authResetPasswordRateLimit,
     validateMiddleware(resetPasswordTokenSchema),
     authController.validateResetToken
 );
 
 router.post(
     '/reset-password/:token',
+    authResetPasswordRateLimit,
     validateMiddleware(resetPasswordSchema),
     authController.resetPassword
 );
 
 router.get(
     '/verify-email/:token',
+    authVerifyEmailRateLimit,
     validateMiddleware(verifyEmailSchema),
     authController.verifyEmail
 );
 
 router.post(
     '/resend-verification',
-    authSensitiveRateLimit,
+    authResendVerificationRateLimit,
     validateMiddleware(resendVerificationSchema),
     authController.resendVerification
 );

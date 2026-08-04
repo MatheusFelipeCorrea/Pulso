@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Plus, Tags } from 'lucide-react'
+import { Plus, Tag, Tags } from 'lucide-react'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { Pagination } from '@/design-system/components/navigation/Pagination/Pagination.jsx'
 import { useToast } from '@/design-system/components/feedback/Toast/useToast.js'
@@ -8,6 +8,7 @@ import { TransactionFilters } from '@/components/features/transactions/Transacti
 import { TransactionList } from '@/components/features/transactions/TransactionList.jsx'
 import { TransactionFormModal } from '@/components/features/transactions/TransactionFormModal.jsx'
 import { CategoryManageModal } from '@/components/features/categories/CategoryManageModal.jsx'
+import { TagManageModal } from '@/components/features/tags/TagManageModal.jsx'
 import { DeleteTransactionModal } from '@/components/features/transactions/DeleteTransactionModal.jsx'
 import * as transactionService from '@/services/transactionService.js'
 import * as tagService from '@/services/tagService.js'
@@ -57,6 +58,7 @@ export default function TransactionsPage() {
   const [deleting, setDeleting] = useState(false)
 
   const [categoryModalOpen, setCategoryModalOpen] = useState(false)
+  const [tagModalOpen, setTagModalOpen] = useState(false)
 
   const queryKey = useMemo(
     () =>
@@ -155,6 +157,7 @@ export default function TransactionsPage() {
         tipo: payload.tipo,
         categoriaId: payload.categoriaId,
         recurso: payload.recurso,
+        recursoDestino: payload.recursoDestino,
         valor: payload.valor,
         descricao: payload.descricao,
         data: payload.data,
@@ -187,12 +190,16 @@ export default function TransactionsPage() {
     }
   }
 
-  const handleConfirmDelete = async ({ excluirFuturas, transacaoId }) => {
+  const handleConfirmDelete = async ({ excluirFuturas, dataCorte }) => {
     setDeleting(true)
     try {
-      const id = transacaoId ?? deleteTarget?.id
-      await transactionService.excluirTransacao(id, excluirFuturas)
-      toast.success('Transação excluída')
+      const id = deleteTarget?.id
+      await transactionService.excluirTransacao(id, excluirFuturas, dataCorte)
+      toast.success(
+        excluirFuturas
+          ? 'Recorrência encerrada. O histórico anterior foi mantido.'
+          : 'Transação excluída'
+      )
       setDeleteOpen(false)
       setModalOpen(false)
       setDeleteTarget(null)
@@ -212,6 +219,15 @@ export default function TransactionsPage() {
           <p className="tx-page__subtitle">Gerencie todas as suas receitas e despesas.</p>
         </div>
         <div className="tx-page__header-actions">
+          <Button
+            variant="secondary"
+            size="md"
+            className="shrink-0 whitespace-nowrap"
+            leftIcon={<Tag size={18} />}
+            onClick={() => setTagModalOpen(true)}
+          >
+            Tags
+          </Button>
           <Button
             variant="secondary"
             size="md"
@@ -292,6 +308,12 @@ export default function TransactionsPage() {
         onClose={() => setCategoryModalOpen(false)}
         onChanged={reloadOpcoesFiltro}
         tipoInicial={filtrosAtivos.tipo === 'RECEITA' ? 'RECEITA' : 'DESPESA'}
+      />
+
+      <TagManageModal
+        open={tagModalOpen}
+        onClose={() => setTagModalOpen(false)}
+        onChanged={reloadOpcoesFiltro}
       />
     </div>
   )

@@ -1,35 +1,76 @@
-import { useState, useRef, cloneElement, isValidElement } from 'react'
+import {
+  useState,
+  useRef,
+  cloneElement,
+  isValidElement,
+  useEffect,
+  useCallback,
+} from 'react'
+import { createPortal } from 'react-dom'
 import { cn } from '../../../utils/cn.js'
-import { tooltipVariants, tooltipWrapperVariants } from './Tooltip.styles.jsx'
+import { tooltipWrapperVariants } from './Tooltip.styles.jsx'
+
+const FLOATING_TOOLTIP_CLASS = [
+  'fixed z-[var(--ds-z-tooltip)]',
+  'px-3 py-2',
+  'text-sm',
+  'font-medium',
+  'rounded-md',
+  'shadow-lg',
+  'pointer-events-none',
+  'whitespace-nowrap',
+  'bg-[var(--ds-color-tooltip-bg)]',
+  'text-[var(--ds-color-tooltip-text)]',
+  'transition-opacity',
+  'duration-[var(--ds-transition-fast)]',
+  'opacity-100',
+].join(' ')
+
+function mergeRefs(...refs) {
+  return (node) => {
+    refs.forEach((ref) => {
+      if (typeof ref === 'function') ref(node)
+      else if (ref != null) ref.current = node
+    })
+  }
+}
+
+function getFloatingCoords(rect, position) {
+  const gap = 8
+
+  switch (position) {
+    case 'bottom':
+      return {
+        top: rect.bottom + gap,
+        left: rect.left + rect.width / 2,
+        transform: 'translateX(-50%)',
+      }
+    case 'left':
+      return {
+        top: rect.top + rect.height / 2,
+        left: rect.left - gap,
+        transform: 'translate(-100%, -50%)',
+      }
+    case 'right':
+      return {
+        top: rect.top + rect.height / 2,
+        left: rect.right + gap,
+        transform: 'translateY(-50%)',
+      }
+    default:
+      return {
+        top: rect.top - gap,
+        left: rect.left + rect.width / 2,
+        transform: 'translate(-50%, -100%)',
+      }
+  }
+}
 
 /**
  * Tooltip - Dica contextual
- * 
- * @component
- * @example
- * ```jsx
- * <Tooltip content="Editar usuário">
- *   <IconButton icon={<Edit />} />
- * </Tooltip>
- * 
- * <Tooltip content="Salvar alterações" position="bottom">
- *   <Button>Salvar</Button>
- * </Tooltip>
- * 
- * <Tooltip content="Descrição longa aqui" position="right" disabled={false}>
- *   <span>Passe o mouse aqui</span>
- * </Tooltip>
- * ```
- * 
- * @param {object} props
- * @param {React.ReactNode} props.children - Elemento que dispara o tooltip (deve aceitar onMouseEnter/Leave, onFocus/Blur)
- * @param {React.ReactNode} props.content - Conteúdo do tooltip (texto ou JSX)
- * @param {('top'|'bottom'|'left'|'right')} [props.position='top'] - Posição do tooltip
- * @param {boolean} [props.disabled=false] - Se true, não exibe o tooltip
- * @param {number} [props.delay=200] - Delay em ms antes de exibir (evita flicker)
- * @param {boolean} [props.fullWidth=false] - Se o wrapper deve ser 100% width
- * @param {string} [props.className] - Classes adicionais no tooltip
- * @param {string} [props.wrapperClassName] - Classes adicionais no wrapper
+ *
+ * Renderiza o conteúdo em portal (document.body) para não ser cortado
+ * por containers com overflow:hidden.
  */
 export const Tooltip = ({
   children,
@@ -41,46 +82,50 @@ export const Tooltip = ({
   className,
   wrapperClassName,
 }) => {
-  // ============================================================
-  // ESTADOS
-  // ============================================================
   const [visible, setVisible] = useState(false)
+  const [coords, setCoords] = useState(null)
   const timeoutRef = useRef(null)
+  const triggerRef = useRef(null)
 
-  // ============================================================
-  // HANDLERS
-  // ============================================================
-  const showTooltip = () => {
+  const updateCoords = useCallback(() => {
+    if (!triggerRef.current) return
+    const rect = triggerRef.current.getBoundingClientRect()
+    setCoords(getFloatingCoords(rect, position))
+  }, [position])
+
+  const showTooltip = useCallback(() => {
     if (disabled || !content) return
     timeoutRef.current = setTimeout(() => {
+      updateCoords()
       setVisible(true)
     }, delay)
-  }
+  }, [disabled, content, delay, updateCoords])
 
-  const hideTooltip = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-    }
+  const hideTooltip = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
     setVisible(false)
-  }
+  }, [])
 
-  // ============================================================
-  // VALIDAÇÃO: children deve ser um único elemento React
-  // ============================================================
+  useEffect(() => {
+    if (!visible) return undefined
+
+    const handleReposition = () => updateCoords()
+    window.addEventListener('scroll', handleReposition, true)
+    window.addEventListener('resize', handleReposition)
+
+    return () => {
+      window.removeEventListener('scroll', handleReposition, true)
+      window.removeEventListener('resize', handleReposition)
+    }
+  }, [visible, updateCoords])
+
   if (!isValidElement(children)) {
     console.warn('Tooltip: children deve ser um elemento React válido')
     return children
   }
 
-  // Se disabled ou sem content, retorna apenas o children
-  if (disabled || !content) {
-    return children
-  }
-
-  // ============================================================
-  // CLONE DO CHILDREN COM EVENT HANDLERS
-  // ============================================================
   const childWithHandlers = cloneElement(children, {
+    ref: mergeRefs(triggerRef, children.ref),
     onMouseEnter: (e) => {
       showTooltip()
       children.props.onMouseEnter?.(e)
@@ -99,24 +144,29 @@ export const Tooltip = ({
     },
   })
 
-  // ============================================================
-  // RENDER
-  // ============================================================
   return (
-    <div className={cn(tooltipWrapperVariants({ fullWidth }), wrapperClassName)}>
-      {childWithHandlers}
-
-      {/* Tooltip */}
-      <div
-        role="tooltip"
-        className={cn(
-          tooltipVariants({ position, visible }),
-          className
-        )}
-      >
-        {content}
+    <>
+      <div className={cn(tooltipWrapperVariants({ fullWidth }), wrapperClassName)}>
+        {childWithHandlers}
       </div>
-    </div>
+
+      {visible && coords && typeof document !== 'undefined'
+        ? createPortal(
+            <div
+              role="tooltip"
+              className={cn(FLOATING_TOOLTIP_CLASS, className)}
+              style={{
+                top: coords.top,
+                left: coords.left,
+                transform: coords.transform,
+              }}
+            >
+              {content}
+            </div>,
+            document.body
+          )
+        : null}
+    </>
   )
 }
 

@@ -2,6 +2,12 @@ const AppError = require('../utils/appError');
 const categoryRepository = require('../repositories/categoryRepository');
 const { mapCategoria } = require('../utils/transactionMapper');
 
+/** Custom sempre nasce null; só persiste o que o usuário escolher no preset. */
+const grupoBeneficioNaCriacao = (tipo, grupoInformado) => {
+    if (tipo !== 'DESPESA') return null;
+    return grupoInformado ?? null;
+};
+
 const listarCategorias = async (usuarioId, tipo) => {
     await categoryRepository.criarPadrao(usuarioId);
     const categorias = await categoryRepository.listarPorUsuario(usuarioId, tipo);
@@ -26,6 +32,7 @@ const criarCategoria = async (usuarioId, body) => {
         tipo: body.tipo,
         icone: body.icone,
         cor: body.cor,
+        grupoBeneficio: grupoBeneficioNaCriacao(body.tipo, body.grupoBeneficio ?? null),
         padrao: false,
         usuarioId,
     });
@@ -53,6 +60,9 @@ const atualizarCategoria = async (usuarioId, id, body) => {
     }
     if (body.icone != null) data.icone = body.icone;
     if (body.cor != null) data.cor = body.cor;
+    if (body.grupoBeneficio !== undefined) {
+        data.grupoBeneficio = existente.tipo === 'DESPESA' ? body.grupoBeneficio : null;
+    }
 
     const atualizada = await categoryRepository.atualizar(id, data);
     return { ...mapCategoria(atualizada), padrao: false };

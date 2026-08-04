@@ -1,24 +1,29 @@
 const AppError = require('../utils/appError');
 const transactionRepository = require('../repositories/transactionRepository');
+const {
+    startOfDay,
+    calcularUntilAPartirDoCorte,
+    aplicarUntilNaRegra,
+} = require('../utils/recurrenceUtils');
 const categoryRepository = require('../repositories/categoryRepository');
 const tagRepository = require('../repositories/tagRepository');
+const notificationService = require('./notificationService');
+const gamificationService = require('./gamificationService');
+const insightService = require('./insightService');
 const prisma = require('../config/database');
 const { validarRecursoCategoria } = require('../utils/recursoCategoriaRules');
 const { mapTransacao } = require('../utils/transactionMapper');
 
-const startOfDay = (date) => {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    return d;
-};
-
 const incrementarStreak = async (usuarioId) => {
     const hoje = startOfDay(new Date());
     const sequencia = await prisma.sequencia.findUnique({ where: { usuarioId } });
-    if (!sequencia) return;
+    if (!sequencia) return { antes: 0, depois: 0 };
 
+    const anterior = sequencia.sequenciaAtual;
     const ultima = sequencia.ultimaAtividade ? startOfDay(sequencia.ultimaAtividade) : null;
-    if (ultima && ultima.getTime() === hoje.getTime()) return;
+    if (ultima && ultima.getTime() === hoje.getTime()) {
+        return { antes: anterior, depois: anterior };
+    }
 
     let novaSequencia = 1;
     if (ultima) {
@@ -35,6 +40,65 @@ const incrementarStreak = async (usuarioId) => {
             sequenciaAtual: novaSequencia,
             maiorSequencia: Math.max(sequencia.maiorSequencia, novaSequencia),
             ultimaAtividade: new Date(),
+        },
+    });
+
+    return { antes: anterior, depois: novaSequencia };
+};
+
+const RECURSO_LABELS = {
+    DINHEIRO: 'Dinheiro',
+    VA: 'VA',
+    VR: 'VR',
+    VT: 'VT',
+    POUPANCA: 'Poupança',
+};
+
+const formatCurrencyBr = (valor) =>
+    Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+const notificarTransferenciaRegistrada = async (usuarioId, transacao) => {
+    const origem = RECURSO_LABELS[transacao.recurso] ?? transacao.recurso;
+    const destino = RECURSO_LABELS[transacao.recursoDestino] ?? transacao.recursoDestino;
+    const descricao = transacao.descricao || `${origem} → ${destino}`;
+    const valorFmt = formatCurrencyBr(transacao.valor);
+
+    await notificationService.criarNotificacao(usuarioId, {
+        tipo: 'TRANSFERENCIA_REGISTRADA',
+        titulo: 'Transferência registrada',
+        mensagem: `${descricao}: ${valorFmt}`,
+        linkAcao: '/transactions',
+        metadados: {
+            transacaoId: transacao.id,
+            recurso: transacao.recurso,
+            recursoDestino: transacao.recursoDestino,
+            valor: Number(transacao.valor).toFixed(2),
+            tipo: transacao.tipo,
+        },
+    });
+};
+
+const notificarTransacaoRegistrada = async (usuarioId, transacao, categoria) => {
+    if (transacao.tipo === 'TRANSFERENCIA') {
+        await notificarTransferenciaRegistrada(usuarioId, transacao);
+        return;
+    }
+
+    const tipo = transacao.tipo === 'RECEITA' ? 'RECEITA_REGISTRADA' : 'DESPESA_REGISTRADA';
+    const sinal = transacao.tipo === 'RECEITA' ? '+' : '-';
+    const descricao = transacao.descricao || categoria.nome;
+    const valorFmt = formatCurrencyBr(transacao.valor);
+
+    await notificationService.criarNotificacao(usuarioId, {
+        tipo,
+        titulo: tipo === 'RECEITA_REGISTRADA' ? 'Receita registrada' : 'Despesa registrada',
+        mensagem: `${descricao}: ${sinal}${valorFmt}`,
+        linkAcao: '/transactions',
+        metadados: {
+            transacaoId: transacao.id,
+            categoriaId: categoria.id,
+            valor: Number(transacao.valor).toFixed(2),
+            tipo: transacao.tipo,
         },
     });
 };
@@ -126,13 +190,22 @@ const calcularResumo = async (usuarioId, filtros) => {
 };
 
 const criarTransacao = async (usuarioId, dados) => {
-    const categoria = await buscarCategoriaDoUsuario(usuarioId, dados.categoriaId);
+    const isTransferencia = dados.tipo === 'TRANSFERENCIA';
+    let categoria = null;
 
-    if (categoria.tipo !== dados.tipo) {
-        throw new AppError('Categoria incompatível com o tipo da transação', 400);
+    if (isTransferencia) {
+        if (dados.recursoDestino === dados.recurso) {
+            throw new AppError('Recurso de destino deve ser diferente do recurso de origem', 400);
+        }
+    } else {
+        categoria = await buscarCategoriaDoUsuario(usuarioId, dados.categoriaId);
+
+        if (categoria.tipo !== dados.tipo) {
+            throw new AppError('Categoria incompatível com o tipo da transação', 400);
+        }
+
+        validarRecursoCategoria(dados.recurso, categoria, dados.tipo);
     }
-
-    validarRecursoCategoria(dados.recurso, categoria, dados.tipo);
 
     const data = validarData(dados.data, dados.recorrente);
     const tags = await validarTags(usuarioId, dados.tags);
@@ -143,9 +216,10 @@ const criarTransacao = async (usuarioId, dados) => {
 
     const transacao = await transactionRepository.criar({
         usuarioId,
-        categoriaId: dados.categoriaId,
+        categoriaId: isTransferencia ? null : dados.categoriaId,
         tipo: dados.tipo,
         recurso: dados.recurso,
+        recursoDestino: isTransferencia ? dados.recursoDestino : null,
         valor: dados.valor,
         descricao: dados.descricao ?? null,
         data,
@@ -160,9 +234,14 @@ const criarTransacao = async (usuarioId, dados) => {
         );
     }
 
-    await incrementarStreak(usuarioId);
+    const streak = await incrementarStreak(usuarioId);
 
     const completa = await transactionRepository.buscarPorId(transacao.id, usuarioId);
+
+    await notificarTransacaoRegistrada(usuarioId, completa, categoria);
+    await gamificationService.processarAposTransacao(usuarioId, streak.antes, streak.depois);
+    await insightService.tentarGerarInsightAposTransacao(usuarioId);
+
     return mapTransacao(completa);
 };
 
@@ -173,24 +252,39 @@ const editarTransacao = async (usuarioId, transacaoId, dados) => {
     }
 
     const tipo = dados.tipo ?? existente.tipo;
-    const categoriaId = dados.categoriaId ?? existente.categoriaId;
     const recurso = dados.recurso ?? existente.recurso;
+    const isTransferencia = tipo === 'TRANSFERENCIA';
 
-    const categoria = await buscarCategoriaDoUsuario(usuarioId, categoriaId);
-    if (categoria.tipo !== tipo) {
-        throw new AppError('Categoria incompatível com o tipo da transação', 400);
+    if (isTransferencia) {
+        const recursoDestino = dados.recursoDestino ?? existente.recursoDestino;
+        if (!recursoDestino || recursoDestino === recurso) {
+            throw new AppError('Recurso de destino deve ser diferente do recurso de origem', 400);
+        }
+    } else {
+        const categoriaId = dados.categoriaId ?? existente.categoriaId;
+        const categoria = await buscarCategoriaDoUsuario(usuarioId, categoriaId);
+        if (categoria.tipo !== tipo) {
+            throw new AppError('Categoria incompatível com o tipo da transação', 400);
+        }
+
+        validarRecursoCategoria(recurso, categoria, tipo);
     }
-
-    validarRecursoCategoria(recurso, categoria, tipo);
 
     const updateData = {};
     if (dados.tipo !== undefined) updateData.tipo = dados.tipo;
     if (dados.categoriaId !== undefined) updateData.categoriaId = dados.categoriaId;
     if (dados.recurso !== undefined) updateData.recurso = dados.recurso;
+    if (dados.recursoDestino !== undefined) updateData.recursoDestino = dados.recursoDestino;
     if (dados.valor !== undefined) updateData.valor = dados.valor;
     if (dados.descricao !== undefined) updateData.descricao = dados.descricao;
     if (dados.data !== undefined) {
         updateData.data = validarData(dados.data, existente.recorrente);
+    }
+
+    if (isTransferencia) {
+        updateData.categoriaId = null;
+    } else if (dados.tipo !== undefined && existente.tipo === 'TRANSFERENCIA') {
+        updateData.recursoDestino = null;
     }
 
     await transactionRepository.atualizar(transacaoId, updateData);
@@ -210,21 +304,38 @@ const editarTransacao = async (usuarioId, transacaoId, dados) => {
     return mapTransacao(atualizada);
 };
 
-const excluirTransacao = async (usuarioId, transacaoId, excluirFuturas = false) => {
+const excluirTransacao = async (usuarioId, transacaoId, excluirFuturas = false, dataCorte = null) => {
     const existente = await transactionRepository.buscarPorId(transacaoId, usuarioId);
     if (!existente) {
         throw new AppError('Transação não encontrada', 404);
     }
 
     const isMaeRecorrente = existente.recorrente && !existente.paiId;
+    const isFilhaRecorrente = Boolean(existente.paiId);
 
-    if (excluirFuturas && isMaeRecorrente) {
-        await transactionRepository.excluirRecorrentesFilhas(transacaoId);
+    if (!excluirFuturas || (!isMaeRecorrente && !isFilhaRecorrente)) {
         await transactionRepository.excluir(transacaoId);
         return;
     }
 
-    await transactionRepository.excluir(transacaoId);
+    const paiId = isMaeRecorrente ? existente.id : existente.paiId;
+    const mae =
+        isMaeRecorrente
+            ? existente
+            : await transactionRepository.buscarPorId(paiId, usuarioId);
+
+    if (!mae) {
+        throw new AppError('Transação recorrente não encontrada', 404);
+    }
+
+    const cutoff = startOfDay(dataCorte ? new Date(dataCorte) : new Date());
+
+    await transactionRepository.excluirRecorrentesFilhasAPartirDe(paiId, cutoff);
+
+    const untilDate = calcularUntilAPartirDoCorte(cutoff);
+    const novaRegra = aplicarUntilNaRegra(mae.regraRecorrencia, untilDate);
+
+    await transactionRepository.encerrarRecorrencia(paiId, novaRegra);
 };
 
 module.exports = {

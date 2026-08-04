@@ -1,0 +1,51 @@
+name: Security
+
+# npm audit no web e na api. Roda em PR/push (feedback rápido sobre o que
+# mudou) e uma vez por semana (pega vulnerabilidades novas em deps que
+# ninguém tocou). Não bloqueia PR — é alerta, não gate.
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 9 * * 1' # toda segunda, 09:00 UTC
+
+jobs:
+  audit-api:
+    name: Audit · API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Codigo/Pulso/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: Codigo/Pulso/api/package-lock.json
+      - run: npm ci
+      # Alerta, não gate: hoje já existem vulnerabilidades "high" conhecidas
+      # em dependências transitivas. Não bloqueia até vocês triarem o que é
+      # de fato explorável antes de virar obrigatório.
+      - run: npm audit --audit-level=high
+        continue-on-error: true
+
+  audit-web:
+    name: Audit · Web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Codigo/Pulso/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: Codigo/Pulso/web/package-lock.json
+      - run: npm ci
+      # Alerta, não gate: hoje já existem vulnerabilidades "high" conhecidas
+      # em dependências transitivas. Não bloqueia até vocês triarem o que é
+      # de fato explorável antes de virar obrigatório.
+      - run: npm audit --audit-level=high
+        continue-on-error: true

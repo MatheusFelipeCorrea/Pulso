@@ -1,11 +1,13 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 const authRepository = require('../repositories/authRepository');
 const emailProvider = require('../providers/emailProvider');
 const categoryService = require('./categoryService');
 const logger = require('../utils/logger');
 const env = require('../config/env');
+const { isPrismaUniqueViolation, mapPrismaUniqueViolation } = require('../utils/prismaErrors');
 const {
     signAccessToken,
     createRefreshTokenValue,
@@ -15,9 +17,10 @@ const {
 const SENHA_FORTE_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
-const SALT_ROUNDS = 10;
+const SALT_ROUNDS = 12;
 const TOKEN_VERIFICACAO_TTL_MS = 24 * 60 * 60 * 1000;
 const TOKEN_RESET_TTL_MS = 60 * 60 * 1000;
+const OAUTH_EXCHANGE_TTL = '60s';
 
 const maskEmail = (email) => {
     const [local, domain] = email.split('@');
@@ -54,49 +57,51 @@ const registerUser = async ({ nome, email, senha, confirmarSenha }) => {
     const tokenVerificacaoEmail = crypto.randomBytes(32).toString('hex');
     const tokenVerificacaoExpira = new Date(Date.now() + TOKEN_VERIFICACAO_TTL_MS);
 
-    const usuario = await authRepository.createUser({
-        nome,
-        email: email.trim().toLowerCase(),
-        senhaHash,
-        provedorAuth: 'EMAIL',
-        verificado: false,
-        tokenVerificacaoEmail,
-        tokenVerificacaoExpira,
-        configuracoes: {
-            create: {
-                tema: 'CLARO',
-                gamificacaoAtiva: true,
+    let usuario;
+    try {
+        usuario = await authRepository.createUser({
+            nome,
+            email: email.trim().toLowerCase(),
+            senhaHash,
+            provedorAuth: 'EMAIL',
+            verificado: false,
+            tokenVerificacaoEmail,
+            tokenVerificacaoExpira,
+            configuracoes: {
+                create: {
+                    tema: 'CLARO',
+                    gamificacaoAtiva: true,
+                },
             },
-        },
-        sequencia: {
-            create: {
-                sequenciaAtual: 0,
-                maiorSequencia: 0,
-                xp: 0,
-                nivel: 'INICIANTE',
+            sequencia: {
+                create: {
+                    sequenciaAtual: 0,
+                    maiorSequencia: 0,
+                    xp: 0,
+                    nivel: 'INICIANTE',
+                },
             },
-        },
-    });
+        });
+    } catch (error) {
+        if (isPrismaUniqueViolation(error)) {
+            throw mapPrismaUniqueViolation(error);
+        }
+        throw error;
+    }
 
     await categoryService.seedCategoriasPadrao(usuario.id);
 
     try {
         await emailProvider.sendVerificationEmail(email, tokenVerificacaoEmail);
     } catch (error) {
-        await authRepository.deleteUser(usuario.id);
         logger.warn(`Falha ao enviar email de verificação para ${email}: ${error.message}`);
 
-        if (env.NODE_ENV === 'development') {
-            throw new AppError(
-                'Cadastro não concluído: limite de envio de email atingido. Aguarde alguns segundos e tente novamente.',
-                503
-            );
-        }
-
-        throw new AppError(
-            'Não foi possível enviar o email de verificação. Tente novamente em instantes.',
-            503
-        );
+        return {
+            message:
+                'Cadastro realizado! Não foi possível enviar o email agora — use "Reenviar verificação" em instantes.',
+            email: email.trim().toLowerCase(),
+            emailPendente: true,
+        };
     }
 
     return {
@@ -198,14 +203,15 @@ const defaultUserRelations = {
 const issueAuthTokens = async (usuario, lembrarMe = false) => {
     const accessToken = signAccessToken(usuario);
     const refreshToken = createRefreshTokenValue();
+    const refreshExpiresAt = getRefreshTokenExpiry(lembrarMe);
 
     await authRepository.createRefreshToken({
         usuarioId: usuario.id,
         token: refreshToken,
-        expiraEm: getRefreshTokenExpiry(lembrarMe),
+        expiraEm: refreshExpiresAt,
     });
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, refreshExpiresAt };
 };
 
 const formatUserResponse = (usuario) => {
@@ -258,11 +264,12 @@ const loginUser = async ({ email, senha, lembrarMe = false }) => {
         throw new AppError('Email ou senha incorretos.', 401);
     }
 
-    const { accessToken, refreshToken } = await issueAuthTokens(usuario, lembrarMe);
+    const { accessToken, refreshToken, refreshExpiresAt } = await issueAuthTokens(usuario, lembrarMe);
 
     return {
         accessToken,
         refreshToken,
+        refreshExpiresAt,
         user: formatUserResponse(usuario),
     };
 };
@@ -270,7 +277,18 @@ const loginUser = async ({ email, senha, lembrarMe = false }) => {
 const refreshAccessToken = async (refreshToken) => {
     const stored = await authRepository.findRefreshToken(refreshToken);
 
-    if (!stored || stored.revogado || stored.expiraEm < new Date()) {
+    if (!stored) {
+        throw new AppError('Sessão expirada. Faça login novamente.', 401);
+    }
+
+    if (stored.revogado) {
+        // Reapresentação de um refresh token já revogado (rotação single-use) sinaliza
+        // possível token roubado — revoga toda a sessão do usuário por segurança.
+        await authRepository.revokeAllRefreshTokensForUser(stored.usuarioId);
+        throw new AppError('Sessão expirada. Faça login novamente.', 401);
+    }
+
+    if (stored.expiraEm < new Date()) {
         throw new AppError('Sessão expirada. Faça login novamente.', 401);
     }
 
@@ -280,8 +298,20 @@ const refreshAccessToken = async (refreshToken) => {
         throw new AppError('Sessão expirada. Faça login novamente.', 401);
     }
 
+    // Rotação: o refresh token apresentado é revogado e substituído por um novo,
+    // de uso único, mantendo a mesma janela de expiração original da sessão.
+    await authRepository.revokeRefreshToken(refreshToken);
+    const novoRefreshToken = createRefreshTokenValue();
+    await authRepository.createRefreshToken({
+        usuarioId: usuario.id,
+        token: novoRefreshToken,
+        expiraEm: stored.expiraEm,
+    });
+
     return {
         accessToken: signAccessToken(usuario),
+        refreshToken: novoRefreshToken,
+        refreshExpiresAt: stored.expiraEm,
     };
 };
 
@@ -438,13 +468,43 @@ const authenticateGoogle = async (profile) => {
 };
 
 const buildGoogleCallbackRedirect = async (usuario) => {
-    const { accessToken, refreshToken } = await issueAuthTokens(usuario);
-    const params = new URLSearchParams({
-        accessToken,
-        refreshToken,
-    });
+    const exchangeToken = jwt.sign(
+        { type: 'oauth_exchange', sub: usuario.id },
+        env.JWT_SECRET,
+        { expiresIn: OAUTH_EXCHANGE_TTL }
+    );
 
+    const params = new URLSearchParams({ exchange: exchangeToken });
     return `${env.FRONTEND_URL}/auth/callback?${params.toString()}`;
+};
+
+const exchangeOAuthSession = async (exchangeToken) => {
+    if (!exchangeToken) {
+        throw new AppError('Sessão OAuth inválida.', 400);
+    }
+
+    let decoded;
+    try {
+        decoded = jwt.verify(exchangeToken, env.JWT_SECRET);
+    } catch {
+        throw new AppError('Sessão OAuth expirada. Tente entrar com Google novamente.', 401);
+    }
+
+    if (decoded.type !== 'oauth_exchange' || !decoded.sub) {
+        throw new AppError('Sessão OAuth inválida.', 400);
+    }
+
+    const usuario = await authRepository.findById(decoded.sub);
+    if (!usuario) {
+        throw new AppError('Usuário não encontrado.', 404);
+    }
+
+    const tokens = await issueAuthTokens(usuario);
+
+    return {
+        ...tokens,
+        user: formatUserResponse(usuario),
+    };
 };
 
 const buildGoogleErrorRedirect = (error) => {
@@ -477,4 +537,5 @@ module.exports = {
     resetPassword,
     buildGoogleCallbackRedirect,
     buildGoogleErrorRedirect,
+    exchangeOAuthSession,
 };

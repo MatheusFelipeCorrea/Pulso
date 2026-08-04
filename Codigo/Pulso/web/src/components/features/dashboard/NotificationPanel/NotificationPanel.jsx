@@ -21,8 +21,12 @@ export const NotificationPanel = ({
   onMarkAllRead,
   onMarkRead,
   onView,
+  onLoadMore,
   markingReadId = null,
   loading = false,
+  loadingMore = false,
+  hasMore = false,
+  total = 0,
   className,
 }) => {
   const hasUnread = notifications.some((n) => !n.read)
@@ -68,16 +72,31 @@ export const NotificationPanel = ({
       )}
 
       {!loading && notifications.length > 0 && (
-        <div className="pulso-notification-panel__list" role="list">
-          {notifications.map((notification) => (
-            <NotificationItem
-              key={notification.id}
-              notification={notification}
-              onView={onView}
-              onMarkRead={onMarkRead}
-              markingRead={markingReadId === notification.id}
-            />
-          ))}
+        <div className="pulso-notification-panel__list-wrap">
+          <div className="pulso-notification-panel__list" role="list">
+            {notifications.map((notification) => (
+              <NotificationItem
+                key={notification.id}
+                notification={notification}
+                onView={onView}
+                onMarkRead={onMarkRead}
+                markingRead={markingReadId === notification.id}
+              />
+            ))}
+          </div>
+
+          {hasMore ? (
+            <div className="pulso-notification-panel__more">
+              <button
+                type="button"
+                className="pulso-notification-panel__more-btn"
+                onClick={onLoadMore}
+                disabled={loadingMore}
+              >
+                {loadingMore ? 'Carregando...' : `Ver mais (${notifications.length} de ${total})`}
+              </button>
+            </div>
+          ) : null}
         </div>
       )}
     </section>

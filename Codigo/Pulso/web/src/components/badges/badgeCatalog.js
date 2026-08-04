@@ -27,6 +27,7 @@ export const PULSO_BADGE_CATALOG = {
   'recurso.va': { label: 'VA', icon: 'Apple', variant: 'success' },
   'recurso.vr': { label: 'VR', icon: 'Utensils', variant: 'orange' },
   'recurso.vt': { label: 'VT', icon: 'Bus', variant: 'info' },
+  'recurso.poupanca': { label: 'Poupança', icon: 'PiggyBank', variant: 'cyan' },
 
   'meta-status.ativa': { label: 'Ativa', icon: 'Play', variant: 'primary' },
   'meta-status.pausada': { label: 'Pausada', icon: 'Pause', variant: 'warning' },
@@ -45,8 +46,8 @@ export const PULSO_BADGE_CATALOG = {
   'perfil.pj': { label: 'PJ/Freelancer', icon: 'Laptop', variant: 'cyan' },
   'perfil.pf': { label: 'Pessoa Física', icon: 'User', variant: 'neutral' },
 
-  'grupo.admin': { label: 'Admin', icon: 'Crown', variant: 'primary' },
-  'grupo.membro': { label: 'Membro', icon: 'User', variant: 'neutral' },
+  'grupo.admin': { label: 'Admin', icon: 'Crown', variant: 'warning' },
+  'grupo.membro': { label: 'Membro', icon: 'User', variant: 'primary' },
 
   'sync.sincronizado': { label: 'Sincronizado', icon: 'CalendarCheck', variant: 'success' },
   'sync.pendente': { label: 'Pendente', icon: 'Hourglass', variant: 'warning' },
