@@ -8,6 +8,7 @@ Aplicativo de gestão financeira pessoal — receitas, despesas, metas, viagens,
 | Área | Situação |
 |------|----------|
 | Auth, transações, VT, orçamento, calendário, dívidas | ✅ Entregue |
+| Dashboard (RF-007–014) | ✅ Entregue (ago/2026) |
 | Metas, viagens + moedas, lembretes, homepage | ✅ Entregue |
 | Grupos, divisão de despesas, planejamento de compra | ✅ Entregue |
 | Dashboard, perfil, insights, chatbot, gamificação | ⏳ Placeholder ou parcial na UI |

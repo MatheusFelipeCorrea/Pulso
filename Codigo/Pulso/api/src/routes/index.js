@@ -17,6 +17,7 @@ const grupoRoutes = require('./grupoRoutes');
 const purchasePlanningRoutes = require('./purchasePlanningRoutes');
 const cronRoutes = require('./cronRoutes');
 const syncRoutes = require('./syncRoutes');
+const dashboardRoutes = require('./dashboardRoutes');
 
 const router = express.Router();
 
@@ -38,5 +39,6 @@ router.use('/grupos', grupoRoutes);
 router.use('/planejamento-compra', purchasePlanningRoutes);
 router.use('/cron', cronRoutes);
 router.use('/sync', syncRoutes);
+router.use('/dashboard', dashboardRoutes);
 
 module.exports = router;
