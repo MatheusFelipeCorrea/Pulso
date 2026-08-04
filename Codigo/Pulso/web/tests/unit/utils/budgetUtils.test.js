@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import {
   barToneFromPercentual,
+  formatBudgetAlertStatus,
   formatPercentualCategoria,
   mesReferenciaAnterior,
   periodoToMesReferencia,
+  resolveBudgetAmounts,
   statusToProgressVariant,
 } from '@/utils/budgetUtils.js'
 
@@ -28,5 +30,18 @@ describe('budgetUtils', () => {
   it('formata percentual inteiro e decimal com vírgula', () => {
     expect(formatPercentualCategoria(10)).toBe('10%')
     expect(formatPercentualCategoria(10.16)).toBe('10,2%')
+  })
+
+  it('resolve gasto a partir de limite e percentual', () => {
+    expect(resolveBudgetAmounts({ limiteValor: 100, percentualUsado: 150 })).toEqual({
+      gasto: 150,
+      limite: 100,
+    })
+  })
+
+  it('formata status de alerta com excesso em reais', () => {
+    expect(
+      formatBudgetAlertStatus({ gasto: 1011.7, limite: 100, percentual: 1011.7, estourado: true })
+    ).toContain('acima do limite')
   })
 })

@@ -10,6 +10,12 @@ const prisma = new PrismaClient();
 const SEED_SENHA = 'Pulso@123';
 const MATHEUS_EMAIL = 'matheusfelipecorreasilva@hotmail.com';
 
+/** Versão do mega-seed de transações — incrementar para forçar re-população em dev */
+const SEED_TX_MEGA_VERSION = 2;
+const SEED_TX_MEGA_MARKER = `__PULSO_SEED_MEGA_V${SEED_TX_MEGA_VERSION}__`;
+const MESES_HISTORICO_TX = 12;
+const TX_BATCH_SIZE = 400;
+
 /** Usuários demo — cobrem todos os modos de uso e estados de VT */
 const SEED_USUARIOS = [
     {
@@ -131,6 +137,42 @@ function emDias(offsetDias) {
     d.setHours(12, 0, 0, 0);
     d.setDate(d.getDate() + offsetDias);
     return d;
+}
+
+/** PRNG determinístico — mesmos dados a cada execução do seed */
+function criarRng(seed) {
+    let s = seed >>> 0;
+    return () => {
+        s = (s + 0x6d2b79f5) | 0;
+        let t = Math.imul(s ^ (s >>> 15), 1 | s);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+
+function valorEntre(rng, min, max) {
+    return Math.round((min + rng() * (max - min)) * 100) / 100;
+}
+
+function escolher(rng, arr) {
+    return arr[Math.floor(rng() * arr.length)];
+}
+
+function diasNoMes(offsetMes) {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + offsetMes + 1, 0).getDate();
+}
+
+function diaValidoNoMes(dia, offsetMes) {
+    return Math.min(Math.max(1, dia), diasNoMes(offsetMes));
+}
+
+async function inserirTransacoesEmLotes(registros) {
+    for (let i = 0; i < registros.length; i += TX_BATCH_SIZE) {
+        await prisma.transacao.createMany({
+            data: registros.slice(i, i + TX_BATCH_SIZE),
+        });
+    }
 }
 
 async function upsertSeedUsuario({ email, nome, modoUso, config }, senhaHash) {
@@ -355,6 +397,74 @@ async function seedValeTransporte(usuarioId, byName) {
     return true;
 }
 
+const SEED_VT_MEGA_MARKER = '__PULSO_SEED_VT_MEGA_V1__';
+
+/** Histórico denso de vendas e usos de VT — complementa seedValeTransporte */
+async function seedValeTransporteMega(usuarioId, byName) {
+    const marker = await prisma.vendaVt.findFirst({
+        where: { usuarioId, nomeComprador: SEED_VT_MEGA_MARKER },
+    });
+    if (marker) return false;
+
+    const categoriaOutros = byName('Outros', 'RECEITA');
+    if (!categoriaOutros) {
+        throw new Error('Categoria "Outros" (RECEITA) não encontrada');
+    }
+
+    const rng = criarRng(77_026);
+    const compradores = ['Lucas', 'Beatriz', 'Rafael', 'Camila', 'Felipe', 'Juliana', 'Bruno', 'Larissa', 'Gustavo', 'Amanda'];
+    let vendasCriadas = 0;
+    let usosCriados = 0;
+
+    for (let offsetMes = -(MESES_HISTORICO_TX - 1); offsetMes <= 0; offsetMes++) {
+        const qtdVendas = 2 + Math.floor(rng() * 3);
+        for (let i = 0; i < qtdVendas; i++) {
+            const valorNominal = escolher(rng, [22, 44, 32, 22]);
+            const valorRecebido = Math.round(valorNominal * (0.85 + rng() * 0.2) * 100) / 100;
+            const nomeComprador =
+                offsetMes === -(MESES_HISTORICO_TX - 1) && i === 0
+                    ? SEED_VT_MEGA_MARKER
+                    : escolher(rng, compradores);
+            const dataVenda = dataNoMes(diaValidoNoMes(3 + Math.floor(rng() * 25), offsetMes), offsetMes);
+
+            await prisma.$transaction(async (tx) => {
+                await tx.vendaVt.create({
+                    data: { usuarioId, nomeComprador, dataVenda, valorNominal, valorRecebido },
+                });
+                await tx.transacao.create({
+                    data: {
+                        usuarioId,
+                        categoriaId: categoriaOutros.id,
+                        tipo: 'RECEITA',
+                        recurso: 'DINHEIRO',
+                        valor: valorRecebido,
+                        descricao: `Venda de VT para ${nomeComprador}`,
+                        data: dataVenda,
+                        recorrente: false,
+                    },
+                });
+            });
+            vendasCriadas++;
+        }
+
+        const qtdUsos = 3 + Math.floor(rng() * 4);
+        for (let i = 0; i < qtdUsos; i++) {
+            await prisma.usoVt.create({
+                data: {
+                    usuarioId,
+                    quantidade: 2 + Math.floor(rng() * 8),
+                    valorPorPassagem: 4.8,
+                    data: dataNoMes(diaValidoNoMes(2 + Math.floor(rng() * 26), offsetMes), offsetMes),
+                },
+            });
+            usosCriados++;
+        }
+    }
+
+    console.log(`   ✅ VT mega: +${vendasCriadas} vendas e +${usosCriados} usos (${MESES_HISTORICO_TX} meses)`);
+    return true;
+}
+
 // ==========================================
 // SEED COMPLETO — matheusfelipecorreasilva@hotmail.com
 // Cobre toda funcionalidade já desenvolvida no Pulso (módulos entregues no
@@ -414,9 +524,7 @@ async function criarTx(data, tagIds = []) {
 }
 
 /** RF-015 a RF-025, RF-140 (transferência) e RF-141 (histórico p/ sugestão de categoria) */
-async function seedTransacoesCompletas(usuarioId, byName, tagsPorNome) {
-    // Guard específico (não pelo count total) — RF-059/RF-061 (VT) já criam algumas
-    // transações de receita antes desta função rodar, então count>0 sempre seria verdadeiro.
+async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
     const jaRodou = await prisma.transacao.findFirst({
         where: { usuarioId, descricao: 'Bolsa estágio' },
     });
@@ -553,8 +661,207 @@ async function seedTransacoesCompletas(usuarioId, byName, tagsPorNome) {
         }),
     });
 
-    console.log('   ✅ ~30 transações em 3 meses (receitas, despesas, 1 transferência, 1 recorrente com filhas, tags)');
+    console.log('   ✅ Transações curadas (3 meses, transferência, recorrente, tags)');
     return true;
+}
+
+/**
+ * Gera ~1.200+ transações em 12 meses — receitas de benefícios, despesas diárias variadas,
+ * assinaturas, transferências e histórico denso para dashboard / listagens / gráficos.
+ */
+async function seedTransacoesMegaVolume(usuarioId, byName) {
+    const markerExistente = await prisma.transacao.findFirst({
+        where: { usuarioId, descricao: SEED_TX_MEGA_MARKER },
+    });
+    if (markerExistente) return false;
+
+    const rng = criarRng(42_026);
+    const base = (tipo, extra) => ({ usuarioId, tipo, recorrente: false, regraRecorrencia: null, ...extra });
+    const registros = [];
+
+    const cat = (nome, tipo) => byName(nome, tipo).id;
+    const mesesComBolsaDemo = new Set([-2, -1, 0]);
+
+    const templatesDespesa = [
+        { categoria: 'Alimentação', recurso: 'VR', descricoes: ['Almoço no RU', 'Lanche cantina', 'Marmita RU'], min: 21, max: 29 },
+        { categoria: 'Alimentação', recurso: 'DINHEIRO', descricoes: ['Jantar delivery', 'Açaí', 'Padaria', 'Hamburguer'], min: 28, max: 95 },
+        { categoria: 'Transporte', recurso: 'VT', descricoes: ['Passagens da semana', 'Recarga VT ida/volta', 'Metrô + ônibus'], min: 19.2, max: 38.4 },
+        { categoria: 'Transporte', recurso: 'DINHEIRO', descricoes: ['Uber pro trampo', '99 pra faculdade', 'Estacionamento'], min: 12, max: 45 },
+        { categoria: 'Compras', recurso: 'VA', descricoes: ['Mercado', 'Feira', 'Produtos de limpeza'], min: 45, max: 180 },
+        { categoria: 'Compras', recurso: 'DINHEIRO', descricoes: ['Amazon', 'Shopee', 'Presente'], min: 35, max: 220 },
+        { categoria: 'Lazer', recurso: 'DINHEIRO', descricoes: ['Cinema', 'Bar com amigos', 'Show', 'Streaming avulso'], min: 25, max: 120 },
+        { categoria: 'Saúde', recurso: 'DINHEIRO', descricoes: ['Farmácia', 'Consulta', 'Exame'], min: 25, max: 180 },
+        { categoria: 'Educação', recurso: 'DINHEIRO', descricoes: ['Material escolar', 'Livro técnico', 'Curso online'], min: 35, max: 150 },
+        { categoria: 'Vestuário', recurso: 'DINHEIRO', descricoes: ['Camiseta', 'Calça jeans', 'Tênis'], min: 49, max: 280 },
+        { categoria: 'Beleza', recurso: 'DINHEIRO', descricoes: ['Barbearia', 'Produtos skincare'], min: 35, max: 90 },
+        { categoria: 'Tecnologia', recurso: 'DINHEIRO', descricoes: ['Cabo USB-C', 'Mouse', 'Capinha'], min: 25, max: 350 },
+        { categoria: 'Pet', recurso: 'DINHEIRO', descricoes: ['Ração', 'Veterinário'], min: 45, max: 160 },
+        { categoria: 'Presentes', recurso: 'DINHEIRO', descricoes: ['Aniversário', 'Dia das mães'], min: 50, max: 200 },
+        { categoria: 'Família', recurso: 'DINHEIRO', descricoes: ['Ajuda em casa', 'Visita'], min: 80, max: 250 },
+    ];
+
+    const assinaturas = [
+        { descricao: 'Netflix', valor: 39.9, dia: 12 },
+        { descricao: 'iCloud 50GB', valor: 12.9, dia: 18 },
+        { descricao: 'Academia Smart Fit', valor: 89.9, dia: 5 },
+        { descricao: 'Spotify Família', valor: 34.9, dia: 10 },
+        { descricao: 'Google One', valor: 11.99, dia: 22 },
+    ];
+
+    for (let offsetMes = -(MESES_HISTORICO_TX - 1); offsetMes <= 0; offsetMes++) {
+        // Receitas fixas mensais
+        if (!mesesComBolsaDemo.has(offsetMes)) {
+            registros.push(base('RECEITA', {
+                categoriaId: cat('Salário', 'RECEITA'),
+                recurso: 'DINHEIRO',
+                valor: 1800,
+                descricao: 'Bolsa estágio',
+                data: dataNoMes(5, offsetMes),
+            }));
+        }
+
+        registros.push(
+            base('RECEITA', {
+                categoriaId: cat('Outros', 'RECEITA'),
+                recurso: 'VA',
+                valor: 400,
+                descricao: 'Vale Alimentação mensal',
+                data: dataNoMes(5, offsetMes),
+            }),
+            base('RECEITA', {
+                categoriaId: cat('Outros', 'RECEITA'),
+                recurso: 'VR',
+                valor: 550,
+                descricao: 'Vale Refeição mensal',
+                data: dataNoMes(5, offsetMes),
+            })
+        );
+
+        // VT do mês atual já é criado por seedReceitaVtMensal() antes do mega-seed
+        if (offsetMes !== 0) {
+            registros.push(base('RECEITA', {
+                categoriaId: cat('Outros', 'RECEITA'),
+                recurso: 'VT',
+                valor: 220,
+                descricao: 'Vale Transporte mensal',
+                data: dataNoMes(5, offsetMes),
+            }));
+        }
+
+        // Freelance esporádico (~40% dos meses)
+        if (rng() > 0.6) {
+            registros.push(base('RECEITA', {
+                categoriaId: cat('Freelance', 'RECEITA'),
+                recurso: 'DINHEIRO',
+                valor: valorEntre(rng, 180, 650),
+                descricao: escolher(rng, ['Freela design', 'Landing page cliente', 'Identidade visual', 'Social media']),
+                data: dataNoMes(diaValidoNoMes(8 + Math.floor(rng() * 18), offsetMes), offsetMes),
+            }));
+        }
+
+        // Rendimentos (~25% dos meses)
+        if (rng() > 0.75) {
+            registros.push(base('RECEITA', {
+                categoriaId: cat('Investimentos', 'RECEITA'),
+                recurso: 'DINHEIRO',
+                valor: valorEntre(rng, 12, 85),
+                descricao: escolher(rng, ['Rendimento CDB', 'Dividendos FIIs', 'Juros poupança']),
+                data: dataNoMes(diaValidoNoMes(1 + Math.floor(rng() * 5), offsetMes), offsetMes),
+            }));
+        }
+
+        // Moradia + transferência mensal
+        registros.push(
+            base('DESPESA', {
+                categoriaId: cat('Moradia', 'DESPESA'),
+                recurso: 'DINHEIRO',
+                valor: 650,
+                descricao: 'Aluguel do quarto',
+                data: dataNoMes(6, offsetMes),
+            }),
+            base('TRANSFERENCIA', {
+                categoriaId: null,
+                recurso: 'DINHEIRO',
+                recursoDestino: 'POUPANCA',
+                valor: valorEntre(rng, 150, 450),
+                descricao: escolher(rng, ['Guardando pra reserva', 'Aporte meta', 'Reserva emergência']),
+                data: dataNoMes(diaValidoNoMes(7 + Math.floor(rng() * 10), offsetMes), offsetMes),
+            })
+        );
+
+        // Assinaturas
+        for (const ass of assinaturas) {
+            registros.push(base('DESPESA', {
+                categoriaId: cat('Serviços e Assinaturas', 'DESPESA'),
+                recurso: 'DINHEIRO',
+                valor: ass.valor,
+                descricao: ass.descricao,
+                data: dataNoMes(diaValidoNoMes(ass.dia, offsetMes), offsetMes),
+            }));
+        }
+
+        // Despesas do dia a dia — densidade alta (~60–75 por mês)
+        const qtdDespesas = 60 + Math.floor(rng() * 16);
+        for (let i = 0; i < qtdDespesas; i++) {
+            const tpl = escolher(rng, templatesDespesa);
+            registros.push(base('DESPESA', {
+                categoriaId: cat(tpl.categoria, 'DESPESA'),
+                recurso: tpl.recurso,
+                valor: valorEntre(rng, tpl.min, tpl.max),
+                descricao: escolher(rng, tpl.descricoes),
+                data: dataNoMes(diaValidoNoMes(1 + Math.floor(rng() * 28), offsetMes), offsetMes),
+            }));
+        }
+
+        // Picos sazonais (IPVA, presentes natal, viagem)
+        if (offsetMes === -2) {
+            registros.push(base('DESPESA', {
+                categoriaId: cat('Veículos', 'DESPESA'),
+                recurso: 'DINHEIRO',
+                valor: 450,
+                descricao: 'IPVA parcela',
+                data: dataNoMes(15, offsetMes),
+            }));
+        }
+        if (offsetMes === -1) {
+            registros.push(base('DESPESA', {
+                categoriaId: cat('Viagem', 'DESPESA'),
+                recurso: 'DINHEIRO',
+                valor: 890,
+                descricao: 'Passagem fim de semana prolongado',
+                data: dataNoMes(20, offsetMes),
+            }));
+        }
+        if (offsetMes === 0 && rng() > 0.3) {
+            registros.push(base('DESPESA', {
+                categoriaId: cat('Finanças', 'DESPESA'),
+                recurso: 'DINHEIRO',
+                valor: valorEntre(rng, 35, 120),
+                descricao: 'Taxa bancária / IOF',
+                data: dataNoMes(28, offsetMes),
+            }));
+        }
+    }
+
+    // Marker invisível na UI (valor simbólico) — controle de idempotência
+    registros.push(base('RECEITA', {
+        categoriaId: cat('Outros', 'RECEITA'),
+        recurso: 'DINHEIRO',
+        valor: 0.01,
+        descricao: SEED_TX_MEGA_MARKER,
+        data: dataNoMes(1, -(MESES_HISTORICO_TX - 1)),
+    }));
+
+    await inserirTransacoesEmLotes(registros);
+
+    const total = await prisma.transacao.count({ where: { usuarioId } });
+    console.log(`   ✅ Mega-volume: +${registros.length} transações (${MESES_HISTORICO_TX} meses) | total usuário: ${total}`);
+    return true;
+}
+
+async function seedTransacoesCompletas(usuarioId, byName, tagsPorNome) {
+    await seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome);
+    return seedTransacoesMegaVolume(usuarioId, byName);
 }
 
 /** RF-026 a RF-031, RF-043 (vínculo viagem), RF-137 (vínculo planejamento de compra) */
@@ -804,10 +1111,15 @@ async function seedLembretesCompletos(usuarioId) {
     return true;
 }
 
-/** RF-109 a RF-114 */
+/** RF-109 a RF-114 — orçamento em vários meses para stress-test de alertas */
 async function seedOrcamentoCompleto(usuarioId, byName) {
-    const count = await prisma.orcamento.count({ where: { usuarioId } });
-    if (count > 0) return false;
+    const marker = await prisma.orcamento.findFirst({
+        where: {
+            usuarioId,
+            mesReferencia: dataNoMes(1, -(MESES_HISTORICO_TX - 1)),
+        },
+    });
+    if (marker) return false;
 
     const limites = [
         { nome: 'Alimentação', limite: 500 },
@@ -815,16 +1127,25 @@ async function seedOrcamentoCompleto(usuarioId, byName) {
         { nome: 'Lazer', limite: 100 },
         { nome: 'Compras', limite: 300 },
         { nome: 'Saúde', limite: 150 },
+        { nome: 'Moradia', limite: 700 },
+        { nome: 'Educação', limite: 200 },
     ];
 
-    await prisma.orcamento.createMany({
-        data: limites.flatMap(({ nome, limite }) => [
-            { usuarioId, categoriaId: byName(nome, 'DESPESA').id, mesReferencia: dataNoMes(1, 0), limiteValor: limite },
-            { usuarioId, categoriaId: byName(nome, 'DESPESA').id, mesReferencia: dataNoMes(1, -1), limiteValor: limite },
-        ]),
-    });
+    const registros = [];
+    for (let offsetMes = -(MESES_HISTORICO_TX - 1); offsetMes <= 0; offsetMes++) {
+        for (const { nome, limite } of limites) {
+            registros.push({
+                usuarioId,
+                categoriaId: byName(nome, 'DESPESA').id,
+                mesReferencia: dataNoMes(1, offsetMes),
+                limiteValor: limite,
+            });
+        }
+    }
 
-    console.log('   ✅ Orçamento em 5 categorias (mês atual e anterior)');
+    await prisma.orcamento.createMany({ data: registros, skipDuplicates: true });
+
+    console.log(`   ✅ Orçamento em ${limites.length} categorias × ${MESES_HISTORICO_TX} meses (${registros.length} registros)`);
     return true;
 }
 
@@ -1211,6 +1532,9 @@ async function main() {
             const valorVt = perfil.config.valorVt ?? 220;
             await seedReceitaVtMensal(usuario.id, byName, valorVt);
             await seedValeTransporte(usuario.id, byName);
+            if (perfil.email === MATHEUS_EMAIL) {
+                await seedValeTransporteMega(usuario.id, byName);
+            }
             console.log('   📊 Saldo VT esperado: Recebido 220 | Usado 48 | Vendido 120 | Saldo 52');
         }
 

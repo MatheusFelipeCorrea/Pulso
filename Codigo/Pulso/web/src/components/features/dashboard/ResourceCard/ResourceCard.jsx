@@ -64,7 +64,9 @@ export const ResourceCard = ({
       {loading ? (
         <Skeleton variant="title" width="60%" className="mt-2" />
       ) : (
-        <p className="pulso-resource-card__value">{formatCurrency(value)}</p>
+        <p className="pulso-resource-card__value" title={formatCurrency(value)}>
+          {formatCurrency(value)}
+        </p>
       )}
 
       {subtitle && !loading && (

@@ -17,6 +17,7 @@ module.exports = {
         '!src/services/grupoService.js',
         '!src/services/purchasePlanningService.js',
         '!src/services/tripDestinationImageService.js',
+        '!src/services/dashboardService.js',
         '!src/services/googleCalendarSyncService.js',
         '!src/services/googleCalendarService.js',
         'src/utils/**/*.js',
