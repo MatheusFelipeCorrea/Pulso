@@ -6,6 +6,7 @@ describe('authSlice', () => {
     expect(reducer(undefined, { type: 'unknown' })).toEqual({
       user: null,
       isAuthenticated: false,
+      sessionChecked: false,
     })
   })
 
@@ -15,11 +16,13 @@ describe('authSlice', () => {
     expect(withUser).toEqual({
       user,
       isAuthenticated: true,
+      sessionChecked: true,
     })
 
     expect(reducer(withUser, clearUser())).toEqual({
       user: null,
       isAuthenticated: false,
+      sessionChecked: true,
     })
   })
 
@@ -28,6 +31,7 @@ describe('authSlice', () => {
     expect(next).toEqual({
       user: null,
       isAuthenticated: false,
+      sessionChecked: true,
     })
   })
 })

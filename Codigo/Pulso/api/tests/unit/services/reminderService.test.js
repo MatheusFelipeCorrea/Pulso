@@ -64,7 +64,7 @@ describe('reminderService', () => {
         expect(result.titulo).toBe('Conta');
     });
 
-    it('remove lembrete criado quando sync falha', async () => {
+    it('preserva lembrete quando sync falha (RF-058b)', async () => {
         reminderRepository.criar.mockResolvedValue({
             id: 'l2',
             titulo: 'Conta',
@@ -82,17 +82,16 @@ describe('reminderService', () => {
         });
         googleCalendarSync.estaConectado.mockResolvedValue(true);
         googleCalendarSync.sincronizarLembrete.mockRejectedValue(new Error('sync'));
-        reminderRepository.deletar.mockResolvedValue(undefined);
 
-        await expect(
-            reminderService.criarLembrete('u1', {
-                titulo: 'Conta',
-                dataVencimento: '2026-01-12',
-                sincronizarGoogle: true,
-            })
-        ).rejects.toThrow('sync');
+        const result = await reminderService.criarLembrete('u1', {
+            titulo: 'Conta',
+            dataVencimento: '2026-01-12',
+            sincronizarGoogle: true,
+        });
 
-        expect(reminderRepository.deletar).toHaveBeenCalledWith('l2');
+        expect(result).toEqual(expect.objectContaining({ id: 'l2', sincronizado: false, googleEventId: null }));
+        expect(reminderRepository.deletar).not.toHaveBeenCalled();
+        expect(reminderRepository.atualizar).not.toHaveBeenCalled();
     });
 
     it('rejeita atualização para lembrete inexistente', async () => {
@@ -208,7 +207,7 @@ describe('reminderService', () => {
         expect(result.pago).toBe(true);
     });
 
-    it('rejeita sync quando Google não está conectado', async () => {
+    it('preserva lembrete quando Google não está conectado (RF-058b)', async () => {
         reminderRepository.criar.mockResolvedValue({
             id: 'l7',
             titulo: 'Conta',
@@ -225,17 +224,16 @@ describe('reminderService', () => {
             atualizadoEm: new Date('2026-01-01T12:00:00.000Z'),
         });
         googleCalendarSync.estaConectado.mockResolvedValue(false);
-        reminderRepository.deletar.mockResolvedValue(undefined);
 
-        await expect(
-            reminderService.criarLembrete('u1', {
-                titulo: 'Conta',
-                dataVencimento: '2026-01-12',
-                sincronizarGoogle: true,
-            })
-        ).rejects.toMatchObject({ statusCode: 400 });
+        const result = await reminderService.criarLembrete('u1', {
+            titulo: 'Conta',
+            dataVencimento: '2026-01-12',
+            sincronizarGoogle: true,
+        });
 
-        expect(reminderRepository.deletar).toHaveBeenCalledWith('l7');
+        expect(result).toEqual(expect.objectContaining({ id: 'l7', sincronizado: false, googleEventId: null }));
+        expect(reminderRepository.deletar).not.toHaveBeenCalled();
+        expect(googleCalendarSync.sincronizarLembrete).not.toHaveBeenCalled();
     });
 
     it('normaliza recorrência mensal com dia informado', async () => {
