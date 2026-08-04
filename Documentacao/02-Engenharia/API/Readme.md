@@ -1,4 +1,4 @@
-# ⚙️ API — Backend
+﻿# ⚙️ API — Backend
 
 Servidor **Node.js + Express** com arquitetura em camadas (routes → controllers → services → repositories).
 
@@ -429,7 +429,7 @@ Prefixo: **`/api/grupos`** (todas 🔒).
 | POST | `/:id/metas/:metaId/aportes` | Aporte |
 | POST | `/:id/mensagens` | Chat |
 
-Gaps: sem remover membro, sem alterar papel, meta não auto-conclui. Ver [Documentacao/Modulos/Grupos.md](../../../../Documentacao/Modulos/Grupos.md).
+Gaps: sem remover membro, sem alterar papel, meta não auto-conclui. Ver [Modulos/Grupos.md](../Modulos/Grupos.md).
 
 ---
 
@@ -461,6 +461,6 @@ Implementação: `controllers/expenseSplitController.js`, `services/expenseSplit
 
 Módulos com **schema Prisma** mas **sem API/UI completa** hoje: gamificação, chatbot, insights IA, relatórios, planejamento de compra. **Grupos:** API/UI principais entregues; pendências listadas em Modulos/Grupos.md. **Divisão de Despesas:** API/UI entregues; integração com o toggle de rateio de Grupos (RF-095) ainda pendente.
 
-**Próximos passos sugeridos:** ver [Documentacao/Analise-Produto.md](../../../../Documentacao/Analise-Produto.md).
+**Próximos passos sugeridos:** ver [Analise-Produto.md](../../01-Produto/Analise-Produto.md).
 
 Epics históricos: `.github/plans/cards/`

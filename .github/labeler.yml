@@ -20,3 +20,11 @@ ci:
 database:
   - changed-files:
       - any-glob-to-any-file: 'Codigo/Pulso/api/prisma/**'
+
+po-audit:
+  - changed-files:
+      - any-glob-to-any-file: 'Documentacao/03-Auditorias/**'
+
+plans:
+  - changed-files:
+      - any-glob-to-any-file: '.github/plans/**'

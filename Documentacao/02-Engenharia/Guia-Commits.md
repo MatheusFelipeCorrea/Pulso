@@ -202,3 +202,18 @@ Corpo opcional.
 Refs: RN-135
 "@
 ```
+
+---
+
+## Onde documentar
+
+Toda documentação markdown do projeto vive em **`Documentacao/`**:
+
+| Pasta | Conteúdo |
+|-------|----------|
+| `01-Produto/` | Requisitos, regras, roadmap |
+| `02-Engenharia/` | API, Web, deploy, módulos técnicos |
+| `03-Auditorias/` | Relatórios PO e prompts |
+| `04-Diagramas/` · `05-Prototipos/` | UML e telas PNG |
+
+Índice: [../README.md](../README.md) · Commits só de docs: `docs(estrutura): …`

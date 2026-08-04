@@ -1,13 +1,13 @@
-# Análise de produto — gaps e oportunidades
+﻿# Análise de produto — gaps e oportunidades
 
-> **Ago/2026** — visão baseada no código em `Codigo/Pulso/` e na [auditoria PO](./Análises/PO/00-Sumario-Executivo.md).
+> **Ago/2026** — visão baseada no código em `Codigo/Pulso/` e na [auditoria PO](../03-Auditorias/Product Owner/00-Sumario-Executivo.md).
 
 ## O que já é sólido
 
 - **Core financeiro:** auth (email + Google, cookies httpOnly), transações com recorrência, categorias com **`grupoBeneficio`**, tags, orçamento com alertas e flag `orcamentoExcedeRenda`.
 - **Operacional:** vale transporte (decisão B — CLT com aviso), calendário + lembretes + sync Google Calendar.
 - **Planejamento:** metas com aportes, dívidas, viagens, **planejamento de compra** (RN-088/093), **divisão de despesas** (`/expense-split`).
-- **Grupos (social):** ver [Modulos/Grupos.md](./Modulos/Grupos.md) — rate limit em códigos de convite.
+- **Grupos (social):** ver [Modulos/Grupos.md](../02-Engenharia/Modulos/Grupos.md) — rate limit em códigos de convite.
 - **Entrada do produto:** pós-login vai para **`/transactions`** (não mais dashboard vazio).
 - **Landing:** badges Em breve/Beta nos módulos incompletos.
 

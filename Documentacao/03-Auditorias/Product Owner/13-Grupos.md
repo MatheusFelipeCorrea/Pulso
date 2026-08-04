@@ -1,6 +1,6 @@
-# 👥 Módulo 13 — Grupos — Auditoria PO/Engenharia de Requisitos
+﻿# 👥 Módulo 13 — Grupos — Auditoria PO/Engenharia de Requisitos
 
-> Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [Modulos/Grupos.md](../Modulos/Grupos.md)
+> Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md)
 > Fontes cruzadas: `Requisitos/Readme.md` (RF-088–102), `RegrasDeNegocio.md` (RN-111–120).
 > Código auditado: `api/src/services/grupoService.js`, `api/src/utils/grupoMapper.js`, `api/src/routes/grupoRoutes.js`.
 

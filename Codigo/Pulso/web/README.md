@@ -4,7 +4,9 @@ Interface web do **Pulso**, construída com React + Vite, design system próprio
 
 ## Documentação completa
 
-Leia **[Documents/Readme.md](./Documents/Readme.md)** — arquitetura, rotas, estrutura de pastas e como rodar.
+Leia **[Documentacao/02-Engenharia/Web/Readme.md](../../../Documentacao/02-Engenharia/Web/Readme.md)** — arquitetura, rotas, estrutura de pastas e como rodar.
+
+(Atalho local: [Documents/Readme.md](./Documents/Readme.md))
 
 Design system: **[src/design-system/README.md](./src/design-system/README.md)**
 

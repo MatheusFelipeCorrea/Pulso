@@ -35,4 +35,15 @@ Não resuma. Seja exaustivo e cite arquivos específicos sempre que possível. A
  
 [Inicie a resposta gerando o Sumário com links âncora para as seções (se o markdown suportar), e em seguida detalhe cada uma das 5 seções com máximo rigor analítico. Faça perguntas clarificadoras ao final, se alguma regra fundamental do negócio não estiver clara no código/README].
  
-Preciso que salve o resultado dentro da pasta PO, vamos passar modulo por modulo pois preciso dessa documentação completa!.
+## 📂 Onde salvar (OBRIGATÓRIO)
+
+Salve **sempre** em:
+
+`Documentacao/03-Auditorias/Product Owner/`
+
+**Padrão de nome por módulo:** `{NN}-{Slug-Modulo}.md`  
+Exemplos: `01-Autenticacao.md`, `04-Metas-Financeiras.md`, `08-Vale-Transporte.md`
+
+**Sumários transversais:** `00-Sumario-Executivo.md`, `00-Achados-Transversais.md`
+
+Audite **um módulo por sessão**. Não avance para o próximo módulo sem eu pedir.

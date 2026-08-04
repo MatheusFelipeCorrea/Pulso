@@ -1,9 +1,9 @@
-# 📋 Pulso — Requisitos do Sistema
+﻿# 📋 Pulso — Requisitos do Sistema
 
 Documento de rastreamento de todos os requisitos funcionais e não funcionais do sistema **Pulso**.
 
 > **Última revisão:** código alinhado a **ago/2026** (correções PO) · planejamento jul/2026.  
-> Auditoria PO: [Análises/PO/00-Sumario-Executivo.md](../Análises/PO/00-Sumario-Executivo.md) · Técnico: [Frontend](../../Codigo/Pulso/web/Documents/Readme.md) · [API](../../Codigo/Pulso/api/Documents/Readme.md) · [Banco](../../Codigo/Pulso/api/Documents/Database.md)
+> Auditoria PO: [03-Auditorias/Product Owner/00-Sumario-Executivo.md](../03-Auditorias/Product Owner/00-Sumario-Executivo.md) · Técnico: [Web](../02-Engenharia/Web/Readme.md) · [API](../02-Engenharia/API/Readme.md) · [Banco](../02-Engenharia/API/Database.md)
 
 ---
 
@@ -263,7 +263,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 
 ## 👥 Módulo 13 — Grupos
 
-> Detalhamento técnico e gaps: [Modulos/Grupos.md](../Modulos/Grupos.md)
+> Detalhamento técnico e gaps: [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md)
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
@@ -313,7 +313,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [x] | RF-119 | O sistema deve exibir saldo consolidado (quanto me devem vs quanto eu devo) | 🟡 Importante |
 | - [x] | RF-120 | O sistema deve permitir enviar lembrete de cobrança para participantes do grupo | 🟢 Desejável |
 
-**Notas:** módulo standalone (`/expense-split`), participantes por nome livre (mesmo padrão de Dívidas Pessoais — sem exigir conta Pulso); rateio igual usa aritmética de centavos determinística (RNF-016); "lembrete de cobrança" (RN-086) cria um `Lembrete` de calendário real pro organizador (autolembrete), vinculado a 1+ participantes via relação N:N (`Lembrete.divisaoParticipantes`, tabela `_DivisaoParticipanteToLembrete`) — um único lembrete pode cobrir vários participantes pendentes de uma mesma divisão. O lembrete é cancelado automaticamente quando todos os participantes que ele cobre quitam suas partes, e é excluído junto se a divisão for excluída antes de ser quitada. Integração com o toggle de RF-095 (Grupos) fica para depois, como já documentado em [Modulos/Grupos.md](../Modulos/Grupos.md).
+**Notas:** módulo standalone (`/expense-split`), participantes por nome livre (mesmo padrão de Dívidas Pessoais — sem exigir conta Pulso); rateio igual usa aritmética de centavos determinística (RNF-016); "lembrete de cobrança" (RN-086) cria um `Lembrete` de calendário real pro organizador (autolembrete), vinculado a 1+ participantes via relação N:N (`Lembrete.divisaoParticipantes`, tabela `_DivisaoParticipanteToLembrete`) — um único lembrete pode cobrir vários participantes pendentes de uma mesma divisão. O lembrete é cancelado automaticamente quando todos os participantes que ele cobre quitam suas partes, e é excluído junto se a divisão for excluída antes de ser quitada. Integração com o toggle de RF-095 (Grupos) fica para depois, como já documentado em [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md).
 ---
 ## 📅 Módulo 16 — Calendário Financeiro
 
@@ -532,7 +532,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | OCR de cupons | **Descartado** — custo/complexidade sem retorno para o escopo gratuito |
 | Open Banking | **Descartado** — custo de integração/certificação incompatível com projeto gratuito; substituído pelo módulo de Importação (OFX/CSV) |
 | Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips`, **`/groups`**, **`/groups/:id`**, **`/expense-split`**, **`/purchase-planning`** |
-| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros, editar grupo, metas múltiplas, RN-119, notificações GRUPO/META, chat paginado + polling (~3s), viagem pessoal→grupo, RF-095 (toggle *Por pretensão*/*Divisão igual*), **rate limit** em preview/entrar — acerto de contas completo em **`/expense-split`** (RF-115–120) — [Modulos/Grupos.md](../Modulos/Grupos.md) |
+| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros, editar grupo, metas múltiplas, RN-119, notificações GRUPO/META, chat paginado + polling (~3s), viagem pessoal→grupo, RF-095 (toggle *Por pretensão*/*Divisão igual*), **rate limit** em preview/entrar — acerto de contas completo em **`/expense-split`** (RF-115–120) — [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md) |
 | Metas (RF-026–031) | CRUD, aportes, pausar/concluir, vínculo viagem; `META_ATINGIDA` pessoal e grupo |
 | Viagens (RF-033–043) | Moedas (cotações, conversor, histórico, favoritas), CRUD de viagens, despesas por categoria, total em BRL, observações, busca GeoNames, estimativas de passagem (avião/ônibus/trem) com ajuste sazonal; Duffel/Amadeus opcionais |
 | Dívidas (RF-126–132) | CRUD em `/debts` com tabs Me devem / Eu devo / Quitadas; resumo consolidado; filtros (busca, valor, DateRangePicker); job `DIVIDA_COBRANCA` (vence hoje / em 2 dias); limpeza automática de quitadas após 180 dias |

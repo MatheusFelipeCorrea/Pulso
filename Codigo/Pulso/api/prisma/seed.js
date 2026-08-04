@@ -1,4 +1,4 @@
-// prisma/seed.js
+﻿// prisma/seed.js
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 const { DEFAULT_CATEGORIES } = require('../src/constants/defaultCategories');
@@ -358,7 +358,7 @@ async function seedValeTransporte(usuarioId, byName) {
 // ==========================================
 // SEED COMPLETO — matheusfelipecorreasilva@hotmail.com
 // Cobre toda funcionalidade já desenvolvida no Pulso (módulos entregues no
-// Documentacao/Requisitos/Readme.md). Cada sub-seed é idempotente (verifica
+// Documentacao/01-Produto/Requisitos/Readme.md). Cada sub-seed é idempotente (verifica
 // contagem antes de criar) para permitir rodar o script mais de uma vez.
 // ==========================================
 

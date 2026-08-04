@@ -1,4 +1,4 @@
-# 🌐 Web — Frontend
+﻿# 🌐 Web — Frontend
 
 Interface do **Pulso** com React + Vite, Tailwind CSS v4, Redux (auth) e design system próprio.
 
@@ -311,7 +311,7 @@ Configuração única em `sidebarNavigation.js` (`SIDEBAR_NAV` + `SIDEBAR_NAV_FO
 
 **Service:** `services/grupoService.js`
 
-**Pendente:** RF-095 completo (split custom "quem paga quem" já existe em `/expense-split`, mas ainda não vinculado ao toggle do grupo) — ver [Documentacao/Modulos/Grupos.md](../../../../Documentacao/Modulos/Grupos.md).
+**Pendente:** RF-095 completo (split custom "quem paga quem" já existe em `/expense-split`, mas ainda não vinculado ao toggle do grupo) — ver [Modulos/Grupos.md](../Modulos/Grupos.md).
 
 **Estilos:** `styles/groups.css`
 
@@ -458,6 +458,6 @@ VITE_GOOGLE_CLIENT_ID=seu_client_id.apps.googleusercontent.com
 
 **Pendente:** dashboard, perfil/settings, insights IA, chatbot, gamificação, relatórios.
 
-Prioridades sugeridas: [Documentacao/Analise-Produto.md](../../../../Documentacao/Analise-Produto.md)
+Prioridades sugeridas: [Analise-Produto.md](../../01-Produto/Analise-Produto.md)
 
 Epics: `.github/plans/cards/`

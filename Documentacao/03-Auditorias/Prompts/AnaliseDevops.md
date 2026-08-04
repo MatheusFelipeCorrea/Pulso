@@ -7,7 +7,7 @@ Eu possuo um arquivo `README.md` (backlog e status report) e o código-fonte com
 Auditoria dividida em 3 fases + consolidação. Regras invioláveis:
 
 - **Execute UMA fase por vez.** Ao final de cada fase, PARE e aguarde meu "OK, próxima fase". NÃO adiante fases.
-- **Cada fase gera UM arquivo `.md` próprio** dentro da pasta `xx/` (nomes abaixo).
+- **Cada fase gera UM arquivo `.md` próprio** em `Documentacao/03-Auditorias/DevOps/` (nomes abaixo).
 - **Não resuma. Seja exaustivo.** Se atingir o limite, continue automaticamente ("Parte 2"...) até concluir a fase.
 - **Cite arquivos/linhas específicos** sempre que possível (`.github/workflows/*.yml`, `vercel.json`, `prisma/schema.prisma`, `prisma/migrations/`, scripts de job, `package.json`). Para CADA achado descreva: (a) sintoma concreto no repo, (b) impacto (confiabilidade/custo/velocidade de entrega/risco operacional), (c) severidade, (d) esforço de correção, (e) solução recomendada com exemplo de config/pseudo-código (YAML, script, etc.).
 - **Escala consistente:** Severidade 🔴 Crítico · 🟠 Alto · 🟡 Médio · 🟢 Baixo · Esforço Baixo/Médio/Alto.
@@ -28,7 +28,7 @@ Cada arquivo deve seguir esta estrutura, iniciando com Sumário com links âncor
 ---
 
 ## 📂 FASE 1 — CI/CD, Ambientes e Release Management
-**Arquivo de saída:** `xx/devops-fase-1-cicd-ambientes.md`
+**Arquivo de saída:** `Documentacao/03-Auditorias/DevOps/devops-fase-1-cicd-ambientes.md`
 
 Escopo obrigatório:
 - **Pipeline CI/CD:** mapear o fluxo real (build → lint → type-check → test → deploy). O que existe/falta? Gates obrigatórios (lint bloqueante, gate de cobertura ≥85% RNF-015, type-check, testes) rodam no PR ou só localmente?
@@ -42,7 +42,7 @@ Escopo obrigatório:
 ---
 
 ## 📂 FASE 2 — Jobs/Cron, Confiabilidade e Resiliência (SRE)
-**Arquivo de saída:** `xx/devops-fase-2-jobs-confiabilidade.md`
+**Arquivo de saída:** `Documentacao/03-Auditorias/DevOps/devops-fase-2-jobs-confiabilidade.md`
 
 Escopo obrigatório:
 - **Migração Cron (Vercel Hobby → GitHub Actions):** avaliar a estratégia planejada. Os workflows de schedule são resilientes? GitHub Actions `schedule` tem atraso/skip conhecido sob carga — há tolerância a isso?
@@ -58,7 +58,7 @@ Escopo obrigatório:
 ---
 
 ## 📂 FASE 3 — Observabilidade, FinOps e Automação Operacional
-**Arquivo de saída:** `xx/devops-fase-3-observabilidade-finops.md`
+**Arquivo de saída:** `Documentacao/03-Auditorias/DevOps/devops-fase-3-observabilidade-finops.md`
 
 Escopo obrigatório:
 - **Logging:** há logging estruturado (JSON) e centralizado? Correlação por request-id? Níveis de log? Logs de serverless são retidos ou somem? (sem PII — cruzar com auditoria de segurança).
@@ -74,13 +74,10 @@ Escopo obrigatório:
 ---
 
 ## 📊 CONSOLIDAÇÃO (só quando eu disser "consolidar")
-**Arquivo de saída:** `xx/devops-sumario-executivo.md`
+**Arquivo de saída:** `Documentacao/03-Auditorias/DevOps/devops-sumario-executivo.md`
+
 Conteúdo: Top 10 riscos operacionais de todo o sistema (referenciando IDs `OPS-x-yy`); matriz severidade × esforço; mapa de limites de free tier com "distância do estouro"; lista completa dos RNF propostos (numerados a partir de RNF-016); roadmap de maturidade DevOps (nível atual → alvo) e plano de ação priorizado (Quick Wins × Investimentos estruturais).
 
 ---
 
-**Comece agora pela FASE 1** e gere `xx/devops-fase-1-cicd-ambientes.md`. Ao terminar, pare e aguarde meu "OK, próxima fase".
-```
-`
-
----
+**Comece agora pela FASE 1** e salve em `Documentacao/03-Auditorias/DevOps/devops-fase-1-cicd-ambientes.md`. Ao terminar, pare e aguarde meu "OK, próxima fase".

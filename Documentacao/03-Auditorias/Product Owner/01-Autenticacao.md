@@ -1,7 +1,7 @@
-# 🔐 Módulo 01 — Autenticação — Auditoria PO/Engenharia de Requisitos
+﻿# 🔐 Módulo 01 — Autenticação — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md) — achados de infraestrutura que afetam este e outros módulos.
-> Fontes cruzadas: `Documentacao/Requisitos/Readme.md` (RF-001–006), `Documentacao/Regras de Negocio/RegrasDeNegocio.md` (RN-131–143), `Documentacao/Roadmap/Roadmap.md` (Fase 3).
+> Fontes cruzadas: `Documentacao/01-Produto/Requisitos/Readme.md` (RF-001–006), `Documentacao/01-Produto/Regras-de-Negocio/RegrasDeNegocio.md` (RN-131–143), `Documentacao/01-Produto/Roadmap/Roadmap.md` (Fase 3).
 > Código auditado: `api/src/{controllers,services,repositories,routes,schemas,middlewares,utils}/*auth*`, `api/prisma/schema.prisma` (models `Usuario`, `ConfiguracaoUsuario`, `TokenRenovacao`), `web/src/{pages/Login.jsx,pages/Register.jsx,services/authService.js,services/api.js,store/slices/authSlice.js,components/routing/AuthBootstrap.jsx}`.
 
 ---

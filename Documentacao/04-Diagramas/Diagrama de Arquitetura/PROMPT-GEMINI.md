@@ -1,4 +1,4 @@
-# Prompt — Diagrama de Arquitetura Pulso (Gemini)
+﻿# Prompt — Diagrama de Arquitetura Pulso (Gemini)
 
 Prompt **mega detalhado** no estilo do diagrama C4 Container (referência: diagrama em camadas com boundary do backend, middlewares nomeados, lista de services, jobs em caixa amarela, integrações externas tracejadas e fluxos numerados).
 
@@ -302,7 +302,7 @@ Replique EXATAMENTE este estilo visual e nível de detalhe, mas com o conteúdo 
 
 ## Export
 
-Salvar como: `Documentacao/Diagramas/Diagrama de Arquitetura/Arquitetura Pulso V1.png`
+Salvar como: `Documentacao/04-Diagramas/Diagrama de Arquitetura/Arquitetura Pulso V1.png`
 
 ---
 
@@ -310,7 +310,7 @@ Salvar como: `Documentacao/Diagramas/Diagrama de Arquitetura/Arquitetura Pulso V
 
 | Área | Caminho |
 |------|---------|
-| Deploy Vercel | `Documentacao/Deploy/Hospedagem.md` |
+| Deploy Vercel | `Documentacao/02-Engenharia/Deploy/Hospedagem.md` |
 | Rotas API | `Codigo/Pulso/api/src/routes/index.js` |
 | Services | `Codigo/Pulso/api/src/services/` |
 | Jobs | `Codigo/Pulso/api/src/jobs/` |

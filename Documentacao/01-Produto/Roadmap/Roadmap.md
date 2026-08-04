@@ -1,4 +1,4 @@
-# 🗺️ Pulso — Roadmap de Implementação
+﻿# 🗺️ Pulso — Roadmap de Implementação
 
 Guia de ordem de desenvolvimento do sistema Pulso, do zero até o deploy.
 
@@ -13,9 +13,9 @@ Fases **concluídas ou em uso**:
 - Fase 2 — Layouts + Sidebar
 - Fase 3 — Autenticação
 - Fase 4 (parcial) — Transações, VT, orçamento, dívidas, metas, viagens
-- Fase 7 (quase fechada) — **Grupos** (ver gaps em [Modulos/Grupos.md](../Modulos/Grupos.md))
+- Fase 7 (quase fechada) — **Grupos** (ver gaps em [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md))
 
-**Próximo foco sugerido:** fechar gaps de Grupos + Dashboard + perfil/settings (ver [Analise-Produto.md](../Analise-Produto.md) e [Modulos/Grupos.md](../Modulos/Grupos.md)).
+**Próximo foco sugerido:** fechar gaps de Grupos + Dashboard + perfil/settings (ver [Analise-Produto.md](../Analise-Produto.md) e [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md)).
 
 ---
 
@@ -432,7 +432,7 @@ Fases **concluídas ou em uso**:
 - [ ] Vincular RF-095 ao módulo /expense-split (Fase 5.5 — já disponível, falta a integração em si)
 ```
 
-Ver gaps: [Modulos/Grupos.md](../Modulos/Grupos.md).
+Ver gaps: [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md).
 
 ---
 

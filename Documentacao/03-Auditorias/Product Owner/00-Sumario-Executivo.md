@@ -1,4 +1,4 @@
-# 📋 Pulso — Auditoria Completa de Requisitos e Arquitetura (PO + Engenharia)
+﻿# 📋 Pulso — Auditoria Completa de Requisitos e Arquitetura (PO + Engenharia)
 
 > **Leia este documento primeiro.** Sintetiza a auditoria dos 25 módulos (18 com código, 7 planejados) e dos RNFs. Detalhe por módulo: [00-Achados-Transversais.md](./00-Achados-Transversais.md).
 > Metodologia: leitura do código (`Codigo/Pulso/api` + `web`) vs. `Requisitos/Readme.md` e `RegrasDeNegocio.md`.
@@ -141,4 +141,4 @@ Itens RF-NOVO-B1, C1–C3, G1, H1, M1–M3, N1, O1, P1, etc.
 
 ---
 
-*20 relatórios em `Documentacao/Análises/PO/` · correções de código refletidas nos módulos 01–05, 07–08, 12–18.*
+*20 relatórios em `Documentacao/03-Auditorias/Product Owner/` · correções de código refletidas nos módulos 01–05, 07–08, 12–18.*
