@@ -11,12 +11,14 @@ const mapCategoria = (categoria) => ({
     icone: categoria.icone,
     cor: categoria.cor,
     tipo: categoria.tipo,
+    grupoBeneficio: categoria.grupoBeneficio ?? null,
 });
 
 const mapTransacao = (transacao) => ({
     id: transacao.id,
     tipo: transacao.tipo,
     recurso: transacao.recurso,
+    recursoDestino: transacao.recursoDestino ?? null,
     valor: Number(transacao.valor).toFixed(2),
     descricao: transacao.descricao,
     data: transacao.data.toISOString(),

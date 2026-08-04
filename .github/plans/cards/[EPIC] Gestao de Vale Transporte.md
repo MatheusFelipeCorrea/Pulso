@@ -1,1299 +1,493 @@
 # [EPIC] Gestão de Vale Transporte
 
-Tipo:        Epic
-Prioridade:  🔺 Highest
-Sprint:      (preencher)
-Categoria:   Vale Transporte, Frontend, Backend
-Relator:     (preencher)
-Pai:         —
-Data Limite: (preencher)
+> **Status (ago/2026):** ✅ Entregue (jun/2026) · revisado auditoria PO M08  
+> **Correções PO:** decisão B (CLT vende VT com aviso), transações Serializable em venda/uso, remoção RF-064/065 (intervalo entre vendas)  
+> **Refs:** RF-059–063, RF-066 · [PO M08](../../Documentacao/03-Auditorias/Product%20Owner/08-Vale-Transporte.md) · [META Auditoria](./[META]%20Auditoria%20PO%202026-08.md)
 
-## Descrição
-
-Esta epic implementa o **módulo completo de gerenciamento de Vale Transporte** do Pulso, permitindo que usuários (especialmente Estagiários e CLT) acompanhem o saldo, registrem usos, vendam VT excedente e visualizem todo o histórico de movimentações.
-
-### Funcionalidades Principais
-
-#### 📊 Tela de Vale Transporte
-
-A tela principal é organizada em três seções:
-
-**1. Cards de Resumo (Header)**
-- **Saldo do mês** - Card principal com 4 métricas:
-  - **Recebido** - Valor de VT recebido no mês (R$ 220,00) com ícone de seta para baixo
-  - **Usado** - Valor gasto em passagens (R$ 48,00) com subtexto "10 passagens"
-  - **Vendido (nominal)** - Valor nominal total vendido (R$ 120,00) com subtexto "Valor nominal total"
-  - **Saldo restante** - Saldo disponível para uso (R$ 52,00) com subtexto "Disponível para uso"
-
-**2. Botões de Ação**
-- **+ Registrar Uso** - Botão outline (borda roxa, fundo transparente)
-- **+ Registrar Venda** - Botão preenchido (fundo roxo)
-- Ambos posicionados lado a lado abaixo dos cards de resumo
-
-**3. Histórico com Tabs**
-
-Navegação por abas:
-- **Histórico de vendas** (aba padrão)
-- **Histórico de usos**
-
-**Aba "Histórico de vendas":**
-- Filtro de período (mês/ano) no canto superior direito
-- Tabela com colunas:
-  - **Data** - Formato DD/MM/YYYY
-  - **Comprador** - Nome da pessoa que comprou
-  - **Nominal** - Valor nominal vendido (R$ 22,00)
-  - **Recebido** - Valor efetivamente recebido (R$ 20,00, R$ 22,00, R$ 23,00)
-  - **Diferença** - Perda/ganho na venda:
-    - Vermelho com "-" se perda (- R$ 2,00)
-    - Verde com "+" se ganho (+ R$ 1,00)
-    - Cinza "R$ 0,00" se igual
-- Linha de TOTAL na parte inferior:
-  - Total Nominal: R$ 176,00
-  - Total Recebido: R$ 168,00
-  - Perda total: - R$ 8,00 (em vermelho com subtexto "Perda total")
-- **Paginação** na parte inferior
-
-**Aba "Histórico de usos":**
-- Filtro de período (mês/ano)
-- Tabela com colunas:
-  - **Data** - Formato DD/MM/YYYY
-  - **Quantidade** - Número de passagens usadas
-  - **Valor por passagem** - Valor unitário (R$ 4,80)
-  - **Total** - Quantidade × Valor (- R$ 9,60)
-- Linha de TOTAL na parte inferior
-- **Paginação**
-
-#### ➕ Modal "Registrar Venda de VT"
-
-Modal centralizado com:
-
-**Header informativo (card azul):**
-- Ícone de ônibus
-- "Saldo VT disponível para venda: R$ 172,00"
-
-**Campos:**
-- **Comprador** - Input de texto (Nome ou apelido do comprador)
-- **Data da venda** - DatePicker (padrão: data atual)
-- **Valor nominal vendido** - Input numérico com máscara R$ (valor de face do VT que está vendendo)
-  - Texto auxiliar: "Valor de face do VT que está vendendo"
-  - Ícone de info ao lado
-- **Valor recebido** - Input numérico com máscara R$ (quanto o comprador pagou)
-  - Texto auxiliar: "Quanto o comprador te pagou"
-  - Ícone de info ao lado
-
-**Resumo da transação (card cinza):**
-- Valor nominal: R$ 60,00
-- Valor recebido: R$ 50,00
-- Diferença: **-R$ 10,00 (perda)** (em vermelho)
-- Novo saldo VT após venda: **R$ 112,00** (em azul)
-- Próxima venda disponível em: **04/05/2026 (30 dias)** (em azul, com ícone de calendário)
-
-- **Cancelar** (outline)
-- **Registrar Venda** (preenchido roxo)
-
-**Estados especiais:**
-- **Se intervalo não passou:** Modal abre mas campos desabilitados, status "🔒 Próxima venda disponível em X dias" em amarelo
-- **Se saldo insuficiente:** Ao tentar vender mais do que tem, exibir erro vermelho: "Saldo insuficiente. Você tem apenas R$ X,XX disponível."
-
-#### ➕ Modal "Registrar Uso de VT"
-
-Modal centralizado com:
-saldo insuficiente:** Ao tentar vender mais do que tem, exibir erro vermelho: "Saldo insuficiente. Você tem apenas R$ X,XX disponível."
-- **Múltiplas vendas permitidas:** Usuário pode vender "picado" para várias pessoas no mesmo mês
-- Ícone de ônibus
-- "Saldo VT atual: R$ 172,00"
-- "Passagens usadas este mês: 10"
-
-**Campos:**
-- **Quantidade de passagens** - Stepper (+ e -) com valor numérico no centro (padrão: 2)
-  - Texto auxiliar: "Informe quantas passagens você utilizou"
-  - Mínimo: 1
-  
-- **Valor por passagem** - Input numérico com máscara R$ (padrão: R$ 4,80)
-  - Texto auxiliar: "Valor padrão da sua região"
-  - Ícone de info ao lado
-  
-- **Data** - DatePicker (padrão: data atual)
-  - Texto auxiliar: "Data em que você utilizou o VT"
-
-**Resumo do uso (card azul claro):**
-- Ícone de calculadora
-- Total do uso: **R$ 4,80 × 2 = R$ 9,60** (fórmula visível)
-- Novo saldo VT: **R$ 162,40** (em azul)
-
-**Toggle (switch):**
-- ☑️ "Salvar valor da passagem como padrão"
-- Texto auxiliar: "Usar este valor como padrão nas próximas vezes"
-- Estado: ligado por padrão
-
-**Botões:**
-- **Cancelar** (outline)
-- **Registrar Uso** (preenchido roxo)
+**Tipo:**        Epic  
+**Prioridade:**  🔺 Highest  
+**Sprint:**      Concluído  
+**Categoria:**   Vale Transporte, Frontend, Backend, Banco de Dados  
+**Relator:**     —  
+**Pai:**         —  
+**Data Limite:** —
 
 ---
 
-### Regras de Negócio Aplicadas
+## 📋 Descrição do Epic
 
-- **RN-003:** Estagiário recebe VA, VR e VT como benefícios (VT pode ser vendido)
-- **RN-038:** VT só pode ser gasto em despesas da categoria "Transporte"
-- **RN-039:** Despesas de alimentação NUNCA podem usar recurso VT
-- **RN-040:** VT pode ser vendido (somente para modo Estagiário - múltiplas vendas permitidas)
-- **RN-041:** Ao vender VT, o valor recebido entra como receita do tipo "Dinheiro"
-- **RN-044:** Saldo VT = Recebido no mês - Usado - Vendido (nominal)
-- **RN-045:** CLT não pode vender VT (desconto de 6% em folha, uso obrigatório)
-- **RN-018:** PJ não recebe VA, VR nem VT (funcionalidades ocultas - mas pode ter exceções)
-- **RN-023:** Pessoa Física: não exibe funcionalidades de benefícios corporativos (mas pode ter exceções)
+Módulo completo de **gestão de Vale Transporte (VT)** para Estagiários, CLT e PJ com opt-in: acompanhar saldo mensal (recebido − usado − vendido nominal), registrar usos de passagens, registrar vendas de VT excedente com cálculo de diferença nominal/recebido, consultar históricos paginados e countdown até a próxima recarga mensal.
+
+### 🎯 Objetivos do Epic
+
+- ✅ Saldo VT mensal com 4 métricas + card de próxima recarga (RN-044)
+- ✅ Registrar uso de passagens (quantidade × valor unitário) com valor padrão opcional
+- ✅ Registrar venda de VT (comprador, data, nominal, recebido) + receita DINHEIRO automática (RN-041)
+- ✅ Histórico de vendas e usos com filtro por período, totais e paginação
+- ✅ Diferença nominal vs. recebido (perda/ganho) em venda e totais do período (RF-063)
+- ✅ CLT pode vender com aviso explícito — decisão de produto B (RN-013/040/045)
+- ✅ PJ opt-in (`vtHabilitado`); Pessoa Física sem acesso à rota
+- ✅ Integridade de saldo com transações Serializable (RNF-NOVO-H1)
+
+### 🎭 Telas e Fluxos
+
+| Rota | Tela | Fluxos principais |
+|------|------|-------------------|
+| `/transport-voucher` | Vale Transporte | Cards saldo, ações registrar uso/venda, tabs histórico |
+| — | Opt-in PJ (`VtOptInScreen`) | "Você recebe VT?" → habilita ou oculta menu |
+| — | VT desabilitado (`VtDisabledScreen`) | PJ que optou "Não recebo" — reabilitar |
+| Modal | Registrar venda | Comprador, data, nominal, recebido, preview diferença/saldo |
+| Modal | Registrar uso | Stepper passagens, valor unitário, data, salvar padrão |
+
+**Comportamento por modo de uso:**
+
+| Modo | Sidebar | Saldo/usos/vendas | Venda VT |
+|------|---------|-------------------|----------|
+| Estagiário | ✅ Visível | ✅ Completo | ✅ Sem restrição |
+| CLT | ✅ Visível | ✅ Completo | ✅ Com `warning` no payload + toast |
+| PJ | ✅ Se `vtHabilitado !== false` | ✅ Se habilitado | ✅ Se habilitado |
+| Pessoa Física | ❌ Oculto | ❌ Redirect `/dashboard` | ❌ |
 
 ---
 
-### Comportamento por Modo de Uso
+## 🔗 Integrações
 
-| Modo | Acesso à Tela | Registrar Uso | Registrar Venda |
-|------|--------------|---------------|----------------|
-| **Estagiário** | ✅ Completo | ✅ Sim | ✅ Sim (sem restrições) |
-| **CLT** | ✅ Completo | ✅ Sim | ⚠️ Sim, mas com aviso: "CLT: VT é descontado em folha (6%). Venda pode gerar irregularidades." |
-| **PJ** | ⚠️ Acesso com aviso | ❌ Desabilitado | ❌ Desabilitado |
-| **Pessoa Física** | ⚠️ Acesso com aviso | ❌ Desabilitado | ❌ Desabilitado |
-
-**Aviso para PJ e Pessoa Física:**
-"Esta funcionalidade está disponível apenas para Estagiários e CLT. Caso você tenha acordo com sua empresa que inclui Vale Transporte, entre em contato com o suporte para habilitar."
+| Módulo | Integração |
+|--------|------------|
+| Transações | `recebido` = soma RECEITA recurso `VT` no período; venda cria RECEITA `DINHEIRO` categoria Outros |
+| Configurações | `valorVt`, `diaVt`, `valorPadraoPassagem`, `vtHabilitado`, `modoUso` em `ConfiguracaoUsuario` |
+| Recebimentos fixos | `fixedIncomeUtils.obterRecebimentosFixosConfig` inclui VT quando perfil permite |
+| Categorias | `categoryRepository.buscarPorNome('Outros', 'RECEITA')` na venda |
+| Regras recurso | `recursoCategoriaRules` — VT só em despesas Transporte (RN-038/039) |
+| Navegação | `filterSidebarNavForUser` oculta item VT conforme modo/opt-in |
+| Auth | JWT em `authMiddleware`; `vtHabilitado` exposto no login via `authService` |
 
 ---
 
-### Cálculos e Fórmulas
+## 📊 Rastreamento de Implementação
 
-**Saldo VT (RN-044):**
-```
-Saldo = Recebido - Usado - Vendido (nominal)
+| Camada | Status | Arquivos principais |
+|--------|--------|---------------------|
+| Database | ✅ | `schema.prisma` (`VendaVt`, `UsoVt`, campos VT em `ConfiguracaoUsuario`), migration `20260613120000_remove_vt_venda_interval` |
+| Backend | ✅ | `transportRoutes.js`, `transportController.js`, `transportService.js`, `transportRepository.js`, `transportSchemas.js` |
+| Utils API | ✅ | `periodUtils.js` (`calcularProximaRecarga`), `fixedIncomeUtils.js`, `recursoCategoriaRules.js` |
+| Frontend | ✅ | `TransportVoucherPage.jsx`, 9 componentes em `components/features/transport/`, `transportService.js`, `transportUtils.js`, `styles/transport.css` |
+| Testes API | ✅ | `api/tests/unit/services/transportService.test.js` |
+| Testes Web | ✅ | `web/tests/unit/services/transportService.test.js`, `web/tests/unit/utils/transportUtils.test.js` |
+| Seed | ✅ | `prisma/seed.js` — receitas VT mensais, usos/vendas demo |
 
-Exemplo:
-Recebido: R$ 220,00
-Usado: R$ 48,00 (10 passagens × R$ 4,80)
-Vendido: R$ 120,00 (nominal total de vendas)
-Saldo = 220 - 48 - 120 = R$ 52,00
-```
+**Registro rotas:** `Codigo/Pulso/api/src/routes/index.js` → `router.use('/transporte', transportRoutes)`  
+**Base URL API:** `/api/transporte`
 
-**Diferença na venda:**
-```
-Diferença = Valor recebido - Valor nominal
+---
 
-Exemplo 1 (Perda):
-Nominal: R$ 60,00
-Recebido: R$ 50,00
-Diferença: 50 - 60 = -R$ 10,00 (perda)
+## 🔧 Correções pós-auditoria PO (ago/2026)
 
-Exemplo 2 (Ganho):
-Nominal: R$ 22,00
-Recebido: R$ 23,00
-Diferença: 23 - 22 = +R$ 1,00 (ganho)
-```
+| ID | Correção | Onde |
+|----|----------|------|
+| RF-NOVO-H1 | Decisão **B**: CLT pode vender VT com aviso — RNs 013/040/045 reescritas | `transportService.js` (`MSG_CLT_WARNING`), docs requisitos |
+| RNF-NOVO-H1 | Transações `Serializable` em venda/uso — elimina saldo negativo por concorrência | `transportRepository.js` (`criarVendaComTransacao`, `criarUsoVtAtomico`) |
+| RF-064/065 | Removidos — sem intervalo mínimo entre vendas; múltiplas vendas no mês permitidas | migration `20260613120000_remove_vt_venda_interval`, frontend sem countdown de venda |
+| UX-CLT | Toast `warning` após venda CLT no frontend | `TransportVoucherPage.jsx:207-208` |
 
-**Total do uso:**
-```
-Total = Quantidade de passagens × Valor por passagem
+---
 
-Exemplo:
-Quantidade: 2 passagens
-Valor: R$ 4,80
-Total = 2 × 4,80 = R$ 9,60
-```
+## ⏳ Pendências
 
-**Valor "Recebido" no card:**
-```
-Recebido = Soma de todas as transações do tipo RECEITA com recurso VT no mês atual
+- [ ] Testes E2E / componente da página `TransportVoucherPage` (só unitários de service/utils hoje)
+- [ ] `VtBlockedScreen.jsx` existe mas não está referenciado — consolidar ou remover
+- [ ] RF-059 parcialmente via recebimentos fixos/config — UI dedicada para editar `valorVt`/`diaVt` na tela VT (hoje via onboarding/config geral)
+- [ ] React Query hooks (padrão do projeto usa `transportService` + `useState` + `useCallback`)
+
+---
+
+## 🚀 Critérios de Aceite Gerais (Epic)
+
+→ Usuário Estagiário/CLT ou PJ habilitado vê saldo VT do mês (recebido, usado, vendido nominal, restante)  
+→ Saldo = recebido − usado − vendido nominal (RN-044)  
+→ Usuário registra uso com quantidade ≥ 1; saldo insuficiente retorna 400  
+→ Usuário registra venda; cria receita DINHEIRO; diferença calculada; múltiplas vendas no mês OK  
+→ CLT recebe aviso na resposta e toast no frontend ao vender  
+→ PJ sem opt-in vê tela de pergunta; PJ opt-out não vê item no menu  
+→ Históricos filtráveis por `YYYY-MM` com totais e paginação  
+→ Venda/uso atômicos — saldo validado dentro de transação Serializable  
+
+---
+
+# [STORY DATABASE] Gestão de Vale Transporte — Banco de Dados
+
+**Tipo:**        Story · **✅ Implementado**  
+**Prioridade:**  🔺 Highest  
+**Categoria:**   Banco de Dados  
+**Pai:**         [EPIC] Gestão de Vale Transporte
+
+---
+
+## 📝 Descrição
+
+**Como sistema**, quero persistir vendas e usos de VT e campos de configuração relacionados, para calcular saldo mensal, históricos e preferências de perfil PJ.
+
+---
+
+## 🗄️ Modelo Prisma (resumo)
+
+**Arquivo:** `Codigo/Pulso/api/prisma/schema.prisma`
+
+### `VendaVt` → tabela `vendas_vt`
+
+| Campo | Tipo | Notas |
+|-------|------|-------|
+| `id` | String @id cuid | PK |
+| `usuarioId` | String | FK → `usuarios`, CASCADE |
+| `nomeComprador` | VarChar(120) | |
+| `dataVenda` | DateTime | |
+| `valorNominal` | Decimal(12,2) | Descontado do saldo VT |
+| `valorRecebido` | Decimal(12,2) | Entra como receita DINHEIRO |
+| `criadoEm` | DateTime | |
+
+**Índice:** `[usuarioId, dataVenda DESC]`
+
+### `UsoVt` → tabela `usos_vt`
+
+| Campo | Tipo | Notas |
+|-------|------|-------|
+| `id` | String @id cuid | PK |
+| `usuarioId` | String | FK → `usuarios`, CASCADE |
+| `quantidade` | Int | Passagens |
+| `valorPorPassagem` | Decimal(10,2) | |
+| `data` | DateTime | |
+| `criadoEm` | DateTime | |
+
+**Índice:** `[usuarioId, data DESC]`
+
+### Campos VT em `ConfiguracaoUsuario`
+
+| Campo | Map | Uso |
+|-------|-----|-----|
+| `valorVt` | `valor_vt` | Valor mensal configurado (RF-059 via recebimentos fixos) |
+| `diaVt` | `dia_vt` | Dia de recarga |
+| `valorPadraoPassagem` | `valor_padrao_passagem` | Default no modal de uso |
+| `vtHabilitado` | `vt_habilitado` | Opt-in PJ (`null` = pendente, `true`/`false`) |
+
+---
+
+## 🗄️ SQL relevante
+
+**Migration:** `Codigo/Pulso/api/prisma/migrations/20260613120000_remove_vt_venda_interval/migration.sql`
+
+```sql
+-- RF-064/065 removidos: sem intervalo entre vendas
+
+ALTER TABLE "configuracoes_usuario" DROP COLUMN IF EXISTS "dias_intervalo_venda_vt";
+ALTER TABLE "vendas_vt" DROP COLUMN IF EXISTS "proxima_data_venda";
 ```
 
 ---
 
-### Protótipos Visuais
+## ✅ Critérios de Aceite (Database)
 
-Ver imagens anexadas:
-- [Imagem 1 e 4] Tela principal - modo claro e escuro
-- [Imagem 2 e 5] Modal "Registrar Venda de VT" - modo claro e escuro
-- [Imagem 3 e 6] Modal "Registrar Uso de VT" - modo claro e escuro
+→ Tabelas `vendas_vt` e `usos_vt` com FK cascade para `usuarios`  
+→ Índices por usuário + data (venda/uso) para listagens DESC  
+→ Campos `valor_padrao_passagem` e `vt_habilitado` em `configuracoes_usuario`  
+→ Colunas legadas de intervalo de venda removidas  
 
 ---
 
 # [STORY BACKEND] Gestão de Vale Transporte — Backend
 
-Tipo:        Story
-Prioridade:  🔺 Highest
-Sprint:      (preencher)
-Categoria:   Backend
-Relator:     (preencher)
-Pai:         [EPIC] Gestão de Vale Transporte
-Data Limite: (preencher)
+**Tipo:**        Story · **✅ Implementado**  
+**Prioridade:**  🔺 Highest  
+**Categoria:**   Backend  
+**Pai:**         [EPIC] Gestão de Vale Transporte
+
+---
 
 ## 📝 Descrição
 
-Como sistema, eu quero implementar todos os endpoints necessários para gerenciar o Vale Transporte (calcular saldo, registrar usos, registrar vendas, obter históricos), para que o frontend possa oferecer uma experiência completa de gestão de VT.
+**Como sistema backend**, quero API REST para saldo, vendas, usos e preferência VT de PJ, com validação de modo de uso, saldo e integridade transacional.
 
 ---
 
-## ✅ Critérios de Aceite
+## ✅ Critérios de Aceite (Given/When/Then)
 
-### Cenário 1 — Obter saldo e resumo do VT no mês
-**Dado** que o usuário autenticado está no modo Estagiário ou CLT,  
-**Quando** GET /api/transporte/saldo é chamado com query param `?periodo=2026-05`,  
-**Então** retorna 200 com:
-```json
-{
-  "recebido": "220.00",
-  "usado": "48.00",
-  "passagensUsadas": 10,
-  "vendidoNominal": "120.00",
-  "saldoRestante": "52.00"
-}
-```
-* **E** "recebido" é calculado somando transações RECEITA com recurso VT no período
-* **E** "usado" é calculado somando todos os UsoVt no período
-* **E** "vendidoNominal" é calculado somando valorNominal de todas as VendaVt no período
-* **E** "saldoRestante" = recebido - usado - vendidoNominal (RN-044)
-* **Se** usuário é PJ ou Pessoa Física: retorna 403 "Funcionalidade disponível apenas para Estagiários e CLT"
+### Cenário 1 — Obter saldo VT
+**Dado** usuário Estagiário/CLT ou PJ com VT habilitado,  
+**Quando** `GET /api/transporte/saldo?periodo=2026-05`,  
+**Então** retorna `200` com `{ recebido, usado, passagensUsadas, vendidoNominal, saldoRestante, valorPadraoPassagem, proximaRecarga }`.  
+* `saldoRestante` = recebido − usado − vendidoNominal (RN-044)  
+* PJ sem VT habilitado → `403` com `MSG_BLOQUEIO_PJ`
 
-### Cenário 2 — Registrar venda de VT (sucesso)
-**Dado** que o usuário é Estagiário e tem saldo VT de R$ 172,00,  
-**Quando** POST /api/transporte/vendas é chamado com payload:
-```json
-{
-  "nomeComprador": "Lucas Martins",
-  "dataVenda": "2026-04-23T00:00:00.000Z",
-  "valorNominal": 60.00,
-  "valorRecebido": 50.00
-}
-```
-**Então** retorna 201 com a venda criada:
-```json
-{
-  "id": "cuid_venda",
-  "nomeComprador": "Lucas Martins",
-  "dataVenda": "2026-04-23T00:00:00.000Z",
-  "valorNominal": "60.00",
-  "valorRecebido": "50.00",
-  "diferenca": "-10.00",
-  "novoSaldoVt": "112.00"
-}
-```
-* **E** cria registro em VendaVt
-* **E** cria transação do tipo RECEITA, recurso DINHEIRO, valor = valorRecebido, categoria = "Outros", descrição = "Venda de VT para {nomeComprador}" (RN-041)
-* **E** retorna diferenca = valorRecebido - valorNominal
-* **E** retorna novoSaldoVt = saldoAtual - valorNominal
-* **E** múltiplas vendas no mesmo mês são permitidas (pode vender "picado" para várias pessoas)
+### Cenário 2 — Registrar venda (Estagiário)
+**Dado** saldo VT R$ 172,00,  
+**Quando** `POST /api/transporte/vendas` com `{ nomeComprador, dataVenda, valorNominal, valorRecebido }`,  
+**Então** retorna `201` com venda, `diferenca`, `novoSaldoVt`; cria `VendaVt` + transação RECEITA DINHEIRO (RN-041).  
+* Saldo insuficiente → `400` "Saldo insuficiente. Você tem apenas R$ X,XX disponível."  
+* Múltiplas vendas no mesmo mês permitidas
 
-### Cenário 3 — Registrar venda de VT (CLT com aviso)
-**Dado** que o usuário é CLT,  
-**Quando** POST /api/transporte/vendas é chamado,  
-**Então** retorna 200 com warning no campo adicional:
-```json
-{
-  "id": "cuid_venda",
-  ...,
-  "warning": "CLT: VT é descontado em folha (6%). Venda pode gerar irregularidades."
-}
-```
-* **E** a venda é registrada normalmente
+### Cenário 3 — Registrar venda (CLT com aviso)
+**Dado** usuário CLT,  
+**Quando** `POST /api/transporte/vendas`,  
+**Então** retorna `201` com campo `warning` (`MSG_CLT_WARNING` reforçada).
 
-### Cenário 4 — Bloquear venda com saldo insuficiente
-**Dado** que o saldo VT é R$ 52,00,  
-**Quando** POST /api/transporte/vendas é chamado com valorNominal = 60.00,  
-**Então** retorna 400 com mensagem:
-```json
-{
-  "error": "Saldo insuficiente. Você tem apenas R$ 52,00 disponível."
-}
-```
+### Cenário 4 — Registrar uso
+**Quando** `POST /api/transporte/usos` com `{ quantidade, valorPorPassagem, data, salvarValorPadrao }`,  
+**Então** retorna `201` com `{ id, totalUsado, novoSaldoVt }`; opcionalmente atualiza `valorPadraoPassagem`.  
+* `quantidade` < 1 → `400`  
+* Saldo insuficiente → `400`
 
-### Cenário 5 — Bloquear venda para PJ/Pessoa Física
-**Dado** que o usuário é PJ ou Pessoa Física,  
-**Quando** POST /api/transporte/vendas é chamado,  
-**Então** retorna 403 com mensagem:
-```json
-{
-  "error": "Funcionalidade disponível apenas para Estagiários e CLT. Entre em contato com o suporte se você tem acordo que inclui VT."
-}
-```
+### Cenário 5 — Listar vendas
+**Quando** `GET /api/transporte/vendas?periodo=2026-04&pagina=1&limite=10`,  
+**Então** retorna `{ vendas[], totais: { totalNominal, totalRecebido, perdaTotal }, paginacao }`.  
+* `diferenca` por linha = recebido − nominal (RF-063)
 
-### Cenário 6 — Registrar uso de VT (sucesso)
-**Dado** que o usuário autenticado tem saldo VT disponível,  
-**Quando** POST /api/transporte/usos é chamado com payload:
-```json
-{
-  "quantidade": 2,
-  "valorPorPassagem": 4.80,
-  "data": "2026-05-15T00:00:00.000Z",
-  "salvarValorPadrao": true
-}
-```
-**Então** retorna 201 com o uso criado:
-```json
-{
-  "id": "cuid_uso",
-  "quantidade": 2,
-  "valorPorPassagem": "4.80",
-  "data": "2026-05-15T00:00:00.000Z",
-  "totalUsado": "9.60",
-  "novoSaldoVt": "162.40"
-}
-```
-* **E** cria registro em UsoVt
-* **E** se salvarValorPadrao = true: atualiza ConfiguracaoUsuario.valorPadraoPassagem com o valor informado
-* **E** retorna totalUsado = quantidade × valorPorPassagem
-* **E** retorna novoSaldoVt = saldoAtual - totalUsado
+### Cenário 6 — Listar usos
+**Quando** `GET /api/transporte/usos?periodo=2026-05&pagina=1&limite=10`,  
+**Então** retorna `{ usos[], totais: { totalPassagens, totalGasto }, paginacao }`.
 
-### Cenário 7 — Validar quantidade mínima de passagens
-**Dado** que o usuário tenta registrar uso,  
-**Quando** POST /api/transporte/usos é chamado com quantidade = 0,  
-**Então** retorna 400 "Quantidade de passagens deve ser pelo menos 1"
+### Cenário 7 — Opt-in PJ
+**Quando** `PATCH /api/transporte/vt-habilitado` com `{ vtHabilitado: true }`,  
+**Então** retorna `200` `{ vtHabilitado }`.  
+* Usuário não-PJ → `400`
 
-### Cenário 8 — Validar valor negativo ou zero na venda
-**Dado** que o usuário tenta registrar venda,  
-**Quando** POST /api/transporte/vendas é chamado com valorNominal = 0 ou valorRecebido = 0,  
-**Então** retorna 400 "Valor nominal e valor recebido devem ser maiores que zero"
-
-### Cenário 9 — Listar histórico de vendas com filtro e paginação
-**Dado** que o usuário possui vendas registradas,  
-**Quando** GET /api/transporte/vendas é chamado com query params `?periodo=2026-04&pagina=1&limite=10`,  
-**Então** retorna 200 com:
-```json
-{
-  "vendas": [
-    {
-      "id": "cuid",
-      "dataVenda": "2026-04-23T00:00:00.000Z",
-      "nomeComprador": "Lucas Martins",
-      "valorNominal": "22.00",
-      "valorRecebido": "20.00",
-      "diferenca": "-2.00"
-    },
-    ...
-  ],
-  "totais": {
-    "totalNominal": "176.00",
-    "totalRecebido": "168.00",
-    "perdaTotal": "-8.00"
-  },
-  "paginacao": {
-    "total": 25,
-    "paginas": 3,
-    "paginaAtual": 1
-  }
-}
-```
-* **E** vendas são ordenadas por dataVenda DESC
-* **E** filtro de período é aplicado (formato YYYY-MM)
-* **E** diferenca = valorRecebido - valorNominal
-* **E** totais são calculados apenas para as vendas do período filtrado
-
-### Cenário 10 — Listar histórico de usos com filtro e paginação
-**Dado** que o usuário possui usos registrados,  
-**Quando** GET /api/transporte/usos é chamado com query params `?periodo=2026-05&pagina=1&limite=10`,  
-**Então** retorna 200 com:
-```json
-{
-  "usos": [
-    {
-      "id": "cuid",
-      "data": "2026-05-14T00:00:00.000Z",
-      "quantidade": 2,
-      "valorPorPassagem": "4.80",
-      "total": "9.60"
-    },
-    ...
-  ],
-  "totais": {
-    "totalPassagens": 10,
-    "totalGasto": "48.00"
-  },
-  "paginacao": {
-    "total": 8,
-    "paginas": 1,
-    "paginaAtual": 1
-  }
-}
-```
-* **E** usos são ordenados por data DESC
-* **E** total = quantidade × valorPorPassagem
+### Cenário 8 — Concorrência de saldo
+**Dado** duas requisições paralelas de venda/uso,  
+**Quando** saldo só cobre uma operação,  
+**Então** uma succeeds e a outra retorna `400` — sem saldo negativo (Serializable).
 
 ---
 
-## 🛠️ Implementação
+## 🛠️ Implementação (o que foi feito)
 
-### transportController.js (EXISTENTE — MODIFICAR)
+### transportController.js (EXISTENTE — IMPLEMENTADO)
 
-**O arquivo já existe. Verificar métodos existentes e adicionar os novos:**
+**Arquivo:** `Codigo/Pulso/api/src/controllers/transportController.js`
 
-Métodos NOVOS a adicionar:
-* `obterSaldoVt()` → GET /api/transporte/saldo
-* `registrarVendaVt()` → POST /api/transporte/vendas
-* `listarVendas()` → GET /api/transporte/vendas
-* `registrarUsoVt()` → POST /api/transporte/usos
-* `listarUsos()` → GET /api/transporte/usos
-
-**Responsabilidades:**
-- Validar schemas com Zod (transportSchemas.js)
-- Extrair userId do req.user
-- Validar modo de uso do usuário (Estagiário/CLT/PJ/Pessoa Física)
-- Chamar métodos do service
-- Retornar respostas HTTP com warnings quando aplicável
-
-### transportService.js (EXISTENTE — MODIFICAR)
-
-**O arquivo já existe. Verificar lógica existente e adicionar:**
-
-Lógica NOVA a adicionar:
-
-**`obterSaldoVt(usuarioId, periodo)`**
-→ Calcula "recebido" somando transações RECEITA com recurso VT no período  
-→ Calcula "usado" somando UsoVt.quantidade × valorPorPassagem no período  
-→ Calcula "vendidoNominal" somando VendaVt.valorNominal no período  
-→ Calcula "saldoRestante" = recebido - usado - vendidoNominal (RN-044)  
-→ Retorna objeto completo
-
-**`registrarVendaVt(usuarioId, dados)`**
-→ Busca modo de uso do usuário  
-→ Se PJ ou Pessoa Física: lança AppError(403, "Funcionalidade disponível apenas para Estagiários e CLT...")  
-→ Calcula saldo atual usando obterSaldoVt()  
-→ Valida saldo suficiente (RN-043)  
-→ Busca última venda e valida intervalo (RN-042, RN-043)  
-→ Busca diasIntervaloVendaVt da ConfiguracaoUsuario  
-→ Calcula proximaDataVenda = dataVenda + intervalo  
-→ Cria VendaVt via repository  
-→ Cria transação RECEITA tipo DINHEIRO com valor = valorRecebido (RN-041)  
-→ Se usuário é CLT: adicio 
-→ Cria VendaVt via repository  
-→ Cria transação RECEITA tipo DINHEIRO com valor = valorRecebido (RN-041)  
-→ Se usuário é CLT: adiciona warning na resposta  
-→ Calcula diferenca e novoSaldoVt  
-→ Retorna venda criada  
-→ **Múltiplas vendas no mesmo período são permitidas** (não há intervalo mínimo)ais + paginação
-
-**`registrarUsoVt(usuarioId, dados)`**
-→ Valida quantidade >= 1  
-→ Cria UsoVt via repository  
-→ Se salvarValorPadrao = true: atualiza ConfiguracaoUsuario.valorPadraoPassagem  
-→ Calcula totalUsado = quantidade × valorPorPassagem  
-→ Calcula novoSaldoVt  
-→ Retorna uso criado
-
-**`listarUsos(usuarioId, periodo, pagina, limite)`**
-→ Busca usos do usuário no período via repository  
-→ Calcula total para cada uso  
-→ Calcula totais (totalPassagens, totalGasto)  
-→ Retorna usos + totais + paginação
-
-### transportRepository.js (EXISTENTE — MODIFICAR)
-
-**O arquivo já existe. Verificar métodos existentes e adicionar:**
-
-Métodos NOVOS a adicionar:
-
-**`calcularRecebidoVt(usuarioId, periodoInicio, periodoFim)`**
-→ Query Prisma:
-```javascript
-prisma.transacao.aggregate({
-  where: {
-    usuarioId,
-    tipo: 'RECEITA',
-    recurso: 'VT',
-    data: { gte: periodoInicio, lte: periodoFim }
-  },
-  _sum: { valor: true }
-})
-```
-→ Retorna total ou 0
-
-**`calcularUsadoVt(usuarioId, periodoInicio, periodoFim)`**
-→ Query Prisma:
-```javascript
-prisma.usoVt.findMany({
-  where: {
-    usuarioId,
-    data: { gte: periodoInicio, lte: periodoFim }
-  },
-  select: { quantidade: true, valorPorPassagem: true }
-})
-```
-→ Soma quantidade × valorPorPassagem de cada registro  
-→ Retorna total
-
-**`calcularVendidoNominalVt(usuarioId, periodoInicio, periodoFim)`**
-→ Query Prisma:
-```javascript
-prisma.vendaVt.aggregate({
-  where: {
-    usuarioId,
-    dataVenda: { gte: periodoInicio, lte: periodoFim }
-  },
-  _sum: { valorNominal: true }
-})
-```
-→ Retorna total ou 0
-
-**`buscarUltimaVenda(usuarioId)`**
-→ Query Prisma:
-```etorna venda criada
-
-**`listarVendas(usuarioId, periodoInicio, periodoFim, skip, take)`**
-→ Query Prisma com where, orderBy dataVenda desc, skip, take  
-→ Retorna vendas + count total
-
-**`criarUsoVt(dados)`**
-→ Cria UsoVt com prisma.usoVt.create  
-→ Retorna uso criado
-
-**`listarUsos(usuarioId, periodoInicio, periodoFim, skip, take)`**
-→ Query Prisma com where, orderBy data desc, skip, take  
-→ Retorna usos + count total
-
-### userRepository.js (EXISTENTE — MODIFICAR)
-
-**Verificar se já existe método para buscar configuração do usuário. Se não:**
-
-Métodos possivelmente NOVOS a adicionar:
-
-**`buscarConfiguracaoUsuario(usuarioId)`**
-→ Busca ConfiguracaoUsuario incluindo modoUso, diasIntervaloVendaVt, valorPadraoPassagem  
-→ Retorna configuração
-
-**`atualizarValorPadraoPassagem(usuarioId, valor)`**
-→ Atualiza ConfiguracaoUsuario.valorPadraoPassagem  
-→ Retorna void
-
-### transactionService.js (EXISTENTE — VERIFICAR)
-
-**Verificar se já existe método para criar transação. Se sim, apenas usar. Se não:**
-
-Métodos possivelmente NOVOS a adicionar:
-
-**`criarTransacaoInterna(usuarioId, dados)`**
-→ Cria transação sem validações complexas (usada por outros serviços)  
-→ Retorna transação criada
+* `obterSaldoVt()` → `GET /saldo`
+* `registrarVendaVt()` → `POST /vendas` — `201`
+* `listarVendas()` → `GET /vendas`
+* `registrarUsoVt()` → `POST /usos` — `201`
+* `listarUsos()` → `GET /usos`
+* `atualizarVtHabilitado()` → `PATCH /vt-habilitado`
 
 ---
 
-## 📐 Schemas (Zod)
+### transportService.js (EXISTENTE — IMPLEMENTADO)
 
-### transportSchemas.js (EXISTENTE — MODIFICAR)
+**Arquivo:** `Codigo/Pulso/api/src/services/transportService.js`
 
-**O arquivo já existe. Verificar schemas existentes e adicionar:**
+→ `obterSaldoVt(usuarioId, periodo)` — agrega recebido/usado/vendido, `calcularProximaRecarga`  
+→ `registrarVendaVt(usuarioId, dados)` — valida modo, data, saldo transacional, warning CLT  
+→ `listarVendas(usuarioId, { periodo, pagina, limite })` — totais do período completo  
+→ `registrarUsoVt(usuarioId, dados)` — uso atômico + valor padrão opcional  
+→ `listarUsos(usuarioId, { periodo, pagina, limite })`  
+→ `atualizarVtHabilitado(usuarioId, vtHabilitado)` — só PJ  
 
-Schemas NOVOS a adicionar:
-
-**`obterSaldoQuerySchema`:**
-```javascript
-{
-  periodo: z.string().regex(/^\d{4}-\d{2}$/).optional() // YYYY-MM
-}
-```
-
-**`registrarVendaSchema`:**
-```javascript
-{
-  nomeComprador: z.string().min(1).max(120),
-  dataVenda: z.string().datetime().or(z.date()),
-  valorNominal: z.number().positive('Valor nominal deve ser maior que zero'),
-  valorRecebido: z.number().positive('Valor recebido deve ser maior que zero')
-}
-```
-
-**`listarVendasQuerySchema`:**
-```javascript
-{
-  periodo: z.string().regex(/^\d{4}-\d{2}$/).optional(),
-  pagina: z.coerce.number().int().positive().default(1),
-  limite: z.coerce.number().int().positive().max(100).default(10)
-}
-```
-
-**`registrarUsoSchema`:**
-```javascript
-{
-  quantidade: z.number().int().min(1, 'Quantidade de passagens deve ser pelo menos 1'),
-  valorPorPassagem: z.number().positive('Valor por passagem deve ser maior que zero'),
-  data: z.string().datetime().or(z.date()),
-  salvarValorPadrao: z.boolean().default(false)
-}
-```
-
-**`listarUsosQuerySchema`:**
-```javascript
-{
-  periodo: z.string().regex(/^\d{4}-\d{2}$/).optional(),
-  pagina: z.coerce.number().int().positive().default(1),
-  limite: z.coerce.number().int().positive().max(100).default(10)
-}
-```
+**Helpers:** `podeUsarVt`, `assertModoPermitido`, `mapVenda`, `assertSaldoVtSuficiente`  
+**Constantes:** `MSG_BLOQUEIO`, `MSG_BLOQUEIO_PJ`, `MSG_CLT_WARNING`
 
 ---
 
-## 🛣️ Rotas
+### transportRepository.js (EXISTENTE — IMPLEMENTADO)
 
-### transportRoutes.js (EXISTENTE — MODIFICAR)
+**Arquivo:** `Codigo/Pulso/api/src/repositories/transportRepository.js`
 
-**O arquivo já existe. Verificar rotas existentes e adicionar:**
-
-Rotas NOVAS a adicionar:
-* GET /api/transporte/saldo → transportController.obterSaldoVt  
-  Middlewares: authMiddleware, validateQuery(obterSaldoQuerySchema)
-
-* POST /api/transporte/vendas → transportController.registrarVendaVt  
-  Middlewares: authMiddleware, validateBody(registrarVendaSchema), rateLimitMiddleware
-
-* GET /api/transporte/vendas → transportController.listarVendas  
-  Middlewares: authMiddleware, validateQuery(listarVendasQuerySchema)
-
-* POST /api/transporte/usos → transportController.registrarUsoVt  
-  Middlewares: authMiddleware, validateBody(registrarUsoSchema), rateLimitMiddleware
-
-* GET /api/transporte/usos → transportController.listarUsos  
-  Middlewares: authMiddleware, validateQuery(listarUsosQuerySchema)
-
-**Observação:** As rotas devem estar registradas em src/routes/index.js como:
-```javascript
-app.use('/api/transporte', transportRoutes);
-```
+→ `calcularSaldoRestanteTx(tx, ...)` — fórmula RN-044 dentro da transação  
+→ `criarVendaComTransacao({ vendaData, transacaoData, inicio, fim })` — Serializable  
+→ `criarUsoVtAtomico({ usoData, inicio, fim, totalUsado })` — Serializable  
+→ `calcularRecebidoVt` / `calcularUsadoVt` / `calcularVendidoNominalVt`  
+→ `listarVendas` / `listarUsos` — paginação + totais do período  
+→ `buscarConfiguracao`, `atualizarValorPadraoPassagem`, `atualizarVtHabilitado`
 
 ---
 
-## 🚫 Regras de Negócio
+### transportSchemas.js (EXISTENTE — IMPLEMENTADO)
 
-* **RN-003:** Estagiário recebe VT como benefício e pode vendê-lo
-* **RN-038:** VT só pode ser gasto em despesas da categoria "Transporte"
-* **RN-039:** Despesas de alimentação NUNCA podem usar recurso VT
-* **RN-040:** VT pode ser vendido (somente para modo Estagiário - CLT com aviso)
-* **RN-041:** Ao vender VT, o valor recebido entra como receita do tipo "Dinheiro"
-* **RN-042:** O intervalo entre vendas de VT é configurável (padrão: 30 dias) - vem de diasIntervaloVendaVt
-* **RN-043:** O sistema deve bloquear nova venda antes do intervalo configurado
-* **RN-044:** Saldo VT = Recebido no mês - Usado - Vendido (nominal)
-* **RN-045:** CLT não pode vender VT sem aviso (desconto de 6% em folha)
-* **RN-018:** PJ não recebe VT (funcionalidade bloqueada - mas pode ter exceções)
-* **RN-023:** Pessoa Física não tem benefícios corporativos (func (múltiplas vendas permitidas)
-* **RN-038:** VT só pode ser gasto em despesas da categoria "Transporte"
-* **RN-039:** Despesas de alimentação NUNCA podem usar recurso VT
-* **RN-040:** VT pode ser vendido (somente para modo Estagiário - CLT com aviso) - **múltiplas vendas no mês permitidas**
-* **RN-041:** Ao vender VT, o valor recebido entra como receita do tipo "Dinheiro"
+**Arquivo:** `Codigo/Pulso/api/src/schemas/transportSchemas.js`
 
-**Adicionar novo campo:**
+**Schemas Zod:** `obterSaldoQuerySchema`, `registrarVendaSchema`, `listarVendasQuerySchema`, `registrarUsoSchema`, `listarUsosQuerySchema`, `atualizarVtHabilitadoSchema`
 
-```prisma
-model ConfiguracaoUsuario {
-  // ... campos existentes
-  
-  valorPadraoPassagem Decimal? @db.Decimal(10, 2) @map("valor_padrao_passagem")
-  
-  // ... resto do modelo
-}
-```
+---
 
-**Após adicionar o campo, executar:**
-```bash
-npx prisma migrate dev --name add_valor_padrao_passagem
-```
+### transportRoutes.js (EXISTENTE — IMPLEMENTADO)
 
-**OU se usar migrate reset:**
-```bash
-npx prisma db push
-```
+**Arquivo:** `Codigo/Pulso/api/src/routes/transportRoutes.js`  
+**Base URL:** `/api/transporte`
+
+| Method | Path | Handler |
+|--------|------|---------|
+| GET | `/saldo` | `obterSaldoVt` |
+| POST | `/vendas` | `registrarVendaVt` |
+| GET | `/vendas` | `listarVendas` |
+| POST | `/usos` | `registrarUsoVt` |
+| GET | `/usos` | `listarUsos` |
+| PATCH | `/vt-habilitado` | `atualizarVtHabilitado` |
+
+---
+
+## 🚫 Regras de Negócio (Backend)
+
+* RN-013/045: CLT pode registrar venda com aviso — responsabilidade do usuário  
+* RN-040: Estagiário sem restrição; CLT com aviso  
+* RN-041: Valor recebido na venda → RECEITA recurso DINHEIRO  
+* RN-044: Saldo = recebido − usado − vendido (nominal)  
+* RN-038/039: VT em despesas só categoria Transporte (módulo transações)  
+* PJ/Pessoa Física: bloqueio via `assertModoPermitido` (PJ precisa `vtHabilitado === true`)  
+* Sem intervalo entre vendas (RF-064/065 removidos)  
+* Validação Zod: valores positivos, quantidade ≥ 1, período `YYYY-MM`
 
 ---
 
 # [STORY FRONTEND] Gestão de Vale Transporte — Frontend
 
-Tipo:        Story
-Prioridade:  🔼 High
-Sprint:      (preencher)
-Categoria:   Frontend
-Relator:     (preencher)
-Pai:         [EPIC] Gestão de Vale Transporte
-Data Limite: (preencher)
+**Tipo:**        Story · **✅ Implementado**  
+**Prioridade:**  🔺 Highest  
+**Categoria:**   Frontend  
+**Pai:**         [EPIC] Gestão de Vale Transporte
+
+---
 
 ## 📝 Descrição
 
-Como usuário, eu quero visualizar meu saldo de Vale Transporte, registrar usos e vendas, e acompanhar todo o histórico de movimentações, para que eu possa gerenciar meu VT de forma eficiente.
+**Como usuário**, quero gerenciar VT na rota `/transport-voucher` com cards de saldo, modais de uso/venda, históricos tabulados e fluxo de opt-in para PJ.
 
 ---
 
-## ✅ Critérios de Aceite
+## ✅ Critérios de Aceite (Given/When/Then)
 
-### Cenário 1 — Carregar página de Vale Transporte (Estagiário/CLT)
-**Dado** que o usuário está autenticado e é Estagiário ou CLT,  
-**Quando** acessa a página /vale-transporte,  
-**Então** a página carrega exibindo:
-* Card "Saldo do mês" com 4 métricas: Recebido, Usado (com passagens), Vendido (nominal), Saldo restante
-* Card "Próxima venda" com progresso, dias restantes e data estimada
-* Botões "+ Registrar Uso" e "+ Registrar Venda"
-* Aba "Histórico de vendas" selecionada por padrão
-* Tabela de vendas com dados do mês atual
-* **E** enquanto carrega: exibir skeletons nos cards e tabela
-* **E** se não há vendas: exibir empty state na tabela "Nenhuma venda registrada ainda"
+### Cenário 1 — Carregar página (Estagiário/CLT)
+**Dado** usuário autenticado com VT permitido,  
+**Quando** acessa `/transport-voucher`,  
+**Então** exibe cards (Recebido, Usado, Vendido nominal, Saldo restante), card Próxima recarga, botões Registrar Uso/Venda, aba vendas ativa com tabela paginada.  
+* Loading: skeletons em cards e tabela
 
-### Cenário 2 — Carregar página de Vale Transporte (PJ/Pessoa Física)
-**Dado** que o usuário é PJ ou Pessoa Física,  
-**Quando** acessa a página /vale-transporte,  
-**Então** exibe tela bloqueada com:
-* Ícone de cadeado ou aviso
-* Título: "Funcionalidade indisponível"
-* Mensagem: "Esta funcionalidade está disponível apenas para Estagiários e CLT. Caso você tenha acordo com sua empresa que inclui Vale Transporte, entre em contato com o suporte para habilitar."
-* Botão "Falar com suporte" (abre chat ou email)
-* **E** não carrega dados nem exibe os botões de ação
+### Cenário 2 — Opt-in PJ
+**Dado** usuário PJ com `vtHabilitado == null`,  
+**Quando** acessa a rota,  
+**Então** exibe `VtOptInScreen` ("Sim, recebo" / "Não recebo"); atualiza Redux auth + sidebar.
 
-### Cenário 3 — Abrir modal "Registrar Venda" (disponível para vender)
-**Dado** que o usuário é Estagiário e passou 
-**Dado** que o usuário é Estagiário,  
-**Quando** clica em "+ Registrar Venda",  
-**Então** abre o modal com:
-* Header azul mostrando saldo disponível
-* Campos habilitados: Comprador, Data da venda, Valor nominal vendido, Valor recebido
-* Resumo da transação calculando diferença e novo saldo em tempo real
-* Botões "Cancelar" e "Registrar Venda"
+### Cenário 3 — PJ desabilitado
+**Dado** PJ com `vtHabilitado === false`,  
+**Então** exibe `VtDisabledScreen` com opção de reabilitar.
 
-### Cenário 4o modal "Registrar Venda" está aberto e disponível,  
-**Quando** o usuário preenche:
-* Comprador: Lucas Martins
-* Data da venda: 23/04/2026
-* Valor nominal: R$ 60,00
-* Valor recebido: R$ 50,00
-**E** clica em "Registrar Venda",  
-**Então** exibe spinner no botão,  
-**E** faz POST /api/transporte/vendas,  
-**E** fecha o modal,  
-**E** exibe toast de sucesso "Venda registrada com sucesso! 💜",  
-**E** atualiza cards de saldo e histórico automaticamente (invalidateQueries),  
-**E** atualiza o card "Próxima venda" com a nova data.
+### Cenário 4 — Pessoa Física
+**Então** redirect para rota autenticada padrão (`Navigate`).
 
-### Cenário 6 — Registrar venda CLT com aviso
-**Dado** que o usuário é CLT,  
-**Quando** registra uma venda com sucesso,  
-**Então** exibe toast de warning com ícone de alerta:  
-"⚠️ CLT: VT é descontado em folha (6%). Venda pode gerar irregularidades."
+### Cenário 5 — Registrar venda
+**Quando** preenche modal e confirma,  
+**Então** `POST /transporte/vendas`, toast sucesso, recarrega saldo + histórico; se CLT → toast warning adicional.
 
-### Cenário 6 — Erro ao registrar venda (saldo insuficiente)
-**Dado** que o saldo VT é R$ 52,00,  
-**Quando** o usuário tenta vender R$ 60,00 nominal,  
-**Então** a requisição retorna 400,  mpo "Valor nominal vendido":  
-"Saldo insuficiente. Você tem apenas R$ 52,00 disponível."  
-**E** o modal NÃO fecha,  
-**E** o usuá5io pode corrigir o valor.
+### Cenário 6 — Erro saldo insuficiente
+**Quando** nominal > saldo disponível,  
+**Então** erro inline no modal (validação local + mensagem API); modal permanece aberto.
 
-### Cenário 7 — Cálculo automático de diferença e novo saldo
-**Dado** que o modal "Registrar Venda" está aberto,  
-**Quando** o usuário digita:
-* Valor nominal: R$ 60,00
-* Valor recebido: R$ 50,00
-**Então** o resumo é atualizado em tempo real mostrando:
-* Valor nominal: R$ 60,00
-* Valor recebido: R$ 50,00
-* Diferença: **-R$ 10,00 (perda)** em vermelho
-* Novo saldo VT: R$ 112,00 (calculado: saldo atual - nominal)
+### Cenário 7 — Registrar uso
+**Quando** informa passagens e valor,  
+**Então** preview fórmula (qtd × valor), `POST /transporte/usos`, atualiza cards e aba usos.
 
-### Cenário 9 — Abrir modal "Registrar Uso"
-**Dado** que8o usuário está na página de Vale Transporte,  
-**Quando** clica em "+ Registrar Uso",  
-**Então** abre o modal com:
-* Header azul mostrando saldo VT atual e passagens usadas no mês
-* Campo "Quantidade de passagens" com stepper (padrão: 2)
-* Campo "Valor por passagem" preenchido com valor padrão do usuário ou R$ 4,80
-* Campo "Data" preenchido com data atual
-* Resumo do uso mostrando fórmula e novo saldo
-* Toggle "Salvar valor da passagem como padrão" ligado
-* Botões "Cancelar" e "Registrar Uso"
+### Cenário 8 — Filtrar período
+**Quando** seleciona mês no `MonthPicker` e clica Filtrar,  
+**Então** recarrega saldo e histórico ativo para `YYYY-MM`; botão Limpar filtros volta ao mês atual.
 
-### Cenário 10 — Registrar uso com sucesso
-**Dado** que9 modal "Registrar Uso" está aberto,  
-**Quando** o usuário preenche:
-* Quantidade: 2 passagens
-* Valor por passagem: R$ 4,80
-* Data: 15/05/2026
-* Toggle "Salvar como padrão": ligado
-**E** clica em "Registrar Uso",  
-**Então** exibe spinner no botão,  
-**E** faz POST /api/transporte/usos com salvarValorPadrao = true,  
-**E** fecha o modal,  
-**E** exibe toast "Uso registrado com sucesso! 💜",  
-**E** atualiza cards de saldo,  
-**E** atualiza aba "Histórico de usos".
+### Cenário 9 — Histórico com cores
+**Então** diferença negativa vermelha, positiva verde, zero neutro (`formatDiferenca`).
 
-### Cenário 11 — Cálculo automático do total do uso
-**Dado** que 0 modal "Registrar Uso" está aberto,  
-**Quando** o usuário altera:
-* Quantidade: 3 passagens
-* Valor: R$ 5,00
-**Então** o resumo é atualizado em tempo real mostrando:
-* Total do uso: R$ 5,00 × 3 = R$ 15,00
-* Novo saldo VT: R$ 157,00 (saldo atual - total)
-
-### Cenário 11 — Alternar entre abas de histórico
-**Dado** que o usuário está na aba "Histórico de vendas",  
-**Quando** clica na aba "Histórico de usos",  
-**Então** a tabela é trocada instantaneamente mostrando:
-* Colunas: Data, Quantidade, Valor por passagem, Total
-* Dados dos usos do período
-* Linha de TOTAL na parte inferior
-* **E** mantém o filtro de período aplicado em ambas as abas
-
-### Cenário 12 — Filtrar histórico por período
-**Dado** que o usuário está na aba "Histórico de vendas",  
-**Quando** seleciona o período "Março de 2026" no filtro,  
-**Então** faz GET /api/transporte/vendas?periodo=2026-03,  
-**E** atualiza a tabela com as vendas de março,  
-**E** atualiza a linha de TOTAL com os valores do período.
-
-### Cenário 13 — Paginação do histórico
-**Dado** que há mais de 10 vendas no período,  
-**Quando** o usuário clica em "2" na paginação,  
-**Então** faz GET /api/transporte/vendas?periodo=2026-04&pagina=2&limite=10,  
-**E** atualiza a tabela com os resultados da página 2,  
-**E** destaca o número "2" como página ativa.
-
-### Cenário 14 — Exibir diferença com cores corretas
-**Dado** que o usuário está visualizando o histórico de vendas,  
-**Quando** uma venda tem:
-* Nominal R$ 22,00, Recebido R$ 20,00 → Diferença: **- R$ 2,00** em vermelho
-* Nominal R$ 22,00, Recebido R$ 23,00 → Diferença: **+ R$ 1,00** em verde
-* Nominal R$ 22,00, Recebido R$ 22,00 → Diferença: **R$ 0,00** em cinza
-**Então** as cores são aplicadas corretamente em cada linha.
-
-### Cenário 15 — Registrar múltiplas vendas no mesmo mês
-**Dado** que o usuário já vendeu R$ 100,00 de VT no mês,  
-**Quando** registra outra venda de R$ 50,00 para outra pessoa,  
-**Então** ambas as vendas são registradas com sucesso,  
-**E** o histórico mostra as duas vendas separadamente,  
-**E** o card "Vendido (nominal)" soma ambas: R$ 150,00,  
-**E** não há restrição de quantidade de vendas por período.
+### Cenário 10 — Paginação
+**Dado** > 10 registros no período,  
+**Então** `Pagination` troca página sem perder filtro de período.
 
 ---
 
-## 🎨 Visual e UX
+## 🛠️ Implementação (o que foi feito)
 
-### Cards de Resumo
+### transportService.js (EXISTENTE — IMPLEMENTADO)
 
-**Card "Saldo do mês" (principal):**
-- Fundo branco (modo claro) ou cinza escuro (modo escuro)
-- Layout em grid 2×2
-- Cada métrica tem:
-  - Ícone colorido à esquerda
-  - Label em cinza
-  - Valor grande em negrito
-  - Subtexto adicional (ex: "10 passagens")
-- **Recebido:** Ícone seta para baixo (azul)
-- **Usado:** Ícone de ônibus (roxo)
-- **Vendido:** Ícone de seta para cima (laranja)
-- **Saldo restante:** Ícone de carteira (verde)
+**Arquivo:** `Codigo/Pulso/web/src/services/transportService.js`
 
-### Botões de Ação
-- **Registrar Uso:** Outline roxo, fundo transparente, hover com fundo roxo claro
-- **Registrar Venda:** Preenchido roxo, hover com roxo mais escuro
-- Ambos com ícone "+" à esquerda
-
-### Tabs de Histórico
-- Design Material-UI padrão
-- Borda inferior roxa na aba ativa
-- Texto cinza nas inativas, roxo na ativa
-- Transição suave ao trocar
-
-### Tabelas
-- Header com fundo cinza claro
-- Linhas alternadas (zebra striping)
-- Hover em cada linha com fundo roxo muito claro
-- Linha de TOTAL em negrito com fundo cinza
-- Valores monetários alinhados à direita
-- Diferenças com cores: verde (+), vermelho (-), cinza (0)
-
-### Modal "Registrar Venda"
-- Largura: 600px
-- Header informativo (card azul claro) no topo:
-  - Ícone de ônibus azul
-  - Saldo disponível em destaque
-  - Última venda e status com ícone
-- Campos organizados verticalmente
-- Labels à esquerda, inputs ocupando largura total
-- Textos auxiliares em cinza abaixo dos campos
-- Ícones de info com tooltip
-- Resumo da transação em card cinza claro:
-  - Layout em lista vertical
-  - Diferença em destaque (verde ou vermelho)
-  - Novo saldo em azul
-  - Próxima venda em azul com ícone de calendário
-- Aviso informativo em card azul claro no final
-- Botões no footer: Cancelar (esquerda), Registrar Venda (direita)
-
-### Modal "Registrar Uso"
-- Largura: 500px (menor que venda)
-- Header informativo (card azul claro)
-- Stepper de quantidade:
-  - Botão "-" à esquerda
-  - Número grande no centro
-  - Botão "+" à direita
-  - Botões circulares roxos
-- Resumo do uso em card azul claro:
-  - Ícone de calculadora
-  - Fórmula visível: "R$ 4,80 × 2 = R$ 9,60"
-  - Novo saldo em azul
-- Toggle personalizado (switch Material-UI)
-- Layout responsivo
-
-### Responsividade
-- Desktop (>1024px): Cards lado a lado, tabela completa
-- Tablet (768-1024px): Cards empilhados, tabela com scroll horizontal
-- Mobile (<768px): Tudo empilhado, modais ocupam 95% da largura
-
-### Tela Bloqueada (PJ/Pessoa Física)
-- Centralizada vertical e horizontalmente
-- Ícone de cadeado grande (roxo)
-- Título em negrito
-- Mensagem explicativa
-- Botão "Falar com suporte" em destaque
+→ `obterSaldo(periodo, options)` → `GET /transporte/saldo`  
+→ `listarVendas(periodo, pagina, limite, options)` → `GET /transporte/vendas`  
+→ `listarUsos(periodo, pagina, limite, options)` → `GET /transporte/usos`  
+→ `registrarVenda(payload)` → `POST /transporte/vendas`  
+→ `registrarUso(payload)` → `POST /transporte/usos`  
+→ `atualizarVtHabilitado(vtHabilitado)` → `PATCH /transporte/vt-habilitado`
 
 ---
 
-## ⚙️ Integração Técnica
+### TransportVoucherPage.jsx (EXISTENTE — IMPLEMENTADO)
 
-### Hooks (TanStack Query)
+**Arquivo:** `Codigo/Pulso/web/src/pages/TransportVoucherPage.jsx`  
+**Rota:** `/transport-voucher` (`App.jsx`, sidebar `sidebarNavigation.js`)
 
-#### useTransport.js (EXISTENTE — MODIFICAR)
+Orquestra: opt-in/disabled/redirect PF, filtro período, saldo, tabs vendas/usos, modais, AbortController, Redux `setUser` após opt-in.
 
-**O arquivo já existe. Verificar hooks existentes e adicionar:**
+---
 
-Hooks NOVOS a adicionar:
+### Componentes (EXISTENTE — IMPLEMENTADO)
 
-**`useGetVtSaldo(periodo)`**
-→ Query key: `['transport', 'saldo', periodo]`  
-→ Query fn: transportService.obterSaldo(periodo)  
-→ Retorna: { data: { recebido, usado, passagensUsadas, vendidoNominal, saldoRestante, proximaVenda }, isLoading, isError }  
-→ Configuração: staleTime 30 segundos, refetchInterval 60 segundos (para atualizar progresso da próxima venda)
+**Pasta:** `Codigo/Pulso/web/src/components/features/transport/`
 
-**`useGetVtVendas(periodo, pagina, limite)`**
-→ Query key: `['transport', 'vendas', periodo, pagina]`  
-→ Query fn: transportService.listarVendas(periodo, pagina, limite)  
-→ Retorna: { data: { vendas, totais, paginacao }, isLoading, isError }   }, isLoading, isError }  
-→ Configuração: staleTime 30 segundos
+| Componente | Responsabilidade |
+|------------|------------------|
+| `VtBalanceCards.jsx` | Grid 4 métricas + card próxima recarga / countdown |
+| `VtSaleHistory.jsx` | Tabela vendas + totais + empty state |
+| `VtUsageHistory.jsx` | Tabela usos + totais + empty state |
+| `VtSaleModal.jsx` | Form venda, preview diferença/novo saldo |
+| `VtUsageModal.jsx` | Stepper passagens, valor, toggle salvar padrão |
+| `VtOptInScreen.jsx` | Opt-in PJ |
+| `VtDisabledScreen.jsx` | PJ opt-out — reabilitar |
+| `VtFieldLabel.jsx` | Label + hint reutilizável nos modais |
+| `VtBlockedScreen.jsx` | Tela bloqueada genérica (**não referenciada**) |
 
-**`useGetVtUsos(periodo, pagina, limite)`**
-→ Query key: `['transport', 'usos', periodo, pagina]`  
-→ Query fn: transportService.listarUsos(periodo, pagina, limite)  
-→ Retorna: { data: { usos, totais, paginacao }, isLoading, isError }  
-→ Configuração: staleTime 1 min
+---
 
-**`useRegistrarVendaVt()`**
-→ Mutation fn: transportService.registrarVenda(dados)  
-→ onSuccess: invalidateQueries(['transport', 'saldo'], ['transport', 'vendas']), toast sucesso, se CLT exibir warning  
-→ onError: toast erro com mensagem do backend  
-→ Retorna: { mutate, isLoading }
+### Utils e estilos (EXISTENTE — IMPLEMENTADO)
 
-**`useRegistrarUsoVt()`**
-→ Mutation fn: transportService.registrarUso(dados)  
-→ onSuccess: invalidateQueries(['transport', 'saldo'], ['transport', 'usos']), toast sucesso  
-→ onError: toast erro  
-→ Retorna: { mutate, isLoading }
+| Arquivo | Função |
+|---------|--------|
+| `web/src/utils/transportUtils.js` | Modo VT, sidebar filter, reset countdown, `formatDiferenca`, datas ISO |
+| `web/src/styles/transport.css` | Estilos `.vt-page`, cards, tabelas, modais, blocked |
+| `web/src/config/sidebarNavigation.js` | Item `{ id: 'vale-transporte', path: '/transport-voucher' }` |
 
-### Services
+---
 
-#### transportService.js (EXISTENTE — MODIFICAR)
+### Rotas e navegação (EXISTENTE — IMPLEMENTADO)
 
-**O arquivo já existe. Verificar métodos existentes e adicionar:**
+**`web/src/App.jsx`:** `<Route path="transport-voucher" element={<TransportVoucherPage />} />`  
+**Sidebar:** filtrada por `filterSidebarNavForUser` em `useSidebarState.js`
 
-Métodos NOVOS a adicionar:
-
-**`obterSaldo(periodo)`**
-→ GET /api/transporte/saldo  
-→ Query params: periodo (YYYY-MM)  
-→ Retorna: { recebido, usado, passagensUsadas, vendidoNominal, saldoRestante, proximaVenda }
-
-**`listarVendas(periodo, pagina, limite)`**
-→ GET /api/transporte/vendas  
-→ Query params: periodo, pagina, limite  
-→ Retorna: { vendas, totais, paginacao }
-
-**`listarUsos(periodo, pagina, limite)`**
-→ GET /api/transporte/usos  
-→ Query params: periodo, pagina, limite  
-→ Retorna: { usos, totais, paginacao }
-
-**`registrarVenda(dados)`**
-→ POST /api/transporte/vendas  
-→ Body: { nomeComprador, dataVenda, valorNominal, valorRecebido }  
-→ Retorna: venda criada com diferenca, novoSaldoVt, proximaDataVenda, warning (se CLT)
-
-**`registrarUso(dados)`**
-→ POST /api/transporte/usos  
-→ Body: { quantidade, valorPorPassagem, data, salvar
-→ Retorna: uso criado com totalUsado, novoSaldoVt
-
-### Componentes
-
-#### Transport/ (EXISTENTE — MODIFICAR)
-
-**O arquivo `Transport.jsx` existe mas pode estar vazio ou básico. Criar estrutura completa:**
-
-**Estrutura:**
-```jsx
-<TransportPageContainer>
-  {modoUso === 'PJ' || modoUso === 'PESSOA_FISICA' ? (
-    <TelaBloqueda />
-  ) : (
-    <>
-      <PageHeader>
-        <Title>Vale Transporte</Title>
-        <Subtitle>Acompanhe seu saldo, usos e vendas do vale transporte.</Subtitle>
-      </PageHeader>
-      
-      <BalanceSection>
-        <VTBalanceCard saldo={saldo} />
-      </BalanceSection>
-      
-      <ActionsSection>
-        <Button variant="outline" onClick={abrirModalUso}>
-          + Registrar Uso
-        </Button>
-        <Button variant="filled" onClick={abrirModalVenda}>
-          + Registrar Venda
-        </Button>
-      </ActionsSection>
-      
-      <HistorySection>
-        <Tabs value={abaAtiva} onChange={setAbaAtiva}>
-          <Tab value="vendas" label="Histórico de vendas" />
-          <Tab value="usos" label="Histórico de usos" />
-        </Tabs>
-        
-        <FiltroPeriodo value={periodo} onChange={setPeriodo} />
-        
-        {abaAtiva === 'vendas' ? (
-          <VTSaleHistory vendas={vendas} totais={totaisVendas} />
-        ) : (
-          <VTUsageHistory usos={usos} totais={totaisUsos} />
-        )}
-        
-        <Pagination {...paginacao} />
-      </HistorySection>
-      
-      {modalVendaAberto && (
-        <VTSaleForm
-          saldo={saldo}
-          proximaVenda={proximaVenda}
-          onClose={fecharModalVenda}
-          onSubmit={handleRegistrarVenda}
-        />
-      )}
-      
-      {modalUsoAberto && (
-        <VTUsageForm
-          saldo={saldo}
-          passagensUsadas={passagensUsadas}
-          valorPadrao={valorPadraoPassagem}
-          onClose={fecharModalUso}
-          onSubmit={handleRegistrarUso}
-        />
-      )}
-    </>
-  )}
-</TransportPageContainer>
-```
-
-**Estado local:**
-```javascript
-const { data: usuario } = useAuth();
-const modoUso = usuario?.configuracoes?.modoUso;
-const [periodo, setPeriodo] = useState(mesAtual); // YYYY-MM
-const [abaAtiva, setAbaAtiva] = useState('vendas');
-const [pagina, setPagina] = useState(1);
-const [modalVendaAberto, setModalVendaAberto] = useState(false);
-const [modalUsoAberto, setModalUsoAberto] = useState(false);
-
-const { data: saldo } = useGetVtSaldo(periodo);
-const { data: vendasData } = useGetVtVendas(periodo, pagina, 10);
-const { data: usosData } = useGetVtUsos(periodo, pagina, 10);
-```
-
-#### VTBalanceCard/ (EXISTENTE — MODIFICAR)
-
-**Verificar se existe e está implementado. Se vazio, criar:**
-
-Props:
-```typescript
-{
-  saldo: {
-    recebido: string,
-    usado: string,
-    passagensUsadas: number,
-    vendidoNominal: string,
-    saldoRestante: string
-  }
-}
-```
-
-**Componentes internos:**
-- Grid 2×2 com 4 cards de métrica
-- Cada métrica: ícone, label, valor, subtexto
-
-#### VTNextSaleCountdown/ (EXISTENTE — MODIFICAR)
-
-**O arquivo existe. Verificar se está implementado:**
-
-Props:
-```typescript
-{
-  saldo: { saldoRestante: string, ... },
-  proximaVenda: { disponivel: boolean, ... },
-  onClose: () => void,
-  onSubmit: (dados) => void
-}
-```
-
-**Estado local:**
-```javascript
-const [nomeComprador, setNomeComprador] = useState('');
-const [dataVenda, setDataVenda] = useState(new Date());
-const [valorNominal, setValorNominal] = useState('');
-const [valorRecebido, setValorRecebido] = useState('');
-const [erro, setErro] = useState('');
-
-// Cálculos em tempo real
-const diferenca = parseFloat(valorRecebido) - parseFloat(valorNominal);
-const novoSaldo = parseFloat(saldo.saldoRestante) - parseFloat(valorNominal);
-const proximaDataVenda = addDays(dataVenda, 30); // ou diasIntervaloVendaVt
-```
-
-**Validações locais:**
-- Se valorNominal > saldo.saldoRestante: exibir erro imediatamente
-- Se valorNominal <= 0 ou valorRecebido <= 0: erro
-- 
-#### VTUsageForm/ (EXISTENTE — MODIFICAR)
-
-**O arquivo existe. Verificar implementação:**
-
-Props:
-```typescript
-{
-  saldo: { saldoRestante: string, ... },
-  passagensUsadas: number,
-  valorPadrao: number | null,
-  onClose: () => void,
-  onSubmit: (dados) => void
-}
-```
-
-**Estado local:**
-```
-
-**Validações locais:**
-- Se valorNominal > saldo.saldoRestante: exibir erro imediatamente
-- Se valorNominal <= 0 ou valorRecebido <= 0: erro
-const totalUsado = quantidade * valorPorPassagem;
-const novoSaldo = parseFloat(saldo.saldoRestante) - totalUsado;
-```
-
-**Stepper:**
-- Botão "-" chama `setQuantidade(q => Math.max(1, q - 1))`
-- Botão "+" chama `setQuantidade(q => q + 1)`
-
-#### VTSaleHistory/ (EXISTENTE — MODIFICAR)
-
-**Verificar se existe. Se vazio, criar:**
-
-Props:
-```typescript
-{
-  vendas: Array<Venda>,
-  totais: {
-    totalNominal: string,
-    totalRecebido: string,
-    perdaTotal: string
-  }
-}
-```
-
-**Tabela:**
-- Colunas: Data, Comprador, Nominal, Recebido, Diferença
-- Formatação da diferença com cores:
-  - `diferenca < 0` → vermelho
-  - `diferenca > 0` → verde
-  - `diferenca === 0` → cinza
-- Linha de TOTAL no footer
-
-#### VTUsageHistory/ (NOVO — CRIAR)
-
-**Este componente NÃO existe.**
-
-Criar em: `src/components/features/transport/VTUsageHistory/VTUsageHistory.jsx`  
-Seguir padrão de: VTSaleHistory
-
-Props:
-```typescript
-{
-  usos: Array<Uso>,
-  totais: {
-    totalPassagens: number,
-    totalGasto: string
-  }
-}
-```
-
-**Tabela:**
-- Colunas: Data, Quantidade, Valor por passagem, Total
-- Total = quantidade × valorPorPassagem
-- Linha de TOTAL no footer
-
-#### TelaBloqueda/ (NOVO — CRIAR)
-
-**Este componente NÃO existe.**
-
-Criar em: `src/components/features/transport/TelaBloqueda/TelaBloqueda.jsx`
-
-**Estrutura:**
-```jsx
-<Container>
-  <Icon>🔒</Icon>
-  <Title>Funcionalidade indisponível</Title>
-  <Message>
-    Esta funcionalidade está disponível apenas para Estagiários e CLT.
-    Caso você tenha acordo com sua empresa que inclui Vale Transporte,
-    entre em contato com o suporte para habilitar.
-  </Message>
-  <Button onClick={abrirChat}>Falar com suporte</Button>
-</Container>
-```
+---
 
 ### Endpoints consumidos
 
-* GET /api/transporte/saldo → Obter saldo e resumo do VT
-* POST /api/transporte/vendas → Registrar venda de VT
-* GET /api/transporte/vendas → Listar histórico de vendas
-* POST /api/transporte/usos → Registrar uso de VT
-* GET /api/transporte/usos → Listar histórico de usos
+* `GET /api/transporte/saldo` · `GET /api/transporte/vendas` · `GET /api/transporte/usos`
+* `POST /api/transporte/vendas` · `POST /api/transporte/usos`
+* `PATCH /api/transporte/vt-habilitado`
 
 ---
 
-## 🚫 Regras de Negócio
+## 📐 Protótipos
 
-* **RN-003:** Estagiário recebe VT como benefício e pode vendê-lo
-* **RN-038:** VT só pode ser gasto em despesas da categoria "Transporte"
-* **RN-039:** Despesas de alimentação NUNCA podem usar recurso VT
-* **RN-040:** VT pode ser vendido (Estagiário sem restrições)
-* **RN-041:** Ao vender VT, o valor recebido entra como receita DINHEIRO
-* **RN-042:** Intervalo entre vendas configurável (padrão 30 dias)
-* **RN-043:** Sistema bloqueia nova venda antes do intervalo
-* **RN-044:** Saldo VT = Recebido - Usado - Vendido (nominal)
-* **RN-045:** CLT pode vender mas com aviso (desconto 6% em folha)
-* **RN-018:** PJ não recebe VT (tela bloqueada, mas pode ter exceções)
-* **RN-023:** Pessoa Física sem benefícios corporativos (tela bloqueada, mas pode ter exceções)
+**Pasta:** `Documentacao/05-Prototipos/Financeiro/Vale Transporte/`
+
+- Painel principal (claro/escuro): `PainelValeTransp.png`
+- Modal registrar venda: `RegistVenda.png`
+- Modal registrar uso: `RegistUso.png`
 
 ---
 
-## 🛠️ Refinamento
+## 📚 Documentação
 
-* **Estado Global:** TanStack Query para cache de saldo, vendas e usos
-* **Estado Local:** useState para filtros, abas, paginação, modais dentro do componente Transport
-* **Validação:** Zod no backend + validação local no frontend para feedback imediato
-* **Máscaras:** react-number-format para campos de valor (R$ 0,00)
-* **DatePicker:** Material-UI DatePicker ou react-datepicker
-* **Cálculos em tempo real:** useEffect ou useMemo para recalcular diferença, novo saldo, progresso
-* **Tratamento de Erros:** Toast para erros globais + mensagem inline no formulário
-* **Loading States:** Skeletons nos cards e tabelas, spinners nos botões de ação
-* **Empty States:** Ilustração + texto quando não há vendas ou usos
-* **Responsividade:** Mobile-first, modais em fullscreen no mobile
-* **Acessibilidade:** Labels nos inputs, aria-labels nos botões, navegação por teclado
-* **Atualização automática:** refetchInterval no hook de saldo para atualizar progresso da próxima venda a cada 60 segundos
+- [PO M08](../../Documentacao/03-Auditorias/Product%20Owner/08-Vale-Transporte.md)
+- [Requisitos RF-059–063, RF-066](../../Documentacao/01-Produto/Requisitos/Readme.md)
+- [Web Readme](../../Documentacao/02-Engenharia/Web/Readme.md)
+- [API Readme](../../Documentacao/02-Engenharia/API/Readme.md)
 
 ---
-Múltiplas vendas:** Não há restrição de quantidade de vendas por período - usuário pode vender "picado" para várias pessoa
+
+## 📅 Histórico
+
+| Data | Evento |
+|------|--------|
+| abr/2026 | Schema inicial VT + evolução Prisma |
+| jun/2026 | Backend `/api/transporte` + frontend `/transport-voucher` entregues |
+| jun/2026 | Migration remove intervalo venda VT (RF-064/065) |
+| ago/2026 | Auditoria PO M08 — decisão B CLT, Serializable, docs alinhados |

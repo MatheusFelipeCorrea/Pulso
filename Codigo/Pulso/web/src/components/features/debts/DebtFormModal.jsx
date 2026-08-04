@@ -106,7 +106,7 @@ export function DebtFormModal({ open, onClose, onSubmit, submitting = false, div
 
   return (
     <Modal isOpen={open} onClose={onClose} size="xl" className="debt-form-modal">
-      <form className="debt-form" onSubmit={handleSubmit}>
+      <form className="debt-form" onSubmit={handleSubmit} noValidate>
         <header className="debt-form__header">
           <div>
             <h2>{isEdit ? 'Editar Empréstimo' : 'Novo Empréstimo'}</h2>

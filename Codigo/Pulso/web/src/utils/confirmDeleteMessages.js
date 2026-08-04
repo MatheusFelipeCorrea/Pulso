@@ -5,7 +5,11 @@ export function deleteTransactionMessage(nome) {
 }
 
 export function deleteRecurringTransactionMessage(nome) {
-  return `A transação "${nome}" é recorrente. Como deseja excluir?`
+  return (
+    `A transação "${nome}" faz parte de uma série recorrente. ` +
+    'Escolha se deseja excluir só esta ocorrência ou encerrar a série a partir desta data. ' +
+    'O histórico anterior será mantido.'
+  )
 }
 
 export function deleteGoalMessage(nome) {
@@ -14,6 +18,14 @@ export function deleteGoalMessage(nome) {
 
 export function deleteTripMessage(nome) {
   return `A viagem "${nome}" e todos os dados relacionados serão excluídos.`
+}
+
+export function deleteTripExpenseMessage(nome) {
+  return `A pretensão "${nome}" será excluída permanentemente.`
+}
+
+export function deleteTripObservationMessage(nome) {
+  return `A observação "${nome}" será excluída permanentemente.`
 }
 
 export function deleteReminderMessage(nome) {

@@ -83,7 +83,7 @@ const obterMarcadoresDias = async (usuarioId, inicio, fim) => {
         if (tx.tipo === 'RECEITA') {
             dias[key].receitas += valor;
             dias[key].temReceita = true;
-        } else {
+        } else if (tx.tipo === 'DESPESA') {
             dias[key].despesas += valor;
             dias[key].temDespesa = true;
         }
@@ -205,7 +205,7 @@ const obterDetalheDia = async (usuarioId, query) => {
     for (const tx of transacoes) {
         const valor = Number(tx.valor);
         if (tx.tipo === 'RECEITA') receitas += valor;
-        else despesas += valor;
+        else if (tx.tipo === 'DESPESA') despesas += valor;
     }
 
     return {

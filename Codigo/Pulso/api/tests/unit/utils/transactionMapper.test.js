@@ -13,7 +13,7 @@ describe('transactionMapper', () => {
             tipo: 'DESPESA',
         };
 
-        expect(mapCategoria(categoria)).toEqual(categoria);
+        expect(mapCategoria(categoria)).toEqual({ ...categoria, grupoBeneficio: null });
     });
 
     it('mapTransacao mapeia categoria e tags', () => {
@@ -50,6 +50,7 @@ describe('transactionMapper', () => {
             id: 'trx-1',
             tipo: 'DESPESA',
             recurso: 'DINHEIRO',
+            recursoDestino: null,
             valor: '100.00',
             descricao: 'Corrida',
             data: '2026-06-01T12:00:00.000Z',
@@ -62,6 +63,7 @@ describe('transactionMapper', () => {
                 icone: 'bus',
                 cor: '#123456',
                 tipo: 'DESPESA',
+                grupoBeneficio: null,
             },
             tags: [
                 {
@@ -91,5 +93,25 @@ describe('transactionMapper', () => {
 
         expect(result.categoria).toBeUndefined();
         expect(result.tags).toEqual([]);
+    });
+
+    it('mapTransacao mapeia transferência sem categoria com recurso de destino (RF-140)', () => {
+        const result = mapTransacao({
+            id: 'trx-3',
+            tipo: 'TRANSFERENCIA',
+            recurso: 'DINHEIRO',
+            recursoDestino: 'POUPANCA',
+            valor: '200',
+            descricao: null,
+            data: new Date('2026-06-05T12:00:00.000Z'),
+            recorrente: false,
+            regraRecorrencia: null,
+            paiId: null,
+            categoria: null,
+            tags: [],
+        });
+
+        expect(result.recursoDestino).toBe('POUPANCA');
+        expect(result.categoria).toBeUndefined();
     });
 });

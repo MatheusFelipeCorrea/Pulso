@@ -1,10 +1,19 @@
 const logger = require('../utils/logger');
-
+const { isPrismaUniqueViolation, mapPrismaUniqueViolation } = require('../utils/prismaErrors');
 const errorMiddleware = (err, req, res, next) => {
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
         return res.status(400).json({
             status: 'error',
             message: 'Corpo da requisição inválido',
+        });
+    }
+
+    if (isPrismaUniqueViolation(err)) {
+        const mapped = mapPrismaUniqueViolation(err);
+        logger.warn(`${mapped.statusCode} - ${mapped.message}`);
+        return res.status(mapped.statusCode).json({
+            status: 'error',
+            message: mapped.message,
         });
     }
 

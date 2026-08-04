@@ -363,7 +363,11 @@ export default function BudgetPage() {
 
 
 
-      <BudgetSummaryCards resumo={status?.resumo} loading={loading} />
+      <BudgetSummaryCards
+        resumo={status?.resumo}
+        rendaMensalPlanejada={status?.rendaMensalPlanejada ?? 0}
+        loading={loading}
+      />
 
 
 

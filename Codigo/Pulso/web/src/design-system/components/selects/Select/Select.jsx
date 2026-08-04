@@ -101,6 +101,11 @@ export const Select = ({
               {placeholder}
             </span>
           )}
+          {selectedOption?.trailingText ? (
+            <span className="shrink-0 text-sm text-[var(--ds-color-text-secondary)]">
+              {selectedOption.trailingText}
+            </span>
+          ) : null}
           <SelectChevron open={isOpen} />
         </SelectTrigger>
 

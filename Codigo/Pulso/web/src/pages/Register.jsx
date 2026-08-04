@@ -12,6 +12,10 @@ import {
   Checkbox,
   useToast,
 } from '@/design-system/components'
+import {
+  PasswordRulesChecklist,
+  PasswordStrengthBar,
+} from '@/components/auth/PasswordStrengthHints'
 import { registerSchema } from '@/schemas/authSchemas'
 import * as authService from '@/services/authService'
 
@@ -62,6 +66,7 @@ export default function Register() {
   })
 
   const aceitarTermos = watch('aceitarTermos')
+  const senha = watch('senha')
   const canSubmit = isValid && aceitarTermos && !isSubmitting
 
   const onSubmit = async (data) => {
@@ -151,14 +156,18 @@ export default function Register() {
               name="senha"
               control={control}
               render={({ field }) => (
-                <InputPassword
-                  placeholder="Senha"
-                  error={errors.senha?.message}
-                  value={field.value}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  name={field.name}
-                />
+                <div>
+                  <InputPassword
+                    placeholder="Senha"
+                    error={errors.senha?.message}
+                    value={field.value}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    name={field.name}
+                    autoComplete="new-password"
+                  />
+                  <PasswordStrengthBar password={senha} />
+                </div>
               )}
             />
 
@@ -177,6 +186,8 @@ export default function Register() {
               )}
             />
           </div>
+
+          <PasswordRulesChecklist password={senha} />
 
           <Controller
             name="aceitarTermos"

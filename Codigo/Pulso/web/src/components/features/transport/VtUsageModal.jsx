@@ -83,7 +83,7 @@ export function VtUsageModal({
 
   return (
     <Modal isOpen={open} onClose={onClose} size="lg">
-      <form className="tx-form vt-form" onSubmit={handleSubmit}>
+      <form className="tx-form vt-form" onSubmit={handleSubmit} noValidate>
         <header className="tx-form__header">
           <h2 className="tx-form__title">Registrar Uso de VT</h2>
           <IconButton

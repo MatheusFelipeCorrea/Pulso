@@ -73,21 +73,21 @@ describe('authService', () => {
             expect(result.email).toBe('a@b.com');
         });
 
-        it('remove usuário se envio de email falhar', async () => {
+        it('mantém usuário se envio de email falhar', async () => {
             authRepositoryMock.findByEmail.mockResolvedValue(null);
-            authRepositoryMock.createUser.mockResolvedValue({ id: 'new-user' });
+            authRepositoryMock.createUser.mockResolvedValue({ id: 'new-user', email: 'a@b.com' });
             emailProviderMock.sendVerificationEmail.mockRejectedValue(new Error('SMTP down'));
 
-            await expect(
-                authService.registerUser({
-                    nome: 'Teste',
-                    email: 'a@b.com',
-                    senha: validPassword,
-                    confirmarSenha: validPassword,
-                })
-            ).rejects.toBeInstanceOf(AppError);
+            const result = await authService.registerUser({
+                nome: 'Teste',
+                email: 'a@b.com',
+                senha: validPassword,
+                confirmarSenha: validPassword,
+            });
 
-            expect(authRepositoryMock.deleteUser).toHaveBeenCalledWith('new-user');
+            expect(authRepositoryMock.deleteUser).not.toHaveBeenCalled();
+            expect(result.emailPendente).toBe(true);
+            expect(result.email).toBe('a@b.com');
         });
     });
 
@@ -189,7 +189,27 @@ describe('authService', () => {
     });
 
     describe('refreshAccessToken', () => {
-        it('rejeita refresh token revogado ou expirado', async () => {
+        it('rejeita refresh token inexistente', async () => {
+            authRepositoryMock.findRefreshToken.mockResolvedValue(null);
+
+            await expect(authService.refreshAccessToken('rt-desconhecido')).rejects.toMatchObject({
+                statusCode: 401,
+            });
+        });
+
+        it('rejeita refresh token expirado', async () => {
+            authRepositoryMock.findRefreshToken.mockResolvedValue({
+                revogado: false,
+                expiraEm: new Date(Date.now() - 1000),
+                usuarioId: 'usr-1',
+            });
+
+            await expect(authService.refreshAccessToken('rt')).rejects.toMatchObject({
+                statusCode: 401,
+            });
+        });
+
+        it('rejeita refresh token já revogado e revoga toda a sessão do usuário (proteção contra reuse)', async () => {
             authRepositoryMock.findRefreshToken.mockResolvedValue({
                 revogado: true,
                 expiraEm: new Date(Date.now() + 60_000),
@@ -199,12 +219,14 @@ describe('authService', () => {
             await expect(authService.refreshAccessToken('rt')).rejects.toMatchObject({
                 statusCode: 401,
             });
+            expect(authRepositoryMock.revokeAllRefreshTokensForUser).toHaveBeenCalledWith('usr-1');
         });
 
-        it('emite novo access token para refresh válido', async () => {
+        it('emite novo access token e rotaciona o refresh token (single-use)', async () => {
+            const expiraEm = new Date(Date.now() + 60_000);
             authRepositoryMock.findRefreshToken.mockResolvedValue({
                 revogado: false,
-                expiraEm: new Date(Date.now() + 60_000),
+                expiraEm,
                 usuarioId: usuarioBase.id,
             });
             authRepositoryMock.findById.mockResolvedValue(usuarioBase);
@@ -212,6 +234,12 @@ describe('authService', () => {
             const result = await authService.refreshAccessToken('rt-valido');
 
             expect(result.accessToken).toBeTruthy();
+            expect(result.refreshToken).toBeTruthy();
+            expect(result.refreshToken).not.toBe('rt-valido');
+            expect(authRepositoryMock.revokeRefreshToken).toHaveBeenCalledWith('rt-valido');
+            expect(authRepositoryMock.createRefreshToken).toHaveBeenCalledWith(
+                expect.objectContaining({ usuarioId: usuarioBase.id, expiraEm })
+            );
         });
     });
 
@@ -433,9 +461,7 @@ describe('authService', () => {
     });
 
     describe('buildGoogleCallbackRedirect', () => {
-        it('monta URL de sucesso com tokens', async () => {
-            authRepositoryMock.createRefreshToken.mockResolvedValue({});
-
+        it('monta URL de sucesso com token de exchange', async () => {
             const url = await authService.buildGoogleCallbackRedirect({
                 id: usuarioBase.id,
                 email: usuarioBase.email,
@@ -443,8 +469,7 @@ describe('authService', () => {
             });
 
             expect(url).toContain('/auth/callback');
-            expect(url).toContain('accessToken=');
-            expect(url).toContain('refreshToken=');
+            expect(url).toContain('exchange=');
         });
 
         it('monta URL de erro com mensagem', () => {

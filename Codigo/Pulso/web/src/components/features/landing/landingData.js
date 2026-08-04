@@ -47,6 +47,7 @@ export const FEATURES = [
     title: 'Dashboard',
     description: 'Visão em tempo real das suas finanças, receitas, despesas e saldo.',
     tone: 'purple',
+    badge: 'Em breve',
   },
   {
     icon: Target,
@@ -63,19 +64,21 @@ export const FEATURES = [
   {
     icon: Sparkles,
     title: 'IA Insights',
-    description: 'Dicas automáticas baseadas no seu perfil e hábitos.',
+    description: 'Alertas automáticos sobre seus gastos — como o maior gasto do mês.',
     tone: 'violet',
+    badge: 'Beta',
   },
   {
     icon: MessageCircle,
     title: 'Chatbot',
     description: 'Tire dúvidas sobre suas finanças em linguagem natural.',
     tone: 'pink',
+    badge: 'Em breve',
   },
   {
     icon: Gamepad2,
     title: 'Gamificação',
-    description: 'Sequências, conquistas e desafios para manter o foco.',
+    description: 'Sequências e conquistas para manter o hábito financeiro.',
     tone: 'orange',
   },
   {

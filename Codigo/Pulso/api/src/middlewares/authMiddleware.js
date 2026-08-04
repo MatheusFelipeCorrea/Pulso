@@ -1,16 +1,16 @@
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 const env = require('../config/env');
+const { getAccessTokenFromRequest } = require('../utils/authCookies');
 
 const authMiddleware = async (req, res, next) => {
     try {
-        const authHeader = req.headers.authorization;
+        const token = getAccessTokenFromRequest(req);
 
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        if (!token) {
             throw new AppError('Token não fornecido ou inválido.', 401);
         }
 
-        const token = authHeader.split(' ')[1];
         const decoded = jwt.verify(token, env.JWT_SECRET);
 
         if (!decoded.sub) {

@@ -30,9 +30,15 @@ export const ToastProvider = ({ children }) => {
   const addToast = useCallback(({ type, title, message, duration = 4000 }) => {
     const id = Date.now() + Math.random()
     const newToast = { id, type, title, message, duration }
-    
-    setToasts((prev) => [newToast, ...prev])
-    
+    const fingerprint = `${type}::${title ?? ''}::${message ?? ''}`
+
+    setToasts((prev) => {
+      if (prev[0] && `${prev[0].type}::${prev[0].title ?? ''}::${prev[0].message ?? ''}` === fingerprint) {
+        return prev
+      }
+      return [newToast, ...prev]
+    })
+
     return id
   }, [])
 
@@ -48,6 +54,9 @@ export const ToastProvider = ({ children }) => {
   // ============================================================
   const success = useCallback(
     (message, title, duration) => {
+      if (message && (title === undefined || title === null || title === '')) {
+        return addToast({ type: 'success', title: message, duration })
+      }
       return addToast({ type: 'success', title, message, duration })
     },
     [addToast]
@@ -55,6 +64,9 @@ export const ToastProvider = ({ children }) => {
 
   const error = useCallback(
     (message, title, duration) => {
+      if (message && (title === undefined || title === null || title === '')) {
+        return addToast({ type: 'error', title: message, duration })
+      }
       return addToast({ type: 'error', title, message, duration })
     },
     [addToast]
@@ -62,6 +74,9 @@ export const ToastProvider = ({ children }) => {
 
   const warning = useCallback(
     (message, title, duration) => {
+      if (message && (title === undefined || title === null || title === '')) {
+        return addToast({ type: 'warning', title: message, duration })
+      }
       return addToast({ type: 'warning', title, message, duration })
     },
     [addToast]
@@ -69,6 +84,9 @@ export const ToastProvider = ({ children }) => {
 
   const info = useCallback(
     (message, title, duration) => {
+      if (message && (title === undefined || title === null || title === '')) {
+        return addToast({ type: 'info', title: message, duration })
+      }
       return addToast({ type: 'info', title, message, duration })
     },
     [addToast]

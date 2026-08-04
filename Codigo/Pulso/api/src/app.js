@@ -1,5 +1,7 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const passport = require('./config/passport');
 const env = require('./config/env');
@@ -21,10 +23,30 @@ const corsOrigins = (env.CORS_ORIGIN || '')
 
 app.use(cors({
     origin: corsOrigins.length <= 1 ? corsOrigins[0] : corsOrigins,
+    credentials: true,
     exposedHeaders: ['X-Total-Count', 'X-Total-Pages', 'X-Current-Page'],
 }));
+app.use(cookieParser());
 app.use(express.json());
 app.use(passport.initialize());
+
+// Uploads locais (dev) — produção usa Vercel Blob
+if (!process.env.VERCEL) {
+    app.use(
+        '/api/uploads/grupos',
+        express.static(path.join(__dirname, '../uploads/grupos'), {
+            maxAge: '7d',
+            immutable: true,
+        })
+    );
+    app.use(
+        '/api/uploads/compras',
+        express.static(path.join(__dirname, '../uploads/compras'), {
+            maxAge: '7d',
+            immutable: true,
+        })
+    );
+}
 
 // Health check
 app.get('/api/health', (req, res) => {

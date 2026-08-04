@@ -25,10 +25,10 @@ describe('utils/apiBaseUrl', () => {
     expect(getApiBaseUrl()).toBe('/api')
   })
 
-  it('usa localhost no ambiente de desenvolvimento', () => {
+  it('usa /api em desenvolvimento quando variável não existe (proxy Vite)', () => {
     import.meta.env.VITE_API_URL = ''
     import.meta.env.PROD = false
 
-    expect(getApiBaseUrl()).toBe('http://localhost:3333/api')
+    expect(getApiBaseUrl()).toBe('/api')
   })
 })

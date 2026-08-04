@@ -1,0 +1,69 @@
+@startuml pulso-implantacao
+' Pulso — Diagrama de Implantação
+' Versão: 1.0 | Data: 2026-06-09
+
+skinparam nodeStyle rectangle
+
+node "Dispositivo do Usuário" as Device {
+  artifact "Navegador\n(Chrome, Safari, …)" as Browser
+  artifact "PWA / SPA\nReact build (dist/)" as SPA
+  Browser --> SPA
+}
+
+cloud "Vercel" as Vercel {
+  node "Edge / CDN" as CDN {
+    artifact "Arquivos estáticos\n(HTML, JS, CSS)" as Static
+  }
+
+  node "Serverless Functions" as Serverless {
+    artifact "api/index.js\n(Express via serverless-http)" as API
+    artifact "Rotas /api/cron/*" as CronRoutes
+  }
+
+  node "Vercel Cron" as VercelCron {
+    artifact "5 0 * * *\n(daily job)" as CronJob
+  }
+
+  CronJob --> CronRoutes : Authorization:\nBearer CRON_SECRET
+}
+
+cloud "Neon" as Neon {
+  database "PostgreSQL\n(pooler + direct)" as PG
+}
+
+cloud "Google Cloud" as Google {
+  artifact "OAuth 2.0\n(Auth + Calendar)" as OAuth
+  artifact "Calendar API" as CalAPI
+}
+
+cloud "Serviços de terceiros" as Third {
+  artifact "SMTP\n(Gmail / Mailtrap)" as SMTP
+  artifact "AwesomeAPI\nEconomia" as Awesome
+  artifact "Gemini API" as Gemini
+}
+
+SPA --> CDN : HTTPS
+SPA --> API : /api/*\n(rewrite Vercel)
+API --> PG : DATABASE_URL\n(Prisma)
+API --> OAuth : login / callback
+API --> CalAPI : sync lembretes
+API --> SMTP : e-mails transacionais
+API --> Awesome : cotações moedas
+API --> Gemini : insights / chatbot
+
+note right of Vercel
+  **Produção**
+  https://seu-app.vercel.app/
+  https://seu-app.vercel.app/api/health
+
+  **Dev local**
+  Web :5173 → proxy /api
+  API :3333 (node-cron local)
+end note
+
+note bottom of PG
+  Migrations via CLI local:
+  npm run db:migrate:deploy
+end note
+
+@enduml

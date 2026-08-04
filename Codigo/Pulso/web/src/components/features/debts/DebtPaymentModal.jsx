@@ -60,7 +60,7 @@ export function DebtPaymentModal({ open, onClose, onSubmit, submitting = false, 
 
   return (
     <Modal isOpen={open} onClose={onClose} size="md" className="debt-payment-modal">
-      <form className="debt-payment-form" onSubmit={handleSubmit}>
+      <form className="debt-payment-form" onSubmit={handleSubmit} noValidate>
         <header className="debt-payment-form__header">
           <div>
             <h2>Registrar pagamento</h2>

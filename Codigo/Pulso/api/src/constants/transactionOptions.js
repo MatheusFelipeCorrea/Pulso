@@ -5,12 +5,14 @@ const RECURSOS = [
     { value: 'VA', label: 'VA' },
     { value: 'VR', label: 'VR' },
     { value: 'VT', label: 'VT' },
+    { value: 'POUPANCA', label: 'Poupança' },
 ];
 
 const TIPOS_FILTRO = [
     { value: 'TODOS', label: 'Todos' },
     { value: 'RECEITA', label: 'Receita' },
     { value: 'DESPESA', label: 'Despesa' },
+    { value: 'TRANSFERENCIA', label: 'Transferência' },
 ];
 
 const RECURSOS_FILTRO = [{ value: 'TODOS', label: 'Todos' }, ...RECURSOS];

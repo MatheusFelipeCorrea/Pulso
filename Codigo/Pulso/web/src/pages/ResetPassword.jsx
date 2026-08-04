@@ -1,53 +1,17 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { UserRound, ArrowLeft, Shield, Loader2, XCircle, Check } from 'lucide-react'
+import { UserRound, ArrowLeft, Shield, Loader2, XCircle } from 'lucide-react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AuthLayout } from '@/components/layouts/AuthLayout'
 import { Button, InputPassword, Alert, useToast } from '@/design-system/components'
+import {
+  PasswordRulesChecklist,
+  PasswordStrengthBar,
+} from '@/components/auth/PasswordStrengthHints'
+import { allPasswordRulesPassed } from '@/utils/passwordStrength'
 import { resetPasswordSchema } from '@/schemas/authSchemas'
 import * as authService from '@/services/authService'
-
-const PASSWORD_RULES = [
-  {
-    id: 'length',
-    label: 'Mínimo de 8 caracteres',
-    test: (value) => value.length >= 8,
-  },
-  {
-    id: 'upper',
-    label: 'Uma letra maiúscula',
-    test: (value) => /[A-Z]/.test(value),
-  },
-  {
-    id: 'number',
-    label: 'Um número',
-    test: (value) => /\d/.test(value),
-  },
-  {
-    id: 'special',
-    label: 'Um caractere especial',
-    test: (value) => /[@$!%*?&#]/.test(value),
-  },
-]
-
-function getPasswordStrength(password) {
-  const passed = PASSWORD_RULES.filter((rule) => rule.test(password)).length
-
-  if (!password) {
-    return { label: 'Fraca', color: '#EF4444', segments: 0, fillColor: '#EF4444' }
-  }
-
-  if (passed <= 1) {
-    return { label: 'Fraca', color: '#EF4444', segments: 1, fillColor: '#EF4444' }
-  }
-
-  if (passed <= 3) {
-    return { label: 'Média', color: '#F59E0B', segments: 2, fillColor: '#7C3AED' }
-  }
-
-  return { label: 'Forte', color: '#10B981', segments: 4, fillColor: '#10B981' }
-}
 
 export default function ResetPassword() {
   const { token } = useParams()
@@ -76,9 +40,7 @@ export default function ResetPassword() {
   const senha = watch('senha')
   const confirmarSenha = watch('confirmarSenha')
 
-  const strength = useMemo(() => getPasswordStrength(senha), [senha])
-
-  const allRulesPassed = PASSWORD_RULES.every((rule) => rule.test(senha))
+  const allRulesPassed = allPasswordRulesPassed(senha)
   const passwordsMatch = senha && confirmarSenha && senha === confirmarSenha
   const canSubmit = allRulesPassed && passwordsMatch && !isSubmitting
 
@@ -194,27 +156,7 @@ export default function ResetPassword() {
                     name={field.name}
                     autoComplete="new-password"
                   />
-
-                  {senha && (
-                    <div className="auth-password-strength">
-                      <p className="auth-password-strength__label">
-                        Força da senha:{' '}
-                        <strong style={{ color: strength.color }}>{strength.label}</strong>
-                      </p>
-                      <div className="auth-password-strength__bar" aria-hidden="true">
-                        {[0, 1, 2, 3].map((index) => (
-                          <span
-                            key={index}
-                            className="auth-password-strength__segment"
-                            style={{
-                              backgroundColor:
-                                index < strength.segments ? strength.fillColor : undefined,
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <PasswordStrengthBar password={senha} />
                 </div>
               )}
             />
@@ -236,25 +178,7 @@ export default function ResetPassword() {
             />
           </div>
 
-          <div className="auth-password-rules">
-            <p className="auth-password-rules__title">Sua senha deve conter:</p>
-            <ul className="auth-password-rules__grid">
-              {PASSWORD_RULES.map((rule) => {
-                const passed = rule.test(senha)
-                return (
-                  <li
-                    key={rule.id}
-                    className={`auth-password-rules__item${passed ? ' auth-password-rules__item--passed' : ''}`}
-                  >
-                    <span className="auth-password-rules__check" aria-hidden="true">
-                      {passed ? <Check size={14} strokeWidth={2.5} /> : null}
-                    </span>
-                    {rule.label}
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
+          <PasswordRulesChecklist password={senha} />
 
           <Button
             type="submit"

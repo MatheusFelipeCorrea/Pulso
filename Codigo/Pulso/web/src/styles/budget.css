@@ -65,6 +65,26 @@
   color: var(--ds-color-text);
 }
 
+.budget-summary__warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(234 88 12 / 0.35);
+  background: rgb(255 237 213 / 0.65);
+  color: #9a3412;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.dark .budget-summary__warning {
+  background: rgb(234 88 12 / 0.12);
+  border-color: rgb(234 88 12 / 0.35);
+  color: #fdba74;
+}
+
 .budget-summary__metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -243,6 +263,7 @@
 .budget-category-row__label,
 .budget-without-limit-card__name {
   display: block;
+  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -442,7 +463,7 @@
 
 .budget-edit-modal__row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(148px, 176px) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(148px, 176px) auto auto;
   gap: 12px;
   align-items: center;
   padding: 10px 12px;
@@ -468,12 +489,34 @@
   border-radius: 8px;
 }
 
+.budget-edit-modal__cat-name-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .budget-edit-modal__cat-name {
   font-size: 14px;
   font-weight: 600;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.budget-edit-modal__rollover-hint {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ds-color-info);
+  white-space: nowrap;
+}
+
+.budget-edit-modal__rollover {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ds-color-text-secondary);
+  flex-shrink: 0;
 }
 
 .budget-edit-modal__money .ds-input-wrapper {
@@ -615,9 +658,31 @@
 }
 
 .notification-bell__panel {
-  max-height: 480px;
-  overflow: auto;
+  max-height: none;
+  overflow: visible;
   box-shadow: var(--ds-shadow-lg, 0 16px 40px rgb(0 0 0 / 0.12));
+}
+
+.notification-bell__live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .notification-bell__dropdown {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 56px;
+    width: auto;
+  }
 }
 
 .main-layout__toolbar {
@@ -749,7 +814,7 @@
     grid-template-columns: 1fr auto;
     grid-template-areas:
       'cat remove'
-      'money money';
+      'money rollover';
   }
 
   .budget-edit-modal__cat {
@@ -758,6 +823,11 @@
 
   .budget-edit-modal__money {
     grid-area: money;
+  }
+
+  .budget-edit-modal__rollover {
+    grid-area: rollover;
+    justify-self: end;
   }
 
   .budget-edit-modal__remove {

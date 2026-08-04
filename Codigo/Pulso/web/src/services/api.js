@@ -6,17 +6,50 @@ const api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true,
 })
 
 const baseURL = getApiBaseUrl()
 
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('accessToken')
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
+let refreshPromise = null
+
+/** Rotas públicas — não forçar reload para /login (evita loop com AuthBootstrap). */
+const GUEST_PATH_PREFIXES = [
+    '/login',
+    '/register',
+    '/forgot-password',
+    '/reset-password',
+    '/auth/callback',
+    '/verify-email',
+    '/termos',
+    '/privacidade',
+    '/design-system',
+]
+
+const isGuestRoute = () => {
+    if (typeof window === 'undefined') return false
+    const { pathname } = window.location
+    if (pathname === '/') return true
+    return GUEST_PATH_PREFIXES.some(
+        (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`)
+    )
+}
+
+const refreshSession = () => {
+    if (!refreshPromise) {
+        refreshPromise = axios
+            .post(`${baseURL}/auth/refresh`, {}, { withCredentials: true })
+            .finally(() => {
+                refreshPromise = null
+            })
     }
-    return config
-})
+    return refreshPromise
+}
+
+const redirectToLogin = () => {
+    if (isGuestRoute()) return
+    window.location.href = '/login'
+}
 
 api.interceptors.response.use(
     (response) => response,
@@ -24,12 +57,15 @@ api.interceptors.response.use(
         const originalRequest = error.config
         const requestUrl = originalRequest?.url || ''
         const isRefreshRequest = requestUrl.includes('/auth/refresh')
+        const isSessionProbeRequest = requestUrl.includes('/auth/me')
         const isAuthRequest =
             requestUrl.includes('/auth/login') ||
             requestUrl.includes('/auth/register') ||
             requestUrl.includes('/auth/forgot-password') ||
             requestUrl.includes('/auth/reset-password') ||
-            isRefreshRequest
+            requestUrl.includes('/auth/oauth/exchange') ||
+            isRefreshRequest ||
+            isSessionProbeRequest
 
         if (
             error.response?.status === 401 &&
@@ -38,28 +74,11 @@ api.interceptors.response.use(
         ) {
             originalRequest._retry = true
 
-            const refreshToken = localStorage.getItem('refreshToken')
-
-            if (!refreshToken) {
-                localStorage.removeItem('accessToken')
-                localStorage.removeItem('refreshToken')
-                window.location.href = '/login'
-                return Promise.reject(error)
-            }
-
             try {
-                const { data } = await axios.post(`${baseURL}/auth/refresh`, {
-                    refreshToken,
-                })
-
-                localStorage.setItem('accessToken', data.accessToken)
-                originalRequest.headers.Authorization = `Bearer ${data.accessToken}`
-
+                await refreshSession()
                 return api(originalRequest)
             } catch (refreshError) {
-                localStorage.removeItem('accessToken')
-                localStorage.removeItem('refreshToken')
-                window.location.href = '/login'
+                redirectToLogin()
                 return Promise.reject(refreshError)
             }
         }

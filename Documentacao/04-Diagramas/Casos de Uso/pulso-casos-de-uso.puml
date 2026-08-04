@@ -1,0 +1,131 @@
+@startuml pulso-casos-de-uso
+' Pulso — Diagrama de Casos de Uso
+' Versão: 1.0 | Data: 2026-06-09
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Usuário\n(financeiro)" as Usuario
+actor "Sistema\n(jobs/cron)" as Sistema
+actor "Google\nOAuth/Calendar" as Google
+actor "AwesomeAPI\n(cotações)" as AwesomeAPI
+actor "Gemini\n(IA)" as Gemini
+
+rectangle "Pulso — Gestão Financeira Pessoal" {
+
+  package "Autenticação e Conta" {
+    usecase "Registrar conta" as UC01
+    usecase "Fazer login" as UC02
+    usecase "Login com Google" as UC03
+    usecase "Recuperar senha" as UC04
+    usecase "Verificar e-mail" as UC05
+    usecase "Gerenciar perfil" as UC06
+    usecase "Configurar preferências" as UC07
+  }
+
+  package "Financeiro" {
+    usecase "Registrar transação" as UC10
+    usecase "Filtrar transações" as UC11
+    usecase "Ver resumo financeiro" as UC12
+    usecase "Gerenciar categorias" as UC13
+    usecase "Gerenciar tags" as UC14
+    usecase "Definir orçamento mensal" as UC15
+    usecase "Copiar orçamento anterior" as UC16
+    usecase "Registrar lembrete" as UC17
+    usecase "Marcar lembrete como pago" as UC18
+    usecase "Visualizar calendário financeiro" as UC19
+    usecase "Sincronizar com Google Calendar" as UC20
+    usecase "Registrar dívida/empréstimo" as UC21
+    usecase "Registrar pagamento de dívida" as UC22
+    usecase "Gerenciar vale transporte" as UC23
+    usecase "Vender vale transporte" as UC24
+  }
+
+  package "Planejamento e Metas" {
+    usecase "Criar meta financeira" as UC30
+    usecase "Registrar aporte em meta" as UC31
+    usecase "Planejar viagem" as UC32
+    usecase "Cadastrar pretensão de gasto" as UC33
+    usecase "Gerenciar observações da viagem" as UC34
+    usecase "Consultar cotações de moedas" as UC35
+    usecase "Gerenciar moedas favoritas" as UC36
+    usecase "Participar de grupo" as UC37
+  }
+
+  package "Inteligência e Engajamento" {
+    usecase "Consultar notificações" as UC40
+    usecase "Visualizar insights" as UC41
+    usecase "Gerar relatórios" as UC42
+    usecase "Conversar com chatbot" as UC43
+    usecase "Acompanhar gamificação" as UC44
+  }
+}
+
+' --- Ator principal ---
+Usuario --> UC01
+Usuario --> UC02
+Usuario --> UC03
+Usuario --> UC04
+Usuario --> UC05
+Usuario --> UC06
+Usuario --> UC07
+Usuario --> UC10
+Usuario --> UC11
+Usuario --> UC12
+Usuario --> UC13
+Usuario --> UC14
+Usuario --> UC15
+Usuario --> UC16
+Usuario --> UC17
+Usuario --> UC18
+Usuario --> UC19
+Usuario --> UC20
+Usuario --> UC21
+Usuario --> UC22
+Usuario --> UC23
+Usuario --> UC30
+Usuario --> UC31
+Usuario --> UC32
+Usuario --> UC33
+Usuario --> UC34
+Usuario --> UC35
+Usuario --> UC36
+Usuario --> UC37
+Usuario --> UC40
+Usuario --> UC41
+Usuario --> UC42
+Usuario --> UC43
+Usuario --> UC44
+
+' --- Extensões / includes ---
+UC02 ..> UC05 : <<include>>\n(e-mail não verificado)
+UC24 ..> UC10 : <<extend>>\n(receita em dinheiro)
+UC33 ..> UC35 : <<include>>
+UC20 ..> UC17 : <<include>>
+UC31 ..> UC30 : <<include>>
+
+' --- Atores externos ---
+Google --> UC03
+Google --> UC20
+AwesomeAPI --> UC35
+Gemini --> UC41
+Gemini --> UC43
+
+' --- Sistema ---
+Sistema --> UC10 : <<extend>>\n(transação recorrente)
+Sistema --> UC15 : <<extend>>\n(alerta 80% / estouro)
+Sistema --> UC17 : <<extend>>\n(recorrência mensal)
+Sistema --> UC40
+
+note right of UC23
+  Disponível apenas para
+  modo ESTAGIARIO ou CLT
+end note
+
+note right of UC24
+  Apenas modo ESTAGIARIO
+  (RN-040, RN-045)
+end note
+
+@enduml

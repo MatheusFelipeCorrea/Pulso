@@ -4,6 +4,8 @@ const budgetRepository = require('../repositories/budgetRepository');
 const categoryRepository = require('../repositories/categoryRepository');
 const notificationService = require('./notificationService');
 const { mapOrcamento, calcularStatusCategoria } = require('../utils/budgetMapper');
+const { calcularValorRollover } = require('../utils/budgetRolloverUtils');
+const { obterRendaMensalPlanejada } = require('../utils/userFinanceUtils');
 const {
     mesReferenciaFromQuery,
     mesReferenciaFromBody,
@@ -15,17 +17,6 @@ const {
 
 const formatCurrency = (value) =>
     Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-const obterRendaMensalPlanejada = async (usuarioId) => {
-    const config = await prisma.configuracaoUsuario.findUnique({
-        where: { usuarioId },
-        select: { rendaMensalPlanejada: true, valorSalario: true },
-    });
-
-    if (!config) return 0;
-    const renda = config.rendaMensalPlanejada ?? config.valorSalario;
-    return Number(renda ?? 0);
-};
 
 const listarOrcamentos = async (usuarioId, query) => {
     const mesReferencia = mesReferenciaFromQuery(query.mes);
@@ -58,6 +49,8 @@ const obterStatusOrcamento = async (usuarioId, query) => {
             restanteValor,
             percentualUsado: Math.round(percentualUsado * 10) / 10,
             status: calcularStatusCategoria(percentualUsado),
+            rolloverAtivo: orcamento.rolloverAtivo,
+            valorRollover: Number(orcamento.valorRollover),
         };
     });
 
@@ -68,6 +61,8 @@ const obterStatusOrcamento = async (usuarioId, query) => {
     const restanteTotal = orcamentoTotal - gastoTotal;
     const percentualUsado =
         orcamentoTotal > 0 ? Math.round((gastoTotal / orcamentoTotal) * 1000) / 10 : 0;
+    const orcamentoExcedeRenda =
+        rendaMensalPlanejada > 0 && orcamentoTotal > rendaMensalPlanejada;
 
     const idsComOrcamento = new Set(orcamentos.map((item) => item.categoriaId));
     const categoriasSemOrcamento = categoriasDespesa
@@ -88,6 +83,7 @@ const obterStatusOrcamento = async (usuarioId, query) => {
             gastoTotal,
             restanteTotal,
             percentualUsado,
+            orcamentoExcedeRenda,
         },
         categorias: categoriasComOrcamento,
         categoriasSemOrcamento,
@@ -122,13 +118,49 @@ const salvarOrcamentos = async (usuarioId, body) => {
     const categoriaIds = limites.map((item) => item.categoriaId);
     await validarCategoriasDoUsuario(usuarioId, categoriaIds);
 
+    const existentes = await budgetRepository.buscarPorUsuarioEMes(usuarioId, mesReferencia);
+    const existentesMap = new Map(existentes.map((item) => [item.categoriaId, item]));
+
+    const precisaRollover = limites.some(
+        (item) => item.rolloverAtivo && !existentesMap.has(item.categoriaId)
+    );
+
+    let orcamentosAnterioresMap = new Map();
+    let gastosAnterioresMap = {};
+    if (precisaRollover) {
+        const mesAnteriorRef = mesAnterior(mesReferencia);
+        const [orcamentosAnteriores, gastos] = await Promise.all([
+            budgetRepository.buscarPorUsuarioEMes(usuarioId, mesAnteriorRef),
+            budgetRepository.calcularGastosPorCategoria(usuarioId, mesAnteriorRef),
+        ]);
+        orcamentosAnterioresMap = new Map(
+            orcamentosAnteriores.map((item) => [item.categoriaId, item])
+        );
+        gastosAnterioresMap = gastos;
+    }
+
     const orcamentos = [];
     for (const item of limites) {
+        const jaExiste = existentesMap.has(item.categoriaId);
+        const rolloverAtivo = Boolean(item.rolloverAtivo);
+        let limiteValor = item.limiteValor;
+        let valorRollover = 0;
+
+        if (!jaExiste && rolloverAtivo) {
+            valorRollover = calcularValorRollover(
+                orcamentosAnterioresMap.get(item.categoriaId),
+                gastosAnterioresMap[item.categoriaId]
+            );
+            limiteValor += valorRollover;
+        }
+
         const orcamento = await budgetRepository.upsert({
             usuarioId,
             categoriaId: item.categoriaId,
             mesReferencia,
-            limiteValor: item.limiteValor,
+            limiteValor,
+            rolloverAtivo,
+            valorRollover,
         });
         orcamentos.push(mapOrcamento(orcamento));
     }
@@ -214,41 +246,55 @@ const criarNotificacaoOrcamento = async ({
     });
 };
 
+const verificarLimitesUsuarioENotificar = async (usuarioId, mesReferencia = null) => {
+    const mes = mesReferencia ?? mesReferenciaFromQuery(mesAtualString());
+    const total = await budgetRepository.contarPorUsuarioEMes(usuarioId, mes);
+    if (total === 0) {
+        return { criadas: 0, skipped: true };
+    }
+
+    const status = await obterStatusOrcamento(usuarioId, { mes: mesReferenciaToQuery(mes) });
+    let criadas = 0;
+
+    for (const categoria of status.categorias) {
+        if (categoria.percentualUsado >= 100) {
+            const notif = await criarNotificacaoOrcamento({
+                usuarioId,
+                tipo: 'ORCAMENTO_ESTOURADO',
+                categoriaNome: categoria.categoriaNome,
+                gastoValor: categoria.gastoValor,
+                limiteValor: categoria.limiteValor,
+                categoriaId: categoria.categoriaId,
+                mesReferencia: mes,
+                percentual: Math.round(categoria.percentualUsado),
+            });
+            if (notif) criadas += 1;
+        } else if (categoria.percentualUsado >= 80) {
+            const notif = await criarNotificacaoOrcamento({
+                usuarioId,
+                tipo: 'ALERTA_ORCAMENTO',
+                categoriaNome: categoria.categoriaNome,
+                gastoValor: categoria.gastoValor,
+                limiteValor: categoria.limiteValor,
+                categoriaId: categoria.categoriaId,
+                mesReferencia: mes,
+                percentual: Math.round(categoria.percentualUsado),
+            });
+            if (notif) criadas += 1;
+        }
+    }
+
+    return { criadas, skipped: false };
+};
+
 const verificarLimitesENotificar = async () => {
     const mesReferencia = mesReferenciaFromQuery(mesAtualString());
     const usuarioIds = await budgetRepository.buscarUsuariosComOrcamentoNoMes(mesReferencia);
     let criadas = 0;
 
     for (const usuarioId of usuarioIds) {
-        const status = await obterStatusOrcamento(usuarioId, { mes: mesReferenciaToQuery(mesReferencia) });
-
-        for (const categoria of status.categorias) {
-            if (categoria.percentualUsado >= 100) {
-                const notif = await criarNotificacaoOrcamento({
-                    usuarioId,
-                    tipo: 'ORCAMENTO_ESTOURADO',
-                    categoriaNome: categoria.categoriaNome,
-                    gastoValor: categoria.gastoValor,
-                    limiteValor: categoria.limiteValor,
-                    categoriaId: categoria.categoriaId,
-                    mesReferencia,
-                    percentual: Math.round(categoria.percentualUsado),
-                });
-                if (notif) criadas += 1;
-            } else if (categoria.percentualUsado >= 80) {
-                const notif = await criarNotificacaoOrcamento({
-                    usuarioId,
-                    tipo: 'ALERTA_ORCAMENTO',
-                    categoriaNome: categoria.categoriaNome,
-                    gastoValor: categoria.gastoValor,
-                    limiteValor: categoria.limiteValor,
-                    categoriaId: categoria.categoriaId,
-                    mesReferencia,
-                    percentual: Math.round(categoria.percentualUsado),
-                });
-                if (notif) criadas += 1;
-            }
-        }
+        const resultado = await verificarLimitesUsuarioENotificar(usuarioId, mesReferencia);
+        criadas += resultado.criadas;
     }
 
     return { criadas, usuariosVerificados: usuarioIds.length };
@@ -261,4 +307,5 @@ module.exports = {
     removerOrcamento,
     copiarOrcamento,
     verificarLimitesENotificar,
+    verificarLimitesUsuarioENotificar,
 };

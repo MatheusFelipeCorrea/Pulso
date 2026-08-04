@@ -10,6 +10,9 @@ const { runReminderAlertJob } = require('./jobs/reminderAlertJob');
 const { runReminderRecurrenceJob } = require('./jobs/reminderRecurrenceJob');
 const { runDebtAlertJob } = require('./jobs/debtAlertJob');
 const { runDebtCleanupJob } = require('./jobs/debtCleanupJob');
+const { runNotificationCleanup } = require('./jobs/notificationCleanupJob');
+const { runChatCleanupJob } = require('./jobs/chatCleanupJob');
+const { runExpenseSplitCleanupJob } = require('./jobs/expenseSplitCleanupJob');
 
 const startTokenCleanupScheduler = () => {
     if (env.NODE_ENV === 'test') {
@@ -140,6 +143,66 @@ const startReminderRecurrenceScheduler = () => {
     logger.info('🔁 Agendador de recorrência de lembretes ativo (diário 00:05 BRT)');
 };
 
+const startNotificationCleanupScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule(
+        '30 3 * * *',
+        async () => {
+            try {
+                await runNotificationCleanup();
+            } catch (error) {
+                logger.error(`Falha na limpeza de notificações: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🔔 Agendador de limpeza de notificações ativo (diário 03:30 BRT)');
+};
+
+const startChatCleanupScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule(
+        '0 4 * * *',
+        async () => {
+            try {
+                await runChatCleanupJob();
+            } catch (error) {
+                logger.error(`Falha no job de limpeza de chat de grupo: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🧹 Agendador de limpeza de chat de grupo ativo (diário 04:00 BRT)');
+};
+
+const startExpenseSplitCleanupScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule(
+        '30 2 * * *',
+        async () => {
+            try {
+                await runExpenseSplitCleanupJob();
+            } catch (error) {
+                logger.error(`Falha no job de limpeza de divisões de despesas: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🧹 Agendador de limpeza de divisões de despesas ativo (diário 02:30 BRT)');
+};
+
 const start = async () => {
     try {
         // Testa conexão com o banco
@@ -155,6 +218,9 @@ const start = async () => {
             startReminderRecurrenceScheduler();
             startDebtCleanupScheduler();
             startDebtAlertScheduler();
+            startNotificationCleanupScheduler();
+            startChatCleanupScheduler();
+            startExpenseSplitCleanupScheduler();
         } else {
             logger.info('⏭️  Cron local desativado (ambiente Vercel)');
         }

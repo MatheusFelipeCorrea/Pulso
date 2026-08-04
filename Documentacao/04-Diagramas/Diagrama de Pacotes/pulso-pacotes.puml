@@ -1,0 +1,135 @@
+@startuml pulso-pacotes
+' Pulso — Diagrama de Pacotes
+' Versão: 1.0 | Data: 2026-06-09
+
+skinparam packageStyle rectangle
+
+package "Codigo.Pulso" {
+
+  package "web" {
+    package "src.pages" {
+      [TransactionsPage]
+      [BudgetPage]
+      [CalendarPage]
+      [TripsPage]
+      [GoalsPage]
+      [DebtsPage]
+      [Auth pages]
+    }
+
+    package "src.components" {
+      package "features" {
+        [transactions]
+        [budget]
+        [calendar]
+        [trips]
+        [goals]
+        [debts]
+        [transport]
+        [auth]
+      }
+      package "layouts" {
+        [MainLayout]
+        [Sidebar]
+      }
+      package "routing" {
+        [ProtectedRoute]
+        [AuthBootstrap]
+      }
+    }
+
+    package "src.design-system" {
+      [components]
+      [styles/tokens]
+      [utils]
+    }
+
+    package "src.services" {
+      [api.js]
+      [transactionService]
+      [budgetService]
+      [viagemService]
+      [metaService]
+      [authService]
+    }
+
+    package "src.store" {
+      [authSlice]
+      [themeSlice]
+    }
+
+    package "src.config" {
+      [appRoutes]
+      [sidebarNavigation]
+    }
+  }
+
+  package "api" {
+    package "src.routes" {
+      [authRoutes]
+      [transactionRoutes]
+      [budgetRoutes]
+      [reminderRoutes]
+      [viagemRoutes]
+      [metaRoutes]
+      [cronRoutes]
+    }
+
+    package "src.controllers" {
+      [authController]
+      [transactionController]
+      [viagemController]
+    }
+
+    package "src.services" {
+      [transactionService]
+      [budgetService]
+      [viagemService]
+      [authService]
+      [notificationService]
+    }
+
+    package "src.repositories" {
+      [transactionRepository]
+      [budgetRepository]
+      [viagemRepository]
+      [metaRepository]
+    }
+
+    package "src.middlewares" {
+      [authMiddleware]
+      [validateMiddleware]
+      [errorMiddleware]
+    }
+
+    package "src.schemas" {
+      [Zod schemas]
+    }
+
+    package "src.jobs" {
+      [recurringTransactions]
+      [budgetAlertJob]
+      [reminderRecurrenceJob]
+    }
+
+    package "prisma" {
+      [schema.prisma]
+      [migrations]
+      [seed.js]
+    }
+  }
+}
+
+' --- Dependências principais ---
+[src.pages] ..> [features] : usa
+[features] ..> [src.design-system] : UI
+[features] ..> [src.services] : dados
+[src.services] ..> [api.js] : HTTP
+[src.routes] ..> [src.controllers]
+[src.controllers] ..> [src.services]
+[src.services] ..> [src.repositories]
+[src.repositories] ..> [schema.prisma]
+[src.routes] ..> [src.middlewares]
+[src.controllers] ..> [src.schemas] : validação
+
+@enduml

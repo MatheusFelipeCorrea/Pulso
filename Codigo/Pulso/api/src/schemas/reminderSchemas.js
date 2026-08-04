@@ -8,6 +8,10 @@ const antecedenciaEnum = z.enum(['NO_DIA', 'UM_DIA', 'TRES_DIAS', 'CINCO_DIAS', 
 
 const categoriaLembreteEnum = z.enum(CATEGORIAS_LEMBRETE);
 
+const horaLembreteSchema = z
+    .string()
+    .regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Use o formato HH:MM');
+
 
 
 const queryMesSchema = z.object({
@@ -50,6 +54,8 @@ const criarLembreteSchema = z.object({
 
         dataVencimento: z.string().datetime({ message: 'Data de vencimento inválida' }),
 
+        horaLembrete: horaLembreteSchema.optional(),
+
         antecedencia: antecedenciaEnum.optional(),
 
         categoria: categoriaLembreteEnum.optional(),
@@ -81,6 +87,8 @@ const atualizarLembreteSchema = z.object({
         valor: z.coerce.number().min(0).optional().nullable(),
 
         dataVencimento: z.string().datetime().optional(),
+
+        horaLembrete: horaLembreteSchema.optional(),
 
         antecedencia: antecedenciaEnum.optional(),
 

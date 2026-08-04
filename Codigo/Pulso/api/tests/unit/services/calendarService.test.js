@@ -107,4 +107,31 @@ describe('calendarService', () => {
         expect(result.totais).toEqual({ receitas: 120, despesas: 0, saldo: 120 });
         expect(result.data).toBe('2026-01-10');
     });
+
+    it('não conta transferências como despesa nos marcadores do mês (RF-140)', async () => {
+        prisma.transacao.groupBy.mockResolvedValueOnce([]).mockResolvedValueOnce([]);
+        prisma.transacao.findMany.mockResolvedValue([
+            { data: new Date('2026-01-12T12:00:00.000Z'), tipo: 'TRANSFERENCIA', valor: 300 },
+        ]);
+        reminderRepository.listarPorUsuario.mockResolvedValue([]);
+        reminderRepository.listarProximos.mockResolvedValue([]);
+        prisma.configuracaoUsuario.findUnique.mockResolvedValue({});
+
+        const result = await calendarService.obterVisaoMes('u1', { mes: '2026-01' });
+
+        const dia = result.dias['2026-01-12'];
+        expect(dia.despesas).toBe(0);
+        expect(dia.temDespesa).toBe(false);
+    });
+
+    it('não conta transferência como despesa no detalhe do dia (RF-140)', async () => {
+        prisma.transacao.findMany.mockResolvedValue([
+            { id: 'tx1', tipo: 'TRANSFERENCIA', valor: 300, data: new Date('2026-01-10T12:00:00.000Z'), categoria: null, tags: [] },
+        ]);
+        reminderRepository.listarPorUsuario.mockResolvedValue([]);
+        prisma.configuracaoUsuario.findUnique.mockResolvedValue({});
+
+        const result = await calendarService.obterDetalheDia('u1', { data: '2026-01-10' });
+        expect(result.totais).toEqual({ receitas: 0, despesas: 0, saldo: 0 });
+    });
 });

@@ -39,8 +39,11 @@ export function LandingFeatures() {
           <p>Ferramentas completas para organizar, planejar e evoluir suas finanças.</p>
         </div>
         <div className="landing-features__grid">
-          {FEATURES.map(({ icon: Icon, title, description, tone }) => (
+          {FEATURES.map(({ icon: Icon, title, description, tone, badge }) => (
             <article key={title} className={`landing-feature landing-feature--${tone}`}>
+              {badge ? (
+                <span className="landing-feature__badge">{badge}</span>
+              ) : null}
               <span className="landing-feature__icon">
                 <Icon size={22} />
               </span>

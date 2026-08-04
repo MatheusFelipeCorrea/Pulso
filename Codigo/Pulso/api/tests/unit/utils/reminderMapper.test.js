@@ -7,6 +7,7 @@ describe('reminderMapper', () => {
             titulo: 'Pagar aluguel',
             valor: '1200',
             dataVencimento: new Date('2026-06-10T12:00:00.000Z'),
+            horaLembrete: '08:30',
             antecedencia: 'UM_DIA',
             categoria: 'ALUGUEL',
             pago: 0,
@@ -24,6 +25,7 @@ describe('reminderMapper', () => {
             titulo: 'Pagar aluguel',
             valor: '1200.00',
             dataVencimento: '2026-06-10T12:00:00.000Z',
+            horaLembrete: '08:30',
             antecedencia: 'UM_DIA',
             antecedenciaLabel: '1 dia antes',
             categoria: 'ALUGUEL',
@@ -33,6 +35,7 @@ describe('reminderMapper', () => {
             sincronizado: true,
             repetirMensal: true,
             diaRecorrencia: 10,
+            repetirCadaDias: null,
             lembreteTemplateId: 'tpl-1',
             criadoEm: '2026-06-01T12:00:00.000Z',
             atualizadoEm: '2026-06-02T12:00:00.000Z',
@@ -64,5 +67,6 @@ describe('reminderMapper', () => {
         expect(result.diaRecorrencia).toBeNull();
         expect(result.lembreteTemplateId).toBeNull();
         expect(result.repetirMensal).toBe(false);
+        expect(result.horaLembrete).toBe('10:00');
     });
 });

@@ -23,6 +23,14 @@ import TransportVoucherPage from './pages/TransportVoucherPage'
 import BudgetPage from './pages/BudgetPage'
 import CalendarPage from './pages/CalendarPage'
 import DebtsPage from './pages/DebtsPage'
+import GoalsPage from './pages/GoalsPage'
+import TripsPage from './pages/TripsPage'
+import TripDetailPage from './pages/TripDetailPage.jsx'
+import GroupsPage from './pages/GroupsPage.jsx'
+import GroupDetailPage from './pages/GroupDetailPage.jsx'
+import GroupJoinRedirect from './pages/GroupJoinRedirect.jsx'
+import PurchasePlanningPage from './pages/PurchasePlanningPage.jsx'
+import ExpenseSplitPage from './pages/ExpenseSplitPage.jsx'
 
 function App() {
   return (
@@ -68,13 +76,26 @@ function App() {
               <Route path="budget" element={<BudgetPage />} />
               <Route path="calendar" element={<CalendarPage />} />
               <Route path="debts" element={<DebtsPage />} />
+              <Route path="goals" element={<GoalsPage />} />
+              <Route path="trips" element={<TripsPage />} />
+              <Route path="trips/:id" element={<TripDetailPage />} />
+              <Route path="groups/join/:codigo" element={<GroupJoinRedirect />} />
+              <Route path="groups" element={<GroupsPage />} />
+              <Route path="groups/:id" element={<GroupDetailPage />} />
+              <Route path="purchase-planning" element={<PurchasePlanningPage />} />
+              <Route path="expense-split" element={<ExpenseSplitPage />} />
               {APP_ROUTE_PATHS.filter(
                 (path) =>
                   path !== '/transactions' &&
                   path !== '/transport-voucher' &&
                   path !== '/budget' &&
                   path !== '/calendar' &&
-                  path !== '/debts'
+                  path !== '/debts' &&
+                  path !== '/goals' &&
+                  path !== '/trips' &&
+                  path !== '/groups' &&
+                  path !== '/purchase-planning' &&
+                  path !== '/expense-split'
               ).map((path) => (
                 <Route
                   key={path}

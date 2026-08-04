@@ -265,4 +265,26 @@ describe('debtService', () => {
 
         expect(debtRepository.excluir).toHaveBeenCalledWith('div-3', 'usr-1');
     });
+
+    it('reabre dívida quitada ao excluir o último pagamento (RF-NOVO-O1)', async () => {
+        const pagamento = {
+            id: 'p1',
+            valor: 100,
+            dataPagamento: new Date('2026-01-10T12:00:00.000Z'),
+            observacao: null,
+            criadoEm: new Date('2026-01-10T12:00:00.000Z'),
+        };
+        debtRepository.buscarPorId.mockResolvedValue(
+            dividaBase({ quitada: true, pagamentos: [pagamento] })
+        );
+        debtRepository.buscarPagamento.mockResolvedValue(pagamento);
+        debtRepository.reabrir.mockResolvedValue(dividaBase({ quitada: false, pagamentos: [] }));
+
+        const result = await debtService.excluirPagamento('usr-1', 'div-1', 'p1');
+
+        expect(debtRepository.reabrir).toHaveBeenCalledWith('div-1', 'usr-1');
+        expect(result.quitada).toBe(false);
+        expect(result.valorPago).toBe('0.00');
+        expect(result.valorRestante).toBe('100.00');
+    });
 });

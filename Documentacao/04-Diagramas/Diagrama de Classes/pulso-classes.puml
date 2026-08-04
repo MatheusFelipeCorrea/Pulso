@@ -1,0 +1,300 @@
+@startuml pulso-classes
+' Pulso — Diagrama de Classes (domínio)
+' Versão: 1.1 | Data: 2026-06-09
+
+skinparam classAttributeIconSize 0
+hide empty members
+
+' --- Enums globais (sintaxe multilinha — evita erro no parser) ---
+enum ProvedorAuth {
+  EMAIL
+  GOOGLE
+}
+
+enum Tema {
+  CLARO
+  ESCURO
+}
+
+enum ModoUso {
+  ESTAGIARIO
+  CLT
+  PJ
+  PESSOA_FISICA
+}
+
+enum TipoTransacao {
+  RECEITA
+  DESPESA
+}
+
+enum TipoRecurso {
+  DINHEIRO
+  VA
+  VR
+  VT
+}
+
+enum TipoCategoria {
+  RECEITA
+  DESPESA
+}
+
+enum TipoNotificacao {
+  ALERTA_ORCAMENTO
+  ORCAMENTO_ESTOURADO
+  LEMBRETE_VENCIMENTO
+  META_ATINGIDA
+  RECEITA_REGISTRADA
+  DESPESA_REGISTRADA
+}
+
+enum StatusMeta {
+  ATIVA
+  PAUSADA
+  CONCLUIDA
+  CANCELADA
+}
+
+enum DirecaoDivida {
+  ME_DEVEM
+  EU_DEVO
+}
+
+enum PapelGrupo {
+  ADMIN
+  MEMBRO
+}
+
+enum NivelFinanceiro {
+  INICIANTE
+  CONSCIENTE
+  ESTRATEGISTA
+  INVESTIDOR
+}
+
+package "Usuário e Configuração" {
+  class Usuario {
+    +id: String
+    +nome: String
+    +email: String
+    +provedorAuth: ProvedorAuth
+    +verificado: Boolean
+    --
+    +registrar()
+    +autenticar()
+  }
+
+  class ConfiguracaoUsuario {
+    +valorSalario: Decimal
+    +valorVa: Decimal
+    +valorVr: Decimal
+    +valorVt: Decimal
+    +tema: Tema
+    +modoUso: ModoUso
+    +googleCalendarAtivo: Boolean
+  }
+
+  class TokenRenovacao {
+    +token: String
+    +expiraEm: DateTime
+    +revogado: Boolean
+  }
+}
+
+package "Transações" {
+  class Categoria {
+    +nome: String
+    +tipo: TipoCategoria
+    +cor: String
+    +padrao: Boolean
+  }
+
+  class Tag {
+    +nome: String
+    +icone: String
+    +cor: String
+  }
+
+  class Transacao {
+    +tipo: TipoTransacao
+    +recurso: TipoRecurso
+    +valor: Decimal
+    +descricao: String
+    +data: DateTime
+    +recorrente: Boolean
+    +regraRecorrencia: String
+    --
+    +validarRecursoCategoria()
+    +gerarRecorrencia()
+  }
+
+  class TransacaoTag {
+  }
+}
+
+package "Orçamento e Notificações" {
+  class Orcamento {
+    +mesReferencia: Date
+    +limiteValor: Decimal
+  }
+
+  class Notificacao {
+    +tipo: TipoNotificacao
+    +titulo: String
+    +mensagem: String
+    +lida: Boolean
+    +linkAcao: String
+  }
+}
+
+package "Metas e Viagens" {
+  class Meta {
+    +nome: String
+    +valorAlvo: Decimal
+    +valorAtual: Decimal
+    +prazo: DateTime
+    +status: StatusMeta
+    --
+    +registrarAporte()
+    +calcularPercentual()
+  }
+
+  class AporteMeta {
+    +valor: Decimal
+    +data: DateTime
+  }
+
+  class Viagem {
+    +destino: String
+    +moeda: String
+    +dataPrevista: DateTime
+  }
+
+  class DespesaViagem {
+    +categoria: String
+    +valorEstimado: Decimal
+    +descricao: String
+  }
+
+  class ObservacaoViagem {
+    +titulo: String
+    +conteudo: String
+    +tipo: String
+    +checklist: Json
+    +linkUrl: String
+  }
+
+  class MoedaFavorita {
+    +codigo: String
+  }
+}
+
+package "Lembretes e Calendário" {
+  class Lembrete {
+    +titulo: String
+    +valor: Decimal
+    +dataVencimento: DateTime
+    +categoria: String
+    +pago: Boolean
+    +repetirMensal: Boolean
+    +googleEventId: String
+  }
+}
+
+package "Vale Transporte" {
+  class VendaVt {
+    +nomeComprador: String
+    +valorNominal: Decimal
+    +valorRecebido: Decimal
+    +dataVenda: DateTime
+  }
+
+  class UsoVt {
+    +quantidade: Int
+    +valorPorPassagem: Decimal
+    +data: DateTime
+  }
+}
+
+package "Dívidas" {
+  class Divida {
+    +direcao: DirecaoDivida
+    +nomePessoa: String
+    +valor: Decimal
+    +quitada: Boolean
+    --
+    +calcularSaldoDevedor()
+  }
+
+  class PagamentoDivida {
+    +valor: Decimal
+    +dataPagamento: DateTime
+  }
+}
+
+package "Grupos (planejado)" <<Cloud>> {
+  class Grupo {
+    +nome: String
+    +codigoConvite: String
+  }
+
+  class MembroGrupo {
+    +papel: PapelGrupo
+  }
+
+  class MetaGrupo
+  class ViagemGrupo
+}
+
+package "Gamificação (planejado)" <<Cloud>> {
+  class Sequencia {
+    +sequenciaAtual: Int
+    +xp: Int
+    +nivel: NivelFinanceiro
+  }
+
+  class Conquista
+  class ConquistaUsuario
+  class DesafioMensal
+}
+
+' --- Relacionamentos (fora dos packages) ---
+Usuario "1" -- "1" ConfiguracaoUsuario
+Usuario "1" -- "*" TokenRenovacao
+
+Usuario "1" -- "*" Categoria
+Usuario "1" -- "*" Tag
+Usuario "1" -- "*" Transacao
+Transacao "*" -- "1" Categoria
+Transacao "0..1" -- "0..*" Transacao : pai / filhas
+Transacao "*" -- "*" Tag : via TransacaoTag
+
+Usuario "1" -- "*" Orcamento
+Orcamento "*" -- "1" Categoria
+Usuario "1" -- "*" Notificacao
+
+Usuario "1" -- "*" Meta
+Meta "1" -- "*" AporteMeta
+Usuario "1" -- "*" Viagem
+Viagem "0..1" -- "1" Meta
+Viagem "1" -- "*" DespesaViagem
+Viagem "1" -- "*" ObservacaoViagem
+Usuario "1" -- "*" MoedaFavorita
+
+Usuario "1" -- "*" Lembrete
+Lembrete "0..1" -- "0..*" Lembrete : template / gerados
+
+Usuario "1" -- "*" VendaVt
+Usuario "1" -- "*" UsoVt
+
+Usuario "1" -- "*" Divida
+Divida "1" -- "*" PagamentoDivida
+
+Grupo "1" -- "*" MembroGrupo
+MembroGrupo "*" -- "1" Usuario
+
+Usuario "1" -- "0..1" Sequencia
+Usuario "1" -- "*" ConquistaUsuario
+
+@enduml

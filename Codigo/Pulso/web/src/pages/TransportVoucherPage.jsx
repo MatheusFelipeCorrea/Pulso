@@ -18,6 +18,7 @@ import { VtSaleModal } from '@/components/features/transport/VtSaleModal.jsx'
 import { VtUsageModal } from '@/components/features/transport/VtUsageModal.jsx'
 import * as transportService from '@/services/transportService.js'
 import { periodoAtual } from '@/utils/transactionRecurrence.js'
+import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/defaultAuthenticatedRoute.js'
 import {
   canUseVtFeatures,
   isVtDisabledByUser,
@@ -187,7 +188,7 @@ export default function TransportVoucherPage() {
         toast.success('Vale Transporte habilitado!')
       } else {
         toast.success('Vale Transporte desabilitado.')
-        navigate('/dashboard', { replace: true })
+        navigate(DEFAULT_AUTHENTICATED_ROUTE, { replace: true })
       }
     } catch (err) {
       toast.error(err.response?.data?.message ?? 'Erro ao salvar preferência')
@@ -232,7 +233,7 @@ export default function TransportVoucherPage() {
   }
 
   if (isPessoaFisica) {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to={DEFAULT_AUTHENTICATED_ROUTE} replace />
   }
 
   if (showOptIn) {

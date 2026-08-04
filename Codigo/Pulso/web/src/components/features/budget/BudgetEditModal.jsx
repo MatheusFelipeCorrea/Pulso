@@ -5,6 +5,7 @@ import {
   Check,
   Info,
   Plus,
+  RefreshCw,
   Tag,
   TrendingUp,
   Wallet,
@@ -16,6 +17,7 @@ import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { Select } from '@/design-system/components/selects/Select/Select.jsx'
 import { InputMoney } from '@/design-system/components/inputs/InputMoney/InputMoney.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
+import { Toggle } from '@/design-system/components/forms/Toggle/Toggle.jsx'
 import { resolveBadgeIcon } from '@/components/badges/iconRegistry.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { categoriaToSelectOption } from '@/utils/filterOptions.js'
@@ -43,6 +45,8 @@ export function BudgetEditModal({
         categoriaIcone: item.categoriaIcone,
         categoriaCor: item.categoriaCor,
         limiteValor: item.limiteValor,
+        rolloverAtivo: item.rolloverAtivo ?? false,
+        valorRollover: item.valorRollover ?? 0,
       }))
     )
     setCategoriaAdicionar(preselectCategoriaId)
@@ -82,6 +86,14 @@ export function BudgetEditModal({
     )
   }
 
+  const handleAtualizarRollover = (categoriaId, ativo) => {
+    setLimites((prev) =>
+      prev.map((item) =>
+        item.categoriaId === categoriaId ? { ...item, rolloverAtivo: ativo } : item
+      )
+    )
+  }
+
   const handleAdicionar = () => {
     if (!categoriaAdicionar) return
     const categoria = categoriasDisponiveis.find((item) => item.id === categoriaAdicionar)
@@ -95,6 +107,8 @@ export function BudgetEditModal({
         categoriaIcone: categoria.icone,
         categoriaCor: categoria.cor,
         limiteValor: 0,
+        rolloverAtivo: false,
+        valorRollover: 0,
       },
     ])
     setCategoriaAdicionar(null)
@@ -106,6 +120,7 @@ export function BudgetEditModal({
       limites: limites.map((item) => ({
         categoriaId: item.categoriaId,
         limiteValor: Number(item.limiteValor),
+        rolloverAtivo: Boolean(item.rolloverAtivo),
       })),
     })
   }
@@ -151,7 +166,14 @@ export function BudgetEditModal({
                     >
                       {resolveBadgeIcon(item.categoriaIcone ?? 'Tag', { size: 16 })}
                     </span>
-                    <span className="budget-edit-modal__cat-name">{item.categoriaNome}</span>
+                    <span className="budget-edit-modal__cat-name-wrap">
+                      <span className="budget-edit-modal__cat-name">{item.categoriaNome}</span>
+                      {item.valorRollover > 0 && (
+                        <span className="budget-edit-modal__rollover-hint">
+                          + {formatCurrency(item.valorRollover)} do mês anterior
+                        </span>
+                      )}
+                    </span>
                   </div>
 
                   <InputMoney
@@ -159,6 +181,18 @@ export function BudgetEditModal({
                     onChange={(value) => handleAtualizarValor(item.categoriaId, value)}
                     className="budget-edit-modal__money"
                   />
+
+                  <div
+                    className="budget-edit-modal__rollover"
+                    title="Acumular sobra no próximo mês"
+                  >
+                    <RefreshCw size={14} aria-hidden />
+                    <Toggle
+                      size="compact"
+                      checked={item.rolloverAtivo}
+                      onChange={(value) => handleAtualizarRollover(item.categoriaId, value)}
+                    />
+                  </div>
 
                   <IconButton
                     variant="ghost"

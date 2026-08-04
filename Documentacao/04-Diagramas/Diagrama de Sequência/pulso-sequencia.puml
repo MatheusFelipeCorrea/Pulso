@@ -1,0 +1,167 @@
+@startuml pulso-sequencia-login
+' Pulso — Sequência: Login com e-mail
+' Versão: 1.0 | Data: 2026-06-09
+
+actor Usuario
+participant "LoginPage" as Page
+participant "authService" as Svc
+participant "API /auth/login" as API
+participant "authService\n(API)" as AuthSvc
+participant "Prisma" as DB
+participant "Redux\nauthSlice" as Store
+
+Usuario -> Page : preenche e-mail/senha
+Page -> Svc : login(credentials)
+Svc -> API : POST /auth/login
+API -> AuthSvc : autenticar(email, senha)
+AuthSvc -> DB : buscar Usuario
+DB --> AuthSvc : usuario + senhaHash
+AuthSvc -> AuthSvc : bcrypt.compare()
+alt conta não verificada
+  AuthSvc --> API : 403
+  API --> Page : erro
+else sucesso
+  AuthSvc -> DB : criar TokenRenovacao
+  AuthSvc --> API : accessToken + refreshToken
+  API --> Svc : tokens + usuario
+  Svc -> Store : setCredentials()
+  Store --> Page : autenticado
+  Page --> Usuario : redirect /transactions
+end
+
+@enduml
+
+@startuml pulso-sequencia-transacao
+' Pulso — Sequência: Criar transação
+
+actor Usuario
+participant "TransactionsPage" as Page
+participant "TransactionFormModal" as Modal
+participant "transactionService" as Svc
+participant "API" as API
+participant "transactionService\n(API)" as TxSvc
+participant "Prisma" as DB
+
+Usuario -> Page : clicar "Nova transação"
+Page -> Modal : abrir
+Usuario -> Modal : preencher dados
+Modal -> Modal : validar recurso×categoria
+Modal -> Svc : criarTransacao(payload)
+Svc -> API : POST /transacoes
+API -> TxSvc : criar(usuarioId, dados)
+TxSvc -> TxSvc : validarRegrasNegocio()
+TxSvc -> DB : transacao.create()
+DB --> TxSvc : transacao
+TxSvc --> API : 201
+API --> Svc : JSON
+Svc --> Page : sucesso
+Page --> Usuario : lista atualizada
+
+@enduml
+
+@startuml pulso-sequencia-viagem
+' Pulso — Sequência: Planejar viagem com pretensões
+
+actor Usuario
+participant "TripsPage" as Page
+participant "TripFormModal" as TripModal
+participant "viagemService" as Svc
+participant "API /viagens" as API
+participant "viagemService\n(API)" as ViagemSvc
+participant "AwesomeAPI" as Cotacao
+participant "Prisma" as DB
+
+Usuario -> Page : nova viagem
+Page -> TripModal : abrir
+Usuario -> TripModal : destino, moeda, data
+TripModal -> Svc : criarViagem(dados)
+Svc -> API : POST /viagens
+API -> ViagemSvc : criar()
+ViagemSvc -> DB : viagem.create()
+DB --> ViagemSvc : viagem
+ViagemSvc --> API : 201
+API --> Page : viagem criada
+
+Usuario -> Page : adicionar pretensão
+Page -> Svc : criarDespesa(viagemId, dados)
+Svc -> API : POST /viagens/:id/despesas
+API -> ViagemSvc : adicionarDespesa()
+ViagemSvc -> DB : despesaViagem.create()
+ViagemSvc --> Page : pretensão salva
+
+Page -> Svc : listarCotacoes()
+Svc -> Cotacao : GET /daily/USD-BRL/30
+Cotacao --> Page : histórico cotação
+Page --> Usuario : gráfico + total BRL
+
+@enduml
+
+@startuml pulso-sequencia-orcamento-alerta
+' Pulso — Sequência: Alerta de orçamento (cron)
+
+participant "Vercel Cron" as Cron
+participant "API /cron/daily" as API
+participant "budgetAlertJob" as Job
+participant "budgetService" as Svc
+participant "Prisma" as DB
+participant "notificationService" as Notif
+participant "Web App" as Web
+
+Cron -> API : GET /cron/daily\nBearer CRON_SECRET
+API -> Job : executar()
+Job -> Svc : verificarLimitesMes()
+Svc -> DB : orcamentos + transacoes
+DB --> Svc : gastos por categoria
+
+loop cada categoria
+  alt gasto >= 100% limite
+    Svc -> Notif : criar(ORCAMENTO_ESTOURADO)
+  else gasto >= 80% limite
+    Svc -> Notif : criar(ALERTA_ORCAMENTO)
+  end
+  Notif -> DB : notificacao.create()
+end
+
+Job --> API : ok
+note over Web
+  Usuário vê badge no sino
+  ao abrir o app
+end note
+
+@enduml
+
+@startuml pulso-sequencia-google-calendar
+' Pulso — Sequência: Sincronizar lembrete com Google Calendar
+
+actor Usuario
+participant "CalendarPage" as Page
+participant "calendarService" as Svc
+participant "API" as API
+participant "calendarService\n(API)" as CalSvc
+participant "Google OAuth" as Google
+participant "Google Calendar" as GCal
+participant "Prisma" as DB
+
+Usuario -> Page : conectar Google Calendar
+Page -> Svc : obterUrlAutorizacao()
+Svc -> API : GET /calendario/google/url
+API --> Page : redirect URL
+Page -> Google : autorizar escopos
+Google --> API : callback /calendario/google/callback
+API -> CalSvc : salvarTokens()
+CalSvc -> DB : configuracaoUsuario.update()
+
+Usuario -> Page : sincronizar lembretes
+Page -> Svc : sincronizar()
+Svc -> API : POST /calendario/google/sync
+API -> CalSvc : syncLembretes()
+CalSvc -> DB : lembretes pendentes
+loop cada lembrete
+  CalSvc -> GCal : events.insert/update
+  GCal --> CalSvc : googleEventId
+  CalSvc -> DB : lembrete.update()
+end
+CalSvc --> Page : concluído
+Page --> Usuario : status sincronizado
+
+@enduml

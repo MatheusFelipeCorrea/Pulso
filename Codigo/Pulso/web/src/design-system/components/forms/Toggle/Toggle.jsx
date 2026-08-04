@@ -40,9 +40,13 @@ export const Toggle = ({
   if (!label && !description) return switchEl
 
   return (
-    <div className={formControlRowVariants({ align: description ? 'start' : 'center' })}>
-      {switchEl}
-      <div className="flex flex-col gap-0.5">
+    <div
+      className={cn(
+        formControlRowVariants({ align: description ? 'start' : 'center' }),
+        'w-full justify-between'
+      )}
+    >
+      <div className="flex flex-col gap-0.5 min-w-0">
         {label && (
           <label htmlFor={id} className={cn(formLabelVariants(), disabled && 'opacity-50')}>
             {label}
@@ -54,6 +58,7 @@ export const Toggle = ({
           </span>
         )}
       </div>
+      {switchEl}
     </div>
   )
 }

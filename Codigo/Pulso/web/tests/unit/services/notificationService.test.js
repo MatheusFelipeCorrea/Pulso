@@ -22,16 +22,16 @@ describe('services/notificationService', () => {
 
   it('lista notificacoes com params opcionais', async () => {
     const signal = new AbortController().signal
-    api.get.mockResolvedValueOnce({ data: [{ id: 'n1' }] })
-    api.get.mockResolvedValueOnce({ data: [] })
+    api.get.mockResolvedValueOnce({
+      data: [{ id: 'n1', tipo: 'STREAK', titulo: 'Streak', mensagem: 'ok', lida: false, criadoEm: '2026-01-01' }],
+      headers: { 'x-total-count': '1', 'x-total-pages': '1', 'x-current-page': '1' },
+    })
 
-    await expect(listarNotificacoes({ lida: false, limite: 20, pagina: 3 }, { signal })).resolves.toEqual([
-      { id: 'n1' },
-    ])
-    await expect(listarNotificacoes({ limite: 0, pagina: 0 })).resolves.toEqual([])
+    const result = await listarNotificacoes({ lida: false, limite: 20, pagina: 3 }, { signal })
 
-    expect(api.get).toHaveBeenNthCalledWith(1, '/notificacoes?lida=false&limite=20&pagina=3', { signal })
-    expect(api.get).toHaveBeenNthCalledWith(2, '/notificacoes?', { signal: undefined })
+    expect(result.notificacoes).toHaveLength(1)
+    expect(result.total).toBe(1)
+    expect(api.get).toHaveBeenCalledWith('/notificacoes?lida=false&limite=20&pagina=3', { signal })
   })
 
   it('conta e marca notificacoes como lidas', async () => {

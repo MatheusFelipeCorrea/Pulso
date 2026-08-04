@@ -10,7 +10,7 @@ const queryNotificacoesSchema = z.object({
                 if (value === 'false') return false;
                 return undefined;
             }),
-        limite: z.coerce.number().int().min(1).max(50).optional().default(10),
+        limite: z.coerce.number().int().min(1).max(50).optional().default(20),
         pagina: z.coerce.number().int().min(1).optional().default(1),
     }),
 });

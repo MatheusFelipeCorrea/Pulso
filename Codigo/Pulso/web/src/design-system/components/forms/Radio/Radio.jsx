@@ -24,7 +24,10 @@ export const Radio = ({
 
   return (
     <label
-      htmlFor={id}
+      onClick={(event) => {
+        event.preventDefault()
+        if (!disabled) onChange?.(value)
+      }}
       className={cn(
         formControlRowVariants({ align: description ? 'start' : 'center' }),
         disabled && 'cursor-not-allowed',

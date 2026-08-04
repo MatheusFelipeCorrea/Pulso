@@ -27,6 +27,8 @@ describe('budgetMapper', () => {
             categoriaCor: '#FFFFFF',
             mesReferencia: '2026-06-01',
             limiteValor: 123.45,
+            rolloverAtivo: false,
+            valorRollover: 0,
             criadoEm: entrada.criadoEm,
             atualizadoEm: entrada.atualizadoEm,
         });

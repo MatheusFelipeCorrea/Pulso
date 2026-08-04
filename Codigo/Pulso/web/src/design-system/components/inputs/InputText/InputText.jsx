@@ -88,7 +88,7 @@ export const InputText = forwardRef(
             value={value}
             onChange={onChange}
             disabled={disabled}
-            required={required}
+            aria-required={required || undefined}
             placeholder={placeholder}
             aria-invalid={hasError || undefined}
             aria-describedby={hasError ? errorId : undefined}
@@ -121,7 +121,8 @@ export const InputText = forwardRef(
         </div>
 
         {hasError && (
-          <p id={errorId} className={inputHelperVariants({ type: 'error' })} role="alert">
+          <p id={errorId} className={cn(inputHelperVariants({ type: 'error' }), 'flex items-center gap-1')} role="alert">
+            <AlertTriangle size={14} className="shrink-0" />
             {error}
           </p>
         )}

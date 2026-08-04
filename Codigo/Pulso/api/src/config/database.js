@@ -1,5 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 
+const KEEPALIVE_INTERVAL_MS = 4 * 60 * 1000;
+
 const isTransientConnectionError = (error) => {
     const message = error?.message ?? '';
     return (
@@ -12,6 +14,31 @@ const isTransientConnectionError = (error) => {
 };
 
 const logConfig = ['error', 'warn'];
+
+const reconnectClient = async (client) => {
+    await client.$disconnect().catch(() => {});
+    await client.$connect();
+};
+
+const startConnectionKeepAlive = (client) => {
+    if (process.env.NODE_ENV === 'test' || process.env.VERCEL) {
+        return;
+    }
+
+    const timer = setInterval(async () => {
+        try {
+            await client.$queryRaw`SELECT 1`;
+        } catch (error) {
+            if (isTransientConnectionError(error)) {
+                await reconnectClient(client);
+            }
+        }
+    }, KEEPALIVE_INTERVAL_MS);
+
+    if (typeof timer.unref === 'function') {
+        timer.unref();
+    }
+};
 
 const createBaseClient = () => {
     if (process.env.VERCEL) {
@@ -44,8 +71,7 @@ const createPrismaClient = () => {
                             throw error;
                         }
 
-                        await baseClient.$disconnect().catch(() => {});
-                        await baseClient.$connect();
+                        await reconnectClient(baseClient);
 
                         return query(args);
                     }
@@ -60,6 +86,7 @@ const globalForPrisma = globalThis;
 const getPrisma = () => {
     if (!globalForPrisma.prisma) {
         globalForPrisma.prisma = createPrismaClient();
+        startConnectionKeepAlive(globalForPrisma.prisma);
     }
     return globalForPrisma.prisma;
 };

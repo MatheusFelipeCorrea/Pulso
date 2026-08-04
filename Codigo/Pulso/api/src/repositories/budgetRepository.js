@@ -1,5 +1,6 @@
 const prisma = require('../config/database');
 const { intervaloDoMes } = require('../utils/monthUtils');
+const { calcularValorRollover } = require('../utils/budgetRolloverUtils');
 
 const includeCategoria = { categoria: true };
 
@@ -21,7 +22,14 @@ const contarPorUsuarioEMes = async (usuarioId, mesReferencia) =>
         where: { usuarioId, mesReferencia },
     });
 
-const upsert = async ({ usuarioId, categoriaId, mesReferencia, limiteValor }) =>
+const upsert = async ({
+    usuarioId,
+    categoriaId,
+    mesReferencia,
+    limiteValor,
+    rolloverAtivo = false,
+    valorRollover = 0,
+}) =>
     prisma.orcamento.upsert({
         where: {
             usuarioId_categoriaId_mesReferencia: {
@@ -35,8 +43,10 @@ const upsert = async ({ usuarioId, categoriaId, mesReferencia, limiteValor }) =>
             categoriaId,
             mesReferencia,
             limiteValor,
+            rolloverAtivo,
+            valorRollover,
         },
-        update: { limiteValor },
+        update: { limiteValor, rolloverAtivo },
         include: includeCategoria,
     });
 
@@ -83,14 +93,18 @@ const calcularGastosPorCategoria = async (usuarioId, mesReferencia) => {
 
 const copiarParaMes = async (usuarioId, mesOrigem, mesDestino) => {
     const origem = await buscarPorUsuarioEMes(usuarioId, mesOrigem);
+    const gastosOrigem = await calcularGastosPorCategoria(usuarioId, mesOrigem);
     const criados = [];
 
     for (const item of origem) {
+        const valorRollover = calcularValorRollover(item, gastosOrigem[item.categoriaId]);
         const orcamento = await upsert({
             usuarioId,
             categoriaId: item.categoriaId,
             mesReferencia: mesDestino,
-            limiteValor: item.limiteValor,
+            limiteValor: Number(item.limiteValor) + valorRollover,
+            rolloverAtivo: item.rolloverAtivo,
+            valorRollover,
         });
         criados.push(orcamento);
     }

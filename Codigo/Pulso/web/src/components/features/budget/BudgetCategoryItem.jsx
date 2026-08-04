@@ -1,4 +1,4 @@
-import { AlertTriangle, Bell } from 'lucide-react'
+import { AlertTriangle, Bell, RefreshCw } from 'lucide-react'
 import { resolveBadgeIcon } from '@/components/badges/iconRegistry.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { Badge } from '@/design-system/components/data-display/Badge/Badge.jsx'
@@ -39,6 +39,16 @@ export function BudgetCategoryItem({ categoria }) {
       <div className="budget-category-row__pct">{formatPercentualCategoria(percentual)}</div>
 
       <div className="budget-category-row__badge">
+        {categoria.valorRollover > 0 ? (
+          <Badge
+            variant="info"
+            size="sm"
+            leftIcon={<RefreshCw size={12} />}
+            title={`Rollover do mês anterior: ${formatCurrency(categoria.valorRollover)}`}
+          >
+            + {formatCurrency(categoria.valorRollover)}
+          </Badge>
+        ) : null}
         {categoria.status === 'alerta' ? (
           <Badge variant="warning" size="sm" leftIcon={<Bell size={12} />}>
             80%

@@ -34,7 +34,10 @@ export const Checkbox = ({
   return (
     <div className={cn('flex flex-col gap-1.5', className)}>
       <label
-        htmlFor={id}
+        onClick={(event) => {
+          event.preventDefault()
+          if (!disabled) onChange?.(!checked)
+        }}
         className={cn(
           formControlRowVariants({ align: description ? 'start' : 'center' }),
           disabled && 'cursor-not-allowed'
