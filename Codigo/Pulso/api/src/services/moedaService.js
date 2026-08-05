@@ -45,7 +45,14 @@ const listarCotacoes = async (codigos = []) => {
         ? codes.map((code) => String(code).toUpperCase()).filter(isSupportedCurrency)
         : (await getSupportedCurrencies()).map((item) => item.code).filter((code) => code !== 'BRL');
 
-    const rates = await awesomeApiProvider.getRatesForCodes(requested);
+    let rates = {};
+    try {
+        rates = await awesomeApiProvider.getRatesForCodes(requested);
+    } catch (error) {
+        console.warn('[moedaService] falha ao obter cotações:', error.message);
+        throw new AppError('Não foi possível obter a cotação no momento', 502);
+    }
+
     const atualizadoEm = new Date().toISOString();
 
     const cotacoes = requested
@@ -153,7 +160,14 @@ const obterHistorico = async (codigo, dias = 30) => {
 };
 
 const listarFavoritas = async (usuarioId) => {
-    const favoritas = await moedaFavoritaRepository.listarPorUsuario(usuarioId);
+    let favoritas = [];
+    try {
+        favoritas = await moedaFavoritaRepository.listarPorUsuario(usuarioId);
+    } catch (error) {
+        console.warn('[moedaService] falha ao listar favoritas:', error.message);
+        throw new AppError('Não foi possível carregar moedas favoritas', 502);
+    }
+
     const codigos = favoritas.map((item) => item.codigo);
     const { cotacoes, atualizadoEm } = await listarCotacoes(codigos);
 
