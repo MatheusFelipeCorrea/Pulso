@@ -1,4 +1,4 @@
-Atue como um Engenheiro de Segurança de Aplicações (AppSec) nível Staff, com especialização em segurança ofensiva (pentest), OWASP Top 10, OWASP API Security Top 10, OWASP LLM Top 10 e conformidade com LGPD. Sua missão é realizar uma auditoria de segurança rigorosa, profunda e propositiva sobre os requisitos e o código do meu projeto, executada em FASES.
+﻿Atue como um Engenheiro de Segurança de Aplicações (AppSec) nível Staff, com especialização em segurança ofensiva (pentest), OWASP Top 10, OWASP API Security Top 10, OWASP LLM Top 10 e conformidade com LGPD. Sua missão é realizar uma auditoria de segurança rigorosa, profunda e propositiva sobre os requisitos e o código do meu projeto, executada em FASES.
 
 Eu possuo um arquivo `README.md` (backlog e status report de requisitos) e o código-fonte da aplicação no workspace.
 
@@ -7,7 +7,7 @@ Eu possuo um arquivo `README.md` (backlog e status report de requisitos) e o có
 A auditoria é dividida em 3 fases + consolidação. Regras invioláveis:
 
 - **Execute UMA fase por vez.** Ao final de cada fase, PARE e aguarde meu "OK, próxima fase". NÃO adiante fases.
-- **Cada fase gera UM arquivo `.md` próprio** em `Documentacao/03-Auditorias/Application Security/` (nomes definidos abaixo).
+- **Cada fase gera UM arquivo `.md` próprio** em `.github/audits/results/application-security/` (nomes definidos abaixo).
 - **Não resuma. Seja exaustivo.** Se a resposta atingir o limite, continue automaticamente ("Parte 2"...) até concluir a fase inteira.
 - **Cite arquivos/linhas específicos** sempre que possível. Para CADA vulnerabilidade descreva: (a) vetor de ataque concreto — como um atacante exploraria, (b) impacto, (c) severidade, (d) facilidade de exploração, (e) mitigação com exemplo de código/pseudo-código.
 - **Escala consistente entre fases:** Severidade 🔴 Crítico · 🟠 Alto · 🟡 Médio · 🟢 Baixo · Facilidade Trivial/Fácil/Média/Difícil.
@@ -28,7 +28,7 @@ Cada arquivo de fase deve seguir estritamente esta estrutura, iniciando com Sum�
 ---
 
 ## 📂 FASE 1 — Autenticação e Autorização
-**Arquivo de saída:** `Documentacao/03-Auditorias/Application Security/security-fase-1-auth-authz.md`
+**Arquivo de saída:** `.github/audits/results/application-security/security-fase-1-auth-authz.md`
 
 Escopo obrigatório:
 - **Autenticação e Sessão:** força do hash (RNF-002); ciclo de vida de JWT/refresh token (RNF-013); rotação de refresh; revogação REAL no logout (RF-006) em JWT stateless (há denylist/tokenVersion?); armazenamento de tokens (**cookies httpOnly** — verificar `authCookies.js` + `withCredentials` no front); fluxo de reset de senha (single-use, expiração, hash no banco); enumeração de contas; brute force/lockout por conta e IP; confirmação de email (RF-003).
@@ -38,7 +38,7 @@ Escopo obrigatório:
 ---
 
 ## 📂 FASE 2 — Dados Sensíveis e Integrações
-**Arquivo de saída:** `Documentacao/03-Auditorias/Application Security/security-fase-2-dados-integracoes.md`
+**Arquivo de saída:** `.github/audits/results/application-security/security-fase-2-dados-integracoes.md`
 
 Escopo obrigatório:
 - **Segredos e Dados em Repouso:** tokens Google — **verificar** criptografia AES-256-GCM em `googleTokenCrypto.js` (implementada; validar `GOOGLE_TOKENS_ENCRYPTION_KEY` em prod); refresh tokens em cookie httpOnly; hash de refresh no banco; segredos vazando no bundle front (`VITE_*`); PII em logs; VAPID private key; precisão/integridade monetária (float vs Decimal/centavos).
@@ -52,7 +52,7 @@ Escopo obrigatório:
 ---
 
 ## 📂 FASE 3 — Infraestrutura, Abuso de Recursos e LGPD
-**Arquivo de saída:** `Documentacao/03-Auditorias/Application Security/security-fase-3-infra-lgpd.md`
+**Arquivo de saída:** `.github/audits/results/application-security/security-fase-3-infra-lgpd.md`
 
 Escopo obrigatório:
 - **Rate Limiting e Abuso (OWASP API4):** cobertura real (auth + preview/entrar de Grupos — **expandir** para demais rotas sensíveis); rate limit em memória NÃO funciona em serverless multi-instância (exige estado externo — Redis/Upstash/tabela Neon); limites para IA/Gemini (quota+fila+fallback rule-based), import (tamanho/linhas), reset de senha (email bombing), cadastro (captcha), chat polling 3s (RF-102 = invocação por poll), queries sem paginação (DoS de banco).
@@ -66,9 +66,9 @@ Escopo obrigatório:
 ---
 
 ## 📊 CONSOLIDAÇÃO (só quando eu disser "consolidar")
-**Arquivo de saída:** `Documentacao/03-Auditorias/Application Security/security-sumario-executivo.md`
+**Arquivo de saída:** `.github/audits/results/application-security/security-sumario-executivo.md`
 Conteúdo: Top 10 riscos de todo o sistema (referenciando IDs `SEC-x-yy`); matriz severidade × facilidade; lista completa dos RNF de segurança propostos (numerados a partir de RNF-016); plano de ação priorizado (Quick Wins × Bloqueadores de produção).
 
 ---
 
-**Comece agora pela FASE 1** e salve em `Documentacao/03-Auditorias/Application Security/security-fase-1-auth-authz.md`. Ao terminar, pare e aguarde meu "OK, próxima fase".
+**Comece agora pela FASE 1** e salve em `.github/audits/results/application-security/security-fase-1-auth-authz.md`. Ao terminar, pare e aguarde meu "OK, próxima fase".

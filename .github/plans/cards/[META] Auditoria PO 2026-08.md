@@ -71,7 +71,7 @@ Auditoria de Product Owner nos módulos 01–18 do Pulso. Identificou gaps entre
 ## Documentação
 
 - [Sumário executivo](../../Documentacao/03-Auditorias/Product Owner/00-Sumario-Executivo.md)
-- [Prompts auditoria](../../Documentacao/03-Auditorias/Prompts/)
+- [Prompts auditoria](../../audits/prompts/)
 - [Guia de commits](../../Documentacao/02-Engenharia/Guia-Commits.md)
 
 ---

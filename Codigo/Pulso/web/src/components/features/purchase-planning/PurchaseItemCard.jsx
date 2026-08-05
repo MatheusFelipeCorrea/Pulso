@@ -81,7 +81,7 @@ export function PurchaseItemCard({
             showPhoto
               ? undefined
               : {
-                  background: `linear-gradient(160deg, color-mix(in srgb, ${categoryConfig.color} 22%, #1a1d2e), color-mix(in srgb, ${categoryConfig.color} 8%, #12141c))`,
+                  background: `linear-gradient(160deg, color-mix(in srgb, ${categoryConfig.color} 22%, var(--ds-color-surface-elevated)), color-mix(in srgb, ${categoryConfig.color} 8%, var(--ds-color-surface)))`,
                 }
           }
         >

@@ -1,4 +1,4 @@
-Atue como um Arquiteto de Software nível Staff, com especialização em arquitetura de sistemas distribuídos, modelagem de domínio (DDD), integração de APIs, persistência relacional (PostgreSQL/Prisma) e front-end SPA (React). Sua missão é realizar uma auditoria arquitetural rigorosa, profunda e propositiva sobre os requisitos e o código do meu projeto, executada em FASES.
+﻿Atue como um Arquiteto de Software nível Staff, com especialização em arquitetura de sistemas distribuídos, modelagem de domínio (DDD), integração de APIs, persistência relacional (PostgreSQL/Prisma) e front-end SPA (React). Sua missão é realizar uma auditoria arquitetural rigorosa, profunda e propositiva sobre os requisitos e o código do meu projeto, executada em FASES.
 
 Eu possuo um `README.md` (backlog e status report de requisitos), documentação em `Documentacao/` e o código-fonte completo no workspace (`Codigo/Pulso/api`, `Codigo/Pulso/web`).
 
@@ -7,7 +7,7 @@ Eu possuo um `README.md` (backlog e status report de requisitos), documentação
 A auditoria é dividida em 3 fases + consolidação. Regras:
 
 - **Execute UMA fase por vez.** Ao final de cada fase, PARE e aguarde meu "OK, próxima fase". NÃO adiante fases.
-- **Cada fase gera UM arquivo `.md` próprio** em `Documentacao/03-Auditorias/Architecture/` (nomes definidos abaixo).
+- **Cada fase gera UM arquivo `.md` próprio** em `.github/audits/results/architecture/` (nomes definidos abaixo).
 - **Não resuma. Seja exaustivo.** Se a resposta atingir o limite, continue automaticamente ("Parte 2"...) até concluir a fase inteira.
 - **Cite arquivos/linhas específicos** sempre que possível. Para CADA achado descreva: (a) problema arquitetural concreto, (b) impacto em manutenção/escala/consistência, (c) severidade, (d) recomendação com trade-offs explícitos.
 - **Escala consistente:** 🔴 Crítico · 🟠 Alto · 🟡 Médio · 🟢 Baixo.
@@ -28,7 +28,7 @@ Cada arquivo de fase deve seguir estritamente:
 ---
 
 ## 📂 FASE 1 — Domínio, Camadas e Modelo de Dados
-**Arquivo de saída:** `Documentacao/03-Auditorias/Architecture/arch-fase-1-dominio-dados.md`
+**Arquivo de saída:** `.github/audits/results/architecture/arch-fase-1-dominio-dados.md`
 
 Escopo obrigatório:
 - **Boundaries e módulos:** mapa dos 25 módulos vs. bounded contexts reais no código; acoplamento indevido entre domínios (ex.: Orçamento ↔ Planejamento de Compra ↔ Perfil).
@@ -41,7 +41,7 @@ Escopo obrigatório:
 ---
 
 ## 📂 FASE 2 — Integrações, Jobs e Runtime Serverless
-**Arquivo de saída:** `Documentacao/03-Auditorias/Architecture/arch-fase-2-integracoes-runtime.md`
+**Arquivo de saída:** `.github/audits/results/architecture/arch-fase-2-integracoes-runtime.md`
 
 Escopo obrigatório:
 - **Integrações externas:** Google OAuth/Calendar, cotações, GeoNames, FIPE, SMTP, Gemini (futuro) — contratos, timeouts, retries, circuit breaker, fallbacks.
@@ -53,7 +53,7 @@ Escopo obrigatório:
 ---
 
 ## 📂 FASE 3 — Escalabilidade, Observabilidade e Evolução
-**Arquivo de saída:** `Documentacao/03-Auditorias/Architecture/arch-fase-3-escala-evolucao.md`
+**Arquivo de saída:** `.github/audits/results/architecture/arch-fase-3-escala-evolucao.md`
 
 Escopo obrigatório:
 - **Escalabilidade:** gargalos em queries N+1, agregações duplicadas (Dashboard futuro vs. Relatórios), índices ausentes.
@@ -66,10 +66,10 @@ Escopo obrigatório:
 ---
 
 ## 📊 CONSOLIDAÇÃO (só quando eu disser "consolidar")
-**Arquivo de saída:** `Documentacao/03-Auditorias/Architecture/arch-sumario-executivo.md`
+**Arquivo de saída:** `.github/audits/results/architecture/arch-sumario-executivo.md`
 
 Conteúdo: mapa C4 simplificado (contexto + containers); top 10 achados (`ARCH-x-yy`); ADRs recomendados; plano de ação (quick wins × refactors estruturais); dependências entre módulos para Dashboard, Perfil e Insights.
 
 ---
 
-**Comece agora pela FASE 1** e salve em `Documentacao/03-Auditorias/Architecture/arch-fase-1-dominio-dados.md`. Ao terminar, pare e aguarde meu "OK, próxima fase".
+**Comece agora pela FASE 1** e salve em `.github/audits/results/architecture/arch-fase-1-dominio-dados.md`. Ao terminar, pare e aguarde meu "OK, próxima fase".

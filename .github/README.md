@@ -1,58 +1,66 @@
 ﻿# `.github/` — automação, planejamento e agentes
 
-Configuração do repositório no GitHub: CI, Dependabot, labels, **cards de implementação** e ferramentas para agentes (Cursor/Copilot).
+> **README principal do repositório:** [../README.md](../README.md)  
+> Este arquivo descreve **somente** o conteúdo da pasta `.github/` (CI, epics, skills, auditorias).
+
+Configuração do repositório no GitHub: workflows, Dependabot, labels, **cards de implementação** e ferramentas para agentes (Cursor/Copilot).
 
 ## Mapa rápido
 
 ```
 .github/
-├── README.md                 ← você está aqui
-├── dependabot.yml            npm (web/api) + GitHub Actions
-├── labeler.yml               labels automáticos em PRs
-├── workflows/                CI (lint, test, build, prisma)
-├── plans/
-│   ├── README.md             índice de epics + status
-│   ├── cards/                epics (Jira-like) — fonte de verdade do escopo
-│   └── implementations/      planos gerados pelo agent (por feature)
-├── agents/                   definições de agentes Cursor/Copilot
-└── skills/                   skills reutilizáveis (geradores + manutenção)
+├── README.md                 ← índice desta pasta (não é a home do repo)
+├── dependabot.yml
+├── labeler.yml
+├── workflows/                CI + security scan
+├── audits/                 prompts, scanners, resultados novos
+├── plans/                  epics e planos de implementação
+├── agents/                 personas Cursor/Copilot
+└── skills/                 auditorias e manutenção
 ```
 
-**Não existem** (e não precisam, por ora): `.github/docs/`, `.github/instructions/` — documentação de produto/código ficou em [`Documentacao/`](../Documentacao/README.md).
+Detalhes de cada subpasta:
+
+| Pasta | Índice |
+|-------|--------|
+| `audits/` | [audits/README.md](./audits/README.md) |
+| `plans/` | [plans/README.md](./plans/README.md) |
+| `skills/` | tabela abaixo + [`skills/_legacy/`](./skills/_legacy/README.md) |
 
 ---
 
 ## O que é cada coisa?
 
-| Pasta / arquivo | Função | Quando usar |
-|-----------------|--------|-------------|
-| **`plans/cards/`** | Epics detalhados (escopo, stories, critérios) | Planejar e rastrear módulos; referência para PRs (`Refs:`) |
-| **`plans/implementations/`** | Planos faseados gerados pelo agent | Durante implementação guiada pelo agent |
-| **`agents/`** | Personas (implementation-plan, mentoring) | Cursor: `@implementation-plan.agent.md` |
-| **`skills/`** | Prompts especializados | Gerar blueprint **de módulo novo** ou atualizar README |
-| **`workflows/`** | CI + security scan | Automático em push/PR |
-| **`dependabot.yml`** | Atualização semanal de deps | Automático |
-| **`labeler.yml`** | Labels `web`, `api`, `docs`, `po-audit`, `plans`, etc. | Automático em PR |
+| Pasta / arquivo | Função |
+|-----------------|--------|
+| **`audits/`** | Prompts, scanners CI e resultados de auditoria |
+| **`plans/cards/`** | Epics detalhados — fonte de verdade do escopo |
+| **`plans/implementations/`** | Planos faseados gerados pelo agent |
+| **`agents/`** | Personas (`implementation-plan`, `mentoring-juniors`) |
+| **`skills/`** | Invocações especializadas para Cursor |
+| **`workflows/`** | CI + `npm audit` (push/PR/schedule) |
+
+Documentação de produto e código: [`Documentacao/`](../Documentacao/README.md)
 
 ---
 
 ## Skills — ativas vs. legado
 
-| Skill | Uso recomendado hoje |
-|-------|----------------------|
-| `readme-updater` | ✅ Manter READMEs de API/Web alinhados ao código |
-| `card-refiner` | ✅ Refinar/detalhar cards antes de implementar |
-| `po-audit` | ✅ Auditoria PO módulo a módulo → `Documentacao/03-Auditorias/Product Owner/` |
-| `security-audit` | ✅ AppSec em 3 fases → `Documentacao/03-Auditorias/Application Security/` |
-| `devops-audit` | ✅ CI/CD, cron, migrations → `Documentacao/03-Auditorias/DevOps/` |
-| `dev-senior-review` | ✅ Code review profundo → `Documentacao/03-Auditorias/Code Review/` |
-| `ux-audit` | ✅ Padronização DS/UX → `Documentacao/03-Auditorias/UX Design/` |
-| `architecture-audit` | ✅ Domínio, integrações, runtime → `Documentacao/03-Auditorias/Architecture/` |
-| `project-architect` | 🟡 Novos módulos grandes (19–25) |
-| `plantuml-diagram-generator` | 🟡 Atualizar diagramas em `Documentacao/04-Diagramas/` |
-| `skills/_legacy/*-blueprint-generator` | ⏸ Legado greenfield — ver [`skills/_legacy/README.md`](./skills/_legacy/README.md) |
+| Skill | Saída |
+|-------|-------|
+| `po-audit` | `.github/audits/results/product-owner/` |
+| `security-audit` | `.github/audits/results/application-security/` |
+| `devops-audit` | `.github/audits/results/devops/` |
+| `dev-senior-review` | `.github/audits/results/code-review/` |
+| `ux-audit` | `.github/audits/results/ux-design/` |
+| `architecture-audit` | `.github/audits/results/architecture/` |
+| `readme-updater` | READMEs API/Web |
+| `card-refiner` | Refino de epics |
+| `project-architect` | Novos módulos grandes |
+| `plantuml-diagram-generator` | Diagramas em `Documentacao/04-Diagramas/` |
+| `skills/_legacy/*` | ⏸ Legado greenfield |
 
-Prompts originais (spec completa): [`Documentacao/03-Auditorias/Prompts/`](../Documentacao/03-Auditorias/Prompts/README.md)
+Prompts (spec): [audits/prompts/](./audits/prompts/README.md) · Histórico ago/2026: [Documentacao/03-Auditorias/](../Documentacao/03-Auditorias/README.md)
 
 ---
 
@@ -60,28 +68,26 @@ Prompts originais (spec completa): [`Documentacao/03-Auditorias/Prompts/`](../Do
 
 | Agent | Papel |
 |-------|--------|
-| `implementation-plan.agent.md` | Lê card → gera plano em `plans/implementations/` → implementa por fases |
-| `mentoring-juniors.agent.md` | Explica código e boas práticas para juniors |
+| `implementation-plan.agent.md` | Card → plano em `plans/implementations/` → implementação por fases |
+| `mentoring-juniors.agent.md` | Explicações para juniors |
 
 ---
 
-## Convenções com o resto do repo
+## Convenções
 
-- **Requisitos oficiais:** [`Documentacao/01-Produto/Requisitos/`](../Documentacao/01-Produto/Requisitos/Readme.md)
-- **Auditoria PO:** [`Documentacao/03-Auditorias/Product Owner/`](../Documentacao/03-Auditorias/Product Owner/00-Sumario-Executivo.md)
-- **Commits:** [`Documentacao/02-Engenharia/Guia-Commits.md`](../Documentacao/02-Engenharia/Guia-Commits.md)
-- Cards usam `Refs: RF-xxx` / `Refs: PO-AUDIT-2026-08` alinhados ao guia de commits
+- Requisitos: [Documentacao/01-Produto/Requisitos/](../Documentacao/01-Produto/Requisitos/Readme.md)
+- Commits: [Guia-Commits.md](../Documentacao/02-Engenharia/Guia-Commits.md)
+- Cards: `Refs: RF-xxx` / `Refs: PO-AUDIT-2026-08`
 
 ---
 
-## Próximos epics sugeridos (ainda sem card)
+## Próximos epics sugeridos
 
 | Módulo | Prioridade |
 |--------|------------|
-| Dashboard (RF-007–014) | 🔴 Alta |
 | Perfil e Configurações (RF-073–078) | 🔴 Alta |
 | Insights + Chatbot (RF-044–053) | 🟡 Média |
+| Importação OFX/CSV/PDF (RF-155–158) | 🟡 Média |
 | Onboarding (RF-151–154) | 🟡 Média |
-| Importação OFX/CSV (RF-155–158) | 🟡 Média |
 
-Ver índice completo em [`plans/README.md`](./plans/README.md).
+Índice completo: [plans/README.md](./plans/README.md)

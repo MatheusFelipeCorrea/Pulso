@@ -1,5 +1,8 @@
 import { useId, useState, useCallback, useEffect } from 'react'
+import { createPortal } from 'react-dom'
+import { cn } from '../../../utils/cn.js'
 import { useSelectDropdown } from '../shared/useSelectDropdown.js'
+import { useFloatingDropdown } from '../shared/useFloatingDropdown.js'
 import { selectDropdownVariants } from '../shared/select.styles.jsx'
 import { SelectOption } from '../shared/SelectOption.jsx'
 import { SelectChevron } from '../shared/SelectChevron.jsx'
@@ -21,7 +24,8 @@ export const Select = ({
 }) => {
   const generatedId = useId()
   const id = idProp ?? generatedId
-  const { isOpen, toggle, close, ref } = useSelectDropdown(disabled)
+  const { isOpen, toggle, close, ref, dropdownRef } = useSelectDropdown(disabled)
+  const dropdownPosition = useFloatingDropdown(isOpen, ref)
   const [highlightIndex, setHighlightIndex] = useState(-1)
 
   const selectedOption = options.find((o) => o.value === value)
@@ -109,24 +113,40 @@ export const Select = ({
           <SelectChevron open={isOpen} />
         </SelectTrigger>
 
-        {isOpen && (
-          <div className={selectDropdownVariants()} role="listbox">
-            <div className="ds-select-dropdown__scroll">
-              {options.map((option) => {
-                const enabledIdx = enabledOptions.indexOf(option)
-                return (
-                  <SelectOption
-                    key={option.value}
-                    option={option}
-                    selected={option.value === value}
-                    highlighted={enabledIdx === highlightIndex}
-                    onClick={() => !option.disabled && handleSelect(option.value)}
-                  />
-                )
-              })}
-            </div>
-          </div>
-        )}
+        {isOpen && dropdownPosition
+          ? createPortal(
+              <div
+                ref={dropdownRef}
+                className={cn(selectDropdownVariants(), 'ds-select-dropdown--portal')}
+                style={{
+                  top: dropdownPosition.top ?? undefined,
+                  bottom: dropdownPosition.bottom ?? undefined,
+                  left: dropdownPosition.left,
+                  width: dropdownPosition.width,
+                }}
+                role="listbox"
+              >
+                <div
+                  className="ds-select-dropdown__scroll"
+                  style={{ maxHeight: dropdownPosition.maxHeight }}
+                >
+                  {options.map((option) => {
+                    const enabledIdx = enabledOptions.indexOf(option)
+                    return (
+                      <SelectOption
+                        key={option.value}
+                        option={option}
+                        selected={option.value === value}
+                        highlighted={enabledIdx === highlightIndex}
+                        onClick={() => !option.disabled && handleSelect(option.value)}
+                      />
+                    )
+                  })}
+                </div>
+              </div>,
+              document.body
+            )
+          : null}
       </div>
     </SelectFieldWrapper>
   )

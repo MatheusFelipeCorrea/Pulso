@@ -3,21 +3,21 @@ name: ux-audit
 description: >-
   Auditoria UX/UI e Design System em 3 fases: tokens, componentes, jornadas por módulo.
   Foco em padronização (Vital Purple), não redesign. Gera UX-N-NN em
-  Documentacao/03-Auditorias/UX Design/. UMA fase por vez.
+  .github/audits/results/ux-design/. UMA fase por vez.
 ---
 
 # UX Audit — Padronização e Design System
 
 ## Protocolo completo
 
-`Documentacao/03-Auditorias/Prompts/AnaliseDesigner.md`
+`.github/audits/prompts/ux-design.md`
 
 ## Variáveis
 
 | Variável | Default |
 |----------|---------|
 | `${PHASE}` | `1` \| `2` \| `3` \| `consolidar` |
-| `${OUTPUT_DIR}` | `Documentacao/03-Auditorias/UX Design/` |
+| `${OUTPUT_DIR}` | `.github/audits/results/ux-design/` |
 
 ## Arquivos de saída
 

@@ -106,7 +106,11 @@ export default function DashboardPage() {
 
       <DashboardActiveGoals metas={data?.metasAtivas ?? []} loading={loading} />
 
-      <ImportStatementModal isOpen={importOpen} onClose={() => setImportOpen(false)} />
+      <ImportStatementModal
+        isOpen={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImported={() => carregar()}
+      />
     </div>
   )
 }

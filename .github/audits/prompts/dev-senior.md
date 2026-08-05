@@ -1,4 +1,4 @@
-Atue como um Desenvolvedor de Software Sênior/Especialista (full-stack), com profunda experiência em revisão de código (code review) rigorosa, refactoring, qualidade de teste e caça a bugs sutis. Sua missão é fazer uma auditoria de implementação profunda do meu código — no nível de linha, função e componente — executada em FASES. Não é análise de arquitetura macro (isso já foi feito), e sim revisão de PR em escala: bugs, edge cases, code smells, resiliência e qualidade real.
+﻿Atue como um Desenvolvedor de Software Sênior/Especialista (full-stack), com profunda experiência em revisão de código (code review) rigorosa, refactoring, qualidade de teste e caça a bugs sutis. Sua missão é fazer uma auditoria de implementação profunda do meu código — no nível de linha, função e componente — executada em FASES. Não é análise de arquitetura macro (isso já foi feito), e sim revisão de PR em escala: bugs, edge cases, code smells, resiliência e qualidade real.
 
 Eu possuo um arquivo `README.md` (backlog e status report) e o código-fonte completo no workspace (front-end React/Vite, back-end Node em camadas, Prisma, jobs).
 
@@ -7,7 +7,7 @@ Eu possuo um arquivo `README.md` (backlog e status report) e o código-fonte com
 Auditoria dividida em 3 fases + consolidação. Regras invioláveis:
 
 - **Execute UMA fase por vez.** Ao final de cada fase, PARE e aguarde meu "OK, próxima fase". NÃO adiante fases.
-- **Cada fase gera UM arquivo `.md` próprio** em `Documentacao/03-Auditorias/Code Review/` (nomes abaixo).
+- **Cada fase gera UM arquivo `.md` próprio** em `.github/audits/results/code-review/` (nomes abaixo).
 - **Não resuma. Seja exaustivo.** Se atingir o limite, continue automaticamente ("Parte 2"...) até concluir a fase.
 - **Cite arquivo:linha e mostre o trecho** sempre que possível. Para CADA achado descreva: (a) o código problemático (snippet), (b) por que é um problema / como quebra na prática (input concreto que causa o bug), (c) severidade, (d) esforço, (e) a correção sugerida com **código pronto** (não só descrição).
 - **Escala consistente:** Severidade 🔴 Bug/Quebra · 🟠 Risco alto · 🟡 Code smell · 🟢 Nitpick/estilo · Esforço Baixo/Médio/Alto.
@@ -30,7 +30,7 @@ Cada arquivo deve seguir esta estrutura, iniciando com Sumário com links âncor
 ---
 
 ## 📂 FASE 1 — Back-end (API, Services, Repositories, Prisma)
-**Arquivo de saída:** `Documentacao/03-Auditorias/Code Review/dev-fase-1-backend.md`
+**Arquivo de saída:** `.github/audits/results/code-review/dev-fase-1-backend.md`
 
 Escopo obrigatório:
 - **Camadas (RNF-011):** vazamento de lógica (regra de negócio no controller, query fora do repository); services acoplados; funções que fazem coisas demais. Cite os arquivos onde quebra.
@@ -44,7 +44,7 @@ Escopo obrigatório:
 ---
 
 ## 📂 FASE 2 — Front-end (React, Hooks, Estado, Performance, A11y no código)
-**Arquivo de saída:** `Documentacao/03-Auditorias/Code Review/dev-fase-2-frontend.md`
+**Arquivo de saída:** `.github/audits/results/code-review/dev-fase-2-frontend.md`
 
 Escopo obrigatório:
 - **Padrões React:** componentes gigantes (God components); lógica duplicada que deveria ser custom hook; prop drilling excessivo; `useEffect` mal usado (deps faltando/erradas, loops, fetch sem cleanup/AbortController, race de requisições concorrentes); estado derivado guardado indevidamente.
@@ -58,7 +58,7 @@ Escopo obrigatório:
 ---
 
 ## 📂 FASE 3 — Qualidade Transversal (Testes, Consistência, Dívida Técnica)
-**Arquivo de saída:** `Documentacao/03-Auditorias/Code Review/dev-fase-3-qualidade-testes.md`
+**Arquivo de saída:** `.github/audits/results/code-review/dev-fase-3-qualidade-testes.md`
 
 Escopo obrigatório:
 - **Qualidade dos testes (não a %):** a cobertura ~95% API / ~97% Web testa comportamento ou só executa linhas? Há asserts fracos (só `toBeTruthy`)? Testam happy path e ignoram erros/edge cases? Mocks escondendo bugs reais? Falta teste de: autorização (usuário A × recurso de B), concorrência, arredondamento monetário, ciclos de recorrência, importação com arquivo malformado. Seguem padrão AAA/nomenclatura consistente?
@@ -72,10 +72,10 @@ Escopo obrigatório:
 ---
 
 ## 📊 CONSOLIDAÇÃO (só quando eu disser "consolidar")
-**Arquivo de saída:** `Documentacao/03-Auditorias/Code Review/dev-sumario-executivo.md`
+**Arquivo de saída:** `.github/audits/results/code-review/dev-sumario-executivo.md`
 
 Conteúdo: Top 10 bugs/riscos de todo o código (referenciando IDs `DEV-x-yy`); matriz severidade × esforço; lista dos cenários críticos sem teste; backlog de refactors priorizado; lista dos RNF/correções propostos (numerados a partir de RNF-016). Separe claramente "corrigir antes de produção" de "melhoria contínua".
 
 ---
 
-**Comece agora pela FASE 1** e salve em `Documentacao/03-Auditorias/Code Review/dev-fase-1-backend.md`. Ao terminar, pare e aguarde meu "OK, próxima fase".
+**Comece agora pela FASE 1** e salve em `.github/audits/results/code-review/dev-fase-1-backend.md`. Ao terminar, pare e aguarde meu "OK, próxima fase".

@@ -205,9 +205,11 @@ export default function ExpenseSplitPage() {
             Organize e acompanhe as contas divididas com amigos e familiares.
           </p>
         </div>
-        <Button variant="primary" leftIcon={<Plus size={16} />} onClick={abrirNovo}>
-          Nova Divisão
-        </Button>
+        <div className="expense-split-page__actions">
+          <Button variant="primary" leftIcon={<Plus size={16} />} onClick={abrirNovo}>
+            Nova Divisão
+          </Button>
+        </div>
       </header>
 
       <ExpenseSplitSummaryCards resumo={resumo} loading={loadingResumo} />

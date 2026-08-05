@@ -27,6 +27,7 @@
      BACKGROUND E SUPERFÍCIE
      ============================================================ */
   --ds-color-background: #FAFAFA;
+  --ds-color-bg: var(--ds-color-background);
   --ds-color-surface: #F4F4F5;
   --ds-color-surface-elevated: #E4E4E7;
   --ds-color-card-bg: #FFFFFF;
@@ -35,7 +36,9 @@
      TEXTO
      ============================================================ */
   --ds-color-text: #18181B;
+  --ds-color-text-primary: var(--ds-color-text);
   --ds-color-text-secondary: #71717A;
+  --ds-color-text-muted: var(--ds-color-text-secondary);
 
   /* ============================================================
      BORDAS
@@ -51,6 +54,7 @@
   --ds-color-placeholder: #A1A1AA;
   --ds-color-input-disabled: #F4F4F5;
   --ds-color-hover: #F4F4F5;
+  --ds-color-surface-hover: var(--ds-color-hover);
   --ds-color-textarea-bg: #FFFFFF;
   --ds-color-textarea-border: #E4E4E7;
   --ds-color-select-bg: #FFFFFF;
@@ -129,6 +133,7 @@
   --ds-font-size-xs: 12px;
   --ds-font-size-sm: 14px;
   --ds-font-size-md: 16px;
+  --ds-font-size-base: var(--ds-font-size-md);
   --ds-font-size-lg: 18px;
   --ds-font-size-xl: 24px;
   --ds-font-size-2xl: 32px;
@@ -161,6 +166,7 @@
      Z-INDEX
      ============================================================ */
   --ds-z-dropdown: 100;
+  --ds-z-sticky: 20;
   --ds-z-modal: 200;
   --ds-z-toast: 300;
   --ds-z-tooltip: 400;
@@ -185,13 +191,16 @@
 
   /* BACKGROUND E SUPERFÍCIE */
   --ds-color-background: #09090B;
+  --ds-color-bg: var(--ds-color-background);
   --ds-color-surface: #18181B;
   --ds-color-surface-elevated: #27272A;
   --ds-color-card-bg: #18181B;
 
   /* TEXTO */
   --ds-color-text: #FAFAFA;
+  --ds-color-text-primary: var(--ds-color-text);
   --ds-color-text-secondary: #A1A1AA;
+  --ds-color-text-muted: var(--ds-color-text-secondary);
 
   /* BORDAS */
   --ds-color-border: #27272A;
@@ -203,6 +212,7 @@
   --ds-color-placeholder: #71717A;
   --ds-color-input-disabled: #18181B;
   --ds-color-hover: #27272A;
+  --ds-color-surface-hover: var(--ds-color-hover);
   --ds-color-textarea-bg: #18181B;
   --ds-color-textarea-border: #27272A;
   --ds-color-select-bg: #27272A;

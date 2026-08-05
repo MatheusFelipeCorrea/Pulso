@@ -22,7 +22,7 @@ Legenda: **✅ Entregue** · **🟡 Parcial** · **📋 Card detalhado (pré-imp
 | Design System | [Design System - Pulso.md](./cards/[EPIC]%20Design%20System%20-%20Pulso.md) | — | 🟡 Contínuo | — |
 | Sidebar / Layout | [Sidebar.md](./cards/[EPIC]%20Sidebar.md) | — | 🟡 Contínuo | — |
 | Perfil e Configurações | — | 073–078 | ⚠️ Parcial | [M10](../../Documentacao/03-Auditorias/Product Owner/10-Perfil-e-Configuracoes.md) |
-| Dashboard | — | 007–014 | ❌ Placeholder | [M02](../../Documentacao/03-Auditorias/Product Owner/02-Dashboard.md) |
+| Dashboard | — | 007–014 | 🟡 Entregue (revisão PO) | [M02](../../Documentacao/03-Auditorias/Product Owner/02-Dashboard.md) |
 | Auditoria PO | [META Auditoria PO 2026-08.md](./cards/[META]%20Auditoria%20PO%202026-08.md) | transversal | ✅ Correções | [Sumário](../../Documentacao/03-Auditorias/Product Owner/00-Sumario-Executivo.md) |
 
 ---

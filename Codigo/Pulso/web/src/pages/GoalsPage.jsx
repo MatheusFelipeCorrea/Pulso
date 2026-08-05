@@ -244,9 +244,11 @@ export default function GoalsPage() {
           <h1 className="goals-page__title">Metas Financeiras</h1>
           <p className="goals-page__subtitle">Acompanhe suas metas e realize seus sonhos.</p>
         </div>
-        <Button variant="primary" leftIcon={<Plus size={16} />} onClick={abrirNova}>
-          Nova Meta
-        </Button>
+        <div className="goals-page__actions">
+          <Button variant="primary" leftIcon={<Plus size={16} />} onClick={abrirNova}>
+            Nova Meta
+          </Button>
+        </div>
       </header>
 
       <div className="goals-page__layout">

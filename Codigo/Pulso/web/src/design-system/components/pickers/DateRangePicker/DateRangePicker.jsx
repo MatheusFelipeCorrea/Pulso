@@ -163,7 +163,7 @@ export const DateRangePicker = ({
           <div
             className={cn(
               pickerDropdownVariants(),
-              'ds-picker-dropdown--range left-0 right-auto flex w-auto min-w-[320px] flex-col sm:min-w-[640px]'
+              'ds-picker-dropdown--range left-0 right-auto flex w-[min(100vw-1.5rem,40rem)] max-w-[calc(100vw-1.5rem)] min-w-0 flex-col md:min-w-[640px]'
             )}
             role="dialog"
           >

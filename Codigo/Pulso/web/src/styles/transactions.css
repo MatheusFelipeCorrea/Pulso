@@ -88,7 +88,7 @@
 }
 
 .tx-summary-card__value--balance {
-  color: #7c3aed;
+  color: var(--ds-color-primary);
 }
 
 .tx-summary-card__meta {
@@ -108,30 +108,30 @@
 }
 
 .tx-summary-card--income .tx-summary-card__label {
-  color: #059669;
+  color: var(--ds-color-success);
 }
 
 .tx-summary-card--income .tx-summary-card__icon {
-  background: color-mix(in srgb, #10b981 16%, transparent);
-  color: #059669;
+  background: color-mix(in srgb, var(--ds-color-success) 16%, transparent);
+  color: var(--ds-color-success);
 }
 
 .tx-summary-card--expense .tx-summary-card__label {
-  color: #dc2626;
+  color: var(--ds-color-danger);
 }
 
 .tx-summary-card--expense .tx-summary-card__icon {
-  background: color-mix(in srgb, #ef4444 16%, transparent);
-  color: #dc2626;
+  background: color-mix(in srgb, var(--ds-color-danger) 16%, transparent);
+  color: var(--ds-color-danger);
 }
 
 .tx-summary-card--balance .tx-summary-card__label {
-  color: #7c3aed;
+  color: var(--ds-color-primary);
 }
 
 .tx-summary-card--balance .tx-summary-card__icon {
-  background: color-mix(in srgb, #7c3aed 16%, transparent);
-  color: #7c3aed;
+  background: color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+  color: var(--ds-color-primary);
 }
 
 /* Filters card */
@@ -313,6 +313,13 @@
   max-width: 100%;
 }
 
+.tx-item__hint {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--ds-color-text-muted);
+}
+
 .tx-item__amount {
   margin: 0;
   font-size: 14px;
@@ -321,15 +328,15 @@
 }
 
 .tx-item__amount--income {
-  color: #10b981;
+  color: var(--ds-color-success);
 }
 
 .tx-item__amount--expense {
-  color: #ef4444;
+  color: var(--ds-color-danger);
 }
 
 .tx-item__amount--transfer {
-  color: #3b82f6;
+  color: var(--ds-color-info);
 }
 
 .tx-item__actions {
@@ -404,21 +411,21 @@
 }
 
 .tx-form__toggle-btn--active.tx-form__toggle-btn--income {
-  border-color: #10b981;
-  background: color-mix(in srgb, #10b981 10%, transparent);
-  color: #059669;
+  border-color: var(--ds-color-success);
+  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  color: var(--ds-color-success);
 }
 
 .tx-form__toggle-btn--active.tx-form__toggle-btn--expense {
-  border-color: #ef4444;
-  background: color-mix(in srgb, #ef4444 10%, transparent);
-  color: #dc2626;
+  border-color: var(--ds-color-danger);
+  background: color-mix(in srgb, var(--ds-color-danger) 10%, transparent);
+  color: var(--ds-color-danger);
 }
 
 .tx-form__toggle-btn--active.tx-form__toggle-btn--transfer {
-  border-color: #3b82f6;
-  background: color-mix(in srgb, #3b82f6 10%, transparent);
-  color: #2563eb;
+  border-color: var(--ds-color-info);
+  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  color: var(--ds-color-info);
 }
 
 .tx-form__suggestion-hint {
@@ -453,18 +460,18 @@
 }
 
 .tx-form__money--income .ds-input-container {
-  border-color: #10b981 !important;
-  box-shadow: 0 0 0 1px color-mix(in srgb, #10b981 25%, transparent);
+  border-color: var(--ds-color-success) !important;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ds-color-success) 25%, transparent);
 }
 
 .tx-form__money--expense .ds-input-container {
-  border-color: #ef4444 !important;
-  box-shadow: 0 0 0 1px color-mix(in srgb, #ef4444 25%, transparent);
+  border-color: var(--ds-color-danger) !important;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ds-color-danger) 25%, transparent);
 }
 
 .tx-form__money--transfer .ds-input-container {
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 0 1px color-mix(in srgb, #3b82f6 25%, transparent);
+  border-color: var(--ds-color-info) !important;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ds-color-info) 25%, transparent);
 }
 
 .tx-form__grid {

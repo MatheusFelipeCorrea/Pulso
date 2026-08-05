@@ -11,6 +11,10 @@ const {
     recebimentosFixosNoDia,
     aplicarMarcadoresRecebimentoFixo,
 } = require('../utils/fixedIncomeUtils');
+const {
+    mergeWhere,
+    whereExcluiAjusteSaldoImportacao,
+} = require('../repositories/transactionRepository');
 
 const includeTransacao = {
     categoria: true,
@@ -38,10 +42,13 @@ const emptyDayMarker = () => ({
 const obterResumoMes = async (usuarioId, inicio, fim) => {
     const agregados = await prisma.transacao.groupBy({
         by: ['tipo'],
-        where: {
-            usuarioId,
-            data: { gte: inicio, lte: fim },
-        },
+        where: mergeWhere(
+            {
+                usuarioId,
+                data: { gte: inicio, lte: fim },
+            },
+            whereExcluiAjusteSaldoImportacao
+        ),
         _sum: { valor: true },
         _count: { id: true },
     });

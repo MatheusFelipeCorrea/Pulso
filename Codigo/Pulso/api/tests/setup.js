@@ -8,7 +8,7 @@ const testEnv = {
     GOOGLE_CLIENT_SECRET: 'test-google-client-secret',
     GOOGLE_CALLBACK_URL: 'http://localhost:3333/api/auth/google/callback',
     GOOGLE_TOKENS_ENCRYPTION_KEY: '1'.repeat(64),
-    GEMINI_API_KEY: 'test-gemini-key',
+    GEMINI_API_KEY_PDF: 'test-gemini-pdf-key',
     SMTP_HOST: 'smtp.test.local',
     SMTP_PORT: '587',
     SMTP_USER: 'test-user',

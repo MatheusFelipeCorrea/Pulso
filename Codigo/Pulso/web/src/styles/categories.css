@@ -550,4 +550,18 @@
     width: 100%;
     justify-content: center;
   }
+
+  .category-manage__footer {
+    padding: 12px 20px 18px;
+  }
+
+  .category-manage__item {
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .category-manage__item-icon {
+    width: 36px;
+    height: 36px;
+  }
 }
