@@ -4,6 +4,9 @@
  */
 
 const WIKI_LANGS = ['pt', 'en'];
+const FETCH_TIMEOUT_MS = 5000;
+const MAX_WIKI_TITLES = 4;
+const MAX_COMMONS_QUERIES = 2;
 
 const WIKI_USER_AGENT = 'PulsoApp/1.0 (https://github.com/MatheusFelipeCorrea/Pulso; viagens@pulso.local)';
 
@@ -84,19 +87,34 @@ function repairWikiThumbUrl(url) {
     return url.replace(/\/420px-/, '/330px-');
 }
 
+async function fetchJson(url, { headers = {}, timeoutMs = FETCH_TIMEOUT_MS } = {}) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+        const response = await fetch(url, {
+            headers,
+            signal: controller.signal,
+        });
+        if (!response.ok) return null;
+        return await response.json();
+    } catch {
+        return null;
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
 async function fetchWikiSummary(lang, title) {
     const encodedTitle = encodeURIComponent(String(title).trim());
     const url = `https://${lang}.wikipedia.org/api/rest_v1/page/summary/${encodedTitle}`;
-    const response = await fetch(url, {
+    const data = await fetchJson(url, {
         headers: {
             Accept: 'application/json',
             'User-Agent': WIKI_USER_AGENT,
         },
     });
 
-    if (!response.ok) return null;
-
-    const data = await response.json();
     if (!isPlaceWikiSummary(data)) return null;
 
     return normalizeWikiThumbWidth(data.thumbnail.source);
@@ -190,42 +208,51 @@ async function searchCommonsPlaceImage(query) {
         format: 'json',
     });
 
-    const response = await fetch(`https://commons.wikimedia.org/w/api.php?${params}`, {
-        headers: { 'User-Agent': WIKI_USER_AGENT },
-    });
-    if (!response.ok) return null;
+    try {
+        const data = await fetchJson(`https://commons.wikimedia.org/w/api.php?${params}`, {
+            headers: { 'User-Agent': WIKI_USER_AGENT },
+        });
+        const pages = data && data.query && data.query.pages;
+        if (!pages) return null;
 
-    const data = await response.json();
-    const pages = data && data.query && data.query.pages;
-    if (!pages) return null;
+        const candidates = Object.values(pages)
+            .map((page) => {
+                const info = page.imageinfo && page.imageinfo[0];
+                return {
+                    title: page.title || '',
+                    url: (info && (info.thumburl || info.url)) || null,
+                };
+            })
+            .filter((item) => item.url && !REJECT_COMMONS_FILE.test(item.title) && !isRejectedThumbnailUrl(item.url));
 
-    const candidates = Object.values(pages)
-        .map((page) => {
-            const info = page.imageinfo && page.imageinfo[0];
-            return {
-                title: page.title || '',
-                url: (info && (info.thumburl || info.url)) || null,
-            };
-        })
-        .filter((item) => item.url && !REJECT_COMMONS_FILE.test(item.title) && !isRejectedThumbnailUrl(item.url));
-
-    const preferred = candidates.find((item) => PREFER_COMMONS_FILE.test(item.title));
-    if (preferred && preferred.url) return preferred.url;
-    if (candidates[0] && candidates[0].url) return candidates[0].url;
-    return null;
+        const preferred = candidates.find((item) => PREFER_COMMONS_FILE.test(item.title));
+        if (preferred && preferred.url) return preferred.url;
+        if (candidates[0] && candidates[0].url) return candidates[0].url;
+        return null;
+    } catch {
+        return null;
+    }
 }
 
 async function resolveTripCoverImage({ destino, destinoMeta }) {
-    const wikiTitles = buildWikiTitles(destinoMeta, destino);
+    const wikiTitles = buildWikiTitles(destinoMeta, destino).slice(0, MAX_WIKI_TITLES);
     for (const title of wikiTitles) {
-        const image = await fetchPlaceThumbnail(title);
-        if (image) return image;
+        try {
+            const image = await fetchPlaceThumbnail(title);
+            if (image) return image;
+        } catch {
+            // próximo título
+        }
     }
 
-    const commonsQueries = buildCommonsQueries(destinoMeta, destino);
+    const commonsQueries = buildCommonsQueries(destinoMeta, destino).slice(0, MAX_COMMONS_QUERIES);
     for (const query of commonsQueries) {
-        const image = await searchCommonsPlaceImage(query);
-        if (image) return image;
+        try {
+            const image = await searchCommonsPlaceImage(query);
+            if (image) return image;
+        } catch {
+            // próxima query
+        }
     }
 
     return null;
@@ -241,10 +268,14 @@ async function attachCoverImage(destinoMeta, destino) {
         return base;
     }
 
-    const coverImageUrl = await resolveTripCoverImage({ destino, destinoMeta: base });
-    if (!coverImageUrl) return Object.keys(base).length ? base : destinoMeta;
-
-    return { ...base, coverImageUrl };
+    try {
+        const coverImageUrl = await resolveTripCoverImage({ destino, destinoMeta: base });
+        if (!coverImageUrl) return Object.keys(base).length ? base : destinoMeta;
+        return { ...base, coverImageUrl };
+    } catch {
+        // Capa é best-effort — nunca bloqueia criar/editar viagem.
+        return Object.keys(base).length ? base : destinoMeta;
+    }
 }
 
 module.exports = {

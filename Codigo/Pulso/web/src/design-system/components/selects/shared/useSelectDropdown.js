@@ -1,14 +1,29 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { useClickOutside } from '../../../hooks/useClickOutside.js'
 
 /** Hook compartilhado: abrir/fechar dropdown (click outside + Esc) */
 export function useSelectDropdown(disabled = false) {
   const [isOpen, setIsOpen] = useState(false)
   const ref = useRef(null)
+  const dropdownRef = useRef(null)
 
   const close = useCallback(() => setIsOpen(false), [])
 
-  useClickOutside(ref, close)
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleClickOutside = (event) => {
+      if (ref.current?.contains(event.target)) return
+      if (dropdownRef.current?.contains(event.target)) return
+      close()
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('touchstart', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('touchstart', handleClickOutside)
+    }
+  }, [isOpen, close])
 
   useEffect(() => {
     const onKey = (e) => {
@@ -22,5 +37,5 @@ export function useSelectDropdown(disabled = false) {
     if (!disabled) setIsOpen((o) => !o)
   }
 
-  return { isOpen, setIsOpen, toggle, close, ref }
+  return { isOpen, setIsOpen, toggle, close, ref, dropdownRef }
 }

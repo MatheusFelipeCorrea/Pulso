@@ -562,7 +562,7 @@ The final copilot-instructions.md should:
 - Be placed in the .github/instructions/ directory (or project root if that directory structure is not used)
 - Reference only patterns and standards that actually exist in the codebase
 - Include explicit version compatibility requirements with actual version numbers
-- Reference specific exemplar files when available (e.g., For new services, follow the pattern in src/services/fazenda.service.js)
+- Reference specific exemplar files when available (e.g., for a new service, follow a discovered peer such as `src/services/order.service.js`)
 - Provide concrete rules, not vague guidance — replace every instance of follow existing patterns with the ACTUAL pattern detected
 - Be comprehensive yet focused — Copilot works best with clear, specific instructions rather than lengthy generic advice
 - Include the Never Break These rules section to prevent common violations

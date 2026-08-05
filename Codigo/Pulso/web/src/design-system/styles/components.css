@@ -365,6 +365,13 @@
   animation: ds-dropdown-enter 150ms ease;
 }
 
+.ds-select-dropdown--portal {
+  position: fixed;
+  top: auto;
+  left: auto;
+  z-index: calc(var(--ds-z-modal) + 10);
+}
+
 .dark .ds-select-dropdown,
 .dark .ds-picker-dropdown {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
@@ -623,6 +630,33 @@
   background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
   color: var(--ds-color-primary);
   font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .ds-picker-dropdown--range {
+    width: min(100%, calc(100vw - 1.5rem));
+    max-width: calc(100vw - 1.5rem);
+  }
+
+  .ds-range-picker__presets {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--ds-color-border);
+  }
+
+  .ds-range-picker__month--next {
+    border-left: none;
+    border-top: 1px solid var(--ds-color-border);
+  }
+
+  .ds-range-picker__footer {
+    padding: 10px 12px;
+  }
+
+  .ds-range-picker__footer > button {
+    flex: 1;
+    justify-content: center;
+  }
 }
 
 .ds-picker-dropdown--calendar {
@@ -1798,6 +1832,22 @@
 
 .ds-confirm-modal__btn--full {
   width: 100%;
+}
+
+@media (max-width: 480px) {
+  .ds-confirm-modal {
+    padding: 1.5rem 1.25rem 1.25rem !important;
+  }
+
+  .ds-confirm-modal__icon-wrap {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .ds-confirm-modal__message {
+    margin-bottom: 1.25rem;
+  }
 }
 
 /* ── Pagination ────────────────────────────────────────────── */

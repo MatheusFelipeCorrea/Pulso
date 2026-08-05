@@ -1,349 +1,130 @@
 ---
 name: project-architect
-description: 'Comprehensive project architecture planner for greenfield projects. Receives project scope, technology preferences, requirements, and optional prototypes to suggest complete architecture including patterns, folder structure, database design, endpoints, UI screen ideas, and data flow. Generates production-ready READMEs for frontend, backend, and database following a standardized format with emojis, sections, and detailed layer descriptions. Supports monorepo, fullstack, and single-project setups. Adapts to any technology stack. Operates in guided steps with human approval gates between each phase.'
+description: >-
+  Greenfield architecture planner. Gathers scope and preferences, proposes
+  stack-agnostic architecture (patterns, folders, data, APIs, screens), then
+  generates production-ready READMEs with human approval gates. Use when
+  starting a new project or major greenfield module — not for routine maintenance.
 ---
 
-# Project Architect — Greenfield Project Planner
+# Project Architect — Greenfield Planner
 
-## Configuration Variables
-${PROJECT_SCOPE="Provided by user"} <!-- Project description, objective, target audience -->
-${TECH_STACK="Suggest|Provided by user"} <!-- Technologies to use or ask the skill to suggest -->
-${HAS_PROTOTYPES="Ask|true|false"} <!-- Whether the user has Figma prototypes ready -->
-${PROJECT_STRUCTURE="Auto-detect|monorepo|fullstack|backend-only|frontend-only"} <!-- How the project is organized -->
-${DATABASE_PROVIDER="Ask|PostgreSQL|MySQL|MongoDB|SQLite|Firebase|Supabase|PlanetScale|Neon|Other"} <!-- Where the database will be hosted -->
-${OUTPUT_LANGUAGE="pt-BR|en"} <!-- Language for the generated READMEs -->
+## Bootstrap
 
-## Generated Prompt
+1. Read `.github/project.yml` if present (locale, preferred output roots, structure hints). Validate configured paths before relying on them.
+2. This skill is **greenfield**: little or no existing code. Do not invent paths for an existing monorepo layout unless the user provides one.
+3. Locale: config or user language.
+4. README output paths: ask the user or use configured `docs.*_readme` / `docs.root` paths — never hardcode a product tree.
+5. Optional later blueprints (`.github/docs/*`) are follow-on work — do not require them to finish planning.
 
-"You are a senior software architect helping plan a new project from scratch. You will guide the user through a structured process to define the architecture, suggest creative solutions, and generate production-ready documentation. You operate in GUIDED STEPS — never skip ahead, always ask for approval before moving to the next step.
+## Variables
+
+| Variable | Default |
+|----------|---------|
+| `${PROJECT_SCOPE}` | from user |
+| `${TECH_STACK}` | Suggest \| user-provided |
+| `${HAS_PROTOTYPES}` | Ask \| true \| false |
+| `${PROJECT_STRUCTURE}` | Ask \| monorepo \| fullstack \| backend-only \| frontend-only |
+| `${DATABASE_PROVIDER}` | Ask \| PostgreSQL \| MySQL \| MongoDB \| SQLite \| managed \| Other |
+| `${OUTPUT_LANGUAGE}` | from config \| user |
 
 ## Critical Rules
 
-1. **NEVER skip a step** — follow the exact sequence below
-2. **NEVER advance without explicit approval** — after each step, ask 'Can I proceed to the next step?'
-3. **NEVER assume** — if something is unclear, ask
-4. **ALWAYS adapt to the tech stack** — the architecture, patterns, folder structure, and README format must match the chosen technologies
-5. **ALWAYS be creative when suggesting** — provide ideas that solve real problems, not generic boilerplate
-6. **ALWAYS generate READMEs in the exact format specified** — with emojis, sections, layer descriptions, and detailed file listings
+1. NEVER skip steps; NEVER advance without explicit approval
+2. NEVER assume — ask when unclear
+3. ALWAYS adapt architecture, folders, and README sections to the **chosen** stack (not a fixed Express/Prisma/React template)
+4. ALWAYS keep suggestions proportional to team size and timeline
+5. ALWAYS generate READMEs in a clear, consistent format (emoji sections optional if user prefers plain)
 
 ## Language
 
-- Generate all content in ${OUTPUT_LANGUAGE}
-- Keep technical terms in English (controller, service, repository, hook, middleware, etc.)
-- READMEs follow the language setting (section titles, descriptions, comments)
+Prose in `${OUTPUT_LANGUAGE}`; keep technical identifiers in their conventional English form when that matches the stack.
 
 ## Step 1: Project Understanding
 
-Gather the following information. If not provided, ASK for each:
+Collect: name · objective · audience · core features · tech preferences or "suggest" · team size · timeline · hosting · auth · realtime · integrations · monorepo vs separate repos · prototypes available?
 
-### Required Information
-- **Project name**: What is the project called?
-- **Objective**: What problem does it solve? What is the main goal?
-- **Target audience**: Who will use it? (end users, admins, internal team, public)
-- **Core features**: List the main functionalities (even if rough)
-- **Tech preferences**: Does the user have specific technologies in mind, or should you suggest?
-- **Team size**: How many developers? (affects architecture complexity)
-- **Timeline**: Is this a sprint project, semester project, or long-term?
-
-### Important Questions to Ask
-- 'Do you already have prototypes (Figma, sketches, wireframes) for the screens?'
-- 'Where will this be hosted? (Vercel, Render, Railway, AWS, self-hosted, university project...)'
-- 'Do you need authentication? What type? (email/password, OAuth, SSO)'
-- 'Do you need real-time features? (chat, notifications, live updates)'
-- 'Any external integrations? (payment, email, WhatsApp, AI, maps, etc.)'
-- 'Is this a monorepo (frontend + backend together) or separate repositories?'
-
-### After gathering information
-Present a summary:
-- 'Here is what I understood about your project: [summary]'
-- 'Is this correct? Can I proceed to architecture design?'
-- **WAIT for approval**
+Summarize → **"Proceed to architecture?"** → **WAIT.**
 
 ## Step 2: Architecture Suggestion
 
-Based on the information gathered, suggest:
+### Pattern
+Recommend MVC, layered, Clean, Hexagonal, modular, serverless, etc. — with **why** and tradeoffs. Avoid over-architecture for small projects.
 
-### 2.1 Architectural Pattern
-- Recommend the most suitable pattern for this project and explain WHY
-- Options to consider: MVC, MVC + Service + Repository, Clean Architecture, Hexagonal, Layered, Modular, Serverless, etc.
-- Explain the tradeoffs: why THIS pattern for THIS project
-- If the project is simple, don't over-architect — recommend something proportional
+### Stack table (if suggesting)
+Layers as rows (UI, API, data, auth, tests, hosting…) — pick technologies that fit the problem. Examples are conditional only (e.g. React, Django, Go, Rails) — never mandatory.
 
-### 2.2 Technology Stack (if not already defined)
-- Suggest specific technologies for each layer with version recommendations
-- Format as a table:
+### Structure
+Monorepo vs separate vs fullstack framework; organize by layer, feature, or hybrid; show high-level folder tree only.
 
-| Layer | Technology | Why |
-|-------|-----------|-----|
-| Frontend | React 19 + Vite 6 | Fast dev experience, large ecosystem |
-| Styling | Tailwind CSS v4 | Utility-first, rapid UI development |
-| State (client) | Zustand | Lightweight, simple API |
-| State (server) | TanStack Query | Cache, loading, error management |
-| Backend | Node.js + Express | Same language as frontend, large ecosystem |
-| ORM | Prisma 5 | Type-safe, great DX, auto-migrations |
-| Database | PostgreSQL (Neon) | Reliable, free tier, serverless |
-| Validation | Zod | Shared between front and back |
-| Auth | JWT + Bcrypt | Stateless, simple |
-| Tests | Vitest | Fast, Vite-native |
+### Design choices
+Discuss only what fits: service/domain layer, data-access abstraction, response shaping, middleware/pipeline, UI state strategy, validation placement.
 
-### 2.3 Project Structure
-- Recommend: monorepo, separate repos, or fullstack (Next.js, Nuxt.js)
-- Explain the folder organization strategy (by layer, by feature, hybrid)
-- Show the HIGH-LEVEL folder tree (just main folders, not files yet)
+### Data flow
+Describe a typical operation end-to-end using the **chosen** layers (not a fixed controller→service→repository chain).
 
-### 2.4 Design Patterns
-- Suggest specific design patterns relevant to the project:
-- Repository Pattern for data access? Why or why not?
-- Service Layer for business logic? Why or why not?
-- View/Serializer layer for response formatting? Why or why not?
-- Middleware pipeline for cross-cutting concerns?
-- Custom hooks for frontend logic extraction?
-- State management strategy (what goes where)?
+Approve architecture → **WAIT.**
 
-### 2.5 Data Flow
-- Describe the complete data flow for a typical operation:
-- Frontend: user action → component → hook → service → HTTP
-- Backend: route → middleware → controller → service → repository → database
-- Response: database → repository → service → view → controller → HTTP → cache → component
+## Step 3: Screens & UX
 
-### After suggesting architecture
-- 'This is my architecture recommendation. Do you approve? Want to change anything?'
-- **WAIT for approval**
+Ask about prototypes if unknown.
 
-## Step 3: Screen and UX Suggestions
+- **With images**: extract pages, components, actions, data, routes, API needs, visual patterns
+- **Without**: propose screens (name, route, purpose, sections, components, data, actions, states) plus concrete UX ideas proportional to the product
+- Map screens to roles and access strategy
 
-${HAS_PROTOTYPES == "Ask" ? "First ask: 'Do you already have prototypes (Figma, wireframes, sketches) for the screens? If yes, share them and I will extract the structure. If not, I will suggest screen ideas based on the requirements.'" : ""}
+Approve screens → **WAIT.**
 
-### If prototypes ARE provided (images):
-- Analyze each screen image
-- Extract: page name, main components, actions, data displayed, navigation
-- Map each screen to: route, page component, required hooks/queries, required endpoints
-- Note visual patterns: color scheme, component library, layout patterns
-- List all unique UI components needed (buttons, modals, tables, forms, badges, etc.)
+## Step 4: Data Design
 
-### If prototypes are NOT provided:
-Suggest screens based on the requirements. For EACH screen suggest:
+Entities from requirements/screens: names, fields, types, constraints, relationships, enums/indexes, timestamps.
 
-- **Screen name and route**
-- **Purpose**: What the user does here
-- **Main sections**: Header, sidebar, content areas, footer
-- **Components needed**: Tables, forms, modals, cards, charts, badges, buttons
-- **Data displayed**: What data is shown and where it comes from
-- **Actions available**: CRUD operations, filters, search, export
-- **States**: Loading, empty, error, success
-- **Creative ideas**: Specific UX improvements that make the app more intuitive:
-- Dashboard cards with real-time data
-- Color-coded badges for status
-- Confirmation modals with safety checks (type-to-confirm for destructive actions)
-- Skeleton loaders instead of spinners
-- Toast notifications for feedback
-- Responsive breakpoints
-- Dark/light mode support
-- Keyboard shortcuts for power users
-- Empty states with helpful illustrations and CTAs
+Adapt to provider (SQL dialects, document schemas, etc.) and optionally show ORM/model equivalents for the chosen stack.
 
-### User Role Mapping
-- Map which screens each user role can access
-- Suggest route protection strategy (public, private, admin-only, role-based)
+Integrity: cascades, uniques, checks; DB vs app validation.
 
-### After suggesting screens
-- 'These are my screen suggestions. Do you approve? Want to add, remove, or change anything?'
-- **WAIT for approval**
+Approve schema → **WAIT.**
 
-## Step 4: Database Design
+## Step 5: APIs & Integrations
 
-### 4.1 Table/Collection Design
-For each entity identified from the requirements and screens:
+Per resource: method + path · purpose · auth/roles · body/query · success/error shapes. Group auth, CRUD, special ops, webhooks.
 
-- **Table name** (snake_case)
-- **Columns**: name, type, constraints (PK, FK, NOT NULL, UNIQUE, DEFAULT)
-- **Relationships**: 1:1, 1:N, N:N (with junction tables)
-- **Enums**: Define all enum types used
-- **Indexes**: Suggest indexes for frequently queried columns
-- **Timestamps**: created_at, updated_at patterns
+Standardize error JSON and status mapping. Document external services (protocol, auth, wrapping module, limits).
 
-### 4.2 Adapt to Database Provider
-${DATABASE_PROVIDER == "Ask" ? "Ask: 'Where will the database be hosted? (Neon, Supabase, PlanetScale, local PostgreSQL, MongoDB Atlas, Firebase, etc.) This determines the SQL dialect and migration approach.'" : ""}
-
-- If PostgreSQL: Generate SQL with PostgreSQL types (UUID, TIMESTAMP, NUMERIC, ENUM via CREATE TYPE)
-- If MySQL: Adapt types (no native UUID, ENUM inline, DATETIME)
-- If MongoDB: Suggest document schemas instead of tables
-- If SQLite: Simplify types
-- Include the ORM schema equivalent if applicable (Prisma schema, Django models, etc.)
-
-### 4.3 Data Integrity
-- Suggest cascade rules for FKs (ON DELETE CASCADE vs RESTRICT)
-- Suggest unique constraints for business rules
-- Suggest check constraints where applicable
-- Note which validations happen at DB level vs application level
-
-### After suggesting database
-- 'This is my database design. Do you approve? Want to change anything?'
-- **WAIT for approval**
-
-## Step 5: Endpoints and Integration Design
-
-### 5.1 Endpoint Design
-For each resource, suggest complete endpoint specifications:
-
-**Format for each endpoint:**
-- HTTP Method + Route
-- Purpose (one sentence)
-- Auth required? Which roles?
-- Request body (if POST/PUT) with types
-- Query params (if GET with filters)
-- Success response (status code + shape)
-- Error responses (status codes + messages)
-
-**Group by resource:**
-- Auth endpoints (login, register, logout, refresh)
-- CRUD endpoints per entity
-- Special endpoints (search, filters, aggregations, exports)
-- Integration endpoints (external APIs, webhooks)
-
-### 5.2 Error Pattern
-Suggest a standardized error response format:
-
-- Consistent JSON shape for all errors
-- HTTP status code mapping (400, 401, 403, 404, 409, 422, 500)
-- Error messages that are clear for frontend consumption
-
-### 5.3 External Integrations (if any)
-For each external service needed:
-- Service name and purpose
-- API type (REST, SDK, WebSocket)
-- Authentication method
-- Which internal service wraps it
-- Estimated cost/limits
-
-### After suggesting endpoints
-- 'These are my endpoint suggestions. Do you approve? Want to change anything?'
-- **WAIT for approval**
+Approve contracts → **WAIT.**
 
 ## Step 6: README Generation
 
-After ALL previous steps are approved, generate the final READMEs.
+After all approvals, write READMEs for the agreed structure:
 
-### README Format Rules
+| Structure | Artifacts |
+|-----------|-----------|
+| Monorepo | Separate frontend/backend (and optional DB) READMEs at user-chosen paths |
+| Fullstack | One README with client vs server sections + data |
+| Backend-only | API README + data |
+| Frontend-only | UI README + consumed APIs |
 
-All READMEs MUST follow this exact format:
+### README content (adapt sections to stack)
 
-**Structure:**
-- Emoji section headers (🛠️ 📁 📖 🔄 🛣️ ▶️ 📋 🔑 ⚠️ ✅ 🚫 ⚙️ 🎨)
-- Technology table with columns: Technology | Use
-- ASCII folder tree with 📁 and 📄 icons
-- Layer descriptions with arrow notation (→) for each file/function
-- ✅ and ❌ markers for what each layer IS and IS NOT responsible for
-- Data flow as ASCII diagram with boxes and arrows
-- Route listing as text block
-- Scripts as table
-- Environment variables as code block with comments
-- Error pattern as JSON + status code table
+1. Header + short description
+2. Index
+3. Technologies table
+4. Folder tree (ASCII)
+5. Layer/module descriptions (`→` file/function notes; ✅/❌ responsibilities)
+6. Data/request flow diagram (ASCII)
+7. Routes or screens
+8. How to run + scripts table
+9. Environment variables
+10. Error pattern (if API)
+11. Business rules (if API)
+12. Schema overview / SQL or migration notes (if data README)
 
-**Adapt to project structure:**
+### Consistency checks
 
-${PROJECT_STRUCTURE == "monorepo" || PROJECT_STRUCTURE == "Auto-detect" ? "If monorepo (frontend + backend as separate folders):
-- Generate README for frontend: [project]/web/Documents/README.md or [project]/front/Documents/README.md
-- Generate README for backend: [project]/api/Documents/README.md or [project]/back/Documents/README.md
-- Generate README for database: [project]/database/Documents/README.md or include in backend README" : ""}
+Endpoints ↔ clients · pages ↔ routes · models ↔ schema · env vars aligned across apps.
 
-${PROJECT_STRUCTURE == "fullstack" ? "If fullstack (Next.js, Nuxt.js, SvelteKit — single project):
-- Generate ONE README covering both frontend and backend aspects
-- Organize sections to clearly separate client-side and server-side patterns
-- Include database section within the same README" : ""}
+Present READMEs → final approval → **WAIT.**
 
-${PROJECT_STRUCTURE == "backend-only" ? "If backend only:
-- Generate README for backend with all layers
-- Generate README for database" : ""}
+## Out of scope
 
-${PROJECT_STRUCTURE == "frontend-only" ? "If frontend only:
-- Generate README for frontend with all layers
-- Note which external APIs it consumes" : ""}
-
-### Frontend README Template
-
-Generate following this exact structure (adapt technologies and sections to the chosen stack):
-
-1. **Header**: Icon + name + short description with tech stack mentioned
-2. **Index**: Links to all sections
-3. **Technologies**: Table with each technology and its purpose
-4. **Folder Structure**: Complete ASCII tree with all folders AND files inside them
-5. **Layer Descriptions**: For EACH folder and key file:
- - What it does (arrow notation →)
- - What goes IN this folder
- - ✅ What it IS responsible for
- - ❌ What it is NOT responsible for
- - For pages: list each page with route, features, RF reference
- - For components: list each component with purpose and variations
- - For services: list each service with methods and endpoints
- - For queries/hooks: list each hook with what it manages
- - For store: list each slice with state shape and actions
- - For utils: list each utility function with input/output
- - For constants: list actual constant values
-6. **Data Flow**: ASCII diagram showing the complete flow from user interaction to API and back
-7. **Routes**: Grouped by access level (public, private, admin, role-specific)
-8. **How to Run**: Step-by-step commands
-9. **Scripts**: Table with all npm/yarn scripts
-10. **Environment Variables**: Code block with all vars and comments
-
-### Backend README Template
-
-Generate following this exact structure:
-
-1. **Header**: Icon + name + short description with architecture pattern mentioned
-2. **Index**: Links to all sections
-3. **Technologies**: Table
-4. **Folder Structure**: Complete ASCII tree
-5. **Layer Descriptions**: For EACH layer:
- - Entry points (server.js, app.js)
- - Models: each model with all fields, types, FKs
- - Views/Serializers: each with render/renderMany pattern
- - Controllers: each with all methods and routes
- - Services: each with business rules
- - Repositories: each with all query methods
- - Routes: each route file and what it maps to
- - Middlewares: each with purpose
- - Schemas: each with all validation rules
- - Jobs: each with schedule and process
- - Config: each config file purpose
- - Database: client, seeds, migrations
- - Shared: errors (AppError), utils (logger, jwt, bcrypt)
- - Tests: organization, what each test covers
-6. **Request Flow**: ASCII diagram from REQUEST to RESPONSE with all layers
-7. **API Routes**: Complete list grouped by resource
-8. **Business Rules**: All rules per entity
-9. **How to Run**: Step-by-step commands
-10. **Scripts**: Table
-11. **Environment Variables**: Code block with all vars
-12. **Error Pattern**: JSON format + status code table
-
-### Database README Template
-
-Generate following this structure:
-
-1. **Header**: Database type and hosting
-2. **Schema Overview**: List of all tables with one-line purpose
-3. **SQL Commands**: Ready-to-execute SQL for:
- - CREATE TYPE for enums
- - CREATE TABLE for each table (with PKs, FKs, constraints, defaults)
- - CREATE INDEX for performance indexes
- - In dependency order (tables with no FKs first)
-4. **Entity Relationship Summary**: Text-based description of all relationships
-5. **After SQL Instructions**: What to run after executing SQL (prisma db pull, prisma generate, django makemigrations, etc.)
-6. **Diagram Update Notes**: What to update in documentation after schema changes
-7. **Acceptance Criteria**: Checkboxes for validating the database was set up correctly
-
-### Quality Checks Before Generating
-
-Before generating each README, verify:
-- Every endpoint mentioned in the backend README has a corresponding service method in the frontend README
-- Every page mentioned has a route defined
-- Every model in the backend matches a table in the database
-- Every service in the frontend maps to endpoints in the backend
-- Every validation schema matches the model fields
-- The data flow is consistent end-to-end
-- Environment variables are consistent between front and back (e.g., API URL matches PORT)
-
-### After generating READMEs
-- 'READMEs generated. Review them and let me know if anything needs adjustment.'
-- **WAIT for final approval**"
+Do not run maintenance skills (readme-updater, audits) as part of greenfield planning unless the user asks next.

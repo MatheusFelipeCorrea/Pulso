@@ -1,13 +1,14 @@
 ﻿# Documentação do Pulso
 
-**Ponto de entrada único** para produto, engenharia, auditorias, diagramas e protótipos.
+**Índice da pasta `Documentacao/`** — produto, engenharia, auditorias, diagramas e protótipos.  
+Visão geral do repositório: [README na raiz](../README.md)
 
 ```
 Documentacao/
 ├── README.md                 ← você está aqui
 ├── 01-Produto/               Requisitos, regras, roadmap, análise
 ├── 02-Engenharia/            API, Web, deploy, módulos técnicos, commits
-├── 03-Auditorias/            Relatórios PO e prompts de auditoria
+├── 03-Auditorias/            Relatórios históricos + redirect para .github/audits
 ├── 04-Diagramas/             UML, DER, arquitetura
 ├── 05-Prototipos/            Telas de referência (PNG)
 └── Histórias de Usuário/     → [01-Produto/Historias-de-Usuario/](./01-Produto/Historias-de-Usuario/) (reservado)
@@ -57,7 +58,7 @@ Design System (no código): [`Codigo/Pulso/web/src/design-system/README.md`](../
 | [Code Review/](./03-Auditorias/Code%20Review/) | Revisão profunda (DEV-N-NN) |
 | [UX Design/](./03-Auditorias/UX%20Design/) | Padronização DS (UX-N-NN) |
 | [Architecture/](./03-Auditorias/Architecture/) | Arquitetura (ARCH-N-NN) |
-| [Prompts/](./03-Auditorias/Prompts/) | Protocolos (skill ou copy-paste) |
+| [`.github/audits/`](../.github/audits/) | **Prompts, scanners CI e novos resultados** |
 
 → [Índice completo da seção](./03-Auditorias/README.md)
 

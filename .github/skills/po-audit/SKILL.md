@@ -1,57 +1,60 @@
-﻿---
+---
 name: po-audit
 description: >-
-  Auditoria Product Owner módulo a módulo: confronta requisitos (Documentacao/01-Produto)
-  com código real (api/web/prisma), gera achados e plano de ação em Documentacao/03-Auditorias/Product Owner/.
-  Use ao auditar um módulo, revisar gaps RF/RN, ou antes de fechar um epic em plans/cards/.
+  Runs a Product Owner audit that compares requirements and docs to real code,
+  producing findings and a prioritized action plan. Use when auditing a feature
+  area, reviewing requirement gaps, or before closing an epic/card.
 ---
 
-# PO Audit — Auditoria de Requisitos vs Código
+# PO Audit — Requirements vs Code
 
-## Quando usar
+## Step 1 — Resolve project context (mandatory)
 
-- Auditar **um módulo** por vez (Autenticação, Metas, Viagens, etc.)
-- Validar se README/Web/API reflete a realidade
-- Gerar ou atualizar docs em `Documentacao/03-Auditorias/Product Owner/`
-- Alimentar cards em `.github/plans/cards/` com correções PO
+1. Read `.github/project.yml` if it exists. Validate configured paths; treat stale or missing paths as hints and fall back to discovery.
+2. If absent: discover layout from manifests (`package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `pom.xml`, etc.), workspaces/monorepo configs, READMEs, and the repo tree. **Never** assume product-specific paths or stacks.
+3. Capture from config or discovery: source roots, docs/requirements roots, `language`/`locale`, and `outputs.audits` (product-owner key or equivalent).
+4. If `project.yml` points to an **overlay** for this audit, read the overlay **after** the base prompt.
 
-## Protocolo completo (obrigatório)
+## Protocol
 
-Leia e siga **integralmente**:
+Follow `.github/audits/prompts/product-owner.md` when present.
 
-`Documentacao/03-Auditorias/Prompts/AnalisePO.md`
+**Fallback:** if the prompt or config is missing, continue with a professional PO checklist (map requirements → reverse-engineer code → gaps → edge cases → new requirement proposals → prioritized plan). Do **not** block.
 
-## Variáveis de execução
+Optional: `.github/audits/manifest.yml` may map skill → prompt → output dir.
 
-| Variável | Default | Descrição |
-|----------|---------|-----------|
-| `${MODULE_NUM}` | (usuário informa) | Ex.: `04`, `05` |
-| `${MODULE_SLUG}` | (usuário informa) | Ex.: `Metas-Financeiras` |
-| `${MODULE_NAME}` | (usuário informa) | Ex.: `Metas Financeiras` |
-| `${OUTPUT_FILE}` | `Documentacao/03-Auditorias/Product Owner/${MODULE_NUM}-${MODULE_SLUG}.md` | Arquivo de saída |
+## Scope
 
-## Fontes obrigatórias
+- Only artifacts that exist or were detected; mark N/A when not applicable.
+- Prefer **one feature area / module per session** when the user scopes it; otherwise honor the requested scope.
+- Do not invent requirements IDs, modules, or paths that are not in docs/code/config.
 
-1. `Documentacao/01-Produto/Requisitos/Readme.md` — RFs do módulo
-2. `Documentacao/01-Produto/Regras-de-Negocio.md` — RNs relacionadas
-3. `Documentacao/02-Engenharia/API/Readme.md` e `Web/Readme.md`
-4. Código: `Codigo/Pulso/api/src/`, `Codigo/Pulso/web/src/`, `prisma/schema.prisma`
-5. Card epic: `.github/plans/cards/[EPIC] *.md` (se existir)
+## Execution rules
 
-## Regras de execução
+- **Read-only by default.** Do not edit code or docs unless the user separately asks for implementation.
+- Be exhaustive for the scoped area; cite evidence as `path:line`.
+- Each finding must include: evidence, severity/priority, impact, confidence (high/medium/low), recommendation.
+- Output language: `project.yml` / user preference; else match the user.
 
-1. **Um módulo por sessão** — não auditar 25 módulos de uma vez
-2. **Não resumir** — ser exaustivo; citar arquivos e linhas
-3. **Salvar** o resultado em `${OUTPUT_FILE}` (não só no chat)
-4. Estrutura de saída conforme protocolo (Sumário + 5 seções + perguntas)
-5. Após salvar: sugerir atualização do card epic em `.github/plans/cards/` (seção Correções PO)
+## Output
 
-## Integração com o repo
+| Source | Path |
+|--------|------|
+| Prefer | `project.yml` → `outputs.audits` (product-owner / mapped key) |
+| Fallback | `.github/audits/results/product-owner/` |
 
-- Índice PO: `Documentacao/03-Auditorias/Product Owner/00-Sumario-Executivo.md`
-- Commits: `Refs: PO-AUDIT-2026-08` ou `Refs: RF-xxx` — ver `Documentacao/02-Engenharia/Guia-Commits.md`
-- Cards entregues: formato completo em `.github/plans/cards/` com rastreamento de implementação
+Create the directory if needed. Save the report file (not chat-only). Naming: follow config/prompt; else `{slug-or-scope}.md`.
 
-## Exemplo de invocação
+## Report skeleton
 
-> Audite o módulo 04 Metas Financeiras. Salve em `Documentacao/03-Auditorias/Product Owner/04-Metas-Financeiras.md`.
+1. Executive summary
+2. Status: docs/requirements vs reality
+3. Gaps (usability / journeys when relevant)
+4. Business rules & validation diagnosis
+5. Proposed new requirements (only when justified)
+6. Prioritized action plan
+7. Clarifying questions (if fundamentals unclear)
+
+## Example
+
+> Audit the authentication area with po-audit and save the report under the configured audits output.

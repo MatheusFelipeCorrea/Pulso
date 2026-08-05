@@ -40,6 +40,22 @@ describe('dateTimezone', () => {
         expect(result.toISOString()).toBe('2026-01-02T03:00:00.000Z');
     });
 
+    it('startOfDayInTimezone preserva string YYYY-MM-DD sem deslocar para o dia anterior', () => {
+        const result = startOfDayInTimezone('2026-08-01');
+        expect(result.toISOString()).toBe('2026-08-01T03:00:00.000Z');
+    });
+
+    it('endOfDayInTimezone preserva string YYYY-MM-DD', () => {
+        const result = endOfDayInTimezone('2026-08-31');
+        expect(result.toISOString()).toBe('2026-09-01T02:59:59.999Z');
+    });
+
+    it('transação de 31/jul fica fora do filtro que começa em 01/ago', () => {
+        const julho = parseVencimentoDate('2026-07-31');
+        const inicioAgosto = startOfDayInTimezone('2026-08-01');
+        expect(julho >= inicioAgosto).toBe(false);
+    });
+
     it('endOfDayInTimezone retorna fim do dia em America/Sao_Paulo', () => {
         const result = endOfDayInTimezone('2026-01-02T12:00:00.000Z');
         expect(result.toISOString()).toMatch(/^2026-01-0[23]T02:59:59\.999Z$/);

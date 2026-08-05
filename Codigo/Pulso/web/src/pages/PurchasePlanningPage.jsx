@@ -198,9 +198,11 @@ export default function PurchasePlanningPage() {
             Planeje suas compras de forma inteligente e sem comprometer seu futuro.
           </p>
         </div>
-        <Button variant="primary" leftIcon={<Plus size={16} />} onClick={abrirNovo}>
-          Novo Item
-        </Button>
+        <div className="purchase-planning-page__actions">
+          <Button variant="primary" leftIcon={<Plus size={16} />} onClick={abrirNovo}>
+            Novo Item
+          </Button>
+        </div>
       </header>
 
       {showAlert ? <PurchasePlanningAlert mediaImpactoRenda={resumo.mediaImpactoRenda} /> : null}

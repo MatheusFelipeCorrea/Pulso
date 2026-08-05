@@ -209,9 +209,11 @@ export default function TripsPage() {
             <span className="trips-page__status">{formatRatesStatus(ratesUpdatedAt)}</span>
           ) : null}
         </div>
-        <Button variant="primary" leftIcon={<Plus size={16} />} onClick={abrirNova}>
-          Nova Viagem
-        </Button>
+        <div className="trips-page__actions">
+          <Button variant="primary" leftIcon={<Plus size={16} />} onClick={abrirNova}>
+            Nova Viagem
+          </Button>
+        </div>
       </header>
 
       <TripQuickConverter

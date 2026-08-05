@@ -2,8 +2,8 @@
 
 Documento de rastreamento de todos os requisitos funcionais e não funcionais do sistema **Pulso**.
 
-> **Última revisão:** código alinhado a **ago/2026** (correções PO) · planejamento jul/2026.  
-> Auditoria PO: [03-Auditorias/Product Owner/00-Sumario-Executivo.md](../03-Auditorias/Product Owner/00-Sumario-Executivo.md) · Técnico: [Web](../02-Engenharia/Web/Readme.md) · [API](../02-Engenharia/API/Readme.md) · [Banco](../02-Engenharia/API/Database.md)
+> **Última revisão:** código alinhado a **ago/2026** — Dashboard (RF-007–014) implementado; RF-139 e importação (RF-155+) pendentes.  
+> Auditoria PO: [03-Auditorias/Product Owner/00-Sumario-Executivo.md](../03-Auditorias/Product%20Owner/00-Sumario-Executivo.md) · Técnico: [Web](../02-Engenharia/Web/Readme.md) · [API](../02-Engenharia/API/Readme.md) · [Banco](../02-Engenharia/API/Database.md)
 
 ---
 
@@ -11,11 +11,11 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 195 | 93 | ~48% |
+| Requisitos Funcionais | 195 | 106 | ~54% |
 | Requisitos Não Funcionais | 16 | 10 | ~63% |
-| **Total** | **211** | **103** | **~49%** |
+| **Total** | **211** | **116** | **~55%** |
 
-Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, transações, VT, orçamento, calendário/lembretes, dívidas, **metas**, **viagens + moedas**, **grupos**, homepage e notificações (orçamento, lembretes, dívidas, transações, gamificação MVP, insights rule-based).
+Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, **dashboard** (8/9 RFs), transações, VT, orçamento, calendário/lembretes, dívidas, metas, viagens + moedas, grupos, homepage e notificações (orçamento, lembretes, dívidas, transações).
 
 **Novos módulos planejados (jul/2026):** Onboarding guiado, Importação de Dados, Cartão de Crédito e Faturas, Integrações e Bots (Telegram/Discord), Modo Casal/Família, PWA + Notificações Push e **Veículos & FIPE**.
 
@@ -28,7 +28,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | Módulo | Total | Concluídos | Progresso |
 |---|---|---|---|
 | 🔐 Autenticação | 6 | 6 | ✅ |
-| 📊 Dashboard | 9 | 0 |  |
+| 📊 Dashboard | 9 | 8 | 🟡 |
 | 💳 Transações | 13 | 13 | ✅ |
 | 🎯 Metas | 8 | 8 | ✅ |
 | 🌍 Viagens e Moedas | 11 | 11 | ✅ |
@@ -48,7 +48,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | 🤝 Dívidas Pessoais | 7 | 7 | ✅ |
 | 🛒 Planejamento de Compra | 6 | 6 | ✅ |
 | 🚀 Onboarding | 4 | 0 | ⏳ |
-| 📥 Importação de Dados | 6 | 0 | ⏳ |
+| 📥 Importação de Dados | 6 | 5 | 🟡 |
 | 💳 Cartão de Crédito e Faturas | 8 | 0 | ⏳ |
 | 🤖 Integrações e Bots | 5 | 0 | ⏳ |
 | 👨‍👩‍👧 Modo Casal/Família | 6 | 0 | ⏳ |
@@ -56,6 +56,9 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | 🚗 Veículos & FIPE | 13 | 0 | ⏳ |
 
 **Legenda:** ✅ módulo entregue · 🟡 parcial (UI ou backend incompleto) · ⏳ aguardando prototipação/implementação
+
+> **Dashboard:** `GET /dashboard` + `DashboardPage` — saldos, gráficos, alertas, metas e saúde financeira. Pendente: **RF-139** (quick-add → chatbot).  
+> **Importação:** fluxo upload → preview → confirmar (OFX/CSV/XLSX + PDF via Gemini). Pendente: **RF-159** (aprendizado), **RF-160** parcial (mapeamento manual).
 
 ---
 
@@ -76,15 +79,17 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-007 | O sistema deve exibir o saldo total disponível do mês corrente | 🔴 Essencial |
-| - [ ] | RF-008 | O sistema deve exibir saldos separados por tipo de recurso (dinheiro, VA, VR, VT) | 🔴 Essencial |
-| - [ ] | RF-009 | O sistema deve exibir um gráfico de receitas vs despesas do mês | 🔴 Essencial |
-| - [ ] | RF-010 | O sistema deve exibir um gráfico de gastos por categoria no dashboard | 🔴 Essencial |
-| - [ ] | RF-011 | O sistema deve exibir um resumo das últimas transações registradas | 🟡 Importante |
-| - [ ] | RF-012 | O sistema deve exibir alertas visuais quando o gasto ultrapassar um limite definido | 🟡 Importante |
-| - [ ] | RF-013 | O sistema deve exibir o progresso resumido das metas ativas | 🟡 Importante |
-| - [ ] | RF-014 | O sistema deve exibir o score de saúde financeira do usuário | 🟢 Desejável |
+| - [x] | RF-007 | O sistema deve exibir o saldo total disponível do mês corrente | 🔴 Essencial |
+| - [x] | RF-008 | O sistema deve exibir saldos separados por tipo de recurso (dinheiro, VA, VR, VT) | 🔴 Essencial |
+| - [x] | RF-009 | O sistema deve exibir um gráfico de receitas vs despesas do mês | 🔴 Essencial |
+| - [x] | RF-010 | O sistema deve exibir um gráfico de gastos por categoria no dashboard | 🔴 Essencial |
+| - [x] | RF-011 | O sistema deve exibir um resumo das últimas transações registradas | 🟡 Importante |
+| - [x] | RF-012 | O sistema deve exibir alertas visuais quando o gasto ultrapassar um limite definido | 🟡 Importante |
+| - [x] | RF-013 | O sistema deve exibir o progresso resumido das metas ativas | 🟡 Importante |
+| - [x] | RF-014 | O sistema deve exibir o score de saúde financeira do usuário | 🟢 Desejável |
 | - [ ] | RF-139 | O sistema deve exibir um botão de acesso rápido (quick-add) no dashboard que abre o chatbot para registro de transação em linguagem natural | 🟡 Importante |
+
+**Implementação:** `api/src/services/dashboardService.js` · `web/src/pages/DashboardPage.jsx` · destino pós-login `/dashboard`.
 
 ---
 
@@ -365,14 +370,16 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
-| - [ ] | RF-155 | O sistema deve permitir importar extrato bancário nos formatos OFX e CSV | 🔴 Essencial |
-| - [ ] | RF-156 | O sistema deve permitir importar extratos de VA, VR e VT (CSV/planilha), atribuindo as transações ao recurso correto | 🟡 Importante |
-| - [ ] | RF-157 | O sistema deve exibir um preview editável das transações detectadas antes de confirmar a importação | 🔴 Essencial |
-| - [ ] | RF-158 | O sistema deve detectar e sinalizar transações potencialmente duplicadas (mesma data, valor e descrição), permitindo ignorá-las | 🔴 Essencial |
+| - [x] | RF-155 | O sistema deve permitir importar extrato bancário nos formatos PDF, OFX e CSV | 🔴 Essencial |
+| - [x] | RF-156 | O sistema deve permitir importar extratos de VA, VR e VT (CSV/planilha/PDF), atribuindo as transações ao recurso correto | 🟡 Importante |
+| - [x] | RF-157 | O sistema deve exibir um preview editável das transações detectadas antes de confirmar a importação | 🔴 Essencial |
+| - [x] | RF-158 | O sistema deve detectar e sinalizar transações potencialmente duplicadas (mesma data, valor e descrição), permitindo ignorá-las | 🔴 Essencial |
 | - [ ] | RF-159 | O sistema deve categorizar automaticamente as transações importadas por regras de descrição (ex: "IFOOD" → Alimentação), aprendendo com ajustes do usuário | 🟡 Importante |
-| - [ ] | RF-160 | O sistema deve permitir o mapeamento manual de colunas (data, valor, descrição) para CSVs de formato desconhecido | 🟡 Importante |
+| - [x] | RF-160 | O sistema deve permitir o mapeamento manual de colunas (data, valor, descrição) para CSVs de formato desconhecido | 🟡 Importante |
 
 **Fluxo previsto:** upload → parse (OFX nativo / CSV com detecção de delimitador e encoding) → normalização → dedupe (hash de data+valor+descrição, comparando com transações existentes) → categorização por regras → **preview editável** → confirmação → gravação em lote. Regras de categorização ficam num dicionário editável por usuário (alimenta o RF-141).
+
+**Status atual (ago/2026):** `POST /importacoes/analisar` + `POST /importacoes/confirmar` · parsers OFX/CSV/XLSX · PDF via **Gemini** (`GEMINI_API_KEY_PDF`) · preview editável no dashboard · dedupe RF-158 · categorização inicial por regras + histórico (RF-141).
 
 ---
 ## 💳 Módulo 21 — Cartão de Crédito e Faturas

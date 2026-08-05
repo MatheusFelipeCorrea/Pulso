@@ -892,3 +892,36 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 640px) {
+  .expense-split-page {
+    padding: 16px;
+  }
+
+  .expense-split-page__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .expense-split-page__actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .expense-split-page__actions > * {
+    width: 100%;
+  }
+
+  .expense-split-card__footer,
+  .expense-split-reminder__footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .expense-split-card__footer > *,
+  .expense-split-reminder__footer > * {
+    width: 100%;
+  }
+}

@@ -30,6 +30,8 @@ const transactionService = require('../../../src/services/transactionService');
 describe('transactionService', () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        transactionRepository.listarRecursosDistintos.mockResolvedValue([]);
+        transactionRepository.listarTransacoesRecurso.mockResolvedValue([]);
         require('../../../src/utils/transactionMapper').mapTransacao.mockImplementation((tx) => ({
             ...tx,
             mapped: true,
@@ -63,7 +65,114 @@ describe('transactionService', () => {
             receitas: { total: '100.00', quantidade: 1 },
             despesas: { total: '40.00', quantidade: 2 },
             saldo: '60.00',
+            modo: 'fluxo',
         });
+    });
+
+    it('calcula resumo em modo carteira para VR', async () => {
+        transactionRepository.calcularAgregados.mockResolvedValue([
+            { tipo: 'RECEITA', _sum: { valor: 798.34 }, _count: { id: 1 } },
+            { tipo: 'DESPESA', _sum: { valor: 99.8 }, _count: { id: 3 } },
+        ]);
+        transactionRepository.listarTransacoesRecurso.mockResolvedValue([
+            { tipo: 'RECEITA', recurso: 'VR', valor: 712.23 },
+        ]);
+
+        const result = await transactionService.calcularResumo('u1', { recurso: 'VR' });
+
+        expect(result.modo).toBe('beneficio');
+        expect(result.recursoCarteira).toBe('VR');
+        expect(result.saldo).toBe('712.23');
+        expect(result.saldoInicialPeriodo).toBe('0.00');
+        expect(result.receitas.total).toBe('798.34');
+        expect(result.despesas.total).toBe('99.80');
+    });
+
+    it('detecta modo carteira quando só há VR no período', async () => {
+        transactionRepository.calcularAgregados.mockResolvedValue([
+            { tipo: 'RECEITA', _sum: { valor: 798.34 }, _count: { id: 1 } },
+            { tipo: 'DESPESA', _sum: { valor: 99.8 }, _count: { id: 3 } },
+        ]);
+        transactionRepository.listarRecursosDistintos.mockResolvedValue(['VR']);
+        transactionRepository.listarTransacoesRecurso
+            .mockResolvedValueOnce([
+                { tipo: 'RECEITA', recurso: 'VR', valor: 798.34 },
+                { tipo: 'RECEITA', recurso: 'VR', valor: 421.47 },
+                { tipo: 'DESPESA', recurso: 'VR', valor: 507.58 },
+            ])
+            .mockResolvedValueOnce([
+                { tipo: 'RECEITA', recurso: 'VR', valor: 127 },
+                { tipo: 'DESPESA', recurso: 'VR', valor: 113.3 },
+            ]);
+
+        const result = await transactionService.calcularResumo('u1', {
+            recurso: 'TODOS',
+            dataInicio: '2026-08-01',
+            dataFim: '2026-08-31',
+        });
+
+        expect(result.modo).toBe('beneficio');
+        expect(result.recursoCarteira).toBe('VR');
+        expect(result.saldo).toBe('712.23');
+        expect(result.saldoInicialPeriodo).toBe('13.70');
+        expect(result.receitas.total).toBe('798.34');
+        expect(result.despesas.total).toBe('99.80');
+    });
+
+    it('calcula resumo em modo conta para Dinheiro', async () => {
+        transactionRepository.calcularAgregados.mockResolvedValue([
+            { tipo: 'RECEITA', _sum: { valor: 3000 }, _count: { id: 1 } },
+            { tipo: 'DESPESA', _sum: { valor: 1200 }, _count: { id: 4 } },
+        ]);
+        transactionRepository.listarTransacoesRecurso.mockResolvedValue([
+            { tipo: 'RECEITA', recurso: 'DINHEIRO', valor: 5000 },
+            { tipo: 'DESPESA', recurso: 'DINHEIRO', valor: 800 },
+        ]);
+
+        const result = await transactionService.calcularResumo('u1', {
+            recurso: 'DINHEIRO',
+            dataInicio: '2026-08-01',
+            dataFim: '2026-08-31',
+        });
+
+        expect(result.modo).toBe('conta');
+        expect(result.recursoCarteira).toBe('DINHEIRO');
+        expect(result.saldo).toBe('4200.00');
+        expect(result.receitas.total).toBe('3000.00');
+        expect(result.despesas.total).toBe('1200.00');
+    });
+
+    it('soma saldos acumulados quando TODOS tem VR e Dinheiro no período', async () => {
+        transactionRepository.calcularAgregados.mockResolvedValue([
+            { tipo: 'RECEITA', _sum: { valor: 773.02 }, _count: { id: 3 } },
+            { tipo: 'DESPESA', _sum: { valor: 315.09 }, _count: { id: 4 } },
+        ]);
+        transactionRepository.listarRecursosDistintos.mockResolvedValue(['VR', 'DINHEIRO']);
+        transactionRepository.listarTransacoesRecurso.mockImplementation((_usuarioId, recurso, filtros = {}) => {
+            if (filtros.antesDe) {
+                return Promise.resolve([]);
+            }
+            if (recurso === 'VR') {
+                return Promise.resolve([{ tipo: 'RECEITA', recurso: 'VR', valor: 871.93 }]);
+            }
+            if (recurso === 'DINHEIRO') {
+                return Promise.resolve([{ tipo: 'RECEITA', recurso: 'DINHEIRO', valor: 1484.96 }]);
+            }
+            return Promise.resolve([]);
+        });
+
+        const result = await transactionService.calcularResumo('u1', {
+            recurso: 'TODOS',
+            dataInicio: '2026-08-01',
+            dataFim: '2026-08-31',
+        });
+
+        expect(result.modo).toBe('carteira');
+        expect(result.recursoCarteira).toBeNull();
+        expect(result.saldo).toBe('2356.89');
+        expect(result.saldoInicialPeriodo).toBe('0.00');
+        expect(result.receitas.total).toBe('773.02');
+        expect(result.despesas.total).toBe('315.09');
     });
 
     it('cria transação, vincula tags e incrementa streak', async () => {
@@ -235,6 +344,7 @@ describe('transactionService', () => {
             receitas: { total: '100.00', quantidade: 1 },
             despesas: { total: '40.00', quantidade: 1 },
             saldo: '60.00',
+            modo: 'fluxo',
         });
     });
 

@@ -50,7 +50,8 @@ module.exports = {
               )
             : undefined),
     GOOGLE_TOKENS_ENCRYPTION_KEY: process.env.GOOGLE_TOKENS_ENCRYPTION_KEY,
-    GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+    GEMINI_API_KEY_PDF: process.env.GEMINI_API_KEY_PDF,
+    GEMINI_PDF_MODEL: process.env.GEMINI_PDF_MODEL || 'gemini-3.1-flash-lite',
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_PORT: process.env.SMTP_PORT,
     SMTP_USER: process.env.SMTP_USER,

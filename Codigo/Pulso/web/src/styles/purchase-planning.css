@@ -25,6 +25,14 @@
   color: var(--ds-color-text-secondary);
 }
 
+.purchase-planning-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
 .purchase-planning-page__layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;
@@ -179,7 +187,7 @@
   padding: 16px 18px;
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-color-border));
   border-radius: 14px;
-  background: #0b0c10;
+  background: var(--ds-color-card-bg);
   transition:
     border-color 180ms ease,
     box-shadow 180ms ease;
@@ -187,7 +195,7 @@
 
 .pp-item-card:hover {
   border-color: color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border));
-  box-shadow: 0 10px 28px color-mix(in srgb, #000 45%, transparent);
+  box-shadow: var(--ds-shadow-md);
 }
 
 .pp-item-card__left {
@@ -220,7 +228,7 @@
 
 .pp-item-card__media--photo {
   display: block;
-  background: #0f1016;
+  background: var(--ds-color-surface);
 }
 
 .pp-item-card__media--photo img {
@@ -265,7 +273,7 @@
   font-size: 11px;
   font-weight: 600;
   color: var(--ds-color-text);
-  background: color-mix(in srgb, var(--ds-color-border) 28%, #14151a);
+  background: color-mix(in srgb, var(--ds-color-border) 40%, var(--ds-color-surface));
 }
 
 .pp-item-card__priority-dot {
@@ -348,7 +356,7 @@
 .pp-item-card__simulations-box {
   border-radius: 10px;
   border: 1px solid color-mix(in srgb, var(--ds-color-border) 75%, transparent);
-  background: #101118;
+  background: var(--ds-color-surface);
   overflow: hidden;
 }
 
@@ -427,11 +435,11 @@
 }
 
 .pp-item-card__goal-progress .ds-progress__track {
-  background: #1a1b24;
+  background: var(--ds-color-progress-track);
 }
 
 .pp-item-card__goal-progress .ds-progress__fill--primary {
-  background: linear-gradient(90deg, #c084fc 0%, #7c3aed 100%);
+  background: linear-gradient(90deg, var(--ds-color-primary-light) 0%, var(--ds-color-primary) 100%);
 }
 
 .pp-item-card__goal-values {
@@ -476,14 +484,17 @@
 }
 
 .pp-item-card__buy-btn {
-  background: #14532d !important;
-  border-color: #166534 !important;
-  box-shadow: 0 0 14px color-mix(in srgb, #22c55e 22%, transparent) !important;
+  background: color-mix(in srgb, var(--ds-color-success) 18%, var(--ds-color-card-bg)) !important;
+  border-color: color-mix(in srgb, var(--ds-color-success) 55%, var(--ds-color-border)) !important;
+  color: var(--ds-color-success) !important;
+  box-shadow: none !important;
   flex-shrink: 0;
 }
 
 .pp-item-card__buy-btn:hover:not(:disabled) {
-  background: #166534 !important;
+  background: color-mix(in srgb, var(--ds-color-success) 28%, var(--ds-color-card-bg)) !important;
+  border-color: var(--ds-color-success) !important;
+  color: var(--ds-color-success) !important;
 }
 
 .pp-item-card__actions {
@@ -516,7 +527,7 @@
     background-color var(--ds-transition-fast),
     border-color var(--ds-transition-fast),
     color var(--ds-transition-fast);
-  background: color-mix(in srgb, var(--ds-color-primary) 6%, #0f1016) !important;
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-color-card-bg)) !important;
   border-color: color-mix(in srgb, var(--ds-color-primary) 45%, var(--ds-color-border)) !important;
   color: var(--ds-color-primary) !important;
 }
@@ -544,26 +555,27 @@
   height: 32px !important;
   min-width: 32px !important;
   flex-shrink: 0;
-  background: color-mix(in srgb, var(--ds-color-border) 12%, #0f1016) !important;
+  background: color-mix(in srgb, var(--ds-color-border) 35%, var(--ds-color-card-bg)) !important;
   border-color: color-mix(in srgb, var(--ds-color-border) 85%, transparent) !important;
   color: var(--ds-color-text-secondary) !important;
 }
 
 .pp-item-card__icon-action:hover {
   color: var(--ds-color-text) !important;
-  border-color: color-mix(in srgb, var(--ds-color-border) 100%, white) !important;
+  border-color: var(--ds-color-border) !important;
+  background: var(--ds-color-hover) !important;
 }
 
 .pp-item-card__icon-action--danger {
-  color: #f87171 !important;
-  border-color: color-mix(in srgb, #ef4444 50%, var(--ds-color-border)) !important;
-  background: color-mix(in srgb, #ef4444 6%, #0f1016) !important;
+  color: var(--ds-color-danger) !important;
+  border-color: color-mix(in srgb, var(--ds-color-danger) 50%, var(--ds-color-border)) !important;
+  background: color-mix(in srgb, var(--ds-color-danger) 8%, var(--ds-color-card-bg)) !important;
 }
 
 .pp-item-card__icon-action--danger:hover {
-  color: #fca5a5 !important;
-  border-color: #ef4444 !important;
-  background: color-mix(in srgb, #ef4444 12%, #0f1016) !important;
+  color: var(--ds-color-danger) !important;
+  border-color: var(--ds-color-danger) !important;
+  background: color-mix(in srgb, var(--ds-color-danger) 14%, var(--ds-color-card-bg)) !important;
 }
 
 /* Recent table */
@@ -1121,7 +1133,7 @@
   padding: 14px;
   border-radius: 14px;
   border: 1px solid color-mix(in srgb, var(--ds-color-border) 80%, transparent);
-  background: color-mix(in srgb, var(--ds-color-surface) 40%, #0a0b10);
+  background: var(--ds-color-surface);
 }
 
 .pp-image-picker__preview-wrap {
@@ -1234,7 +1246,9 @@
   color: var(--ds-color-danger);
 }
 
-/* Sidebar do app expandida — compacta mantendo card horizontal */
+/* Sidebar do app expandida — compacta mantendo card horizontal.
+   Só no desktop: abaixo de 1024px a sidebar vira drawer e o atributo fica sempre 'false'. */
+@media (min-width: 1024px) {
 .main-layout[data-sidebar-collapsed='false'] .purchase-planning-page__layout {
   grid-template-columns: minmax(0, 1fr) 300px;
   gap: 16px;
@@ -1339,6 +1353,7 @@
   justify-content: center;
   margin-left: 0;
 }
+}
 
 @media (max-width: 1100px) {
   .purchase-planning-page__layout {
@@ -1360,10 +1375,25 @@
     align-items: stretch;
   }
 
+  .purchase-planning-page__actions {
+    width: 100%;
+  }
+
+  .purchase-planning-page__actions > * {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .purchase-planning-page__panel {
+    padding: 16px;
+  }
+
+  /* Card do item: empilha mídia/infos e painel */
   .pp-item-card {
     flex-direction: column;
     align-items: stretch;
     min-height: 0;
+    padding: 14px 16px;
   }
 
   .pp-item-card__left {
@@ -1383,6 +1413,17 @@
     width: 88px;
     height: 88px;
     min-width: 88px;
+    max-width: 88px;
+    max-height: 88px;
+  }
+
+  .pp-item-card__info h3 {
+    font-size: 15px;
+    overflow-wrap: anywhere;
+  }
+
+  .pp-item-card__value {
+    font-size: 20px;
   }
 
   .pp-item-card__divider {
@@ -1393,6 +1434,8 @@
   }
 
   .pp-item-card__panel {
+    display: flex;
+    min-height: 0;
     padding-left: 0;
   }
 
@@ -1403,8 +1446,69 @@
     padding-right: 0;
   }
 
+  .pp-item-card__simulation-row {
+    align-items: flex-start;
+    padding: 9px 10px;
+  }
+
+  /* Progresso da meta em bloco: valores não brigam por espaço */
+  .pp-item-card__goal-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'bar bar'
+      'values percent';
+    row-gap: 6px;
+    align-items: center;
+  }
+
+  .pp-item-card__goal-progress.ds-progress-root {
+    grid-area: bar;
+  }
+
+  .pp-item-card__goal-values {
+    grid-area: values;
+    white-space: normal;
+  }
+
+  .pp-item-card__goal-percent {
+    grid-area: percent;
+    justify-self: end;
+  }
+
+  /* Ações: primárias ocupam a linha, ícones ficam à direita */
+  .pp-item-card__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .pp-item-card__actions-primary {
+    flex: 1 1 220px;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .pp-item-card__actions-primary > button {
+    flex: 1 1 130px;
+    justify-content: center;
+  }
+
+  .pp-item-card__actions-secondary {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
   .pp-alert {
     flex-wrap: wrap;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .pp-alert__content {
+    flex: 1 1 200px;
   }
 
   .pp-image-picker {
@@ -1423,6 +1527,67 @@
 
   .pp-form__row {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .purchase-planning-page__title {
+    font-size: 22px;
+  }
+
+  .pp-item-card {
+    padding: 14px;
+  }
+
+  .pp-item-card__left {
+    gap: 12px;
+  }
+
+  .pp-item-card__media {
+    width: 68px;
+    height: 68px;
+    min-width: 68px;
+    max-width: 68px;
+    max-height: 68px;
+  }
+
+  .pp-item-card__value {
+    font-size: 18px;
+  }
+
+  .pp-item-card__simulation-copy {
+    gap: 4px;
+    font-size: 11px;
+  }
+
+  .pp-item-card__simulation-arrow {
+    display: none;
+  }
+
+  .pp-item-card__actions-primary > button {
+    flex: 1 1 100%;
+  }
+
+  .pp-item-card__actions-secondary {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .pp-alert__ring,
+  .pp-alert__ring svg {
+    width: 52px;
+    height: 52px;
+  }
+
+  .pp-sidebar__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .pp-sidebar__stats dd {
+    font-size: 19px;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -1662,5 +1827,26 @@
 @media (max-width: 640px) {
   .pp-history__summary {
     grid-template-columns: 1fr;
+  }
+
+  .pp-history__header {
+    padding: 18px 16px 16px;
+  }
+
+  .pp-history__body {
+    padding: 16px 16px 20px;
+  }
+
+  .pp-history__identity {
+    gap: 10px;
+  }
+
+  .pp-history__identity h2 {
+    font-size: 17px;
+  }
+
+  .pp-history__timeline-item {
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 10px;
   }
 }

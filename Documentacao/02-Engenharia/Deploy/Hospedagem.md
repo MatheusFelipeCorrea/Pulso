@@ -62,7 +62,7 @@ O `vercel.json` na raiz já define install, build e output.
 | `GOOGLE_CLIENT_SECRET` | `GOCSPX-xxx` |
 | `GOOGLE_CALLBACK_URL` | `https://seu-app.vercel.app/api/auth/google/callback` |
 | `GOOGLE_CALENDAR_CALLBACK_URL` | `https://seu-app.vercel.app/api/calendario/google/callback` |
-| `GEMINI_API_KEY` | sua chave |
+| `GEMINI_API_KEY_PDF` | chave Gemini para importação de PDF |
 | `SMTP_HOST` / `PORT` / `USER` / `PASS` / `FROM` | Gmail ou Mailtrap |
 | `CORS_ORIGIN` | `https://seu-app.vercel.app` |
 | `FRONTEND_URL` | `https://seu-app.vercel.app` |

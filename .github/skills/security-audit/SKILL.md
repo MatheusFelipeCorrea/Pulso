@@ -1,47 +1,66 @@
 ---
 name: security-audit
 description: >-
-  Auditoria AppSec em 3 fases (auth, dados/integrações, infra/LGPD). OWASP Top 10,
-  OWASP API Security, LGPD. Gera achados SEC-N-NN em Documentacao/03-Auditorias/Application Security/.
-  Execute UMA fase por vez; aguarde OK do usuário entre fases.
+  Runs a phased application security audit (auth, data/integrations, infra/privacy)
+  using OWASP-oriented checklists and evidence-backed findings. Use when the user
+  asks for AppSec, security review, or a specific security audit phase.
 ---
 
-# Security Audit — AppSec em Fases
+# Security Audit — AppSec (Phased)
 
-## Protocolo completo
+## Step 1 — Resolve project context (mandatory)
 
-`Documentacao/03-Auditorias/Prompts/AnaliseSegurança.md`
+1. Read `.github/project.yml` if it exists. Validate configured paths; treat stale or missing paths as hints and fall back to discovery.
+2. If absent: discover apps, source dirs, auth surfaces, CI/deploy configs, dependency manifests, and privacy-related docs from the tree. **Never** assume a fixed stack or layout.
+3. Capture: source roots, deploy/runtime hints, `language`/`locale`, `outputs.audits` (application-security or equivalent).
+4. If an **overlay** is configured for this audit, read it **after** the base prompt.
 
-## Variáveis
+## Protocol
 
-| Variável | Valores |
-|----------|---------|
-| `${PHASE}` | `1` \| `2` \| `3` \| `consolidar` |
-| `${OUTPUT_DIR}` | `Documentacao/03-Auditorias/Application Security/` |
+Follow `.github/audits/prompts/security.md` when present.
 
-## Arquivos de saída por fase
+**Fallback:** if prompt/config is missing, continue with a professional AppSec checklist (threat model → authn/authz → secrets/PII → injections → integrations → supply chain → infra/privacy). Do **not** block.
 
-| Fase | Arquivo |
-|------|---------|
-| 1 | `${OUTPUT_DIR}/security-fase-1-auth-authz.md` |
-| 2 | `${OUTPUT_DIR}/security-fase-2-dados-integracoes.md` |
-| 3 | `${OUTPUT_DIR}/security-fase-3-infra-lgpd.md` |
-| consolidar | `${OUTPUT_DIR}/security-sumario-executivo.md` |
+## Phases (generic)
 
-## Regras invioláveis
+Run **one phase per session**; stop and wait for user OK before the next.
 
-- **UMA fase por vez** — parar e aguardar "OK, próxima fase"
-- ID achados: `SEC-<FASE>-<NN>`
-- Cada achado: vetor de ataque, impacto, severidade, facilidade, mitigação com código
-- Criar pasta `${OUTPUT_DIR}` se não existir
+| Phase | Focus (adapt to what exists) |
+|-------|------------------------------|
+| 1 | Authentication & authorization |
+| 2 | Sensitive data & integrations |
+| 3 | Infrastructure, supply chain & privacy |
+| consolidate | Executive summary across phases |
 
-## Escopo do projeto Pulso (contexto)
+Skip or mark N/A any subdomain with no artifacts (e.g. no OAuth, no LLM, no mobile).
 
-- Auth: cookies httpOnly, refresh mutex — `authCookies.js`, `authService.js`
-- Google tokens: AES-256-GCM — `googleTokenCrypto.js`
-- Rate limit parcial: auth + convites grupo
-- Serverless Vercel — rate limit em memória é limitação conhecida
+## Scope & findings
 
-## Exemplo
+- Only detected/existing artifacts.
+- Finding IDs: `SEC-<PHASE>-<NN>` (or prefix from config/manifest).
+- Each finding: attack vector, evidence `path:line`, severity, exploitability, impact, confidence, mitigation (code/pseudo-code when useful).
+- Severity scale: Critical / High / Medium / Low (or config equivalent).
 
-> Execute Fase 1 da auditoria de segurança. Salve em Documentacao/03-Auditorias/Application Security/
+## Execution rules
+
+- **Read-only by default.** No code changes unless the user asks for a separate remediation pass.
+- Do not run offensive exploits against live systems; analyze code and config only.
+- Output language: config / user preference.
+
+## Output
+
+| Source | Path |
+|--------|------|
+| Prefer | `project.yml` → `outputs.audits` (application-security) |
+| Fallback | `.github/audits/results/application-security/` |
+
+Suggested filenames (override via config/prompt):
+
+- `security-fase-1-auth-authz.md`
+- `security-fase-2-dados-integracoes.md`
+- `security-fase-3-infra-privacy.md`
+- `security-sumario-executivo.md`
+
+## Example
+
+> Run security-audit phase 1 and save under the configured application-security output.

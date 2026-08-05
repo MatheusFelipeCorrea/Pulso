@@ -1,42 +1,65 @@
-﻿---
+---
 name: architecture-audit
 description: >-
-  Auditoria arquitetural Staff em 3 fases: domínio/dados, integrações/runtime,
-  front-end/evolução. Gera ARCH-N-NN em Documentacao/03-Auditorias/Architecture/.
-  UMA fase por vez; trade-offs explícitos.
+  Runs a phased architecture review of domain/data, integrations/runtime, and
+  client/evolution concerns with explicit trade-offs. Use when assessing
+  structure, boundaries, coupling, or evolution readiness.
 ---
 
-# Architecture Audit — Domínio, Integrações, Runtime
+# Architecture Audit — Domain, Runtime, Evolution
 
-## Protocolo completo
+## Step 1 — Resolve project context (mandatory)
 
-`Documentacao/03-Auditorias/Prompts/AnaliseArquiteto.md`
+1. Read `.github/project.yml` if it exists. Validate configured paths; treat stale or missing paths as hints and fall back to discovery.
+2. If absent: discover bounded contexts/packages, data stores, integration points, runtime/deploy model, and client apps from manifests, workspaces, diagrams (if any), READMEs, and tree. **Never** assume a fixed domain, ORM, or hosting model.
+3. Capture: package boundaries, data/schema locations, `language`/`locale`, `outputs.audits` (architecture).
+4. If an **overlay** is configured, read it **after** the base prompt.
 
-## Variáveis
+## Protocol
 
-| Variável | Default |
-|----------|---------|
-| `${PHASE}` | `1` \| `2` \| `3` \| `consolidar` |
-| `${OUTPUT_DIR}` | `Documentacao/03-Auditorias/Architecture/` |
+Follow `.github/audits/prompts/architecture.md` when present.
 
-## Arquivos de saída
+**Fallback:** if prompt/config is missing, continue with a professional architecture checklist (boundaries → data model → integrations → runtime constraints → client architecture → evolution risks). Do **not** block.
 
-| Fase | Arquivo |
-|------|---------|
-| 1 | `arch-fase-1-dominio-dados.md` |
-| 2 | `arch-fase-2-integracoes-runtime.md` |
-| 3 | `arch-fase-3-frontend-evolucao.md` |
-| consolidar | `arch-sumario-executivo.md` |
+## Phases (generic)
 
-## Fontes
+**One phase per session**; wait for user OK between phases.
 
-- `Documentacao/04-Diagramas/`
-- `prisma/schema.prisma`, migrations pendentes
-- `.github/plans/cards/` — boundaries entre módulos
-- `Documentacao/03-Auditorias/Product Owner/00-Achados-Transversais.md`
+| Phase | Focus (adapt to detected shape) |
+|-------|----------------------------------|
+| 1 | Domain & data |
+| 2 | Integrations & runtime |
+| 3 | Clients & evolution |
+| consolidate | Cross-cutting trade-offs + executive summary |
 
-## Regras
+Phases are thematic, not tied to product modules. Mark N/A when a layer does not exist (e.g. no external integrations).
 
-- ID achados: `ARCH-<FASE>-<NN>`
-- Bounded contexts vs. 25 módulos planejados
-- Serverless: cron Vercel vs node-cron local, rate limit memória
+## Scope & findings
+
+- Finding IDs: `ARCH-<PHASE>-<NN>` (or config prefix).
+- Each finding: evidence `path:line`, severity/priority, impact, confidence, recommendation, and **explicit trade-offs** when proposing change.
+- Prefer structural risks (coupling, consistency, operability) over micro-style nits.
+
+## Execution rules
+
+- **Read-only by default.** Do not refactor unless the user asks for a separate implementation pass.
+- Do not invent target architectures; ground recommendations in what the repo actually has.
+- Output language: config / user preference.
+
+## Output
+
+| Source | Path |
+|--------|------|
+| Prefer | `project.yml` → `outputs.audits` (architecture) |
+| Fallback | `.github/audits/results/architecture/` |
+
+Suggested filenames:
+
+- `arch-fase-1-dominio-dados.md`
+- `arch-fase-2-integracoes-runtime.md`
+- `arch-fase-3-clientes-evolucao.md`
+- `arch-sumario-executivo.md`
+
+## Example
+
+> Run architecture-audit phase 1 (domain & data) and save the report.

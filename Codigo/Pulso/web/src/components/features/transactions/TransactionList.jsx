@@ -10,6 +10,7 @@ import { IconButton } from '@/design-system/components/buttons/IconButton/IconBu
 import { EmptyState } from '@/design-system/components/feedback/EmptyState/EmptyState.jsx'
 import { SpinnerDots } from '@/design-system/components/feedback/Spinner/SpinnerDots.jsx'
 import { cn } from '@/design-system/utils/cn.js'
+import { isAjusteSaldoImportacao } from '@/utils/importBeneficioUtils.js'
 
 function groupByDate(transacoes) {
   const groups = new Map()
@@ -30,6 +31,7 @@ function groupByDate(transacoes) {
 function TransactionRow({ transacao, onEdit, onDelete }) {
   const isReceita = transacao.tipo === 'RECEITA'
   const isTransferencia = transacao.tipo === 'TRANSFERENCIA'
+  const isAjuste = isAjusteSaldoImportacao(transacao.descricao)
   const recursoKind = badgeKindFromRecurso(transacao.recurso)
   const categoriaIcon = resolveBadgeIcon(transacao.categoria?.icone ?? 'Tag', { size: 18 })
 
@@ -59,6 +61,9 @@ function TransactionRow({ transacao, onEdit, onDelete }) {
             {transacao.descricao ||
               (isTransferencia ? `${recursoOrigemLabel} → ${recursoDestinoLabel}` : transacao.categoria?.nome)}
           </p>
+          {isAjuste ? (
+            <p className="tx-item__hint">Não entra no resumo do período — só concilia o saldo da carteira</p>
+          ) : null}
           {recursoKind ? (
             <div className="tx-item__badge">
               <PulsoBadge kind={recursoKind} size="sm" />

@@ -1,5 +1,8 @@
 ﻿# Plans — cards e implementações
 
+Epics/stories do **produto Pulso** e planos gerados pelo agent de implementação.  
+Pack de agents/skills (genérico): [`../INDEX.md`](../INDEX.md) · Comandos: [`../COMMANDS.md`](../COMMANDS.md).
+
 ## Índice de Epics
 
 Legenda: **✅ Entregue** · **🟡 Parcial** · **📋 Card detalhado (pré-implementação)** · **❌ Sem card**
@@ -22,7 +25,7 @@ Legenda: **✅ Entregue** · **🟡 Parcial** · **📋 Card detalhado (pré-imp
 | Design System | [Design System - Pulso.md](./cards/[EPIC]%20Design%20System%20-%20Pulso.md) | — | 🟡 Contínuo | — |
 | Sidebar / Layout | [Sidebar.md](./cards/[EPIC]%20Sidebar.md) | — | 🟡 Contínuo | — |
 | Perfil e Configurações | — | 073–078 | ⚠️ Parcial | [M10](../../Documentacao/03-Auditorias/Product Owner/10-Perfil-e-Configuracoes.md) |
-| Dashboard | — | 007–014 | ❌ Placeholder | [M02](../../Documentacao/03-Auditorias/Product Owner/02-Dashboard.md) |
+| Dashboard | — | 007–014 | 🟡 Entregue (revisão PO) | [M02](../../Documentacao/03-Auditorias/Product Owner/02-Dashboard.md) |
 | Auditoria PO | [META Auditoria PO 2026-08.md](./cards/[META]%20Auditoria%20PO%202026-08.md) | transversal | ✅ Correções | [Sumário](../../Documentacao/03-Auditorias/Product Owner/00-Sumario-Executivo.md) |
 
 ---
@@ -43,7 +46,7 @@ Template compacto legado: [`_TEMPLATE-epic-entregue.md`](./_TEMPLATE-epic-entreg
 
 ## Implementations
 
-Planos gerados pelo [implementation-plan agent](../agents/implementation-plan.agent.md) ficam em `implementations/`:
+Planos gerados pelo [implementation-plan agent](../agents/implementation-plan.agent.md) ficam em [`implementations/`](./implementations/README.md):
 
 ```
 implementations/
@@ -51,6 +54,8 @@ implementations/
 ```
 
 Não versionar planos descartáveis; manter só os que documentam decisões importantes.
+
+Fluxo típico: *Refine este card* (`card-refiner`) → *Implemente o card …* (agent).
 
 ---
 
