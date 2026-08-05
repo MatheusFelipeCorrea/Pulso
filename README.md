@@ -32,7 +32,7 @@ Pulso/
 
 ## Status do produto (ago/2026)
 
-~**52%** dos requisitos funcionais entregues ([detalhe por RF](./Documentacao/01-Produto/Requisitos/Readme.md)).
+~**55%** dos requisitos funcionais entregues ([detalhe por RF](./Documentacao/01-Produto/Requisitos/Readme.md)).
 
 ### Módulos entregues (UI + API utilizáveis)
 
@@ -40,7 +40,7 @@ Pulso/
 |--------|-----|
 | Autenticação | 001–006 |
 | Transações | 015–025, 140–141 |
-| Dashboard | 007–014 (🟡 revisão PO pendente) |
+| Dashboard | 007–014 (🟡 falta RF-139 quick-add) |
 | Metas financeiras | 026–032 |
 | Viagens e moedas | 033–043 |
 | Lembretes + Google Agenda | 054–058 |
@@ -52,18 +52,18 @@ Pulso/
 | Planejamento de compra | 133–138 |
 | Homepage pública | 084–087 |
 | Grupos | 088–102 |
+| Importação de extratos | 155–158, 160 (🟡 falta RF-159 aprendizado) |
 
 ### Parcial ou só placeholder na UI
 
 | Módulo | Situação |
 |--------|----------|
-| Perfil e configurações | Rotas existem; funcionalidades RF-073–078 incompletas |
+| Perfil e configurações | Tema claro/escuro (RF-076) ok; demais RF-073–078 / settings incompletos |
 | Design System / Sidebar | Contínuo — base pronta, evolução incremental |
-| Importação OFX/CSV/PDF | UI do modal pronta; parser/backend RF-155–158 pendente |
 | Gamificação | Página placeholder (RF-067–072) |
 | Relatórios | Placeholder (RF-045–050) |
 | Insights | Placeholder (RF-044–048) |
-| Chatbot / quick-add IA | Placeholder (RF-049–053, RF-139); env Gemini configurável, código pendente |
+| Chatbot / quick-add IA | Placeholder (RF-049–053, RF-139); Gemini usado na importação PDF |
 
 ### Planejados (sem implementação)
 

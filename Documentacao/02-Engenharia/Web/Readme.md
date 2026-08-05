@@ -48,7 +48,9 @@ Interface do **Pulso** com React + Vite, Tailwind CSS v4, Redux (auth) e design 
 | **Grupos** (`/groups`, `/groups/:id`) | ✅ |
 | **Divisão de Despesas** (`/expense-split`) | ✅ |
 | **Notificações** (sino no layout) | ✅ |
-| Dashboard, insights, chatbot, perfil, … | 🔜 `InDevelopmentPage` |
+| **Dashboard** (`/dashboard`) | ✅ — saldos, gráficos, importação de extratos |
+| **Planejamento de Compra** (`/purchase-planning`) | ✅ |
+| Insights, chatbot, perfil, gamificação, relatórios | 🔜 `InDevelopmentPage` / parcial |
 
 ---
 
@@ -86,17 +88,19 @@ Pulso/web/
 │   │   │   ├── auth/
 │   │   │   ├── budget/          ← orçamento mensal
 │   │   │   ├── calendar/        ← calendário + lembretes + Google Calendar
-│   │   │   ├── dashboard/       ← NotificationPanel (sino)
+│   │   │   ├── dashboard/       ← DashboardPage + ImportStatementModal + NotificationPanel
 │   │   │   ├── debts/           ← dívidas pessoais
 │   │   │   ├── expense-split/   ← divisão de despesas
 │   │   │   ├── goals/           ← metas financeiras
 │   │   │   ├── groups/          ← grupos (viagens/metas compartilhadas)
+│   │   │   ├── purchase-planning/
 │   │   │   ├── transactions/
 │   │   │   ├── transport/       ← vale transporte
 │   │   │   └── trips/           ← viagens + moedas
 │   │   ├── layouts/
 │   │   │   ├── MainLayout/
 │   │   │   ├── AuthLayout/
+│   │   │   ├── UserMenu/        ← perfil + toggle tema claro/escuro
 │   │   │   └── Sidebar/
 │   │   └── routing/             ← ProtectedRoute, AuthBootstrap
 │   ├── pages/
@@ -173,9 +177,10 @@ Documentação: `src/design-system/README.md`
 | `/groups/:id` | **Detalhe do grupo** (membros, viagem, metas, chat) |
 | `/expense-split` | **Divisão de Despesas** |
 | `/purchase-planning` | **Planejamento de Compra** |
-| `/dashboard`, `/insights`, `/chatbot`, `/profile`, … | `InDevelopmentPage` |
+| `/dashboard` | **Dashboard** (saldos, gráficos, importação de extratos) |
+| `/insights`, `/chatbot`, `/profile`, `/settings`, `/achievements`, `/reports`, … | `InDevelopmentPage` |
 
-Pós-login/OAuth/GuestRoute: destino padrão **`/transactions`** (`src/config/defaultAuthenticatedRoute.js`).
+Pós-login/OAuth/GuestRoute: destino padrão **`/dashboard`** (`src/config/defaultAuthenticatedRoute.js`).
 
 Lista completa de paths: `src/config/appRoutes.js`  
 Menu lateral: `src/config/sidebarNavigation.js`
@@ -187,8 +192,8 @@ Menu lateral: `src/config/sidebarNavigation.js`
 Configuração única em `sidebarNavigation.js` (`SIDEBAR_NAV` + `SIDEBAR_NAV_FOOTER`).
 
 - Desktop: sidebar fixa, colapsável
-- Mobile: drawer + header com menu e toggle de tema
-- Tema: `useTheme()` → classe `.dark` no `<html>`, chave `ds-theme` no localStorage
+- Mobile: drawer + header com menu; **toggle de tema** no **`UserMenu`** (não no drawer)
+- Tema: `useTheme()` → classe `.dark` no `<html>`; preferência `ds-theme-preference` (legado `ds-theme`)
 
 ---
 
@@ -354,7 +359,7 @@ Configuração única em `sidebarNavigation.js` (`SIDEBAR_NAV` + `SIDEBAR_NAV_FO
 | Slice | Uso |
 |-------|-----|
 | `authSlice` | Usuário logado, tokens |
-| `themeSlice` | Legado; tema visual usa `useTheme()` + `localStorage` (`ds-theme`) |
+| `themeSlice` | Legado; tema visual usa `useTheme()` + `localStorage` (`ds-theme-preference`) |
 
 Slices de transações, metas, etc. estão comentados em `store/index.js` — previstos para módulos futuros.
 
@@ -454,10 +459,10 @@ VITE_GOOGLE_CLIENT_ID=seu_client_id.apps.googleusercontent.com
 
 ## 🗺️ Roadmap
 
-**Entregue:** transações, VT, orçamento, calendário, dívidas, metas, viagens (com insights de transporte e moedas), grupos, divisão de despesas.
+**Entregue:** dashboard (+ importação de extratos), transações, VT, orçamento, calendário, dívidas, metas, viagens (transporte + moedas), grupos, divisão de despesas, planejamento de compra, tema claro/escuro.
 
-**Pendente:** dashboard, perfil/settings, insights IA, chatbot, gamificação, relatórios.
+**Pendente:** perfil/settings, insights IA, chatbot / RF-139, gamificação UI, relatórios, onboarding, RF-159 (aprendizado na importação).
 
 Prioridades sugeridas: [Analise-Produto.md](../../01-Produto/Analise-Produto.md)
 
-Epics: `.github/plans/cards/`
+Epics: [`.github/plans/cards/`](../../../.github/plans/cards/) · Pack: [`.github/INDEX.md`](../../../.github/INDEX.md)

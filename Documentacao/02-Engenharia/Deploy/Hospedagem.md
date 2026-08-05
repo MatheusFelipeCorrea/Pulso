@@ -3,9 +3,11 @@
 Deploy unificado: **frontend e backend no mesmo projeto Vercel**.
 
 ```text
-https://seu-app.vercel.app/           → React (estático)
-https://seu-app.vercel.app/api/...    → Express (serverless)
+https://pulso-psi-five.vercel.app/           → React (estático)
+https://pulso-psi-five.vercel.app/api/...    → Express (serverless)
 ```
+
+(Substitua pelo domínio customizado se houver.)
 
 Banco: **Neon** (PostgreSQL). Jobs: **Vercel Cron** → `/api/cron/*`.
 
@@ -60,13 +62,17 @@ O `vercel.json` na raiz já define install, build e output.
 | `JWT_REFRESH_SECRET` | string longa |
 | `GOOGLE_CLIENT_ID` | `xxx.apps.googleusercontent.com` |
 | `GOOGLE_CLIENT_SECRET` | `GOCSPX-xxx` |
-| `GOOGLE_CALLBACK_URL` | `https://seu-app.vercel.app/api/auth/google/callback` |
-| `GOOGLE_CALENDAR_CALLBACK_URL` | `https://seu-app.vercel.app/api/calendario/google/callback` |
+| `GOOGLE_CALLBACK_URL` | `https://pulso-psi-five.vercel.app/api/auth/google/callback` |
+| `GOOGLE_CALENDAR_CALLBACK_URL` | `https://pulso-psi-five.vercel.app/api/calendario/google/callback` |
+| `GOOGLE_TOKENS_ENCRYPTION_KEY` | hex 64 chars (`openssl rand -hex 32`) |
 | `GEMINI_API_KEY_PDF` | chave Gemini para importação de PDF |
+| `GEMINI_PDF_MODEL` | opcional — default `gemini-3.1-flash-lite` |
 | `SMTP_HOST` / `PORT` / `USER` / `PASS` / `FROM` | Gmail ou Mailtrap |
-| `CORS_ORIGIN` | `https://seu-app.vercel.app` |
-| `FRONTEND_URL` | `https://seu-app.vercel.app` |
+| `CORS_ORIGIN` | `https://pulso-psi-five.vercel.app` (+ previews separados por vírgula) |
+| `FRONTEND_URL` | `https://pulso-psi-five.vercel.app` |
+| `API_PUBLIC_URL` | `https://pulso-psi-five.vercel.app` |
 | `CRON_SECRET` | `openssl rand -hex 32` |
+| `BLOB_READ_WRITE_TOKEN` | opcional — Vercel Blob (imagens de grupo em prod) |
 
 ### Opcionais (viagens / passagens)
 
@@ -104,8 +110,8 @@ Protegidos por `CRON_SECRET` — a Vercel envia `Authorization: Bearer <CRON_SEC
 
 ### Tela de consentimento
 
-- Política: `https://seu-app.vercel.app/privacidade`
-- Termos: `https://seu-app.vercel.app/termos`
+- Política: `https://pulso-psi-five.vercel.app/privacidade`
+- Termos: `https://pulso-psi-five.vercel.app/termos`
 - Domínio autorizado: `vercel.app` (ou domínio custom)
 
 ### Credenciais → Cliente OAuth
@@ -114,7 +120,7 @@ Protegidos por `CRON_SECRET` — a Vercel envia `Authorization: Bearer <CRON_SEC
 
 ```text
 http://localhost:5173
-https://seu-app.vercel.app
+https://pulso-psi-five.vercel.app
 ```
 
 **URIs de redirecionamento** (mesmo domínio Vercel):
@@ -122,8 +128,8 @@ https://seu-app.vercel.app
 ```text
 http://localhost:3333/api/auth/google/callback
 http://localhost:3333/api/calendario/google/callback
-https://seu-app.vercel.app/api/auth/google/callback
-https://seu-app.vercel.app/api/calendario/google/callback
+https://pulso-psi-five.vercel.app/api/auth/google/callback
+https://pulso-psi-five.vercel.app/api/calendario/google/callback
 ```
 
 ### Em teste vs Produção
@@ -136,7 +142,7 @@ https://seu-app.vercel.app/api/calendario/google/callback
 ## 5. Deploy e validação
 
 1. Push na `main` → deploy automático
-2. `https://seu-app.vercel.app/api/health` → `{ "status": "ok", ... }`
+2. `https://pulso-psi-five.vercel.app/api/health` → `{ "status": "ok", ... }`
 3. Login email/senha e Google
 4. Conectar Google Calendar em `/calendar`
 5. E-mail (registro / reset)
@@ -178,9 +184,13 @@ npm run db:migrate:deploy
 | Item | Detalhe |
 |------|---------|
 | Cold start | 1–3 s na API após idle |
-| Timeout | 10 s por request |
+| Timeout | Hobby ~10 s; projeto configura `maxDuration: 30` em `vercel.json` para a função API |
 | Crons | 1 job/dia (limite Hobby) |
 | Gemini | Cota da API Google separada |
+
+**Dependabot:** [`.github/dependabot.yml`](../../../.github/dependabot.yml) existe, mas `open-pull-requests-limit: 0` — atualizações via `npm audit` / bump manual, sem PRs automáticos.
+
+**Viagens / capa:** resolução de imagem de destino (Wikipedia/Commons) roda no **criar/editar** viagem, não no `GET /viagens` (evita timeout no Preview).
 
 ---
 

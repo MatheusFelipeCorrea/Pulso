@@ -4,18 +4,21 @@ Guia de ordem de desenvolvimento do sistema Pulso, do zero até o deploy.
 
 ---
 
-## ✅ Status atual (jun/2026)
+## ✅ Status atual (ago/2026)
 
 Fases **concluídas ou em uso**:
 
 - Fase 0 — Setup
-- Fase 1 — Design System (componentes principais)
+- Fase 1 — Design System (componentes principais + tema claro/escuro)
 - Fase 2 — Layouts + Sidebar
 - Fase 3 — Autenticação
-- Fase 4 (parcial) — Transações, VT, orçamento, dívidas, metas, viagens
+- Fase 4 — Core financeiro: Transações, VT, orçamento, dívidas, metas, viagens, **dashboard**, **importação de extratos**, planejamento de compra, divisão de despesas
 - Fase 7 (quase fechada) — **Grupos** (ver gaps em [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md))
+- Fase 9 (parcial) — Homepage pública entregue; onboarding RF-151–154 ainda não
 
-**Próximo foco sugerido:** fechar gaps de Grupos + Dashboard + perfil/settings (ver [Analise-Produto.md](../Analise-Produto.md) e [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md)).
+**Próximo foco sugerido:** perfil/settings + RF-139 (quick-add) + RF-159 (aprendizado na importação) — ver [Analise-Produto.md](../Analise-Produto.md).
+
+Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comandos: [`.github/COMMANDS.md`](../../../.github/COMMANDS.md).
 
 ---
 
