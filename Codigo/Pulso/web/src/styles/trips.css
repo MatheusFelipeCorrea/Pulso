@@ -12,6 +12,14 @@
   margin-bottom: 24px;
 }
 
+.trips-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
 .trips-page__title {
   margin: 0 0 4px;
   font-size: 28px;
@@ -571,8 +579,8 @@
   border-radius: 8px;
   font-size: 11px;
   font-weight: 700;
-  color: #7dd3fc;
-  background: color-mix(in srgb, #2563eb 22%, transparent);
+  color: var(--ds-color-info);
+  background: color-mix(in srgb, var(--ds-color-info) 14%, transparent);
 }
 
 .trip-card__expenses {
@@ -1338,9 +1346,9 @@
 }
 
 .trip-detail-page__badge--currency {
-  color: #7dd3fc;
-  background: color-mix(in srgb, #2563eb 20%, transparent);
-  border: 1px solid color-mix(in srgb, #2563eb 28%, transparent);
+  color: var(--ds-color-info);
+  background: color-mix(in srgb, var(--ds-color-info) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-color-info) 28%, transparent);
 }
 
 .trip-detail-page__badge--date {
@@ -1460,16 +1468,16 @@
 
 .trip-detail-page__goal-stat--planned {
   padding: 12px 14px;
-  border: 1px solid color-mix(in srgb, #22d3ee 28%, var(--ds-color-border));
+  border: 1px solid color-mix(in srgb, var(--ds-color-cyan) 28%, var(--ds-color-border));
   border-radius: 12px;
-  background: color-mix(in srgb, #22d3ee 8%, transparent);
+  background: color-mix(in srgb, var(--ds-color-cyan) 8%, transparent);
 }
 
 .trip-detail-page__goal-planned-value {
   margin: 0;
   font-size: 22px;
   font-weight: 700;
-  color: #22d3ee;
+  color: var(--ds-color-cyan);
 }
 
 .trip-detail-page__goal-stat-hint {
@@ -1756,7 +1764,7 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 16px;
-  color: #22d3ee;
+  color: var(--ds-color-cyan);
 }
 
 .trip-detail-page__summary-head h2 {
@@ -1787,7 +1795,7 @@
 }
 
 .trip-detail-page__summary-totals strong.is-success {
-  color: #22c55e;
+  color: var(--ds-color-success);
 }
 
 .trip-detail-page__rate-block {
@@ -1825,9 +1833,9 @@
   border-radius: 999px;
   font-size: 11px;
   font-weight: 700;
-  color: #7dd3fc;
-  background: color-mix(in srgb, #2563eb 18%, transparent);
-  border: 1px solid color-mix(in srgb, #2563eb 24%, transparent);
+  color: var(--ds-color-info);
+  background: color-mix(in srgb, var(--ds-color-info) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-color-info) 24%, transparent);
 }
 
 .trip-detail-page__rate-updated {
@@ -2002,23 +2010,23 @@
 }
 
 .trip-transport-insight__season--high {
-  color: #fde047;
-  background: color-mix(in srgb, #fbbf24 14%, var(--ds-color-modal-bg));
-  border: 1px solid color-mix(in srgb, #fbbf24 42%, transparent);
+  color: var(--ds-color-warning);
+  background: color-mix(in srgb, var(--ds-color-warning) 12%, var(--ds-color-modal-bg));
+  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 42%, transparent);
 }
 
 .trip-transport-insight__season--high svg {
-  color: #facc15;
+  color: var(--ds-color-warning);
 }
 
 .trip-transport-insight__season--low {
-  color: #86efac;
-  background: color-mix(in srgb, #22c55e 12%, var(--ds-color-modal-bg));
-  border: 1px solid color-mix(in srgb, #22c55e 38%, transparent);
+  color: var(--ds-color-success);
+  background: color-mix(in srgb, var(--ds-color-success) 12%, var(--ds-color-modal-bg));
+  border: 1px solid color-mix(in srgb, var(--ds-color-success) 38%, transparent);
 }
 
 .trip-transport-insight__season--low svg {
-  color: #4ade80;
+  color: var(--ds-color-success);
 }
 
 .trip-transport-insight__value {
@@ -2320,7 +2328,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #60a5fa;
+  color: var(--ds-color-info);
 }
 
 .trip-expense-form__preview {
@@ -3003,6 +3011,23 @@
     padding: 16px;
   }
 
+  .trips-page__header,
+  .trip-detail-page__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .trips-page__actions,
+  .trip-detail-page__actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .trips-page__actions > *,
+  .trip-detail-page__actions > * {
+    flex: 1 1 auto;
+  }
+
   .trips-converter__grid {
     grid-template-columns: 1fr;
   }
@@ -3018,11 +3043,28 @@
   }
 
   .trips-chart__stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
+  }
+
+  .trips-favorites__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trips-favorites--carousel .trips-favorites__card,
+  .trips-favorites--carousel .trips-favorites__add {
+    flex-basis: 100%;
   }
 
   .trip-card__media,
   .trip-card__media img {
     min-height: 112px;
+  }
+
+  .trip-detail-page__badges {
+    gap: 8px;
+  }
+
+  .trip-detail-page__table-wrap {
+    margin-inline: -4px;
   }
 }

@@ -637,7 +637,7 @@
 .vt-field-error {
   margin: 0;
   font-size: 13px;
-  color: #dc2626;
+  color: var(--ds-color-danger);
 }
 
 @media (max-width: 900px) {

@@ -20,6 +20,10 @@ const {
     saldoTotalDisponivel,
     diasUteisRestantesNoMes,
 } = require('../utils/resourceBalanceUtils');
+const {
+    mergeWhere,
+    whereExcluiAjusteSaldoImportacao,
+} = require('../repositories/transactionRepository');
 
 const round2 = (n) => Math.round(Number(n) * 100) / 100;
 
@@ -36,11 +40,14 @@ const buildVariacaoPercentual = (atual, anterior) => {
 
 const obterSerieReceitasDespesas = async (usuarioId, inicio, fim) => {
     const transacoes = await prisma.transacao.findMany({
-        where: {
-            usuarioId,
-            data: { gte: inicio, lte: fim },
-            tipo: { in: ['RECEITA', 'DESPESA'] },
-        },
+        where: mergeWhere(
+            {
+                usuarioId,
+                data: { gte: inicio, lte: fim },
+                tipo: { in: ['RECEITA', 'DESPESA'] },
+            },
+            whereExcluiAjusteSaldoImportacao
+        ),
         select: { data: true, tipo: true, valor: true },
         orderBy: { data: 'asc' },
     });
@@ -64,12 +71,15 @@ const obterSerieReceitasDespesas = async (usuarioId, inicio, fim) => {
 const obterGastosPorCategoria = async (usuarioId, inicio, fim) => {
     const rows = await prisma.transacao.groupBy({
         by: ['categoriaId'],
-        where: {
-            usuarioId,
-            tipo: 'DESPESA',
-            data: { gte: inicio, lte: fim },
-            categoriaId: { not: null },
-        },
+        where: mergeWhere(
+            {
+                usuarioId,
+                tipo: 'DESPESA',
+                data: { gte: inicio, lte: fim },
+                categoriaId: { not: null },
+            },
+            whereExcluiAjusteSaldoImportacao
+        ),
         _sum: { valor: true },
     });
 

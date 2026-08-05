@@ -1701,7 +1701,7 @@
 }
 
 .group-detail-trip__transport-chip--flight {
-  color: #60a5fa;
+  color: var(--ds-color-info);
   border-color: color-mix(in srgb, #2563eb 30%, transparent);
   background: color-mix(in srgb, #2563eb 12%, transparent);
 }
@@ -1762,7 +1762,7 @@
 }
 
 .group-detail-trip__transport-tooltip-mode--flight {
-  color: #60a5fa;
+  color: var(--ds-color-info);
 }
 
 .group-detail-trip__transport-tooltip-mode--bus {
@@ -2655,6 +2655,42 @@
   .group-detail-page__footer {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .group-detail-page__footer > button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .group-detail-trip__grid--cols-2,
+  .group-detail-trip__grid--cols-3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .group-detail-trip__grid--scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .group-detail-trip__grid--scroll .group-detail-trip__member-col {
+    flex-basis: min(100%, 260px);
+  }
+
+  .group-detail-chat__feed {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .group-detail-chat__bubble p {
+    overflow-wrap: anywhere;
+  }
+
+  .group-detail-chat__composer {
+    gap: 6px;
+  }
+
+  .group-detail-chat__composer input {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 16px;
   }
 }
 

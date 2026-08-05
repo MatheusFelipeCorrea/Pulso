@@ -150,7 +150,8 @@
 /* ── NotificationPanel ─────────────────────────────────────── */
 
 .pulso-notification-panel {
-  min-width: 360px;
+  width: min(100vw - 24px, 440px);
+  min-width: 0;
   max-width: 440px;
   background: var(--ds-color-modal-bg);
   border-radius: var(--ds-radius-lg);

@@ -13,6 +13,34 @@ const insightService = require('./insightService');
 const prisma = require('../config/database');
 const { validarRecursoCategoria } = require('../utils/recursoCategoriaRules');
 const { mapTransacao } = require('../utils/transactionMapper');
+const { calcularSaldosPorRecurso } = require('../utils/resourceBalanceUtils');
+
+const RECURSOS_BENEFICIO = new Set(['VR', 'VA', 'VT']);
+const RECURSOS_SALDO_ACUMULADO = new Set(['VR', 'VA', 'VT', 'DINHEIRO', 'POUPANCA']);
+
+const round2 = (value) => Math.round(Number(value) * 100) / 100;
+
+const saldoRecursoFromTransacoes = (transacoes, recurso) =>
+    calcularSaldosPorRecurso(transacoes)[recurso] ?? 0;
+
+const calcularSaldoRecursoNoPeriodo = async (usuarioId, recurso, filtros = {}) => {
+    const transacoesFim = await transactionRepository.listarTransacoesRecurso(usuarioId, recurso, {
+        ate: filtros.dataFim ?? undefined,
+    });
+    const saldoFim = round2(saldoRecursoFromTransacoes(transacoesFim, recurso));
+
+    let saldoInicial = 0;
+    if (filtros.dataInicio) {
+        const transacoesAntes = await transactionRepository.listarTransacoesRecurso(
+            usuarioId,
+            recurso,
+            { antesDe: filtros.dataInicio }
+        );
+        saldoInicial = round2(saldoRecursoFromTransacoes(transacoesAntes, recurso));
+    }
+
+    return { saldoFim, saldoInicial };
+};
 
 const incrementarStreak = async (usuarioId) => {
     const hoje = startOfDay(new Date());
@@ -186,7 +214,60 @@ const listarTransacoes = async (usuarioId, filtros) => {
 
 const calcularResumo = async (usuarioId, filtros) => {
     const agregados = await transactionRepository.calcularAgregados(usuarioId, filtros);
-    return montarResumo(agregados);
+    const resumo = montarResumo(agregados);
+
+    const recursoFiltro = filtros.recurso;
+    let recursoSaldo = recursoFiltro;
+    let candidatosCarteira = [];
+
+    if (!recursoSaldo || recursoSaldo === 'TODOS') {
+        const recursosNoPeriodo = await transactionRepository.listarRecursosDistintos(usuarioId, filtros);
+        candidatosCarteira = (recursosNoPeriodo ?? []).filter((item) => RECURSOS_SALDO_ACUMULADO.has(item));
+        if (candidatosCarteira.length === 1) {
+            recursoSaldo = candidatosCarteira[0];
+        }
+    }
+
+    if (recursoSaldo && RECURSOS_SALDO_ACUMULADO.has(recursoSaldo)) {
+        const { saldoFim, saldoInicial } = await calcularSaldoRecursoNoPeriodo(
+            usuarioId,
+            recursoSaldo,
+            filtros
+        );
+
+        return {
+            ...resumo,
+            modo: RECURSOS_BENEFICIO.has(recursoSaldo) ? 'beneficio' : 'conta',
+            recursoCarteira: recursoSaldo,
+            saldo: saldoFim.toFixed(2),
+            saldoInicialPeriodo: saldoInicial.toFixed(2),
+        };
+    }
+
+    if (candidatosCarteira.length > 1) {
+        let saldoFimTotal = 0;
+        let saldoInicialTotal = 0;
+
+        for (const recurso of candidatosCarteira) {
+            const { saldoFim, saldoInicial } = await calcularSaldoRecursoNoPeriodo(
+                usuarioId,
+                recurso,
+                filtros
+            );
+            saldoFimTotal += saldoFim;
+            saldoInicialTotal += saldoInicial;
+        }
+
+        return {
+            ...resumo,
+            modo: 'carteira',
+            recursoCarteira: null,
+            saldo: round2(saldoFimTotal).toFixed(2),
+            saldoInicialPeriodo: round2(saldoInicialTotal).toFixed(2),
+        };
+    }
+
+    return { ...resumo, modo: 'fluxo' };
 };
 
 const criarTransacao = async (usuarioId, dados) => {

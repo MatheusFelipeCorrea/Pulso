@@ -2,7 +2,7 @@
 name: po-audit
 description: >-
   Auditoria Product Owner módulo a módulo: confronta requisitos (Documentacao/01-Produto)
-  com código real (api/web/prisma), gera achados e plano de ação em Documentacao/03-Auditorias/Product Owner/.
+  com código real (api/web/prisma), gera achados e plano de ação em .github/audits/results/product-owner/.
   Use ao auditar um módulo, revisar gaps RF/RN, ou antes de fechar um epic em plans/cards/.
 ---
 
@@ -12,14 +12,14 @@ description: >-
 
 - Auditar **um módulo** por vez (Autenticação, Metas, Viagens, etc.)
 - Validar se README/Web/API reflete a realidade
-- Gerar ou atualizar docs em `Documentacao/03-Auditorias/Product Owner/`
+- Gerar ou atualizar docs em `.github/audits/results/product-owner/`
 - Alimentar cards em `.github/plans/cards/` com correções PO
 
 ## Protocolo completo (obrigatório)
 
 Leia e siga **integralmente**:
 
-`Documentacao/03-Auditorias/Prompts/AnalisePO.md`
+`.github/audits/prompts/product-owner.md`
 
 ## Variáveis de execução
 
@@ -28,7 +28,7 @@ Leia e siga **integralmente**:
 | `${MODULE_NUM}` | (usuário informa) | Ex.: `04`, `05` |
 | `${MODULE_SLUG}` | (usuário informa) | Ex.: `Metas-Financeiras` |
 | `${MODULE_NAME}` | (usuário informa) | Ex.: `Metas Financeiras` |
-| `${OUTPUT_FILE}` | `Documentacao/03-Auditorias/Product Owner/${MODULE_NUM}-${MODULE_SLUG}.md` | Arquivo de saída |
+| `${OUTPUT_FILE}` | `.github/audits/results/product-owner/${MODULE_NUM}-${MODULE_SLUG}.md` | Arquivo de saída |
 
 ## Fontes obrigatórias
 
@@ -48,10 +48,11 @@ Leia e siga **integralmente**:
 
 ## Integração com o repo
 
-- Índice PO: `Documentacao/03-Auditorias/Product Owner/00-Sumario-Executivo.md`
+- Índice PO (histórico): `Documentacao/03-Auditorias/Product Owner/00-Sumario-Executivo.md`
+- Novos relatórios: `.github/audits/results/product-owner/`
 - Commits: `Refs: PO-AUDIT-2026-08` ou `Refs: RF-xxx` — ver `Documentacao/02-Engenharia/Guia-Commits.md`
 - Cards entregues: formato completo em `.github/plans/cards/` com rastreamento de implementação
 
 ## Exemplo de invocação
 
-> Audite o módulo 04 Metas Financeiras. Salve em `Documentacao/03-Auditorias/Product Owner/04-Metas-Financeiras.md`.
+> Audite o módulo 04 Metas Financeiras. Salve em `.github/audits/results/product-owner/04-Metas-Financeiras.md`.

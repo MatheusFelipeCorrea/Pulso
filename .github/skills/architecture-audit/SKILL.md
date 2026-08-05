@@ -2,7 +2,7 @@
 name: architecture-audit
 description: >-
   Auditoria arquitetural Staff em 3 fases: domínio/dados, integrações/runtime,
-  front-end/evolução. Gera ARCH-N-NN em Documentacao/03-Auditorias/Architecture/.
+  front-end/evolução. Gera ARCH-N-NN em .github/audits/results/architecture/.
   UMA fase por vez; trade-offs explícitos.
 ---
 
@@ -10,14 +10,14 @@ description: >-
 
 ## Protocolo completo
 
-`Documentacao/03-Auditorias/Prompts/AnaliseArquiteto.md`
+`.github/audits/prompts/architecture.md`
 
 ## Variáveis
 
 | Variável | Default |
 |----------|---------|
 | `${PHASE}` | `1` \| `2` \| `3` \| `consolidar` |
-| `${OUTPUT_DIR}` | `Documentacao/03-Auditorias/Architecture/` |
+| `${OUTPUT_DIR}` | `.github/audits/results/architecture/` |
 
 ## Arquivos de saída
 

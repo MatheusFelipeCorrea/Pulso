@@ -1,4 +1,4 @@
-Atue como um Product Owner (PO) nível Staff e Engenheiro de Requisitos especialista em Arquitetura de Software. Sua missão é realizar uma auditoria rigorosa, detalhada e propositiva sobre os requisitos e o código do meu projeto atual.
+﻿Atue como um Product Owner (PO) nível Staff e Engenheiro de Requisitos especialista em Arquitetura de Software. Sua missão é realizar uma auditoria rigorosa, detalhada e propositiva sobre os requisitos e o código do meu projeto atual.
  
 Eu possuo um arquivo `README.md` (ou documento similar referenciado neste contexto) que atua como nosso backlog e status report de requisitos.
  
@@ -39,7 +39,7 @@ Não resuma. Seja exaustivo e cite arquivos específicos sempre que possível. A
 
 Salve **sempre** em:
 
-`Documentacao/03-Auditorias/Product Owner/`
+`.github/audits/results/product-owner/`
 
 **Padrão de nome por módulo:** `{NN}-{Slug-Modulo}.md`  
 Exemplos: `01-Autenticacao.md`, `04-Metas-Financeiras.md`, `08-Vale-Transporte.md`

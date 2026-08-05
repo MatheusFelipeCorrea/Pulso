@@ -261,7 +261,11 @@ export default function TransactionsPage() {
         loading={loadingFilter}
       />
 
-      <TransactionSummaryCards resumo={resumo} loading={loadingResumo} />
+      <TransactionSummaryCards
+        resumo={resumo}
+        loading={loadingResumo}
+        recursoFiltro={filtrosAtivos.recurso !== 'TODOS' ? filtrosAtivos.recurso : null}
+      />
 
       <TransactionList
         transacoes={transacoes}

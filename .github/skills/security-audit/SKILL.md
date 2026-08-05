@@ -2,7 +2,7 @@
 name: security-audit
 description: >-
   Auditoria AppSec em 3 fases (auth, dados/integrações, infra/LGPD). OWASP Top 10,
-  OWASP API Security, LGPD. Gera achados SEC-N-NN em Documentacao/03-Auditorias/Application Security/.
+  OWASP API Security, LGPD. Gera achados SEC-N-NN em .github/audits/results/application-security/.
   Execute UMA fase por vez; aguarde OK do usuário entre fases.
 ---
 
@@ -10,14 +10,14 @@ description: >-
 
 ## Protocolo completo
 
-`Documentacao/03-Auditorias/Prompts/AnaliseSegurança.md`
+`.github/audits/prompts/security.md`
 
 ## Variáveis
 
 | Variável | Valores |
 |----------|---------|
 | `${PHASE}` | `1` \| `2` \| `3` \| `consolidar` |
-| `${OUTPUT_DIR}` | `Documentacao/03-Auditorias/Application Security/` |
+| `${OUTPUT_DIR}` | `.github/audits/results/application-security/` |
 
 ## Arquivos de saída por fase
 
@@ -44,4 +44,4 @@ description: >-
 
 ## Exemplo
 
-> Execute Fase 1 da auditoria de segurança. Salve em Documentacao/03-Auditorias/Application Security/
+> Execute Fase 1 da auditoria de segurança. Salve em `.github/audits/results/application-security/`

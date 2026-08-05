@@ -3,21 +3,21 @@ name: devops-audit
 description: >-
   Auditoria DevOps/SRE em 3 fases: CI/CD, jobs/confiabilidade, observabilidade/custos.
   Analisa .github/workflows, vercel.json, prisma migrations, cron. Gera OPS-N-NN em
-  Documentacao/03-Auditorias/DevOps/. UMA fase por vez.
+  .github/audits/results/devops/. UMA fase por vez.
 ---
 
 # DevOps Audit — Plataforma e Operação
 
 ## Protocolo completo
 
-`Documentacao/03-Auditorias/Prompts/AnaliseDevops.md`
+`.github/audits/prompts/devops.md`
 
 ## Variáveis
 
 | Variável | Default |
 |----------|---------|
 | `${PHASE}` | `1` \| `2` \| `3` \| `consolidar` |
-| `${OUTPUT_DIR}` | `Documentacao/03-Auditorias/DevOps/` |
+| `${OUTPUT_DIR}` | `.github/audits/results/devops/` |
 
 ## Arquivos de saída
 

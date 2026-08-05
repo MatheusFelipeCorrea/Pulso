@@ -23,8 +23,14 @@ database:
 
 po-audit:
   - changed-files:
-      - any-glob-to-any-file: 'Documentacao/03-Auditorias/**'
+      - any-glob-to-any-file:
+          - 'Documentacao/03-Auditorias/**'
+          - '.github/audits/**'
 
 plans:
   - changed-files:
       - any-glob-to-any-file: '.github/plans/**'
+
+audits:
+  - changed-files:
+      - any-glob-to-any-file: '.github/audits/**'

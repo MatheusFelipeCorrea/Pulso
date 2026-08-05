@@ -1,5 +1,15 @@
 const prisma = require('../config/database');
 const { startOfDayInTimezone, endOfDayInTimezone } = require('../utils/dateTimezone');
+const { AJUSTE_SALDO_IMPORTACAO_DESCRICAO } = require('../utils/importBeneficioUtils');
+
+const whereExcluiAjusteSaldoImportacao = {
+    NOT: { descricao: AJUSTE_SALDO_IMPORTACAO_DESCRICAO },
+};
+
+const mergeWhere = (base, extra) => {
+    if (!extra || !Object.keys(extra).length) return base;
+    return { AND: [base, extra] };
+};
 
 const includeRelacionamentos = {
     categoria: true,
@@ -56,7 +66,7 @@ const buildWhere = (usuarioId, filtros = {}) => {
 };
 
 const listarPorUsuario = async (usuarioId, filtros, { pagina = 1, limite = 10 } = {}) => {
-    const where = buildWhere(usuarioId, filtros);
+    const where = mergeWhere(buildWhere(usuarioId, filtros), whereExcluiAjusteSaldoImportacao);
     const pageNum = Number(pagina) || 1;
     const limitNum = Number(limite) || 10;
     const skip = (pageNum - 1) * limitNum;
@@ -79,7 +89,7 @@ const listarPorUsuario = async (usuarioId, filtros, { pagina = 1, limite = 10 } 
 };
 
 const calcularAgregados = async (usuarioId, filtros) => {
-    const where = buildWhere(usuarioId, filtros);
+    const where = mergeWhere(buildWhere(usuarioId, filtros), whereExcluiAjusteSaldoImportacao);
 
     return prisma.transacao.groupBy({
         by: ['tipo'],
@@ -87,6 +97,18 @@ const calcularAgregados = async (usuarioId, filtros) => {
         _sum: { valor: true },
         _count: { id: true },
     });
+};
+
+const listarRecursosDistintos = async (usuarioId, filtros) => {
+    const where = mergeWhere(buildWhere(usuarioId, filtros), whereExcluiAjusteSaldoImportacao);
+
+    const rows = await prisma.transacao.findMany({
+        where,
+        select: { recurso: true },
+        distinct: ['recurso'],
+    });
+
+    return rows.map((row) => row.recurso);
 };
 
 const criar = async (dados) =>
@@ -164,10 +186,50 @@ const listarDescricoesPorTipo = async (usuarioId, tipo, limite = 300) =>
         take: limite,
     });
 
+const listarParaDedupeImportacao = async (usuarioId, limite = 5000) =>
+    prisma.transacao.findMany({
+        where: { usuarioId, tipo: { in: ['RECEITA', 'DESPESA'] } },
+        select: { data: true, valor: true, descricao: true },
+        orderBy: { data: 'desc' },
+        take: limite,
+    });
+
+const listarTransacoesRecurso = async (usuarioId, recurso, { ate, antesDe } = {}) => {
+    const where = {
+        usuarioId,
+        OR: [{ recurso }, { recursoDestino: recurso }],
+    };
+
+    if (ate || antesDe) {
+        where.data = {};
+        if (ate) {
+            where.data.lte = endOfDayInTimezone(ate);
+        }
+        if (antesDe) {
+            where.data.lt = startOfDayInTimezone(antesDe);
+        }
+    }
+
+    return prisma.transacao.findMany({
+        where,
+        select: {
+            tipo: true,
+            valor: true,
+            recurso: true,
+            recursoDestino: true,
+        },
+    });
+};
+
+const listarPorRecurso = async (usuarioId, recurso) => listarTransacoesRecurso(usuarioId, recurso);
+
 module.exports = {
     buildWhere,
+    mergeWhere,
+    whereExcluiAjusteSaldoImportacao,
     listarPorUsuario,
     calcularAgregados,
+    listarRecursosDistintos,
     criar,
     vincularTags,
     desvincularTags,
@@ -178,4 +240,7 @@ module.exports = {
     encerrarRecorrencia,
     listarRecorrentesMae,
     listarDescricoesPorTipo,
+    listarParaDedupeImportacao,
+    listarPorRecurso,
+    listarTransacoesRecurso,
 };

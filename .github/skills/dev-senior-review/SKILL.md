@@ -3,21 +3,21 @@ name: dev-senior-review
 description: >-
   Code review profundo em 3 fases: backend (services/prisma), frontend (React),
   testes e integração. Caça bugs, edge cases, code smells. Gera DEV-N-NN em
-  Documentacao/03-Auditorias/Code Review/. UMA fase por vez; snippets com correção sugerida.
+  .github/audits/results/code-review/. UMA fase por vez; snippets com correção sugerida.
 ---
 
 # Dev Senior Review — Auditoria de Implementação
 
 ## Protocolo completo
 
-`Documentacao/03-Auditorias/Prompts/AnaliseDevSenior.md`
+`.github/audits/prompts/dev-senior.md`
 
 ## Variáveis
 
 | Variável | Default |
 |----------|---------|
 | `${PHASE}` | `1` (backend) \| `2` (frontend) \| `3` (testes) \| `consolidar` |
-| `${OUTPUT_DIR}` | `Documentacao/03-Auditorias/Code Review/` |
+| `${OUTPUT_DIR}` | `.github/audits/results/code-review/` |
 | `${MODULE_SCOPE}` | opcional — ex.: `metaService`, `GoalsPage` |
 
 ## Arquivos de saída

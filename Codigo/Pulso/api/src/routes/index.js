@@ -18,6 +18,7 @@ const purchasePlanningRoutes = require('./purchasePlanningRoutes');
 const cronRoutes = require('./cronRoutes');
 const syncRoutes = require('./syncRoutes');
 const dashboardRoutes = require('./dashboardRoutes');
+const importRoutes = require('./importRoutes');
 
 const router = express.Router();
 
@@ -40,5 +41,6 @@ router.use('/planejamento-compra', purchasePlanningRoutes);
 router.use('/cron', cronRoutes);
 router.use('/sync', syncRoutes);
 router.use('/dashboard', dashboardRoutes);
+router.use('/importacoes', importRoutes);
 
 module.exports = router;

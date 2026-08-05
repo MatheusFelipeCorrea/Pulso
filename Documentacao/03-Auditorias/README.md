@@ -1,18 +1,27 @@
 # 03 — Auditorias
 
-Relatórios de auditoria e prompts reutilizáveis.
+Relatórios de auditoria. **Histórico** (ago/2026) nesta pasta; **novas execuções** em [`.github/audits/results/`](../../.github/audits/results/README.md).
 
-## Pastas de resultados
+## Hub operacional (prompts + scanners + novos resultados)
+
+| Recurso | Caminho |
+|---------|---------|
+| Prompts (spec) | [`.github/audits/prompts/`](../../.github/audits/prompts/) |
+| Scanners CI | [`.github/audits/scanners/`](../../.github/audits/scanners/) |
+| Novos relatórios | [`.github/audits/results/`](../../.github/audits/results/) |
+| Mapa completo | [`.github/audits/manifest.yml`](../../.github/audits/manifest.yml) |
+
+## Pastas de resultados (histórico)
 
 | Pasta | Conteúdo | Prompt / Skill |
 |-------|----------|----------------|
-| [Product Owner/](./Product%20Owner/) | Relatórios PO por módulo (ago/2026) | `AnalisePO.md` · `po-audit` |
-| [Application Security/](./Application%20Security/) | Fases AppSec (SEC-N-NN) | `AnaliseSegurança.md` · `security-audit` |
-| [DevOps/](./DevOps/) | CI/CD, cron, FinOps (OPS-N-NN) | `AnaliseDevops.md` · `devops-audit` |
-| [Code Review/](./Code%20Review/) | Revisão profunda (DEV-N-NN) | `AnaliseDevSenior.md` · `dev-senior-review` |
-| [UX Design/](./UX%20Design/) | Padronização DS (UX-N-NN) | `AnaliseDesigner.md` · `ux-audit` |
-| [Architecture/](./Architecture/) | Arquitetura (ARCH-N-NN) | `AnaliseArquiteto.md` · `architecture-audit` |
-| [Prompts/](./Prompts/) | Protocolos (copy-paste ou via skill) | — |
+| [Product Owner/](./Product%20Owner/) | Relatórios PO por módulo (ago/2026) | `product-owner.md` · `po-audit` |
+| [Application Security/](./Application%20Security/) | Fases AppSec (SEC-N-NN) | `security.md` · `security-audit` |
+| [DevOps/](./DevOps/) | CI/CD, cron, FinOps (OPS-N-NN) | `devops.md` · `devops-audit` |
+| [Code Review/](./Code%20Review/) | Revisão profunda (DEV-N-NN) | `dev-senior.md` · `dev-senior-review` |
+| [UX Design/](./UX%20Design/) | Padronização DS (UX-N-NN) | `ux-design.md` · `ux-audit` |
+| [Architecture/](./Architecture/) | Arquitetura (ARCH-N-NN) — incl. fases iniciais | `architecture.md` · `architecture-audit` |
+| [Prompts/](./Prompts/) | Redirect → `.github/audits/prompts/` | — |
 
 ## Product Owner — índice principal
 

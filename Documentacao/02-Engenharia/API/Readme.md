@@ -385,7 +385,7 @@ FRONTEND_URL=http://localhost:5173
 CRON_SECRET=...                    # produção / Vercel Cron
 GEONAMES_USERNAME=...              # opcional — busca global de destinos
 DUFFEL_ACCESS_TOKEN=...            # opcional — cotação aérea ao vivo
-GEMINI_API_KEY=...                 # opcional — ainda sem uso no código
+GEMINI_API_KEY_PDF=...             # opcional — importação de extratos em PDF (Gemini)
 ```
 
 ---

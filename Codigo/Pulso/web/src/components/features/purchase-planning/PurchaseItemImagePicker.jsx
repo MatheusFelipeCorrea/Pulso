@@ -91,8 +91,8 @@ export function PurchaseItemImagePicker({
           className="pp-image-picker__preview"
           style={{
             background: displayUrl
-              ? '#0f1016'
-              : `linear-gradient(160deg, color-mix(in srgb, ${categoryConfig.color} 22%, #1a1d2e), color-mix(in srgb, ${categoryConfig.color} 8%, #12141c))`,
+              ? 'var(--ds-color-surface)'
+              : `linear-gradient(160deg, color-mix(in srgb, ${categoryConfig.color} 22%, var(--ds-color-surface-elevated)), color-mix(in srgb, ${categoryConfig.color} 8%, var(--ds-color-surface)))`,
           }}
         >
           {displayUrl ? (
