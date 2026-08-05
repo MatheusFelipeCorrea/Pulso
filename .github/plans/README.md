@@ -1,5 +1,8 @@
 ﻿# Plans — cards e implementações
 
+Epics/stories do **produto Pulso** e planos gerados pelo agent de implementação.  
+Pack de agents/skills (genérico): [`../INDEX.md`](../INDEX.md) · Comandos: [`../COMMANDS.md`](../COMMANDS.md).
+
 ## Índice de Epics
 
 Legenda: **✅ Entregue** · **🟡 Parcial** · **📋 Card detalhado (pré-implementação)** · **❌ Sem card**
@@ -43,7 +46,7 @@ Template compacto legado: [`_TEMPLATE-epic-entregue.md`](./_TEMPLATE-epic-entreg
 
 ## Implementations
 
-Planos gerados pelo [implementation-plan agent](../agents/implementation-plan.agent.md) ficam em `implementations/`:
+Planos gerados pelo [implementation-plan agent](../agents/implementation-plan.agent.md) ficam em [`implementations/`](./implementations/README.md):
 
 ```
 implementations/
@@ -51,6 +54,8 @@ implementations/
 ```
 
 Não versionar planos descartáveis; manter só os que documentam decisões importantes.
+
+Fluxo típico: *Refine este card* (`card-refiner`) → *Implemente o card …* (agent).
 
 ---
 

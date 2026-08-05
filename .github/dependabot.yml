@@ -1,37 +1,28 @@
+# Dependabot desativado — atualizações de deps ficam manuais (npm audit / bump local).
+# open-pull-requests-limit: 0 impede novos PRs automáticos.
+# Para reativar, suba o limit (ex.: 5) e ajuste schedule/groups.
 version: 2
 updates:
   - package-ecosystem: npm
     directory: /Codigo/Pulso/web
     schedule:
-      interval: weekly
-      day: monday
-    open-pull-requests-limit: 5
-    groups:
-      minor-and-patch:
-        update-types:
-          - minor
-          - patch
+      interval: monthly
+    open-pull-requests-limit: 0
     commit-message:
       prefix: 'chore(deps-web)'
 
   - package-ecosystem: npm
     directory: /Codigo/Pulso/api
     schedule:
-      interval: weekly
-      day: monday
-    open-pull-requests-limit: 5
-    groups:
-      minor-and-patch:
-        update-types:
-          - minor
-          - patch
+      interval: monthly
+    open-pull-requests-limit: 0
     commit-message:
       prefix: 'chore(deps-api)'
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-      day: monday
+      interval: monthly
+    open-pull-requests-limit: 0
     commit-message:
       prefix: 'chore(deps-ci)'

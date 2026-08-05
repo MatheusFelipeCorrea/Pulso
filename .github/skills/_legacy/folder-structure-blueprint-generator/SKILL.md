@@ -406,7 +406,7 @@ ${(PROJECT_TYPE == "Node.js" || PROJECT_TYPE == "Auto-detect") ?
 
 - **Layer Folder Organization** (document each folder's purpose and file patterns):
 - **routes/** — Route definition files
-  - File naming pattern (auth.routes.js, fazenda.routes.js)
+  - File naming pattern (auth.routes.js, order.routes.js)
   - index.js aggregation pattern (if routes are collected in one place)
   - How middleware is applied per-route
 - **controllers/** — Request handlers
@@ -422,7 +422,7 @@ ${(PROJECT_TYPE == "Node.js" || PROJECT_TYPE == "Auto-detect") ?
   - Whether models are separate from ORM schema or the ORM schema IS the model
   - File naming pattern
 - **views/** or **presenters/** or **serializers/** (if response formatting layer exists):
-  - File naming pattern (fazenda.view.js)
+  - File naming pattern (order.view.js)
   - render/renderMany convention
 - **middlewares/** — Express/Fastify middleware
   - auth.middleware.js, error.middleware.js, validator.middleware.js patterns

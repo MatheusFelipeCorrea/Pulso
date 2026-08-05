@@ -1,0 +1,80 @@
+# yaml-language-server: $schema=./project.schema.json
+# Contrato do repositório para agents/skills em `.github/`.
+# Schema: .github/project.schema.json
+#
+# Portabilidade: este arquivo é a ÚNICA ponte entre o kit genérico
+# (prompts, skills, agents) e os detalhes deste produto. Em outro repo,
+# copie o pack `.github/{agents,skills,audits/prompts,audits/manifest.yml}`
+# e reescreva apenas este YAML (+ overlay opcional).
+#
+# Paths em estilo POSIX, relativos à raiz do repositório.
+
+version: 1
+
+name: Pulso
+locale: pt-BR
+
+# Layout do workspace: monorepo | single | multi-package
+layout: monorepo
+
+# Aplicações / pacotes descobertos pelo kit (não inventar além do listado).
+apps:
+  api:
+    root: Codigo/Pulso/api
+    manifest: Codigo/Pulso/api/package.json
+    source_dirs:
+      - Codigo/Pulso/api/src
+    orm:
+      kind: prisma
+      schema: Codigo/Pulso/api/prisma/schema.prisma
+  web:
+    root: Codigo/Pulso/web
+    manifest: Codigo/Pulso/web/package.json
+    source_dirs:
+      - Codigo/Pulso/web/src
+
+# Documentação de produto e engenharia (substituem chutes como `.github/docs` fixo).
+docs:
+  requirements: Documentacao/01-Produto/Requisitos/Readme.md
+  api_readme: Documentacao/02-Engenharia/API/Readme.md
+  web_readme: Documentacao/02-Engenharia/Web/Readme.md
+  # Destino dos blueprints gerados pelas skills legacy / project-architect
+  blueprints: .github/docs
+  diagrams: Documentacao/04-Diagramas
+  # Relatórios já entregues (não confundir com outputs.audits)
+  historical_audits: Documentacao/03-Auditorias
+
+# Onde agents/skills devem gravar artefatos novos.
+outputs:
+  audits: .github/audits/results
+  cards: .github/plans/cards
+  implementations: .github/plans/implementations
+
+# Dicas de stack (não obrigatórias — discovery ainda vale se ausentes).
+stack_hints:
+  - Node.js
+  - Express
+  - Prisma
+  - PostgreSQL
+  - Neon
+  - React
+  - Vite
+  - Vercel
+  - GitHub Actions
+
+# Convenções de IDs usadas em requisitos e achados de auditoria.
+conventions:
+  requirement_prefixes:
+    - RF
+    - RNF
+  finding_prefixes:
+    product-owner: PO
+    application-security: SEC
+    devops: OPS
+    code-review: DEV
+    ux-design: UX
+    architecture: ARCH
+
+# Overlay de domínio (opcional). Complementa prompts genéricos; nunca os substitui.
+audits:
+  overlay: .github/audits/overlays/pulso.md

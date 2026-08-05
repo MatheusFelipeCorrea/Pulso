@@ -1,12 +1,20 @@
 # Mapa de auditorias — fonte única para skills, prompts, scanners e pastas de saída.
 # Atualize aqui ao adicionar novo tipo de auditoria.
+#
+# Portabilidade: este manifesto é genérico (kit reutilizável). Paths de produto,
+# docs e stack ficam em `project_config`; contexto de domínio no `overlay`.
+# Em outro repositório, mantenha este arquivo e ajuste só project.yml + overlay.
 
 version: 1
+
+project_config: .github/project.yml
+
+# Overlay opcional é resolvido por `audits.overlay` em project.yml.
+# O manifesto base não conhece produto, domínio ou stack.
 
 defaults:
   results_root: .github/audits/results
   prompts_root: .github/audits/prompts
-  historical_root: Documentacao/03-Auditorias
 
 audits:
   product-owner:
@@ -14,7 +22,7 @@ audits:
     skill: po-audit
     prompt: prompts/product-owner.md
     output_dir: results/product-owner
-    id_prefix: null
+    id_prefix: PO
     phased: false
     scanners: []
 
@@ -46,6 +54,7 @@ audits:
         jobs: [lint-test-build-api, lint-test-build-web]
       - id: dependabot
         config: .github/dependabot.yml
+        note: "Desativado (open-pull-requests-limit: 0) — deps via npm audit manual"
 
   code-review:
     label: Code Review (Dev Senior)

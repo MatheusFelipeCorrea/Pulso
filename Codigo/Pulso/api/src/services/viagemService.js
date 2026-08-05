@@ -86,26 +86,10 @@ const buscarViagem = async (viagemId, usuarioId) => {
     return viagem;
 };
 
-const hydrateCoverImage = async (viagem, usuarioId) => {
-    const baseMeta =
-        viagem.destinoMeta && typeof viagem.destinoMeta === 'object' ? viagem.destinoMeta : {};
-
-    if (baseMeta.coverImageUrl && !/\/420px-/.test(baseMeta.coverImageUrl)) return;
-
-    const enriched = await attachCoverImage(baseMeta, viagem.destino);
-    if (!enriched?.coverImageUrl) return;
-
-    if (enriched.coverImageUrl === baseMeta.coverImageUrl) return;
-
-    await viagemRepository.atualizar(viagem.id, usuarioId, { destinoMeta: enriched });
-    viagem.destinoMeta = enriched;
-};
-
 const listarViagens = async (usuarioId) => {
     const viagens = await viagemRepository.listarPorUsuario(usuarioId);
-
-    await Promise.all(viagens.map((viagem) => hydrateCoverImage(viagem, usuarioId)));
-
+    // Capas são resolvidas no criar/editar (attachCoverImage). Não hidratar no GET —
+    // Wikipedia/Commons sem timeout estourava maxDuration na Vercel e virava 500.
     return viagens.map(mapViagem);
 };
 
@@ -503,7 +487,6 @@ const listarDestinosViagem = async ({ q, limit } = {}) => {
 
 const obterViagem = async (usuarioId, viagemId) => {
     const viagem = await buscarViagem(viagemId, usuarioId);
-    await hydrateCoverImage(viagem, usuarioId);
     return mapViagem(viagem);
 };
 

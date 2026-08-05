@@ -2,7 +2,8 @@
 
 Aplicativo de gestão financeira pessoal — receitas, despesas, metas, viagens, grupos, orçamento e insights com IA.
 
-**Este é o README principal do repositório.** No GitHub ele aparece na página inicial do projeto. Índices específicos: [Documentacao/](./Documentacao/README.md) · [`.github/`](./.github/README.md) (automação e agentes)
+**Este é o README principal do repositório.** No GitHub ele aparece na página inicial do projeto.  
+Automação e agents: [`.github/INDEX.md`](./.github/INDEX.md) (guia da pasta — **não** é a home do repo). Docs de produto: [Documentacao/](./Documentacao/README.md).
 
 ---
 
@@ -25,7 +26,7 @@ Pulso/
 | [`Documentacao/`](./Documentacao/) | RFs, regras, deploy, auditorias históricas | [Índice](./Documentacao/README.md) |
 | [`.github/plans/`](./.github/plans/) | Epics e stories (fonte de escopo) | [Índice de epics](./.github/plans/README.md) |
 | [`.github/audits/`](./.github/audits/) | Prompts, scanners CI, novos relatórios | [Índice](./.github/audits/README.md) |
-| [`.github/skills/`](./.github/skills/) | Skills Cursor (auditorias, cards, README) | [README .github](./.github/README.md) |
+| [`.github/skills/`](./.github/skills/) | Skills de auditoria, startup, docs | [skills/README](./.github/skills/README.md) · [INDEX](./.github/INDEX.md) |
 
 ---
 
@@ -132,15 +133,19 @@ Deploy: [Hospedagem.md](./Documentacao/02-Engenharia/Deploy/Hospedagem.md)
 
 ## Automação, epics e auditorias
 
-Planejamento e ferramentas para agentes ficam em [`.github/`](./.github/README.md) — **não substituem este README**; são o índice da pasta de configuração do GitHub.
+Guia do pack em [`.github/INDEX.md`](./.github/INDEX.md) — **não substitui este README**; é o índice da pasta de configuração do GitHub.
 
 | Recurso | Uso |
 |---------|-----|
-| [`.github/plans/cards/`](./.github/plans/cards/) | Epics detalhados — escopo, stories, rastreamento |
-| [`.github/audits/`](./.github/audits/) | Rodar auditorias (PO, segurança, DevOps, UX…) |
-| [`.github/workflows/`](./.github/workflows/) | CI e security scan (automático em push/PR) |
+| [`.github/INDEX.md`](./.github/INDEX.md) | O que é a pasta, agents, skills, fluxos |
+| [`.github/COMMANDS.md`](./.github/COMMANDS.md) | Catálogo: start-up, discovery, auditorias, implementação |
+| [`.github/USAGE.md`](./.github/USAGE.md) | Cursor, Copilot e Claude |
+| [`.github/plans/cards/`](./.github/plans/cards/) | Epics — escopo e rastreamento |
+| [`.github/audits/`](./.github/audits/) | Prompts, scanners, resultados |
+| [`.github/workflows/`](./.github/workflows/) | CI e security scan |
 
-Exemplo de invocação no Cursor: `Audite o módulo 02 Dashboard com po-audit`
+Primeiro comando: `Faça o start-up deste repositório`  
+Auditoria: `Auditoria completa do repositório` · Isolada: `Audite o módulo 02 Dashboard com po-audit`
 
 ---
 

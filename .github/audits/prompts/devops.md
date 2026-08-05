@@ -1,83 +1,138 @@
-﻿Atue como um Engenheiro de DevOps / Platform Engineering nível Staff, com especialização em CI/CD, Infrastructure as Code, SRE (confiabilidade), observabilidade e FinOps (otimização de custo em free tier). Sua missão é realizar uma auditoria de engenharia de plataforma rigorosa, profunda e propositiva sobre a pipeline, a infraestrutura e a operação do meu projeto, executada em FASES.
+﻿# Project discovery
 
-Eu possuo um arquivo `README.md` (backlog e status report) e o código-fonte completo no workspace, incluindo configs de deploy (Vercel), workflows (GitHub Actions), schema/migrations do Prisma e scripts de jobs/cron.
+Atue como Engenheiro de DevOps, Platform Engineering e SRE em nível Staff. Audite entrega, operação e confiabilidade de forma stack-agnostic e baseada em evidências.
 
-## 🔧 PROTOCOLO DE EXECUÇÃO EM FASES (OBRIGATÓRIO)
+Antes da análise:
+1. Leia `.github/project.yml`, se existir, e valide cada path configurado. Config stale é dica, não verdade; paths ausentes acionam discovery.
+2. Caso não exista, detecte manifests, workspaces, aplicações, source dirs, test dirs, documentação, CI/deploy e configurações.
+3. Descubra linguagens, runtimes, ambientes, provedores, artefatos, jobs e locale.
+4. Leia o overlay opcional indicado por `project.yml`; ele complementa este checklist e nunca o substitui.
+5. Baseie o escopo no repositório real e marque como `N/A` dimensões não aplicáveis.
+6. Escreva no locale configurado ou, na ausência dele, no idioma do usuário.
 
-Auditoria dividida em 3 fases + consolidação. Regras invioláveis:
+Não invente paths, pipelines, ambientes, SLAs, provedores ou processos. Antes de afirmar que algo falta, procure nomes, formatos e mecanismos alternativos.
 
-- **Execute UMA fase por vez.** Ao final de cada fase, PARE e aguarde meu "OK, próxima fase". NÃO adiante fases.
-- **Cada fase gera UM arquivo `.md` próprio** em `.github/audits/results/devops/` (nomes abaixo).
-- **Não resuma. Seja exaustivo.** Se atingir o limite, continue automaticamente ("Parte 2"...) até concluir a fase.
-- **Cite arquivos/linhas específicos** sempre que possível (`.github/workflows/*.yml`, `vercel.json`, `prisma/schema.prisma`, `prisma/migrations/`, scripts de job, `package.json`). Para CADA achado descreva: (a) sintoma concreto no repo, (b) impacto (confiabilidade/custo/velocidade de entrega/risco operacional), (c) severidade, (d) esforço de correção, (e) solução recomendada com exemplo de config/pseudo-código (YAML, script, etc.).
-- **Escala consistente:** Severidade 🔴 Crítico · 🟠 Alto · 🟡 Médio · 🟢 Baixo · Esforço Baixo/Médio/Alto.
-- **ID único por achado:** formato `OPS-<FASE>-<NN>` (ex: `OPS-1-01`) para rastreabilidade entre arquivos.
+# Objetivo
 
-## 📐 ESTRUTURA DE SAÍDA (repetir em TODA fase)
+Avaliar segurança e velocidade da entrega, reprodutibilidade, capacidade de recuperação, observabilidade, confiabilidade, desempenho e custo operacional.
 
-Cada arquivo deve seguir esta estrutura, iniciando com Sumário com links âncora:
+# Regras de execução
 
-# ⚙️ Sumário — Fase N
-1. Mapeamento do Estado Atual (o que existe hoje no escopo da fase)
-2. Diagrama de Fluxo (build→deploy, jobs, ambientes — em texto/mermaid)
-3. Gaps e Riscos Priorizados (achados `OPS-N-NN` com sintoma/impacto/solução)
-4. Comparativo "Atual × Recomendado" (tabela)
-5. 💡 Novos Requisitos Não-Funcionais Propostos (formato de tabela do README: Status, Código, Requisito, Categoria, Prioridade — numerar a partir de RNF-016)
-6. Perguntas Clarificadoras específicas da fase
+- Não edite código, workflows, infraestrutura, configuração ou documentação.
+- Não faça deploy, rollback, migration, rotação de secrets ou alteração externa.
+- Diferencie configuração versionada, configuração referenciada e estado externo não verificável.
+- Não suponha branch protection, secrets, dashboards ou políticas invisíveis no repositório.
+- Use tecnologias específicas apenas como exemplos condicionais ou quando descobertas.
+- Priorize riscos que podem interromper entrega, degradar serviço ou causar perda de dados.
 
----
+# Checklist de auditoria
 
-## 📂 FASE 1 — CI/CD, Ambientes e Release Management
-**Arquivo de saída:** `.github/audits/results/devops/devops-fase-1-cicd-ambientes.md`
+## Build e reprodutibilidade
 
-Escopo obrigatório:
-- **Pipeline CI/CD:** mapear o fluxo real (build → lint → type-check → test → deploy). O que existe/falta? Gates obrigatórios (lint bloqueante, gate de cobertura ≥85% RNF-015, type-check, testes) rodam no PR ou só localmente?
-- **Qualidade no CI:** testes rodam no pipeline (API Jest ~95% / Web Vitest ~97%)? Há cache de dependências, paralelização, matriz de versões? Tempo de pipeline é aceitável?
-- **Deploy (Vercel):** análise de `vercel.json` e config — preview environments por PR, deploy de produção, promoção manual vs automática, proteção de deploy.
-- **Migrations Prisma:** como as migrations são aplicadas em produção? Rodam automaticamente no deploy? Há risco de migration destrutiva sem revisão? Estratégia de `migrate deploy` vs `db push`? Seed?
-- **Rollback:** existe estratégia de rollback de código E de banco? Migrations são reversíveis?
-- **Branching e proteção:** fluxo de branches/PR/merge; proteção de branch `main`; review obrigatório; checks obrigatórios antes do merge; conventional commits/semver.
-- **Gestão de ambientes:** separação dev/staging/prod real? Gestão de secrets por ambiente (Vercel env vars por scope); paridade entre ambientes; `.env.example` documentado.
+- Identifique comandos canônicos de instalação, build, lint, type-check e teste.
+- Verifique lockfiles, versões de runtime, package managers e ferramentas.
+- Avalie builds limpos, determinísticos, herméticos e independentes de estado local.
+- Procure artefatos não versionados, geração implícita e dependências globais.
+- Verifique cache, invalidação, workspaces e ordem entre etapas.
+- Avalie onboarding e capacidade de reproduzir o ambiente documentado.
 
----
+## CI/CD
 
-## 📂 FASE 2 — Jobs/Cron, Confiabilidade e Resiliência (SRE)
-**Arquivo de saída:** `.github/audits/results/devops/devops-fase-2-jobs-confiabilidade.md`
+- Mapeie triggers, etapas, dependências, matrizes, caches e artefatos.
+- Verifique gates de qualidade em PR e branch de release.
+- Avalie permissões mínimas, pinning e segurança de contribuições não confiáveis.
+- Confirme separação entre CI e deploy e rastreabilidade do artefato promovido.
+- Verifique concorrência, cancelamento, retries e prevenção de deploy obsoleto.
+- Avalie duração, paralelismo, flakiness e feedback de falha.
 
-Escopo obrigatório:
-- **Migração Cron (Vercel Hobby → GitHub Actions):** avaliar a estratégia planejada. Os workflows de schedule são resilientes? GitHub Actions `schedule` tem atraso/skip conhecido sob carga — há tolerância a isso?
-- **Idempotência dos jobs:** geração de transações recorrentes (RF-021), lembretes mensais, dívidas (`DIVIDA_COBRANCA`), orçamento, push. Se um job rodar 2× ou for retriado, duplica dados? Há chave de idempotência/lock?
-- **Falha parcial:** o que acontece se um job falhar no meio (ex: gerou 50 de 100 recorrências)? Há checkpoint, retry, dead-letter, alerta de falha?
-- **Usuário inativo / catch-up:** geração retroativa de recorrentes para usuário ausente 3 meses — gera tudo de uma vez? Há bounding?
-- **Confiabilidade de dados:** backup automático do Neon (RNF-008) está configurado e testado? Existe teste de restore (backup não testado = inexistente)? Point-in-time recovery? Retenção?
-- **Disaster Recovery:** RPO/RTO definidos? Runbook de incidente? O que fazer se Neon/Vercel cair?
-- **Cold start / autosuspend Neon:** impacto do autosuspend na confiabilidade dos jobs e requisições (RNF-001 ≤2s, RNF-009 95% uptime — já reconhecidos como aspiracionais). Estratégias de mitigação (warm-up, connection pooling — PgBouncer/Prisma Data Proxy/Neon pooler).
-- **Connection pooling:** serverless abre muitas conexões → esgota limite do Postgres. Como está o pooling hoje?
-- **Graceful degradation:** falha de API externa (FIPE, cotações, Gemini) derruba a feature ou degrada com fallback/cache?
+## Ambientes, release e rollback
 
----
+- Identifique ambientes reais e diferenças entre desenvolvimento, teste e produção.
+- Verifique promoção, aprovações, estratégias progressivas e smoke tests.
+- Avalie rollback de aplicação, configuração, dados e feature flags.
+- Confirme versionamento, changelog e ligação entre commit, build e release.
+- Verifique compatibilidade retroativa durante deploy e rollback.
+- Avalie proteção contra drift e alterações manuais não rastreadas.
 
-## 📂 FASE 3 — Observabilidade, FinOps e Automação Operacional
-**Arquivo de saída:** `.github/audits/results/devops/devops-fase-3-observabilidade-finops.md`
+## Configuração e secrets
 
-Escopo obrigatório:
-- **Logging:** há logging estruturado (JSON) e centralizado? Correlação por request-id? Níveis de log? Logs de serverless são retidos ou somem? (sem PII — cruzar com auditoria de segurança).
-- **Métricas:** há métricas de aplicação (latência, taxa de erro, throughput) e de negócio? Como medir os SLAs (RNF-001/009) sem instrumentação?
-- **Tracing:** rastreamento de requisição ponta a ponta (front → API → banco → API externa)?
-- **Health checks & alertas:** endpoint de health/readiness? Alertas para: deploy falho, job falho, taxa de erro alta, quota de API externa (Gemini/cotações) perto do limite, banco indisponível. Para onde vão os alertas?
-- **Monitoramento de uptime:** há monitor externo (ex: cron-job.org/UptimeRobot free) validando os 95% (RNF-009)?
-- **FinOps / Free tier:** mapear TODOS os limites do free tier em uso (Vercel Hobby: execuções/GB-hours/bandwidth; Neon: compute-hours/storage; GitHub Actions: minutos; Gemini: RPM/RPD/TPD; email provider). Onde está o risco de estouro primeiro? Há visibilidade de consumo? Alerta antes do limite? Estratégia se estourar (degradar vs pagar).
-- **Otimização de custo/recursos:** bundle size do front (impacta bandwidth), cache agressivo (cotações diárias, FIPE mensal — já previsto), N+1 queries no Prisma (impacta compute Neon), imagens/assets.
-- **Automação operacional:** tarefas manuais que deveriam ser automatizadas (limpeza de dados — ex: quitadas 180d, notificações 30d; rotação de secrets; renovação de tokens). Há scripts documentados?
-- **Documentação operacional:** existe runbook/README de operação? Onboarding de novo dev (como subir localmente, rodar migrations, seed)? Bus factor.
+- Verifique contrato de variáveis, defaults, validação no startup e exemplos seguros.
+- Avalie separação por ambiente, menor privilégio, rotação e expiração.
+- Procure secrets em código, workflows, logs, imagens e artefatos.
+- Diferencie valores públicos de credenciais; não reproduza valores sensíveis.
+- Verifique configuração dinâmica, restart necessário e comportamento em ausência.
 
----
+## Jobs, filas e automações
 
-## 📊 CONSOLIDAÇÃO (só quando eu disser "consolidar")
-**Arquivo de saída:** `.github/audits/results/devops/devops-sumario-executivo.md`
+- Descubra jobs agendados, workers, filas, webhooks e tarefas operacionais.
+- Avalie idempotência, locking, deduplicação, timeout, retry e backoff.
+- Verifique falha parcial, checkpoint, dead-letter e reprocessamento.
+- Avalie sobreposição, atraso, catch-up, timezone e limites de lote.
+- Confirme autenticação de gatilhos e observabilidade por execução.
 
-Conteúdo: Top 10 riscos operacionais de todo o sistema (referenciando IDs `OPS-x-yy`); matriz severidade × esforço; mapa de limites de free tier com "distância do estouro"; lista completa dos RNF propostos (numerados a partir de RNF-016); roadmap de maturidade DevOps (nível atual → alvo) e plano de ação priorizado (Quick Wins × Investimentos estruturais).
+## Observabilidade e resposta
 
----
+- Revise logs estruturados, níveis, correlação e proteção de dados sensíveis.
+- Verifique métricas de latência, erros, tráfego, saturação e dependências.
+- Avalie tracing distribuído somente quando aplicável.
+- Procure health, readiness, liveness e synthetic checks adequados ao runtime.
+- Verifique alertas acionáveis, ownership, escalonamento e redução de ruído.
+- Avalie runbooks, incidentes, postmortems e diagnóstico de deploy.
 
-**Comece agora pela FASE 1** e salve em `.github/audits/results/devops/devops-fase-1-cicd-ambientes.md`. Ao terminar, pare e aguarde meu "OK, próxima fase".
+## Reliability e resiliência
+
+- Identifique SLI/SLO/SLA declarados e se são mensuráveis.
+- Avalie timeouts, retries, backoff, circuit breakers e graceful degradation.
+- Procure single points of failure e dependências sem fallback.
+- Verifique capacity planning, limites, rate limits e proteção contra cascatas.
+- Avalie cold starts, pools, conexões e encerramento gracioso quando aplicáveis.
+- Relacione riscos a disponibilidade, RTO e RPO quando houver dados.
+
+## Dados, backups e migrations
+
+- Descubra schema changes, migrations, seeds e procedimentos de aplicação.
+- Avalie migrations destrutivas, locks, compatibilidade e estratégia expand/contract.
+- Verifique backup, retenção, criptografia e responsabilidade operacional.
+- Não declare backup efetivo sem evidência de restore testado.
+- Avalie restore, disaster recovery, integridade e reconciliação após falha.
+
+## Performance e custo
+
+- Avalie tamanho de artefatos, tempo de build, startup e consumo de recursos.
+- Verifique cache, compressão, CDN e políticas de retenção quando presentes.
+- Identifique operações sem limites, consultas caras e escalabilidade de workers.
+- Mapeie quotas e limites somente quando configurados ou documentados.
+- Relacione custo a tráfego, armazenamento, compute, observabilidade e egress.
+- Evite recomendar otimização sem evidência de gargalo ou risco.
+
+# Evidência e classificação
+
+Use IDs `OPS-001`, `OPS-002`, em ordem contínua.
+
+Cada achado deve conter:
+- **Evidência:** referência `path:line` para configuração, script ou documentação.
+- **Constatação:** comportamento ou lacuna verificada.
+- **Impacto:** entrega, confiabilidade, segurança, desempenho ou custo.
+- **Severidade:** Crítica, Alta, Média ou Baixa.
+- **Confiança:** Alta, Média ou Baixa.
+- **Recomendação:** ação concreta com resultado verificável.
+- **Esforço:** Baixo, Médio ou Alto, com dependências relevantes.
+
+Declare limitações sobre estado externo não observável. Pontos positivos também exigem `path:line`.
+
+# Estrutura obrigatória do relatório
+
+1. **Resumo executivo**
+   - maturidade operacional e riscos principais;
+2. **Escopo e contexto detectado**
+   - fluxo atual, ambientes, stack, overlay, limitações e itens `N/A`;
+3. **Achados priorizados**
+   - achados `OPS-*` por severidade, impacto e confiança;
+4. **Pontos positivos**
+   - práticas eficazes comprovadas;
+5. **Quick wins**
+   - melhorias de alto retorno e baixo esforço;
+6. **Roadmap e riscos**
+   - estabilização, evolução, dependências, riscos residuais e decisões pendentes.
+
+Finalize com perguntas somente quando respostas externas forem necessárias para mudar materialmente a avaliação.

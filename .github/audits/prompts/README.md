@@ -1,6 +1,16 @@
 # Prompts de auditoria
 
-Protocolos completos para auditorias especializadas. **Não apague** — são a spec que skills e copy-paste devem seguir.
+Protocolos **genéricos**. Skills e copy-paste seguem estes arquivos.
+
+Produto (paths, RFs, stack): [`../../project.yml`](../../project.yml) + overlay opcional.  
+Hub: [`../README.md`](../README.md) · Comandos: [`../../COMMANDS.md`](../../COMMANDS.md).
+
+## Ordem de leitura
+
+1. **Prompt** desta pasta  
+2. **`project.yml`** (se existir)  
+3. **Overlay** (`audits.overlay`) — complemento, nunca substituto  
+4. Sem config → discovery (sem inventar paths)
 
 ## Mapa prompt → skill → saída
 
@@ -13,17 +23,14 @@ Protocolos completos para auditorias especializadas. **Não apague** — são a 
 | [ux-design.md](./ux-design.md) | `ux-audit` | [`../results/ux-design/`](../results/ux-design/) |
 | [architecture.md](./architecture.md) | `architecture-audit` | [`../results/architecture/`](../results/architecture/) |
 
-Índice completo (scanners, fases, IDs): [`../manifest.yml`](../manifest.yml)
+Manifesto: [`../manifest.yml`](../manifest.yml) · Overlay Pulso: [`../overlays/pulso.md`](../overlays/pulso.md)
 
-## Como invocar
+## Invocar
 
-```
-Audite o módulo 04 Metas com po-audit
+```text
+Auditoria completa do repositório
+Audite o módulo X com po-audit
 Execute Fase 1 da security-audit
 ```
 
-Auditorias multi-fase: **uma fase por sessão**, aguardar OK entre fases.
-
-## Relação com cards
-
-Após auditoria Product Owner, atualizar epic em [`.github/plans/cards/`](../../plans/cards/) — seções **Correções PO** e **Rastreamento de Implementação**.
+Multi-fase: **uma fase por sessão**.

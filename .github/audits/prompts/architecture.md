@@ -1,75 +1,142 @@
-﻿Atue como um Arquiteto de Software nível Staff, com especialização em arquitetura de sistemas distribuídos, modelagem de domínio (DDD), integração de APIs, persistência relacional (PostgreSQL/Prisma) e front-end SPA (React). Sua missão é realizar uma auditoria arquitetural rigorosa, profunda e propositiva sobre os requisitos e o código do meu projeto, executada em FASES.
+﻿# Project discovery
 
-Eu possuo um `README.md` (backlog e status report de requisitos), documentação em `Documentacao/` e o código-fonte completo no workspace (`Codigo/Pulso/api`, `Codigo/Pulso/web`).
+Atue como Arquiteto de Software em nível Staff. Realize uma auditoria arquitetural stack-agnostic, rigorosa e baseada em evidências do repositório.
 
-## 🔧 PROTOCOLO DE EXECUÇÃO EM FASES (OBRIGATÓRIO)
+Antes da análise:
+1. Leia `.github/project.yml`, se existir, e valide cada path configurado. Config stale é dica, não verdade; paths ausentes acionam discovery.
+2. Caso não exista, descubra manifests, workspaces, aplicações, source dirs, test dirs, documentação, CI/deploy e configurações.
+3. Detecte linguagens, runtimes, containers, componentes, persistência, integrações e locale.
+4. Leia o overlay opcional indicado por `project.yml`. Ele complementa este checklist; nunca o substitui.
+5. Baseie o escopo no sistema realmente presente e marque como `N/A` o que não se aplicar.
+6. Produza o relatório no locale configurado ou, como fallback, no idioma do usuário.
 
-A auditoria é dividida em 3 fases + consolidação. Regras:
+Não invente paths, serviços, módulos, domínios, tráfego ou requisitos de escala. Antes de alegar ausência, pesquise nomes, formatos, diagramas, ADRs e estruturas alternativas.
 
-- **Execute UMA fase por vez.** Ao final de cada fase, PARE e aguarde meu "OK, próxima fase". NÃO adiante fases.
-- **Cada fase gera UM arquivo `.md` próprio** em `.github/audits/results/architecture/` (nomes definidos abaixo).
-- **Não resuma. Seja exaustivo.** Se a resposta atingir o limite, continue automaticamente ("Parte 2"...) até concluir a fase inteira.
-- **Cite arquivos/linhas específicos** sempre que possível. Para CADA achado descreva: (a) problema arquitetural concreto, (b) impacto em manutenção/escala/consistência, (c) severidade, (d) recomendação com trade-offs explícitos.
-- **Escala consistente:** 🔴 Crítico · 🟠 Alto · 🟡 Médio · 🟢 Baixo.
-- **ID único por achado:** formato `ARCH-<FASE>-<NN>` (ex: `ARCH-1-01`).
+# Objetivo
 
-## 📐 ESTRUTURA DE SAÍDA (repetir em TODA fase)
+Avaliar boundaries, dependências, fluxo de dados, modularidade, acoplamento, escalabilidade, resiliência, segurança arquitetural, deployment e capacidade de evolução.
 
-Cada arquivo de fase deve seguir estritamente:
+# Regras de execução
 
-# 🏗️ Sumário — Fase N
-1. Contexto e Boundaries do Escopo
-2. Top Riscos Arquiteturais da Fase
-3. Auditoria de Status (README vs. Realidade Arquitetural)
-4. Diagnóstico Detalhado por Domínio (achados `ARCH-N-NN`)
-5. 💡 Novos Requisitos Arquiteturais Propostos (RNF ou ADRs sugeridos)
-6. Perguntas Clarificadoras específicas da fase
+- Não edite código, configuração, diagramas, ADRs ou documentação.
+- Descubra a arquitetura existente antes de compará-la com padrões.
+- Não recomende microservices, eventos, DDD ou novas camadas sem necessidade demonstrada.
+- Diferencie arquitetura observada, intenção documentada e inferência.
+- Explique trade-offs, custo de migração e riscos de cada recomendação.
+- Use tecnologias específicas apenas quando descobertas ou como exemplos condicionais.
+- Não trate diagrama ou documentação como prova de implementação.
 
----
+# Checklist de auditoria
 
-## 📂 FASE 1 — Domínio, Camadas e Modelo de Dados
-**Arquivo de saída:** `.github/audits/results/architecture/arch-fase-1-dominio-dados.md`
+## Contexto e boundaries
 
-Escopo obrigatório:
-- **Boundaries e módulos:** mapa dos 25 módulos vs. bounded contexts reais no código; acoplamento indevido entre domínios (ex.: Orçamento ↔ Planejamento de Compra ↔ Perfil).
-- **Camadas API:** controllers → services → repositories — vazamento de Prisma para cima? lógica de negócio no controller? duplicação entre services?
-- **Schema Prisma:** normalização, índices, constraints (`@unique`, FKs), enums vs. strings livres; migrations pendentes vs. código; integridade referencial em exclusões em cascata.
-- **Regras de negócio:** centralização (`RegrasDeNegocio.md` vs. código); regras espalhadas ou duplicadas (ex.: validação recurso×categoria, limites de metas, VT).
-- **Consistência transacional:** onde faltam transações; isolamento Serializable vs. Read Committed; race conditions em saldo, metas de grupo, VT.
-- **Estado atual relevante (ago/2026):** cookies httpOnly para sessão; `grupoBeneficio` em categorias; redirects pós-login para `/transactions`; rate limit parcial (auth + grupos).
+- Identifique usuários, sistemas externos, responsabilidades e trust boundaries.
+- Mapeie aplicações, processos, serviços, bibliotecas e data stores.
+- Descubra módulos e boundaries reais por dependências e ownership de dados.
+- Avalie alinhamento entre domínio, estrutura do código e deployment.
+- Procure responsabilidades órfãs, sobrepostas ou mal posicionadas.
+- Marque como `N/A` conceitos incompatíveis com o porte ou estilo do sistema.
 
----
+## Dependências e modularidade
 
-## 📂 FASE 2 — Integrações, Jobs e Runtime Serverless
-**Arquivo de saída:** `.github/audits/results/architecture/arch-fase-2-integracoes-runtime.md`
+- Construa o grafo principal de dependências entre módulos e camadas.
+- Verifique direção, ciclos, inversões e acesso que contorna boundaries.
+- Avalie coesão, coupling temporal, fan-in e fan-out relevantes.
+- Procure shared kernels excessivos, utils genéricos e abstrações centrais frágeis.
+- Verifique estabilidade de interfaces e encapsulamento de detalhes.
+- Avalie se testes conseguem isolar boundaries importantes.
 
-Escopo obrigatório:
-- **Integrações externas:** Google OAuth/Calendar, cotações, GeoNames, FIPE, SMTP, Gemini (futuro) — contratos, timeouts, retries, circuit breaker, fallbacks.
-- **Jobs e cron:** `recurringTransactions`, limpeza de contas, sync Google — idempotência, proteção de endpoints, cold start Vercel.
-- **Serverless constraints:** polling de chat (~3s) vs. WebSocket; rate limit em memória por instância; cache de cotações; implicações de escala horizontal.
-- **Front-end:** estrutura de rotas, Redux vs. fetch local, composição de features, `DEFAULT_AUTHENTICATED_ROUTE`, placeholders (`InDevelopmentPage`).
-- **API design:** versionamento, paginação consistente, códigos HTTP, shape de erros, DTOs vs. entidades expostas.
+## Fluxo e ownership de dados
 
----
+- Mapeie origens, transformações, persistência, caches e consumidores.
+- Identifique source of truth, duplicação e sincronização.
+- Verifique transações, idempotência, consistência e reconciliação.
+- Avalie schema evolution, migrations e compatibilidade.
+- Procure dados sensíveis atravessando boundaries sem necessidade.
+- Verifique retenção, exclusão e lineage quando aplicáveis.
 
-## 📂 FASE 3 — Escalabilidade, Observabilidade e Evolução
-**Arquivo de saída:** `.github/audits/results/architecture/arch-fase-3-escala-evolucao.md`
+## Contratos e integrações
 
-Escopo obrigatório:
-- **Escalabilidade:** gargalos em queries N+1, agregações duplicadas (Dashboard futuro vs. Relatórios), índices ausentes.
-- **Multi-tenancy / isolamento:** `usuarioId` em todas as queries; separação pessoal×grupo (RF-098); convites e preview.
-- **Observabilidade:** logging estruturado, correlação de requests, métricas de jobs, alertas de falha de sync.
-- **Testabilidade arquitetural:** cobertura por camada; testes de integração vs. unitários; mocks de Prisma.
-- **Roadmap técnico:** módulos 19–25 (onboarding, import, cartões); decisões ADR pendentes (Redis/Upstash, Dashboard MVP, integração Grupos↔expense-split).
-- **Dívida técnica transversal:** scaffolds vazios (T1), concorrência otimista, cache compartilhado (T5).
+- Descubra APIs, eventos, webhooks, arquivos, SDKs e chamadas internas.
+- Avalie versionamento, validação, compatibilidade e evolução.
+- Verifique timeout, retry, backoff, circuit breaker e idempotência.
+- Procure contratos implícitos, payloads acoplados e modelos internos expostos.
+- Avalie tratamento de falha parcial e indisponibilidade de dependências.
+- Considere anti-corruption layers apenas quando reduzirem acoplamento real.
 
----
+## Escalabilidade e performance
 
-## 📊 CONSOLIDAÇÃO (só quando eu disser "consolidar")
-**Arquivo de saída:** `.github/audits/results/architecture/arch-sumario-executivo.md`
+- Identifique gargalos por arquitetura e evidência, não por suposição.
+- Avalie estado compartilhado, particionamento, pools, filas e cache se presentes.
+- Procure operações não limitadas, fan-out, N+1 e trabalho síncrono pesado.
+- Verifique escalabilidade horizontal e constraints do runtime aplicável.
+- Considere backpressure, rate limits e capacity boundaries.
+- Relacione recomendações a carga conhecida ou risco documentado.
 
-Conteúdo: mapa C4 simplificado (contexto + containers); top 10 achados (`ARCH-x-yy`); ADRs recomendados; plano de ação (quick wins × refactors estruturais); dependências entre módulos para Dashboard, Perfil e Insights.
+## Resiliência e confiabilidade
 
----
+- Mapeie failure domains e single points of failure.
+- Avalie graceful degradation, isolamento e recuperação.
+- Verifique jobs, eventos e workflows quanto a replay e falha parcial.
+- Considere RTO/RPO, backups e disaster recovery quando aplicáveis.
+- Avalie observabilidade arquitetural: logs, métricas, traces e correlação.
+- Procure cascatas de falha e dependências críticas sem proteção.
 
-**Comece agora pela FASE 1** e salve em `.github/audits/results/architecture/arch-fase-1-dominio-dados.md`. Ao terminar, pare e aguarde meu "OK, próxima fase".
+## Segurança arquitetural
+
+- Identifique trust boundaries, entry points e operações privilegiadas.
+- Avalie autenticação, autorização e isolamento nos boundaries corretos.
+- Verifique princípio do menor privilégio e segmentação.
+- Procure secrets ou dados sensíveis propagados entre componentes.
+- Avalie validação nas bordas e confiança indevida em componentes internos.
+- Relacione ameaças à topologia e ao fluxo de dados observados.
+
+## Deployment e operação
+
+- Mapeie unidades de build, deploy, escala e rollback.
+- Avalie coupling de deployment entre módulos.
+- Verifique configuração por ambiente e compatibilidade durante releases.
+- Procure estado local incompatível com escala ou recuperação.
+- Avalie migrations, jobs e dependências na sequência de deploy.
+- Verifique se topologia documentada corresponde aos artefatos.
+
+## Decisões e evolução
+
+- Localize ADRs, RFCs, diagramas e documentação arquitetural.
+- Verifique contexto, decisão, alternativas, consequências e status.
+- Identifique decisões importantes sem registro e registros obsoletos.
+- Avalie dívida técnica por impacto, urgência e custo de mudança.
+- Procure extensibilidade prematura e complexidade acidental.
+- Proponha ADRs para decisões, não para fatos triviais.
+
+# Evidência e classificação
+
+Use IDs `ARCH-001`, `ARCH-002`, em ordem contínua.
+
+Cada achado deve conter:
+- **Evidência:** uma ou mais referências `path:line`.
+- **Constatação:** problema ou propriedade arquitetural observada.
+- **Impacto:** manutenção, evolução, escala, consistência, segurança ou operação.
+- **Severidade:** Crítica, Alta, Média ou Baixa.
+- **Confiança:** Alta, Média ou Baixa.
+- **Recomendação:** ação concreta, incremental e verificável.
+- **Trade-offs:** benefícios, custos, riscos e alternativas.
+
+Declare limitações quando runtime, topologia ou carga não forem observáveis. Pontos positivos também exigem `path:line`.
+
+# Estrutura obrigatória do relatório
+
+1. **Resumo executivo**
+   - arquitetura atual, riscos dominantes e capacidade de evolução;
+2. **Escopo e contexto detectado**
+   - sistemas, boundaries, stack, overlay, limitações e itens `N/A`;
+3. **Achados priorizados**
+   - achados `ARCH-*` ordenados por severidade, alcance e confiança;
+4. **Pontos positivos**
+   - decisões arquiteturais eficazes comprovadas;
+5. **Quick wins**
+   - melhorias incrementais de alto retorno;
+6. **Roadmap e riscos**
+   - estabilização, decisões/ADRs, mudanças estruturais e riscos residuais.
+
+Finalize com perguntas apenas quando uma premissa ausente puder alterar materialmente a recomendação.

@@ -1,44 +1,65 @@
 ---
 name: dev-senior-review
 description: >-
-  Code review profundo em 3 fases: backend (services/prisma), frontend (React),
-  testes e integração. Caça bugs, edge cases, code smells. Gera DEV-N-NN em
-  .github/audits/results/code-review/. UMA fase por vez; snippets com correção sugerida.
+  Performs a deep phased code review (backend, frontend/UI, tests/integration)
+  hunting bugs, edge cases, and maintainability issues. Use when the user asks
+  for senior review, implementation audit, or a specific review phase.
 ---
 
-# Dev Senior Review — Auditoria de Implementação
+# Dev Senior Review — Implementation Audit
 
-## Protocolo completo
+## Step 1 — Resolve project context (mandatory)
 
-`.github/audits/prompts/dev-senior.md`
+1. Read `.github/project.yml` if it exists. Validate configured paths; treat stale or missing paths as hints and fall back to discovery.
+2. If absent: discover apps, languages, source/test dirs, frameworks, and layering from manifests, workspaces, READMEs, and tree. **Never** assume a particular framework or ORM.
+3. Capture: source roots, test roots, optional `${MODULE_SCOPE}`, `language`/`locale`, `outputs.audits` (code-review).
+4. If an **overlay** is configured, read it **after** the base prompt.
 
-## Variáveis
+## Protocol
 
-| Variável | Default |
-|----------|---------|
-| `${PHASE}` | `1` (backend) \| `2` (frontend) \| `3` (testes) \| `consolidar` |
-| `${OUTPUT_DIR}` | `.github/audits/results/code-review/` |
-| `${MODULE_SCOPE}` | opcional — ex.: `metaService`, `GoalsPage` |
+Follow `.github/audits/prompts/dev-senior.md` when present.
 
-## Arquivos de saída
+**Fallback:** if prompt/config is missing, continue with a professional senior review checklist (correctness → concurrency/edge cases → error handling → API contracts → UI state → tests → smells). Do **not** block.
 
-| Fase | Arquivo |
-|------|---------|
-| 1 | `dev-fase-1-backend.md` |
-| 2 | `dev-fase-2-frontend.md` |
-| 3 | `dev-fase-3-testes-integracao.md` |
-| consolidar | `dev-sumario-executivo.md` |
+## Phases (generic)
 
-## Regras
+**One phase per session**; wait for user OK between phases.
 
-- ID achados: `DEV-<FASE>-<NN>`
-- Priorizar bugs reais sobre nitpicks
-- Cada bug: snippet, input que dispara, correção com código pronto
-- Uma fase por sessão
+| Phase | Focus | Skip when |
+|-------|-------|-----------|
+| 1 | Backend / services / data access | No server/API/data layer |
+| 2 | Frontend / client / UI | No UI client |
+| 3 | Tests & integration | Always assess what exists; N/A if none |
+| consolidate | Executive summary | — |
 
-## Foco Pulso
+Phases describe **layers**, not product modules. Adapt names to detected structure (mobile, CLI, workers, etc.).
 
-- Camadas: controller → service → repository (RNF-011)
-- Prisma transactions em operações financeiras
-- Race conditions: metas, VT saldo, aportes grupo
-- Frontend: useEffect/fetch sem cleanup, estado page-local vs Redux
+## Scope & findings
+
+- Optional scope: a package, folder, or symbol provided by the user.
+- Finding IDs: `DEV-<PHASE>-<NN>` (or config prefix).
+- Prioritize real bugs over style nitpicks.
+- Each finding: evidence `path:line`, severity/priority, impact, confidence, reproduction or trigger, recommendation (prefer a concrete fix snippet).
+
+## Execution rules
+
+- **Read-only by default.** Suggest patches; apply only if the user asks for a separate implementation pass.
+- Output language: config / user preference.
+
+## Output
+
+| Source | Path |
+|--------|------|
+| Prefer | `project.yml` → `outputs.audits` (code-review) |
+| Fallback | `.github/audits/results/code-review/` |
+
+Suggested filenames:
+
+- `dev-fase-1-backend.md`
+- `dev-fase-2-frontend.md`
+- `dev-fase-3-testes-integracao.md`
+- `dev-sumario-executivo.md`
+
+## Example
+
+> Run dev-senior-review phase 1 on the API package and save the report.

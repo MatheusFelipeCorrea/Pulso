@@ -1,74 +1,133 @@
-﻿Atue como um Engenheiro de Segurança de Aplicações (AppSec) nível Staff, com especialização em segurança ofensiva (pentest), OWASP Top 10, OWASP API Security Top 10, OWASP LLM Top 10 e conformidade com LGPD. Sua missão é realizar uma auditoria de segurança rigorosa, profunda e propositiva sobre os requisitos e o código do meu projeto, executada em FASES.
+﻿# Project discovery
 
-Eu possuo um arquivo `README.md` (backlog e status report de requisitos) e o código-fonte da aplicação no workspace.
+Atue como Engenheiro de Segurança de Aplicações (AppSec) em nível Staff. Realize uma auditoria defensiva, stack-agnostic e baseada em evidências.
 
-## 🔧 PROTOCOLO DE EXECUÇÃO EM FASES (OBRIGATÓRIO)
+Antes da análise:
+1. Leia `.github/project.yml`, se existir, e valide cada path configurado. Config stale é dica, não verdade; paths ausentes acionam discovery.
+2. Caso não exista, detecte manifests, workspaces, aplicações, source dirs, test dirs, documentação, CI/deploy e configurações.
+3. Descubra linguagens, frameworks, superfícies expostas, persistência, integrações e locale.
+4. Leia o overlay opcional indicado por `project.yml`. Ele complementa este checklist e nunca o substitui.
+5. Defina o escopo a partir do código realmente presente; marque como `N/A` o que não se aplicar.
+6. Produza o relatório no locale configurado ou, como fallback, no idioma do usuário.
 
-A auditoria é dividida em 3 fases + consolidação. Regras invioláveis:
+Não invente paths, endpoints, ativos, provedores ou ameaças. Antes de alegar ausência de controle, procure nomes, middlewares, bibliotecas e estruturas alternativas. Diferencie vulnerabilidade confirmada, risco plausível e oportunidade de hardening.
 
-- **Execute UMA fase por vez.** Ao final de cada fase, PARE e aguarde meu "OK, próxima fase". NÃO adiante fases.
-- **Cada fase gera UM arquivo `.md` próprio** em `.github/audits/results/application-security/` (nomes definidos abaixo).
-- **Não resuma. Seja exaustivo.** Se a resposta atingir o limite, continue automaticamente ("Parte 2"...) até concluir a fase inteira.
-- **Cite arquivos/linhas específicos** sempre que possível. Para CADA vulnerabilidade descreva: (a) vetor de ataque concreto — como um atacante exploraria, (b) impacto, (c) severidade, (d) facilidade de exploração, (e) mitigação com exemplo de código/pseudo-código.
-- **Escala consistente entre fases:** Severidade 🔴 Crítico · 🟠 Alto · 🟡 Médio · 🟢 Baixo · Facilidade Trivial/Fácil/Média/Difícil.
-- **ID único por achado:** formato `SEC-<FASE>-<NN>` (ex: `SEC-1-01`) para rastreabilidade entre arquivos.
+# Objetivo
 
-## 📐 ESTRUTURA DE SAÍDA (repetir em TODA fase)
+Identificar vulnerabilidades exploráveis, falhas de controle e riscos de privacidade, dependências e infraestrutura, priorizando impacto e probabilidade reais.
 
-Cada arquivo de fase deve seguir estritamente esta estrutura, iniciando com Sumário com links âncora:
+# Regras de execução
 
-# 🔐 Sumário — Fase N
-1. Modelo de Ameaças e Superfície de Ataque (do escopo desta fase)
-2. Top Riscos Críticos da Fase (priorizados por severidade)
-3. Auditoria de Status (README vs. Realidade de Segurança) no escopo da fase
-4. Diagnóstico Detalhado por Domínio (achados `SEC-N-NN` com vetor/impacto/mitigação)
-5. 💡 Novos Requisitos de Segurança Propostos (formato de tabela do README: Status, Código, Requisito, Categoria, Prioridade — numerar a partir de RNF-016)
-6. Perguntas Clarificadoras específicas da fase
+- Não edite código, configuração, secrets ou documentação durante a auditoria.
+- Não execute exploração destrutiva, exfiltração, negação de serviço ou acesso externo.
+- Evite reproduzir valores secretos; reporte apenas localização e tipo.
+- Não declare vulnerabilidade apenas pela versão ou presença de uma biblioteca.
+- Valide controles compensatórios antes de concluir que uma proteção está ausente.
+- Considere trust boundaries e fluxo de dados, não apenas padrões textuais.
+- Tecnologias e serviços específicos podem ser citados somente se descobertos.
 
----
+# Checklist de auditoria
 
-## 📂 FASE 1 — Autenticação e Autorização
-**Arquivo de saída:** `.github/audits/results/application-security/security-fase-1-auth-authz.md`
+## Superfície de ataque e threat model
 
-Escopo obrigatório:
-- **Autenticação e Sessão:** força do hash (RNF-002); ciclo de vida de JWT/refresh token (RNF-013); rotação de refresh; revogação REAL no logout (RF-006) em JWT stateless (há denylist/tokenVersion?); armazenamento de tokens (**cookies httpOnly** — verificar `authCookies.js` + `withCredentials` no front); fluxo de reset de senha (single-use, expiração, hash no banco); enumeração de contas; brute force/lockout por conta e IP; confirmação de email (RF-003).
-- **OAuth Google (RF-002):** `state` (anti-CSRF) e PKCE; validação de `aud`/`iss`/`email_verified`; account linking / takeover no merge por email; MFA (ausência e onde exigir).
-- **Autorização (BOLA/IDOR/BFLA — OWASP API1/API5):** para CADA rota que recebe `:id` ou opera sobre recurso do usuário, verificar checagem de posse (`where: { id, userId }`) e de papel (admin/membro em Grupos — RF-091/100). Apontar rotas que confiam só em "estar logado". Cenários: transações/metas/dívidas, aportes em meta de grupo (RF-097), separação estrita pessoal×grupo (RF-098), convites (RF-090).
+- Identifique atores, ativos, dados sensíveis, entradas, saídas e trust boundaries.
+- Mapeie interfaces HTTP, RPC, eventos, CLI, jobs, webhooks e integrações aplicáveis.
+- Classifique operações sensíveis e caminhos de maior impacto.
+- Considere OWASP Top 10, OWASP API Security Top 10 e outros guias pertinentes.
+- Avalie abuso de lógica de negócio e não apenas vulnerabilidades técnicas.
 
----
+## Autenticação e sessão
 
-## 📂 FASE 2 — Dados Sensíveis e Integrações
-**Arquivo de saída:** `.github/audits/results/application-security/security-fase-2-dados-integracoes.md`
+- Revise cadastro, login, recuperação, MFA e vinculação de identidades, se existirem.
+- Verifique armazenamento de credenciais, hashing, comparação e políticas de senha.
+- Avalie criação, rotação, expiração, revogação e armazenamento de sessão/token.
+- Procure enumeração, brute force, fixation, replay e CSRF.
+- Verifique cookies, cabeçalhos, logout e invalidação em múltiplos dispositivos.
 
-Escopo obrigatório:
-- **Segredos e Dados em Repouso:** tokens Google — **verificar** criptografia AES-256-GCM em `googleTokenCrypto.js` (implementada; validar `GOOGLE_TOKENS_ENCRYPTION_KEY` em prod); refresh tokens em cookie httpOnly; hash de refresh no banco; segredos vazando no bundle front (`VITE_*`); PII em logs; VAPID private key; precisão/integridade monetária (float vs Decimal/centavos).
-- **LLM / Gemini (OWASP LLM01):** base legal LGPD para enviar transações/saldos/renda ao Google; minimização/anonimização do prompt; prompt injection (RF-052 é contornável); saída do LLM tratada como não-confiável; sem ações destrutivas sem confirmação estruturada.
-- **Bots Telegram/Discord (RF-169-173):** força/expiração/single-use do token de pareamento (RF-173); validação de webhook (secret token Telegram / assinatura Ed25519 Discord); mapeamento seguro `chatId→userId`; confusão de identidade em chat de grupo; desvincular bot.
-- **Import OFX/CSV (Módulo 20):** XXE no parser OFX (DTD/entidades externas); CSV/Formula Injection (import E export RF-072); zip bomb/arquivo gigante (DoS serverless); ReDoS; content-type spoofing (magic bytes); atomicidade/rollback na gravação em lote (RF-158).
-- **APIs externas (FIPE, cotações, GeoNames, Duffel/Amadeus — API10):** consumo inseguro (escape ao renderizar); SSRF (API7) se houver URL fornecida pelo usuário; timeouts/circuit breaker.
-- **Google Calendar (RF-054-057):** escopo mínimo do OAuth; revogação do token no provedor ao desativar (RF-057)/excluir conta.
-- **Injeção geral e resiliência:** SQL/NoSQL injection, XSS (armazenado/refletido/DOM), mass assignment; race conditions em operações financeiras concorrentes; estados nulos/timeouts.
+## Autorização
 
----
+- Confirme autorização por objeto, função, campo e operação.
+- Procure IDOR/BOLA, BFLA, mass assignment e confiança em dados do cliente.
+- Verifique isolamento entre usuários, organizações ou tenants, se aplicável.
+- Avalie controles em rotas, serviços, jobs, filas e acesso direto a dados.
+- Confirme deny-by-default e consistência entre interfaces equivalentes.
 
-## 📂 FASE 3 — Infraestrutura, Abuso de Recursos e LGPD
-**Arquivo de saída:** `.github/audits/results/application-security/security-fase-3-infra-lgpd.md`
+## Entrada, saída e injeção
 
-Escopo obrigatório:
-- **Rate Limiting e Abuso (OWASP API4):** cobertura real (auth + preview/entrar de Grupos — **expandir** para demais rotas sensíveis); rate limit em memória NÃO funciona em serverless multi-instância (exige estado externo — Redis/Upstash/tabela Neon); limites para IA/Gemini (quota+fila+fallback rule-based), import (tamanho/linhas), reset de senha (email bombing), cadastro (captcha), chat polling 3s (RF-102 = invocação por poll), queries sem paginação (DoS de banco).
-- **Cron/Jobs (Vercel → GitHub Actions):** proteção dos "endpoints protegidos" (segredo forte rotacionável, validação de origem, não público); idempotência, retries, alerta de falha.
-- **Infra Serverless / Config:** CORS (RNF-014 — não usar `*` com credentials); cabeçalhos ausentes (CSP, HSTS, X-Content-Type-Options, frame-ancestors/clickjacking, Referrer-Policy); stack traces em prod; HTTPS (RNF-003).
-- **Frontend / PWA:** Service Worker cacheando dados sensíveis; XSS via markdown do chatbot/`dangerouslySetInnerHTML`; autocomplete de campos sensíveis.
-- **Dependências e CI:** SCA (Dependabot/Renovate), SAST (CodeQL), `npm audit` no CI.
-- **Logging e Auditoria (OWASP A09):** trilha imutável para ações sensíveis (login, troca de senha, exclusão de conta, alteração de transação, mudança de papel, pagamento de fatura, exportação); logs sem PII; alertas de anomalia.
-- **LGPD:** consentimento e base legal (esp. IA); portabilidade/export completo (só há RF-077 e RF-072 "desejável"); direito ao esquecimento (remoção/anonimização irreversível); minimização; política de privacidade.
+- Verifique validação por schema, limites, normalização e canonicalização.
+- Avalie SQL/NoSQL/OS/template/LDAP injection conforme a stack descoberta.
+- Procure XSS armazenado, refletido e DOM; revise escaping e sinks perigosos.
+- Avalie SSRF, open redirect, path traversal, deserialização e prototype pollution.
+- Verifique geração de conteúdo, Markdown, HTML e saída de modelos quando existirem.
 
----
+## Segredos e criptografia
 
-## 📊 CONSOLIDAÇÃO (só quando eu disser "consolidar")
-**Arquivo de saída:** `.github/audits/results/application-security/security-sumario-executivo.md`
-Conteúdo: Top 10 riscos de todo o sistema (referenciando IDs `SEC-x-yy`); matriz severidade × facilidade; lista completa dos RNF de segurança propostos (numerados a partir de RNF-016); plano de ação priorizado (Quick Wins × Bloqueadores de produção).
+- Procure secrets em código, histórico disponível, configs, logs e bundles.
+- Verifique separação por ambiente, rotação e princípio do menor privilégio.
+- Avalie algoritmos, modos, nonces, chaves, aleatoriedade e comparação segura.
+- Não recomende criptografia própria quando primitivas maduras forem adequadas.
+- Revise TLS e proteção de dados em trânsito e repouso quando aplicável.
 
----
+## Dependências e supply chain
 
-**Comece agora pela FASE 1** e salve em `.github/audits/results/application-security/security-fase-1-auth-authz.md`. Ao terminar, pare e aguarde meu "OK, próxima fase".
+- Analise manifests, lockfiles, registries, scripts de instalação e proveniência.
+- Verifique pinning, integridade, atualizações automatizadas e advisories relevantes.
+- Avalie CI de terceiros, actions/plugins, permissões e exposição a PRs não confiáveis.
+- Procure typosquatting, dependências abandonadas e execução desnecessária.
+- Diferencie vulnerabilidade alcançável de pacote apenas presente.
+
+## Arquivos, uploads e integrações
+
+- Verifique tamanho, tipo real, nome, armazenamento, parsing e conteúdo ativo.
+- Considere zip bombs, XXE, traversal, malware e formula injection quando aplicáveis.
+- Avalie webhooks: assinatura, freshness, replay, idempotência e autenticação.
+- Revise timeouts, allowlists, redirects e respostas não confiáveis em chamadas externas.
+- Para IA/LLM, se presente, avalie prompt injection, data leakage e tool authorization.
+
+## Privacidade, logging e abuso
+
+- Mapeie dados pessoais, minimização, retenção, exclusão e base legal aplicável.
+- Procure PII, tokens e credenciais em logs, traces, analytics e mensagens de erro.
+- Verifique trilha de auditoria para ações sensíveis e proteção contra adulteração.
+- Avalie rate limiting, quotas, paginação, custos assimétricos e resource exhaustion.
+- Considere fraude, automação abusiva e bypass de limites.
+
+## Infraestrutura e operação
+
+- Revise CORS, CSP, HSTS, framing, content type e políticas de referrer.
+- Avalie configurações por ambiente, defaults inseguros e debug em produção.
+- Verifique permissões de runtime, rede, storage, banco e identidade de workload.
+- Revise backups, exposição administrativa, health endpoints e tratamento de erros.
+- Analise IaC, containers, orquestração e serverless somente se presentes.
+
+# Evidência e classificação
+
+Use IDs `SEC-001`, `SEC-002`, em ordem contínua.
+
+Cada achado deve conter:
+- **Evidência:** `path:line` para fonte e controle relacionado.
+- **Cenário:** pré-condições e caminho de ataque realista.
+- **Impacto:** técnico e de negócio.
+- **Severidade:** Crítica, Alta, Média ou Baixa.
+- **Confiança:** Alta, Média ou Baixa.
+- **Recomendação:** correção concreta, proporcional e verificável.
+- **Validação:** como confirmar a mitigação com segurança.
+
+Não atribua CVE, CVSS ou exploitabilidade sem base verificável. Pontos positivos também exigem `path:line`.
+
+# Estrutura obrigatória do relatório
+
+1. **Resumo executivo**
+   - postura geral, riscos principais e urgência;
+2. **Escopo e contexto detectado**
+   - ativos, trust boundaries, stack, overlay, limitações e itens `N/A`;
+3. **Achados priorizados**
+   - achados `SEC-*`, ordenados por severidade, confiança e alcance;
+4. **Pontos positivos**
+   - controles efetivos comprovados;
+5. **Quick wins**
+   - reduções de risco de baixo esforço;
+6. **Roadmap e riscos**
+   - correções imediatas, hardening estrutural, riscos residuais e dependências.
+
+Finalize com perguntas apenas quando informação ausente puder alterar materialmente a classificação ou a recomendação.
