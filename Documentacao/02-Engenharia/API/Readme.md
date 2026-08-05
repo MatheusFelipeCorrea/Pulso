@@ -47,8 +47,12 @@ Servidor **Node.js + Express** com arquitetura em camadas (routes → controller
 | **Viagens** (CRUD, despesas, observações, destinos, passagens) | ✅ |
 | **Moedas** (cotações AwesomeAPI, favoritas, conversor) | ✅ |
 | GeoNames / Duffel / Amadeus (passagens) | 🟡 Opcional — estimativas sazonais sem API |
-| **Grupos** (CRUD, convite, viagem, metas, chat) | 🟡 Parcial — ver gaps |
-| Insights, chatbot, gamificação, relatórios | 🔜 Schema Prisma · sem rotas |
+| **Dashboard** (`GET /dashboard`) | ✅ |
+| **Importação** (OFX/CSV/XLSX/PDF → preview → confirmar) | 🟡 Core entregue; RF-159 aprendizado pendente |
+| **Planejamento de compra** | ✅ |
+| **Divisão de despesas** | ✅ |
+| **Grupos** (CRUD, convite, membros, viagem, metas, chat) | 🟡 Quase completo — ver gaps menores |
+| Insights, chatbot, gamificação, relatórios | 🔜 Schema Prisma · sem rotas/UI completas |
 
 Prefixo global: **`/api`**
 
@@ -84,7 +88,7 @@ Pulso/api/
     ├── config/          env, database, passport
     ├── middlewares/     auth, validate, rate limit, error
     ├── routes/
-    │   ├── index.js     → monta todas as rotas abaixo
+    │   ├── index.js
     │   ├── authRoutes.js
     │   ├── transactionRoutes.js
     │   ├── categoryRoutes.js
@@ -98,14 +102,21 @@ Pulso/api/
     │   ├── metaRoutes.js
     │   ├── viagemRoutes.js
     │   ├── moedaRoutes.js
+    │   ├── grupoRoutes.js
+    │   ├── purchasePlanningRoutes.js
+    │   ├── expenseSplitRoutes.js
+    │   ├── dashboardRoutes.js
+    │   ├── importRoutes.js
+    │   ├── syncRoutes.js
     │   └── cronRoutes.js
     ├── controllers/
-    ├── services/
+    ├── services/        (+ importService, dashboardService, …)
     ├── repositories/
+    ├── parsers/         ofx, csv, xlsx, pdf (+ Gemini)
     ├── providers/       email, geonames, duffel, amadeus (+ templates)
     ├── schemas/
-    ├── constants/       defaultCategories, tripSeasonalPricing, tripTransportRoutes, …
-    ├── utils/           transactionMapper, recursoCategoriaRules, …
+    ├── constants/       defaultCategories, tripSeasonalPricing, …
+    ├── utils/           transactionMapper, importHashUtils, …
     └── jobs/            recurringTransactions, tokenCleanupJob, budgetAlertJob, …
 ```
 
@@ -227,13 +238,40 @@ Tipos ativos no job de alertas: `ALERTA_ORCAMENTO` (80%) e `ORCAMENTO_ESTOURADO`
 | GET | `/google/sync/pendentes` | 🔒 Lembretes pendentes de sync |
 | POST | `/google/sync` | 🔒 Sincronizar lembretes com Google Calendar |
 
+### Dashboard — `/api/dashboard`
+
+| Método | Rota | Acesso |
+|--------|------|--------|
+| GET | `/` | 🔒 Resumo: saldos por recurso, gráficos, alertas, metas, saúde financeira |
+
+### Importação — `/api/importacoes`
+
+| Método | Rota | Acesso |
+|--------|------|--------|
+| POST | `/analisar` | 🔒 Upload + parse (OFX/CSV/XLSX/PDF) → preview com dedupe e categorias sugeridas |
+| POST | `/confirmar` | 🔒 Gravação em lote (+ ajuste de saldo opcional) |
+
+Multipart via `statementImportUploadMiddleware`. PDF usa `GEMINI_API_KEY_PDF`.
+
+### Planejamento de compra — `/api/planejamento-compra`
+
+| Método | Rota | Acesso |
+|--------|------|--------|
+| CRUD + histórico | ver `purchasePlanningRoutes.js` | 🔒 |
+
+### Divisão de despesas — `/api/divisoes`
+
+Ver seção [Divisão de Despesas](#-divisão-de-despesas--detalhes) abaixo.
+
+---
+
 ### Dívidas — `/api/dividas`
 
 CRUD de dívidas/empréstimos, pagamentos parciais, resumo consolidado, jobs de alerta (`DIVIDA_COBRANCA`) e limpeza de quitadas.
 
 ### Metas — `/api/metas`
 
-CRUD, aportes, resumo, filtros por status. Notificação `META_ATINGIDA` ainda não implementada.
+CRUD, aportes, resumo, filtros por status. Notificação `META_ATINGIDA` ao concluir/atingir meta.
 
 ### Viagens — `/api/viagens`
 
@@ -386,6 +424,7 @@ CRON_SECRET=...                    # produção / Vercel Cron
 GEONAMES_USERNAME=...              # opcional — busca global de destinos
 DUFFEL_ACCESS_TOKEN=...            # opcional — cotação aérea ao vivo
 GEMINI_API_KEY_PDF=...             # opcional — importação de extratos em PDF (Gemini)
+GEMINI_PDF_MODEL=gemini-3.1-flash-lite  # opcional — modelo Gemini para PDF
 ```
 
 ---
@@ -422,6 +461,8 @@ Prefixo: **`/api/grupos`** (todas 🔒).
 | GET/POST | `/` | Listar / criar |
 | GET/PATCH/DELETE | `/:id` | Detalhe / editar / excluir |
 | POST | `/:id/sair` | Sair |
+| DELETE | `/:id/membros/:membroId` | Remover membro |
+| PATCH | `/:id/membros/:membroId` | Alterar papel |
 | POST | `/:id/viagem` | Vincular viagem |
 | GET | `/:id/viagem/media-passagem` | Estimativas de transporte |
 | POST/PATCH/DELETE | `/:id/viagem/despesas[/:despesaId]` | Pretensões |
@@ -429,7 +470,7 @@ Prefixo: **`/api/grupos`** (todas 🔒).
 | POST | `/:id/metas/:metaId/aportes` | Aporte |
 | POST | `/:id/mensagens` | Chat |
 
-Gaps: sem remover membro, sem alterar papel, meta não auto-conclui. Ver [Modulos/Grupos.md](../Modulos/Grupos.md).
+Gaps restantes: meta não auto-conclui; integração RF-095 ↔ `/expense-split`. Ver [Modulos/Grupos.md](../Modulos/Grupos.md).
 
 ---
 
@@ -459,8 +500,8 @@ Implementação: `controllers/expenseSplitController.js`, `services/expenseSplit
 
 ## 🗺️ Roadmap (não implementado)
 
-Módulos com **schema Prisma** mas **sem API/UI completa** hoje: gamificação, chatbot, insights IA, relatórios, planejamento de compra. **Grupos:** API/UI principais entregues; pendências listadas em Modulos/Grupos.md. **Divisão de Despesas:** API/UI entregues; integração com o toggle de rateio de Grupos (RF-095) ainda pendente.
+Módulos com **schema Prisma** mas **sem API/UI completa** hoje: gamificação, chatbot, insights IA, relatórios. **Grupos** e **Divisão de Despesas:** API/UI principais entregues; integração do toggle de rateio (RF-095) ainda pendente. **Importação:** core entregue; falta RF-159 (aprendizado).
 
 **Próximos passos sugeridos:** ver [Analise-Produto.md](../../01-Produto/Analise-Produto.md).
 
-Epics históricos: `.github/plans/cards/`
+Epics: [`.github/plans/cards/`](../../../.github/plans/cards/) · Pack: [`.github/INDEX.md`](../../../.github/INDEX.md)

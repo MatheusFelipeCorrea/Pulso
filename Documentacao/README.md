@@ -1,20 +1,19 @@
 ﻿# Documentação do Pulso
 
 **Índice da pasta `Documentacao/`** — produto, engenharia, auditorias, diagramas e protótipos.  
-Visão geral do repositório: [README na raiz](../README.md)
+Visão geral do repositório: [README na raiz](../README.md) · Automação/agents: [`.github/INDEX.md`](../.github/INDEX.md)
 
 ```
 Documentacao/
 ├── README.md                 ← você está aqui
 ├── 01-Produto/               Requisitos, regras, roadmap, análise
 ├── 02-Engenharia/            API, Web, deploy, módulos técnicos, commits
-├── 03-Auditorias/            Relatórios históricos + redirect para .github/audits
+├── 03-Auditorias/            Relatórios históricos (+ redirect para .github/audits)
 ├── 04-Diagramas/             UML, DER, arquitetura
-├── 05-Prototipos/            Telas de referência (PNG)
-└── Histórias de Usuário/     → [01-Produto/Historias-de-Usuario/](./01-Produto/Historias-de-Usuario/) (reservado)
+└── 05-Prototipos/            Telas de referência (PNG)
 ```
 
-Código-fonte: [`Codigo/`](../Codigo/) · Epics: [`.github/plans/`](../.github/plans/)
+Código-fonte: [`Codigo/`](../Codigo/) · Epics: [`.github/plans/`](../.github/plans/) · Comandos do pack: [`.github/COMMANDS.md`](../.github/COMMANDS.md)
 
 ---
 
@@ -40,6 +39,7 @@ Código-fonte: [`Codigo/`](../Codigo/) · Epics: [`.github/plans/`](../.github/p
 | [Web/Readme.md](./02-Engenharia/Web/Readme.md) | Frontend — rotas, páginas, DS |
 | [Deploy/Hospedagem.md](./02-Engenharia/Deploy/Hospedagem.md) | Vercel, Neon, cron |
 | [Modulos/Grupos.md](./02-Engenharia/Modulos/Grupos.md) | Deep dive — Grupos |
+| [Modulos/Cron.md](./02-Engenharia/Modulos/Cron.md) | Jobs agendados |
 | [Guia-Commits.md](./02-Engenharia/Guia-Commits.md) | Padrão de mensagens de commit |
 
 Design System (no código): [`Codigo/Pulso/web/src/design-system/README.md`](../Codigo/Pulso/web/src/design-system/README.md)
@@ -58,7 +58,7 @@ Design System (no código): [`Codigo/Pulso/web/src/design-system/README.md`](../
 | [Code Review/](./03-Auditorias/Code%20Review/) | Revisão profunda (DEV-N-NN) |
 | [UX Design/](./03-Auditorias/UX%20Design/) | Padronização DS (UX-N-NN) |
 | [Architecture/](./03-Auditorias/Architecture/) | Arquitetura (ARCH-N-NN) |
-| [`.github/audits/`](../.github/audits/) | **Prompts, scanners CI e novos resultados** |
+| [`.github/audits/`](../.github/audits/) | **Prompts, overlay, scanners CI e novos resultados** |
 
 → [Índice completo da seção](./03-Auditorias/README.md)
 
@@ -83,3 +83,5 @@ Design System (no código): [`Codigo/Pulso/web/src/design-system/README.md`](../
 | Schema do banco | [02-Engenharia/API/Database.md](./02-Engenharia/API/Database.md) |
 | Deploy produção | [02-Engenharia/Deploy/Hospedagem.md](./02-Engenharia/Deploy/Hospedagem.md) |
 | Padrão de commit | [02-Engenharia/Guia-Commits.md](./02-Engenharia/Guia-Commits.md) |
+| Usar skills/agents | [`.github/INDEX.md`](../.github/INDEX.md) · [COMMANDS](../.github/COMMANDS.md) · [USAGE](../.github/USAGE.md) |
+| Contrato do pack | [`.github/project.yml`](../.github/project.yml) |

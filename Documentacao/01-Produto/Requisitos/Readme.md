@@ -2,8 +2,8 @@
 
 Documento de rastreamento de todos os requisitos funcionais e não funcionais do sistema **Pulso**.
 
-> **Última revisão:** código alinhado a **ago/2026** — Dashboard (RF-007–014) implementado; RF-139 e importação (RF-155+) pendentes.  
-> Auditoria PO: [03-Auditorias/Product Owner/00-Sumario-Executivo.md](../03-Auditorias/Product%20Owner/00-Sumario-Executivo.md) · Técnico: [Web](../02-Engenharia/Web/Readme.md) · [API](../02-Engenharia/API/Readme.md) · [Banco](../02-Engenharia/API/Database.md)
+> **Última revisão:** código alinhado a **ago/2026** — Dashboard (RF-007–014) e importação core (RF-155–158, RF-160) entregues; pendentes **RF-139** (quick-add/chatbot) e **RF-159** (aprendizado de categorização na importação).  
+> Auditoria PO: [03-Auditorias/Product Owner/00-Sumario-Executivo.md](../03-Auditorias/Product%20Owner/00-Sumario-Executivo.md) · Técnico: [Web](../02-Engenharia/Web/Readme.md) · [API](../02-Engenharia/API/Readme.md) · [Banco](../02-Engenharia/API/Database.md) · Agents: [`.github/INDEX.md`](../../.github/INDEX.md)
 
 ---
 
@@ -11,15 +11,15 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 
 | Categoria | Total | Concluídos | Progresso |
 |---|---|---|---|
-| Requisitos Funcionais | 195 | 106 | ~54% |
+| Requisitos Funcionais | 195 | 107 | ~55% |
 | Requisitos Não Funcionais | 16 | 10 | ~63% |
-| **Total** | **211** | **116** | **~55%** |
+| **Total** | **211** | **117** | **~55%** |
 
-Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, **dashboard** (8/9 RFs), transações, VT, orçamento, calendário/lembretes, dívidas, metas, viagens + moedas, grupos, homepage e notificações (orçamento, lembretes, dívidas, transações).
+Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, **dashboard** (8/9 RFs), transações, VT, orçamento, calendário/lembretes, dívidas, metas, viagens + moedas, grupos, homepage, notificações, **planejamento de compra**, **divisão de despesas** e **importação de extratos** (5/6 RFs).
 
-**Novos módulos planejados (jul/2026):** Onboarding guiado, Importação de Dados, Cartão de Crédito e Faturas, Integrações e Bots (Telegram/Discord), Modo Casal/Família, PWA + Notificações Push e **Veículos & FIPE**.
+**Módulos ainda planejados:** Onboarding guiado, Cartão de Crédito e Faturas, Integrações e Bots (Telegram/Discord), Modo Casal/Família, PWA + Notificações Push e **Veículos & FIPE**.
 
-**Fora da lista de RF (entregue):** busca global de destinos (GeoNames), estimativas de passagem com ajuste sazonal, integração opcional Duffel/Amadeus, observações na viagem.
+**Fora da lista de RF (entregue):** busca global de destinos (GeoNames), estimativas de passagem com ajuste sazonal, integração opcional Duffel/Amadeus, observações na viagem, tema claro/escuro na área autenticada (`UserMenu`).
 
 ---
 
@@ -37,7 +37,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | 📅 Lembretes | 5 | 5 | ✅ |
 | 🚌 Vale Transporte | 6 | 6 | ✅ |
 | 📈 Relatórios | 6 | 0 |  |
-| 👤 Perfil e Configurações | 13 | 0 | 🟡 |
+| 👤 Perfil e Configurações | 13 | 1 | 🟡 |
 | 🎮 Gamificação | 7 | 0 |  |
 | 🏠 Homepage | 4 | 4 | ✅ |
 | 👥 Grupos | 15 | 15 | ✅ |
@@ -57,8 +57,8 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 
 **Legenda:** ✅ módulo entregue · 🟡 parcial (UI ou backend incompleto) · ⏳ aguardando prototipação/implementação
 
-> **Dashboard:** `GET /dashboard` + `DashboardPage` — saldos, gráficos, alertas, metas e saúde financeira. Pendente: **RF-139** (quick-add → chatbot).  
-> **Importação:** fluxo upload → preview → confirmar (OFX/CSV/XLSX + PDF via Gemini). Pendente: **RF-159** (aprendizado), **RF-160** parcial (mapeamento manual).
+> **Dashboard:** `GET /dashboard` + `DashboardPage` — saldos, gráficos, alertas, metas e saúde financeira. Destino pós-login: **`/dashboard`**. Pendente: **RF-139** (quick-add → chatbot).  
+> **Importação:** fluxo upload → preview → confirmar (OFX/CSV/XLSX + PDF via Gemini) no modal do dashboard. Pendente: **RF-159** (aprendizado com ajustes do usuário). RF-160 (mapeamento manual de CSV) entregue.
 
 ---
 
@@ -226,7 +226,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [ ] | RF-073 | O sistema deve permitir o usuário editar nome, email e foto de perfil | 🔴 Essencial |
 | - [ ] | RF-074 | O sistema deve permitir alteração de senha para contas com email/senha | 🔴 Essencial |
 | - [ ] | RF-075 | O sistema deve permitir configurar receitas fixas mensais (salário, VA, VR, VT) para preenchimento automático | 🔴 Essencial |
-| - [ ] | RF-076 | O sistema deve permitir alternar entre tema claro e escuro | 🟡 Importante |
+| - [x] | RF-076 | O sistema deve permitir alternar entre tema claro e escuro | 🟡 Importante |
 | - [ ] | RF-077 | O sistema deve permitir o usuário excluir sua conta e todos os dados associados | 🔴 Essencial |
 | - [ ] | RF-078 | O sistema deve permitir ativar/desativar o módulo de gamificação | 🟡 Importante |
 | - [ ] | RF-103 | O sistema deve permitir selecionar o modo de uso: Estagiário, CLT ou Freelancer | 🔴 Essencial |
@@ -517,7 +517,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 
 ---
 
-## 📌 Notas de implementação (atualizado jul/2026)
+## 📌 Notas de implementação (atualizado ago/2026)
 
 | Item | Situação |
 |------|----------|
@@ -525,11 +525,12 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | RF-140 | Transferência unificada na própria tabela `Transacao` (`tipo = TRANSFERENCIA`, `recursoDestino`, `categoriaId` nulo); novo recurso `POUPANCA`. Excluída dos totais de receita/despesa (`montarResumo`) e dos marcadores do Calendário |
 | RF-123 | Lógica em `fixedIncomeUtils.js`: marcador azul no grid + lista no painel do dia conforme `configuracoes_usuario` (valor/dia por tipo). VA/VR só CLT/Estagiário; VT conforme `modoUso`/`vtHabilitado`. **Coleta dos dados:** onboarding (RF-075/RF-151); sem tela de config manual por enquanto |
 | RF-064 / RF-065 | **Removidos** — intervalo entre vendas de VT e contador regressivo de venda não fazem mais parte do escopo |
-| RF-076 | Toggle claro/escuro na **landing** (`PublicHeader`); área autenticada ainda sem controle na sidebar — tela Configurações pendente |
+| RF-076 | Toggle claro/escuro na **landing** (`PublicHeader`) e na área autenticada (**`UserMenu`**); preferência em `ds-theme-preference` (legado `ds-theme`) |
 | RF-103 / RF-104 | `modoUso` no cadastro/onboarding e na API de VT; sidebar já oculta VT conforme modo (`filterSidebarByUser`); tela de perfil/configurações ainda pendente |
 | RF-139 | Quick-add planejado como FAB no dashboard, reutilizando o parser em linguagem natural do chatbot (Gemini Flash) |
 | RF-141 | Sugestão de categoria via similaridade de texto (coeficiente de Dice sobre bigramas, hand-rolled/sem dependência) comparando a descrição digitada com o histórico do próprio usuário (mesmo tipo). Preenchimento automático discreto no formulário de transação (apenas ao criar), sem sobrescrever escolha manual |
-| RF-159 (futuro) | Import de extratos deve reaproveitar/alimentar o mesmo motor de sugestão do RF-141 quando implementado |
+| RF-155–158 / RF-160 | Importação entregue — `POST /importacoes/analisar` + `/confirmar`, parsers OFX/CSV/XLSX/PDF, preview no dashboard, dedupe, mapeamento manual de colunas |
+| RF-159 (futuro) | Import de extratos deve reaproveitar/alimentar o mesmo motor de sugestão do RF-141 quando implementado (aprendizado com ajustes) |
 | RF-174–179 (Casal/Família) | Reaproveita o motor de espaços compartilhados de Grupos (`tipo = FAMILIA`); específico: rateio recorrente e acerto de contas contínuo |
 | RF-180–184 (PWA/Push) | Base PWA (manifest + service worker) habilita instalação e Web Push (VAPID, gratuito); envio de eventos usa os jobs do GitHub Actions |
 | RF-185–197 (Veículos/FIPE) | Tabela FIPE via BrasilAPI/Parallelum (gratuita) com cache mensal; custo mensal médio (RF-190) = média histórica de gastos + depreciação mensal derivada do histórico FIPE (RF-187); despesas do veículo podem espelhar em Transações; vencimentos e manutenção por km reutilizam Calendário/Lembretes/Push |
@@ -537,18 +538,18 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | Cotações (RF-033) | Fonte gratuita (AwesomeAPI/Frankfurter) com cache de **5 minutos** por instância (memória); ver T5 para cache compartilhado futuro |
 | Bots (RF-169–173) | Telegram + Discord (Bot APIs gratuitas); WhatsApp/Evolution **descartado** |
 | OCR de cupons | **Descartado** — custo/complexidade sem retorno para o escopo gratuito |
-| Open Banking | **Descartado** — custo de integração/certificação incompatível com projeto gratuito; substituído pelo módulo de Importação (OFX/CSV) |
-| Páginas implementadas | `/` (landing), `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips`, **`/groups`**, **`/groups/:id`**, **`/expense-split`**, **`/purchase-planning`** |
-| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros, editar grupo, metas múltiplas, RN-119, notificações GRUPO/META, chat paginado + polling (~3s), viagem pessoal→grupo, RF-095 (toggle *Por pretensão*/*Divisão igual*), **rate limit** em preview/entrar — acerto de contas completo em **`/expense-split`** (RF-115–120) — [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md) |
+| Open Banking | **Descartado** — custo de integração/certificação incompatível com projeto gratuito; substituído pelo módulo de Importação (OFX/CSV/PDF) |
+| Páginas implementadas | `/` (landing), **`/dashboard`**, `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips`, **`/groups`**, **`/groups/:id`**, **`/expense-split`**, **`/purchase-planning`** |
+| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros (incl. remover / alterar papel), editar grupo, metas múltiplas, RN-119, notificações GRUPO/META, chat paginado + polling (~3s), viagem pessoal→grupo, RF-095 (toggle *Por pretensão*/*Divisão igual*), **rate limit** em preview/entrar — acerto de contas completo em **`/expense-split`** (RF-115–120) — [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md) |
 | Metas (RF-026–031) | CRUD, aportes, pausar/concluir, vínculo viagem; `META_ATINGIDA` pessoal e grupo |
-| Viagens (RF-033–043) | Moedas (cotações, conversor, histórico, favoritas), CRUD de viagens, despesas por categoria, total em BRL, observações, busca GeoNames, estimativas de passagem (avião/ônibus/trem) com ajuste sazonal; Duffel/Amadeus opcionais |
+| Viagens (RF-033–043) | Moedas (cotações, conversor, histórico, favoritas), CRUD de viagens, despesas por categoria, total em BRL, observações, busca GeoNames, estimativas de passagem (avião/ônibus/trem) com ajuste sazonal; Duffel/Amadeus opcionais; capa em `destinoMeta.coverImageUrl` (resolvida no criar/editar) |
 | Dívidas (RF-126–132) | CRUD em `/debts` com tabs Me devem / Eu devo / Quitadas; resumo consolidado; filtros (busca, valor, DateRangePicker); job `DIVIDA_COBRANCA` (vence hoje / em 2 dias); limpeza automática de quitadas após 180 dias |
 | Notificações | Orçamento, lembretes, dívidas, transações (RECEITA/DESPESA), streak/conquista, insight MVP, grupos — sino paginado (20), retenção 30d lidas |
 | Google Calendar | Sync Pulso → Google na criação/edição; **importação Google → Pulso** ao abrir o mês e após sync manual; marcar pago remove evento |
 | Lembretes recorrentes | UI "Repetir todo mês" enviada ao backend; job diário gera instâncias mensais |
 | Tags | CRUD em Transações → **Tags**; criação sob demanda na transação |
 | Calendário + IA | Tela entregue; integração com IA (Gemini) na página do calendário **pendente** |
-| Banco completo | Schema Prisma com 30+ entidades; API expõe auth, transações, VT, orçamento, lembretes, calendário, dívidas, **metas**, **viagens**, **moedas** e notificações |
+| Banco completo | Schema Prisma com 30+ entidades; API expõe auth, transações, VT, orçamento, lembretes, calendário, dívidas, **metas**, **viagens**, **moedas**, **dashboard**, **importações**, planejamento de compra e notificações |
 
 ### Implementações técnicas fora da lista de RF (dívida / melhorias futuras)
 
@@ -556,11 +557,11 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 |------|----------|
 | Rate limiting global (RNF-004) | Auth + **preview/entrar de Grupos** (`grupoInviteCodeRateLimit`, 20/min por usuário) |
 | Renda mensal unificada | `userFinanceUtils.obterRendaMensalPlanejada` — Orçamento + Planejamento de Compra |
-| Pós-login | `DEFAULT_AUTHENTICATED_ROUTE` = `/transactions` (Dashboard ainda placeholder) |
-| Migrations pendentes deploy | `viagens_meta_id_unique`, `viagem_grupo_grupo_id_unique`, `categoria_grupo_beneficio` |
+| Pós-login | `DEFAULT_AUTHENTICATED_ROUTE` = **`/dashboard`** |
+| Migrations | Incluem `viagens_meta_id_unique`, `viagem_grupo_grupo_id_unique`, `categoria_grupo_beneficio` — aplicar com `prisma migrate deploy` no ambiente |
 | Tokens Google em repouso | ✅ AES-256-GCM implementado (`api/src/utils/googleTokenCrypto.js`) |
 | Cron Vercel (Hobby) → GitHub Actions | Migração planejada; hoje jobs diários 1×/dia; orçamento local roda a cada 20 min |
-| Cobertura de testes (RNF-015) | API ~95% linhas / ~94% statements (Jest); Web ~97% linhas (Vitest) — services, utils, jobs, middlewares |
+| Cobertura de testes (RNF-015) | API: limiares Jest (~85%+ statements/lines em services/utils/jobs selecionados); Web: limiares Vitest (~65%+). Alguns services grandes excluídos do collectCoverage (`viagemService`, `grupoService`, …) |
 | Tags CRUD completo | Entregue (jun/2026); merge de duplicatas opcional pós-MVP |
 
 ### Tags — posicionamento (jun/2026)
