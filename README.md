@@ -1,19 +1,23 @@
-# [Nome do projeto]
+# 💜 Pulso
 
-[Escreva um ou dois  parágrafo resumindo o objetivo do seu projeto.]
+**Pulso** é um sistema de gestão financeira pessoal desenvolvido para estagiários, estudantes e jovens em início de carreira que estão aprendendo a lidar com dinheiro. O sistema diferencia recursos reais (salário) de benefícios com restrição de uso (VA, VR, VT), oferece insights inteligentes via IA (Google Gemini), planejamento de viagens com câmbio integrado, e funcionalidade de grupos para planejamento compartilhado. Tudo isso com uma interface moderna em modo claro e escuro, 100% gratuito.
+
+O nome "Pulso" remete à ideia de manter o pulso firme nas finanças, monitorar a saúde financeira como um batimento cardíaco e criar o hábito diário de controle — cada registro é uma batida, cada dia é um passo rumo à estabilidade.
 
 ## Alunos integrantes da equipe
 
-* [Nome completo do aluno 1]
-* [Nome completo do aluno 2]
-* [Nome completo do aluno 3]
-* [Nome completo do aluno 4]
+* Matheus Felipe
+* Alice Shikida
+* Maria Clara
+* Sofia Vasconcelos
+* Vinicius Simões
 
 ## Professores responsáveis
 
-* [Nome completo do professor 1]
-* [Nome completo do professor 2]
+* Leonardo Vilela
+* João Paulo Aramuni
+* Arthur Mol
 
 ## Instruções de utilização
 
-[Assim que a primeira versão do sistema estiver disponível, deverá complementar com as instruções de utilização. Descreva como instalar eventuais dependências e como executar a aplicação.]
+*Em breve — será complementado quando a primeira versão do sistema estiver disponível.*
