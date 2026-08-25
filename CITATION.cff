@@ -1,31 +1,38 @@
 cff-version: 1.0.1
 message: Please cite this software using these metadata.
-title: 
+title: Pulso — O pulso da sua vida financeira
 authors:
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names:
+  - family-names: Felipe
+    given-names: Matheus
+  - family-names: Shikida
+    given-names: Alice
+  - family-names: Clara
+    given-names: Maria
+  - family-names: Vasconcelos
+    given-names: Sofia
+  - family-names: Simões
+    given-names: Vinicius
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Vilela
+    given-names: Leonardo
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Aramuni
+    given-names: João Paulo
+  - name-suffix: Professor
+    affiliation: PUC Minas
+    family-names: Mol
+    given-names: Arthur
 keywords:
-  - 
-  - 
-repository-code: 
+  - gestão financeira pessoal
+  - controle de gastos
+  - estagiários
+  - inteligência artificial
+  - planejamento de viagens
+  - react
+  - nodejs
+repository-code: https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso
 license: CC-BY-4.0
 version: 1.0.0
-date-released: 2022-07-14
+date-released: 2026-08-25
