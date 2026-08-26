@@ -1,7 +1,7 @@
 # 🎯 Módulo 04 — Metas Financeiras — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-026–032, RF-142), `RegrasDeNegocio.md` (RN-061–068).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-029–032, RF-036), `RegrasDeNegocio.md` (RN-061–068).
 > Código auditado: `api/src/services/metaService.js`, `api/src/utils/metaBalanceUtils.js`, `api/prisma/schema.prisma` (models `Meta`, `AporteMeta`, `Viagem`), `web/src/services/metaService.js`.
 
 ---
@@ -22,14 +22,14 @@
 
 | RF | Descrição | Status README | Realidade no código |
 |---|---|---|---|
-| RF-026 | Criar meta (nome, valor-alvo, prazo, descrição opcional) | ✅ | Confirmado, `criarMeta` (`metaService.js:222-239`) |
-| RF-027 | Aportes manuais | ✅ | Confirmado, `registrarAporte` (`:300-354`) |
-| RF-028 | Progresso com barra visual e percentual | ✅ | Confirmado no cálculo (`calcProgressoMeta`); a barra em si é responsabilidade do frontend, não auditada aqui |
-| RF-029 | Sugestão de valor mensal/semanal | ✅ | Confirmado, `calcValorMensalSugerido` (RN-067 ✅, fórmula exata: `valorRestante / diffMesesAte(prazo)`) |
-| RF-030 | Curto/longo prazo | ✅ | Confirmado, `inferirTipoMeta` — corte em 6 meses (`diffMesesAte(prazo) <= 6`), não documentado explicitamente no RN mas é uma regra de negócio implícita razoável |
-| RF-031 | Pausar/editar/concluir | ✅ | Confirmado com boas transições de estado (`editarMeta:274-294`) — só permite pausar ativa, retomar pausada, concluir quando `valorRestante <= 0` |
-| RF-032 | Notificar meta atingida | ✅ | Confirmado (`registrarAporte:335-343`, cria notificação `META_ATINGIDA`) |
-| RF-142 | Meta de Reserva de Emergência sugerida por X meses de gasto médio | ✅ | Confirmado, `sugerirReservaEmergencia` (`:194-220`) — usa média de 3 meses de despesas × N meses configurável (padrão 6) |
+| RF-029 | Criar meta (nome, valor-alvo, prazo, descrição opcional) | ✅ | Confirmado, `criarMeta` (`metaService.js:222-239`) |
+| RF-030 | Aportes manuais | ✅ | Confirmado, `registrarAporte` (`:300-354`) |
+| RF-031 | Progresso com barra visual e percentual | ✅ | Confirmado no cálculo (`calcProgressoMeta`); a barra em si é responsabilidade do frontend, não auditada aqui |
+| RF-032 | Sugestão de valor mensal/semanal | ✅ | Confirmado, `calcValorMensalSugerido` (RN-067 ✅, fórmula exata: `valorRestante / diffMesesAte(prazo)`) |
+| RF-033 | Curto/longo prazo | ✅ | Confirmado, `inferirTipoMeta` — corte em 6 meses (`diffMesesAte(prazo) <= 6`), não documentado explicitamente no RN mas é uma regra de negócio implícita razoável |
+| RF-034 | Pausar/editar/concluir | ✅ | Confirmado com boas transições de estado (`editarMeta:274-294`) — só permite pausar ativa, retomar pausada, concluir quando `valorRestante <= 0` |
+| RF-035 | Notificar meta atingida | ✅ | Confirmado (`registrarAporte:335-343`, cria notificação `META_ATINGIDA`) |
+| RF-036 | Meta de Reserva de Emergência sugerida por X meses de gasto médio | ✅ | Confirmado, `sugerirReservaEmergencia` (`:194-220`) — usa média de 3 meses de despesas × N meses configurável (padrão 6) |
 
 Nenhum RF deste módulo é scaffold morto (T1) — todos batem com implementação real.
 

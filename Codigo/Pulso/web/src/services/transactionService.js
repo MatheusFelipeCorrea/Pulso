@@ -50,7 +50,7 @@ export async function obterOpcoesFiltro(options = {}) {
   return data
 }
 
-/** RF-141 — sugestão de categoria com base no histórico de descrições do usuário */
+/** RF-028 — sugestão de categoria com base no histórico de descrições do usuário */
 export async function sugerirCategoria({ tipo, descricao }, options = {}) {
   const params = new URLSearchParams({ tipo, descricao })
   const { data } = await api.get(`/transacoes/sugestao-categoria?${params.toString()}`, axiosConfig(options))

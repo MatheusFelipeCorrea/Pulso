@@ -318,7 +318,7 @@ describe('transactionService', () => {
         });
     });
 
-    it('resumo ignora transferências (RF-140)', async () => {
+    it('resumo ignora transferências (RF-027)', async () => {
         transactionRepository.calcularAgregados.mockResolvedValue([
             { tipo: 'RECEITA', _sum: { valor: 100 }, _count: { id: 1 } },
             { tipo: 'DESPESA', _sum: { valor: 40 }, _count: { id: 1 } },
@@ -334,7 +334,7 @@ describe('transactionService', () => {
         });
     });
 
-    it('cria transferência entre recursos sem categoria (RF-140)', async () => {
+    it('cria transferência entre recursos sem categoria (RF-027)', async () => {
         transactionRepository.criar.mockResolvedValue({ id: 'tx1' });
         transactionRepository.buscarPorId.mockResolvedValue({
             id: 'tx1',

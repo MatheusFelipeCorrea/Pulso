@@ -95,7 +95,7 @@ describe('transactionMapper', () => {
         expect(result.tags).toEqual([]);
     });
 
-    it('mapTransacao mapeia transferência sem categoria com recurso de destino (RF-140)', () => {
+    it('mapTransacao mapeia transferência sem categoria com recurso de destino (RF-027)', () => {
         const result = mapTransacao({
             id: 'trx-3',
             tipo: 'TRANSFERENCIA',

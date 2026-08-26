@@ -335,7 +335,7 @@ const excluirDivisao = async (usuarioId, divisaoId) => {
         );
     }
 
-    // Sem isso, o lembrete de cobrança (RF-120) sobrevive órfão no calendário/Google Agenda,
+    // Sem isso, o lembrete de cobrança (RF-111) sobrevive órfão no calendário/Google Agenda,
     // cobrando uma divisão que deixou de existir.
     const lembretes = await expenseSplitRepository.listarLembretesDaDivisao(divisaoId);
     for (const lembrete of lembretes) {
@@ -351,7 +351,7 @@ const formatarListaNomes = (nomes) => {
     return `${nomes.slice(0, -1).join(', ')} e ${nomes[nomes.length - 1]}`;
 };
 
-/** RF-120/RN-086 — um único lembrete de calendário cobrindo 1+ participantes pendentes. */
+/** RF-111/RN-086 — um único lembrete de calendário cobrindo 1+ participantes pendentes. */
 const criarLembreteCobranca = async (usuarioId, divisaoId, participanteIds, dadosLembrete = {}) => {
     const divisao = await buscarDivisaoOuFalhar(divisaoId, usuarioId);
 

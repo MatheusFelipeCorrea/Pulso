@@ -1,7 +1,7 @@
 # 📅 Módulo 16 — Calendário Financeiro — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [10-Perfil-e-Configuracoes.md](./10-Perfil-e-Configuracoes.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-121–125), `RegrasDeNegocio.md` (RN-100).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-112–125), `RegrasDeNegocio.md` (RN-100).
 > Código auditado: `api/src/services/calendarService.js`, `api/src/utils/fixedIncomeUtils.js`.
 
 ---
@@ -22,11 +22,11 @@
 
 | RF | Descrição | Status |
 |---|---|---|
-| RF-121 | Calendário mensal com marcadores | ✅ |
-| RF-122 | Diferenciar receitas/despesas/ambos | ✅ (dados no backend) |
-| RF-123 | Dias de recebimento fixo | ✅ (condicionado por `modoUso`) |
-| RF-124 | Vencimentos/lembretes | ✅ |
-| RF-125 | Detalhe ao clicar no dia | ✅ |
+| RF-112 | Calendário mensal com marcadores | ✅ |
+| RF-113 | Diferenciar receitas/despesas/ambos | ✅ (dados no backend) |
+| RF-114 | Dias de recebimento fixo | ✅ (condicionado por `modoUso`) |
+| RF-115 | Vencimentos/lembretes | ✅ |
+| RF-116 | Detalhe ao clicar no dia | ✅ |
 
 ---
 

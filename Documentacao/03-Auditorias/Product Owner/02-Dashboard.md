@@ -1,7 +1,7 @@
 # 📊 Módulo 02 — Dashboard Principal — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-007–014, RF-139), `Analise-Produto.md` (gap #1), `Roadmap/Roadmap.md` (Fase 4.4).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-007–014, RF-015), `Analise-Produto.md` (gap #1), `Roadmap/Roadmap.md` (Fase 4.4).
 > Código auditado: `web/src/App.jsx`, `web/src/config/appRoutes.js`, `web/src/pages/InDevelopmentPage.jsx`, `web/src/pages/Dashboard.jsx`, `web/src/config/sidebarNavigation.js`, `web/src/components/routing/{ProtectedRoute,AuthBootstrap}.jsx`, `web/src/pages/AuthCallback.jsx`, `api/src/routes/transactionRoutes.js`, `api/src/services/transactionService.js`.
 
 ---
@@ -27,10 +27,10 @@
 | RF-009 | Gráfico receitas vs. despesas | ❌ Não feito | Confirmado ausente. Dado bruto (receitas/despesas totais) já existe via `/transactions/resumo`, falta granularidade temporal (série por dia/semana) e o componente de gráfico |
 | RF-010 | Gráfico gastos por categoria | ❌ Não feito | Confirmado ausente. Não há endpoint de agregação por categoria pronto |
 | RF-011 | Resumo das últimas transações | ❌ Não feito | Confirmado ausente como widget, mas `GET /transactions` já pagina e ordena — trivial de reaproveitar com `limite=5` |
-| RF-012 | Alertas visuais de limite ultrapassado | ❌ Não feito | Confirmado ausente no dashboard; a lógica de alerta em si (80%/100% do limite) já existe no módulo de Orçamento (RF-111/112, ✅) — reaproveitável, não precisa ser reinventada |
+| RF-012 | Alertas visuais de limite ultrapassado | ❌ Não feito | Confirmado ausente no dashboard; a lógica de alerta em si (80%/100% do limite) já existe no módulo de Orçamento (RF-101/112, ✅) — reaproveitável, não precisa ser reinventada |
 | RF-013 | Progresso resumido das metas ativas | ❌ Não feito | Confirmado ausente; `GET /metas` já retorna progresso — reaproveitável |
 | RF-014 | Score de saúde financeira | ❌ Não feito | Confirmado ausente. Não localizei nenhum cálculo de score em nenhum service ainda auditado — this parece depender do Módulo 06 (Insights), que também está em 0% |
-| RF-139 | Quick-add (FAB) abrindo chatbot p/ registro em linguagem natural | ❌ Não feito | Confirmado ausente; depende do Chatbot (Módulo 06), também 0% |
+| RF-015 | Quick-add (FAB) abrindo chatbot p/ registro em linguagem natural | ❌ Não feito | Confirmado ausente; depende do Chatbot (Módulo 06), também 0% |
 
 **Achado:** o Dashboard continua em `InDevelopmentPage`, mas **não é mais destino forçado** de autenticação — ver RF-NOVO-B1 abaixo.
 
@@ -76,7 +76,7 @@ Não há regras de negócio específicas de Dashboard documentadas em `RegrasDeN
 | 2 | Dashboard mínimo (RF-NOVO-B2) | 🟡 Pendente |
 | 3 | Badge sidebar incompletos (RNF-NOVO-B1) | 🟡 Pendente |
 | 4 | 🟡 Endpoint de saldo por recurso (RF-NOVO-B3) | Necessário para RF-008; hoje a lógica de saldo por recurso está fragmentada entre módulos | Médio |
-| 5 | 🟢 Score de saúde financeira (RF-014) e projeções (RF-107/108) | Depende do Módulo 06 (Insights), ainda não auditado — não priorizar isoladamente antes de mapear aquele módulo | A definir após Módulo 06 |
+| 5 | 🟢 Score de saúde financeira (RF-014) e projeções (RF-053/108) | Depende do Módulo 06 (Insights), ainda não auditado — não priorizar isoladamente antes de mapear aquele módulo | A definir após Módulo 06 |
 
 ---
 

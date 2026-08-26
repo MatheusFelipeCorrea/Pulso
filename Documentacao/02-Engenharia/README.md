@@ -31,7 +31,7 @@ Código: [`Codigo/Pulso/web/`](../../Codigo/Pulso/web/) · DS: [`web/src/design-
 
 | Documento | Descrição |
 |-----------|-----------|
-| [Modulos/Grupos.md](./Modulos/Grupos.md) | API, UI, RF-095, chat, gaps |
+| [Modulos/Grupos.md](./Modulos/Grupos.md) | API, UI, RF-091, chat, gaps |
 | [Modulos/Cron.md](./Modulos/Cron.md) | Jobs agendados |
 
 **Produto:** [../01-Produto/README.md](../01-Produto/README.md) · **Agents/skills:** [../../.github/INDEX.md](../../.github/INDEX.md)

@@ -71,7 +71,7 @@ Ao vincular viagem **sem** foto customizada, a capa do destino passa a aparecer 
 
 ---
 
-## RF-095 — Divisão na viagem do grupo
+## RF-091 — Divisão na viagem do grupo
 
 Toggle no rodapé do card **Viagem do grupo**, persistido no servidor (`grupos.modo_divisao`, `PATCH /grupos/:id/modo-divisao` — qualquer membro pode alterar):
 
@@ -85,31 +85,31 @@ Toggle no rodapé do card **Viagem do grupo**, persistido no servidor (`grupos.m
 - Não gera “quem paga quem” (acerto de contas).
 - Não há % customizada por membro.
 
-**Roadmap:** o módulo **Divisão de Despesas** (`/expense-split`, API `/api/divisoes`, RF-115–120) já está implementado como módulo standalone, com split bill completo (rateio igual/personalizado, "quem paga quem", lembrete de cobrança). Falta apenas **vincular** ou substituir este toggle no detalhe do grupo por ele. Até lá, o toggle cobre o planejamento rápido da viagem compartilhada.
+**Roadmap:** o módulo **Divisão de Despesas** (`/expense-split`, API `/api/divisoes`, RF-106–120) já está implementado como módulo standalone, com split bill completo (rateio igual/personalizado, "quem paga quem", lembrete de cobrança). Falta apenas **vincular** ou substituir este toggle no detalhe do grupo por ele. Até lá, o toggle cobre o planejamento rápido da viagem compartilhada.
 
 Implementação: `api/src/services/grupoService.js` → `atualizarModoDivisao`; `web/src/utils/groupDetailUtils.js` → `calcularSaldosViagem`.
 
 ---
 
-## Requisitos (RF-088–RF-102)
+## Requisitos (RF-084–098)
 
 | RF | Status | Observação |
 |----|--------|------------|
-| RF-088 | ✅ | Criar grupo |
-| RF-089 | ✅ | Código + link + renovar código |
-| RF-090 | ✅ | Entrar por código |
-| RF-091 | ✅ | Papéis ADMIN/MEMBRO + promoção/rebaixamento |
-| RF-092 | ✅ | Vincular viagem (+ viagem pessoal → grupo em `/trips`) |
-| RF-093 | ✅ | Pretensões por membro |
-| RF-094 | ✅ | Total do grupo |
-| RF-095 | ✅ | Pretensão + divisão igual, persistido no servidor. Split custom (quem paga quem) já existe em `/expense-split` (standalone) — integração com este toggle pendente |
-| RF-096 | ✅ | Metas compartilhadas (até 5) |
-| RF-097 | ✅ | Aportes + seletor de meta |
-| RF-098 | ✅ | Dados pessoais isolados |
-| RF-099 | ✅ | Sair (lista + detalhe) |
-| RF-100 | ✅ | Admin remover / gerenciar membros |
-| RF-101 | ✅ | Painel 4 cards + ícones |
-| RF-102 | ✅ | Chat Socket.IO em tempo real + histórico REST. API long-running (TI5) |
+| RF-084 | ✅ | Criar grupo |
+| RF-085 | ✅ | Código + link + renovar código |
+| RF-086 | ✅ | Entrar por código |
+| RF-087 | ✅ | Papéis ADMIN/MEMBRO + promoção/rebaixamento |
+| RF-088 | ✅ | Vincular viagem (+ viagem pessoal → grupo em `/trips`) |
+| RF-089 | ✅ | Pretensões por membro |
+| RF-090 | ✅ | Total do grupo |
+| RF-091 | ✅ | Pretensão + divisão igual, persistido no servidor. Split custom (quem paga quem) já existe em `/expense-split` (standalone) — integração com este toggle pendente |
+| RF-092 | ✅ | Metas compartilhadas (até 5) |
+| RF-093 | ✅ | Aportes + seletor de meta |
+| RF-094 | ✅ | Dados pessoais isolados |
+| RF-095 | ✅ | Sair (lista + detalhe) |
+| RF-096 | ✅ | Admin remover / gerenciar membros |
+| RF-097 | ✅ | Painel 4 cards + ícones |
+| RF-098 | ✅ | Chat Socket.IO em tempo real + histórico REST. API long-running (TI5) |
 
 ---
 
@@ -127,7 +127,7 @@ Implementação: `api/src/services/grupoService.js` → `atualizarModoDivisao`; 
 
 | Gap | Detalhe |
 |-----|---------|
-| **RF-095 completo (split custom)** | "Quem paga quem" já existe em `/expense-split` (standalone) — falta vincular/delegar a partir do detalhe do grupo |
+| **RF-091 completo (split custom)** | "Quem paga quem" já existe em `/expense-split` (standalone) — falta vincular/delegar a partir do detalhe do grupo |
 | **Testes E2E grupos** | Playwright em `web/e2e/groups.spec.js` (login demo + modal criar) |
 
 ### Baixa / depois

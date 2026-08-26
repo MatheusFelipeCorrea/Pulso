@@ -64,7 +64,7 @@ describe('reminderService', () => {
         expect(result.titulo).toBe('Conta');
     });
 
-    it('preserva lembrete quando sync falha (RF-058b)', async () => {
+    it('preserva lembrete quando sync falha (RF-067)', async () => {
         reminderRepository.criar.mockResolvedValue({
             id: 'l2',
             titulo: 'Conta',
@@ -207,7 +207,7 @@ describe('reminderService', () => {
         expect(result.pago).toBe(true);
     });
 
-    it('preserva lembrete quando Google não está conectado (RF-058b)', async () => {
+    it('preserva lembrete quando Google não está conectado (RF-067)', async () => {
         reminderRepository.criar.mockResolvedValue({
             id: 'l7',
             titulo: 'Conta',

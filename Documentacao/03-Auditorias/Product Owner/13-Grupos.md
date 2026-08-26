@@ -1,7 +1,7 @@
 ﻿# 👥 Módulo 13 — Grupos — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-088–102), `RegrasDeNegocio.md` (RN-111–120).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-084–102), `RegrasDeNegocio.md` (RN-111–120).
 > Código auditado: `api/src/services/grupoService.js`, `api/src/utils/grupoMapper.js`, `api/src/routes/grupoRoutes.js`.
 
 ---
@@ -14,13 +14,13 @@
 4. [💡 Novos Requisitos Propostos](#4-novos-requisitos-propostos)
 5. [Plano de Ação Priorizado](#5-plano-de-ação-priorizado)
 
-**Resumo executivo:** módulo complexo e confiável (RF-088–102 ✅). Isolamento RN-098/116 e admin único RN-113 corretos. **Correções aplicadas (ago/2026):** rate limit por usuário em preview/entrar por código; `@unique` em `ViagemGrupo.grupoId`; criação de metas em transação Serializable com recontagem atômica.
+**Resumo executivo:** módulo complexo e confiável (RF-084–102 ✅). Isolamento RN-098/116 e admin único RN-113 corretos. **Correções aplicadas (ago/2026):** rate limit por usuário em preview/entrar por código; `@unique` em `ViagemGrupo.grupoId`; criação de metas em transação Serializable com recontagem atômica.
 
 ---
 
 ## 1. Auditoria de Status (README vs. Realidade)
 
-Todos os RF-088 a RF-102 confirmados em `Modulos/Grupos.md` e `grupoService.js` — nenhum scaffold morto.
+Todos os RF-084 a RF-098 confirmados em `Modulos/Grupos.md` e `grupoService.js` — nenhum scaffold morto.
 
 ---
 

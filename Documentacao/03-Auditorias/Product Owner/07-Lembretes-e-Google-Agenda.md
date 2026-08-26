@@ -1,7 +1,7 @@
 # 📅 Módulo 07 — Lembretes e Google Agenda — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-054–058, RF-058b), `RegrasDeNegocio.md` (RN-094–100, RN-169).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-062–058, RF-067), `RegrasDeNegocio.md` (RN-094–100, RN-169).
 > Código auditado: `api/src/services/{reminderService,reminderAlertService,googleCalendarSyncService}.js`, `api/src/jobs/{reminderRecurrenceJob,reminderAlertJob}.js`, `api/src/utils/googleTokenCrypto.js`.
 
 ---
@@ -14,7 +14,7 @@
 4. [💡 Novos Requisitos Propostos](#4-novos-requisitos-propostos)
 5. [Plano de Ação Priorizado](#5-plano-de-ação-priorizado)
 
-**Resumo executivo:** módulo tecnicamente sofisticado — integração real com Google Calendar (calendário dedicado "Pulso", import bidirecional, refresh de token criptografado, jobs de cron com teto de iterações). README marca **✅ 5/5 + RF-058b**, confirmado. **Correção aplicada (ago/2026):** `criarLembrete` preserva o lembrete com `sincronizado: false` quando a sync falha (RN-097 / RF-NOVO-G1), alinhado a `atualizarLembrete`.
+**Resumo executivo:** módulo tecnicamente sofisticado — integração real com Google Calendar (calendário dedicado "Pulso", import bidirecional, refresh de token criptografado, jobs de cron com teto de iterações). README marca **✅ 5/5 + RF-067**, confirmado. **Correção aplicada (ago/2026):** `criarLembrete` preserva o lembrete com `sincronizado: false` quando a sync falha (RN-097 / RF-NOVO-G1), alinhado a `atualizarLembrete`.
 
 ---
 
@@ -22,12 +22,12 @@
 
 | RF | Descrição | Status README | Realidade no código |
 |---|---|---|---|
-| RF-054 | Conectar conta Google para Google Calendar | ✅ | Confirmado (fluxo de OAuth do Calendar, distinto do OAuth de login — `GOOGLE_CALENDAR_CALLBACK_URL` próprio) |
-| RF-055 | Criar lembretes com data e valor | ✅ | Confirmado, `criarLembrete` |
-| RF-056 | Sincronizar lembretes como eventos no Google Calendar | ✅ | Confirmado — cria calendário "Pulso" dedicado (`garantirCalendarioPulso`) |
-| RF-057 | Ativar/desativar integração a qualquer momento | ✅ | Confirmado — `aplicarSyncGoogle` remove o evento do Google quando `wantsSync=false` |
-| RF-058 | Configurar antecedência do lembrete | ✅ | Confirmado, `ANTECEDENCIA_DIAS`/`ANTECEDENCIA_MINUTOS` |
-| RF-058b | Importar alterações Google → Pulso | ✅ | Confirmado, `importarAlteracoesDoGoogle` — formalizado no README |
+| RF-062 | Conectar conta Google para Google Calendar | ✅ | Confirmado (fluxo de OAuth do Calendar, distinto do OAuth de login — `GOOGLE_CALENDAR_CALLBACK_URL` próprio) |
+| RF-063 | Criar lembretes com data e valor | ✅ | Confirmado, `criarLembrete` |
+| RF-064 | Sincronizar lembretes como eventos no Google Calendar | ✅ | Confirmado — cria calendário "Pulso" dedicado (`garantirCalendarioPulso`) |
+| RF-065 | Ativar/desativar integração a qualquer momento | ✅ | Confirmado — `aplicarSyncGoogle` remove o evento do Google quando `wantsSync=false` |
+| RF-066 | Configurar antecedência do lembrete | ✅ | Confirmado, `ANTECEDENCIA_DIAS`/`ANTECEDENCIA_MINUTOS` |
+| RF-067 | Importar alterações Google → Pulso | ✅ | Confirmado, `importarAlteracoesDoGoogle` — formalizado no README |
 
 ---
 
@@ -76,7 +76,7 @@ Comportamento alinhado a RN-097 e consistente com `atualizarLembrete`.
 ### Funcionais
 
 - ~~**RF-NOVO-G1 (correção)**~~ — ✅ `criarLembrete` preserva lembrete em falha de sync.
-- ~~**RF-NOVO-G2**~~ — ✅ Formalizado como **RF-058b** no README.
+- ~~**RF-NOVO-G2**~~ — ✅ Formalizado como **RF-067** no README.
 
 ### Não funcionais
 
@@ -89,7 +89,7 @@ Comportamento alinhado a RN-097 e consistente com `atualizarLembrete`.
 | # | Ação | Status | Esforço |
 |---|---|---|---|
 | 1 | Corrigir `criarLembrete` (RF-NOVO-G1) | ✅ Feito | — |
-| 2 | Formalizar importação Google→Pulso (RF-NOVO-G2 / RF-058b) | ✅ Feito | — |
+| 2 | Formalizar importação Google→Pulso (RF-NOVO-G2 / RF-067) | ✅ Feito | — |
 | 3 | Paginação do job de alertas (RNF-NOVO-G1) | 🟢 Pendente | Baixo, preventivo |
 
 ---
@@ -97,7 +97,7 @@ Comportamento alinhado a RN-097 e consistente com `atualizarLembrete`.
 ## ❓ Perguntas clarificadoras
 
 1. ~~Apagar lembrete na falha de sync~~ — **Resolvido:** era descuido; corrigido para preservar registro.
-2. ~~Documentar importação Google→Pulso~~ — **Resolvido:** RF-058b no README.
+2. ~~Documentar importação Google→Pulso~~ — **Resolvido:** RF-067 no README.
 
 ---
 

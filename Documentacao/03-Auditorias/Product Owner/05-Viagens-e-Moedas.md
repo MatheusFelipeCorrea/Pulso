@@ -1,7 +1,7 @@
 # 🌍 Módulo 05 — Viagens e Simulador de Moedas — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md) (achado T5 é diretamente relevante a este módulo)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-033–043), `RegrasDeNegocio.md` (RN-069–074).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-037–043), `RegrasDeNegocio.md` (RN-069–074).
 > Código auditado: `api/src/services/{viagemService,moedaService}.js`, `api/src/providers/awesomeApiProvider.js`, `api/prisma/schema.prisma` (models `Viagem`, `DespesaViagem`, `ObservacaoViagem`).
 
 ---
@@ -14,7 +14,7 @@
 4. [💡 Novos Requisitos Propostos](#4-novos-requisitos-propostos)
 5. [Plano de Ação Priorizado](#5-plano-de-ação-priorizado)
 
-**Resumo executivo:** módulo robusto e o mais funcionalmente rico auditado até agora (resolução de destino via GeoNames + catálogo + aeroportos, conversor de moedas com cruzamento de pares, histórico, favoritas). README marca **✅ 11/11**, confirmado. **Correções aplicadas (ago/2026):** RN-074 atualizada para 10 categorias; nota de cache RF-033 alinhada (5 min/memória); constraint `@unique` em `Viagem.metaId` + migration + mapeamento P2002 → 409. Pendente: performance na criação (capa assíncrona) e cache compartilhado (T5).
+**Resumo executivo:** módulo robusto e o mais funcionalmente rico auditado até agora (resolução de destino via GeoNames + catálogo + aeroportos, conversor de moedas com cruzamento de pares, histórico, favoritas). README marca **✅ 11/11**, confirmado. **Correções aplicadas (ago/2026):** RN-074 atualizada para 10 categorias; nota de cache RF-037 alinhada (5 min/memória); constraint `@unique` em `Viagem.metaId` + migration + mapeamento P2002 → 409. Pendente: performance na criação (capa assíncrona) e cache compartilhado (T5).
 
 ---
 
@@ -22,17 +22,17 @@
 
 | RF | Descrição | Status README | Realidade no código |
 |---|---|---|---|
-| RF-033 | Cotações atualizadas (USD, EUR, GBP, ARS etc.) | ✅ | Confirmado, `moedaService.listarCotacoes` via `awesomeApiProvider` |
-| RF-034 | Converter BRL ↔ qualquer moeda | ✅ | Confirmado, `moedaService.converter` (`:58-102`) — trata inclusive conversão via par cruzado quando não há par direto com BRL |
-| RF-035 | Gráfico de histórico de cotação | ✅ | Confirmado, `obterHistorico` (`:104-153`), inclusive mescla o ponto de hoje com a cotação ao vivo |
-| RF-036 | Moedas favoritas | ✅ | Confirmado, `listarFavoritas`/`adicionarFavorita` (limite de 8, tratamento correto de `P2002` — ver ponto positivo na seção 3) |
-| RF-037 | Criar planejamento de viagem (destino, moeda, data) | ✅ | Confirmado, `criarViagem` |
-| RF-038 | Pretensões por categoria | ✅ | Confirmado — 10 categorias (RN-074 corrigida) |
-| RF-039 | Custo total somando pretensões | ✅ | Não visto diretamente neste service (provavelmente em `mapViagem`/`viagemRepository`) — presumir correto, não auditado a fundo aqui |
-| RF-040 | Converter custo total para BRL | ✅ | Idem — depende de `mapViagem`, não aprofundado |
-| RF-041 | Editar/remover pretensões individuais | ✅ | Confirmado, `editarDespesa`/`excluirDespesa` |
-| RF-042 | Múltiplas viagens simultâneas | ✅ | Confirmado — sem limite de quantidade |
-| RF-043 | Vincular viagem a uma meta | ✅ | Confirmado — 1:1 com `@unique` em `metaId` (RN-072) |
+| RF-037 | Cotações atualizadas (USD, EUR, GBP, ARS etc.) | ✅ | Confirmado, `moedaService.listarCotacoes` via `awesomeApiProvider` |
+| RF-038 | Converter BRL ↔ qualquer moeda | ✅ | Confirmado, `moedaService.converter` (`:58-102`) — trata inclusive conversão via par cruzado quando não há par direto com BRL |
+| RF-039 | Gráfico de histórico de cotação | ✅ | Confirmado, `obterHistorico` (`:104-153`), inclusive mescla o ponto de hoje com a cotação ao vivo |
+| RF-040 | Moedas favoritas | ✅ | Confirmado, `listarFavoritas`/`adicionarFavorita` (limite de 8, tratamento correto de `P2002` — ver ponto positivo na seção 3) |
+| RF-041 | Criar planejamento de viagem (destino, moeda, data) | ✅ | Confirmado, `criarViagem` |
+| RF-042 | Pretensões por categoria | ✅ | Confirmado — 10 categorias (RN-074 corrigida) |
+| RF-043 | Custo total somando pretensões | ✅ | Não visto diretamente neste service (provavelmente em `mapViagem`/`viagemRepository`) — presumir correto, não auditado a fundo aqui |
+| RF-044 | Converter custo total para BRL | ✅ | Idem — depende de `mapViagem`, não aprofundado |
+| RF-045 | Editar/remover pretensões individuais | ✅ | Confirmado, `editarDespesa`/`excluirDespesa` |
+| RF-046 | Múltiplas viagens simultâneas | ✅ | Confirmado — sem limite de quantidade |
+| RF-047 | Vincular viagem a uma meta | ✅ | Confirmado — 1:1 com `@unique` em `metaId` (RN-072) |
 
 **Fora da lista de RF, mas mencionado no README como entregue:** busca global de destinos (GeoNames), estimativas de passagem, Duffel/Amadeus opcional, observações — todos confirmados presentes no código (`resolverDestinoPayload`, `tripFlightPriceService`, `criarObservacao`).
 
@@ -56,7 +56,7 @@
 
 Migration `20260804130000_viagem_meta_id_unique` adiciona `@@unique([metaId])` no schema Prisma. `validarMetaVinculo` continua como checagem antecipada; violações de corrida retornam 409 via `mapPrismaUniqueViolation` (`meta_id`).
 
-### ✅ Corrigido — Cache de cotação documentado (RF-033)
+### ✅ Corrigido — Cache de cotação documentado (RF-037)
 
 Nota do `Requisitos/Readme.md` alinhada: cache de **5 minutos por instância** (memória), não "cache diário". Em serverless o TTL efetivo pode ser menor (achado T5).
 
@@ -86,7 +86,7 @@ Nota do `Requisitos/Readme.md` alinhada: cache de **5 minutos por instância** (
 - **RNF-NOVO-E1 (Performance)** — Desacoplar a busca de imagem de capa (`attachCoverImage`) do fluxo síncrono de criação/edição de viagem: gravar a viagem imediatamente e enriquecer a capa em background (job ou próxima leitura), evitando que uma API de imagem lenta atrase o `POST/PATCH /viagens`.
 - ~~**RNF-NOVO-E2 (Integridade de dados)**~~ — ✅ `@unique` em `Viagem.metaId` (migration `20260804130000`).
 - ~~**RNF-NOVO-E3 (Documentação)**~~ — ✅ RN-074 atualizada (10 categorias).
-- ~~**RNF-NOVO-E4 (Correção de doc)**~~ — ✅ Nota RF-033 corrigida (5 min/memória).
+- ~~**RNF-NOVO-E4 (Correção de doc)**~~ — ✅ Nota RF-037 corrigida (5 min/memória).
 
 ---
 
@@ -95,7 +95,7 @@ Nota do `Requisitos/Readme.md` alinhada: cache de **5 minutos por instância** (
 | # | Ação | Status | Esforço |
 |---|---|---|---|
 | 1 | Constraint única `Viagem.metaId` (RNF-NOVO-E2) | ✅ Feito | — |
-| 2 | Corrigir documentação RN-074 e cache RF-033 (RNF-NOVO-E3/E4) | ✅ Feito | — |
+| 2 | Corrigir documentação RN-074 e cache RF-037 (RNF-NOVO-E3/E4) | ✅ Feito | — |
 | 3 | Mover busca de imagem de capa para background (RNF-NOVO-E1) | 🟢 Pendente | Médio |
 | 4 | Cache compartilhado de cotações (achado T5) | 🟢 Pendente | A tratar globalmente |
 

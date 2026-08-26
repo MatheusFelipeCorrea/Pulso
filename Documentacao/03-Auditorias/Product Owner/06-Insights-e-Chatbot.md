@@ -1,7 +1,7 @@
 # 🤖 Módulo 06 — Inteligência (Insights e Chatbot) — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-044–053, RF-107/108, RF-143/144), `RegrasDeNegocio.md` (RN-121–130), `Analise-Produto.md` (gap #3).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-048–053, RF-053/108, RF-055/144), `RegrasDeNegocio.md` (RN-121–130), `Analise-Produto.md` (gap #3).
 > Código auditado: `api/src/services/insightService.js`, `api/src/routes/index.js`, `api/src/providers/geminiProvider.js` (vazio), `api/prisma/schema.prisma` (models `MensagemChat`, `HistoricoScore`, `DesafioMensal`), `web/src/services/chatbotService.js` (vazio), `web/src/components/features/chatbot/**` (vazios), `web/src/pages/Insights.jsx`/`Chatbot` (rota inexistente, cai em `InDevelopmentPage`).
 
 ---
@@ -24,13 +24,13 @@
 
 | RF | Descrição | Status README | Realidade no código |
 |---|---|---|---|
-| RF-044 | Resumo mensal em linguagem natural | ❌ | Confirmado ausente — a única saída de texto existente é a frase fixa de maior gasto, não um resumo gerado |
-| RF-045 | Categorias com gasto maior que mês anterior | ❌ | Confirmado ausente — `insightService.js` não compara com mês anterior, só pega o maior gasto do mês atual |
-| RF-046 | Sugestões personalizadas de economia | ❌ | Confirmado ausente |
-| RF-047 | Alertas preditivos ("VA acaba dia 22") | ❌ | Confirmado ausente |
-| RF-048 | Score de saúde financeira (0-100) | ❌ | Confirmado ausente — **e mais**: existe uma tabela `HistoricoScore` inteira no schema (`schema.prisma`, relação `Usuario.historicoScore`) sem nenhum código em toda a API que leia ou escreva nela. É um "órgão fantasma" no banco — schema pronto, zero lógica |
-| RF-107/108 | Projeções (3 cenários), "ficará negativo em X dias" | ❌ | Confirmado ausente |
-| RF-143/144 | "Você vs você mesmo", revisão semanal guiada | ❌ | Confirmado ausente |
+| RF-048 | Resumo mensal em linguagem natural | ❌ | Confirmado ausente — a única saída de texto existente é a frase fixa de maior gasto, não um resumo gerado |
+| RF-049 | Categorias com gasto maior que mês anterior | ❌ | Confirmado ausente — `insightService.js` não compara com mês anterior, só pega o maior gasto do mês atual |
+| RF-050 | Sugestões personalizadas de economia | ❌ | Confirmado ausente |
+| RF-051 | Alertas preditivos ("VA acaba dia 22") | ❌ | Confirmado ausente |
+| RF-052 | Score de saúde financeira (0-100) | ❌ | Confirmado ausente — **e mais**: existe uma tabela `HistoricoScore` inteira no schema (`schema.prisma`, relação `Usuario.historicoScore`) sem nenhum código em toda a API que leia ou escreva nela. É um "órgão fantasma" no banco — schema pronto, zero lógica |
+| RF-053/108 | Projeções (3 cenários), "ficará negativo em X dias" | ❌ | Confirmado ausente |
+| RF-055/144 | "Você vs você mesmo", revisão semanal guiada | ❌ | Confirmado ausente |
 
 **O que de fato existe (não documentado com esse nível de detalhe em nenhum RF):** `gerarInsightParaUsuario` (`insightService.js:24-66`) roda automaticamente dentro de `transactionService.criarTransacao` (via `tentarGerarInsightAposTransacao`, chamado com `try/catch` silencioso — se falhar, não quebra o registro da transação). Ele: (1) verifica se já gerou um insight `INSIGHT_IA` neste mês (olhando as últimas 5 notificações desse tipo); (2) se não, agrupa despesas do mês por categoria, pega a de maior valor, e cria uma notificação com o texto fixo. **Não existe nenhuma rota HTTP para insights** (nem no `routes/index.js`, nem em nenhum outro arquivo) — o único jeito de um insight aparecer é através do sino de notificações, nunca de uma tela dedicada.
 
@@ -38,7 +38,7 @@
 
 | RF | Descrição | Status README | Realidade no código |
 |---|---|---|---|
-| RF-049–053 (todos) | Chatbot financeiro, linguagem natural, contexto de dados reais, escopo restrito, histórico de sessão | ❌ | **Ausência total confirmada**: nenhuma rota `/chatbot` existe; `geminiProvider.js` (backend) e `chatbotService.js` (frontend) estão vazios; os 3 componentes de UI de chat (`ChatWindow`, `ChatInput`, `ChatMessage`) estão vazios. Não há nem um esqueleto não funcional — é zero linhas em toda a cadeia |
+| RF-057–053 (todos) | Chatbot financeiro, linguagem natural, contexto de dados reais, escopo restrito, histórico de sessão | ❌ | **Ausência total confirmada**: nenhuma rota `/chatbot` existe; `geminiProvider.js` (backend) e `chatbotService.js` (frontend) estão vazios; os 3 componentes de UI de chat (`ChatWindow`, `ChatInput`, `ChatMessage`) estão vazios. Não há nem um esqueleto não funcional — é zero linhas em toda a cadeia |
 
 ---
 

@@ -80,12 +80,12 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 | RN-036 | O sistema deve calcular "VR por refeição": saldo ÷ dias úteis restantes |
 | RN-037 | Pode diferenciar dias úteis vs fins de semana (VR geralmente usado em dias de trabalho) |
 
-### Recurso VT (benefício)
+### Recurso VT (legado)
 
 | Regra | Descrição |
 |---|---|
-| RN-038 | VT só pode ser gasto em despesas da categoria "Transporte" |
-| RN-039 | Despesas de alimentação NUNCA podem usar recurso VT |
+| RN-038 | Recurso VT **não** pode ser usado em novas transações (módulo de gestão de VT fora do escopo TI5); a API rejeita o recurso |
+| RN-039 | Extratos/importações podem ainda reconhecer categorias de transporte; isso não reabre o módulo de VT |
 
 ---
 
@@ -95,8 +95,8 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 |---|---|
 | RN-046 | Toda transação deve ter: valor, data, categoria, recurso e tipo (receita/despesa) |
 | RN-047 | Valor deve ser positivo e maior que zero |
-| RN-048 | Recurso é obrigatório (Dinheiro, VA, VR ou VT) |
-| RN-049 | Validação cruzada: categoria + recurso devem ser compatíveis (ex: não pode usar VT pra alimentação) |
+| RN-048 | Recurso é obrigatório (Dinheiro, VA, VR ou Poupança); VT é rejeitado |
+| RN-049 | Validação cruzada: categoria + recurso devem ser compatíveis (VA/VR × grupoBeneficio) |
 | RN-050 | Transações recorrentes geram automaticamente via cron no dia programado |
 | RN-051 | O usuário pode cancelar a recorrência a qualquer momento |
 | RN-052 | Ao excluir uma transação recorrente, perguntar: "Excluir só esta ou todas as futuras?" |

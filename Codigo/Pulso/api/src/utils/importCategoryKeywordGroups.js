@@ -1,6 +1,6 @@
 const { GRUPO_BENEFICIO } = require('../constants/categoryBeneficioGroups');
 
-/** Palavras-chave normalizadas (sem acento, minúsculas) — RF-159 importação. */
+/** Palavras-chave normalizadas (sem acento, minúsculas) — RF-138 importação. */
 const KEYWORD_GROUPS = [
     // ── Alimentação (alta prioridade — refeições, lanches, bebidas no local) ──
     {

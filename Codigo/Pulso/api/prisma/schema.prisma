@@ -154,7 +154,7 @@ enum NivelFinanceiro {
   INVESTIDOR
 }
 
-/// Modo de uso do app (RF-103) — badges perfil.* no frontend
+/// Modo de uso do app (RF-073) — badges perfil.* no frontend
 enum ModoUso {
   ESTAGIARIO
   CLT
@@ -337,7 +337,7 @@ model Categoria {
 model Transacao {
   id               String        @id @default(cuid())
   usuarioId        String        @map("usuario_id")
-  categoriaId      String?       @map("categoria_id") // nula em transferências (RF-140)
+  categoriaId      String?       @map("categoria_id") // nula em transferências (RF-027)
   tipo             TipoTransacao
   recurso          TipoRecurso
   recursoDestino   TipoRecurso?  @map("recurso_destino") // usado apenas em TRANSFERENCIA

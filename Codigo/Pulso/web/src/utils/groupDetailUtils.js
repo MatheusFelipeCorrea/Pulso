@@ -71,7 +71,7 @@ export function mergeTripMemberColumns(grupoMembros, viagemMembros) {
   })
 }
 
-/** RF-095 — saldo por pretensão ou divisão igual do total */
+/** RF-091 — saldo por pretensão ou divisão igual do total */
 export function calcularSaldosViagem(colunas, totalGrupo, modoDivisao = 'PRETENSAO') {
   const total = Number(totalGrupo ?? 0)
   const count = colunas.length || 1

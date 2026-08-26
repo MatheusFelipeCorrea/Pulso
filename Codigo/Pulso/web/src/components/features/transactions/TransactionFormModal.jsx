@@ -158,7 +158,7 @@ export function TransactionFormModal({
     setCategoriaAutoSugerida(false)
   }
 
-  // RF-141 — sugere a categoria com base no histórico de descrições do usuário
+  // RF-028 — sugere a categoria com base no histórico de descrições do usuário
   useEffect(() => {
     if (!open || mode !== 'create' || isTransferencia) return
     if (form.categoriaId && !categoriaAutoSugerida) return

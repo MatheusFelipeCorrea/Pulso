@@ -17,8 +17,8 @@ A auditoria original registrou achados em vários módulos. A maior parte dos it
 | **Dashboard / UX entrada (02, 12)** | Pós-login → `/dashboard`; landing com badges Em breve/Beta |
 | **Transações (03)** | Delete recorrente preserva histórico; `grupoBeneficio` + presets VA/VR/VT |
 | **Metas (04)** | `excluirAporte` em meta concluída + UI de aportes |
-| **Viagens (05)** | `@unique` em `Viagem.metaId`; RN-074 (10 cat.); doc cache RF-033 |
-| **Lembretes (07)** | `criarLembrete` preserva registro se sync falhar; RF-058b |
+| **Viagens (05)** | `@unique` em `Viagem.metaId`; RN-074 (10 cat.); doc cache RF-037 |
+| **Lembretes (07)** | `criarLembrete` preserva registro se sync falhar; RF-067 |
 | **Grupos (13)** | Rate limit preview/entrar; `@unique` viagem/grupo; metas atômicas; Socket.IO + Premium |
 | **Orçamento (14)** | Flag `orcamentoExcedeRenda` no backend |
 | **Dívidas (17)** | Reabertura auto ao excluir último pagamento |
@@ -43,7 +43,7 @@ A auditoria original registrou achados em vários módulos. A maior parte dos it
 | # | Módulo | Status README | Veredito |
 |---|---|---|---|
 | 01 | Autenticação | ✅ 6/6 | ✅ Confirmado; achados T3/T4/T6/T7 corrigidos |
-| 02 | Dashboard | 🟡 8/9 | ✅ API + UI; falta RF-139 |
+| 02 | Dashboard | 🟡 8/9 | ✅ API + UI; falta RF-015 |
 | 03 | Transações | ✅ 13/13 | ✅ Confirmado; bugs recorrente + VA/VR/VT corrigidos |
 | 04 | Metas | ✅ 8/8 | ✅ Confirmado; excluir aporte corrigido |
 | 05 | Viagens | ✅ 11/11 | ✅ Confirmado; doc + unique metaId |

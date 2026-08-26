@@ -32,39 +32,40 @@ Pulso/
 
 ## Status do produto (ago/2026)
 
-~**58%** dos requisitos funcionais entregues ([detalhe por RF](./Documentacao/01-Produto/Requisitos/Readme.md)).
+~**78%** dos requisitos funcionais do escopo TI5 entregues ([detalhe por RF](./Documentacao/01-Produto/Requisitos/Readme.md) — **139 RF** / **108** concluídos; **16 RNF** / **10** concluídos).
 
 ### Módulos entregues (UI + API utilizáveis)
 
 | Módulo | RFs |
 |--------|-----|
 | Autenticação | 001–006 |
-| Transações | 015–025, 140–141 |
-| Dashboard | 007–014 (🟡 falta RF-139 quick-add) |
-| Metas financeiras | 026–032 |
-| Viagens e moedas | 033–043 |
-| Lembretes + Google Agenda | 054–058 |
-| Orçamento mensal | 109–114 |
-| Divisão de despesas | 115–120 |
-| Calendário financeiro | 121–125 |
-| Dívidas pessoais | 126–132 |
-| Planejamento de compra | 133–138 |
-| Homepage pública | 084–087 |
-| Grupos (+ chat Socket.IO) | 088–102 |
-| Importação de extratos | 155–158, 160 (🟡 falta RF-159 aprendizado) |
+| Dashboard | 007–015 (🟡 falta RF-015 quick-add) |
+| Transações | 016–028 |
+| Metas financeiras | 029–036 |
+| Viagens e moedas | 037–047 |
+| Lembretes + Google Agenda | 062–067 |
+| Perfil e configurações | 068–079 (🟡 só tema RF-071 ok) |
+| Homepage pública | 080–083 |
+| Grupos (+ chat Socket.IO) | 084–098 |
+| Orçamento mensal | 099–105 |
+| Divisão de despesas | 106–111 |
+| Calendário financeiro | 112–116 |
+| Dívidas pessoais | 117–123 |
+| Planejamento de compra | 124–129 |
+| Importação de extratos | 134–137, 139 (🟡 falta RF-138 aprendizado) |
 
 ### Planos Free / Premium (TI5)
 
 | Plano | Acesso |
 |-------|--------|
-| **Free** | Core financeiro (transações, orçamento, metas, viagens pessoais, etc.) |
-| **Premium** | Grupos (viagens/metas compartilhadas + chat em tempo real) — gate no backend |
+| **Free** | Core financeiro (transações, orçamento, metas, dívidas, dashboard, calendário/lembretes locais, etc.) |
+| **Premium** | Grupos (+ chat Socket.IO), viagens/moedas e sync Google Calendar — gate no backend |
 
 Alternância demo via API de auth (`plano` FREE/PREMIUM), sem billing.
 
 ### Infra TI5
 
-- **RabbitMQ** — filas `pulso.alerts` e `pulso.reminders` (jobs de orçamento/dívidas/lembretes); sem `RABBITMQ_URL`, jobs rodam em modo direto.
+- **RabbitMQ** — filas `pulso.alerts`, `pulso.reminders` e `pulso.emails`; sem `RABBITMQ_URL`, jobs/e-mails rodam em modo direto.
 - **Socket.IO** — chat de grupos em tempo real (API long-running).
 - **Hospedagem:** web na Vercel; API em processo contínuo — [TI5-Hospedagem.md](./Documentacao/02-Engenharia/Deploy/TI5-Hospedagem.md).
 
@@ -72,14 +73,14 @@ Alternância demo via API de auth (`plano` FREE/PREMIUM), sem billing.
 
 | Módulo | Situação |
 |--------|----------|
-| Perfil e configurações | Tema claro/escuro (RF-076) ok; demais RF-073–077 / settings incompletos |
+| Perfil e configurações | Tema claro/escuro (RF-071) ok; demais de 068–079 incompletos |
 | Design System / Sidebar | Contínuo — base pronta, evolução incremental |
-| Insights | Placeholder (RF-044–048) |
-| Chatbot / quick-add IA | Placeholder (RF-049–053, RF-139); Gemini usado na importação PDF |
+| Insights | Placeholder (048–056) |
+| Chatbot / quick-add IA | Placeholder (057–061, RF-015); Gemini usado na importação PDF |
 
 ### Planejados (sem implementação)
 
-Onboarding (RF-151–154) — ver [módulos planejados TI5](./Documentacao/03-Auditorias/Product%20Owner/19-25-Modulos-Planejados.md).
+Onboarding (RF-130–133) — ver [módulos planejados TI5](./Documentacao/03-Auditorias/Product%20Owner/19-25-Modulos-Planejados.md).
 
 Gaps e prioridades: [Analise-Produto.md](./Documentacao/01-Produto/Analise-Produto.md) · Auditoria PO: [Sumário executivo](./Documentacao/03-Auditorias/Product%20Owner/00-Sumario-Executivo.md)
 

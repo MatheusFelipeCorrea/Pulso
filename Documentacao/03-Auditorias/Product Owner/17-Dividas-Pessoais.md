@@ -1,7 +1,7 @@
 # 🤝 Módulo 17 — Dívidas Pessoais — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [04-Metas-Financeiras.md](./04-Metas-Financeiras.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-126–132), `RegrasDeNegocio.md` (RN-075–080).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-117–132), `RegrasDeNegocio.md` (RN-075–080).
 > Código auditado: `api/src/services/debtService.js`, `api/src/utils/debtBalanceUtils.js`.
 
 ---
@@ -22,7 +22,7 @@
 
 | RF | Descrição | Status |
 |---|---|---|
-| RF-126–132 | CRUD, pagamentos, saldo, histórico, alertas | ✅ |
+| RF-117–132 | CRUD, pagamentos, saldo, histórico, alertas | ✅ |
 
 ---
 

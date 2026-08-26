@@ -256,7 +256,7 @@ async function seedCategoriaPersonalizada(usuarioId) {
         },
     });
 
-    console.log('   ? Categoria personalizada: Curso de Ingl�s (RF-018)');
+    console.log('   ? Categoria personalizada: Curso de Ingl�s (RF-019)');
     return categoria;
 }
 
@@ -290,7 +290,7 @@ async function criarTx(data, tagIds = []) {
     return transacao;
 }
 
-/** RF-015 a RF-025, RF-140 (transfer�ncia) e RF-141 (hist�rico p/ sugest�o de categoria) */
+/** RF-016 a RF-026, RF-027 (transfer�ncia) e RF-028 (hist�rico p/ sugest�o de categoria) */
 async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
     const jaRodou = await prisma.transacao.findFirst({
         where: { usuarioId, descricao: 'Bolsa est�gio' },
@@ -299,7 +299,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
 
     const base = (tipo, extra) => ({ usuarioId, tipo, recorrente: false, regraRecorrencia: null, ...extra });
 
-    // Receitas (RF-015) � sal�rio dos �ltimos 3 meses + extras no m�s atual
+    // Receitas (RF-016) � sal�rio dos �ltimos 3 meses + extras no m�s atual
     for (const offsetMes of [-2, -1, 0]) {
         await criarTx(base('RECEITA', {
             categoriaId: byName('Sal�rio', 'RECEITA').id,
@@ -327,7 +327,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
         data: dataNoMes(2, 0),
     }));
 
-    // Despesas (RF-016/RF-017/RF-025 recurso x categoria) � 3 meses de hist�rico
+    // Despesas (RF-017/RF-018/RF-026 recurso x categoria) � 3 meses de hist�rico
     const despesasPorMes = {
         '-2': [
             { categoriaId: byName('Alimenta��o', 'DESPESA').id, recurso: 'VR', valor: 24.9, descricao: 'Almo�o no RU', dia: 3 },
@@ -386,7 +386,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
         [tagsPorNome.Essencial.id]
     );
 
-    // RF-140 � transfer�ncia entre recursos (Dinheiro ? Poupan�a), fora dos totais de receita/despesa
+    // RF-027 � transfer�ncia entre recursos (Dinheiro ? Poupan�a), fora dos totais de receita/despesa
     await criarTx(base('TRANSFERENCIA', {
         categoriaId: null,
         recurso: 'DINHEIRO',
@@ -396,7 +396,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
         data: dataNoMes(6, 0),
     }));
 
-    // RF-020/RF-021 � transa��o recorrente (m�e) j� com "filhas" geradas nos meses seguintes
+    // RF-021/RF-022 � transa��o recorrente (m�e) j� com "filhas" geradas nos meses seguintes
     const categoriaAssinaturas = byName('Servi�os e Assinaturas', 'DESPESA').id;
     const mae = await criarTx(base('DESPESA', {
         categoriaId: categoriaAssinaturas,
@@ -620,7 +620,7 @@ async function seedTransacoesCompletas(usuarioId, byName, tagsPorNome) {
     return seedTransacoesMegaVolume(usuarioId, byName);
 }
 
-/** RF-026 a RF-031, RF-043 (v�nculo viagem), RF-137 (v�nculo planejamento de compra) */
+/** RF-029 a RF-034, RF-047 (v�nculo viagem), RF-128 (v�nculo planejamento de compra) */
 async function seedMetasCompletas(usuarioId) {
     const count = await prisma.meta.count({ where: { usuarioId } });
     if (count > 0) return null;
@@ -717,14 +717,14 @@ async function seedMetasCompletas(usuarioId) {
     return { reserva, notebook, bonito };
 }
 
-/** RF-133 a RF-138 */
+/** RF-124 a RF-129 */
 async function seedPlanejamentoCompraCompleto(usuarioId, categorias, metaNotebookId) {
     const count = await prisma.itemPlanejamentoCompra.count({ where: { usuarioId } });
     if (count > 0) return false;
 
     const categoriaTecnologia = categorias.find((c) => c.nome === 'Tecnologia' && c.tipo === 'DESPESA');
 
-    // RF-138 � item comprado gera automaticamente a transa��o vinculada
+    // RF-129 � item comprado gera automaticamente a transa��o vinculada
     const transacaoNotebook = await prisma.transacao.create({
         data: {
             usuarioId,
@@ -767,7 +767,7 @@ async function seedPlanejamentoCompraCompleto(usuarioId, categorias, metaNoteboo
     return true;
 }
 
-/** RF-033 a RF-043 � viagens pessoais, despesas por categoria, observa��es e moedas favoritas */
+/** RF-037 a RF-047 � viagens pessoais, despesas por categoria, observa��es e moedas favoritas */
 async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
     const count = await prisma.viagem.count({ where: { usuarioId } });
     if (count > 0) return false;
@@ -846,7 +846,7 @@ async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
     return true;
 }
 
-/** RF-054 a RF-058, RF-121 a RF-125 */
+/** RF-062 a RF-066, RF-112 a RF-116 */
 async function seedLembretesCompletos(usuarioId) {
     const count = await prisma.lembrete.count({ where: { usuarioId } });
     if (count > 0) return false;
@@ -867,7 +867,7 @@ async function seedLembretesCompletos(usuarioId) {
     return true;
 }
 
-/** RF-109 a RF-114 � or�amento em v�rios meses para stress-test de alertas */
+/** RF-099 a RF-104 � or�amento em v�rios meses para stress-test de alertas */
 async function seedOrcamentoCompleto(usuarioId, byName) {
     const marker = await prisma.orcamento.findFirst({
         where: {
@@ -905,7 +905,7 @@ async function seedOrcamentoCompleto(usuarioId, byName) {
     return true;
 }
 
-/** RF-126 a RF-132 */
+/** RF-117 a RF-123 */
 async function seedDividasCompletas(usuarioId) {
     const count = await prisma.divida.count({ where: { usuarioId } });
     if (count > 0) return false;

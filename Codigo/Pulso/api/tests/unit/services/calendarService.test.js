@@ -108,7 +108,7 @@ describe('calendarService', () => {
         expect(result.data).toBe('2026-01-10');
     });
 
-    it('não conta transferências como despesa nos marcadores do mês (RF-140)', async () => {
+    it('não conta transferências como despesa nos marcadores do mês (RF-027)', async () => {
         prisma.transacao.groupBy.mockResolvedValueOnce([]).mockResolvedValueOnce([]);
         prisma.transacao.findMany.mockResolvedValue([
             { data: new Date('2026-01-12T12:00:00.000Z'), tipo: 'TRANSFERENCIA', valor: 300 },
@@ -124,7 +124,7 @@ describe('calendarService', () => {
         expect(dia.temDespesa).toBe(false);
     });
 
-    it('não conta transferência como despesa no detalhe do dia (RF-140)', async () => {
+    it('não conta transferência como despesa no detalhe do dia (RF-027)', async () => {
         prisma.transacao.findMany.mockResolvedValue([
             { id: 'tx1', tipo: 'TRANSFERENCIA', valor: 300, data: new Date('2026-01-10T12:00:00.000Z'), categoria: null, tags: [] },
         ]);

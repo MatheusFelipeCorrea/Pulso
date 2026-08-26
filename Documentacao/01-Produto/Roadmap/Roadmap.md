@@ -14,9 +14,9 @@ Fases **concluídas ou em uso**:
 - Fase 3 — Autenticação
 - Fase 4 — Core financeiro: Transações, orçamento, dívidas, metas, viagens, **dashboard**, **importação de extratos**, planejamento de compra, divisão de despesas
 - Fase 7 (quase fechada) — **Grupos** Premium + chat Socket.IO (ver gaps em [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md))
-- Fase 9 (parcial) — Homepage pública entregue; onboarding RF-151–154 ainda não
+- Fase 9 (parcial) — Homepage pública entregue; onboarding RF-130–133 ainda não
 
-**Próximo foco sugerido:** perfil/settings + RF-139 (quick-add) + RF-159 (aprendizado na importação) — ver [Analise-Produto.md](../Analise-Produto.md).
+**Próximo foco sugerido:** perfil/settings + RF-015 (quick-add) + RF-138 (aprendizado na importação) — ver [Analise-Produto.md](../Analise-Produto.md).
 
 Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comandos: [`.github/COMMANDS.md`](../../../.github/COMMANDS.md).
 
@@ -332,7 +332,7 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 - [x] Modal: lembrete de cobrança
 - [x] Cálculo igualitário e personalizado
 - [x] Saldo consolidado
-- [ ] Vincular ao toggle RF-095 de Grupos (ver Fase 7)
+- [ ] Vincular ao toggle RF-091 de Grupos (ver Fase 7)
 ```
 
 ### 5.5 — Planejamento de Compra ✅
@@ -401,13 +401,13 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 - [x] Backend: chat REST + **Socket.IO** em tempo real
 - [x] Frontend: lista + detalhe (4 cards, ícones)
 - [x] Modais: criar, entrar, convidar (com QR code), gerenciar membros, editar, metas, aporte, imagem (upload de arquivo)
-- [x] RF-095 MVP: toggle pretensão / divisão igual (UI, persistido no servidor por grupo)
+- [x] RF-091 MVP: toggle pretensão / divisão igual (UI, persistido no servidor por grupo)
 - [x] Viagem pessoal → grupo (TripFormModal)
 - [x] Notificações GRUPO_ATIVIDADE / META_ATINGIDA
 - [x] RN-119 meta concluída automaticamente
 - [x] Upload de imagem (arquivo jpg/png)
 - [x] Gate **Premium** (`requirePremium`)
-- [ ] Vincular RF-095 ao módulo /expense-split (Fase 5.4 — já disponível, falta a integração em si)
+- [ ] Vincular RF-091 ao módulo /expense-split (Fase 5.4 — já disponível, falta a integração em si)
 ```
 
 Ver gaps: [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md).

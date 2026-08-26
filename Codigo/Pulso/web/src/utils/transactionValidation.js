@@ -79,7 +79,7 @@ export function validarRecursoCategoria(recurso, categoria, tipo) {
   return null
 }
 
-/** Valida a transferência entre recursos no cliente (RF-140, espelha backend) */
+/** Valida a transferência entre recursos no cliente (RF-027, espelha backend) */
 export function validarTransferencia(recurso, recursoDestino) {
   if (!recurso || !recursoDestino) return null
   if (recurso === recursoDestino) {

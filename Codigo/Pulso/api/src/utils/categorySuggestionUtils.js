@@ -42,7 +42,7 @@ const similaridade = (a, b) => {
 
 /**
  * Sugere a categoria mais provável para `descricaoAlvo` com base no histórico de
- * transações do próprio usuário (RF-141). `historico` é `[{ descricao, categoriaId }]`.
+ * transações do próprio usuário (RF-028). `historico` é `[{ descricao, categoriaId }]`.
  * Retorna o `categoriaId` com maior score acumulado de similaridade, ou `null`
  * se nada atingir o limiar mínimo.
  */

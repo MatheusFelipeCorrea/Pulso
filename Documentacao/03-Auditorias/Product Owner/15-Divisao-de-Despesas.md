@@ -1,7 +1,7 @@
 # 💸 Módulo 15 — Divisão de Despesas — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [07-Lembretes-e-Google-Agenda.md](./07-Lembretes-e-Google-Agenda.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-115–120), `RegrasDeNegocio.md` (RN-081–086, RNF-016).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-106–120), `RegrasDeNegocio.md` (RN-081–086, RNF-016).
 > Código auditado: `api/src/services/expenseSplitService.js`, `api/src/utils/expenseSplitUtils.js`.
 
 ---
@@ -22,7 +22,7 @@
 
 | RF | Descrição | Status |
 |---|---|---|
-| RF-115–120 | Divisão, rateio, pagamentos, saldo, lembrete | ✅ Confirmado |
+| RF-106–120 | Divisão, rateio, pagamentos, saldo, lembrete | ✅ Confirmado |
 
 ---
 

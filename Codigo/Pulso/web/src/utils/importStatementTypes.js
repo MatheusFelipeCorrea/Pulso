@@ -2,7 +2,7 @@ import { Banknote, CreditCard, Utensils } from 'lucide-react'
 
 const PDF_ACCEPT = '.pdf,application/pdf'
 
-/** Tipos de importação de extrato em PDF (RF-155/156). */
+/** Tipos de importação de extrato em PDF (RF-134+). */
 export const IMPORT_STATEMENT_TYPES = [
   {
     id: 'CONTA',

@@ -1,7 +1,7 @@
 # 🏠 Módulo 12 — Homepage (Landing Page) — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [02-Dashboard.md](./02-Dashboard.md), [06-Insights-e-Chatbot.md](./06-Insights-e-Chatbot.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-084–087).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-080–087).
 > Código auditado: `web/src/pages/LandingPage.jsx`, `web/src/components/features/landing/landingData.js`, `web/src/components/features/landing/LandingHero.jsx`.
 
 ---
@@ -22,10 +22,10 @@
 
 | RF | Descrição | Status README | Realidade no código |
 |---|---|---|---|
-| RF-084 | Homepage pública apresentando o Pulso | ✅ | Confirmado |
-| RF-085 | CTAs (Cadastrar e Entrar) | ✅ | Confirmado |
-| RF-086 | Seções com os principais módulos | ✅ | Confirmado — cards com badges onde aplicável |
-| RF-087 | Responsiva, paleta Vital Purple | ✅ | Confirmado (design system) |
+| RF-080 | Homepage pública apresentando o Pulso | ✅ | Confirmado |
+| RF-081 | CTAs (Cadastrar e Entrar) | ✅ | Confirmado |
+| RF-082 | Seções com os principais módulos | ✅ | Confirmado — cards com badges onde aplicável |
+| RF-083 | Responsiva, paleta Vital Purple | ✅ | Confirmado (design system) |
 
 ---
 

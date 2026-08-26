@@ -1,7 +1,7 @@
 # 📊 Módulo 14 — Orçamento Mensal — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-109–114, RF-150), `RegrasDeNegocio.md` (RN-055–060, RN-170).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-099–114, RF-105), `RegrasDeNegocio.md` (RN-055–060, RN-170).
 > Código auditado: `api/src/services/budgetService.js`, `api/src/utils/budgetRolloverUtils.js`, `api/src/repositories/budgetRepository.js`.
 
 ---
@@ -22,7 +22,7 @@
 
 | RF | Status | Notas |
 |---|---|---|
-| RF-109–114, RF-150 | ✅ | Confirmado — rollover, alertas 80%/100%, upsert |
+| RF-099–114, RF-105 | ✅ | Confirmado — rollover, alertas 80%/100%, upsert |
 
 ---
 

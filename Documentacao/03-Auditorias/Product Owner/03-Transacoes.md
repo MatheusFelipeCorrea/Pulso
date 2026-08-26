@@ -1,7 +1,7 @@
 # 💳 Módulo 03 — Gestão de Transações — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-015–025, RF-140–141), `RegrasDeNegocio.md` (RN-046–054, RN-032/035/038/039).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-016–025, RF-027–141), `RegrasDeNegocio.md` (RN-046–054, RN-032/035/038/039).
 > Código auditado: `api/src/{controllers,services,repositories,schemas,utils}/transaction*.js`, `api/src/utils/recursoCategoriaRules.js`, `api/src/jobs/recurringTransactions.js`, `api/src/services/categoryService.js`, `api/prisma/schema.prisma` (model `Transacao`), `web/src/components/features/transactions/DeleteTransactionModal.jsx`.
 
 ---
@@ -22,16 +22,16 @@
 
 | RF | Descrição | Status README | Realidade no código |
 |---|---|---|---|
-| RF-015/016 | Registrar receita/despesa (valor, data, categoria, recurso/origem) | ✅ | Confirmado — `criarTransacaoSchema` (`transactionSchemas.js:6-43`) valida tudo; `transactionService.criarTransacao` aplica regras de domínio |
-| RF-017 | Categorias padrão | ✅ | Seed via `categoryService.seedCategoriasPadrao`, chamado em `registerUser`/`authenticateGoogle` |
-| RF-018 | Categorias personalizadas | ✅ | Confirmado, com ícone+cor; **`grupoBeneficio`** permite VA/VR/VT em custom (RF-NOVO-C2 ✅) |
-| RF-019 | Tags livres | ✅ | Confirmado (`tagRepository`, `vincularTags`/`desvincularTags`) |
-| RF-020/021 | Recorrência configurável + geração automática | ✅ | Confirmado — `regraRecorrencia` + `jobs/recurringTransactions.js` |
-| RF-022 | Editar/excluir transações | ✅ | Delete recorrente corrigido — RF-NOVO-C1 ✅ |
-| RF-023/024 | Filtros + busca | ✅ | Confirmado, `transactionRepository.buildWhere` |
-| RF-025 | Bloquear despesas de Alimentação usando VT | ✅ | Via `grupoBeneficio` / categorias padrão — não depende mais só do nome literal |
-| RF-140 | Transferência entre recursos, fora dos totais de receita/despesa | ✅ | Confirmado — `tipo: TRANSFERENCIA`, `categoriaId` nulo, excluído de `montarResumo` (só soma `RECEITA`/`DESPESA`) |
-| RF-141 | Sugestão de categoria por similaridade de descrição | ✅ | Não auditado em profundidade neste módulo (arquivo `categorySuggestionService.js` existe e tem conteúdo) — mencionar para futura verificação de precisão do algoritmo de Dice bigramas |
+| RF-016/016 | Registrar receita/despesa (valor, data, categoria, recurso/origem) | ✅ | Confirmado — `criarTransacaoSchema` (`transactionSchemas.js:6-43`) valida tudo; `transactionService.criarTransacao` aplica regras de domínio |
+| RF-018 | Categorias padrão | ✅ | Seed via `categoryService.seedCategoriasPadrao`, chamado em `registerUser`/`authenticateGoogle` |
+| RF-019 | Categorias personalizadas | ✅ | Confirmado, com ícone+cor; **`grupoBeneficio`** permite VA/VR/VT em custom (RF-NOVO-C2 ✅) |
+| RF-020 | Tags livres | ✅ | Confirmado (`tagRepository`, `vincularTags`/`desvincularTags`) |
+| RF-021/021 | Recorrência configurável + geração automática | ✅ | Confirmado — `regraRecorrencia` + `jobs/recurringTransactions.js` |
+| RF-023 | Editar/excluir transações | ✅ | Delete recorrente corrigido — RF-NOVO-C1 ✅ |
+| RF-024/024 | Filtros + busca | ✅ | Confirmado, `transactionRepository.buildWhere` |
+| RF-026 | Bloquear despesas de Alimentação usando VT | ✅ | Via `grupoBeneficio` / categorias padrão — não depende mais só do nome literal |
+| RF-027 | Transferência entre recursos, fora dos totais de receita/despesa | ✅ | Confirmado — `tipo: TRANSFERENCIA`, `categoriaId` nulo, excluído de `montarResumo` (só soma `RECEITA`/`DESPESA`) |
+| RF-028 | Sugestão de categoria por similaridade de descrição | ✅ | Não auditado em profundidade neste módulo (arquivo `categorySuggestionService.js` existe e tem conteúdo) — mencionar para futura verificação de precisão do algoritmo de Dice bigramas |
 
 Todos os RFs "✅" do README de fato têm implementação real por trás (não são scaffolds mortos do T1) — este módulo passa no teste de "não é só checkbox".
 

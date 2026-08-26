@@ -97,7 +97,7 @@ describe('services/transactionService', () => {
     })
   })
 
-  it('sugere categoria com base em tipo e descrição (RF-141)', async () => {
+  it('sugere categoria com base em tipo e descrição (RF-028)', async () => {
     api.get.mockResolvedValueOnce({ data: { categoriaId: 'cat-1' } })
 
     const result = await sugerirCategoria({ tipo: 'DESPESA', descricao: 'Uber pro trampo' })

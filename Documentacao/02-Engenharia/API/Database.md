@@ -106,7 +106,7 @@ Preferências e receitas fixas recorrentes do usuário. Tabela: `configuracoes_u
 | `tokensGoogle` | Json | Tokens OAuth do Google (criptografados) |
 | `limiteGastos` | Decimal(12,2) | Limite de gastos pra alerta |
 | `rendaMensalPlanejada` | Decimal(12,2) | Renda mensal planejada (orçamento) |
-| `modoUso` | Enum | `ESTAGIARIO`, `CLT`, `PJ`, `PESSOA_FISICA` (RF-103) |
+| `modoUso` | Enum | `ESTAGIARIO`, `CLT`, `PJ`, `PESSOA_FISICA` (RF-073) |
 | `criadoEm` / `atualizadoEm` | DateTime | Timestamps |
 
 ---
@@ -169,10 +169,10 @@ Receitas e despesas. Tabela: `transacoes`
 |---|---|---|---|
 | `id` | String | ✅ | Identificador |
 | `usuarioId` | String (FK) | ✅ | Dono |
-| `categoriaId` | String (FK) | ❌ | Categoria vinculada — nula em transferências (RF-140) |
+| `categoriaId` | String (FK) | ❌ | Categoria vinculada — nula em transferências (RF-027) |
 | `tipo` | Enum | ✅ | `RECEITA`, `DESPESA` ou `TRANSFERENCIA` |
 | `recurso` | Enum | ✅ | `DINHEIRO`, `VA`, `VR`, `VT`, `POUPANCA` |
-| `recursoDestino` | Enum | ❌ | Recurso de destino — usado apenas quando `tipo = TRANSFERENCIA` (RF-140) |
+| `recursoDestino` | Enum | ❌ | Recurso de destino — usado apenas quando `tipo = TRANSFERENCIA` (RF-027) |
 | `valor` | Decimal(12,2) | ✅ | Valor (sempre > 0) |
 | `descricao` | VarChar(255) | ❌ | Descrição livre |
 | `data` | DateTime | ✅ | Data da transação |
@@ -186,8 +186,8 @@ Receitas e despesas. Tabela: `transacoes`
 - ❌ `VT` só com categoria Transporte (despesas)
 - ❌ `VR` só com Alimentação; `VA` com Alimentação ou Compras
 - ✅ Valor sempre > 0
-- **Transferência (RF-140):** `tipo = TRANSFERENCIA` exige `recursoDestino` diferente de `recurso` e não tem `categoriaId`; excluída dos totais de receita/despesa (`calcularAgregados`/`montarResumo`) e dos marcadores do Calendário
-- **Sugestão de categoria (RF-141):** endpoint `GET /transacoes/sugestao-categoria` compara a descrição informada com o histórico do usuário (mesmo `tipo`) via similaridade de bigramas (`categorySuggestionUtils.js`), sem persistir nada
+- **Transferência (RF-027):** `tipo = TRANSFERENCIA` exige `recursoDestino` diferente de `recurso` e não tem `categoriaId`; excluída dos totais de receita/despesa (`calcularAgregados`/`montarResumo`) e dos marcadores do Calendário
+- **Sugestão de categoria (RF-028):** endpoint `GET /transacoes/sugestao-categoria` compara a descrição informada com o histórico do usuário (mesmo `tipo`) via similaridade de bigramas (`categorySuggestionUtils.js`), sem persistir nada
 
 ---
 
@@ -542,7 +542,7 @@ Cada pessoa envolvida em uma `Divisao`, incluindo o organizador (linha com `ehOr
 | `dataPagamento` | DateTime | ❌ | Quando foi marcado como pago |
 | `criadoEm` / `atualizadoEm` | DateTime | ✅ | Timestamps |
 
-**Relação com Lembrete:** N:N (`divisaoParticipantes` ↔ `Lembrete.divisaoParticipantes`, tabela de junção `_DivisaoParticipanteToLembrete`, `ON DELETE CASCADE` nos dois lados) — um único lembrete de cobrança (RF-120) pode cobrir 1+ participantes pendentes. O lembrete é cancelado automaticamente quando todos os participantes que ele cobre já pagaram, e removido junto se a `Divisao` for excluída.
+**Relação com Lembrete:** N:N (`divisaoParticipantes` ↔ `Lembrete.divisaoParticipantes`, tabela de junção `_DivisaoParticipanteToLembrete`, `ON DELETE CASCADE` nos dois lados) — um único lembrete de cobrança (RF-111) pode cobrir 1+ participantes pendentes. O lembrete é cancelado automaticamente quando todos os participantes que ele cobre já pagaram, e removido junto se a `Divisao` for excluída.
 
 ---
 

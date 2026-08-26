@@ -1,7 +1,7 @@
 # 🛒 Módulo 18 — Planejamento de Compra — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [14-Orcamento-Mensal.md](./14-Orcamento-Mensal.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-133–138), `RegrasDeNegocio.md` (RN-087–093).
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-124–138), `RegrasDeNegocio.md` (RN-087–093).
 > Código auditado: `api/src/services/purchasePlanningService.js`.
 
 ---
@@ -22,12 +22,12 @@
 
 | RF | Descrição | Status |
 |---|---|---|
-| RF-133 | Registrar item desejado | ✅ |
-| RF-134 | Tempo para comprar (sobra mensal) | ✅ Média 3 meses (RN-088) |
-| RF-135 | Simular à vista vs. parcelado | ✅ |
-| RF-136 | Alerta % renda comprometida | ✅ |
-| RF-137 | Vincular meta | ✅ |
-| RF-138 | Marcar comprado + transação + meta | ✅ RN-093 aplicada |
+| RF-124 | Registrar item desejado | ✅ |
+| RF-125 | Tempo para comprar (sobra mensal) | ✅ Média 3 meses (RN-088) |
+| RF-126 | Simular à vista vs. parcelado | ✅ |
+| RF-127 | Alerta % renda comprometida | ✅ |
+| RF-128 | Vincular meta | ✅ |
+| RF-129 | Marcar comprado + transação + meta | ✅ RN-093 aplicada |
 
 ---
 

@@ -310,11 +310,11 @@ Configuração única em `sidebarNavigation.js` (`SIDEBAR_NAV` + `SIDEBAR_NAV_FO
 
 - `GET/POST /grupos`, `GET/PATCH/DELETE /grupos/:id`, `GET /grupos/preview`, `POST /grupos/entrar`
 - `POST /grupos/:id/sair`, `POST /grupos/:id/viagem`, `POST/PATCH/DELETE /grupos/:id/viagem/despesas[/:despesaId]`
-- `POST /grupos/:id/metas`, `POST /grupos/:id/metas/:metaId/aportes`, `POST /grupos/:id/mensagens` (chat, polling ~3s)
+- `POST /grupos/:id/metas`, `POST /grupos/:id/metas/:metaId/aportes`, `POST /grupos/:id/mensagens` (histórico REST; tempo real via Socket.IO)
 
 **Service:** `services/grupoService.js`
 
-**Pendente:** RF-095 completo (split custom "quem paga quem" já existe em `/expense-split`, mas ainda não vinculado ao toggle do grupo) — ver [Modulos/Grupos.md](../Modulos/Grupos.md).
+**Pendente:** RF-091 completo (split custom "quem paga quem" já existe em `/expense-split`, mas ainda não vinculado ao toggle do grupo) — ver [Modulos/Grupos.md](../Modulos/Grupos.md).
 
 **Estilos:** `styles/groups.css`
 
@@ -332,7 +332,7 @@ Configuração única em `sidebarNavigation.js` (`SIDEBAR_NAV` + `SIDEBAR_NAV_FO
 | `ExpenseSplitCard.jsx` | Card de divisão ativa |
 | `ExpenseSplitFormModal.jsx` | Criar/editar (rateio igual ou personalizado) |
 | `ExpenseSplitDetailsModal.jsx` | Detalhe — marcar/desmarcar participante como pago |
-| `ExpenseSplitReminderModal.jsx` | Criar lembrete de cobrança (RF-120) |
+| `ExpenseSplitReminderModal.jsx` | Criar lembrete de cobrança (RF-111) |
 | `ExpenseSplitHistoryRow.jsx` | Linha do histórico de divisões quitadas |
 | `DeleteExpenseSplitModal.jsx` | Exclusão |
 
@@ -457,7 +457,7 @@ VITE_GOOGLE_CLIENT_ID=seu_client_id.apps.googleusercontent.com
 
 **Entregue:** dashboard (+ importação de extratos), transações, orçamento, calendário, dívidas, metas, viagens (transporte/passagens + moedas), grupos (Premium + Socket.IO), divisão de despesas, planejamento de compra, tema claro/escuro, planos Free/Premium.
 
-**Pendente:** perfil/settings, insights IA, chatbot / RF-139, onboarding, RF-159 (aprendizado na importação).
+**Pendente:** perfil/settings, insights IA, chatbot / RF-015, onboarding, RF-138 (aprendizado na importação).
 
 Prioridades sugeridas: [Analise-Produto.md](../../01-Produto/Analise-Produto.md)
 

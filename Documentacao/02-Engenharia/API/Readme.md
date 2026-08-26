@@ -47,12 +47,12 @@ Servidor **Node.js + Express** com arquitetura em camadas (routes → controller
 | **Moedas** (cotações AwesomeAPI, favoritas, conversor) | ✅ |
 | GeoNames / Duffel / Amadeus (passagens) | 🟡 Opcional — estimativas sazonais sem API |
 | **Dashboard** (`GET /dashboard`) | ✅ |
-| **Importação** (OFX/CSV/XLSX/PDF → preview → confirmar) | 🟡 Core entregue; RF-159 aprendizado pendente |
+| **Importação** (OFX/CSV/XLSX/PDF → preview → confirmar) | 🟡 Core entregue; RF-138 aprendizado pendente |
 | **Planejamento de compra** | ✅ |
 | **Divisão de despesas** | ✅ |
 | **Grupos** (CRUD, convite, membros, viagem, metas, chat Socket.IO) | 🟡 Premium — ver gaps menores |
 | Insights, chatbot | 🔜 Schema / parcial |
-| Planos Free/Premium | ✅ Gate Premium em grupos |
+| Planos Free/Premium | ✅ Gate Premium em grupos, viagens e sync Google Calendar |
 | RabbitMQ (alerts + reminders + emails) | ✅ Opcional — fallback modo direto |
 
 Prefixo global: **`/api`**
@@ -345,9 +345,8 @@ Cookies: `utils/authCookies.js` · Lógica: `services/authService.js` · Reposit
 
 - Valor obrigatório e > 0
 - Categoria e recurso obrigatórios
-- Validação cruzada recurso × categoria (VA, VR, VT) — backend e frontend
-- VT **não** pode ser usado em Alimentação
-- VT só em categoria Transporte (despesas)
+- Validação cruzada recurso × categoria (VA / VR × `grupoBeneficio`) — backend e frontend
+- Recurso **VT** é rejeitado na criação/edição de transações (fora do escopo TI5)
 - VR só em Alimentação; VA em Alimentação ou Compras
 
 Implementação: `utils/recursoCategoriaRules.js`, `services/transactionService.js`
@@ -461,7 +460,7 @@ Prefixo: **`/api/grupos`** (todas 🔒).
 | POST | `/:id/metas/:metaId/aportes` | Aporte |
 | POST | `/:id/mensagens` | Chat (também em tempo real via Socket.IO) |
 
-**Premium:** rotas de grupos exigem plano `PREMIUM`. Gaps restantes: integração RF-095 ↔ `/expense-split`. Ver [Modulos/Grupos.md](../Modulos/Grupos.md).
+**Premium:** rotas de grupos exigem plano `PREMIUM`. Gaps restantes: integração RF-091 ↔ `/expense-split`. Ver [Modulos/Grupos.md](../Modulos/Grupos.md).
 
 ---
 
@@ -490,7 +489,7 @@ Prefixo: **`/api/divisoes`** (todas 🔒; página do frontend em `/expense-split
 | PATCH | `/:id` | Editar — **bloqueado** se já houver pagamento manual registrado ou a divisão estiver quitada |
 | PATCH | `/:id/participantes/:participanteId/pagar` | Marcar participante como pago |
 | PATCH | `/:id/participantes/:participanteId/despagar` | Desfazer pagamento |
-| POST | `/:id/lembrete` | Criar lembrete de cobrança (RF-120) para 1+ participantes pendentes |
+| POST | `/:id/lembrete` | Criar lembrete de cobrança (RF-111) para 1+ participantes pendentes |
 | DELETE | `/:id` | Excluir — bloqueado se quitada; remove os lembretes de cobrança vinculados |
 
 **Regras de negócio:** rateio em aritmética de centavos determinística (RNF-016); nomes de participantes únicos (case-insensitive) e diferentes de "Você"; divisão some automaticamente para "Quitada" quando todos pagam (e reabre se algum pagamento for desfeito); lembrete de cobrança é cancelado automaticamente quando todos os participantes que ele cobre já pagaram, e um mesmo participante não pode ter dois lembretes ativos simultâneos.
@@ -503,7 +502,7 @@ Implementação: `controllers/expenseSplitController.js`, `services/expenseSplit
 
 ## 🗺️ Roadmap (não implementado)
 
-Módulos parciais hoje: chatbot, insights IA. **Grupos** e **Divisão de Despesas:** API/UI principais entregues; integração do toggle de rateio (RF-095) ainda pendente. **Importação:** core entregue; falta RF-159 (aprendizado).
+Módulos parciais hoje: chatbot, insights IA. **Grupos** e **Divisão de Despesas:** API/UI principais entregues; integração do toggle de rateio (RF-091) ainda pendente. **Importação:** core entregue; falta RF-138 (aprendizado).
 
 **Próximos passos sugeridos:** ver [Analise-Produto.md](../../01-Produto/Analise-Produto.md).
 
