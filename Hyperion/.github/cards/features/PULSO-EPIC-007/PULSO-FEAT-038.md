@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: null
+reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-007
 due_date: null
 categories:
@@ -40,7 +40,6 @@ Implementar header/footer compartilhados, seção mobile, termos/privacidade e f
 - PULSO-TASK-077
 - PULSO-TASK-078
 - PULSO-TASK-079
-- PULSO-TASK-080
 
 ## 📋 Resumo
 
@@ -48,4 +47,4 @@ Implementar header/footer compartilhados, seção mobile, termos/privacidade e f
 - Componentes chrome e legal spec definidos
 
 ### ⏳ Pendente
-- PULSO-TASK-077–080 — header, mobile, CSS e legal
+- PULSO-TASK-077–079 — header, mobile e CSS

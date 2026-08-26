@@ -368,9 +368,11 @@ function buildEdges(cards) {
   for (const card of cards) {
     const subIds = parseSubIssueIds(card.body);
     for (const childId of subIds) {
-      if (byCardId.has(childId)) {
-        addEdge(card.cardId, childId);
-      }
+      const child = byCardId.get(childId);
+      if (!child) continue;
+      // Child `parent:` is source of truth — ignore stale children lists.
+      if (child.parent && child.parent !== card.cardId) continue;
+      addEdge(card.cardId, childId);
     }
   }
 
@@ -566,6 +568,7 @@ async function graphql(query, variables = {}) {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
       "User-Agent": "cards-sync-script",
+      "GraphQL-Features": "sub_issues,issue_types",
     },
     body: JSON.stringify({ query, variables }),
   });
@@ -658,8 +661,24 @@ async function updateIssue(issueId, title, body) {
 }
 
 async function linkAsSubIssue(parentIssueId, childIssueId) {
+  try {
+    await graphql(
+      `mutation($issueId: ID!, $subIssueId: ID!) { addSubIssue(input: { issueId: $issueId, subIssueId: $subIssueId }) { issue { id } } }`,
+      { issueId: parentIssueId, subIssueId: childIssueId }
+    );
+    return;
+  } catch (error) {
+    if (!/one parent/i.test(String(error.message || error))) throw error;
+  }
+
+  const current = await graphql(
+    `query($id: ID!) { node(id: $id) { ... on Issue { parent { id } } } }`,
+    { id: childIssueId }
+  );
+  if (current.node?.parent?.id === parentIssueId) return;
+
   await graphql(
-    `mutation($issueId: ID!, $subIssueId: ID!) { addSubIssue(input: { issueId: $issueId, subIssueId: $subIssueId }) { issue { id } } }`,
+    `mutation($issueId: ID!, $subIssueId: ID!) { addSubIssue(input: { issueId: $issueId, subIssueId: $subIssueId, replaceParent: true }) { issue { id } } }`,
     { issueId: parentIssueId, subIssueId: childIssueId }
   );
 }
@@ -791,6 +810,27 @@ const DEFAULT_STATUS_OPTIONS = [
   "In Revision",
   "Done",
 ];
+const STATUS_OPTION_COLORS = {
+  backlog: "GRAY",
+  "functional refinement": "BLUE",
+  "refinamento funcional": "BLUE",
+  "technical refinement": "PURPLE",
+  "refinamento tecnico": "PURPLE",
+  "in progress": "YELLOW",
+  "em progresso": "YELLOW",
+  "in tests": "ORANGE",
+  "em testes": "ORANGE",
+  "in revision": "PINK",
+  "em revisao": "PINK",
+  done: "GREEN",
+  concluido: "GREEN",
+};
+const GITHUB_STOCK_STATUS_TO_CANONICAL = {
+  todo: "Backlog",
+  "to do": "Backlog",
+  "in progress": "In Progress",
+  done: "Done",
+};
 
 async function createProjectV2(ownerId, title, repositoryId = null) {
   const data = await graphql(
@@ -1001,7 +1041,10 @@ async function applySelectFieldColors(field, colorByName, label) {
   const options = (field.options || []).map((opt, i) => ({
     id: opt.id,
     name: opt.name,
-    color: colorByName[opt.name] || singleSelectColor(i),
+    color:
+      colorByName[opt.name] ||
+      colorByName[normalizeText(opt.name)] ||
+      optionColorForField(label === "Status" ? "status" : null, opt.name, i),
     description: "",
   }));
 
@@ -1022,12 +1065,13 @@ async function applySelectFieldColors(field, colorByName, label) {
 
 async function ensureKitFieldColors(project, repoConfig) {
   const fieldMap = repoConfig.fieldMap || {};
-  const typeField = getFieldByName(project, fieldMap.type || "Type")
-    || getFieldByName(project, "Tipo");
-  const priorityField = getFieldByName(project, fieldMap.priority || "Priority");
+  const typeField = resolveProjectField(project, "type", fieldMap);
+  const priorityField = resolveProjectField(project, "priority", fieldMap);
+  const statusField = resolveProjectField(project, "status", fieldMap);
 
   await applySelectFieldColors(typeField, TYPE_OPTION_COLORS, "Type/Tipo");
   await applySelectFieldColors(priorityField, PRIORITY_OPTION_COLORS, "Priority");
+  await applySelectFieldColors(statusField, STATUS_OPTION_COLORS, "Status");
 }
 
 const HYPERION_PROJECT_VIEWS = [
@@ -1133,33 +1177,85 @@ async function ensureKitProjectViews(project) {
   }
 }
 
+function statusWorkflowOptions(repoConfig) {
+  return DEFAULT_STATUS_OPTIONS.map((name) =>
+    String(resolveMappedOptionValue("status", name, repoConfig) || name)
+  );
+}
+
+function optionMatchesStatusName(optionName, desiredName, repoConfig) {
+  const candidates = buildOptionCandidates("status", desiredName, repoConfig);
+  const needle = normalizeText(optionName);
+  return candidates.some((c) => normalizeText(c) === needle) || needle === normalizeText(desiredName);
+}
+
+function hasHyperionStatusOptions(statusField, repoConfig) {
+  const existing = statusField?.options || [];
+  return statusWorkflowOptions(repoConfig).every((name) =>
+    existing.some((opt) => optionMatchesStatusName(opt.name, name, repoConfig))
+  );
+}
+
+function buildStatusOptionPayload(statusField, desiredNames, repoConfig) {
+  const existing = [...(statusField.options || [])];
+  const used = new Set();
+  return desiredNames.map((name, index) => {
+    let match = existing.find(
+      (opt) => !used.has(opt.id) && optionMatchesStatusName(opt.name, name, repoConfig)
+    );
+    if (!match) {
+      match = existing.find((opt) => {
+        if (used.has(opt.id)) return false;
+        const canonical = GITHUB_STOCK_STATUS_TO_CANONICAL[normalizeText(opt.name)];
+        if (!canonical) return false;
+        const mapped = resolveMappedOptionValue("status", canonical, repoConfig);
+        return normalizeText(mapped) === normalizeText(name) || normalizeText(canonical) === normalizeText(name);
+      });
+    }
+    if (match) used.add(match.id);
+    const payload = {
+      name,
+      color: optionColorForField("status", name, index),
+      description: "",
+    };
+    if (match?.id) payload.id = match.id;
+    return payload;
+  });
+}
+
 async function ensureStatusFieldOptions(project, repoConfig) {
   const fieldMap = repoConfig.fieldMap || {};
   const statusName = fieldMap.status || "Status";
   let statusField = getFieldByName(project, statusName);
+  const desiredNames = statusWorkflowOptions(repoConfig);
 
   if (!statusField) {
-    await addSingleSelectField(project.id, statusName, DEFAULT_STATUS_OPTIONS);
-    log(`  + Status field created with ${DEFAULT_STATUS_OPTIONS.length} workflow options`);
+    await addSingleSelectField(project.id, statusName, desiredNames, "status");
+    log(`  + Status field created with ${desiredNames.length} workflow options`);
     return;
   }
 
   if (statusField.__typename !== "ProjectV2SingleSelectField") return;
 
-  const existing = new Set((statusField.options || []).map((o) => normalizeText(o.name)));
-  const allPresent = DEFAULT_STATUS_OPTIONS.every((opt) => existing.has(normalizeText(opt)));
-
-  if (allPresent && (statusField.options || []).length >= DEFAULT_STATUS_OPTIONS.length) {
+  if (hasHyperionStatusOptions(statusField, repoConfig) && (statusField.options || []).length >= desiredNames.length) {
     log(`  = Status field already has Hyperion workflow options`);
     return;
   }
 
   try {
-    await updateSingleSelectFieldOptions(statusField.id, DEFAULT_STATUS_OPTIONS, "status");
-    log(`  ~ Status field updated with Hyperion workflow options (${DEFAULT_STATUS_OPTIONS.length})`);
+    const options = buildStatusOptionPayload(statusField, desiredNames, repoConfig);
+    await graphql(
+      `mutation($fieldId: ID!, $options: [ProjectV2SingleSelectFieldOptionInput!]!) {
+        updateProjectV2Field(input: { fieldId: $fieldId, singleSelectOptions: $options }) {
+          projectV2Field { ... on ProjectV2SingleSelectField { id name options { id name color } } }
+        }
+      }`,
+      { fieldId: statusField.id, options }
+    );
+    log(`  ~ Status field updated with Hyperion workflow options (${desiredNames.join(" → ")})`);
   } catch (error) {
     log(`  WARN: Could not update Status options automatically: ${error.message}`);
-    log(`  Customize Status options manually in Project Settings.`);
+    log("  Customize Status options manually in Project Settings.");
   }
 }
 
@@ -1171,6 +1267,9 @@ function singleSelectColor(index) {
 function optionColorForField(fieldKey, optionName, index) {
   if (fieldKey === "type") return TYPE_OPTION_COLORS[optionName] || singleSelectColor(index);
   if (fieldKey === "priority") return PRIORITY_OPTION_COLORS[optionName] || singleSelectColor(index);
+  if (fieldKey === "status") {
+    return STATUS_OPTION_COLORS[normalizeText(optionName)] || singleSelectColor(index);
+  }
   return singleSelectColor(index);
 }
 
@@ -1192,14 +1291,91 @@ async function getOwnerNodeId(owner) {
 // Fields the sync expects to exist. Names here are the defaults used when creating.
 // The fieldMap in config can override these names to match an existing Project.
 const REQUIRED_FIELDS = [
-  { key: "type", defaultName: "Type", kind: "single_select", options: DEFAULT_TYPE_OPTIONS },
-  { key: "priority", defaultName: "Priority", kind: "single_select", options: DEFAULT_PRIORITY_OPTIONS },
+  { key: "type", defaultName: "Type", fallbackNames: ["Card type"], kind: "single_select", options: DEFAULT_TYPE_OPTIONS },
+  { key: "priority", defaultName: "Priority", fallbackNames: ["Card priority"], kind: "single_select", options: DEFAULT_PRIORITY_OPTIONS },
   { key: "sprint", defaultName: "Sprint", kind: "iteration" },
   { key: "storyPoints", defaultName: "Story Points", kind: "number" },
   { key: "reporter", defaultName: "Reporter", kind: "text" },
   { key: "parent", defaultName: "Parent (Epic/Feature)", kind: "text" },
-  { key: "dueDate", defaultName: "Due Date", kind: "date" },
+  { key: "dueDate", defaultName: "Due Date", fallbackNames: ["Card due date"], kind: "date" },
 ];
+
+function collectFieldNames(project) {
+  return new Set(
+    (project?.fields?.nodes || []).map((f) => f?.name?.toLowerCase()).filter(Boolean)
+  );
+}
+
+function isReservedFieldError(error) {
+  const msg = String(error?.message || error);
+  return /reserved|already been taken|UNPROCESSABLE/i.test(msg);
+}
+
+async function createProjectFieldByKind(projectId, spec, name, repoConfig) {
+  if (spec.kind === "single_select") {
+    await addSingleSelectField(projectId, name, spec.options, spec.key);
+  } else if (spec.kind === "number") {
+    await addNumberField(projectId, name);
+  } else if (spec.kind === "text") {
+    await addTextField(projectId, name);
+  } else if (spec.kind === "date") {
+    await addDateField(projectId, name);
+  } else if (spec.kind === "iteration") {
+    await addIterationField(projectId, name, repoConfig);
+  }
+}
+
+/**
+ * Create Hyperion custom fields. GitHub now reserves names like Type on new
+ * Projects — never abort the whole setup if one name is rejected.
+ */
+async function ensureRequiredProjectFields(project, repoConfig) {
+  if (!project?.id) return project;
+
+  const fieldMap = repoConfig.fieldMap || {};
+  const existingNames = collectFieldNames(project);
+
+  for (const spec of REQUIRED_FIELDS) {
+    const preferred = fieldMap[spec.key] || spec.defaultName;
+    const aliases = [
+      preferred,
+      ...(FIELD_NAME_ALIASES[spec.key] || []),
+      ...(spec.fallbackNames || []),
+    ];
+    if (aliases.some((n) => existingNames.has(String(n).toLowerCase()))) {
+      log(`  = Field exists: ${preferred} (skip)`);
+      continue;
+    }
+
+    const candidates = [preferred, ...(spec.fallbackNames || [])].filter(
+      (n, i, arr) => n && arr.findIndex((x) => x.toLowerCase() === n.toLowerCase()) === i
+    );
+
+    let created = false;
+    for (const name of candidates) {
+      if (existingNames.has(name.toLowerCase())) continue;
+      try {
+        await createProjectFieldByKind(project.id, spec, name, repoConfig);
+        existingNames.add(name.toLowerCase());
+        log(`  + Field created: ${name}`);
+        created = true;
+        break;
+      } catch (error) {
+        if (isReservedFieldError(error)) {
+          log(`  = Field "${name}" skipped (GitHub reserved or already taken)`);
+          continue;
+        }
+        log(`  WARN: Could not create field "${name}": ${error.message}`);
+        break;
+      }
+    }
+    if (!created) {
+      log(`  WARN: No writable field for ${spec.key} — set fieldMap.${spec.key} in projects-map.json`);
+    }
+  }
+
+  return project;
+}
 
 async function autoCreateProject(owner, repoConfig) {
   log("Project not found. Auto-creating...");
@@ -1218,42 +1394,7 @@ async function autoCreateProject(owner, repoConfig) {
     log(`  + Default repository: ${repoOwner}/${repoName}`);
   }
 
-  // Fetch newly created project to see existing fields (Status is auto-created by GitHub)
-  const project = await getProject(owner, created.number);
-  const existingNames = new Set(
-    (project?.fields?.nodes || []).map((f) => f?.name?.toLowerCase()).filter(Boolean)
-  );
-
-  const fieldMap = repoConfig.fieldMap || {};
-
-  for (const spec of REQUIRED_FIELDS) {
-    const name = fieldMap[spec.key] || spec.defaultName;
-    if (existingNames.has(name.toLowerCase())) {
-      log(`  = Field exists: ${name} (skip)`);
-      continue;
-    }
-
-    if (spec.kind === "single_select") {
-      await addSingleSelectField(project.id, name, spec.options, spec.key);
-    } else if (spec.kind === "number") {
-      await addNumberField(project.id, name);
-    } else if (spec.kind === "text") {
-      await addTextField(project.id, name);
-    } else if (spec.kind === "date") {
-      await addDateField(project.id, name);
-    } else if (spec.kind === "iteration") {
-      await addIterationField(project.id, name, repoConfig);
-    }
-    log(`  + Field created: ${name}`);
-  }
-
-  const refreshed = await getProject(owner, created.number);
-  await ensureStatusFieldOptions(refreshed, repoConfig);
-  await ensureKitFieldColors(refreshed, repoConfig);
-  await ensureKitProjectViews(refreshed);
-  await ensureSprintField(refreshed, repoConfig);
-
-  // Auto-save projectNumber back to config
+  // Persist number immediately so a later field error cannot orphan the Project.
   try {
     const rawConfig = await fs.readFile(configPath, "utf8");
     const configObj = JSON.parse(rawConfig);
@@ -1265,6 +1406,19 @@ async function autoCreateProject(owner, repoConfig) {
   } catch (e) {
     log(`  Could not auto-save projectNumber to config: ${e.message}`);
     log(`  Manually set "projectNumber": ${created.number} in projects-map.json`);
+  }
+
+  const project = await getProject(owner, created.number);
+  try {
+    await ensureRequiredProjectFields(project, repoConfig);
+    const refreshed = await getProject(owner, created.number);
+    await ensureStatusFieldOptions(refreshed, repoConfig);
+    await ensureKitFieldColors(refreshed, repoConfig);
+    await ensureKitProjectViews(refreshed);
+    await ensureSprintField(refreshed, repoConfig);
+  } catch (error) {
+    log(`  WARN: Project created but field/view setup was incomplete: ${error.message}`);
+    log("  Re-run sync — ensureRequiredProjectFields will fill remaining fields.");
   }
 
   log("");
@@ -1297,13 +1451,13 @@ function applyKitSampleFilter(cards, onlyIds) {
 
 const FIELD_NAME_ALIASES = {
   status: ["Status"],
-  type: ["Type", "Tipo"],
-  priority: ["Priority", "Prioridade"],
+  type: ["Type", "Tipo", "Card type"],
+  priority: ["Priority", "Prioridade", "Card priority"],
   sprint: ["Sprint", "Numero da Sprint", "Número da Sprint"],
   storyPoints: ["Story Points"],
   reporter: ["Reporter", "Relator"],
   parent: ["Parent (Epic/Feature)", "Pai (Epic/Feature)"],
-  dueDate: ["Due Date", "Data Limite"],
+  dueDate: ["Due Date", "Data Limite", "Card due date"],
 };
 
 function resolveProjectField(project, key, fieldMap = {}) {
@@ -1785,11 +1939,13 @@ async function runForwardSync() {
       log(`Project not found: owner=${projectOwner} number=${projectNumber}`);
     } else {
       log(`Project found: owner=${projectOwner} number=${projectNumber}`);
+      await ensureRequiredProjectFields(project, repoConfig);
+      project = (await getProject(projectOwner, projectNumber)) || project;
       await ensureStatusFieldOptions(project, repoConfig);
       await ensureKitFieldColors(project, repoConfig);
       await ensureKitProjectViews(project);
       await ensureSprintField(project, repoConfig);
-      project = await getProject(projectOwner, projectNumber);
+      project = (await getProject(projectOwner, projectNumber)) || project;
     }
   }
 
@@ -3141,4 +3297,5 @@ export {
   jiraRequest,
   graphql,
   DEFAULT_STATUS_OPTIONS,
+  statusWorkflowOptions,
 };

@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: null
+reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-005
 due_date: null
 categories:
@@ -41,7 +41,6 @@ Expor endpoints autenticados em `/api/moedas` para catálogo, cotações, conver
 
 ## 🔗 Sub-issues
 
-- PULSO-TASK-049
 - PULSO-TASK-050
 
 ## 📋 Resumo
@@ -50,4 +49,4 @@ Expor endpoints autenticados em `/api/moedas` para catálogo, cotações, conver
 - Contratos HTTP e limites definidos
 
 ### ⏳ Pendente
-- PULSO-TASK-049–050 — persistência favoritas e service/rotas
+- PULSO-TASK-050 — service e rotas de moedas

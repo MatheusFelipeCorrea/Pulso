@@ -146,14 +146,14 @@ function printMissingOptionMapping(repoConfig, locale) {
   }
 }
 
-const EXPECTED_STATUS_OPTIONS = [
-  "Backlog",
-  "Functional Refinement",
-  "Technical Refinement",
-  "In Progress",
-  "In Tests",
-  "In Revision",
-  "Done",
+const EXPECTED_STATUS_OPTION_GROUPS = [
+  ["Backlog"],
+  ["Functional Refinement", "Refinamento Funcional"],
+  ["Technical Refinement", "Refinamento Técnico"],
+  ["In Progress", "Em Progresso"],
+  ["In Tests", "Em Testes"],
+  ["In Revision", "Em Revisão"],
+  ["Done", "Concluído"],
 ];
 
 function normalizeText(value) {
@@ -172,9 +172,9 @@ function checkStatusOptions(statusField) {
 
   const optionNames = (statusField.options || []).map((o) => o.name);
   const normalizedExisting = new Set(optionNames.map(normalizeText));
-  const missing = EXPECTED_STATUS_OPTIONS.filter(
-    (name) => !normalizedExisting.has(normalizeText(name))
-  );
+  const missing = EXPECTED_STATUS_OPTION_GROUPS.filter(
+    (group) => !group.some((name) => normalizedExisting.has(normalizeText(name)))
+  ).map((group) => group[0]);
 
   if (!missing.length) {
     ok("Status field options match Hyperion flow (7 columns).");

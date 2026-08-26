@@ -11,6 +11,7 @@ import {
   buildIssueBody,
   buildEdges,
   resolveMappedOptionValue,
+  statusWorkflowOptions,
   buildOptionCandidates,
   pickSingleSelectOption,
   pickIterationOption,
@@ -152,6 +153,49 @@ test("buildEdges merges parent field and body sub-issues without duplicates", ()
     edges.map((e) => `${e.parentCardId}->${e.childCardId}`).sort(),
     ["PARENT->CHILD-1", "PARENT->CHILD-2"]
   );
+});
+
+test("buildEdges prefers child parent: over a stale parent children list", () => {
+  const cards = [
+    { cardId: "WRONG", parent: null, body: "## Sub-issues\n- CHILD\n" },
+    { cardId: "RIGHT", parent: null, body: "" },
+    { cardId: "CHILD", parent: "RIGHT", body: "" },
+  ];
+
+  const edges = buildEdges(cards);
+  assert.deepEqual(
+    edges.map((e) => `${e.parentCardId}->${e.childCardId}`),
+    ["RIGHT->CHILD"]
+  );
+});
+
+test("statusWorkflowOptions uses locale map for board column names", () => {
+  const repoConfig = {
+    locale: "pt-BR",
+    optionMapByLocale: {
+      "pt-BR": {
+        status: {
+          Backlog: "Backlog",
+          "Functional Refinement": "Refinamento Funcional",
+          "Technical Refinement": "Refinamento Técnico",
+          "In Progress": "Em Progresso",
+          "In Tests": "Em Testes",
+          "In Revision": "Em Revisão",
+          Done: "Concluído",
+        },
+      },
+    },
+  };
+
+  assert.deepEqual(statusWorkflowOptions(repoConfig), [
+    "Backlog",
+    "Refinamento Funcional",
+    "Refinamento Técnico",
+    "Em Progresso",
+    "Em Testes",
+    "Em Revisão",
+    "Concluído",
+  ]);
 });
 
 test("resolveMappedOptionValue prefers optionMapByLocale then optionMap", () => {

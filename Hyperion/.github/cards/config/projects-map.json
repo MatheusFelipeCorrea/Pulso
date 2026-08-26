@@ -8,7 +8,7 @@
     "backend": "github",
     "fieldMap": {
       "status": "Status",
-      "type": "Type",
+      "type": "Card type",
       "priority": "Priority",
       "sprint": "Sprint",
       "storyPoints": "Story Points",
