@@ -1,29 +1,30 @@
 ﻿# 📋 Pulso — Auditoria Completa de Requisitos e Arquitetura (PO + Engenharia)
 
-> **Leia este documento primeiro.** Sintetiza a auditoria dos 25 módulos (18 com código, 7 planejados) e dos RNFs. Detalhe por módulo: [00-Achados-Transversais.md](./00-Achados-Transversais.md).
+> **Leia este documento primeiro.** Sintetiza a auditoria dos módulos com código e dos RNFs. Detalhe transversal: [00-Achados-Transversais.md](./00-Achados-Transversais.md).  
 > Metodologia: leitura do código (`Codigo/Pulso/api` + `web`) vs. `Requisitos/Readme.md` e `RegrasDeNegocio.md`.
+
+> **Escopo TI5:** o produto documentado não inclui módulos dedicados de gestão de vale-transporte, relatórios produto nem gamificação.
 
 ---
 
 ## ✅ Correções pós-auditoria (ago/2026)
 
-A auditoria original registrou achados em **10 dos 18 módulos**. A maior parte dos itens 🔴/🟡 abaixo **já foi endereçada no código ou na documentação**:
+A auditoria original registrou achados em vários módulos. A maior parte dos itens 🔴/🟡 abaixo **já foi endereçada no código ou na documentação**:
 
 | Área | O que mudou |
 |---|---|
 | **Auth (01)** | Cookies `httpOnly`, mutex refresh, cadastro resiliente SMTP, P2002→409, rate-limit por rota, fix loop F5 em `/auth/me` |
-| **Dashboard / UX entrada (02, 12)** | Pós-login → `/transactions` (`DEFAULT_AUTHENTICATED_ROUTE`); landing com badges Em breve/Beta |
+| **Dashboard / UX entrada (02, 12)** | Pós-login → `/dashboard`; landing com badges Em breve/Beta |
 | **Transações (03)** | Delete recorrente preserva histórico; `grupoBeneficio` + presets VA/VR/VT |
 | **Metas (04)** | `excluirAporte` em meta concluída + UI de aportes |
 | **Viagens (05)** | `@unique` em `Viagem.metaId`; RN-074 (10 cat.); doc cache RF-033 |
 | **Lembretes (07)** | `criarLembrete` preserva registro se sync falhar; RF-058b |
-| **VT (08)** | Decisão B — CLT vende com aviso; RNs reescritas; saldo Serializable |
-| **Grupos (13)** | Rate limit preview/entrar; `@unique` viagem/grupo; metas atômicas |
+| **Grupos (13)** | Rate limit preview/entrar; `@unique` viagem/grupo; metas atômicas; Socket.IO + Premium |
 | **Orçamento (14)** | Flag `orcamentoExcedeRenda` no backend |
 | **Dívidas (17)** | Reabertura auto ao excluir último pagamento |
 | **Planejamento compra (18)** | RN-093 meta concluída; RN-088 média 3 meses; renda unificada |
 
-**Ainda pendente (prioridade product/infra):** Dashboard MVP (RF-007+), `modoUso` configurável (M10), Chatbot/Insights (M06), Redis/cache compartilhado (T5), badges sidebar incompletos (RNF-NOVO-B1), RN módulos 19–25.
+**Ainda pendente (prioridade product/infra):** `modoUso` configurável (M10), Chatbot/Insights (M06), Redis/cache compartilhado (T5), badges sidebar incompletos (RNF-NOVO-B1), RN do Onboarding (escopo TI5).
 
 ---
 
@@ -42,42 +43,34 @@ A auditoria original registrou achados em **10 dos 18 módulos**. A maior parte 
 | # | Módulo | Status README | Veredito |
 |---|---|---|---|
 | 01 | Autenticação | ✅ 6/6 | ✅ Confirmado; achados T3/T4/T6/T7 corrigidos |
-| 02 | Dashboard | ❌ 0/9 | ✅ Confirmado ausente; **redirect pós-login corrigido** → `/transactions` |
+| 02 | Dashboard | 🟡 8/9 | ✅ API + UI; falta RF-139 |
 | 03 | Transações | ✅ 13/13 | ✅ Confirmado; bugs recorrente + VA/VR/VT corrigidos |
 | 04 | Metas | ✅ 8/8 | ✅ Confirmado; excluir aporte corrigido |
 | 05 | Viagens | ✅ 11/11 | ✅ Confirmado; doc + unique metaId |
 | 06 | Insights/Chatbot | ❌ 0% | ✅ Confirmado — chatbot inexistente |
 | 07 | Lembretes | ✅ 5/5 | ✅ Confirmado; sync na criação corrigido |
-| 08 | VT | ✅ 6/6 | ✅ **Decisão B** — permitir venda CLT com aviso |
-| 09 | Relatórios | ❌ 0/6 | ✅ Scaffold morto |
 | 10 | Perfil | 🟡 Parcial | ⚠️ `modoUso` ainda não setável na UI |
-| 11 | Gamificação | ❌ 0/7 | 🟡 Streak OK; resto parcial |
 | 12 | Homepage | ✅ 4/4 | ✅ Badges alinhados à realidade |
-| 13 | Grupos | ✅ 15/15 | ✅ Maduro; enumeração mitigada |
+| 13 | Grupos | ✅ 15/15 | ✅ Maduro; Premium + Socket.IO |
 | 14 | Orçamento | ✅ 7/7 | ✅ Sólido; RN-059 no backend |
 | 15 | Divisão | ✅ 6/6 | ✅ Referência de engenharia |
 | 16 | Calendário | ✅ 5/5 | ✅ Sem achados críticos |
 | 17 | Dívidas | ✅ 7/7 | ✅ Reabertura auto corrigida |
 | 18 | Planej. compra | ✅ 6/6 | ✅ RN-088/093 corrigidos |
-| 19–25 | Planejados | ⏳ | Zero RN documentada |
+| 19 | Onboarding (planejado TI5) | ⏳ | RN ainda não escrita |
 
 ---
 
 ## 2. Gaps de Usabilidade (estado atual)
 
-### ~~Porta de entrada quebrada~~ ✅ Corrigido
-
-Login/OAuth/GuestRoute/Landing redirecionam para **`/transactions`**, não mais para `InDevelopmentPage` do Dashboard.
-
 ### Landing vs realidade ✅ Mitigado
 
-Badges **Em breve** (Dashboard, Chatbot) e **Beta** (IA Insights); textos ajustados.
+Badges **Em breve** (Chatbot) e **Beta** (IA Insights); textos ajustados.
 
 ### Gaps ainda abertos
 
-- **Dashboard e sidebar:** `/dashboard`, `/reports`, `/insights`, etc. ainda são placeholders se o usuário clicar no menu.
 - **`modoUso` (M10):** segmentação Estagiário/PJ/PF inacessível na UI.
-- **Chatbot / Insights com Gemini:** prometidos na visão de produto, 0% de código.
+- **Chatbot / Insights com Gemini:** prometidos na visão de produto, implementação parcial.
 
 ---
 
@@ -85,11 +78,10 @@ Badges **Em breve** (Dashboard, Chatbot) e **Beta** (IA Insights); textos ajusta
 
 | Achado original | Status ago/2026 |
 |---|---|
-| VT CLT — bloquear vs aviso | ✅ Decisão **B** — RNs reescritas, aviso no front |
 | Delete recorrente apaga passado | ✅ Corrigido (UNTIL + dataCorte) |
 | `modoUso` nunca setável | ⏸ Pendente (M10) |
 | Padrão T6 (efeito colateral apaga recurso) | ✅ Auth + Lembretes corrigidos |
-| Padrão T7 (check-then-act) | ✅ VT, Viagem↔Meta, Grupos viagem/metas |
+| Padrão T7 (check-then-act) | ✅ Viagem↔Meta, Grupos viagem/metas |
 | RN-088 / RN-093 (Planejamento) | ✅ Corrigidos |
 | Integração custom + VA/VR/VT | ✅ `grupoBeneficio` |
 
@@ -99,16 +91,11 @@ Badges **Em breve** (Dashboard, Chatbot) e **Beta** (IA Insights); textos ajusta
 
 ### Ainda relevantes
 
-- Dashboard MVP (RF-NOVO-B2) reaproveitando endpoints existentes
 - Tela Perfil/`modoUso` (M10)
-- Cache/rate-limit compartilhado serverless (T5)
+- Cache/rate-limit compartilhado (T5) quando aplicável
 - Badge "em breve" na sidebar (RNF-NOVO-B1)
-- RN para módulos 19–25
+- RN para Onboarding (M19)
 - Integração Grupos ↔ `/expense-split`
-
-### Já endereçados (ver tabela no topo)
-
-Itens RF-NOVO-B1, C1–C3, G1, H1, M1–M3, N1, O1, P1, etc.
 
 ---
 
@@ -117,7 +104,6 @@ Itens RF-NOVO-B1, C1–C3, G1, H1, M1–M3, N1, O1, P1, etc.
 | Prioridade | Ação | Status |
 |---|---|---|
 | 🔴 | Pós-login → rota funcional | ✅ |
-| 🔴 | VT CLT (decisão B) | ✅ |
 | 🔴 | Delete recorrente | ✅ |
 | 🔴 | `modoUso` configurável | ⏸ M10 |
 | 🔴 | Cookies httpOnly | ✅ |
@@ -128,17 +114,15 @@ Itens RF-NOVO-B1, C1–C3, G1, H1, M1–M3, N1, O1, P1, etc.
 | 🟢 | Rate limit grupos | ✅ |
 | 🟢 | Unique viagem/meta/grupo | ✅ |
 | 🟢 | Landing badges | ✅ |
-| 🟢 | RN módulos 19–25 | ⏸ |
+| 🟢 | RN Onboarding (M19) | ⏸ |
 
 ---
 
 ## Perguntas em aberto
 
-1. ~~VT CLT bloquear ou aviso?~~ → **Decisão B (aviso)**.
-2. **`modoUso`** — quando priorizar tela de perfil/onboarding?
-3. **CI com `jest --coverage`** — pipeline automatizado ou manual?
-4. **Módulo 23 (Casal)** — rateio vs privacidade (RN-116)?
+1. **`modoUso`** — quando priorizar tela de perfil/onboarding?
+2. **CI com `jest --coverage`** — pipeline automatizado ou manual?
 
 ---
 
-*20 relatórios em `Documentacao/03-Auditorias/Product Owner/` · correções de código refletidas nos módulos 01–05, 07–08, 12–18.*
+*Relatórios PO em `Documentacao/03-Auditorias/Product Owner/` (sem 08/09/11) · correções refletidas nos módulos 01–05, 07, 12–18.*

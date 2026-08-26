@@ -35,7 +35,6 @@ Servidor **Node.js + Express** com arquitetura em camadas (routes → controller
 | Categorias padrão no registro | ✅ |
 | Tags | ✅ |
 | **Transações** (CRUD, filtros, resumo, recorrência) | ✅ |
-| **Vale Transporte** (saldo, vendas, usos) | ✅ |
 | **Orçamento mensal** (limites, cópia, alertas) | ✅ |
 | **Notificações** (listagem, contador, marcar lida) | ✅ |
 | **Lembretes** (CRUD, marcar pago) | ✅ |
@@ -51,8 +50,10 @@ Servidor **Node.js + Express** com arquitetura em camadas (routes → controller
 | **Importação** (OFX/CSV/XLSX/PDF → preview → confirmar) | 🟡 Core entregue; RF-159 aprendizado pendente |
 | **Planejamento de compra** | ✅ |
 | **Divisão de despesas** | ✅ |
-| **Grupos** (CRUD, convite, membros, viagem, metas, chat) | 🟡 Quase completo — ver gaps menores |
-| Insights, chatbot, gamificação, relatórios | 🔜 Schema Prisma · sem rotas/UI completas |
+| **Grupos** (CRUD, convite, membros, viagem, metas, chat Socket.IO) | 🟡 Premium — ver gaps menores |
+| Insights, chatbot | 🔜 Schema / parcial |
+| Planos Free/Premium | ✅ Gate Premium em grupos |
+| RabbitMQ (alerts + reminders + emails) | ✅ Opcional — fallback modo direto |
 
 Prefixo global: **`/api`**
 
@@ -68,7 +69,9 @@ Prefixo global: **`/api`**
 | JWT + bcrypt | Auth |
 | Passport | Google OAuth |
 | Nodemailer | Emails transacionais |
-| node-cron | Jobs (recorrência, cleanup tokens, alertas de orçamento) |
+| node-cron | Jobs (recorrência, cleanup tokens, alertas) |
+| amqplib / RabbitMQ | Filas `pulso.alerts`, `pulso.reminders`, `pulso.emails` (TI5) |
+| Socket.IO | Chat de grupos em tempo real |
 | Winston | Logs |
 | Jest + Supertest | Testes |
 
@@ -93,25 +96,25 @@ Pulso/api/
     │   ├── transactionRoutes.js
     │   ├── categoryRoutes.js
     │   ├── tagRoutes.js
-    │   ├── transportRoutes.js
-    │   ├── budgetRoutes.js
-    │   ├── notificationRoutes.js
-    │   ├── reminderRoutes.js
-    │   ├── calendarRoutes.js
-    │   ├── debtRoutes.js
-    │   ├── metaRoutes.js
-    │   ├── viagemRoutes.js
-    │   ├── moedaRoutes.js
-    │   ├── grupoRoutes.js
-    │   ├── purchasePlanningRoutes.js
-    │   ├── expenseSplitRoutes.js
-    │   ├── dashboardRoutes.js
-    │   ├── importRoutes.js
-    │   ├── syncRoutes.js
-    │   └── cronRoutes.js
+│   ├── budgetRoutes.js
+│   ├── notificationRoutes.js
+│   ├── reminderRoutes.js
+│   ├── calendarRoutes.js
+│   ├── debtRoutes.js
+│   ├── metaRoutes.js
+│   ├── viagemRoutes.js
+│   ├── moedaRoutes.js
+│   ├── grupoRoutes.js
+│   ├── purchasePlanningRoutes.js
+│   ├── expenseSplitRoutes.js
+│   ├── dashboardRoutes.js
+│   ├── importRoutes.js
+│   ├── syncRoutes.js
+│   └── cronRoutes.js
     ├── controllers/
     ├── services/        (+ importService, dashboardService, …)
     ├── repositories/
+    ├── messaging/       rabbit.js, jobBridge.js (alerts + reminders)
     ├── parsers/         ofx, csv, xlsx, pdf (+ Gemini)
     ├── providers/       email, geonames, duffel, amadeus (+ templates)
     ├── schemas/
@@ -181,18 +184,6 @@ Erros: `AppError` → `errorMiddleware` → `{ status: 'error', message }`
 |--------|------|--------|
 | GET | `/` | 🔒 |
 | POST | `/` | 🔒 Criar tag (usado pelo formulário de transações) |
-
-### Vale Transporte — `/api/transporte`
-
-| Método | Rota | Acesso |
-|--------|------|--------|
-| GET | `/saldo` | 🔒 Resumo do mês (`?periodo=YYYY-MM`) |
-| GET | `/vendas` | 🔒 Histórico de vendas paginado |
-| POST | `/vendas` | 🔒 Registrar venda (+ receita DINHEIRO RN-041) |
-| GET | `/usos` | 🔒 Histórico de usos paginado |
-| POST | `/usos` | 🔒 Registrar uso de passagens |
-
-Acesso restrito a `modoUso` **ESTAGIARIO** ou **CLT** (403 para PJ / Pessoa Física).
 
 ### Orçamento — `/api/orcamentos`
 
@@ -468,9 +459,21 @@ Prefixo: **`/api/grupos`** (todas 🔒).
 | POST/PATCH/DELETE | `/:id/viagem/despesas[/:despesaId]` | Pretensões |
 | POST | `/:id/metas` | Criar metas (lote) |
 | POST | `/:id/metas/:metaId/aportes` | Aporte |
-| POST | `/:id/mensagens` | Chat |
+| POST | `/:id/mensagens` | Chat (também em tempo real via Socket.IO) |
 
-Gaps restantes: meta não auto-conclui; integração RF-095 ↔ `/expense-split`. Ver [Modulos/Grupos.md](../Modulos/Grupos.md).
+**Premium:** rotas de grupos exigem plano `PREMIUM`. Gaps restantes: integração RF-095 ↔ `/expense-split`. Ver [Modulos/Grupos.md](../Modulos/Grupos.md).
+
+---
+
+## 🐇 RabbitMQ + Socket.IO (TI5)
+
+| Recurso | Detalhe |
+|---------|---------|
+| Filas | `pulso.alerts` (orçamento, dívidas) · `pulso.reminders` (lembretes) · `pulso.emails` (verificação / reset) |
+| Código | `src/messaging/rabbit.js`, `src/messaging/jobBridge.js` |
+| Fallback | Sem `RABBITMQ_URL`, jobs executam em modo direto |
+| Socket.IO | Path `/api/socket.io` — chat de grupos |
+| Deploy | API **long-running** — [TI5-Hospedagem.md](../Deploy/TI5-Hospedagem.md) |
 
 ---
 
@@ -500,7 +503,7 @@ Implementação: `controllers/expenseSplitController.js`, `services/expenseSplit
 
 ## 🗺️ Roadmap (não implementado)
 
-Módulos com **schema Prisma** mas **sem API/UI completa** hoje: gamificação, chatbot, insights IA, relatórios. **Grupos** e **Divisão de Despesas:** API/UI principais entregues; integração do toggle de rateio (RF-095) ainda pendente. **Importação:** core entregue; falta RF-159 (aprendizado).
+Módulos parciais hoje: chatbot, insights IA. **Grupos** e **Divisão de Despesas:** API/UI principais entregues; integração do toggle de rateio (RF-095) ainda pendente. **Importação:** core entregue; falta RF-159 (aprendizado).
 
 **Próximos passos sugeridos:** ver [Analise-Produto.md](../../01-Produto/Analise-Produto.md).
 

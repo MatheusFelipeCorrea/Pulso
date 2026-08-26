@@ -101,4 +101,4 @@ Comportamento alinhado a RN-097 e consistente com `atualizarLembrete`.
 
 ---
 
-*Próximo módulo sugerido: 08 — Gestão de Vale Transporte.*
+*Próximo módulo sugerido: 10 — Perfil e Configurações.*

@@ -202,21 +202,6 @@ package "Lembretes e Calendário" {
   }
 }
 
-package "Vale Transporte" {
-  class VendaVt {
-    +nomeComprador: String
-    +valorNominal: Decimal
-    +valorRecebido: Decimal
-    +dataVenda: DateTime
-  }
-
-  class UsoVt {
-    +quantidade: Int
-    +valorPorPassagem: Decimal
-    +data: DateTime
-  }
-}
-
 package "Dívidas" {
   class Divida {
     +direcao: DirecaoDivida
@@ -233,7 +218,7 @@ package "Dívidas" {
   }
 }
 
-package "Grupos (planejado)" <<Cloud>> {
+package "Grupos" {
   class Grupo {
     +nome: String
     +codigoConvite: String
@@ -245,18 +230,7 @@ package "Grupos (planejado)" <<Cloud>> {
 
   class MetaGrupo
   class ViagemGrupo
-}
-
-package "Gamificação (planejado)" <<Cloud>> {
-  class Sequencia {
-    +sequenciaAtual: Int
-    +xp: Int
-    +nivel: NivelFinanceiro
-  }
-
-  class Conquista
-  class ConquistaUsuario
-  class DesafioMensal
+  class MensagemChatGrupo
 }
 
 ' --- Relacionamentos (fora dos packages) ---
@@ -285,16 +259,11 @@ Usuario "1" -- "*" MoedaFavorita
 Usuario "1" -- "*" Lembrete
 Lembrete "0..1" -- "0..*" Lembrete : template / gerados
 
-Usuario "1" -- "*" VendaVt
-Usuario "1" -- "*" UsoVt
-
 Usuario "1" -- "*" Divida
 Divida "1" -- "*" PagamentoDivida
 
 Grupo "1" -- "*" MembroGrupo
 MembroGrupo "*" -- "1" Usuario
-
-Usuario "1" -- "0..1" Sequencia
-Usuario "1" -- "*" ConquistaUsuario
+Grupo "1" -- "*" MensagemChatGrupo
 
 @enduml

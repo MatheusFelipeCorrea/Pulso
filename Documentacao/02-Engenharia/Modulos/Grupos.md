@@ -63,9 +63,9 @@ Ao vincular viagem **sem** foto customizada, a capa do destino passa a aparecer 
 
 **Modais:** convite (link + WhatsApp + Instagram + **QR code**), editar grupo, gerenciar membros, viagem, pretensão, metas (múltiplas), aporte, imagem (upload de arquivo), excluir, sair.
 
-**Chat:** sync ~3s (pausa quando a aba não está visível, via `document.visibilityState`) + “Carregar mensagens anteriores” (`GET /mensagens`, 20 por página) — o sync mescla por id em vez de substituir a lista, então histórico já carregado não desaparece a cada poll. Detalhe do grupo também faz polling geral ~30s.
+**Chat:** **Socket.IO** em tempo real (`web/src/services/groupChatSocket.js`, path `/api/socket.io`) + REST para histórico (`GET /mensagens`). Requer API **long-running** — ver [TI5-Hospedagem.md](../Deploy/TI5-Hospedagem.md).
 
-> **Por que polling e não WebSocket:** a API roda como funções serverless na Vercel em produção (`vercel.json` + adapter Neon em `database.js`), que não sustenta conexões WebSocket persistentes. Polling rápido (~3s) é o caminho compatível com esse runtime sem depender de um serviço gerenciado (Pusher/Ably/Supabase Realtime). Se a API migrar para um servidor persistente (VPS/Railway) ou um desses serviços for integrado, dá pra trocar por push real.
+> **Premium:** rotas de grupos protegidas por `requirePremium`. Plano Free recebe 403.
 
 **Viagem pessoal → grupo:** `TripFormModal` em `/trips` — toggle opcional para vincular a um grupo após criar.
 
@@ -109,7 +109,7 @@ Implementação: `api/src/services/grupoService.js` → `atualizarModoDivisao`; 
 | RF-099 | ✅ | Sair (lista + detalhe) |
 | RF-100 | ✅ | Admin remover / gerenciar membros |
 | RF-101 | ✅ | Painel 4 cards + ícones |
-| RF-102 | ✅ | Chat com polling rápido (~3s) + paginação. WebSocket não é viável no runtime serverless atual (ver nota acima) |
+| RF-102 | ✅ | Chat Socket.IO em tempo real + histórico REST. API long-running (TI5) |
 
 ---
 
@@ -134,13 +134,12 @@ Implementação: `api/src/services/grupoService.js` → `atualizarModoDivisao`; 
 
 | Gap | Detalhe |
 |-----|---------|
-| **Página `/achievements`** | Notificações STREAK/CONQUISTA já disparam; UI pendente |
 | **Transferir admin único** | RN-113 parcialmente coberta por mensagens de erro |
 
 ### Fora de escopo imediato
 
 - **Vincular toggle do grupo → `/expense-split`:** o módulo global já existe e está na sidebar; falta o trabalho de integração em si (ligar participantes do grupo aos participantes da divisão).
-- **Chat via WebSocket/SSE nativo:** inviável enquanto a API rodar como funções serverless na Vercel. Só faz sentido se a API migrar para um processo persistente (VPS/Railway) ou se um serviço gerenciado (Pusher/Ably/Supabase Realtime) for integrado — nenhuma das duas está planejada agora.
+- **Chat em tempo real:** entregue via Socket.IO; exige hospedagem de API contínua (não serverless puro).
 
 ---
 

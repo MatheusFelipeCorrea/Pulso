@@ -12,8 +12,8 @@ Fases **concluídas ou em uso**:
 - Fase 1 — Design System (componentes principais + tema claro/escuro)
 - Fase 2 — Layouts + Sidebar
 - Fase 3 — Autenticação
-- Fase 4 — Core financeiro: Transações, VT, orçamento, dívidas, metas, viagens, **dashboard**, **importação de extratos**, planejamento de compra, divisão de despesas
-- Fase 7 (quase fechada) — **Grupos** (ver gaps em [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md))
+- Fase 4 — Core financeiro: Transações, orçamento, dívidas, metas, viagens, **dashboard**, **importação de extratos**, planejamento de compra, divisão de despesas
+- Fase 7 (quase fechada) — **Grupos** Premium + chat Socket.IO (ver gaps em [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md))
 - Fase 9 (parcial) — Homepage pública entregue; onboarding RF-151–154 ainda não
 
 **Próximo foco sugerido:** perfil/settings + RF-139 (quick-add) + RF-159 (aprendizado na importação) — ver [Analise-Produto.md](../Analise-Produto.md).
@@ -33,8 +33,8 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 | Fase 4 | Core Financeiro | 2-3 semanas |
 | Fase 5 | Módulos Secundários | 2-3 semanas |
 | Fase 6 | IA e Inteligência | 1-2 semanas |
-| Fase 7 | Social (Grupos) | 1-2 semanas |
-| Fase 8 | Gamificação | 1 semana |
+| Fase 7 | Social (Grupos + Socket.IO) | 1-2 semanas |
+| Fase 8 | Planos Free/Premium + mensageria | 3-5 dias |
 | Fase 9 | Homepage + Onboarding | 3-5 dias |
 | Fase 10 | Testes + Polish + Deploy | 1-2 semanas |
 
@@ -161,10 +161,7 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 
 ### 2.3 — Header
 ```
-- [ ] Logo clicável
-- [ ] Streak counter
-- [ ] Score de saúde mini
-- [ ] Avatar + dropdown (perfil, config, sair)
+- [ ] Header com avatar + dropdown (perfil, config, sair)
 - [ ] Toggle tema (dark/light)
 - [ ] Notificações (sino com badge de contagem)
 ```
@@ -268,7 +265,6 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 - [ ] Últimas transações (mini tabela)
 - [ ] Metas ativas (preview)
 - [ ] Score de saúde (mini)
-- [ ] Streak (mini)
 ```
 
 ### 4.5 — Orçamento Mensal
@@ -305,17 +301,7 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 - [ ] Auto-concluir ao atingir alvo
 ```
 
-### 5.2 — Vale Transporte
-```
-- [ ] Backend: CRUD vendas + usos
-- [ ] Frontend: tela VT (saldo, countdown, histórico)
-- [ ] Modal: registrar venda
-- [ ] Modal: registrar uso
-- [ ] Lógica de intervalo entre vendas
-- [ ] Cálculo: saldo = recebido - usado - vendido
-```
-
-### 5.3 — Viagens e Moedas
+### 5.2 — Viagens e Moedas
 ```
 - [ ] Backend: CRUD viagens + pretensões
 - [ ] Backend: provider AwesomeAPI (cotações)
@@ -326,9 +312,10 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 - [ ] Modal: observação
 - [ ] Moedas favoritas
 - [ ] Gráfico histórico de cotação
+- [ ] Estimativas de transporte (passagens) com ajuste sazonal
 ```
 
-### 5.4 — Dívidas Pessoais
+### 5.3 — Dívidas Pessoais
 ```
 - [ ] Backend: CRUD dívidas
 - [ ] Frontend: tela dívidas (tabs: me devem / eu devo / quitadas)
@@ -337,7 +324,7 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 - [ ] Alertas de vencimento
 ```
 
-### 5.5 — Divisão de Despesas ✅
+### 5.4 — Divisão de Despesas ✅
 ```
 - [x] Backend: CRUD divisões + participantes
 - [x] Frontend: tela divisões
@@ -348,7 +335,7 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 - [ ] Vincular ao toggle RF-095 de Grupos (ver Fase 7)
 ```
 
-### 5.6 — Planejamento de Compra ✅
+### 5.5 — Planejamento de Compra ✅
 ```
 - [x] Backend: CRUD itens
 - [x] Frontend: tela planejamento
@@ -359,19 +346,7 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 - [x] Ação "Comprei!"
 ```
 
-### 5.7 — Relatórios
-```
-- [ ] Backend: endpoints de relatório (monthly, categories, comparison, evolution)
-- [ ] Frontend: tela relatórios
-- [ ] Gráficos: pizza, barras comparativas, linha de evolução
-- [ ] Gastos por recurso
-- [ ] Top 5 maiores gastos
-- [ ] Métricas rápidas
-- [ ] Exportar PDF (@react-pdf/renderer)
-- [ ] Exportar CSV (PapaParse)
-```
-
-### 5.8 — Perfil e Configurações
+### 5.6 — Perfil e Configurações
 ```
 - [ ] Backend: endpoints de user/settings
 - [ ] Frontend: tela perfil
@@ -417,13 +392,13 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 
 ---
 
-## Fase 7 — Social (Grupos) ✅ (jul/2026)
+## Fase 7 — Social (Grupos) ✅ (jul/2026+)
 
 ```
 - [x] Backend: CRUD grupos + membros (entrada/saída, papéis)
 - [x] Backend: viagens de grupo + pretensões por membro
 - [x] Backend: metas de grupo + aportes por membro
-- [x] Backend: chat (POST + GET /mensagens paginado)
+- [x] Backend: chat REST + **Socket.IO** em tempo real
 - [x] Frontend: lista + detalhe (4 cards, ícones)
 - [x] Modais: criar, entrar, convidar (com QR code), gerenciar membros, editar, metas, aporte, imagem (upload de arquivo)
 - [x] RF-095 MVP: toggle pretensão / divisão igual (UI, persistido no servidor por grupo)
@@ -431,27 +406,23 @@ Pack de agents/skills: [`.github/INDEX.md`](../../../.github/INDEX.md) · Comand
 - [x] Notificações GRUPO_ATIVIDADE / META_ATINGIDA
 - [x] RN-119 meta concluída automaticamente
 - [x] Upload de imagem (arquivo jpg/png)
-- [ ] Chat tempo real (WebSocket/SSE)
-- [ ] Vincular RF-095 ao módulo /expense-split (Fase 5.5 — já disponível, falta a integração em si)
+- [x] Gate **Premium** (`requirePremium`)
+- [ ] Vincular RF-095 ao módulo /expense-split (Fase 5.4 — já disponível, falta a integração em si)
 ```
 
 Ver gaps: [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md).
 
 ---
 
-## Fase 8 — Gamificação
+## Fase 8 — Planos Free/Premium + mensageria (TI5)
 
 ```
-- [ ] Backend: streak (calcular, incrementar, resetar)
-- [ ] Backend: conquistas (seed + verificação automática)
-- [ ] Backend: desafio mensal (gerar via Gemini)
-- [ ] Backend: XP e níveis
-- [ ] Frontend: tela Gamificação/Conquistas
-- [ ] Grid de badges (desbloqueadas/bloqueadas)
-- [ ] Desafio do mês com progresso
-- [ ] Educação financeira (quizzes)
-- [ ] Modal: quiz
-- [ ] Toast de conquista ao desbloquear
+- [x] Campo `plano` FREE/PREMIUM em configurações do usuário
+- [x] Middleware `requirePremium` nas rotas de grupos
+- [x] Alternância demo de plano (sem billing)
+- [x] RabbitMQ — filas `pulso.alerts`, `pulso.reminders` e `pulso.emails`
+- [x] Fallback: jobs em modo direto sem `RABBITMQ_URL`
+- [ ] Documentar deploy API long-running (Socket.IO + consumers) — ver TI5-Hospedagem.md
 ```
 
 ---
@@ -490,7 +461,7 @@ Ver gaps: [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md).
 ### 10.3 — Deploy
 ```
 - [ ] Frontend: deploy na Vercel
-- [ ] Backend: deploy no Render
+- [ ] Backend: processo long-running (Socket.IO + RabbitMQ) — TI5
 - [ ] Banco: já no Neon ✅
 - [ ] Variáveis de ambiente em produção
 - [ ] HTTPS forçado

@@ -48,10 +48,7 @@ const buildMensagemIncompativel = (recurso, categoriaNome) => {
         );
     }
 
-    return (
-        `A categoria "${nome}" não aceita Vale Transporte (VT). ` +
-        `VT só vale para ${GRUPO_BENEFICIO_LABELS.TRANSPORTE}.`
-    );
+    return `A categoria "${nome}" não aceita este recurso.`;
 };
 
 /**
@@ -59,6 +56,10 @@ const buildMensagemIncompativel = (recurso, categoriaNome) => {
  * Usa grupoBeneficio explícito, com fallback por nome/aliases das categorias padrão.
  */
 const validarRecursoCategoria = (recurso, categoria, tipo) => {
+    if (recurso === 'VT') {
+        throw new AppError('VT não está disponível', 400);
+    }
+
     if (tipo !== 'DESPESA') return;
     if (recurso === 'DINHEIRO' || recurso === 'POUPANCA') return;
 
@@ -76,19 +77,6 @@ const validarRecursoCategoria = (recurso, categoria, tipo) => {
     if (recurso === 'VR') {
         if (grupo !== GRUPO_BENEFICIO.ALIMENTACAO) {
             throw new AppError(buildMensagemIncompativel('VR', categoria?.nome), 400);
-        }
-        return;
-    }
-
-    if (recurso === 'VT') {
-        if (grupo === GRUPO_BENEFICIO.ALIMENTACAO) {
-            throw new AppError(
-                `Não é possível usar VT na categoria "${categoria?.nome}". VT não vale para alimentação.`,
-                400
-            );
-        }
-        if (grupo !== GRUPO_BENEFICIO.TRANSPORTE) {
-            throw new AppError(buildMensagemIncompativel('VT', categoria?.nome), 400);
         }
     }
 };

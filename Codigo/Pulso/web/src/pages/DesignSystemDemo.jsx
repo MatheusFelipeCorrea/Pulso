@@ -644,27 +644,6 @@ export default function DesignSystemDemo() {
                   </div>
                 </div>
 
-                <div className="p-4 bg-[var(--ds-color-surface)] rounded-lg space-y-3">
-                  <h4 className="font-semibold text-sm text-[var(--ds-color-text)]">Gamificação</h4>
-                  <div className="space-y-2">
-                    <Button
-                      size="sm"
-                      fullWidth
-                      variant="success"
-                      onClick={() => toast.success('Você ganhou 50 XP!', '🏆 Conquista desbloqueada')}
-                    >
-                      Desbloquear Conquista
-                    </Button>
-                    <Button
-                      size="sm"
-                      fullWidth
-                      variant="ghost"
-                      onClick={() => toast.info('Você subiu para o nível 5!', '⬆️ Level Up')}
-                    >
-                      Level Up
-                    </Button>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

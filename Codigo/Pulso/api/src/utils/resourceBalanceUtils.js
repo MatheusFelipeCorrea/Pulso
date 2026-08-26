@@ -1,4 +1,4 @@
-const RECURSOS_DASHBOARD = ['DINHEIRO', 'VA', 'VR', 'VT'];
+const RECURSOS_DASHBOARD = ['DINHEIRO', 'VA', 'VR'];
 
 /**
  * Calcula saldo acumulado por recurso a partir de todas as transações.

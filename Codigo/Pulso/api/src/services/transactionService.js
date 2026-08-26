@@ -8,9 +8,7 @@ const {
 const categoryRepository = require('../repositories/categoryRepository');
 const tagRepository = require('../repositories/tagRepository');
 const notificationService = require('./notificationService');
-const gamificationService = require('./gamificationService');
 const insightService = require('./insightService');
-const prisma = require('../config/database');
 const { validarRecursoCategoria } = require('../utils/recursoCategoriaRules');
 const { mapTransacao } = require('../utils/transactionMapper');
 const { calcularSaldosPorRecurso } = require('../utils/resourceBalanceUtils');
@@ -40,38 +38,6 @@ const calcularSaldoRecursoNoPeriodo = async (usuarioId, recurso, filtros = {}) =
     }
 
     return { saldoFim, saldoInicial };
-};
-
-const incrementarStreak = async (usuarioId) => {
-    const hoje = startOfDay(new Date());
-    const sequencia = await prisma.sequencia.findUnique({ where: { usuarioId } });
-    if (!sequencia) return { antes: 0, depois: 0 };
-
-    const anterior = sequencia.sequenciaAtual;
-    const ultima = sequencia.ultimaAtividade ? startOfDay(sequencia.ultimaAtividade) : null;
-    if (ultima && ultima.getTime() === hoje.getTime()) {
-        return { antes: anterior, depois: anterior };
-    }
-
-    let novaSequencia = 1;
-    if (ultima) {
-        const ontem = new Date(hoje);
-        ontem.setDate(ontem.getDate() - 1);
-        if (ultima.getTime() === ontem.getTime()) {
-            novaSequencia = sequencia.sequenciaAtual + 1;
-        }
-    }
-
-    await prisma.sequencia.update({
-        where: { usuarioId },
-        data: {
-            sequenciaAtual: novaSequencia,
-            maiorSequencia: Math.max(sequencia.maiorSequencia, novaSequencia),
-            ultimaAtividade: new Date(),
-        },
-    });
-
-    return { antes: anterior, depois: novaSequencia };
 };
 
 const RECURSO_LABELS = {
@@ -315,12 +281,9 @@ const criarTransacao = async (usuarioId, dados) => {
         );
     }
 
-    const streak = await incrementarStreak(usuarioId);
-
     const completa = await transactionRepository.buscarPorId(transacao.id, usuarioId);
 
     await notificarTransacaoRegistrada(usuarioId, completa, categoria);
-    await gamificationService.processarAposTransacao(usuarioId, streak.antes, streak.depois);
     await insightService.tentarGerarInsightAposTransacao(usuarioId);
 
     return mapTransacao(completa);

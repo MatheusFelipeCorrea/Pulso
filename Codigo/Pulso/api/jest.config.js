@@ -7,7 +7,6 @@ module.exports = {
     resetMocks: true,
     collectCoverageFrom: [
         'src/services/**/*.js',
-        '!src/services/gamificationService.js',
         '!src/services/insightService.js',
         '!src/services/viagemService.js',
         '!src/services/purchaseItemImageService.js',

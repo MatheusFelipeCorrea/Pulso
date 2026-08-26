@@ -1,18 +1,23 @@
 const app = require('./app');
+const http = require('http');
 const env = require('./config/env');
 const logger = require('./utils/logger');
 const prisma = require('./config/database');
 const cron = require('node-cron');
+const { initSocket } = require('./socket/groupChat');
 const { runTokenCleanup } = require('./jobs/tokenCleanupJob');
 const { runRecurringTransactions } = require('./jobs/recurringTransactions');
-const { runBudgetAlertJob } = require('./jobs/budgetAlertJob');
-const { runReminderAlertJob } = require('./jobs/reminderAlertJob');
-const { runReminderRecurrenceJob } = require('./jobs/reminderRecurrenceJob');
-const { runDebtAlertJob } = require('./jobs/debtAlertJob');
 const { runDebtCleanupJob } = require('./jobs/debtCleanupJob');
 const { runNotificationCleanup } = require('./jobs/notificationCleanupJob');
 const { runChatCleanupJob } = require('./jobs/chatCleanupJob');
 const { runExpenseSplitCleanupJob } = require('./jobs/expenseSplitCleanupJob');
+const {
+    enqueueBudgetAlert,
+    enqueueDebtAlert,
+    enqueueReminderAlert,
+    enqueueReminderRecurrence,
+    startMessagingWorkers,
+} = require('./messaging/jobBridge');
 
 const startTokenCleanupScheduler = () => {
     if (env.NODE_ENV === 'test') {
@@ -54,7 +59,7 @@ const startBudgetAlertScheduler = () => {
 
     cron.schedule('*/20 * * * *', async () => {
         try {
-            await runBudgetAlertJob();
+            await enqueueBudgetAlert();
         } catch (error) {
             logger.error(`Falha no job de alertas de orçamento: ${error.message}`);
         }
@@ -72,7 +77,7 @@ const startReminderAlertScheduler = () => {
         '0 10 * * *',
         async () => {
             try {
-                await runReminderAlertJob();
+                await enqueueReminderAlert();
             } catch (error) {
                 logger.error(`Falha no job de lembretes: ${error.message}`);
             }
@@ -112,7 +117,7 @@ const startDebtAlertScheduler = () => {
         '0 8 * * *',
         async () => {
             try {
-                await runDebtAlertJob();
+                await enqueueDebtAlert();
             } catch (error) {
                 logger.error(`Falha no job de alertas de dívidas: ${error.message}`);
             }
@@ -132,7 +137,7 @@ const startReminderRecurrenceScheduler = () => {
         '5 0 * * *',
         async () => {
             try {
-                await runReminderRecurrenceJob();
+                await enqueueReminderRecurrence();
             } catch (error) {
                 logger.error(`Falha no job de recorrência de lembretes: ${error.message}`);
             }
@@ -211,6 +216,7 @@ const start = async () => {
 
         // Na Vercel os jobs rodam via /api/cron/* (vercel.json crons)
         if (!process.env.VERCEL) {
+            await startMessagingWorkers();
             startTokenCleanupScheduler();
             startRecurringTransactionsScheduler();
             startBudgetAlertScheduler();
@@ -225,7 +231,14 @@ const start = async () => {
             logger.info('⏭️  Cron local desativado (ambiente Vercel)');
         }
 
-        app.listen(env.PORT, () => {
+        const server = http.createServer(app);
+        if (!process.env.VERCEL) {
+            initSocket(server);
+        } else {
+            logger.info('⏭️  Socket.IO desativado (ambiente Vercel serverless)');
+        }
+
+        server.listen(env.PORT, () => {
             logger.info(`💜 Pulso API rodando na porta ${env.PORT}`);
             logger.info(`📚 Docs: http://localhost:${env.PORT}/api/docs`);
             logger.info(`🏥 Health: http://localhost:${env.PORT}/api/health`);

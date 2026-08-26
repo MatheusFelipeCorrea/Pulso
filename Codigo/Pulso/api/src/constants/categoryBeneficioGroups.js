@@ -1,4 +1,4 @@
-/** Grupos semânticos para compatibilidade VA / VR / VT (RN-032/035/038/039). */
+/** Grupos semânticos para compatibilidade VA / VR (grupo TRANSPORTE para importação; recurso VT rejeitado na API). */
 const GRUPO_BENEFICIO = {
     ALIMENTACAO: 'ALIMENTACAO',
     COMPRAS: 'COMPRAS',
@@ -8,7 +8,7 @@ const GRUPO_BENEFICIO = {
 const GRUPO_BENEFICIO_LABELS = {
     ALIMENTACAO: 'Refeições e delivery (VA e VR)',
     COMPRAS: 'Mercado / supermercado (VA)',
-    TRANSPORTE: 'Transporte (VT)',
+    TRANSPORTE: 'Transporte',
 };
 
 /**
@@ -16,6 +16,7 @@ const GRUPO_BENEFICIO_LABELS = {
  * - Supermercado pode ir em Alimentação ou Mercado — ambos aceitam VA.
  * - VR só em refeições (grupo Alimentação).
  * - Categorias custom nascem sem benefício; inferência só para nomes óbvios.
+ * - Grupo TRANSPORTE permanece para importação de extratos; recurso VT é rejeitado na API de transações.
  */
 
 /** Categorias padrão — match exato no nome normalizado. */

@@ -62,4 +62,6 @@ module.exports = {
     CRON_SECRET: process.env.CRON_SECRET,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
     API_PUBLIC_URL: process.env.API_PUBLIC_URL,
+    /** Opcional. Ex.: amqp://pulso:pulso@localhost:5672 — sem URL, jobs rodam síncronos. */
+    RABBITMQ_URL: process.env.RABBITMQ_URL || '',
 };

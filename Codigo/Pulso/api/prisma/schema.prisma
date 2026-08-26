@@ -162,6 +162,12 @@ enum ModoUso {
   PESSOA_FISICA
 }
 
+/// TI5 freemium
+enum Plano {
+  FREE
+  PREMIUM
+}
+
 /// Prioridade opcional em metas / itens (badges prioridade.*)
 enum Prioridade {
   ALTA
@@ -268,6 +274,8 @@ model ConfiguracaoUsuario {
   valorPadraoPassagem  Decimal? @db.Decimal(10, 2) @map("valor_padrao_passagem")
   vtHabilitado         Boolean? @map("vt_habilitado")
   modoUso              ModoUso  @default(CLT) @map("modo_uso")
+  /// TI5 freemium FREE ou PREMIUM
+  plano                Plano    @default(FREE)
   criadoEm             DateTime @default(now()) @map("criado_em")
   atualizadoEm         DateTime @updatedAt @map("atualizado_em")
 

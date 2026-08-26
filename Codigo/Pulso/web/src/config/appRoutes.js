@@ -4,7 +4,6 @@
 export const APP_PAGE_TITLES = {
   '/dashboard': 'Dashboard',
   '/transactions': 'Transações',
-  '/transport-voucher': 'Vale Transporte',
   '/budget': 'Orçamento Mensal',
   '/calendar': 'Calendário Financeiro',
   '/debts': 'Dívidas',
@@ -13,10 +12,8 @@ export const APP_PAGE_TITLES = {
   '/groups': 'Grupos',
   '/purchase-planning': 'Planejamento de Compra',
   '/expense-split': 'Divisão de Despesas',
-  '/reports': 'Relatórios',
   '/insights': 'Insights',
   '/chatbot': 'Chatbot',
-  '/achievements': 'Gamificação',
   '/profile': 'Perfil',
   '/settings': 'Configurações',
 }

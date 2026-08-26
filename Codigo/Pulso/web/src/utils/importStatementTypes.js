@@ -1,4 +1,4 @@
-import { Banknote, Bus, CreditCard, Utensils } from 'lucide-react'
+import { Banknote, CreditCard, Utensils } from 'lucide-react'
 
 const PDF_ACCEPT = '.pdf,application/pdf'
 
@@ -11,14 +11,6 @@ export const IMPORT_STATEMENT_TYPES = [
     accept: PDF_ACCEPT,
     icon: CreditCard,
     recurso: 'DINHEIRO',
-  },
-  {
-    id: 'VT',
-    label: 'Vale-Transporte',
-    description: 'Qualquer operadora de VT',
-    accept: PDF_ACCEPT,
-    icon: Bus,
-    recurso: 'VT',
   },
   {
     id: 'VA',
@@ -40,7 +32,6 @@ export const IMPORT_STATEMENT_TYPES = [
 
 const EXTENSIONS_BY_TYPE = {
   CONTA: ['pdf'],
-  VT: ['pdf'],
   VA: ['pdf'],
   VR: ['pdf'],
 }

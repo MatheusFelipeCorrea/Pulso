@@ -1,19 +1,9 @@
-const MODOS_VT_AUTOMATICOS = new Set(['ESTAGIARIO', 'CLT']);
-
 const diasNoMes = (year, month) => new Date(year, month, 0).getDate();
 
 const clampDiaMes = (dia, year, month) => {
     const d = Number(dia);
     if (!Number.isFinite(d) || d < 1) return null;
     return Math.min(Math.floor(d), diasNoMes(year, month));
-};
-
-const podeExibirVt = (config) => {
-    const modo = config?.modoUso ?? 'CLT';
-    if (modo === 'PESSOA_FISICA') return false;
-    if (MODOS_VT_AUTOMATICOS.has(modo)) return true;
-    if (modo === 'PJ') return config?.vtHabilitado === true;
-    return false;
 };
 
 const podeExibirVaVr = (config) => {
@@ -23,7 +13,7 @@ const podeExibirVaVr = (config) => {
 
 /**
  * Recebimentos fixos configurados (valores/dias vêm do onboarding ou config futura).
- * Só inclui itens com valor > 0.
+ * Só inclui itens com valor > 0. Recurso VT legado não entra no calendário.
  */
 const obterRecebimentosFixosConfig = (config) => {
     if (!config) return [];
@@ -42,10 +32,6 @@ const obterRecebimentosFixosConfig = (config) => {
     if (podeExibirVaVr(config)) {
         push('VA', 'Vale Alimentação', config.valorVa, config.diaVa);
         push('VR', 'Vale Refeição', config.valorVr, config.diaVr);
-    }
-
-    if (podeExibirVt(config)) {
-        push('VT', 'Vale Transporte', config.valorVt, config.diaVt);
     }
 
     return itens;

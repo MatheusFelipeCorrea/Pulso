@@ -9,7 +9,7 @@ export const termsOfUseSections = [
   },
   {
     title: '3. Descrição do Serviço',
-    content: `O Pulso oferece ferramentas para registro de transações financeiras, categorização de gastos, definição de metas, planejamento de viagens, controle de vale-transporte, lembretes de pagamentos, relatórios, gamificação (sequências, conquistas e desafios), insights automatizados e assistente de chat com foco em finanças pessoais. Funcionalidades podem ser alteradas, ampliadas ou descontinuadas conforme evolução do produto.`,
+    content: `O Pulso oferece ferramentas para registro de transações financeiras, categorização de gastos, definição de metas, planejamento de viagens, lembretes de pagamentos, insights automatizados, chat em grupos, planos Free/Premium e assistente de chat com foco em finanças pessoais. Funcionalidades podem ser alteradas, ampliadas ou descontinuadas conforme evolução do produto.`,
   },
   {
     title: '4. Responsabilidades do Usuário',

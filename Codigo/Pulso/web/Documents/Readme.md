@@ -8,4 +8,4 @@ A documentação técnica foi **centralizada** em `Documentacao/02-Engenharia/`.
 | Design System | [src/design-system/README.md](../src/design-system/README.md) |
 | Índice geral | [Documentacao/README.md](../../../../Documentacao/README.md) |
 
-Código-fonte: diretório pai (`../`).
+Código-fonte: diretório pai (`../`). README rápido do pacote: [../README.md](../README.md).

@@ -1,5 +1,5 @@
 /**
- * Grupos semânticos para VA / VR / VT (RN-032/035/038/039).
+ * Grupos semânticos para VA / VR (e grupo TRANSPORTE para importação; recurso VT rejeitado na API).
  *
  * Convenção do usuário (não imposta pelo código):
  * - Supermercado pode ir em Alimentação (VA) ou Mercado (VA) — escolha pessoal.
@@ -15,7 +15,7 @@ export const GRUPO_BENEFICIO = {
 export const GRUPO_BENEFICIO_LABELS = {
   ALIMENTACAO: 'Refeições e delivery (VA e VR)',
   COMPRAS: 'Mercado / supermercado (VA)',
-  TRANSPORTE: 'Transporte (VT)',
+  TRANSPORTE: 'Transporte',
 }
 
 /** Categorias padrão do sistema — match exato no nome normalizado. */

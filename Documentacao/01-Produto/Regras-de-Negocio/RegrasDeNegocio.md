@@ -11,8 +11,7 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 | Regra | Descrição |
 |---|---|
 | RN-001 | Estagiário recebe bolsa auxílio (não tem descontos INSS/IRRF) |
-| RN-002 | Estagiário pode receber VA, VR e VT como benefícios |
-| RN-003 | VT de estagiário pode ser vendido (funcionalidade habilitada) |
+| RN-002 | Estagiário pode receber VA, VR e VT como benefícios (tipos de recurso) |
 | RN-004 | Estagiário não tem 13º salário nem férias remuneradas obrigatórias |
 | RN-005 | A bolsa auxílio não tem desconto, valor líquido = valor bruto |
 
@@ -22,12 +21,11 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 |---|---|
 | RN-006 | CLT tem salário bruto com descontos explícitos |
 | RN-007 | Descontos obrigatórios de CLT: INSS + IRRF (calculados por faixa) |
-| RN-008 | Descontos opcionais de CLT: VT (6% do salário bruto), plano de saúde, vale farmácia, etc. |
+| RN-008 | Descontos opcionais de CLT: desconto de VT em folha (6% do salário bruto), plano de saúde, vale farmácia, etc. |
 | RN-009 | O sistema deve permitir cadastrar descontos personalizados com nome e valor |
 | RN-010 | O sistema deve calcular e exibir: Salário Bruto - Descontos = Salário Líquido |
 | RN-011 | CLT tem direito a 13º salário (sistema deve considerar como receita extra em Nov/Dez) |
 | RN-012 | CLT tem férias remuneradas (sistema deve permitir planejar o adicional de 1/3) |
-| RN-013 | VT de CLT é descontado em folha (6% do salário bruto). No Pulso, registrar venda de VT é **permitido com aviso** — por conta e responsabilidade do usuário (pode ser irregular perante a empresa) |
 | RN-014 | FGTS (8%) não é descontado do salário mas deve ser informativo (patrimônio acumulado) |
 
 ### 💻 PJ / Freelancer
@@ -82,18 +80,12 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 | RN-036 | O sistema deve calcular "VR por refeição": saldo ÷ dias úteis restantes |
 | RN-037 | Pode diferenciar dias úteis vs fins de semana (VR geralmente usado em dias de trabalho) |
 
-### Vale Transporte (VT)
+### Recurso VT (benefício)
 
 | Regra | Descrição |
 |---|---|
 | RN-038 | VT só pode ser gasto em despesas da categoria "Transporte" |
 | RN-039 | Despesas de alimentação NUNCA podem usar recurso VT |
-| RN-040 | VT pode ser vendido no Pulso: Estagiário sem restrição; CLT com aviso de possível irregularidade (RN-013/045) |
-| RN-041 | Ao vender VT, o valor recebido entra como receita do tipo "Dinheiro" |
-| RN-042 | O intervalo entre vendas de VT é configurável (padrão: 30 dias) |
-| RN-043 | O sistema deve bloquear nova venda antes do intervalo configurado |
-| RN-044 | Saldo VT = Recebido no mês - Usado - Vendido (nominal) |
-| RN-045 | CLT pode registrar venda de VT no Pulso com aviso explícito (desconto de 6% em folha; uso formalmente obrigatório na empresa — o Pulso não bloqueia, apenas alerta) |
 
 ---
 
@@ -108,7 +100,6 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 | RN-050 | Transações recorrentes geram automaticamente via cron no dia programado |
 | RN-051 | O usuário pode cancelar a recorrência a qualquer momento |
 | RN-052 | Ao excluir uma transação recorrente, perguntar: "Excluir só esta ou todas as futuras?" |
-| RN-053 | Cada transação registrada incrementa o streak de gamificação (1 por dia, não importa quantas) |
 | RN-054 | Transação não pode ter data futura (exceto recorrentes programadas) |
 
 ---
@@ -210,23 +201,6 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 
 ---
 
-## 🎮 Regras de Gamificação
-
-| Regra | Descrição |
-|---|---|
-| RN-101 | Streak incrementa +1 por dia que o usuário registrar PELO MENOS 1 transação |
-| RN-102 | Streak zera se passar 1 dia completo (00:00-23:59) sem nenhum registro |
-| RN-103 | Conquistas são desbloqueadas automaticamente ao atingir o critério |
-| RN-104 | Conquistas NÃO podem ser perdidas uma vez desbloqueadas |
-| RN-105 | XP é concedido por: registrar transação (+5), completar quiz (+20), atingir marco de streak (+50), completar meta (+100), completar desafio (+100) |
-| RN-106 | Níveis por XP: Iniciante (0-249), Consciente (250-999), Estrategista (1000-2499), Investidor (2500+) |
-| RN-107 | Desafio mensal é gerado pela Gemini baseado nos padrões de gasto do usuário |
-| RN-108 | Desafio mensal reseta no dia 1 de cada mês |
-| RN-109 | Módulo de gamificação pode ser DESATIVADO pelo usuário (sem penalidade) |
-| RN-110 | Se desativado: streak, XP e conquistas ficam "pausados" (não perdem progresso) |
-
----
-
 ## 👥 Regras de Grupos
 
 | Regra | Descrição |
@@ -241,6 +215,18 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 | RN-118 | Meta do grupo: aportes são individuais e rastreados por membro |
 | RN-119 | Meta do grupo concluída quando valor_atual >= valor_alvo (soma de todos os aportes) |
 | RN-120 | Se admin excluir o grupo: todos os dados do grupo são removidos (membros notificados) |
+| RN-171 | Grupos exigem plano **Premium**; Free recebe 403 no backend |
+| RN-172 | Chat do grupo usa Socket.IO em tempo real (API long-running) |
+
+---
+
+## 🎫 Planos Free / Premium (TI5)
+
+| Regra | Descrição |
+|---|---|
+| RN-173 | Todo usuário inicia em plano **FREE** |
+| RN-174 | Plano **PREMIUM** desbloqueia o módulo de Grupos (e chat) |
+| RN-175 | Em ambiente acadêmico/demo, o plano pode ser alternado sem billing |
 
 ---
 
@@ -316,20 +302,6 @@ Documento que define todas as regras de negócio do sistema **Pulso**, organizad
 | RN-149 | O cálculo de IRRF considera: Base = Bruto - INSS - Dependentes |
 | RN-150 | Tabelas de INSS/IRRF devem ser atualizáveis (mudam todo ano) |
 | RN-151 | O sistema deve informar que tabelas podem estar desatualizadas com disclaimer |
-
----
-
-## 📈 Regras de Relatórios
-
-| Regra | Descrição |
-|---|---|
-| RN-152 | Relatórios mostram dados de QUALQUER período (não só mês atual) |
-| RN-153 | Comparativo sempre usa o período ANTERIOR como referência (maio vs abril) |
-| RN-154 | Variação percentual: ((atual - anterior) / anterior) × 100 |
-| RN-155 | Se período anterior = 0: não calcular variação (exibir "Sem dados anteriores") |
-| RN-156 | Exportação PDF inclui: resumo, gráficos como imagem, lista de transações |
-| RN-157 | Exportação CSV inclui: todas as transações com colunas (data, descrição, categoria, tipo, recurso, valor) |
-| RN-158 | Relatórios NÃO incluem dados de grupos (são pessoais) |
 
 ---
 

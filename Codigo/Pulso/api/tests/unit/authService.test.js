@@ -499,7 +499,7 @@ describe('authService', () => {
             });
         });
 
-        it('retorna usuário formatado com regras de VT', async () => {
+        it('retorna usuário formatado com plano e preferências', async () => {
             authRepositoryMock.findById.mockResolvedValue({
                 id: 'usr-77',
                 nome: 'Ana',
@@ -507,6 +507,7 @@ describe('authService', () => {
                 urlAvatar: null,
                 configuracoes: {
                     modoUso: 'PJ',
+                    plano: 'PREMIUM',
                     vtHabilitado: true,
                     valorPadraoPassagem: '4.8',
                 },
@@ -520,6 +521,7 @@ describe('authService', () => {
                 email: 'ana@pulso.dev',
                 urlAvatar: null,
                 modoUso: 'PJ',
+                plano: 'PREMIUM',
                 vtHabilitado: true,
                 valorPadraoPassagem: '4.80',
             });

@@ -16,7 +16,6 @@ export const SIDEBAR_NAV = [
     icon: 'HandCoins',
     children: [
       { id: 'transacoes', label: 'Transações', path: '/transactions', icon: 'ArrowLeftRight' },
-      { id: 'vale-transporte', label: 'Vale Transporte', path: '/transport-voucher', icon: 'Bus' },
       { id: 'orcamento', label: 'Orçamento Mensal', path: '/budget', icon: 'PieChart' },
       { id: 'calendario', label: 'Calendário Financeiro', path: '/calendar', icon: 'CalendarDays' },
       { id: 'dividas', label: 'Dívidas', path: '/debts', icon: 'Landmark' },
@@ -36,13 +35,11 @@ export const SIDEBAR_NAV = [
   },
   {
     id: 'inteligencia',
-    label: 'Inteligência & Relatórios',
+    label: 'Inteligência',
     icon: 'Brain',
     children: [
-      { id: 'relatorios', label: 'Relatórios', path: '/reports', icon: 'BarChart3' },
       { id: 'insights', label: 'Insights', path: '/insights', icon: 'Sparkles' },
       { id: 'chatbot', label: 'Chatbot', path: '/chatbot', icon: 'MessageCircle' },
-      { id: 'gamificacao', label: 'Gamificação', path: '/achievements', icon: 'Gamepad2' },
     ],
   },
 ]

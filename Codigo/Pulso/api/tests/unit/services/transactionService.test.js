@@ -1,9 +1,7 @@
 jest.mock('../../../src/repositories/transactionRepository');
 jest.mock('../../../src/repositories/categoryRepository');
 jest.mock('../../../src/repositories/tagRepository');
-jest.mock('../../../src/config/database', () => ({
-    sequencia: { findUnique: jest.fn(), update: jest.fn() },
-}));
+jest.mock('../../../src/config/database', () => ({}));
 jest.mock('../../../src/utils/recursoCategoriaRules', () => ({
     validarRecursoCategoria: jest.fn(),
 }));
@@ -13,9 +11,6 @@ jest.mock('../../../src/utils/transactionMapper', () => ({
 jest.mock('../../../src/services/notificationService', () => ({
     criarNotificacao: jest.fn(),
 }));
-jest.mock('../../../src/services/gamificationService', () => ({
-    processarAposTransacao: jest.fn(),
-}));
 jest.mock('../../../src/services/insightService', () => ({
     tentarGerarInsightAposTransacao: jest.fn(),
 }));
@@ -23,7 +18,6 @@ jest.mock('../../../src/services/insightService', () => ({
 const transactionRepository = require('../../../src/repositories/transactionRepository');
 const categoryRepository = require('../../../src/repositories/categoryRepository');
 const tagRepository = require('../../../src/repositories/tagRepository');
-const prisma = require('../../../src/config/database');
 const notificationService = require('../../../src/services/notificationService');
 const transactionService = require('../../../src/services/transactionService');
 
@@ -175,18 +169,11 @@ describe('transactionService', () => {
         expect(result.despesas.total).toBe('315.09');
     });
 
-    it('cria transação, vincula tags e incrementa streak', async () => {
+    it('cria transação e vincula tags', async () => {
         categoryRepository.buscarPorId.mockResolvedValue({ id: 'c1', tipo: 'RECEITA' });
         tagRepository.buscarPorIds.mockResolvedValue([{ id: 'tag1' }]);
         transactionRepository.criar.mockResolvedValue({ id: 'tx1' });
         transactionRepository.buscarPorId.mockResolvedValue({ id: 'tx1' });
-        prisma.sequencia.findUnique.mockResolvedValue({
-            usuarioId: 'u1',
-            sequenciaAtual: 2,
-            maiorSequencia: 4,
-            ultimaAtividade: new Date(Date.now() - 24 * 60 * 60 * 1000),
-        });
-        prisma.sequencia.update.mockResolvedValue({});
 
         const result = await transactionService.criarTransacao('u1', {
             categoriaId: 'c1',
@@ -199,7 +186,6 @@ describe('transactionService', () => {
         });
 
         expect(transactionRepository.vincularTags).toHaveBeenCalledWith('tx1', ['tag1']);
-        expect(prisma.sequencia.update).toHaveBeenCalled();
         expect(result).toEqual({ id: 'tx1', mapped: true });
     });
 
@@ -358,7 +344,6 @@ describe('transactionService', () => {
             valor: 200,
         });
         tagRepository.buscarPorIds.mockResolvedValue([]);
-        prisma.sequencia.findUnique.mockResolvedValue(null);
 
         const result = await transactionService.criarTransacao('u1', {
             tipo: 'TRANSFERENCIA',

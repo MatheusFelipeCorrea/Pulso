@@ -1,8 +1,8 @@
 # 👤 Módulo 10 — Perfil e Configurações — Auditoria PO/Engenharia de Requisitos
 
 > Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md)
-> Fontes cruzadas: `Requisitos/Readme.md` (RF-073–078, RF-103–104, RF-145–149), `RegrasDeNegocio.md` (RN-001–025, RN-164), `Analise-Produto.md` (gap #2).
-> Código auditado: `api/src/routes/index.js` (nenhuma rota de perfil/config montada), `api/src/{controllers,services,routes}/user*.js` (scaffold morto, T1), `api/src/services/{authService,transportService}.js`, `api/src/utils/fixedIncomeUtils.js`, `web/src/pages/Profile.jsx` (vazio), `web/src/pages/Register.jsx`, `web/src/components/layouts/Sidebar/UserInfoCard.jsx`.
+> Fontes cruzadas: `Requisitos/Readme.md` (RF-073–077, RF-103–104, RF-145–149), `RegrasDeNegocio.md` (RN-001–025, RN-164), `Analise-Produto.md`.
+> Código auditado: `api/src/routes/index.js` (nenhuma rota de perfil/config montada), `api/src/{controllers,services,routes}/user*.js` (scaffold morto, T1), `api/src/services/authService.js`, `api/src/utils/fixedIncomeUtils.js`, `web/src/pages/Profile.jsx` (vazio), `web/src/pages/Register.jsx`, `web/src/components/layouts/Sidebar/UserInfoCard.jsx`.
 
 ---
 
@@ -14,7 +14,7 @@
 4. [💡 Novos Requisitos Propostos](#4-novos-requisitos-propostos)
 5. [Plano de Ação Priorizado](#5-plano-de-ação-priorizado)
 
-**Resumo executivo:** o README marca este módulo como **🟡 parcial**, com a nota "`modoUso`, renda fixa, VA/VR/VT e preferências existem no banco mas não têm tela" e a expectativa (`Requisitos/Readme.md:519`) de que `modoUso` já seria setável "no cadastro/onboarding e na API de VT". **A auditoria não confirma essa expectativa: não existe, em lugar nenhum do código atual, uma forma de um usuário definir seu `modoUso`.** Nem o cadastro (`Register.jsx` não pergunta o modo), nem a API de VT (`transportService.js` só lê `modoUso`, nunca escreve), nem qualquer outra rota. **Todo usuário cadastrado no Pulso hoje é permanentemente `CLT`** (o valor padrão do schema, `ConfiguracaoUsuario.modoUso @default(CLT)`), sem nenhum caminho de UI ou API para mudar isso. Isso significa que toda a segmentação de experiência por modo de uso — Estagiário, PJ/Freelancer, Pessoa Física, e as ~20 regras de negócio associadas (RN-001 a RN-025) — está **funcionalmente inacessível** para 100% dos usuários reais do produto hoje, não "parcial".
+**Resumo executivo:** o README marca este módulo como **🟡 parcial**, com a nota "`modoUso`, renda fixa, VA/VR/VT e preferências existem no banco mas não têm tela". **A auditoria não confirma que `modoUso` seja setável:** não existe, em lugar nenhum do código atual, uma forma de um usuário definir seu `modoUso`. Nem o cadastro (`Register.jsx` não pergunta o modo), nem qualquer outra rota. **Todo usuário cadastrado no Pulso hoje é permanentemente `CLT`** (o valor padrão do schema, `ConfiguracaoUsuario.modoUso @default(CLT)`), sem nenhum caminho de UI ou API para mudar isso. Isso significa que toda a segmentação de experiência por modo de uso — Estagiário, PJ/Freelancer, Pessoa Física, e as ~20 regras de negócio associadas (RN-001 a RN-025) — está **funcionalmente inacessível** para 100% dos usuários reais do produto hoje, não "parcial".
 
 ---
 
@@ -25,18 +25,17 @@
 | RF-073 | Editar nome, email, foto | ❌ | Confirmado ausente — nenhuma rota de perfil |
 | RF-074 | Alterar senha (conta email/senha) | ❌ | Confirmado ausente — só existe o fluxo de "esqueci minha senha" (Módulo 01), não uma troca autenticada direta |
 | RF-075 | Configurar receitas fixas mensais (salário, VA, VR, VT) | ❌ | Confirmado ausente como tela; os campos existem em `ConfiguracaoUsuario` mas não há endpoint de escrita |
-| RF-076 | Alternar tema claro/escuro (área autenticada) | ❌ | Confirmado ausente — README já registra que o toggle só existe na landing pública |
+| RF-076 | Alternar tema claro/escuro (área autenticada) | 🟡 | Toggle existe na landing e no `UserMenu` autenticado |
 | RF-077 | Excluir conta e todos os dados | ❌ | Confirmado ausente |
-| RF-078 | Ativar/desativar gamificação | ❌ | Confirmado ausente como tela — o campo `gamificacaoAtiva` existe e é setado com `true` por padrão na criação da conta, mas nada permite ao usuário mudá-lo depois |
 | RF-103 | Selecionar modo de uso (Estagiário/CLT/Freelancer) | ❌ | **Confirmado ausente — e mais grave do que "ausente como tela": não há nenhum caminho de API para setar `modoUso` em lugar nenhum do sistema atual.** Ver achado crítico na seção 3 |
-| RF-104 | Adaptar UI conforme modo | 🟡 | A **leitura** de `modoUso` já é usada corretamente em vários lugares (sidebar oculta VT, `transportService` bloqueia funcionalidades) — mas como `modoUso` nunca muda do padrão `CLT`, essa adaptação nunca é exercitada na prática para os outros 3 modos |
+| RF-104 | Adaptar UI conforme modo | 🟡 | A **leitura** de `modoUso` já é usada em filtros de sidebar — mas como `modoUso` nunca muda do padrão `CLT`, essa adaptação nunca é exercitada na prática para os outros modos |
 | RF-145–149 | Regras específicas de Freelancer/CLT (reserva de imposto, renda irregular, 13º/férias, FGTS informativo) | ❌ | Confirmado ausente — dependem inteiramente de RF-103 estar resolvido primeiro |
 
 ---
 
 ## 2. Gaps de Usabilidade e Jornada do Usuário
 
-1. **Toda a segmentação de modo de uso do produto é, na prática, morta.** O Pulso foi desenhado com uma proposta de valor forte de personalização por perfil (Estagiário ganha VT vendável, PJ esconde benefícios CLT e ganha reserva de imposto, etc.) — mas como não existe caminho para setar `modoUso`, **nenhum usuário real experimenta essa personalização hoje**, exceto a experiência CLT padrão. Isso é um gap de produto muito maior do que "falta uma tela" — é a ausência completa de uma jornada de onboarding que o restante do sistema já pressupõe que existe.
+1. **Toda a segmentação de modo de uso do produto é, na prática, morta.** O Pulso foi desenhado com personalização por perfil (CLT vs PJ vs Pessoa Física, benefícios VA/VR, etc.) — mas como não existe caminho para setar `modoUso`, **nenhum usuário real experimenta essa personalização hoje**, exceto a experiência CLT padrão.
 2. **A sidebar já mostra um badge de modo de uso** (`UserInfoCard.jsx`) que hoje sempre vai exibir "CLT" para todo mundo, sem que o usuário tenha escolhido isso conscientemente — pode ser lido como uma informação errada/enganosa para um usuário que na verdade é estagiário ou autônomo.
 3. **Sem tela de exclusão de conta (RF-077/RN-142/143), o usuário não tem controle sobre seus próprios dados** — um requisito de conformidade básica (direito de exclusão, relevante para LGPD) está ausente, não apenas incompleto.
 
@@ -49,11 +48,10 @@
 **Evidência (busca exaustiva confirmada):**
 - `web/src/pages/Register.jsx` — sem nenhuma referência a `modoUso` no formulário de cadastro.
 - `api/src/routes/index.js` — nenhuma rota de usuário/perfil/configurações é montada (`userRoutes.js` é scaffold morto, T1).
-- `api/src/services/transportService.js` — **lê** `config.modoUso` para checar permissões (`podeUsarVt`), mas **nunca escreve**.
 - `api/src/services/authService.js` — **lê** `usuario.configuracoes?.modoUso` para formatar a resposta de login/registro (`formatUserResponse`), mas a criação de conta (`registerUser`, `authenticateGoogle`) sempre usa os defaults do Prisma (`ConfiguracaoUsuario.modoUso @default(CLT)`), nunca aceita um valor vindo do cadastro.
 - Nenhum endpoint tipo `PATCH /usuarios/modo-uso` ou similar existe em nenhuma rota montada.
 
-**Impacto nas regras de negócio RN-001 a RN-025 (Estagiário/CLT/PJ/Pessoa Física):** todas essas ~25 regras de negócio pressupõem que o usuário tenha escolhido um modo. Hoje, **na prática, apenas o comportamento CLT é alcançável em produção** — as regras de Estagiário (RN-001–005, incluindo a possibilidade de vender VT), PJ (RN-015–021, incluindo reserva de IR) e Pessoa Física (RN-022–025, experiência simplificada) são código morto do ponto de vista do usuário final, mesmo estando implementadas onde já existem (ex.: `podeUsarVt` já sabe lidar com PJ).
+**Impacto nas regras de negócio RN-001 a RN-025 (Estagiário/CLT/PJ/Pessoa Física):** todas essas ~25 regras de negócio pressupõem que o usuário tenha escolhido um modo. Hoje, **na prática, apenas o comportamento CLT é alcançável em produção** — as regras de Estagiário, PJ (incl. reserva de IR) e Pessoa Física (experiência simplificada) ficam inacessíveis ao usuário final enquanto não houver escrita de `modoUso`. (O módulo dedicado de gestão de vale-transporte foi removido do escopo TI5.)
 
 ### Resiliência a estados extremos
 
@@ -66,7 +64,7 @@ Não aplicável — não há fluxo de escrita para testar. O único ponto de res
 ### Funcionais
 
 - **RF-NOVO-J1 (prioridade máxima)** — Adicionar, no mínimo, um endpoint `PATCH` para `modoUso` (mesmo antes de existir uma tela de Perfil completa), desbloqueando ao menos via uma implementação mínima a segmentação de produto que já está pronta no restante do backend. Pode ser entregue como parte do onboarding (Módulo 19) ou como uma tela de configurações mínima — mas precisa existir em algum lugar antes de qualquer um dos outros RFs deste módulo fazer sentido.
-- **RF-NOVO-J2** — Tela de Perfil/Configurações mínima cobrindo RF-073 (editar nome/foto), RF-075 (receitas fixas) e RF-103 (modo de uso), priorizando esses três por serem os que desbloqueiam outros módulos (VT, onboarding, cálculo de descontos CLT).
+- **RF-NOVO-J2** — Tela de Perfil/Configurações mínima cobrindo RF-073 (editar nome/foto), RF-075 (receitas fixas) e RF-103 (modo de uso), priorizando esses três por serem os que desbloqueiam onboarding e cálculo de descontos CLT.
 
 ### Não funcionais
 
@@ -92,4 +90,4 @@ Não aplicável — não há fluxo de escrita para testar. O único ponto de res
 
 ---
 
-*Próximo módulo sugerido: 11 — Gamificação (backend com conteúdo real segundo Analise-Produto.md, mas sem tela — padrão parecido com Insights).*
+*Próximo módulo sugerido: 12 — Homepage.*

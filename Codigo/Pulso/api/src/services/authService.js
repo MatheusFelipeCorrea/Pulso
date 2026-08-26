@@ -3,7 +3,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 const authRepository = require('../repositories/authRepository');
-const emailProvider = require('../providers/emailProvider');
+const prisma = require('../config/database');
+const {
+    enqueueVerificationEmail,
+    enqueuePasswordResetEmail,
+} = require('../messaging/emailBridge');
 const categoryService = require('./categoryService');
 const logger = require('../utils/logger');
 const env = require('../config/env');
@@ -70,15 +74,6 @@ const registerUser = async ({ nome, email, senha, confirmarSenha }) => {
             configuracoes: {
                 create: {
                     tema: 'CLARO',
-                    gamificacaoAtiva: true,
-                },
-            },
-            sequencia: {
-                create: {
-                    sequenciaAtual: 0,
-                    maiorSequencia: 0,
-                    xp: 0,
-                    nivel: 'INICIANTE',
                 },
             },
         });
@@ -92,7 +87,7 @@ const registerUser = async ({ nome, email, senha, confirmarSenha }) => {
     await categoryService.seedCategoriasPadrao(usuario.id);
 
     try {
-        await emailProvider.sendVerificationEmail(email, tokenVerificacaoEmail);
+        await enqueueVerificationEmail(email, tokenVerificacaoEmail);
     } catch (error) {
         logger.warn(`Falha ao enviar email de verificação para ${email}: ${error.message}`);
 
@@ -165,7 +160,7 @@ const resendVerificationEmail = async (email) => {
     });
 
     try {
-        await emailProvider.sendVerificationEmail(normalizedEmail, tokenVerificacaoEmail);
+        await enqueueVerificationEmail(normalizedEmail, tokenVerificacaoEmail);
     } catch (error) {
         logger.warn(
             `Falha ao reenviar email de verificação para ${normalizedEmail}: ${error.message}`
@@ -187,15 +182,6 @@ const defaultUserRelations = {
     configuracoes: {
         create: {
             tema: 'CLARO',
-            gamificacaoAtiva: true,
-        },
-    },
-    sequencia: {
-        create: {
-            sequenciaAtual: 0,
-            maiorSequencia: 0,
-            xp: 0,
-            nivel: 'INICIANTE',
         },
     },
 };
@@ -231,6 +217,7 @@ const formatUserResponse = (usuario) => {
         email: usuario.email,
         urlAvatar: usuario.urlAvatar,
         modoUso,
+        plano: usuario.configuracoes?.plano ?? 'FREE',
         vtHabilitado,
         valorPadraoPassagem: usuario.configuracoes?.valorPadraoPassagem
             ? Number(usuario.configuracoes.valorPadraoPassagem).toFixed(2)
@@ -355,7 +342,7 @@ const requestPasswordReset = async (email) => {
     });
 
     try {
-        await emailProvider.sendPasswordResetEmail(normalizedEmail, tokenResetSenha);
+        await enqueuePasswordResetEmail(normalizedEmail, tokenResetSenha);
     } catch (error) {
         logger.warn(
             `Falha ao enviar email de recuperação para ${normalizedEmail}: ${error.message}`
@@ -521,6 +508,23 @@ const buildGoogleErrorRedirect = (error) => {
     return `${env.FRONTEND_URL}/auth/callback?${params.toString()}`;
 };
 
+/** TI5 demo — alterna FREE/PREMIUM sem billing */
+const setUserPlano = async (usuarioId, plano) => {
+    const valor = String(plano || '').toUpperCase();
+    if (valor !== 'FREE' && valor !== 'PREMIUM') {
+        throw new AppError('Plano inválido. Use FREE ou PREMIUM.', 400);
+    }
+
+    await prisma.configuracaoUsuario.upsert({
+        where: { usuarioId },
+        update: { plano: valor },
+        create: { usuarioId, plano: valor, tema: 'CLARO' },
+    });
+
+    const usuario = await authRepository.findById(usuarioId);
+    return formatUserResponse(usuario);
+};
+
 module.exports = {
     registerUser,
     verifyEmail,
@@ -532,6 +536,7 @@ module.exports = {
     logoutUser,
     getAuthenticatedUser,
     formatUserResponse,
+    setUserPlano,
     requestPasswordReset,
     validateResetToken,
     resetPassword,

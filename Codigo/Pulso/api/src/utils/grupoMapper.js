@@ -230,4 +230,5 @@ module.exports = {
     mapGrupoResumo,
     mapGrupoDetalhe,
     mapGrupoPreview,
+    mapMensagemGrupo,
 };

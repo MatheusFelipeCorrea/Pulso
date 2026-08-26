@@ -313,6 +313,7 @@ const criarMensagemChat = async (grupoId, usuarioId, conteudo) =>
             usuarioId,
             conteudo,
         },
+        include: { usuario: { select: usuarioSelect } },
     });
 
 const listarMensagens = async (grupoId, { pagina = 1, limite = 20 } = {}) => {

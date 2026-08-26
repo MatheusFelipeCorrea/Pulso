@@ -24,6 +24,7 @@ Código: [`Codigo/Pulso/web/`](../../Codigo/Pulso/web/) · DS: [`web/src/design-
 | Documento | Descrição |
 |-----------|-----------|
 | [Deploy/Hospedagem.md](./Deploy/Hospedagem.md) | Vercel, Neon, variáveis, cron |
+| [Deploy/TI5-Hospedagem.md](./Deploy/TI5-Hospedagem.md) | Nota TI5: Vercel web + API long-running |
 | [Guia-Commits.md](./Guia-Commits.md) | Conventional Commits + `Refs:` |
 
 ## Deep dives por módulo

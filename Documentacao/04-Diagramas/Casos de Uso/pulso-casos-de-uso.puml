@@ -38,8 +38,6 @@ rectangle "Pulso — Gestão Financeira Pessoal" {
     usecase "Sincronizar com Google Calendar" as UC20
     usecase "Registrar dívida/empréstimo" as UC21
     usecase "Registrar pagamento de dívida" as UC22
-    usecase "Gerenciar vale transporte" as UC23
-    usecase "Vender vale transporte" as UC24
   }
 
   package "Planejamento e Metas" {
@@ -51,14 +49,13 @@ rectangle "Pulso — Gestão Financeira Pessoal" {
     usecase "Consultar cotações de moedas" as UC35
     usecase "Gerenciar moedas favoritas" as UC36
     usecase "Participar de grupo" as UC37
+    usecase "Chat do grupo (Socket.IO)" as UC38
   }
 
   package "Inteligência e Engajamento" {
     usecase "Consultar notificações" as UC40
     usecase "Visualizar insights" as UC41
-    usecase "Gerar relatórios" as UC42
     usecase "Conversar com chatbot" as UC43
-    usecase "Acompanhar gamificação" as UC44
   }
 }
 
@@ -83,7 +80,6 @@ Usuario --> UC19
 Usuario --> UC20
 Usuario --> UC21
 Usuario --> UC22
-Usuario --> UC23
 Usuario --> UC30
 Usuario --> UC31
 Usuario --> UC32
@@ -92,18 +88,17 @@ Usuario --> UC34
 Usuario --> UC35
 Usuario --> UC36
 Usuario --> UC37
+Usuario --> UC38
 Usuario --> UC40
 Usuario --> UC41
-Usuario --> UC42
 Usuario --> UC43
-Usuario --> UC44
 
 ' --- Extensões / includes ---
 UC02 ..> UC05 : <<include>>\n(e-mail não verificado)
-UC24 ..> UC10 : <<extend>>\n(receita em dinheiro)
 UC33 ..> UC35 : <<include>>
 UC20 ..> UC17 : <<include>>
 UC31 ..> UC30 : <<include>>
+UC38 ..> UC37 : <<include>>
 
 ' --- Atores externos ---
 Google --> UC03

@@ -4,15 +4,15 @@
 
 Esta fase cobre domínio, camadas da API, modelo de dados e consistência transacional. O escopo foi comparado com o mapa real de rotas do backend em [routes/index.js](Codigo/Pulso/api/src/routes/index.js), com o schema Prisma em [schema.prisma](Codigo/Pulso/api/prisma/schema.prisma) e com as regras de negócio em [RegrasDeNegocio.md](Documentacao/01-Produto/Regras-de-Negocio/RegrasDeNegocio.md).
 
-O runtime real do backend expõe estes limites principais: auth, transações, categorias, tags, transporte, orçamento, notificações, lembretes, calendário, dívidas, divisão de despesas, metas, moedas, viagens, grupos, planejamento de compra, cron e sync. Em paralelo, os cards de planejamento em [.github/plans/cards](.github/plans/cards) mostram um backlog maior, com módulos que ainda não aparecem como fronteira técnica explícita no backend, como dashboard, relatórios, insights, homepage, perfil e configurações.
+O runtime real do backend expõe estes limites principais: auth, transações, categorias, tags, orçamento, notificações, lembretes, calendário, dívidas, divisão de despesas, metas, moedas, viagens, grupos, planejamento de compra, cron, sync, messaging (RabbitMQ) e Socket.IO. Em paralelo, os cards de planejamento em [.github/plans/cards](.github/plans/cards) mostram um backlog maior, com módulos que ainda não aparecem como fronteira técnica explícita no backend, como insights, homepage, perfil e configurações.
 
 A documentação da API em [Codigo/Pulso/api/README.md](Codigo/Pulso/api/README.md) está vazia, então a verdade arquitetural hoje está no código e nos cards, não no README.
 
 ## 2. Top Riscos Arquiteturais da Fase
 
 - A fronteira entre aplicação e persistência não é uniforme: alguns domínios seguem repository pattern, outros leem e escrevem Prisma direto dentro de services.
-- A escrita de transações financeiras e seus efeitos colaterais não é atômica; streak, notificações, gamificação e insights podem ficar fora de sincronia sob falha parcial ou concorrência.
-- O objeto `ConfiguracaoUsuario` concentra regras e flags de vários domínios em uma única linha, o que aumenta acoplamento entre perfil, auth, orçamento, calendário, VT e gamificação.
+- A escrita de transações financeiras e seus efeitos colaterais não é atômica; notificações e insights podem ficar fora de sincronia sob falha parcial ou concorrência.
+- O objeto `ConfiguracaoUsuario` concentra regras e flags de vários domínios em uma única linha, o que aumenta acoplamento entre perfil, auth, orçamento e calendário.
 - Regras centrais dependem demais de strings, presets e validação em memória, em vez de serem parcialmente garantidas no banco.
 
 ## 3. Auditoria de Status (README vs. Realidade Arquitetural)
@@ -30,7 +30,7 @@ A documentação da API em [Codigo/Pulso/api/README.md](Codigo/Pulso/api/README.
 | Campo | Conteúdo |
 |---|---|
 | Severidade | 🟠 Alta |
-| Problema | Parte do backend respeita uma camada de repository explícita, mas vários services falam direto com Prisma. Em [categoryService.js](Codigo/Pulso/api/src/services/categoryService.js) a persistência fica encapsulada por repository, enquanto [budgetService.js](Codigo/Pulso/api/src/services/budgetService.js), [calendarService.js](Codigo/Pulso/api/src/services/calendarService.js), [gamificationService.js](Codigo/Pulso/api/src/services/gamificationService.js) e [transactionService.js](Codigo/Pulso/api/src/services/transactionService.js) acessam Prisma diretamente. |
+| Problema | Parte do backend respeita uma camada de repository explícita, mas vários services falam direto com Prisma. Em [categoryService.js](Codigo/Pulso/api/src/services/categoryService.js) a persistência fica encapsulada por repository, enquanto [budgetService.js](Codigo/Pulso/api/src/services/budgetService.js), [calendarService.js](Codigo/Pulso/api/src/services/calendarService.js) e [transactionService.js](Codigo/Pulso/api/src/services/transactionService.js) acessam Prisma diretamente. |
 | Impacto | Isso enfraquece a leitura dos bounded contexts, aumenta o custo de teste e torna mais difícil centralizar invariantes de domínio. Hoje não está claro quando a regra pertence ao repository, ao service ou ao schema. |
 | Evidência | O agregador de rotas em [routes/index.js](Codigo/Pulso/api/src/routes/index.js) mostra a API como conjunto de domínios separados, mas os services não seguem o mesmo padrão de encapsulamento. |
 | Recomendação | Escolher uma convenção única por contexto: ou repository obrigatório para escrita e consulta de domínio, ou application services com Prisma explícito, mas sem mistura informal entre os dois. Se o objetivo é reduzir boilerplate, limitar repository aos agregados que têm invariantes reais e documentar a exceção. |
@@ -41,7 +41,7 @@ A documentação da API em [Codigo/Pulso/api/README.md](Codigo/Pulso/api/README.
 | Campo | Conteúdo |
 |---|---|
 | Severidade | 🟠 Alta |
-| Problema | O model [schema.prisma](Codigo/Pulso/api/prisma/schema.prisma) em `ConfiguracaoUsuario` concentra salário, VA, VR, VT, tema, calendário Google, renda planejada, valor padrão de passagem, flag de VT, modo de uso e timestamps em uma única entidade. |
+| Problema | O model [schema.prisma](Codigo/Pulso/api/prisma/schema.prisma) em `ConfiguracaoUsuario` concentra salário, VA, VR, VT (tipos de recurso), tema, plano Free/Premium, calendário Google, renda planejada, modo de uso e timestamps em uma única entidade. |
 | Impacto | Mudanças de um módulo passam a tocar a mesma linha e a mesma migration. Isso aumenta acoplamento entre perfil, auth, orçamento, transporte, calendário e experiências corporativas, além de tornar mais provável conflito de edição entre fluxos independentes. |
 | Evidência | As linhas do schema mostram a reunião de campos que pertencem a domínios distintos: finanças pessoais, benefícios, UI e integração externa. |
 | Recomendação | Separar a configuração por subdomínios: perfil/uso, benefícios, calendário e preferências de UI. Se a separação completa ainda for cedo demais, pelo menos isolar as partes mais voláteis em tabelas menores ou em um JSON bem delimitado com ownership explícito. |
@@ -52,7 +52,7 @@ A documentação da API em [Codigo/Pulso/api/README.md](Codigo/Pulso/api/README.
 | Campo | Conteúdo |
 |---|---|
 | Severidade | 🔴 Crítica |
-| Problema | Em [transactionService.js](Codigo/Pulso/api/src/services/transactionService.js) a criação da transação acontece antes de vincular tags, atualizar streak, notificar, processar gamificação e gerar insight. `incrementarStreak` faz leitura e escrita separadas na tabela `sequencia`, sem `\$transaction`, e `gamificationService.js` também executa contagens e updates fora de uma unidade atômica compartilhada. |
+| Problema | Em [transactionService.js](Codigo/Pulso/api/src/services/transactionService.js) a criação da transação acontece antes de vincular tags, notificar e gerar insight — efeitos colaterais fora de uma unidade atômica compartilhada. |
 | Impacto | Se qualquer etapa posterior falhar, o ledger financeiro fica salvo mas parte dos efeitos derivados não. Em concorrência, dois lançamentos no mesmo intervalo podem ler a mesma `sequenciaAtual` e gravar um valor final menor do que o devido. Isso afeta consistência de métricas, badges e notificações, além de dificultar reprocessamento confiável. |
 | Evidência | A sequência de criação em `criarTransacao` é linear e sem bloco transacional. O helper `incrementarStreak` lê `sequencia`, calcula novo valor e depois atualiza a mesma linha em chamadas separadas. |
 | Recomendação | Separar claramente o que é parte do commit do domínio financeiro do que é efeito colateral. A transação de banco deve cobrir o estado que precisa ser consistente; notificações e insights podem sair para pós-commit ou fila. O streak precisa de proteção contra corrida, idealmente com update atômico ou versão otimista. |
@@ -86,7 +86,7 @@ A documentação da API em [Codigo/Pulso/api/README.md](Codigo/Pulso/api/README.
 - RNF-A2: todo fluxo que cria ou altera ledger financeiro relevante deve declarar se é atômico, eventual ou pós-commit; efeitos colaterais devem ser idempotentes.
 - RNF-A3: dividir `ConfiguracaoUsuario` em subconfigurações por domínio, ou justificar formalmente a permanência do agregado único até a próxima revisão de arquitetura.
 - RNF-A4: transformar `grupoBeneficio` em regra explícita e estável, sem fallback baseado em nome para invariantes críticos.
-- ADR-A1: definir o contrato arquitetural entre auth, perfil, orçamento, VT e calendário, porque hoje eles compartilham a mesma estrutura de configuração.
+- ADR-A1: definir o contrato arquitetural entre auth, perfil, orçamento e calendário, porque hoje eles compartilham a mesma estrutura de configuração.
 
 ## 6. Perguntas Clarificadoras específicas da fase
 

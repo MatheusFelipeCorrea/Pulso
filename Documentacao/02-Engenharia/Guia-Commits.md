@@ -50,15 +50,15 @@ Use o **módulo** ou a **camada** mais específica:
 |--------|----------|
 | `auth` | Login, OAuth, sessão, cookies |
 | `transactions` | CRUD, recorrência, categorias |
-| `vt` | Vale Transporte |
 | `budget` | Orçamento mensal |
 | `goals` | Metas |
 | `trips` | Viagens e moedas |
-| `groups` | Grupos |
+| `groups` | Grupos / Socket.IO |
 | `reminders` | Lembretes / Google Calendar |
 | `debts` | Dívidas pessoais |
 | `purchase-planning` | Planejamento de compra |
 | `expense-split` | Divisão de despesas |
+| `messaging` | RabbitMQ / filas |
 | `web` | Frontend transversal |
 | `api` | Backend transversal |
 | `db` | Prisma schema / migrations |
@@ -138,15 +138,14 @@ cadastro resiliente a falha SMTP e job de limpeza de contas não verificadas.
 Transações: exclusão recorrente preserva histórico (UNTIL), grupoBeneficio
 para categorias custom com VA/VR/VT.
 
-VT: venda CLT com aviso (decisão B), saldo em transação Serializable.
 Viagens/Grupos: unique metaId e grupoId, rate limit em preview/entrar,
 criação de metas atômica.
 
 Orçamento (orcamentoExcedeRenda), dívidas (reabrir ao excluir pagamento),
 planejamento de compra (RN-088/093), lembretes, metas, homepage.
 
-Docs: relatórios PO 00–18, RegrasDeNegocio, prompts, Database/Readme sessão,
-redirect pós-login para /transactions.
+Docs: relatórios PO, RegrasDeNegocio, prompts, Database/Readme sessão,
+redirect pós-login.
 
 Refs: PO-AUDIT-2026-08
 

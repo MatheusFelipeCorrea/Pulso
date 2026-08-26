@@ -1,10 +1,8 @@
 const prisma = require('../config/database');
 const transactionRepository = require('../repositories/transactionRepository');
 const metaRepository = require('../repositories/metaRepository');
-const transportRepository = require('../repositories/transportRepository');
 const transactionService = require('./transactionService');
 const budgetService = require('./budgetService');
-const transportService = require('./transportService');
 const { mapTransacao } = require('../utils/transactionMapper');
 const { mapMeta } = require('../utils/metaMapper');
 const {
@@ -13,7 +11,6 @@ const {
     mesAnterior,
     mesReferenciaToQuery,
 } = require('../utils/monthUtils');
-const { periodoAtual } = require('../utils/periodUtils');
 const {
     RECURSOS_DASHBOARD,
     calcularSaldosPorRecurso,
@@ -116,16 +113,6 @@ const obterSaldosRecursos = async (usuarioId, mesReferencia) => {
     });
 
     const saldos = calcularSaldosPorRecurso(transacoes);
-
-    try {
-        const config = await transportRepository.buscarConfiguracao(usuarioId);
-        if (config) {
-            const vtSaldo = await transportService.obterSaldoVt(usuarioId, periodoAtual());
-            saldos.VT = Number(vtSaldo.saldoRestante);
-        }
-    } catch {
-        // VT indisponível — mantém saldo derivado de transações
-    }
 
     const diasUteis = diasUteisRestantesNoMes(mesReferencia);
     const sugestaoVr =

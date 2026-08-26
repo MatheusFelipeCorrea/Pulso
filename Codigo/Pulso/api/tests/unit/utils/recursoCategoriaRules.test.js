@@ -32,10 +32,6 @@ describe('recursoCategoriaRules', () => {
         ).not.toThrow();
     });
 
-    it('não valida transferências (RF-140, sem categoria)', () => {
-        expect(() => validarRecursoCategoria('VT', null, 'TRANSFERENCIA')).not.toThrow();
-    });
-
     it('não valida quando recurso é DINHEIRO', () => {
         expect(() =>
             validarRecursoCategoria('DINHEIRO', { nome: 'Qualquer' }, 'DESPESA')
@@ -81,21 +77,18 @@ describe('recursoCategoriaRules', () => {
         ).toThrow(/não aceita Vale Refeição/);
     });
 
-    it('rejeita VT em Alimentação', () => {
+    it('rejeita VT em qualquer contexto', () => {
+        expect(() => validarRecursoCategoria('VT', null, 'TRANSFERENCIA')).toThrow(
+            /VT não está disponível/
+        );
         expect(() =>
             validarRecursoCategoria('VT', { nome: 'Alimentação' }, 'DESPESA')
-        ).toThrow(/VT não vale para alimentação/);
-    });
-
-    it('rejeita VT fora de Transporte', () => {
+        ).toThrow(/VT não está disponível/);
         expect(() =>
             validarRecursoCategoria('VT', { nome: 'Compras' }, 'DESPESA')
-        ).toThrow(/não aceita Vale Transporte/);
-    });
-
-    it('aceita VT para Transporte', () => {
+        ).toThrow(/VT não está disponível/);
         expect(() =>
             validarRecursoCategoria('VT', { nome: 'Transporte' }, 'DESPESA')
-        ).not.toThrow();
+        ).toThrow(/VT não está disponível/);
     });
 });

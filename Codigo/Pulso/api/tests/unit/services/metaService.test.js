@@ -3,9 +3,6 @@ jest.mock('../../../src/repositories/transactionRepository');
 jest.mock('../../../src/services/notificationService', () => ({
     criarNotificacao: jest.fn(),
 }));
-jest.mock('../../../src/services/gamificationService', () => ({
-    processarAposCriarMeta: jest.fn(),
-}));
 
 const metaRepository = require('../../../src/repositories/metaRepository');
 const transactionRepository = require('../../../src/repositories/transactionRepository');

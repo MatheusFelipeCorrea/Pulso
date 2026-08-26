@@ -1,6 +1,6 @@
 # 🏠 Módulo 12 — Homepage (Landing Page) — Auditoria PO/Engenharia de Requisitos
 
-> Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [02-Dashboard.md](./02-Dashboard.md), [06-Insights-e-Chatbot.md](./06-Insights-e-Chatbot.md), [11-Gamificacao.md](./11-Gamificacao.md)
+> Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [02-Dashboard.md](./02-Dashboard.md), [06-Insights-e-Chatbot.md](./06-Insights-e-Chatbot.md)
 > Fontes cruzadas: `Requisitos/Readme.md` (RF-084–087).
 > Código auditado: `web/src/pages/LandingPage.jsx`, `web/src/components/features/landing/landingData.js`, `web/src/components/features/landing/LandingHero.jsx`.
 
@@ -31,8 +31,8 @@
 
 ## 2. Gaps de Usabilidade e Jornada do Usuário
 
-1. ~~**Redirect autenticado para `/dashboard` quebrado.**~~ **✅ Corrigido** — `LandingPage`, `GuestRoute`, `Login`, `AuthCallback` e `TransportVoucherPage` usam `/transactions`.
-2. ~~**Sem indicador "em breve" nos módulos não implementados.**~~ **✅ Corrigido** — badges nos cards de Dashboard, Chatbot e IA Insights; texto de Gamificação sem prometer desafios.
+1. ~~**Redirect autenticado quebrado.**~~ **✅ Corrigido** — destino pós-login funcional via `DEFAULT_AUTHENTICATED_ROUTE`.
+2. ~~**Sem indicador "em breve" nos módulos não implementados.**~~ **✅ Corrigido** — badges nos cards de Chatbot e IA Insights.
 
 ---
 
@@ -42,10 +42,8 @@
 
 | Feature | Ajuste aplicado |
 |---|---|
-| Dashboard | Badge **Em breve** |
 | IA Insights | Badge **Beta** + texto: alerta de maior gasto do mês |
 | Chatbot | Badge **Em breve** |
-| Gamificação | Texto sem "desafios" — sequências e conquistas apenas |
 
 ---
 

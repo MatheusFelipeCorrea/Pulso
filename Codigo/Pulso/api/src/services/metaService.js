@@ -1,5 +1,4 @@
 const notificationService = require('./notificationService');
-const gamificationService = require('./gamificationService');
 const AppError = require('../utils/appError');
 const metaRepository = require('../repositories/metaRepository');
 const transactionRepository = require('../repositories/transactionRepository');
@@ -232,8 +231,6 @@ const criarMeta = async (usuarioId, dados) => {
         descricao: dados.descricao?.trim() || null,
         prioridade: dados.prioridade ?? null,
     });
-
-    await gamificationService.processarAposCriarMeta(usuarioId);
 
     return mapMeta({ ...meta, aportes: [] });
 };

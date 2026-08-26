@@ -105,8 +105,6 @@
 | Alerta orçamento (80%) | `#F59E0B` / `#FBBF24` |
 | Orçamento estourado | `#EF4444` / `#F87171` |
 | Lembrete/vencimento | `#3B82F6` / `#60A5FA` |
-| Streak/gamificação | `#F59E0B` / `#FBBF24` |
-| Conquista | `#7C3AED` / `#A78BFA` |
 | Grupo (atividade) | `#06B6D4` / `#22D3EE` |
 | Dívida/cobrança | `#F97316` / `#FB923C` |
 | Insight IA | `#8B5CF6` / `#C4B5FD` |

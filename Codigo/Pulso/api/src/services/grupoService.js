@@ -5,7 +5,8 @@ const viagemRepository = require('../repositories/viagemRepository');
 const { attachCoverImage } = require('./tripDestinationImageService');
 const tripFlightPriceService = require('./tripFlightPriceService');
 const grupoNotificationService = require('./grupoNotificationService');
-const { mapGrupoResumo, mapGrupoDetalhe, mapGrupoPreview } = require('../utils/grupoMapper');
+const { mapGrupoResumo, mapGrupoDetalhe, mapGrupoPreview, mapMensagemGrupo } = require('../utils/grupoMapper');
+const { emitGrupoMensagem } = require('../socket/groupChat');
 
 const CODIGO_REGEX = /^PULSO-[A-Z0-9]{4}$/;
 const CODIGO_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -627,7 +628,14 @@ const enviarMensagemGrupo = async (usuarioId, grupoId, dados) => {
     await buscarGrupoDoUsuario(grupoId, usuarioId);
     const conteudo = validarConteudoMensagem(dados.conteudo);
 
-    await grupoRepository.criarMensagemChat(grupoId, usuarioId, conteudo);
+    const criada = await grupoRepository.criarMensagemChat(grupoId, usuarioId, conteudo);
+    const mensagem = mapMensagemGrupo(criada);
+
+    try {
+        emitGrupoMensagem(grupoId, mensagem);
+    } catch (err) {
+        // Socket opcional — REST já persistiu
+    }
 
     const grupo = await buscarGrupoDoUsuario(grupoId, usuarioId);
     return mapGrupoDetalhe(grupo, usuarioId);

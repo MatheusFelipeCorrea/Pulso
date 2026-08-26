@@ -22,14 +22,17 @@ describe('validarRecursoCategoria', () => {
     expect(validarRecursoCategoria('VA', { nome: 'Shopping' }, 'DESPESA')).toMatch(/não aceita Vale Alimentação/)
   })
 
-  it('valida regras para VT com normalização de acentos', () => {
+  it('rejeita VT como indisponível', () => {
     expect(validarRecursoCategoria('VT', { nome: 'Alimentação' }, 'DESPESA')).toBe(
-      'Não é possível usar VT na categoria "Alimentação". VT não vale para alimentação.'
+      'VT não está disponível'
     )
-    expect(validarRecursoCategoria('VT', { nome: 'Comprás' }, 'DESPESA')).toMatch(
-      /não aceita Vale Transporte/
+    expect(validarRecursoCategoria('VT', { nome: 'Comprás' }, 'DESPESA')).toBe(
+      'VT não está disponível'
     )
-    expect(validarRecursoCategoria('VT', { nome: 'Transporte' }, 'DESPESA')).toBeNull()
+    expect(validarRecursoCategoria('VT', { nome: 'Transporte' }, 'DESPESA')).toBe(
+      'VT não está disponível'
+    )
+    expect(validarRecursoCategoria('VT', null, 'RECEITA')).toBe('VT não está disponível')
   })
 })
 

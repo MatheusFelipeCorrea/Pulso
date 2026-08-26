@@ -117,6 +117,15 @@ const me = async (req, res, next) => {
     }
 };
 
+const setPlano = async (req, res, next) => {
+    try {
+        const user = await authService.setUserPlano(req.user.id, req.body?.plano);
+        res.status(200).json({ user, message: `Plano atualizado para ${user.plano}.` });
+    } catch (error) {
+        next(error);
+    }
+};
+
 const forgotPassword = async (req, res, next) => {
     try {
         const result = await authService.requestPasswordReset(req.body.email);
@@ -155,6 +164,7 @@ module.exports = {
     refresh,
     logout,
     me,
+    setPlano,
     forgotPassword,
     validateResetToken,
     resetPassword,

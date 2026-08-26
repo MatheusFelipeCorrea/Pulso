@@ -1,6 +1,6 @@
 # 📅 Módulo 16 — Calendário Financeiro — Auditoria PO/Engenharia de Requisitos
 
-> Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [09-Relatorios.md](./09-Relatorios.md), [10-Perfil-e-Configuracoes.md](./10-Perfil-e-Configuracoes.md)
+> Ver também: [00-Achados-Transversais.md](./00-Achados-Transversais.md), [10-Perfil-e-Configuracoes.md](./10-Perfil-e-Configuracoes.md)
 > Fontes cruzadas: `Requisitos/Readme.md` (RF-121–125), `RegrasDeNegocio.md` (RN-100).
 > Código auditado: `api/src/services/calendarService.js`, `api/src/utils/fixedIncomeUtils.js`.
 
@@ -14,7 +14,7 @@
 4. [💡 Novos Requisitos Propostos](#4-novos-requisitos-propostos)
 5. [Plano de Ação Priorizado](#5-plano-de-ação-priorizado)
 
-**Resumo executivo:** README **✅ 5/5**, confirmado. RN-100 respeitada; `buildVariacao` pronto para reaproveitar no Módulo 09. **Sem correções de código neste módulo** — dependência do Módulo 10 (`modoUso` configurável) permanece no roadmap.
+**Resumo executivo:** README **✅ 5/5**, confirmado. RN-100 respeitada. **Sem correções de código neste módulo** — dependência do Módulo 10 (`modoUso` configurável) permanece no roadmap.
 
 ---
 
@@ -44,11 +44,11 @@ Somente transações registradas + lembretes futuros — sem projeções fictíc
 
 ### Dependência Módulo 10
 
-`fixedIncomeUtils` implementa matriz VA/VR/VT por `modoUso` corretamente; em produção quase todos os usuários permanecem em `CLT` até haver tela de perfil.
+`fixedIncomeUtils` implementa matriz VA/VR por `modoUso` (sem VT no calendário); em produção quase todos os usuários permanecem em `CLT` até haver tela de perfil.
 
 ### Positivo — `buildVariacao` reaproveitável (M09)
 
-Evita divisão por zero (RN-155 futura) — extrair para util compartilhado quando Relatórios for construído.
+Evita divisão por zero (RN-155 futura) — extrair para util compartilhado se outros módulos precisarem da mesma fórmula.
 
 ### Resiliência
 

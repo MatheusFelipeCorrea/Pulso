@@ -68,6 +68,8 @@ router.post(
 
 router.get('/me', authMiddleware, authController.me);
 
+router.patch('/me/plano', authMiddleware, authController.setPlano);
+
 router.post(
     '/forgot-password',
     authForgotPasswordRateLimit,

@@ -26,19 +26,19 @@ Abre em `http://localhost:5173`. A API deve estar em `http://localhost:3333/api`
 - Layout autenticado (sidebar + mobile drawer)
 - **Landing** (`/`) — homepage pública com tema claro/escuro
 - **Transações** — listagem, filtros, resumo, CRUD, recorrência, tags, categorias
-- **Vale Transporte** — saldo, vendas e usos de passagens (conforme `modoUso`)
 - **Orçamento mensal** — limites por categoria, progresso e alertas
 - **Calendário financeiro** — visão mensal, lembretes e integração Google Calendar (IA na tela pendente)
 - **Dívidas** — empréstimos e cobranças com pagamentos parciais
 - **Metas** — CRUD, aportes, progresso e sugestão de aporte mensal
 - **Viagens** — planejamento, despesas, moedas, busca de destinos, estimativas de passagem
-- **Grupos** — criar/entrar, viagem compartilhada, metas, chat, divisão por pretensão
+- **Grupos** — criar/entrar (Premium), viagem compartilhada, metas, chat Socket.IO, divisão por pretensão
 - **Divisão de Despesas** (`/expense-split`) — rateio e acerto de contas
 - **Planejamento de Compra** (`/purchase-planning`) — lista de desejos e prazo estimado
 - **Notificações** — sino no layout (orçamento, lembretes, dívidas, grupos, metas)
+- Planos Free/Premium (demo sem billing)
 - Termos de uso e política de privacidade
 - Demo do design system em `/design-system`
 
 ## Em desenvolvimento (placeholder)
 
-Pós-login o destino padrão é **`/transactions`** (`DEFAULT_AUTHENTICATED_ROUTE`). Placeholders no menu: `/dashboard`, `/reports`, `/insights`, `/chatbot`, `/achievements`, `/profile`, `/settings`.
+Pós-login o destino padrão é **`/dashboard`**. Placeholders no menu: `/insights`, `/chatbot`, `/profile`, `/settings`.

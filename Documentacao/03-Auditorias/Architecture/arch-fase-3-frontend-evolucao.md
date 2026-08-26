@@ -10,7 +10,7 @@ O que aparece aqui não é um bug isolado, mas a qualidade do sistema para cresc
 
 - Observabilidade fraca para investigar falhas distribuídas: falta correlação de requisições e estrutura de log.
 - A cobertura de testes declarada não representa integralmente o que é mais sensível no domínio, porque vários services relevantes estão excluídos do cálculo.
-- Há duplicação de agregações de leitura em mais de um service, o que aumenta risco de drift entre relatórios futuros, calendário e insights.
+- Há duplicação de agregações de leitura em mais de um service, o que aumenta risco de drift entre dashboard, calendário e insights.
 - O plano técnico dos módulos 19–25 ainda depende de requisitos não escritos e de decisões que hoje só existem como intenção de backlog.
 - A orquestração de jobs segue duas superfícies diferentes, local e cron via endpoint, o que fragiliza a previsibilidade operacional.
 
@@ -39,7 +39,7 @@ O que aparece aqui não é um bug isolado, mas a qualidade do sistema para cresc
 | Campo | Conteúdo |
 |---|---|
 | Severidade | 🟠 Alta |
-| Problema | O backend declara thresholds globais em [jest.config.js](Codigo/Pulso/api/jest.config.js#L8-L44), mas exclui explicitamente `gamificationService.js`, `insightService.js`, `googleCalendarService.js`, `googleCalendarSyncService.js`, `purchasePlanningService.js` e `viagemService.js` do cálculo. O frontend faz o mesmo em [vite.config.js](Codigo/Pulso/web/vite.config.js#L20-L49), excluindo `viagemService.js`, `moedaService.js`, `syncService.js`, `purchasePlanningService.js` e `expenseSplitService.js`. |
+| Problema | O backend declara thresholds globais em [jest.config.js](Codigo/Pulso/api/jest.config.js#L8-L44), mas exclui explicitamente `insightService.js`, `googleCalendarService.js`, `googleCalendarSyncService.js`, `purchasePlanningService.js` e `viagemService.js` do cálculo. O frontend faz o mesmo em [vite.config.js](Codigo/Pulso/web/vite.config.js#L20-L49), excluindo `viagemService.js`, `moedaService.js`, `syncService.js`, `purchasePlanningService.js` e `expenseSplitService.js`. |
 | Impacto | O número de cobertura continua útil como métrica geral, mas deixa de representar exatamente os serviços que concentram regras mais delicadas, integrações externas e leitura agregada. Isso reduz a confiança na cobertura como indicador de prontidão real para evolução. |
 | Evidência | Tanto API quanto web têm listas explícitas de exclusão de cobertura, o que desloca o percentual para um subconjunto mais confortável do código. |
 | Recomendação | Separar o que é infraestrutura daquilo que é negócio crítico no relatório de cobertura. No mínimo, acompanhar métricas específicas para services excluídos e revisar se as exclusões ainda são justificáveis. |
@@ -50,10 +50,10 @@ O que aparece aqui não é um bug isolado, mas a qualidade do sistema para cresc
 | Campo | Conteúdo |
 |---|---|
 | Severidade | 🟡 Média |
-| Problema | As mesmas tabelas de transação e saldo são agregadas em mais de um ponto do backend: [calendarService.js](Codigo/Pulso/api/src/services/calendarService.js) soma receitas e despesas por dia/mês; [insightService.js](Codigo/Pulso/api/src/services/insightService.js) calcula o maior gasto do mês; [purchasePlanningService.js](Codigo/Pulso/api/src/services/purchasePlanningService.js) calcula sobra mensal por três meses; e [gamificationService.js](Codigo/Pulso/api/src/services/gamificationService.js) conta transações e metas para desbloquear conquistas. |
-| Impacto | Isso não é um bug imediato, mas é uma rota clássica para drift semântico quando o Dashboard, Relatórios e futuros painéis passarem a reutilizar essas mesmas noções de saldo, gasto top e média mensal. Também aumenta o custo de manutenção das regras de leitura. |
+| Problema | As mesmas tabelas de transação e saldo são agregadas em mais de um ponto do backend: [calendarService.js](Codigo/Pulso/api/src/services/calendarService.js) soma receitas e despesas por dia/mês; [insightService.js](Codigo/Pulso/api/src/services/insightService.js) calcula o maior gasto do mês; [purchasePlanningService.js](Codigo/Pulso/api/src/services/purchasePlanningService.js) calcula sobra mensal por três meses. |
+| Impacto | Isso não é um bug imediato, mas é uma rota clássica para drift semântico quando o Dashboard e futuros painéis passarem a reutilizar essas mesmas noções de saldo, gasto top e média mensal. Também aumenta o custo de manutenção das regras de leitura. |
 | Evidência | Cada service mantém sua própria interpretação do mesmo ledger, com consultas agregadas e fórmulas semelhantes, mas sem uma camada de read model unificada. |
-| Recomendação | Introduzir um serviço de leitura compartilhado ou uma camada de read model para métricas recorrentes, especialmente para dashboard, relatórios e insights. |
+| Recomendação | Introduzir um serviço de leitura compartilhado ou uma camada de read model para métricas recorrentes, especialmente para dashboard e insights. |
 | Trade-off | Centralizar leitura reduz duplicação e divergência, mas pode adicionar complexidade e uma camada extra de abstração sobre queries já simples. |
 
 ### ARCH-3-04 - Orquestração de jobs depende de duas superfícies diferentes e com cadências distintas
@@ -72,25 +72,25 @@ O que aparece aqui não é um bug isolado, mas a qualidade do sistema para cresc
 | Campo | Conteúdo |
 |---|---|
 | Severidade | 🟡 Média |
-| Problema | O arquivo [19-25-Modulos-Planejados.md](../Product%20Owner/19-25-Modulos-Planejados.md) deixa claro que os módulos 19–25 ainda não têm Regras de Negócio correspondentes, apenas RFs e dependências de alto nível. O próprio documento aponta lacunas de comportamento em onboarding, importação, cartão, bots, casal/família, push e veículos/FIPE. |
-| Impacto | Sem RN formal e sem ADRs para tópicos como push persistence, rate limit de bots, cálculo proporcional em família, fallback de FIPE e parcelamento de faturas, a implementação tende a começar com ambiguidades e retrabalho. |
-| Evidência | O documento de prontidão de escopo registra explicitamente a ausência total de RN para os módulos planejados e lista decisões que precisam ser fechadas antes do código. |
-| Recomendação | Tratar os módulos 19–25 como backlog de engenharia, não apenas de produto: antes de codar, formalizar RN/ADRs mínimos para os fluxos com maior risco de divergência. |
+| Problema | No escopo TI5, [19-25-Modulos-Planejados.md](../Product%20Owner/19-25-Modulos-Planejados.md) ficou só com **Onboarding** (e contexto de importação). Ainda faltam Regras de Negócio formais para esse planejado. |
+| Impacto | Sem RN/ADR mínimos de onboarding, a implementação tende a começar com ambiguidades (modo de uso, receitas fixas, primeiro login). |
+| Evidência | O documento TI5 registra Onboarding como único planejado e a ausência de RN correspondente. |
+| Recomendação | Antes de codar onboarding, formalizar RN/ADRs mínimos do fluxo de primeiro uso. |
 | Trade-off | Antecipar ADRs reduz ambiguidade e retrabalho, mas exige parar para decisão antes de velocidade de implementação. |
 
 ## 5. Novos Requisitos Arquiteturais Propostos
 
 - RNF-E1: todo request relevante deve carregar um identificador de correlação propagado até logs e jobs associados.
 - RNF-E2: cobertura de teste deve ser reportada por categoria de risco, não apenas por percentual global.
-- RNF-E3: métricas de leitura recorrente devem ter uma camada compartilhada para evitar drift entre dashboard, relatórios e insights.
+- RNF-E3: métricas de leitura recorrente devem ter uma camada compartilhada para evitar drift entre dashboard e insights.
 - RNF-E4: jobs devem ter uma única fonte de verdade para agenda e composição, com adaptadores por ambiente.
-- ADR-E1: os módulos 19–25 precisam de RN/ADRs mínimos antes de entrar em implementação.
+- ADR-E1: Onboarding (único planejado TI5 em 19–25) precisa de RN/ADRs mínimos antes de entrar em implementação.
 
 ## 6. Perguntas Clarificadoras específicas da fase
 
 - O time quer adotar correlação de requisição via middleware agora, ou isso só entra quando houver tracing distribuído completo?
 - As exclusões de coverage em API e web são temporárias ou fazem parte da estratégia de métricas do projeto?
-- Existe intenção de consolidar consultas agregadas em um read model comum para dashboard, relatórios e insights?
+- Existe intenção de consolidar consultas agregadas em um read model comum para dashboard e insights?
 - O catálogo de jobs deve ser unificado em uma só camada, ou a separação local/serverless é uma decisão permanente?
 - Os módulos 19–25 vão ganhar RN/ADRs antes de qualquer história de implementação, ou o time prefere implementar e detalhar depois?
 
@@ -98,6 +98,6 @@ O que aparece aqui não é um bug isolado, mas a qualidade do sistema para cresc
 
 - A correlação de requisição via middleware é a direção preferida agora, não só uma etapa futura de tracing.
 - As exclusões de coverage podem continuar por métrica, considerando o contexto de plano gratuito, mas precisam ficar explicitadas como decisão de medição, não como cobertura integral.
-- Ainda não há intenção de consolidar um read model comum para dashboard, relatórios e insights.
+- Ainda não há intenção de consolidar um read model comum para dashboard e insights.
 - Os jobs podem seguir sendo disparados em uma única camada por conta do Vercel, desde que a agenda fique centralizada e previsível.
 - Os módulos 19–25 devem entrar como histórias, mas apoiados por RN/ADRs mínimos antes da implementação para reduzir ambiguidade.

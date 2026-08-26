@@ -4,7 +4,6 @@ const RECURSOS = [
     { value: 'DINHEIRO', label: 'Dinheiro' },
     { value: 'VA', label: 'VA' },
     { value: 'VR', label: 'VR' },
-    { value: 'VT', label: 'VT' },
     { value: 'POUPANCA', label: 'Poupança' },
 ];
 

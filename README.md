@@ -32,7 +32,7 @@ Pulso/
 
 ## Status do produto (ago/2026)
 
-~**55%** dos requisitos funcionais entregues ([detalhe por RF](./Documentacao/01-Produto/Requisitos/Readme.md)).
+~**58%** dos requisitos funcionais entregues ([detalhe por RF](./Documentacao/01-Produto/Requisitos/Readme.md)).
 
 ### Módulos entregues (UI + API utilizáveis)
 
@@ -44,30 +44,42 @@ Pulso/
 | Metas financeiras | 026–032 |
 | Viagens e moedas | 033–043 |
 | Lembretes + Google Agenda | 054–058 |
-| Vale-transporte | 059–066 |
 | Orçamento mensal | 109–114 |
 | Divisão de despesas | 115–120 |
 | Calendário financeiro | 121–125 |
 | Dívidas pessoais | 126–132 |
 | Planejamento de compra | 133–138 |
 | Homepage pública | 084–087 |
-| Grupos | 088–102 |
+| Grupos (+ chat Socket.IO) | 088–102 |
 | Importação de extratos | 155–158, 160 (🟡 falta RF-159 aprendizado) |
+
+### Planos Free / Premium (TI5)
+
+| Plano | Acesso |
+|-------|--------|
+| **Free** | Core financeiro (transações, orçamento, metas, viagens pessoais, etc.) |
+| **Premium** | Grupos (viagens/metas compartilhadas + chat em tempo real) — gate no backend |
+
+Alternância demo via API de auth (`plano` FREE/PREMIUM), sem billing.
+
+### Infra TI5
+
+- **RabbitMQ** — filas `pulso.alerts` e `pulso.reminders` (jobs de orçamento/dívidas/lembretes); sem `RABBITMQ_URL`, jobs rodam em modo direto.
+- **Socket.IO** — chat de grupos em tempo real (API long-running).
+- **Hospedagem:** web na Vercel; API em processo contínuo — [TI5-Hospedagem.md](./Documentacao/02-Engenharia/Deploy/TI5-Hospedagem.md).
 
 ### Parcial ou só placeholder na UI
 
 | Módulo | Situação |
 |--------|----------|
-| Perfil e configurações | Tema claro/escuro (RF-076) ok; demais RF-073–078 / settings incompletos |
+| Perfil e configurações | Tema claro/escuro (RF-076) ok; demais RF-073–077 / settings incompletos |
 | Design System / Sidebar | Contínuo — base pronta, evolução incremental |
-| Gamificação | Página placeholder (RF-067–072) |
-| Relatórios | Placeholder (RF-045–050) |
 | Insights | Placeholder (RF-044–048) |
 | Chatbot / quick-add IA | Placeholder (RF-049–053, RF-139); Gemini usado na importação PDF |
 
 ### Planejados (sem implementação)
 
-Onboarding (RF-151–154) · Cartão de crédito e faturas · Integrações Telegram/Discord · Modo casal/família · PWA + push · Veículos & FIPE — ver [módulos 19–25](./Documentacao/03-Auditorias/Product%20Owner/19-25-Modulos-Planejados.md).
+Onboarding (RF-151–154) — ver [módulos planejados TI5](./Documentacao/03-Auditorias/Product%20Owner/19-25-Modulos-Planejados.md).
 
 Gaps e prioridades: [Analise-Produto.md](./Documentacao/01-Produto/Analise-Produto.md) · Auditoria PO: [Sumário executivo](./Documentacao/03-Auditorias/Product%20Owner/00-Sumario-Executivo.md)
 
@@ -102,7 +114,7 @@ Após login, o app redireciona para **`/dashboard`**.
 
 Integrações opcionais da API: `GEONAMES_USERNAME`, `DUFFEL_ACCESS_TOKEN`, `GEMINI_API_KEY_PDF` (importação PDF) — ver [`api/.env.example`](./Codigo/Pulso/api/.env.example).
 
-Deploy: [Hospedagem.md](./Documentacao/02-Engenharia/Deploy/Hospedagem.md)
+Deploy: [Hospedagem.md](./Documentacao/02-Engenharia/Deploy/Hospedagem.md) · TI5: [TI5-Hospedagem.md](./Documentacao/02-Engenharia/Deploy/TI5-Hospedagem.md)
 
 ---
 
@@ -113,7 +125,9 @@ Deploy: [Hospedagem.md](./Documentacao/02-Engenharia/Deploy/Hospedagem.md)
 | Frontend | React, Vite, Redux Toolkit, React Router, Recharts, Lucide |
 | Backend | Node.js, Express, Prisma, PostgreSQL (Neon) |
 | Auth | JWT + refresh em cookie httpOnly, Google OAuth |
-| Hospedagem | Vercel (web + serverless API), cron Vercel |
+| Mensageria | RabbitMQ (alerts + reminders) — opcional |
+| Realtime | Socket.IO (chat de grupos) |
+| Hospedagem | Vercel (web) + API long-running (TI5); ver também deploy serverless legado |
 | CI | GitHub Actions — lint, test, build, `npm audit` |
 
 ---

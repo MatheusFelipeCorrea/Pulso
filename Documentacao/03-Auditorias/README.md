@@ -34,7 +34,7 @@ Guia do pack (skills, comandos, fluxo): [`.github/INDEX.md`](../../.github/INDEX
 |-----------|----------|
 | [00-Sumario-Executivo.md](./Product%20Owner/00-Sumario-Executivo.md) | Visão geral + correções aplicadas |
 | [00-Achados-Transversais.md](./Product%20Owner/00-Achados-Transversais.md) | T1–T7 (infra, testes, serverless) |
-| [01-…18-….md](./Product%20Owner/) | Um relatório por módulo implementado |
+| [01-…18-….md](./Product%20Owner/) | Um relatório por módulo implementado (sem 08/09/11 — fora do escopo TI5) |
 | [19-25-Modulos-Planejados.md](./Product%20Owner/19-25-Modulos-Planejados.md) | Escopo futuro |
 | [20-Requisitos-Nao-Funcionais.md](./Product%20Owner/20-Requisitos-Nao-Funcionais.md) | RNFs consolidados |
 

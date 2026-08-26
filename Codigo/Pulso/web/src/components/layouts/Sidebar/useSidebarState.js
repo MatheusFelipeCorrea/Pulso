@@ -2,9 +2,23 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { SIDEBAR_NAV, SIDEBAR_NAV_FOOTER } from '@/config/sidebarNavigation'
 import { useAppSelector } from '@/store/hooks'
-import { filterSidebarNavForUser } from '@/utils/transportUtils.js'
 
 const STORAGE_KEY = 'sidebar_collapsed'
+
+const PREMIUM_PATHS = new Set(['/trips', '/groups', '/insights', '/chatbot'])
+
+function filterNavByPlano(navItems, plano) {
+  if (plano === 'PREMIUM') return navItems
+  return navItems
+    .map((item) => {
+      if (item.path && PREMIUM_PATHS.has(item.path)) return null
+      if (!item.children) return item
+      const children = item.children.filter((c) => !PREMIUM_PATHS.has(c.path))
+      if (!children.length && !item.path) return null
+      return { ...item, children }
+    })
+    .filter(Boolean)
+}
 
 export function flattenNavItems(items = SIDEBAR_NAV) {
   const flat = []
@@ -26,7 +40,10 @@ export function flattenNavItems(items = SIDEBAR_NAV) {
 export function useSidebarState() {
   const location = useLocation()
   const user = useAppSelector((state) => state.auth.user)
-  const navForUser = useMemo(() => filterSidebarNavForUser(SIDEBAR_NAV, user), [user])
+  const navForUser = useMemo(
+    () => filterNavByPlano(SIDEBAR_NAV, user?.plano ?? 'FREE'),
+    [user?.plano]
+  )
   const [isCollapsed, setIsCollapsed] = useState(() => {
     try {
       return localStorage.getItem(STORAGE_KEY) === 'true'

@@ -9,7 +9,7 @@ export const privacyPolicySections = [
   },
   {
     title: '3. Finalidades do tratamento',
-    content: `Utilizamos seus dados para: criar e autenticar sua conta; prestar as funcionalidades financeiras do Pulso; enviar comunicações essenciais (verificação de email, reset de senha); gerar relatórios, insights e respostas do chatbot com base exclusivamente nos seus dados financeiros; operar gamificação; melhorar segurança, desempenho e experiência do produto; cumprir obrigações legais.`,
+    content: `Utilizamos seus dados para: criar e autenticar sua conta; prestar as funcionalidades financeiras do Pulso; enviar comunicações essenciais (verificação de email, reset de senha); gerar insights e respostas do chatbot com base exclusivamente nos seus dados financeiros; melhorar segurança, desempenho e experiência do produto; cumprir obrigações legais.`,
   },
   {
     title: '4. Bases legais (LGPD)',

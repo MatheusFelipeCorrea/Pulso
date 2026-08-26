@@ -11,12 +11,14 @@ Documento de referência das entidades do banco de dados do **Pulso**.
 
 | Camada | Situação |
 |--------|----------|
-| **Prisma** | 36 modelos no schema · 33 documentados abaixo — faltam `Divida`, `PagamentoDivida`, `ObservacaoViagem` |
-| **API em uso** | Auth, transações, categorias, tags, VT, orçamento, notificações, lembretes, calendário, **dividas**, **metas**, **viagens**, **moedas**, **planejamento de compra**, **grupos**, **divisão de despesas** |
-| **Implementado na API** | Auth, transações, VT, orçamento, lembretes, calendário, dívidas, metas, viagens, moedas, planejamento de compra, **grupos**, **divisão de despesas** |
-| **Pendente na API** | IA (chat/insights), gamificação completa, relatórios; grupos: chat em tempo real |
+| **Prisma** | Modelos no schema · documentados abaixo |
+| **API em uso** | Auth, transações, categorias, tags, orçamento, notificações, lembretes, calendário, dívidas, metas, viagens, moedas, planejamento de compra, grupos (Premium + Socket.IO), divisão de despesas, dashboard, importação |
+| **Pendente na API** | IA (chat/insights) completo |
+| **TI5** | Planos Free/Premium · RabbitMQ (alerts + reminders + emails) · Socket.IO |
 
 Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`, `configuracoes_usuario`).
+
+> **Fora do escopo produto TI5:** tabelas/campos legados de gestão de vale-transporte (`VendaVt`, `UsoVt`), gamificação (`Sequencia`, `Conquista`, …) e relatórios produto — podem existir no schema histórico; não são módulos do produto documentado.
 
 ---
 
@@ -36,12 +38,8 @@ Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`,
 - [💱 MoedaFavorita](#-moedafavorita)
 - [📅 Lembrete](#-lembrete)
 - [🛒 ItemPlanejamentoCompra](#-itemplanejamentocompra)
-- [🚌 VendaVt](#-vendavt)
-- [🎫 UsoVt](#-usovt)
-- [🔥 Sequencia](#-sequencia)
-- [🏆 Conquista](#-conquista)
-- [🎖️ ConquistaUsuario](#️-conquistausuario)
-- [🎲 DesafioMensal](#-desafiomensal)
+- [🚌 VendaVt / UsoVt (legado)](#-vendavt--usovt-legado-schema)
+- [🔥 Sequencia / Conquistas (legado)](#-sequencia--conquista--conquistausuario--desafio-mensal-legado-schema)
 - [💬 MensagemChat](#-mensagemchat)
 - [📊 HistoricoScore](#-historicoscore)
 - [👥 Grupo](#-grupo)
@@ -98,18 +96,16 @@ Preferências e receitas fixas recorrentes do usuário. Tabela: `configuracoes_u
 | `diaVa` | Int | Dia em que cai o VA |
 | `valorVr` | Decimal(12,2) | Valor do Vale Refeição |
 | `diaVr` | Int | Dia em que cai o VR |
-| `valorVt` | Decimal(12,2) | Valor do Vale Transporte |
+| `valorVt` | Decimal(12,2) | Valor de benefício VT (tipo de recurso) |
 | `diaVt` | Int | Dia em que cai o VT |
 | `tema` | Enum | `CLARO` ou `ESCURO` |
-| `gamificacaoAtiva` | Boolean | Módulo de gamificação ativo? |
+| `plano` | Enum | `FREE` ou `PREMIUM` (TI5) |
 | `googleCalendarAtivo` | Boolean | Integração com Google Calendar? |
 | `googleCalendarId` | String | ID do calendário dedicado no Google |
 | `googleCalendarEmail` | VarChar(180) | E-mail da conta Google conectada (OAuth) |
 | `tokensGoogle` | Json | Tokens OAuth do Google (criptografados) |
 | `limiteGastos` | Decimal(12,2) | Limite de gastos pra alerta |
 | `rendaMensalPlanejada` | Decimal(12,2) | Renda mensal planejada (orçamento) |
-| `valorPadraoPassagem` | Decimal(10,2) | Valor padrão da passagem de VT (uso) |
-| `vtHabilitado` | Boolean | VT habilitado para o usuário? |
 | `modoUso` | Enum | `ESTAGIARIO`, `CLT`, `PJ`, `PESSOA_FISICA` (RF-103) |
 | `criadoEm` / `atualizadoEm` | DateTime | Timestamps |
 
@@ -350,102 +346,15 @@ Itens de uma lista de desejos, com simulação de parcelamento e vínculo opcion
 
 ---
 
-## 🚌 VendaVt
+## 🚌 VendaVt / UsoVt (legado schema)
 
-Registro de VT vendido pelo usuário.
-
-| Campo | Tipo | Descrição |
-|---|---|---|
-| `id` | String | Identificador |
-| `usuarioId` | String (FK) | Dono |
-| `nomeComprador` | VarChar(120) | Nome de quem comprou |
-| `dataVenda` | DateTime | Data da venda |
-| `valorNominal` | Decimal(12,2) | Valor "de face" do VT |
-| `valorRecebido` | Decimal(12,2) | Valor realmente recebido |
-| `criadoEm` | DateTime | Timestamp |
-
-**Regra**: `valorRecebido` geralmente é menor que `valorNominal` (diferença = perda na venda).
+> **Fora do escopo TI5.** Tabelas históricas (`VendaVt`, `UsoVt`); não há módulo de produto correspondente.
 
 ---
 
-## 🎫 UsoVt
+## 🔥 Sequencia / 🏆 Conquista / 🎖️ ConquistaUsuario / 🎲 DesafioMensal (legado schema)
 
-Registro de passagens efetivamente usadas.
-
-| Campo | Tipo | Descrição |
-|---|---|---|
-| `id` | String | Identificador |
-| `usuarioId` | String (FK) | Dono |
-| `quantidade` | Int | Qtd de passagens |
-| `valorPorPassagem` | Decimal(10,2) | Valor unitário |
-| `data` | DateTime | Data do uso |
-| `criadoEm` | DateTime | Timestamp |
-
----
-
-## 🔥 Sequencia
-
-Streak + XP + Nível de gamificação.
-
-| Campo | Tipo | Descrição |
-|---|---|---|
-| `id` | String | Identificador |
-| `usuarioId` | String (FK único) | Dono |
-| `sequenciaAtual` | Int | Dias consecutivos atuais |
-| `maiorSequencia` | Int | Recorde pessoal |
-| `xp` | Int | Pontos acumulados |
-| `nivel` | Enum | `INICIANTE`, `CONSCIENTE`, `ESTRATEGISTA`, `INVESTIDOR` |
-| `ultimaAtividade` | DateTime | Último dia com registro |
-| `atualizadoEm` | DateTime | Timestamp |
-
----
-
-## 🏆 Conquista
-
-Catálogo global de conquistas (seed).
-
-| Campo | Tipo | Descrição |
-|---|---|---|
-| `id` | String | Identificador |
-| `codigo` | VarChar(60) único | Identificador técnico (ex: `PRIMEIRA_META`) |
-| `nome` | VarChar(100) | Nome visível (ex: "Sonhador") |
-| `descricao` | VarChar(255) | Descrição da conquista |
-| `icone` | VarChar(40) | Nome do ícone lucide |
-| `criterio` | Json | Regras de desbloqueio |
-| `recompensaXp` | Int | XP ao desbloquear |
-
----
-
-## 🎖️ ConquistaUsuario
-
-Conquistas desbloqueadas por cada usuário.
-
-| Campo | Tipo | Descrição |
-|---|---|---|
-| `id` | String | Identificador |
-| `usuarioId` | String (FK) | Dono |
-| `conquistaId` | String (FK) | Qual conquista |
-| `desbloqueadaEm` | DateTime | Quando desbloqueou |
-
----
-
-## 🎲 DesafioMensal
-
-Desafios personalizados gerados pela Gemini.
-
-| Campo | Tipo | Descrição |
-|---|---|---|
-| `id` | String | Identificador |
-| `usuarioId` | String (FK) | Dono |
-| `titulo` | VarChar(120) | Título do desafio |
-| `descricao` | VarChar(500) | Descrição |
-| `criterio` | Json | Regras de avaliação |
-| `mes` | Int (1-12) | Mês |
-| `ano` | Int | Ano |
-| `progresso` | Decimal(5,2) | Percentual (0-100) |
-| `concluido` | Boolean | Foi concluído? |
-| `concluidoEm` | DateTime | Quando concluiu |
-| `criadoEm` | DateTime | Timestamp |
+> **Fora do escopo TI5.** Entidades históricas de engajamento; não fazem parte do produto documentado.
 
 ---
 
@@ -682,14 +591,12 @@ Alertas in-app para o usuário. Tabela: `notificacoes`
 | 4 | ✈️ Viagens | Viagem, DespesaViagem | 2 |
 | 5 | 💱 Câmbio | MoedaFavorita | 1 |
 | 6 | 📅 Lembretes | Lembrete | 1 |
-| 7 | 🚌 VT | VendaVt, UsoVt | 2 |
-| 8 | 📊 Orçamento & Alertas | Orcamento, Notificacao | 2 |
-| 9 | 🎮 Gamificação | Sequencia, Conquista, ConquistaUsuario, DesafioMensal | 4 |
-| 10 | 🤖 IA | MensagemChat, HistoricoScore | 2 |
-| 11 | 👥 Grupos | Grupo, MembroGrupo, ViagemGrupo, DespesaViagemGrupo, MetaGrupo, AporteMetaGrupo, MensagemChatGrupo | 7 |
-| 12 | 🛒 Planejamento de Compra | ItemPlanejamentoCompra | 1 |
-| 13 | 💸 Divisão de Despesas | Divisao, DivisaoParticipante | 2 |
-| | | **TOTAL** | **33** |
+| 7 | 📊 Orçamento & Alertas | Orcamento, Notificacao | 2 |
+| 8 | 🤖 IA | MensagemChat, HistoricoScore | 2 |
+| 9 | 👥 Grupos | Grupo, MembroGrupo, ViagemGrupo, DespesaViagemGrupo, MetaGrupo, AporteMetaGrupo, MensagemChatGrupo | 7 |
+| 10 | 🛒 Planejamento de Compra | ItemPlanejamentoCompra | 1 |
+| 11 | 💸 Divisão de Despesas | Divisao, DivisaoParticipante | 2 |
+| — | 📦 Legado (fora TI5) | VendaVt, UsoVt, Sequencia, Conquista, ConquistaUsuario, DesafioMensal | 6 |
 
 ---
 
@@ -724,7 +631,6 @@ Alertas in-app para o usuário. Tabela: `notificacoes`
 
 ```
 Usuario (1) ──── (1) ConfiguracaoUsuario
-  (1) ──── (1) Sequencia
   (1) ──── (N) Transacao ──── (0:1) Categoria [nula em TRANSFERENCIA]
                         └──── (N:N) Tag
   (1) ──── (N) Meta ──── (N) AporteMeta
@@ -735,10 +641,7 @@ Usuario (1) ──── (1) ConfiguracaoUsuario
                                      └──── (0:1) Transacao
   (1) ──── (N) Orcamento ──── (N) Categoria
   (1) ──── (N) Notificacao
-  (1) ──── (N) VendaVt, UsoVt
   (1) ──── (N) MoedaFavorita
-  (1) ──── (N) ConquistaUsuario ──── (N) Conquista
-  (1) ──── (N) DesafioMensal
   (1) ──── (N) MensagemChat
   (1) ──── (N) HistoricoScore
   (N:N) ── Grupo (via MembroGrupo)
@@ -756,7 +659,7 @@ Grupo ──── (N) ViagemGrupo ──── (N) DespesaViagemGrupo
 - **Fonte de verdade:** alterações de modelo → editar `prisma/schema.prisma` e rodar `npm run db:migrate`
 - **Timestamps:** `criadoEm` e `atualizadoEm` gerenciados pelo Prisma (`@default(now())`, `@updatedAt`)
 - **IDs:** `cuid()` em todas as entidades
-- **Valores monetários:** `Decimal(12,2)` (ou `Decimal(10,2)` em `UsoVt.valorPorPassagem`)
+- **Valores monetários:** `Decimal(12,2)` (ou `Decimal(10,2)` em campos unitários)
 - **Cores:** hex `#RRGGBB` (7 caracteres)
 - **Ícones:** string com nome Lucide (ex: `UtensilsCrossed`, `Banknote`) — ver `web/src/components/badges/iconRegistry.jsx`
 - **Moedas:** ISO 4217, 3 letras (`USD`, `BRL`, `EUR`)

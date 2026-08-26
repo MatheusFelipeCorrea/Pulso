@@ -1,6 +1,7 @@
 const express = require('express');
 const calendarController = require('../controllers/calendarController');
 const authMiddleware = require('../middlewares/authMiddleware');
+const requirePremium = require('../middlewares/requirePremium');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const { queryMesSchema, queryDataSchema, googleSyncSchema } = require('../schemas/reminderSchemas');
 
@@ -10,19 +11,20 @@ router.get('/mes', authMiddleware, validateMiddleware(queryMesSchema), calendarC
 
 router.get('/dia', authMiddleware, validateMiddleware(queryDataSchema), calendarController.obterDia);
 
-router.get('/google/status', authMiddleware, calendarController.obterStatusGoogle);
+router.get('/google/status', authMiddleware, requirePremium, calendarController.obterStatusGoogle);
 
-router.get('/google/url', authMiddleware, calendarController.obterUrlGoogle);
+router.get('/google/url', authMiddleware, requirePremium, calendarController.obterUrlGoogle);
 
 router.get('/google/callback', calendarController.callbackGoogle);
 
-router.post('/google/desconectar', authMiddleware, calendarController.desconectarGoogle);
+router.post('/google/desconectar', authMiddleware, requirePremium, calendarController.desconectarGoogle);
 
-router.get('/google/sync/pendentes', authMiddleware, calendarController.obterPendentesSyncGoogle);
+router.get('/google/sync/pendentes', authMiddleware, requirePremium, calendarController.obterPendentesSyncGoogle);
 
 router.post(
     '/google/sync',
     authMiddleware,
+    requirePremium,
     validateMiddleware(googleSyncSchema),
     calendarController.sincronizarPendentesGoogle
 );

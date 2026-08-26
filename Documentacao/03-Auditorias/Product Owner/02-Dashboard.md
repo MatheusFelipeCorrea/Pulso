@@ -23,9 +23,9 @@
 | RF | Descrição | Status README | Realidade no código |
 |---|---|---|---|
 | RF-007 | Saldo total do mês | ❌ Não feito | Confirmado ausente. Mas `GET /transactions/resumo` (`transactionRoutes.js:28-33` → `transactionService.calcularResumo`, `transactionService.js:188-191`) já calcula `receitas.total`, `despesas.total` e `saldo` agregados por filtro de período — é 80% do dado que RF-007 pede, só falta a tela |
-| RF-008 | Saldos por recurso (dinheiro/VA/VR/VT) | ❌ Não feito | Confirmado ausente como endpoint dedicado; a lógica de saldo por recurso individual existe espalhada (VT em `transportService.js`, mencionado no Módulo 08) mas não há um agregador único "saldo por recurso" pronto para consumo direto |
+| RF-008 | Saldos por recurso (dinheiro/VA/VR/VT) | ❌ Não feito | Confirmado ausente como endpoint dedicado; saldos por recurso ainda não têm agregador único pronto para consumo direto |
 | RF-009 | Gráfico receitas vs. despesas | ❌ Não feito | Confirmado ausente. Dado bruto (receitas/despesas totais) já existe via `/transactions/resumo`, falta granularidade temporal (série por dia/semana) e o componente de gráfico |
-| RF-010 | Gráfico gastos por categoria | ❌ Não feito | Confirmado ausente. Não há endpoint de agregação por categoria pronto (nem em `reportService.js`, que está vazio — ver T1) |
+| RF-010 | Gráfico gastos por categoria | ❌ Não feito | Confirmado ausente. Não há endpoint de agregação por categoria pronto |
 | RF-011 | Resumo das últimas transações | ❌ Não feito | Confirmado ausente como widget, mas `GET /transactions` já pagina e ordena — trivial de reaproveitar com `limite=5` |
 | RF-012 | Alertas visuais de limite ultrapassado | ❌ Não feito | Confirmado ausente no dashboard; a lógica de alerta em si (80%/100% do limite) já existe no módulo de Orçamento (RF-111/112, ✅) — reaproveitável, não precisa ser reinventada |
 | RF-013 | Progresso resumido das metas ativas | ❌ Não feito | Confirmado ausente; `GET /metas` já retorna progresso — reaproveitável |
@@ -40,7 +40,7 @@
 
 Esta é a seção mais importante deste módulo, dado que ele é 100% placeholder.
 
-1. ~~**Toda autenticação termina em "em desenvolvimento".**~~ **✅ Corrigido (ago/2026)** — `Login`, `AuthCallback`, `GuestRoute`, `LandingPage` e `TransportVoucherPage` usam `DEFAULT_AUTHENTICATED_ROUTE` = `/transactions`.
+1. ~~**Toda autenticação termina em "em desenvolvimento".**~~ **✅ Corrigido (ago/2026)** — destino pós-login via `DEFAULT_AUTHENTICATED_ROUTE`.
 2. **`InDevelopmentPage` sem next-step** — permanece se o usuário clicar em Dashboard no menu; falta atalho ou badge "em breve" na sidebar (RNF-NOVO-B1).
 3. **Sidebar** — Dashboard ainda é primeiro item; usuário pode voltar ao placeholder manualmente.
 4. **Onboarding (M19)** — ainda 0%; não cobre lacuna do dashboard completo.
@@ -64,7 +64,7 @@ Não há regras de negócio específicas de Dashboard documentadas em `RegrasDeN
 ### Não funcionais
 
 - **RNF-NOVO-B1 (UX)** — Adicionar indicador visual (badge "em breve"/ícone diferenciado) nos itens da sidebar que apontam para `InDevelopmentPage`, para não sugerir que módulos incompletos têm o mesmo nível de prontidão que os já entregues.
-- **RNF-NOVO-B2 (Arquitetura)** — Ao implementar o Dashboard real, centralizar os cálculos de agregação (saldo, resumo por categoria) em um único service reaproveitado por Dashboard e Relatórios (Módulo 09, também 0%), em vez de duplicar a lógica de `transactionService.montarResumo` em dois lugares diferentes.
+- **RNF-NOVO-B2 (Arquitetura)** — Ao implementar o Dashboard real, centralizar os cálculos de agregação (saldo, resumo por categoria) em um único service reaproveitado, em vez de duplicar a lógica de `transactionService.montarResumo` em dois lugares diferentes.
 
 ---
 

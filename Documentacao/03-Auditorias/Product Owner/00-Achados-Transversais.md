@@ -20,13 +20,11 @@ Em paralelo, no código da API existe um conjunto de arquivos **em inglês, todo
 | Metas | `controllers/goalController.js`, `services/goalService.js`, `repositories/goalRepository.js`, `routes/goalRoutes.js`, `schemas/goalSchemas.js` | `metaService.js` (+ controller/routes próprios, não auditado ainda) |
 | Viagens | `controllers/tripController.js`, `services/tripService.js`, `repositories/tripRepository.js`, `routes/tripRoutes.js`, `schemas/tripSchemas.js` | `viagemService.js` |
 | Usuário | `controllers/userController.js`, `services/userService.js`, `repositories/userRepository.js`, `routes/userRoutes.js` | `userSyncService.js` (parcial — Módulo 10 ainda não tem tela) |
-| Gamificação | `controllers/gamificationController.js`, `repositories/gamificationRepository.js`, `routes/gamificationRoutes.js` | `services/gamificationService.js` (tem conteúdo real) |
 | Insights | `controllers/insightController.js`, `routes/insightRoutes.js` | `services/insightService.js` (tem conteúdo real) |
-| Relatórios | `controllers/reportController.js`, `services/reportService.js`, `routes/reportRoutes.js` | nenhuma — condiz com Módulo 09 em 0% |
 | Diversos | `config/swagger.js`, `middlewares/rateLimitMiddleware.js`, `utils/helpers.js` | — |
 | **Testes** | **Todos** os `.spec.js` em `src/tests/controllers/`, `src/tests/services/`, `src/tests/integration/` (25 arquivos) | testes reais confirmados em `api/tests/unit/**/*.test.js` (84 arquivos, 6.800 linhas) — ver T2 |
 
-O mesmo padrão se repete no front-end: componentes inteiros em `web/src/components/features/{auth,chatbot,dashboard,gamification,goals,groups,homepage}/**/*.jsx` estão **vazios e não importados por nenhuma página** (confirmado para o fluxo de Auth: `pages/Login.jsx` implementa o formulário inline e não referencia `components/features/auth/Login/LoginForm.jsx`).
+O mesmo padrão se repete no front-end: componentes inteiros em `web/src/components/features/{auth,chatbot,dashboard,goals,groups,homepage}/**/*.jsx` estão **vazios e não importados por nenhuma página** (confirmado para o fluxo de Auth: `pages/Login.jsx` implementa o formulário inline e não referencia `components/features/auth/Login/LoginForm.jsx`).
 
 **Por que isso importa para a auditoria inteira:**
 1. **Não dá pra usar o nome do arquivo como proxy de "existe/não existe"** — preciso confirmar, módulo a módulo, qual é o arquivo realmente montado nas rotas (`api/src/routes/index.js`) antes de declarar algo ausente ou presente.
@@ -46,7 +44,7 @@ A API tem **dois diretórios de teste em paralelo**:
 2. `api/tests/unit/**/*.test.js` — **84 arquivos reais, 6.800 linhas no total, nenhum vazio**. É esta a suíte que o `npm test` de fato roda, e o `jest.config.js` define `coverageThreshold.global` em 90% (lines/functions/statements) e 74% (branches) sobre um `collectCoverageFrom` que inclui `src/services/**`, `src/utils/**`, `src/jobs/**`, `src/middlewares/**` (não inclui `src/controllers/**`/`src/routes/**`).
 
 **O que isso muda:** a alegação de RNF-015 (~95% linhas/~94% statements) é **plausível e não foi refutada** por esta auditoria — ao contrário do que uma leitura apressada dos arquivos `.spec.js` vazios sugeriria. Dito isso, dois pontos concretos valem seguimento (detalhados na auditoria de NFR):
-- `gamificationService.js`, `insightService.js`, `googleCalendarService.js` e `googleCalendarSyncService.js` são **explicitamente excluídos** do `collectCoverageFrom` (via `!src/services/...`) — todos com conteúdo real e não triviais, então o "95%" é medido sobre um subconjunto que já exclui essas peças.
+- `insightService.js`, `googleCalendarService.js` e `googleCalendarSyncService.js` são **explicitamente excluídos** do `collectCoverageFrom` (via `!src/services/...`) — todos com conteúdo real e não triviais, então o "95%" é medido sobre um subconjunto que já exclui essas peças.
 - Não foi encontrado teste dedicado para `viagemService.js` (Módulo 05) na suíte real — **`purchasePlanningService.test.js` adicionado (ago/2026)**; `viagemService` ainda sem teste dedicado.
 
 **Recomendação:** os 25 arquivos `.spec.js` vazios deveriam ser removidos (fazem parte da limpeza de T1) — sua mera existência já causou uma leitura incorreta nesta própria auditoria, o que é evidência direta do risco descrito em T1.
@@ -113,12 +111,11 @@ Quarta variação do mesmo anti-padrão de concorrência encontrada de forma ind
 
 1. **Módulo 01 (Auth):** ~~verificação de email duplicado antes de criar usuário — e, pior, o erro de constraint (`P2002`) resultante de uma corrida não é tratado~~ → **✅ P2002 → 409** implementado.
 2. **Módulo 05 (Viagens):** vínculo 1:1 Viagem↔Meta — **✅ `@unique(metaId)`** + migration + P2002→409.
-3. **Módulo 08 (VT):** ~~checagem de saldo~~ → **✅ transação serializável** — impede estouro de saldo VT (RN-044).
-4. **Módulo 13 (Grupos):** "uma viagem por grupo" — **✅ `@unique(grupoId)`** em `ViagemGrupo`; metas ativas — **✅ transação Serializable** em `criarMetas`.
+3. **Módulo 13 (Grupos):** "uma viagem por grupo" — **✅ `@unique(grupoId)`** em `ViagemGrupo`; metas ativas — **✅ transação Serializable** em `criarMetas`.
 
-> **Distinção importante:** **VT / VA / VR** = saldo de benefício com **piso zero** (não se gasta além do creditado). **DINHEIRO** = saldo de conta pode ser **negativo de propósito** (receitas − despesas em `transactionService`; cheque especial, cartão, etc.). A urgência de transação atômica em benefícios é **integridade do ledger**, não “evitar vermelho na conta”. VA/VR ainda não checam saldo ao lançar despesa — só categoria (`recursoCategoriaRules`).
+> **Distinção importante:** **VA / VR / VT** = tipos de recurso/benefício com validação de categoria. **DINHEIRO** = saldo de conta pode ser **negativo de propósito** (receitas − despesas em `transactionService`).
 
-**Recomendação:** priorizar por tipo de regra — (1) **benefícios** que não podem estourar (VT ✅; VA/VR se/quando houver módulo de saldo); (2) **conta corrente** — negativo permitido, sem bloqueio; (3) **unicidade** Viagens/Grupos — baixo risco, documentar ou 409 basta no MVP.
+**Recomendação:** priorizar por tipo de regra — (1) **unicidade** Viagens/Grupos — documentar ou 409 no MVP; (2) **benefícios** — validação de categoria via `recursoCategoriaRules`.
 
 ---
 
@@ -133,10 +130,7 @@ Quarta variação do mesmo anti-padrão de concorrência encontrada de forma ind
 | 05 — Viagens e Moedas | [05-Viagens-e-Moedas.md](./05-Viagens-e-Moedas.md) | ✅ Concluído |
 | 06 — Insights e Chatbot | [06-Insights-e-Chatbot.md](./06-Insights-e-Chatbot.md) | ✅ Concluído |
 | 07 — Lembretes e Google Agenda | [07-Lembretes-e-Google-Agenda.md](./07-Lembretes-e-Google-Agenda.md) | ✅ Concluído |
-| 08 — Vale Transporte | [08-Vale-Transporte.md](./08-Vale-Transporte.md) | ✅ Concluído |
-| 09 — Relatórios | [09-Relatorios.md](./09-Relatorios.md) | ✅ Concluído |
 | 10 — Perfil e Configurações | [10-Perfil-e-Configuracoes.md](./10-Perfil-e-Configuracoes.md) | ✅ Concluído |
-| 11 — Gamificação | [11-Gamificacao.md](./11-Gamificacao.md) | ✅ Concluído |
 | 12 — Homepage | [12-Homepage.md](./12-Homepage.md) | ✅ Concluído |
 | 13 — Grupos | [13-Grupos.md](./13-Grupos.md) | ✅ Concluído |
 | 14 — Orçamento Mensal | [14-Orcamento-Mensal.md](./14-Orcamento-Mensal.md) | ✅ Concluído |

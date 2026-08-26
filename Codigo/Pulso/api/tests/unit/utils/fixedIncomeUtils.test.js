@@ -19,7 +19,7 @@ describe('fixedIncomeUtils', () => {
         expect(clampDiaMes('abc', 2026, 6)).toBeNull();
     });
 
-    it('obterRecebimentosFixosConfig inclui salário, VA/VR e VT para CLT', () => {
+    it('obterRecebimentosFixosConfig inclui salário e VA/VR para CLT (sem VT)', () => {
         const config = {
             modoUso: 'CLT',
             valorSalario: 5000,
@@ -36,11 +36,10 @@ describe('fixedIncomeUtils', () => {
             { tipo: 'SALARIO', label: 'Salário', valor: 5000, dia: 5 },
             { tipo: 'VA', label: 'Vale Alimentação', valor: 800, dia: 10 },
             { tipo: 'VR', label: 'Vale Refeição', valor: 700, dia: 12 },
-            { tipo: 'VT', label: 'Vale Transporte', valor: 300, dia: 15 },
         ]);
     });
 
-    it('obterRecebimentosFixosConfig respeita regras de PJ e ignora valores inválidos', () => {
+    it('obterRecebimentosFixosConfig ignora VT e valores inválidos (PJ)', () => {
         const config = {
             modoUso: 'PJ',
             vtHabilitado: true,
@@ -54,9 +53,7 @@ describe('fixedIncomeUtils', () => {
             diaVr: 10,
         };
 
-        expect(obterRecebimentosFixosConfig(config)).toEqual([
-            { tipo: 'VT', label: 'Vale Transporte', valor: 250, dia: 31 },
-        ]);
+        expect(obterRecebimentosFixosConfig(config)).toEqual([]);
     });
 
     it('recebimentosFixosNoDia considera clamp do fim do mês', () => {
@@ -75,7 +72,7 @@ describe('fixedIncomeUtils', () => {
         const recebimentos = [
             { tipo: 'VA', dia: 10 },
             { tipo: 'VA', dia: 10 },
-            { tipo: 'VT', dia: 31 },
+            { tipo: 'SALARIO', dia: 31 },
         ];
 
         aplicarMarcadoresRecebimentoFixo(dias, recebimentos, 2026, 2);
@@ -86,7 +83,7 @@ describe('fixedIncomeUtils', () => {
         });
         expect(dias['2026-02-28']).toMatchObject({
             temRecebimentoFixo: true,
-            recebimentosFixos: ['VT'],
+            recebimentosFixos: ['SALARIO'],
         });
     });
 
@@ -103,10 +100,9 @@ describe('fixedIncomeUtils', () => {
         expect(config).toEqual([{ tipo: 'SALARIO', label: 'Salário', valor: 1000, dia: 1 }]);
     });
 
-    it('PJ sem vtHabilitado não inclui VT', () => {
+    it('nunca emite VT mesmo com valorVt configurado', () => {
         const config = obterRecebimentosFixosConfig({
-            modoUso: 'PJ',
-            vtHabilitado: false,
+            modoUso: 'CLT',
             valorSalario: 8000,
             diaSalario: 5,
             valorVt: 300,

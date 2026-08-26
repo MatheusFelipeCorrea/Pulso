@@ -38,6 +38,7 @@ Código-fonte: [`Codigo/`](../Codigo/) · Epics: [`.github/plans/`](../.github/p
 | [API/Database.md](./02-Engenharia/API/Database.md) | Dicionário de dados (Prisma) |
 | [Web/Readme.md](./02-Engenharia/Web/Readme.md) | Frontend — rotas, páginas, DS |
 | [Deploy/Hospedagem.md](./02-Engenharia/Deploy/Hospedagem.md) | Vercel, Neon, cron |
+| [Deploy/TI5-Hospedagem.md](./02-Engenharia/Deploy/TI5-Hospedagem.md) | TI5: web Vercel + API long-running |
 | [Modulos/Grupos.md](./02-Engenharia/Modulos/Grupos.md) | Deep dive — Grupos |
 | [Modulos/Cron.md](./02-Engenharia/Modulos/Cron.md) | Jobs agendados |
 | [Guia-Commits.md](./02-Engenharia/Guia-Commits.md) | Padrão de mensagens de commit |
@@ -81,7 +82,7 @@ Design System (no código): [`Codigo/Pulso/web/src/design-system/README.md`](../
 | Como rodar a API | [02-Engenharia/API/Readme.md](./02-Engenharia/API/Readme.md#-como-rodar) |
 | Como rodar o front | [02-Engenharia/Web/Readme.md](./02-Engenharia/Web/Readme.md) |
 | Schema do banco | [02-Engenharia/API/Database.md](./02-Engenharia/API/Database.md) |
-| Deploy produção | [02-Engenharia/Deploy/Hospedagem.md](./02-Engenharia/Deploy/Hospedagem.md) |
+| Deploy produção | [02-Engenharia/Deploy/Hospedagem.md](./02-Engenharia/Deploy/Hospedagem.md) · [TI5](./02-Engenharia/Deploy/TI5-Hospedagem.md) |
 | Padrão de commit | [02-Engenharia/Guia-Commits.md](./02-Engenharia/Guia-Commits.md) |
 | Usar skills/agents | [`.github/INDEX.md`](../.github/INDEX.md) · [COMMANDS](../.github/COMMANDS.md) · [USAGE](../.github/USAGE.md) |
 | Contrato do pack | [`.github/project.yml`](../.github/project.yml) |

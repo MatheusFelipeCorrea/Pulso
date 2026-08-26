@@ -44,18 +44,20 @@ Caixa "Frontend App (React + Vite)" — cor roxa clara:
 
   Páginas implementadas (agrupar visualmente):
   • Auth: Login, Registro, OAuth callback, Reset senha, Verificar e-mail
-  • Financeiro: Transações, Orçamento, Calendário, Dívidas, Vale Transporte
-  • Planejamento: Metas, Viagens (+ detalhe), Moedas favoritas
+  • Financeiro: Transações, Orçamento, Calendário, Dívidas, Dashboard
+  • Planejamento: Metas, Viagens (+ detalhe, estimativas de transporte), Moedas favoritas
+  • Social: Grupos (Premium, chat Socket.IO)
   • Layout: MainLayout, Sidebar colapsável, NotificationPanel (sino)
-  • Em desenvolvimento (badge "em breve"): Dashboard, Grupos, Relatórios, Insights, Chatbot, Gamificação
+  • Em desenvolvimento (badge "em breve"): Insights, Chatbot
 
   Feature modules (components/features/):
-  transactions | budget | calendar | debts | transport | goals | trips | auth | dashboard
+  transactions | budget | calendar | debts | goals | trips | groups | auth | dashboard
 
   → seta "HTTPS/JSON API Requests\nAuthorization: Bearer JWT" para o backend
   ← seta "JSON Responses" do backend
 
 Deploy frontend: Vercel (build estático dist/) — anotar no rodapé da caixa
+Deploy API (TI5): processo long-running (Socket.IO + RabbitMQ) — ver TI5-Hospedagem.md
 
 ═══════════════════════════════════════════════════════════════
 CENTRO — PULSO BACKEND SYSTEM BOUNDARY (borda tracejada azul)
@@ -94,11 +96,10 @@ Listar TODOS os services com agrupamento por módulo:
   • categoryService — categorias padrão no registro (RN-165)
 
   [Financeiro]
-  • transactionService — CRUD, validação recurso×categoria (VA/VR/VT)
+  • transactionService — CRUD, validação recurso×categoria (VA/VR; VT legado rejeitado)
   • transactionFilterService — filtros, paginação, resumo
   • budgetService — limites mensais, cópia mês anterior, % gasto
   • debtService — dívidas EU_DEVO/ME_DEVEM, pagamentos parciais
-  • transportService — vendas VT, usos VT, saldo (só ESTAGIARIO/CLT)
 
   [Organização]
   • reminderService — CRUD lembretes, marcar pago, recorrência mensal
@@ -245,10 +246,15 @@ Fluxo 5 — Google Calendar:
   4. googleCalendarSyncService cria/atualiza eventos
   5. lembrete.googleEventId persistido no banco
 
-Fluxo 6 — Vale Transporte (Estagiário):
-  1. Registrar venda VT → gera receita DINHEIRO (RN-041)
-  2. Registrar uso de passagens → debita saldo VT
-  3. Bloqueio para PJ/Pessoa Física (403)
+Fluxo 6 — Chat de grupo (Socket.IO):
+  1. Cliente Premium conecta em /api/socket.io
+  2. Entra na room do grupo
+  3. Mensagens em tempo real + histórico via REST
+
+Fluxo 7 — RabbitMQ (opcional):
+  1. Cron/job ou auth publica em pulso.alerts, pulso.reminders ou pulso.emails
+  2. Consumer processa orçamento/dívidas/lembretes
+  3. Sem RABBITMQ_URL → modo direto
 
 ═══════════════════════════════════════════════════════════════
 LEGENDA (canto inferior)

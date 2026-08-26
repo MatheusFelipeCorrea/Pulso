@@ -21,6 +21,7 @@ import { GroupDetailTripCard } from '@/components/features/groups/detail/GroupDe
 import * as grupoService from '@/services/grupoService.js'
 import * as moedaService from '@/services/moedaService.js'
 import * as viagemService from '@/services/viagemService.js'
+import { joinGrupoRoom, onGrupoMensagem } from '@/services/groupChatSocket.js'
 import { mesclarMensagensChat } from '@/utils/groupDetailUtils.js'
 
 export default function GroupDetailPage() {
@@ -137,6 +138,19 @@ export default function GroupDetailPage() {
       if (document.visibilityState === 'visible') syncChat()
     }, 3000)
     return () => clearInterval(interval)
+  }, [id])
+
+  useEffect(() => {
+    if (!id) return undefined
+    try {
+      joinGrupoRoom(id)
+      return onGrupoMensagem((payload) => {
+        if (payload?.grupoId !== id || !payload.mensagem) return
+        setChatMensagens((prev) => mesclarMensagensChat(prev, [payload.mensagem]))
+      })
+    } catch {
+      return undefined
+    }
   }, [id])
 
   const carregarMensagensAntigas = async () => {

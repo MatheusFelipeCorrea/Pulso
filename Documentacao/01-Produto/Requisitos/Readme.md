@@ -15,9 +15,10 @@ Documento de rastreamento de todos os requisitos funcionais e não funcionais do
 | Requisitos Não Funcionais | 16 | 10 | ~63% |
 | **Total** | **211** | **117** | **~55%** |
 
-Contagem considera requisitos **implementados e utilizáveis**. Módulos entregues: auth, **dashboard** (8/9 RFs), transações, VT, orçamento, calendário/lembretes, dívidas, metas, viagens + moedas, grupos, homepage, notificações, **planejamento de compra**, **divisão de despesas** e **importação de extratos** (5/6 RFs).
+Contagem considera requisitos **implementados e utilizáveis**. Escopo TI5: auth, dashboard, transações, orçamento, calendário/lembretes, dívidas, metas, viagens + moedas, grupos (Premium + Socket.IO), homepage, notificações, planejamento de compra, divisão de despesas, importação de extratos, planos Free/Premium e mensageria RabbitMQ (alerts, reminders, emails).
 
-**Módulos ainda planejados:** Onboarding guiado, Cartão de Crédito e Faturas, Integrações e Bots (Telegram/Discord), Modo Casal/Família, PWA + Notificações Push e **Veículos & FIPE**.
+**Módulos ainda planejados (TI5):** Onboarding guiado.
+
 
 **Fora da lista de RF (entregue):** busca global de destinos (GeoNames), estimativas de passagem com ajuste sazonal, integração opcional Duffel/Amadeus, observações na viagem, tema claro/escuro na área autenticada (`UserMenu`).
 
@@ -35,10 +36,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | 🤖 Insights | 9 | 0 |  |
 | 💬 Chatbot | 5 | 0 |  |
 | 📅 Lembretes | 5 | 5 | ✅ |
-| 🚌 Vale Transporte | 6 | 6 | ✅ |
-| 📈 Relatórios | 6 | 0 |  |
 | 👤 Perfil e Configurações | 13 | 1 | 🟡 |
-| 🎮 Gamificação | 7 | 0 |  |
 | 🏠 Homepage | 4 | 4 | ✅ |
 | 👥 Grupos | 15 | 15 | ✅ |
 | ⚙️ Não Funcionais | 16 | 10 | 🟡 |
@@ -49,11 +47,6 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | 🛒 Planejamento de Compra | 6 | 6 | ✅ |
 | 🚀 Onboarding | 4 | 0 | ⏳ |
 | 📥 Importação de Dados | 6 | 5 | 🟡 |
-| 💳 Cartão de Crédito e Faturas | 8 | 0 | ⏳ |
-| 🤖 Integrações e Bots | 5 | 0 | ⏳ |
-| 👨‍👩‍👧 Modo Casal/Família | 6 | 0 | ⏳ |
-| 📱 PWA e Notificações Push | 5 | 0 | ⏳ |
-| 🚗 Veículos & FIPE | 13 | 0 | ⏳ |
 
 **Legenda:** ✅ módulo entregue · 🟡 parcial (UI ou backend incompleto) · ⏳ aguardando prototipação/implementação
 
@@ -80,7 +73,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | Status | Código | Requisito | Prioridade |
 |---|---|---|---|
 | - [x] | RF-007 | O sistema deve exibir o saldo total disponível do mês corrente | 🔴 Essencial |
-| - [x] | RF-008 | O sistema deve exibir saldos separados por tipo de recurso (dinheiro, VA, VR, VT) | 🔴 Essencial |
+| - [x] | RF-008 | O sistema deve exibir saldos separados por tipo de recurso (dinheiro, VA, VR) | 🔴 Essencial |
 | - [x] | RF-009 | O sistema deve exibir um gráfico de receitas vs despesas do mês | 🔴 Essencial |
 | - [x] | RF-010 | O sistema deve exibir um gráfico de gastos por categoria no dashboard | 🔴 Essencial |
 | - [x] | RF-011 | O sistema deve exibir um resumo das últimas transações registradas | 🟡 Importante |
@@ -107,8 +100,8 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [x] | RF-022 | O sistema deve permitir editar e excluir transações já registradas | 🔴 Essencial |
 | - [x] | RF-023 | O sistema deve permitir filtrar transações por período, categoria, tipo (receita/despesa) e recurso | 🟡 Importante |
 | - [x] | RF-024 | O sistema deve permitir buscar transações por descrição ou tag | 🟡 Importante |
-| - [x] | RF-025 | O sistema deve impedir que o usuário registre despesas de alimentação usando recurso do tipo VT | 🟡 Importante |
-| - [x] | RF-140 | O sistema deve permitir registrar transferência entre recursos (ex: dinheiro → poupança) sem contabilizar como receita ou despesa nos relatórios | 🟡 Importante |
+| - [x] | RF-025 | O sistema deve validar compatibilidade entre recurso (VA/VR) e categoria da despesa | 🟡 Importante |
+| - [x] | RF-140 | O sistema deve permitir registrar transferência entre recursos (ex: dinheiro → poupança) sem contabilizar como receita ou despesa nos totais | 🟡 Importante |
 | - [x] | RF-141 | O sistema deve sugerir automaticamente a categoria de uma transação com base no histórico de descrições semelhantes do próprio usuário | 🟡 Importante |
 
 ---
@@ -191,32 +184,6 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 
 > **Nota (ago/2026):** RF-058b formaliza a importação Google → Pulso já implementada em `importarAlteracoesDoGoogle`. Correção RF-NOVO-G1: falha de sync na **criação** preserva o lembrete com `sincronizado: false` (RN-097).
 
-## 🚌 Módulo 08 — Gestão de Vale Transporte
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [x] | RF-059 | O sistema deve permitir registrar o valor mensal recebido de VT | 🔴 Essencial |
-| - [x] | RF-060 | O sistema deve permitir registrar uso real do VT (passagens utilizadas) | 🔴 Essencial |
-| - [x] | RF-061 | O sistema deve permitir registrar venda do VT informando: comprador, data da venda, valor nominal vendido e valor recebido | 🔴 Essencial |
-| - [x] | RF-062 | O sistema deve manter um histórico de vendas de VT com todos os detalhes registrados | 🟡 Importante |
-| - [x] | RF-063 | O sistema deve calcular a diferença entre valor nominal e valor recebido na venda (perda/ganho) | 🟡 Importante |
-| - [x] | RF-066 | O sistema deve exibir saldo atual de VT (recebido – usado – vendido) | 🟡 Importante |
-
-> **Nota (ago/2026):** CLT pode registrar venda de VT com **aviso** (decisão B — RN-013/040/045). PJ/Pessoa Física continuam bloqueados. Saldo protegido por transação Serializable.
-
----
-
-## 📈 Módulo 09 — Relatórios e Histórico
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [ ] | RF-067 | O sistema deve gerar relatório mensal com total de receitas, despesas e saldo | 🔴 Essencial |
-| - [ ] | RF-068 | O sistema deve exibir gráfico de pizza com distribuição de gastos por categoria | 🔴 Essencial |
-| - [ ] | RF-069 | O sistema deve exibir gráfico de barras comparando meses anteriores | 🟡 Importante |
-| - [ ] | RF-070 | O sistema deve exibir gráfico de evolução temporal do saldo | 🟡 Importante |
-| - [ ] | RF-071 | O sistema deve permitir exportar relatórios em PDF | 🟡 Importante |
-| - [ ] | RF-072 | O sistema deve permitir exportar transações em CSV | 🟢 Desejável |
-
 ---
 
 ## 👤 Módulo 10 — Perfil e Configurações
@@ -228,28 +195,13 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 | - [ ] | RF-075 | O sistema deve permitir configurar receitas fixas mensais (salário, VA, VR, VT) para preenchimento automático | 🔴 Essencial |
 | - [x] | RF-076 | O sistema deve permitir alternar entre tema claro e escuro | 🟡 Importante |
 | - [ ] | RF-077 | O sistema deve permitir o usuário excluir sua conta e todos os dados associados | 🔴 Essencial |
-| - [ ] | RF-078 | O sistema deve permitir ativar/desativar o módulo de gamificação | 🟡 Importante |
 | - [ ] | RF-103 | O sistema deve permitir selecionar o modo de uso: Estagiário, CLT ou Freelancer | 🔴 Essencial |
-| - [ ] | RF-104 | O sistema deve adaptar a interface e funcionalidades visíveis conforme o modo selecionado (ex: VT só aparece no modo Estagiário) | 🟡 Importante |
+| - [ ] | RF-104 | O sistema deve adaptar a interface e funcionalidades visíveis conforme o modo selecionado (ex: benefícios VA/VR ocultos no modo Pessoa Física) | 🟡 Importante |
 | - [ ] | RF-145 | (Freelancer) O sistema deve permitir configurar reserva automática de um percentual de cada receita para impostos (DAS/INSS), separando esse valor do saldo disponível | 🟡 Importante |
 | - [ ] | RF-146 | (Freelancer) O sistema deve tratar renda irregular usando média móvel dos últimos meses em vez de salário fixo nas projeções e sugestões | 🟡 Importante |
 | - [ ] | RF-147 | (Freelancer) O sistema deve permitir separar contas/recursos PJ e PF | 🟢 Desejável |
 | - [ ] | RF-148 | (CLT) O sistema deve prever 13º salário e férias como receitas futuras no calendário e nas projeções | 🟡 Importante |
 | - [ ] | RF-149 | (CLT) O sistema deve permitir registrar o saldo de FGTS de forma informativa (não contabilizado no saldo disponível) | 🟢 Desejável |
-
----
-
-## 🎮 Módulo 11 — Gamificação
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [ ] | RF-079 | O sistema deve rastrear streak de dias consecutivos com registro de transação | 🟡 Importante |
-| - [ ] | RF-080 | O sistema deve conceder conquistas ao atingir marcos (ex: "Primeiro mês no positivo", "30 dias de streak") | 🟡 Importante |
-| - [ ] | RF-081 | O sistema deve atribuir um nível financeiro ao usuário (Iniciante → Consciente → Estrategista → Investidor) | 🟢 Desejável |
-| - [ ] | RF-082 | O sistema deve gerar desafios mensais personalizados (ex: "Gaste 10% menos em delivery") | 🟢 Desejável |
-| - [ ] | RF-083 | O sistema deve exibir um painel de conquistas desbloqueadas e pendentes | 🟡 Importante |
-| - [ ] | RF-105 | O sistema deve oferecer dicas educativas contextualizadas baseadas nos hábitos do usuário (módulo ativável/desativável) | 🟡 Importante |
-| - [ ] | RF-106 | O sistema deve oferecer quizzes financeiros semanais com XP como recompensa | 🟢 Desejável |
 
 ---
 
@@ -261,7 +213,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 |---|---|---|---|
 | - [x] | RF-084 | O sistema deve exibir uma homepage pública apresentando o Pulso, suas funcionalidades e benefícios | 🔴 Essencial |
 | - [x] | RF-085 | A homepage deve conter botões de chamada para ação (Cadastrar e Entrar) | 🔴 Essencial |
-| - [x] | RF-086 | A homepage deve exibir seções com os principais módulos do sistema (dashboard, metas, viagens, insights, chatbot, gamificação) | 🟡 Importante |
+| - [x] | RF-086 | A homepage deve exibir seções com os principais módulos do sistema (dashboard, metas, viagens, insights, chatbot, grupos) | 🟡 Importante |
 | - [x] | RF-087 | A homepage deve ser responsiva e atraente visualmente com a paleta Vital Purple | 🔴 Essencial |
 
 ---
@@ -290,9 +242,7 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 
 **RF-095:** toggle *Por pretensão* / *Divisão igual* no card viagem, persistido no servidor (`grupos.modo_divisao`). "Quem paga quem" (acerto de contas) e split custom por % → módulo **Divisão de Despesas** (`/expense-split`, RF-115–120), a vincular depois.
 
-**RF-102:** chat com polling rápido (~3s, pausado quando a aba não está visível). WebSocket tradicional não é viável enquanto a API rodar como funções serverless na Vercel — ver detalhe em Modulos/Grupos.md.
-
-> **Nota (jul/2026):** a infraestrutura de Grupos (membros, convites, papéis, notificações, chat) será **reaproveitada** pelo Modo Casal/Família (Módulo 23) via um "tipo" de espaço (`VIAGEM` vs `FAMILIA`).
+**RF-102:** chat em tempo real via **Socket.IO** (API long-running). Grupos exigem plano **Premium**. Ver [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md) e [TI5-Hospedagem.md](../../02-Engenharia/Deploy/TI5-Hospedagem.md).
 
 ---
 ## 📊 Módulo 14 — Orçamento Mensal
@@ -326,230 +276,37 @@ Contagem considera requisitos **implementados e utilizáveis**. Módulos entregu
 |---|---|---|---|
 | - [x] | RF-121 | O sistema deve exibir um calendário mensal visual com marcadores de transações por dia | 🔴 Essencial |
 | - [x] | RF-122 | O sistema deve diferenciar visualmente dias com receitas (verde), despesas (vermelho) e ambos (roxo) | 🔴 Essencial |
-| - [x] | RF-123 | O sistema deve exibir os dias de recebimento fixo (salário, VA, VR, VT) destacados no calendário | 🟡 Importante |
-| - [x] | RF-124 | O sistema deve exibir vencimentos de contas/lembretes no calendário | 🟡 Importante |
-| - [x] | RF-125 | O sistema deve permitir clicar em um dia para ver o detalhe das transações daquele dia | 🔴 Essencial |
----
-## 🤝 Módulo 17 — Dívidas Pessoais
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [x] | RF-126 | O sistema deve permitir registrar um empréstimo feito a alguém (quem me deve) com valor, pessoa e data | 🔴 Essencial |
-| - [x] | RF-127 | O sistema deve permitir registrar um empréstimo recebido de alguém (quem eu devo) com valor, pessoa e data | 🔴 Essencial |
-| - [x] | RF-128 | O sistema deve permitir definir prazo de devolução para cada dívida | 🟡 Importante |
-| - [x] | RF-129 | O sistema deve permitir marcar uma dívida como paga/devolvida | 🔴 Essencial |
-| - [x] | RF-130 | O sistema deve exibir saldo consolidado: total que me devem vs total que eu devo | 🔴 Essencial |
-| - [x] | RF-131 | O sistema deve exibir histórico completo de empréstimos (ativos e quitados) | 🟡 Importante |
-| - [x] | RF-132 | O sistema deve alertar quando uma dívida estiver próxima do vencimento | 🟢 Desejável |
----
-## 🛒 Módulo 18 — Planejamento de Compra
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [x] | RF-133 | O sistema deve permitir registrar um item desejado com nome, valor e prioridade | 🔴 Essencial |
-| - [x] | RF-134 | O sistema deve calcular em quanto tempo o usuário poderá comprar o item baseado na sobra mensal atual | 🔴 Essencial |
-| - [x] | RF-135 | O sistema deve simular cenários de compra à vista vs parcelado (com quantidade de parcelas) | 🟡 Importante |
-| - [x] | RF-136 | O sistema deve alertar sobre o percentual da renda comprometido com parcelas | 🟡 Importante |
-| - [x] | RF-137 | O sistema deve permitir vincular um planejamento de compra a uma meta financeira | 🟢 Desejável |
-| - [x] | RF-138 | O sistema deve permitir marcar um item como "comprado" e registrar a transação automaticamente | 🟡 Importante |
----
-## 🚀 Módulo 19 — Onboarding
-
-> **Objetivo:** eliminar o "cold start" — o usuário não pode ver tudo zerado no dia 1. Guiar a carga inicial de dados de forma rápida e opcional.
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [ ] | RF-151 | O sistema deve exibir um wizard de onboarding guiado após o primeiro login/cadastro | 🔴 Essencial |
-| - [ ] | RF-152 | O sistema deve permitir informar o saldo inicial atual por recurso (dinheiro, VA, VR, VT) manualmente | 🔴 Essencial |
-| - [ ] | RF-153 | O sistema deve permitir selecionar o modo de uso (Estagiário/CLT/Freelancer) durante o onboarding | 🔴 Essencial |
-| - [ ] | RF-154 | O onboarding deve oferecer duas rotas de carga inicial: (a) importar extratos (banco/VA/VR/VT) ou (b) informar saldos manualmente — permitindo pular a etapa | 🔴 Essencial |
----
-## 📥 Módulo 20 — Importação de Dados
-
-> **Objetivo:** ser o "Open Banking dos pobres" — carga inicial e recorrente de transações a partir de arquivos, sem custo de integração bancária. Usado tanto no onboarding quanto continuamente.
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [x] | RF-155 | O sistema deve permitir importar extrato bancário nos formatos PDF, OFX e CSV | 🔴 Essencial |
-| - [x] | RF-156 | O sistema deve permitir importar extratos de VA, VR e VT (CSV/planilha/PDF), atribuindo as transações ao recurso correto | 🟡 Importante |
-| - [x] | RF-157 | O sistema deve exibir um preview editável das transações detectadas antes de confirmar a importação | 🔴 Essencial |
-| - [x] | RF-158 | O sistema deve detectar e sinalizar transações potencialmente duplicadas (mesma data, valor e descrição), permitindo ignorá-las | 🔴 Essencial |
-| - [ ] | RF-159 | O sistema deve categorizar automaticamente as transações importadas por regras de descrição (ex: "IFOOD" → Alimentação), aprendendo com ajustes do usuário | 🟡 Importante |
-| - [x] | RF-160 | O sistema deve permitir o mapeamento manual de colunas (data, valor, descrição) para CSVs de formato desconhecido | 🟡 Importante |
-
-**Fluxo previsto:** upload → parse (OFX nativo / CSV com detecção de delimitador e encoding) → normalização → dedupe (hash de data+valor+descrição, comparando com transações existentes) → categorização por regras → **preview editável** → confirmação → gravação em lote. Regras de categorização ficam num dicionário editável por usuário (alimenta o RF-141).
-
-**Status atual (ago/2026):** `POST /importacoes/analisar` + `POST /importacoes/confirmar` · parsers OFX/CSV/XLSX · PDF via **Gemini** (`GEMINI_API_KEY_PDF`) · preview editável no dashboard · dedupe RF-158 · categorização inicial por regras + histórico (RF-141).
-
----
-## 💳 Módulo 21 — Cartão de Crédito e Faturas
-
-> **Objetivo:** cobrir o maior gap funcional para o público brasileiro — parcelamento e fatura. Integra-se ao Calendário (vencimento) e ao Planejamento de Compra (RF-135).
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [ ] | RF-161 | O sistema deve permitir cadastrar um cartão de crédito com nome, limite, dia de fechamento e dia de vencimento | 🔴 Essencial |
-| - [ ] | RF-162 | O sistema deve permitir registrar uma compra no cartão, à vista ou parcelada (informando o número de parcelas) | 🔴 Essencial |
-| - [ ] | RF-163 | O sistema deve gerar automaticamente as parcelas futuras, alocando cada uma na fatura correspondente | 🔴 Essencial |
-| - [ ] | RF-164 | O sistema deve consolidar as despesas do cartão em faturas mensais, respeitando a data de fechamento | 🔴 Essencial |
-| - [ ] | RF-165 | O sistema deve exibir o limite disponível do cartão (limite – fatura atual – parcelas futuras comprometidas) | 🟡 Importante |
-| - [ ] | RF-166 | O sistema deve exibir o vencimento da fatura no calendário financeiro | 🟡 Importante |
-| - [ ] | RF-167 | O sistema deve permitir marcar a fatura como paga, registrando a despesa no recurso escolhido | 🔴 Essencial |
-| - [ ] | RF-168 | O sistema deve sugerir o "melhor dia de compra" com base na data de fechamento da fatura | 🟢 Desejável |
----
-## 🤖 Módulo 22 — Integrações e Bots
-
-> **Objetivo:** reduzir o atrito do registro diário. Decisão de arquitetura: **Telegram e Discord** (Bot APIs 100% gratuitas). WhatsApp foi **descartado** por exigir número próprio + Evolution API (infra/custo/risco de bloqueio).
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [ ] | RF-169 | O sistema deve disponibilizar um bot no Telegram integrado à conta Pulso | 🟡 Importante |
-| - [ ] | RF-170 | O sistema deve disponibilizar um bot no Discord integrado à conta Pulso | 🟢 Desejável |
-| - [ ] | RF-171 | O sistema deve permitir registrar transações via bot em linguagem natural (ex: "gastei 30 no almoço") | 🟡 Importante |
-| - [ ] | RF-172 | O sistema deve permitir consultar saldo, resumo do mês e progresso de metas via bot | 🟡 Importante |
-| - [ ] | RF-173 | O sistema deve vincular a conta Pulso ao bot por meio de um token/código de pareamento seguro | 🔴 Essencial |
----
-## 👨‍👩‍👧 Módulo 23 — Modo Casal/Família
-
-> **Objetivo:** finanças compartilhadas **contínuas** (diferente de Grupos, que é focado em viagem/evento pontual). **Reaproveita** a infraestrutura de Grupos (membros, convites, papéis, notificações) via um tipo de espaço `FAMILIA`.
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [ ] | RF-174 | O sistema deve permitir criar um espaço financeiro compartilhado contínuo (casal ou família) | 🟡 Importante |
-| - [ ] | RF-175 | O sistema deve distinguir despesas compartilhadas de despesas individuais dentro do espaço | 🟡 Importante |
-| - [ ] | RF-176 | O sistema deve permitir dividir as despesas compartilhadas de forma igualitária ou proporcional à renda de cada membro | 🟢 Desejável |
-| - [ ] | RF-177 | O sistema deve exibir uma visão consolidada do orçamento familiar, preservando a privacidade dos dados individuais de cada membro | 🟡 Importante |
-| - [ ] | RF-178 | O sistema deve permitir cadastrar despesas fixas/recorrentes compartilhadas (aluguel, mercado, contas), gerando lançamentos automáticos já rateados entre os membros | 🟡 Importante |
-| - [ ] | RF-179 | O sistema deve exibir o acerto de contas do espaço (quem deve a quem) e permitir marcar as quitações | 🟡 Importante |
-
-> **Nota de arquitetura (jul/2026):** um mesmo motor de "espaços compartilhados" atende Grupos (`tipo = VIAGEM`, pontual) e Casal/Família (`tipo = FAMILIA`, contínuo). Convites, papéis (admin/membro), notificações e a separação estrita entre finanças pessoais e compartilhadas (RF-098) são herdados de Grupos; as telas e regras de rateio recorrente são específicas do modo Família.
-
----
-## 📱 Módulo 24 — PWA e Notificações Push
-
-> **Objetivo:** presença "de app" no celular a **custo zero** (sem app store), servindo de ponte até o app nativo (roadmap). Web Push (VAPID) é gratuito e depende da base PWA (service worker).
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [ ] | RF-180 | O sistema deve ser instalável como PWA (manifest + service worker), permitindo "adicionar à tela inicial" em mobile e desktop | 🟡 Importante |
-| - [ ] | RF-181 | O sistema deve funcionar parcialmente offline, exibindo os dados já carregados (cache) quando sem conexão | 🟢 Desejável |
-| - [ ] | RF-182 | O sistema deve solicitar permissão e habilitar notificações push no navegador via Web Push (VAPID) | 🟡 Importante |
-| - [ ] | RF-183 | O sistema deve enviar notificações push para eventos financeiros relevantes (fatura a vencer, meta atingida, orçamento estourado, VA/VR/VT acabando) | 🟡 Importante |
-| - [ ] | RF-184 | O sistema deve permitir ao usuário gerenciar quais tipos de notificação push deseja receber | 🟢 Desejável |
-
-> **Nota (jul/2026):** o envio dos push de eventos agendados (fatura, dívida, orçamento) reutiliza os mesmos jobs migrados para GitHub Actions. A geração de conteúdo continua rule-based, sem custo de LLM.
-
----
-## 🚗 Módulo 25 — Veículos & FIPE
-
-> **Objetivo:** dar ao usuário a visão do **Custo Total de Propriedade (TCO)** do veículo — não só a parcela, mas o quanto o carro *realmente* sangra por mês (depreciação invisível + combustível + IPVA + seguro + manutenção). O grande diferencial é responder à pergunta que quase todo mundo erra: *"quanto meu carro me custa de verdade?"* e *"vale a pena trocar?"*.
->
-> **Filosofia de custo:** 100% gratuito. Tabela FIPE via **BrasilAPI** ou **Parallelum/FIPE** (grátis) com **cache agressivo** (a FIPE atualiza 1×/mês, então o valor de um modelo é consultado no máximo mensalmente). Preço de combustível informado pelo usuário. Sem dependências pagas.
-
-### A) Cadastro e valor de mercado
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [ ] | RF-185 | O sistema deve permitir cadastrar um veículo (marca, modelo, ano e versão via FIPE; placa e apelido opcionais) | 🔴 Essencial |
-| - [ ] | RF-186 | O sistema deve buscar e exibir o valor FIPE atual do veículo cadastrado | 🔴 Essencial |
-| - [ ] | RF-187 | O sistema deve registrar o histórico mensal do valor FIPE e exibir a curva de desvalorização do veículo ao longo do tempo | 🟡 Importante |
-| - [ ] | RF-188 | O sistema deve estimar a depreciação projetada (quanto o veículo deve valer em 12/24/36 meses) com base na tendência do histórico FIPE | 🟢 Desejável |
-
-### B) Custos recorrentes e custo mensal médio (coração do módulo)
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [ ] | RF-189 | O sistema deve permitir registrar despesas do veículo por tipo (combustível, manutenção, seguro, IPVA, licenciamento, estacionamento, multas, financiamento) | 🔴 Essencial |
-| - [ ] | RF-190 | O sistema deve calcular o custo mensal médio do veículo, consolidando a média histórica de gastos recorrentes somada à depreciação mensal estimada | 🔴 Essencial |
-| - [ ] | RF-191 | O sistema deve permitir registrar abastecimentos (litros, valor pago, hodômetro) e calcular consumo médio (km/l) e custo por km rodado | 🟡 Importante |
-| - [ ] | RF-192 | O sistema deve estimar o IPVA anual com base no valor FIPE e na alíquota do estado do usuário | 🟢 Desejável |
-
-### C) Manutenção e documentos (integra com Calendário/Lembretes)
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [ ] | RF-193 | O sistema deve permitir registrar manutenções programadas (ex: troca de óleo a cada X km, revisões) com alerta por quilometragem ou data | 🟡 Importante |
-| - [ ] | RF-194 | O sistema deve registrar vencimentos do veículo (IPVA, licenciamento, seguro) e exibi-los no Calendário Financeiro e via lembrete/push | 🟡 Importante |
-
-### D) Comparativo e decisão de compra/troca
-
-| Status | Código | Requisito | Prioridade |
-|---|---|---|---|
-| - [ ] | RF-195 | O sistema deve comparar dois ou mais veículos (que possuo × que pretendo comprar) lado a lado: custo mensal médio, custo por km, depreciação e gasto anual estimado | 🔴 Essencial |
-| - [ ] | RF-196 | O sistema deve simular a troca de veículo: valor de venda do atual (FIPE) + entrada + financiamento do novo, exibindo o impacto no orçamento mensal | 🟡 Importante |
-| - [ ] | RF-197 | O sistema deve permitir vincular a intenção de compra de um veículo a uma meta (RF-142) e ao Planejamento de Compra (RF-135) | 🟢 Desejável |
-
-**Cálculo do custo mensal médio (RF-190):** `custo_mensal = média_gastos_recorrentes_dos_últimos_N_meses + depreciação_mensal_estimada`, onde a depreciação mensal deriva da variação do histórico FIPE (RF-187). Gastos anuais (IPVA, seguro, licenciamento) são diluídos em 12 meses para não distorcer o mês em que foram pagos.
-
-**Integrações naturais:**
-- **Transações:** abastecimentos e manutenções (RF-189/191) podem virar transações normais marcadas com o veículo → entram em relatórios e orçamento.
-- **Calendário/Lembretes/Push:** vencimentos (RF-194) e manutenção por km (RF-193) usam o fluxo já existente de lembretes e Módulo 24.
-- **Metas + Planejamento de Compra:** juntar para a entrada / trocar de carro (RF-196/197).
-- **Insights:** alimenta frases como "seu carro consumiu 22% da sua renda este mês" ou "gasto com combustível +30% vs média".
-
----
-## ⚙️ Requisitos Não Funcionais
-
-| Status | Código | Requisito | Categoria | Prioridade |
-|---|---|---|---|---|
-| - [ ] | RNF-001 | O sistema deve responder a qualquer requisição em no máximo 2 segundos em condições normais | Performance | 🔴 Essencial |
-| - [x] | RNF-002 | O sistema deve armazenar senhas com hash bcrypt com salt rounds ≥ 12 | Segurança | 🔴 Essencial |
-| - [x] | RNF-003 | Toda comunicação deve ser feita via HTTPS | Segurança | 🔴 Essencial |
-| - [ ] | RNF-004 | O sistema deve implementar rate limiting para prevenir abuso de APIs (máx. 100 req/min por usuário) | Segurança | 🔴 Essencial |
-| - [x] | RNF-005 | O sistema deve validar e sanitizar toda entrada de dados no backend para prevenir SQL Injection e XSS | Segurança | 🔴 Essencial |
-| - [x] | RNF-006 | O front-end deve ser responsivo e funcional em telas de 360px até 1920px | Usabilidade | 🔴 Essencial |
-| - [ ] | RNF-007 | O sistema deve suportar no mínimo 500 usuários simultâneos dentro do free tier | Escalabilidade | 🟡 Importante |
-| - [ ] | RNF-008 | O banco de dados deve ter backup automático (recurso nativo do Neon) | Confiabilidade | 🔴 Essencial |
-| - [ ] | RNF-009 | O sistema deve ter disponibilidade mínima de 95% mensal | Disponibilidade | 🟡 Importante |
-| - [ ] | RNF-010 | O sistema deve seguir padrões de acessibilidade WCAG 2.1 nível A (contraste, navegação por teclado, aria-labels) | Acessibilidade | 🟡 Importante |
-| - [x] | RNF-011 | O código deve seguir arquitetura em camadas com separação clara entre controllers, services e repositories | Manutenibilidade | 🔴 Essencial |
-| - [x] | RNF-012 | O sistema deve utilizar variáveis de ambiente para todas as chaves e credenciais sensíveis | Segurança | 🔴 Essencial |
-| - [x] | RNF-013 | Os tokens JWT devem expirar em 15 minutos com refresh token de 7 dias | Segurança | 🔴 Essencial |
-| - [x] | RNF-014 | O sistema deve implementar CORS configurado apenas para origens permitidas | Segurança | 🔴 Essencial |
-| - [x] | RNF-015 | O sistema deve manter cobertura mínima de 85% de testes unitários nas camadas de serviço, podendo ser superior | Qualidade | 🔴 Essencial |
-| - [x] | RNF-016 | Todo valor monetário deve ser armazenado como decimal de precisão fixa (nunca float/double), para evitar erros de arredondamento em rateios, parcelas e câmbio | Confiabilidade | 🔴 Essencial |
-
-> **⚠️ Tensão free tier (jul/2026):** RNF-001 (≤2s "sempre"), RNF-007 (500 simultâneos) e RNF-009 (95% uptime) são **aspiracionais** no free tier (Vercel Hobby + Neon com autosuspend/cold start). Documentado como limite conhecido; metas serão revisadas se/quando houver upgrade de infra.
->
-> **RNF-003:** Vercel provisiona TLS e força HTTPS automaticamente em todos os domínios (produção e preview); não há configuração própria a fazer.
->
-> **RNF-016:** já cumprida desde o schema inicial — todo campo monetário no Prisma usa `Decimal @db.Decimal(12,2)` (nunca `Float`), inclusive em rateios/parcelas/câmbio.
-
----
-
-## 📌 Notas de implementação (atualizado ago/2026)
-
-| Item | Situação |
-|------|----------|
-| RF-018 | CRUD de categorias personalizadas com **ícone e cor** (padrão Lucide + paleta). UI em Transações → **Categorias** |
-| RF-140 | Transferência unificada na própria tabela `Transacao` (`tipo = TRANSFERENCIA`, `recursoDestino`, `categoriaId` nulo); novo recurso `POUPANCA`. Excluída dos totais de receita/despesa (`montarResumo`) e dos marcadores do Calendário |
-| RF-123 | Lógica em `fixedIncomeUtils.js`: marcador azul no grid + lista no painel do dia conforme `configuracoes_usuario` (valor/dia por tipo). VA/VR só CLT/Estagiário; VT conforme `modoUso`/`vtHabilitado`. **Coleta dos dados:** onboarding (RF-075/RF-151); sem tela de config manual por enquanto |
-| RF-064 / RF-065 | **Removidos** — intervalo entre vendas de VT e contador regressivo de venda não fazem mais parte do escopo |
+| - [x] | RF-123 | Lógica em `fixedIncomeUtils.js`: marcador azul no grid + lista no painel do dia conforme `configuracoes_usuario` (valor/dia por tipo). VA/VR/VT conforme `modoUso`. **Coleta dos dados:** onboarding (RF-075/RF-151); sem tela de config manual por enquanto |
 | RF-076 | Toggle claro/escuro na **landing** (`PublicHeader`) e na área autenticada (**`UserMenu`**); preferência em `ds-theme-preference` (legado `ds-theme`) |
-| RF-103 / RF-104 | `modoUso` no cadastro/onboarding e na API de VT; sidebar já oculta VT conforme modo (`filterSidebarByUser`); tela de perfil/configurações ainda pendente |
+| RF-103 / RF-104 | `modoUso` no cadastro/onboarding; sidebar filtra itens por modo (`filterSidebarByUser`); tela de perfil/configurações ainda pendente |
 | RF-139 | Quick-add planejado como FAB no dashboard, reutilizando o parser em linguagem natural do chatbot (Gemini Flash) |
 | RF-141 | Sugestão de categoria via similaridade de texto (coeficiente de Dice sobre bigramas, hand-rolled/sem dependência) comparando a descrição digitada com o histórico do próprio usuário (mesmo tipo). Preenchimento automático discreto no formulário de transação (apenas ao criar), sem sobrescrever escolha manual |
 | RF-155–158 / RF-160 | Importação entregue — `POST /importacoes/analisar` + `/confirmar`, parsers OFX/CSV/XLSX/PDF, preview no dashboard, dedupe, mapeamento manual de colunas |
 | RF-159 (futuro) | Import de extratos deve reaproveitar/alimentar o mesmo motor de sugestão do RF-141 quando implementado (aprendizado com ajustes) |
-| RF-174–179 (Casal/Família) | Reaproveita o motor de espaços compartilhados de Grupos (`tipo = FAMILIA`); específico: rateio recorrente e acerto de contas contínuo |
-| RF-180–184 (PWA/Push) | Base PWA (manifest + service worker) habilita instalação e Web Push (VAPID, gratuito); envio de eventos usa os jobs do GitHub Actions |
-| RF-185–197 (Veículos/FIPE) | Tabela FIPE via BrasilAPI/Parallelum (gratuita) com cache mensal; custo mensal médio (RF-190) = média histórica de gastos + depreciação mensal derivada do histórico FIPE (RF-187); despesas do veículo podem espelhar em Transações; vencimentos e manutenção por km reutilizam Calendário/Lembretes/Push |
 | Cron / jobs agendados | **Migração planejada Vercel Cron (Hobby, 1×/dia) → GitHub Actions** (schedule grátis, múltiplas execuções/dia) chamando endpoints protegidos — resolve imprecisão de RF-047/111/132/166/183/194 |
 | Cotações (RF-033) | Fonte gratuita (AwesomeAPI/Frankfurter) com cache de **5 minutos** por instância (memória); ver T5 para cache compartilhado futuro |
-| Bots (RF-169–173) | Telegram + Discord (Bot APIs gratuitas); WhatsApp/Evolution **descartado** |
 | OCR de cupons | **Descartado** — custo/complexidade sem retorno para o escopo gratuito |
 | Open Banking | **Descartado** — custo de integração/certificação incompatível com projeto gratuito; substituído pelo módulo de Importação (OFX/CSV/PDF) |
-| Páginas implementadas | `/` (landing), **`/dashboard`**, `/transactions`, `/transport-voucher`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips`, **`/groups`**, **`/groups/:id`**, **`/expense-split`**, **`/purchase-planning`** |
-| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros (incl. remover / alterar papel), editar grupo, metas múltiplas, RN-119, notificações GRUPO/META, chat paginado + polling (~3s), viagem pessoal→grupo, RF-095 (toggle *Por pretensão*/*Divisão igual*), **rate limit** em preview/entrar — acerto de contas completo em **`/expense-split`** (RF-115–120) — [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md) |
+| Páginas implementadas | `/` (landing), **`/dashboard`**, `/transactions`, `/budget`, `/calendar`, `/debts`, `/goals`, `/trips`, **`/groups`**, **`/groups/:id`**, **`/expense-split`**, **`/purchase-planning`** |
+| Grupos (RF-088–102) | Lista, detalhe, gerenciar membros (incl. remover / alterar papel), editar grupo, metas múltiplas, RN-119, notificações GRUPO/META, **chat Socket.IO**, viagem pessoal→grupo, RF-095 (toggle *Por pretensão*/*Divisão igual*), **Premium**, **rate limit** em preview/entrar — acerto de contas em **`/expense-split`** — [Modulos/Grupos.md](../../02-Engenharia/Modulos/Grupos.md) |
 | Metas (RF-026–031) | CRUD, aportes, pausar/concluir, vínculo viagem; `META_ATINGIDA` pessoal e grupo |
 | Viagens (RF-033–043) | Moedas (cotações, conversor, histórico, favoritas), CRUD de viagens, despesas por categoria, total em BRL, observações, busca GeoNames, estimativas de passagem (avião/ônibus/trem) com ajuste sazonal; Duffel/Amadeus opcionais; capa em `destinoMeta.coverImageUrl` (resolvida no criar/editar) |
 | Dívidas (RF-126–132) | CRUD em `/debts` com tabs Me devem / Eu devo / Quitadas; resumo consolidado; filtros (busca, valor, DateRangePicker); job `DIVIDA_COBRANCA` (vence hoje / em 2 dias); limpeza automática de quitadas após 180 dias |
-| Notificações | Orçamento, lembretes, dívidas, transações (RECEITA/DESPESA), streak/conquista, insight MVP, grupos — sino paginado (20), retenção 30d lidas |
+| Notificações | Orçamento, lembretes, dívidas, transações (RECEITA/DESPESA), insight MVP, grupos — sino paginado (20), retenção 30d lidas |
 | Google Calendar | Sync Pulso → Google na criação/edição; **importação Google → Pulso** ao abrir o mês e após sync manual; marcar pago remove evento |
 | Lembretes recorrentes | UI "Repetir todo mês" enviada ao backend; job diário gera instâncias mensais |
 | Tags | CRUD em Transações → **Tags**; criação sob demanda na transação |
 | Calendário + IA | Tela entregue; integração com IA (Gemini) na página do calendário **pendente** |
-| Banco completo | Schema Prisma com 30+ entidades; API expõe auth, transações, VT, orçamento, lembretes, calendário, dívidas, **metas**, **viagens**, **moedas**, **dashboard**, **importações**, planejamento de compra e notificações |
+| Banco / API | Schema Prisma; API expõe auth, transações, orçamento, lembretes, calendário, dívidas, **metas**, **viagens**, **moedas**, **dashboard**, **importações**, planejamento de compra, grupos (Premium), notificações; RabbitMQ opcional (alerts + reminders + emails) |
+| Planos Free/Premium | Gate Premium em grupos; demo via `setPlano` (sem billing) — TI5 |
+
+### Infraestrutura TI5 (fora da numeração clássica de RF)
+
+| Item | Situação |
+|------|----------|
+| RabbitMQ | Filas `pulso.alerts`, `pulso.reminders` e `pulso.emails`; fallback modo direto sem `RABBITMQ_URL` |
+| Socket.IO | Chat de grupos em tempo real (`/api/socket.io`) |
+| Hospedagem | Web Vercel + API long-running — [TI5-Hospedagem.md](../../02-Engenharia/Deploy/TI5-Hospedagem.md) |
 
 ### Implementações técnicas fora da lista de RF (dívida / melhorias futuras)
 
@@ -626,7 +383,6 @@ O fluxo atual (criar tag ao digitar na transação, reutilizar no catálogo, íc
 | 💵 Salário | `#F5F3FF` | `#DDD6FE` | `#7C3AED` | `#1E1B4B` | `#3730A3` | `#A78BFA` |
 | 🍎 VA | `#ECFDF5` | `#A7F3D0` | `#059669` | `#022C22` | `#065F46` | `#34D399` |
 | 🍽️ VR | `#FFF7ED` | `#FED7AA` | `#EA580C` | `#431407` | `#9A3412` | `#FB923C` |
-| 🚌 VT | `#EFF6FF` | `#BFDBFE` | `#2563EB` | `#172554` | `#1E40AF` | `#60A5FA` |
 
 ### 💚 Score de Saúde Financeira
 
@@ -642,14 +398,14 @@ O fluxo atual (criar tag ao digitar na transação, reutilizar no catálogo, íc
 
 ## 📊 Distribuição por Prioridade
 
-Contagem dos **195 requisitos funcionais** ativos (RF-001 a RF-197, excluindo RF-064/RF-065 removidos).
+Contagem dos **175 requisitos funcionais** ativos no escopo TI5.
 
 | Prioridade | Quantidade | Percentual |
 |---|---|---|
 | 🔴 Essencial | 89 | 46% |
 | 🟡 Importante | 82 | 42% |
 | 🟢 Desejável | 24 | 12% |
-| **Total** | **195** | **100%** |
+| **Total** | **175** | **100%** |
 
 ---
 
@@ -660,8 +416,8 @@ Contagem dos **195 requisitos funcionais** ativos (RF-001 a RF-197, excluindo RF
 - [ ] 📺 Gestão de Assinaturas — detectar assinaturas recorrentes, alertar "assinaturas fantasma" e somar custo anual (candidato a módulo formal; reaproveita RF-020/021)
 - [ ] 📈 Patrimônio & Investimentos — patrimônio líquido (ativos − passivos), cotações via brapi.dev/CoinGecko (grátis)
 - [ ] 🏦 Simulador de Financiamentos — SAC vs Price, comparar propostas, simular antecipação/quitação
-- [ ] 📱 **App mobile nativo** (Flutter ou React Native) — reaproveitando a API REST existente; PWA (Módulo 24) cobre o curto prazo, app nativo é objetivo de longo prazo (push nativo, biometria, widgets de tela inicial)
+- [ ] 📱 **App mobile nativo** (Flutter ou React Native) — reaproveitando a API REST existente; app nativo Flutter é objetivo do trabalho (mesma API REST + Socket.IO)
 
-> **Itens promovidos a módulo formal (jul/2026):** PWA e Notificações Push → **Módulo 24**. Tabela FIPE / gestão de veículos → **Módulo 25** (Veículos & FIPE).
+> **Fora do escopo TI5:** cartão/faturas, bots, modo casal/família, PWA/push web, veículos/FIPE; também fora: gestão de vale-transporte, relatórios produto e gamificação.
 >
-> **Itens descartados (jul/2026):** Open Banking (custo), OCR de cupons (custo/complexidade), bot WhatsApp (exige número próprio + Evolution). Import de extrato e bots migraram para módulos formais (20 e 22).
+> **Itens descartados:** Open Banking (custo), OCR de cupons (custo/complexidade), bot WhatsApp.

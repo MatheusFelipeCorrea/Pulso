@@ -1,7 +1,6 @@
 import {
   Brain,
   CalendarDays,
-  Gamepad2,
   LayoutGrid,
   MessageCircle,
   Plane,
@@ -76,12 +75,6 @@ export const FEATURES = [
     badge: 'Em breve',
   },
   {
-    icon: Gamepad2,
-    title: 'Gamificação',
-    description: 'Sequências e conquistas para manter o hábito financeiro.',
-    tone: 'orange',
-  },
-  {
     icon: Users,
     title: 'Grupos',
     description: 'Metas compartilhadas com amigos, família ou colegas.',
@@ -100,7 +93,7 @@ export const AUDIENCE = [
     title: 'Estagiários',
     tag: 'Primeiro salário',
     description:
-      'Separe benefícios (VA, VR, VT) do dinheiro real e entenda quanto sobra de verdade no mês.',
+      'Separe benefícios (VA, VR) do dinheiro real e entenda quanto sobra de verdade no mês.',
     tone: 'purple',
     icon: 'graduation',
   },
@@ -131,13 +124,13 @@ export const AUDIENCE = [
 ]
 
 export const BENEFITS = [
-  'Separa dinheiro real de benefícios (VA, VR, VT)',
+  'Separa dinheiro real de benefícios (VA, VR)',
   'IA que entende o contexto de estagiário e CLT',
   'Planejamento de viagens com moedas e metas',
-  'Gamificação para manter o hábito financeiro',
+  'Insights para manter o hábito financeiro',
   'Dark mode lindo (você está vendo!)',
   'Integração com Google Calendar',
-  'Relatórios e insights automáticos',
+  'Alertas e insights automáticos',
   '100% gratuito, sem cartão de crédito',
 ]
 
@@ -146,7 +139,7 @@ export const TESTIMONIALS = [
     name: 'Juliana Silva',
     role: 'Estagiária',
     quote:
-      'Finalmente consigo separar o que é benefício do que é meu dinheiro. O controle de VT salvou meu mês!',
+      'Finalmente consigo separar o que é benefício do que é meu dinheiro. O dashboard salvou meu mês!',
     initials: 'JS',
     tone: 'purple',
   },

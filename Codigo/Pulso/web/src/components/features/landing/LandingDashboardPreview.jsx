@@ -1,7 +1,6 @@
 import {
   Bell,
   Brain,
-  Bus,
   CalendarDays,
   ChevronDown,
   HandCoins,
@@ -22,7 +21,7 @@ const NAV = [
     icon: HandCoins,
     label: 'Financeiro',
     open: true,
-    children: ['Transações', 'Vale Transporte'],
+    children: ['Transações'],
   },
   {
     icon: Target,
@@ -31,8 +30,8 @@ const NAV = [
   },
   {
     icon: Brain,
-    label: 'Inteligência & Relatórios',
-    children: ['Relatórios', 'Insights e Chatbot', 'Gamificação'],
+    label: 'Inteligência',
+    children: ['Insights e Chatbot'],
   },
   { icon: Wrench, label: 'Ferramentas', children: ['Agenda e Lembretes'] },
   { icon: User, label: 'Conta', children: ['Perfil'] },
@@ -48,7 +47,6 @@ const RESOURCES = [
     icon: Target,
     hint: 'Sugestão: R$ 34,90/dia',
   },
-  { label: 'Vale-Transporte', value: 'R$ 375,55', tone: 'vt', icon: Bus },
 ]
 
 const CATEGORIES = [

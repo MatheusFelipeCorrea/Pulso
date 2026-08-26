@@ -39,7 +39,6 @@ Interface do **Pulso** com React + Vite, Tailwind CSS v4, Redux (auth) e design 
 | Layout autenticado (MainLayout + Sidebar) | ✅ |
 | Design System + demo `/design-system` | ✅ |
 | **Transações** (`/transactions`) | ✅ |
-| **Vale Transporte** (`/transport-voucher`) | ✅ |
 | **Orçamento mensal** (`/budget`) | ✅ |
 | **Calendário financeiro** (`/calendar`) | 🟡 Parcial — IA na tela pendente |
 | **Dívidas** (`/debts`) | ✅ |
@@ -50,7 +49,8 @@ Interface do **Pulso** com React + Vite, Tailwind CSS v4, Redux (auth) e design 
 | **Notificações** (sino no layout) | ✅ |
 | **Dashboard** (`/dashboard`) | ✅ — saldos, gráficos, importação de extratos |
 | **Planejamento de Compra** (`/purchase-planning`) | ✅ |
-| Insights, chatbot, perfil, gamificação, relatórios | 🔜 `InDevelopmentPage` / parcial |
+| Insights, chatbot, perfil | 🔜 `InDevelopmentPage` / parcial |
+| Planos Free/Premium | ✅ Gate Premium em grupos |
 
 ---
 
@@ -95,8 +95,7 @@ Pulso/web/
 │   │   │   ├── groups/          ← grupos (viagens/metas compartilhadas)
 │   │   │   ├── purchase-planning/
 │   │   │   ├── transactions/
-│   │   │   ├── transport/       ← vale transporte
-│   │   │   └── trips/           ← viagens + moedas
+│   │   │   └── trips/           ← viagens + moedas (+ estimativas de transporte)
 │   │   ├── layouts/
 │   │   │   ├── MainLayout/
 │   │   │   ├── AuthLayout/
@@ -166,7 +165,6 @@ Documentação: `src/design-system/README.md`
 | Rota | Página |
 |------|--------|
 | `/transactions` | **Transações** |
-| `/transport-voucher` | **Vale Transporte** |
 | `/budget` | **Orçamento mensal** |
 | `/calendar` | **Calendário financeiro** |
 | `/debts` | **Dívidas** |
@@ -178,7 +176,7 @@ Documentação: `src/design-system/README.md`
 | `/expense-split` | **Divisão de Despesas** |
 | `/purchase-planning` | **Planejamento de Compra** |
 | `/dashboard` | **Dashboard** (saldos, gráficos, importação de extratos) |
-| `/insights`, `/chatbot`, `/profile`, `/settings`, `/achievements`, `/reports`, … | `InDevelopmentPage` |
+| `/insights`, `/chatbot`, `/profile`, `/settings`, … | `InDevelopmentPage` |
 
 Pós-login/OAuth/GuestRoute: destino padrão **`/dashboard`** (`src/config/defaultAuthenticatedRoute.js`).
 
@@ -379,7 +377,6 @@ Slices de transações, metas, etc. estão comentados em `store/index.js` — pr
 | `calendarService.js` | `/calendario/*` |
 | `reminderService.js` | `/lembretes/*` |
 | `notificationService.js` | `/notificacoes/*` |
-| `transportService.js` | `/transporte/*` |
 | `grupoService.js` | `/grupos/*` |
 | `expenseSplitService.js` | `/divisoes/*` |
 
@@ -418,7 +415,6 @@ import './styles/transactions.css'
 import './styles/categories.css'
 import './styles/budget.css'
 import './styles/calendar.css'
-import './styles/transport.css'
 import './styles/debts.css'
 import './styles/goals.css'
 import './styles/trips.css'
@@ -459,9 +455,9 @@ VITE_GOOGLE_CLIENT_ID=seu_client_id.apps.googleusercontent.com
 
 ## 🗺️ Roadmap
 
-**Entregue:** dashboard (+ importação de extratos), transações, VT, orçamento, calendário, dívidas, metas, viagens (transporte + moedas), grupos, divisão de despesas, planejamento de compra, tema claro/escuro.
+**Entregue:** dashboard (+ importação de extratos), transações, orçamento, calendário, dívidas, metas, viagens (transporte/passagens + moedas), grupos (Premium + Socket.IO), divisão de despesas, planejamento de compra, tema claro/escuro, planos Free/Premium.
 
-**Pendente:** perfil/settings, insights IA, chatbot / RF-139, gamificação UI, relatórios, onboarding, RF-159 (aprendizado na importação).
+**Pendente:** perfil/settings, insights IA, chatbot / RF-139, onboarding, RF-159 (aprendizado na importação).
 
 Prioridades sugeridas: [Analise-Produto.md](../../01-Produto/Analise-Produto.md)
 
