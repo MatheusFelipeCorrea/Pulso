@@ -1,0 +1,17 @@
+---
+description: Hyperion kit pointer (nested under Hyperion/)
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Hyperion
+
+The Hyperion agents/skills kit lives in `./Hyperion/`.
+
+Before planning or coding with Hyperion commands:
+1. Read `.github/project.yml` (note `kit.root: Hyperion`).
+2. Open skills under `Hyperion/.github/skills/**/SKILL.md`.
+3. Write cards under `Hyperion/.github/cards/` (nested by parent card_id).
+4. Do not copy kit files into the product root — keep artifacts inside `Hyperion/`.
+
+Full command map: `Hyperion/CLAUDE.md` and `Hyperion/.github/commands.yml`.
