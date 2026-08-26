@@ -11,7 +11,16 @@
     "build:web": "npm run build --prefix Codigo/Pulso/web",
     "build:api": "npm run db:generate --prefix Codigo/Pulso/api",
     "dev:web": "npm run dev --prefix Codigo/Pulso/web",
-    "dev:api": "npm run dev --prefix Codigo/Pulso/api"
+    "dev:api": "npm run dev --prefix Codigo/Pulso/api",
+    "hyperion:init": "node Hyperion/scripts/hyperion/init.mjs",
+    "hyperion:doctor": "node Hyperion/scripts/hyperion/doctor.mjs",
+    "hyperion:setup": "node Hyperion/scripts/hyperion/setup.mjs",
+    "hyperion:sync": "node Hyperion/scripts/hyperion/sync.mjs",
+    "cards:validate": "node Hyperion/scripts/cards-sync/validate.mjs",
+    "cards:sync": "node Hyperion/scripts/cards-sync/sync.mjs",
+    "cards:sync:rest": "node Hyperion/scripts/cards-sync/sync.mjs --rest-only",
+    "cards:sync:board": "node Hyperion/scripts/cards-sync/sync.mjs --board-only",
+    "cards:dry-run": "node Hyperion/scripts/cards-sync/sync.mjs --dry-run"
   },
   "dependencies": {
     "dotenv": "^17.4.2",
