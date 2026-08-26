@@ -1,0 +1,95 @@
+# yaml-language-server: $schema=../Hyperion/.github/project.schema.json
+# Contract of the PULSO product. Kit lives under Hyperion/.
+# After scaffolding React / Node / Flutter, refresh with /discover.
+
+version: 1
+
+kit:
+  root: Hyperion
+
+name: Pulso
+locale: pt-BR
+
+layout: monorepo
+
+apps:
+  api:
+    root: code/back
+    source_dirs:
+      - code/back
+  web:
+    root: code/front
+    source_dirs:
+      - code/front
+  mobile:
+    root: code/mobile
+    source_dirs:
+      - code/mobile
+
+docs:
+  root: docs
+  requirements: docs/3.requisitos.md
+  api_readme: code/back/README.md
+  web_readme: code/front/README.md
+  blueprints: docs
+  diagrams: docs/imagens
+
+outputs:
+  audits: Hyperion/.github/audits/results
+  cards: Hyperion/.github/plans/cards
+  implementations: Hyperion/.github/plans/implementations
+  diagrams: Hyperion/.github/diagrams
+
+stack_hints:
+  - React
+  - Node.js
+  - Flutter
+
+conventions:
+  requirement_prefixes:
+    - RF
+    - RNF
+    - REQ
+    - BIZ
+  finding_prefixes:
+    product-owner: PO
+    application-security: SEC
+    devops: OPS
+    code-review: DEV
+    ux-design: UX
+    architecture: ARCH
+
+management:
+  backend: github
+  owner: ICEI-PUC-Minas-PMGES-TI
+  repo: pmg-es-2026-2-ti5-6904100-pulso
+
+audits:
+  overlay: null
+
+ci:
+  provider: github-actions
+  policy: detect
+  stack: node-npm
+  hyperion:
+    cards_sync: true
+    kit_validation: false
+    security_scan: true
+    product_ci: auto
+
+commands:
+  test: echo PULSO-apps-not-scaffolded-yet
+  lint: null
+  build: null
+  audit: null
+
+memory:
+  auto_capture: true
+  decisions_file: Hyperion/.github/memory/DECISIONS.md
+  project_file: Hyperion/.github/memory/PROJECT.md
+
+uncertainties:
+  - Manifests ainda nao existem (package.json / pubspec.yaml). Apps serao scaffoldadas depois; regenerar project.yml via /discover.
+  - Frameworks confirmados pelo time: React (web), Node (api), Flutter (mobile) — sem evidencia de imports ainda.
+  - ORM, banco, deploy e comandos reais de test/lint/build indefinidos ate o scaffold.
+  - code/mobile README ainda nao existe no schema (so api_readme e web_readme).

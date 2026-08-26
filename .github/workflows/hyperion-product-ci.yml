@@ -1,0 +1,48 @@
+name: Hyperion — Product CI
+
+# Placeholder until React / Node / Flutter are scaffolded. Refresh with /pipeline after init.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Detect package manager
+        id: detect
+        run: |
+          if [ -f "code/back/package-lock.json" ] || [ -f "code/front/package-lock.json" ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+          elif [ -f "code/back/package.json" ] || [ -f "code/front/package.json" ]; then
+            echo "manager=npm" >> $GITHUB_OUTPUT
+          elif [ -f "code/mobile/pubspec.yaml" ]; then
+            echo "manager=flutter" >> $GITHUB_OUTPUT
+          else
+            echo "manager=unknown" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Node
+        if: steps.detect.outputs.manager == 'npm'
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Placeholder until apps are scaffolded
+        if: steps.detect.outputs.manager == 'unknown'
+        run: echo "PULSO apps not scaffolded yet — skip product CI"
+
+      - name: Install / test / build (Node apps)
+        if: steps.detect.outputs.manager == 'npm'
+        run: |
+          set -e
+          for app in code/back code/front; do
+            if [ -f "$app/package.json" ]; then
+              (cd "$app" && npm install && npm run lint --if-present && npm test --if-present && npm run build --if-present)
+            fi
+          done

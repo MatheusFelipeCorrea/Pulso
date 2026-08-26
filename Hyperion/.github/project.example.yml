@@ -1,0 +1,106 @@
+# yaml-language-server: $schema=./project.schema.json
+# Project contract for .github/ agents and skills.
+#
+# Adopter template — copy this file to project.yml (do NOT copy the kit's
+# dogfood project.yml). Prefer /setup or /migrate for a guided wire-up.
+# Do not blindly copy kit workflows; use /pipeline when you want CI.
+#
+# Paths are POSIX-style, relative to repo root.
+
+version: 1
+
+# Where the kit folder lives relative to the PRODUCT repo root.
+# Preferred adoption: copy the whole Hyperion folder into the product, then:
+#   npm run hyperion:init -- --adopt
+# Upstream Hyperion repo (this kit) omits kit.root — files stay at workspace root.
+kit:
+  root: Hyperion
+
+name: My Project
+locale: en
+
+# Workspace shape: single | monorepo | multi-package
+layout: single
+
+# Applications / packages
+apps:
+  api:
+    root: src
+    manifest: package.json
+    source_dirs:
+      - src
+
+# Documentation paths (all optional — discovery fills what it finds)
+docs:
+  requirements: null
+  blueprints: .github/docs
+  diagrams: null
+
+# Where agents/skills write new artifacts
+outputs:
+  audits: .github/audits/results
+  cards: .github/plans/cards
+  implementations: .github/plans/implementations
+  diagrams: .github/diagrams
+
+# Stack hints (optional — discovery confirms via imports/configs)
+stack_hints:
+  - Node.js
+  - Express
+  - PostgreSQL
+
+# Conventions
+conventions:
+  requirement_prefixes:
+    - REQ
+    - BIZ
+  finding_prefixes:
+    product-owner: PO
+    application-security: SEC
+    devops: OPS
+    code-review: DEV
+    ux-design: UX
+    architecture: ARCH
+
+# Project management tool (optional — discovery auto-detects)
+management:
+  # backend: github | jira | azure-devops | linear | gitlab | none
+  backend: github
+  # For Jira:
+  #   url: https://your-org.atlassian.net
+  #   project_key: PROJ
+  # For Azure DevOps:
+  #   org: https://dev.azure.com/your-org
+  #   project: MyProject
+  # For Linear:
+  #   team: my-team
+  # For GitHub (default — auto-detected from git remote):
+  #   owner: auto
+  #   repo: auto
+
+# Audit overlay (optional — domain-specific context for audit prompts)
+audits:
+  overlay: null
+
+# CI/CD — Hyperion adds hyperion-*.yml; policy detect never overwrites existing product CI
+ci:
+  provider: github-actions
+  policy: detect
+  stack: auto
+  hyperion:
+    cards_sync: true
+    kit_validation: false
+    security_scan: true
+    product_ci: auto
+
+# Repo-adaptive commands (agents run these — discovery fills when omitted)
+commands:
+  test: npm test
+  lint: null
+  build: null
+  audit: npm audit --audit-level=moderate
+
+# Session memory (optional)
+memory:
+  auto_capture: true
+  decisions_file: .github/memory/DECISIONS.md

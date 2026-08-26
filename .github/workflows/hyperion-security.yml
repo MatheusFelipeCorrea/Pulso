@@ -1,0 +1,38 @@
+name: Hyperion — Security Scan
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Audit Node dependencies (product apps, when present)
+        if: hashFiles('code/back/package.json') != '' || hashFiles('code/front/package.json') != '' || hashFiles('package.json') != ''
+        env:
+          HYPERION_AUDIT_SOFT: ${{ vars.HYPERION_AUDIT_SOFT }}
+        run: |
+          set -e
+          audit_dir() {
+            if [ -f "$1/package.json" ]; then
+              (cd "$1" && if [ "${HYPERION_AUDIT_SOFT}" = "1" ]; then npm audit --audit-level=high || true; else npm audit --audit-level=high; fi)
+            fi
+          }
+          audit_dir .
+          audit_dir code/back
+          audit_dir code/front
+
+      - name: Check for secrets
+        uses: trufflesecurity/trufflehog@v3.97.0
+        with:
+          extra_args: --only-verified

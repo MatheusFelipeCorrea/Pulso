@@ -1,0 +1,18 @@
+{
+  "name": "pulso",
+  "private": true,
+  "description": "Pulso — gestão financeira pessoal (PUC Minas PMG-ES TI5)",
+  "scripts": {
+    "hyperion:help": "node Hyperion/scripts/hyperion/help.mjs",
+    "hyperion:doctor": "node Hyperion/scripts/hyperion/doctor.mjs",
+    "hyperion:setup": "node Hyperion/scripts/hyperion/setup.mjs",
+    "hyperion:sync": "node Hyperion/scripts/hyperion/sync.mjs",
+    "hyperion:init": "node Hyperion/scripts/hyperion/init.mjs",
+    "hyperion:project-verify": "node Hyperion/scripts/hyperion/project-verify.mjs",
+    "hyperion:pipeline-detect": "node Hyperion/scripts/hyperion/pipeline-detect.mjs",
+    "hyperion:pipeline-plan": "node Hyperion/scripts/hyperion/pipeline-plan.mjs",
+    "hyperion:repo-detect": "node Hyperion/scripts/hyperion/repo-detect.mjs",
+    "cards:sync": "node Hyperion/scripts/cards-sync/sync.mjs",
+    "cards:validate": "node Hyperion/scripts/cards-sync/validate.mjs"
+  }
+}

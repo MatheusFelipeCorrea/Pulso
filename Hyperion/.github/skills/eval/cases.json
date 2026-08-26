@@ -1,0 +1,106 @@
+[
+  {
+    "skill": "memory-capture",
+    "mustContain": ["DECISIONS.md", "## Output", "auto_capture"]
+  },
+  {
+    "skill": "dependency-health",
+    "mustContain": ["## Output", "dependency-health", "project.yml"]
+  },
+  {
+    "skill": "pr-review",
+    "mustContain": ["## Output", "commands.test", "verdict"]
+  },
+  {
+    "skill": "repo-migration",
+    "mustContain": ["## Output", "project.yml", "commands"]
+  },
+  {
+    "skill": "acceptance-spec",
+    "mustContain": ["## Output", "Given/When/Then"]
+  },
+  {
+    "skill": "card-refiner",
+    "mustContain": ["## Output", ".github/cards/"]
+  },
+  {
+    "skill": "release-manager",
+    "mustContain": ["## Output", "CHANGELOG"]
+  },
+  {
+    "skill": "project-startup",
+    "mustContain": ["project-discovery", "Output summary", "/setup"]
+  },
+  {
+    "skill": "project-discovery",
+    "mustContain": ["## Output", "project.yml", "project.schema.json"]
+  },
+  {
+    "skill": "pipeline-architect",
+    "mustContain": ["## Output", "hyperion:pipeline", "ci.policy"]
+  },
+  {
+    "skill": "hyperion-ops",
+    "mustContain": ["hyperion:doctor", "hyperion:sync", "/help"]
+  },
+  {
+    "skill": "hypothesis-forge",
+    "mustContain": ["## Output", ".github/memory/discoveries/"]
+  },
+  {
+    "skill": "project-architect",
+    "mustContain": ["## Output", "Blueprint"]
+  },
+  {
+    "skill": "full-audit",
+    "mustContain": ["## Output", ".github/audits/results/"]
+  },
+  {
+    "skill": "security-audit",
+    "mustContain": ["## Output", "application-security"]
+  },
+  {
+    "skill": "testing-strategy",
+    "mustContain": ["## Output", "testing-strategy"]
+  },
+  {
+    "skill": "plantuml-generator",
+    "mustContain": ["## Output", ".github/diagrams/"]
+  },
+  {
+    "skill": "changelog-generator",
+    "mustContain": ["## Output", "CHANGELOG.md"]
+  },
+  {
+    "skill": "integration-bridge",
+    "mustContain": ["## Output", "management"]
+  },
+  {
+    "skill": "cards-sync-setup",
+    "mustContain": ["## Output", "projects-map.json"]
+  },
+  {
+    "file": ".github/agents/implementation-executor.agent.md",
+    "mustContain": ["Never skip tests", "tests_result", "Verification", "phase-verify"]
+  },
+  {
+    "file": ".github/agents/pr-reviewer.agent.md",
+    "mustContain": ["tests_ran", "review-verify", "verdict"]
+  },
+  {
+    "file": ".github/agents/migration.agent.md",
+    "mustContain": ["project-verify", "project.yml"]
+  },
+  {
+    "file": ".github/docs/meta/definition-of-done.md",
+    "mustContain": ["phase-verify", "project-verify", "review-verify"]
+  },
+  {
+    "skill": "project-discovery",
+    "mustContain": ["hyperion:project-verify", "uncertainties"]
+  },
+  {
+    "skill": "pr-review",
+    "mustContain": ["review-verify", "tests_ran", "project.yml"]
+  }
+]
