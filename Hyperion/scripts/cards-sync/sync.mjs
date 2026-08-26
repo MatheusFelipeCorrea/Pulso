@@ -837,6 +837,71 @@ async function getProject(owner, projectNumber) {
   return null;
 }
 
+async function loadProjectFieldValuesByIssueNumber(projectId) {
+  const values = new Map();
+  let after = null;
+  let hasNextPage = true;
+
+  while (hasNextPage) {
+    const data = await graphql(
+      `query($id: ID!, $after: String) {
+        node(id: $id) {
+          ... on ProjectV2 {
+            items(first: 100, after: $after) {
+              pageInfo { hasNextPage endCursor }
+              nodes {
+                content { ... on Issue { number } }
+                status: fieldValueByName(name: "Status") {
+                  ... on ProjectV2ItemFieldSingleSelectValue { name }
+                }
+                cardType: fieldValueByName(name: "Card type") {
+                  ... on ProjectV2ItemFieldSingleSelectValue { name }
+                }
+                priority: fieldValueByName(name: "Priority") {
+                  ... on ProjectV2ItemFieldSingleSelectValue { name }
+                }
+                sprint: fieldValueByName(name: "Sprint") {
+                  ... on ProjectV2ItemFieldIterationValue { title }
+                }
+                storyPoints: fieldValueByName(name: "Story Points") {
+                  ... on ProjectV2ItemFieldNumberValue { number }
+                }
+                reporter: fieldValueByName(name: "Reporter") {
+                  ... on ProjectV2ItemFieldTextValue { text }
+                }
+                dueDate: fieldValueByName(name: "Due Date") {
+                  ... on ProjectV2ItemFieldDateValue { date }
+                }
+              }
+            }
+          }
+        }
+      }`,
+      { id: projectId, after }
+    );
+
+    const conn = data.node?.items;
+    for (const node of conn?.nodes || []) {
+      const number = node.content?.number;
+      if (!number) continue;
+      values.set(number, {
+        status: node.status?.name ?? null,
+        type: node.cardType?.name ?? null,
+        priority: node.priority?.name ?? null,
+        sprint: node.sprint?.title ?? null,
+        storyPoints: node.storyPoints?.number ?? null,
+        reporter: node.reporter?.text ?? null,
+        dueDate: node.dueDate?.date ?? null,
+      });
+    }
+
+    hasNextPage = Boolean(conn?.pageInfo?.hasNextPage);
+    after = conn?.pageInfo?.endCursor || null;
+  }
+
+  return values;
+}
+
 // ---------------------------------------------------------------------------
 // Auto-create Project with default fields
 // ---------------------------------------------------------------------------
@@ -1571,6 +1636,26 @@ function resolveMappedOptionValue(fieldKey, value, repoConfig) {
   const directMap = repoConfig?.optionMap?.[fieldKey] || {};
   const localeMap = repoConfig?.optionMapByLocale?.[locale]?.[fieldKey] || {};
   return localeMap[raw] ?? directMap[raw] ?? value;
+}
+
+/** Map a board option name (EN or locale) back to the canonical YAML value. */
+function canonicalizeRemoteOption(fieldKey, remoteName, repoConfig) {
+  if (remoteName === null || remoteName === undefined || String(remoteName).trim() === "") return null;
+  const raw = String(remoteName).trim();
+  const locale = repoConfig?.locale || "en";
+  const maps = [repoConfig?.optionMapByLocale?.[locale]?.[fieldKey] || {}, repoConfig?.optionMap?.[fieldKey] || {}];
+  for (const map of maps) {
+    for (const [canonical, display] of Object.entries(map)) {
+      if (normalizeText(canonical) === normalizeText(raw) || normalizeText(display) === normalizeText(raw)) {
+        return canonical;
+      }
+    }
+  }
+  const aliases = OPTION_ALIASES[fieldKey] || {};
+  for (const [canonical, list] of Object.entries(aliases)) {
+    if ([canonical, ...list].some((alias) => normalizeText(alias) === normalizeText(raw))) return canonical;
+  }
+  return raw;
 }
 
 function buildOptionCandidates(fieldKey, value, repoConfig) {
@@ -2987,6 +3072,58 @@ function yamlNullIfEmptyNumber(value) {
   return Number.isFinite(n) ? String(n) : "null";
 }
 
+function yamlPlainOrNull(value) {
+  if (value === null || value === undefined || String(value).trim() === "") return "null";
+  const s = String(value).trim();
+  return /[\s:#{}[\],&*?!'"]/.test(s) ? yamlQuote(s) : s;
+}
+
+function scalarEqual(left, right) {
+  const norm = (value) => {
+    if (value === undefined || value === null || value === "" || value === "null") return null;
+    return String(value);
+  };
+  return norm(left) === norm(right);
+}
+
+function patchFrontmatterFields(content, fields) {
+  let next = String(content || "");
+  for (const [key, yamlValue] of Object.entries(fields)) {
+    const re = new RegExp(`^${key}:\\s*.*$`, "m");
+    if (!re.test(next)) continue;
+    next = next.replace(re, `${key}: ${yamlValue}`);
+  }
+  return next;
+}
+
+function candidateCardPaths(sourceFile) {
+  const relative = String(sourceFile || "").replace(/\\/g, "/");
+  const paths = [relative];
+  const legacyPrefix = ".github/cards/";
+  if (relative.startsWith(legacyPrefix) && cardsPrefix !== ".github/cards") {
+    paths.push(`${cardsPrefix}/${relative.slice(legacyPrefix.length)}`);
+  }
+  const marker = ".github/cards/";
+  const idx = relative.indexOf(marker);
+  if (idx >= 0 && !relative.startsWith(cardsPrefix)) {
+    paths.push(`${cardsPrefix}/${relative.slice(idx + marker.length)}`);
+  }
+  return [...new Set(paths.filter(Boolean))];
+}
+
+async function readLocalCardFromSourceFile(sourceFile) {
+  for (const relative of candidateCardPaths(sourceFile)) {
+    const full = path.join(workspaceRoot, relative);
+    try {
+      const current = await fs.readFile(full, "utf8");
+      return { full, relative, current };
+    } catch {
+      // try next layout
+    }
+  }
+  return null;
+}
+
 function jiraIssueToCardMarkdown(issue) {
   return remoteIssueToCardMarkdown({
     title: issue?.fields?.summary,
@@ -3245,7 +3382,7 @@ async function runReverseSync() {
 
   log(`Repository: ${repoOwner}/${repoName}`);
   log(`Dry-run: ${dryRun ? "yes" : "no"}`);
-  log("Direction: reverse (GitHub -> Markdown)");
+  log("Direction: reverse (GitHub Project -> Markdown frontmatter)");
 
   const issueByCardId = await loadIssueMapByCardId(repoOwner, repoName);
   const issues = [...issueByCardId.values()];
@@ -3257,9 +3394,27 @@ async function runReverseSync() {
 
   log(`Issues found: ${issues.length}`);
 
+  const projectOwner = process.env.PROJECT_OWNER || repoConfig.projectOwner || repoOwner;
+  const projectNumber =
+    Number(process.env.PROJECT_NUMBER || "0") || Number(repoConfig.projectNumber || "0");
+  let projectFields = new Map();
+  if (projectNumber > 0) {
+    const project = await getProject(projectOwner, projectNumber);
+    if (project?.id) {
+      log(`Project found: owner=${projectOwner} number=${projectNumber}`);
+      projectFields = await loadProjectFieldValuesByIssueNumber(project.id);
+    } else {
+      log(`Project not found: owner=${projectOwner} number=${projectNumber}`);
+    }
+  }
+
   let skippedSamples = 0;
+  let updated = 0;
+  let unchanged = 0;
+  let skippedMissing = 0;
+
   for (const issue of issues) {
-    if (!issue?.number) continue; // defensive: ignore non-Issue nodes
+    if (!issue?.number) continue;
 
     const parsed = parseSyncMetadataFromDescription(issue.body);
     const sourceFile = parsed?.meta?.SOURCE_FILE?.trim();
@@ -3273,22 +3428,79 @@ async function runReverseSync() {
       continue;
     }
 
-    const bodyContent = issue.body.replace(/\n---\n<!-- SYNC_METADATA[\s\S]*<!-- \/SYNC_METADATA -->/, "").trim();
-    const targetPath = path.join(workspaceRoot, sourceFile);
-
-    if (dryRun) {
-      log(`Would write: ${sourceFile} (issue #${issue.number})`);
+    const localFile = await readLocalCardFromSourceFile(sourceFile);
+    if (!localFile) {
+      skippedMissing += 1;
+      log(`SKIP (no local card): ${sourceFile} (issue #${issue.number})`);
       continue;
     }
 
-    await fs.mkdir(path.dirname(targetPath), { recursive: true });
-    await fs.writeFile(targetPath, `${bodyContent}\n`, "utf8");
-    log(`Written: ${sourceFile} (issue #${issue.number})`);
+    const local = parseCardFile(localFile.current, localFile.relative);
+    if (!local) {
+      skippedMissing += 1;
+      log(`SKIP (invalid local card): ${sourceFile} (issue #${issue.number})`);
+      continue;
+    }
+
+    const board = projectFields.get(issue.number) || {};
+    const parsedTitle = parseIssueSummaryTypeTitle(issue.title);
+    const next = {
+      title: parsedTitle.title || local.title,
+      status: canonicalizeRemoteOption("status", board.status, repoConfig) ?? local.status,
+      type: canonicalizeRemoteOption("type", board.type, repoConfig) ?? local.type,
+      priority: canonicalizeRemoteOption("priority", board.priority, repoConfig) ?? local.priority,
+      sprint: board.sprint ?? local.sprint,
+      storyPoints: board.storyPoints ?? local.storyPoints,
+      reporter: board.reporter ?? local.reporter,
+      dueDate: board.dueDate ?? local.dueDate,
+    };
+
+    const changes = [];
+    if (!scalarEqual(local.title, next.title)) changes.push(`title: ${local.title} -> ${next.title}`);
+    if (!scalarEqual(local.status, next.status)) changes.push(`status: ${local.status} -> ${next.status}`);
+    if (!scalarEqual(local.type, next.type)) changes.push(`type: ${local.type} -> ${next.type}`);
+    if (!scalarEqual(local.priority, next.priority)) changes.push(`priority: ${local.priority} -> ${next.priority}`);
+    if (!scalarEqual(local.sprint, next.sprint)) changes.push(`sprint: ${local.sprint} -> ${next.sprint}`);
+    if (!scalarEqual(local.storyPoints, next.storyPoints)) {
+      changes.push(`story_points: ${local.storyPoints} -> ${next.storyPoints}`);
+    }
+    if (!scalarEqual(local.reporter, next.reporter)) {
+      changes.push(`reporter: ${local.reporter} -> ${next.reporter}`);
+    }
+    if (!scalarEqual(local.dueDate, next.dueDate)) changes.push(`due_date: ${local.dueDate} -> ${next.dueDate}`);
+
+    if (!changes.length) {
+      unchanged += 1;
+      continue;
+    }
+
+    if (dryRun) {
+      log(`Would update ${localFile.relative} (#${issue.number}): ${changes.join("; ")}`);
+      updated += 1;
+      continue;
+    }
+
+    const patched = patchFrontmatterFields(localFile.current, {
+      title: yamlQuote(next.title),
+      status: yamlPlainOrNull(next.status),
+      type: yamlPlainOrNull(next.type),
+      priority: yamlPlainOrNull(next.priority),
+      sprint: yamlPlainOrNull(next.sprint),
+      story_points: yamlNullIfEmptyNumber(next.storyPoints),
+      reporter: yamlPlainOrNull(next.reporter),
+      due_date: yamlPlainOrNull(next.dueDate),
+    });
+    await fs.writeFile(localFile.full, patched, "utf8");
+    log(`Updated ${localFile.relative} (#${issue.number}): ${changes.join("; ")}`);
+    updated += 1;
   }
 
   if (skippedSamples > 0) {
     log(`Skipped ${skippedSamples} kit sample issue(s) on reverse sync.`);
   }
+  log(
+    `${dryRun ? "Would update" : "Updated"} ${updated} card(s); unchanged ${unchanged}; missing local ${skippedMissing}.`
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -3327,6 +3539,7 @@ export {
   buildEdges,
   normalizeText,
   resolveMappedOptionValue,
+  canonicalizeRemoteOption,
   buildOptionCandidates,
   pickSingleSelectOption,
   pickIterationOption,

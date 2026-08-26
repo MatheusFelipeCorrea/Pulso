@@ -11,6 +11,7 @@ import {
   buildIssueBody,
   buildEdges,
   resolveMappedOptionValue,
+  canonicalizeRemoteOption,
   statusWorkflowOptions,
   buildOptionCandidates,
   pickSingleSelectOption,
@@ -249,6 +250,24 @@ test("pickSingleSelectOption matches mapped value on project options", () => {
 
   const selected = pickSingleSelectOption(field, "In Revision", { fieldKey: "status", repoConfig });
   assert.equal(selected, "2");
+});
+
+test("canonicalizeRemoteOption maps localized board values back to YAML English", () => {
+  const repoConfig = {
+    locale: "pt-BR",
+    optionMapByLocale: {
+      "pt-BR": {
+        status: { "In Progress": "Em Progresso", Backlog: "Backlog" },
+        type: { Feature: "Funcionalidade", Epic: "Épico" },
+      },
+    },
+  };
+
+  assert.equal(canonicalizeRemoteOption("status", "Em Progresso", repoConfig), "In Progress");
+  assert.equal(canonicalizeRemoteOption("status", "Backlog", repoConfig), "Backlog");
+  assert.equal(canonicalizeRemoteOption("type", "Funcionalidade", repoConfig), "Feature");
+  assert.equal(canonicalizeRemoteOption("type", "Feature", repoConfig), "Feature");
+  assert.equal(canonicalizeRemoteOption("status", null, repoConfig), null);
 });
 
 test("buildJiraDescription encodes SYNC_METADATA block", () => {

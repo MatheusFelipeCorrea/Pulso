@@ -6,7 +6,7 @@ type: Epic
 priority: Highest
 sprint: null
 story_points: null
-reporter: null
+reporter: "Matheus Felipe Correa"
 parent: null
 due_date: null
 categories:

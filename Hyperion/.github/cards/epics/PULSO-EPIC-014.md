@@ -3,8 +3,8 @@ card_id: PULSO-EPIC-014
 title: "Documentação acadêmica"
 status: Backlog
 type: Epic
-priority: High
-sprint: null
+priority: Highest
+sprint: "Sprint 1"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null

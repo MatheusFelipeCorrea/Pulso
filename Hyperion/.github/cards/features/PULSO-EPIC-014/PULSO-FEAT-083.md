@@ -4,7 +4,7 @@ title: "Avaliação heurística do Pulso"
 status: Backlog
 type: Feature
 priority: Medium
-sprint: null
+sprint: "Sprint 1"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-014

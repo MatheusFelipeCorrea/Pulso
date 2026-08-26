@@ -3,10 +3,10 @@ card_id: PULSO-FEAT-015
 title: "Recorrência e geração automática"
 status: Backlog
 type: Feature
-priority: Highest
+priority: High
 sprint: null
 story_points: null
-reporter: null
+reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-003
 due_date: null
 categories:

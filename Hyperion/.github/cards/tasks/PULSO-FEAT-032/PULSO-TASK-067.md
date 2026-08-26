@@ -3,10 +3,10 @@ card_id: PULSO-TASK-067
 title: "Backend — calendarService e rotas calendário"
 status: Backlog
 type: Task
-priority: High
+priority: Medium
 sprint: null
 story_points: null
-reporter: null
+reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-032
 due_date: null
 categories:

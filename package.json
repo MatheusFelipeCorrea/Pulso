@@ -13,6 +13,7 @@
     "hyperion:pipeline-plan": "node Hyperion/scripts/hyperion/pipeline-plan.mjs",
     "hyperion:repo-detect": "node Hyperion/scripts/hyperion/repo-detect.mjs",
     "cards:sync": "node Hyperion/scripts/cards-sync/sync.mjs",
+    "cards:reverse": "node Hyperion/scripts/cards-sync/sync.mjs --reverse",
     "cards:validate": "node Hyperion/scripts/cards-sync/validate.mjs"
   }
 }

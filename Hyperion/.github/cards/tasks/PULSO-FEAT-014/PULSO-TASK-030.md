@@ -3,10 +3,10 @@ card_id: PULSO-TASK-030
 title: "Transferências — backend e formulário"
 status: Backlog
 type: Task
-priority: High
+priority: Highest
 sprint: null
 story_points: null
-reporter: null
+reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-014
 due_date: null
 categories:
