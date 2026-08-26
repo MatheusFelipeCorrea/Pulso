@@ -1,72 +1,54 @@
-# yaml-language-server: $schema=./project.schema.json
-# Contrato do repositório para agents/skills em `.github/`.
-# Schema: .github/project.schema.json
-#
-# Portabilidade: este arquivo é a ÚNICA ponte entre o kit genérico
-# (prompts, skills, agents) e os detalhes deste produto. Em outro repo,
-# copie o pack `.github/{agents,skills,audits/prompts,audits/manifest.yml}`
-# e reescreva apenas este YAML (+ overlay opcional).
-#
-# Paths em estilo POSIX, relativos à raiz do repositório.
+# yaml-language-server: $schema=../Hyperion/.github/project.schema.json
+# Contrato do produto Pulso — kit Hyperion em pasta aninhada.
 
 version: 1
+
+kit:
+  root: Hyperion
 
 name: Pulso
 locale: pt-BR
 
-# Layout do workspace: monorepo | single | multi-package
 layout: monorepo
 
-# Aplicações / pacotes descobertos pelo kit (não inventar além do listado).
 apps:
   api:
     root: Codigo/Pulso/api
     manifest: Codigo/Pulso/api/package.json
     source_dirs:
       - Codigo/Pulso/api/src
-    orm:
-      kind: prisma
-      schema: Codigo/Pulso/api/prisma/schema.prisma
   web:
     root: Codigo/Pulso/web
     manifest: Codigo/Pulso/web/package.json
     source_dirs:
       - Codigo/Pulso/web/src
 
-# Documentação de produto e engenharia (substituem chutes como `.github/docs` fixo).
 docs:
-  requirements: Documentacao/01-Produto/Requisitos/Readme.md
-  api_readme: Documentacao/02-Engenharia/API/Readme.md
-  web_readme: Documentacao/02-Engenharia/Web/Readme.md
-  # Destino dos blueprints gerados pelas skills legacy / project-architect
-  blueprints: .github/docs
+  requirements: Documentacao/01-Produto
+  blueprints: Documentacao/02-Engenharia
   diagrams: Documentacao/04-Diagramas
-  # Relatórios já entregues (não confundir com outputs.audits)
   historical_audits: Documentacao/03-Auditorias
 
-# Onde agents/skills devem gravar artefatos novos.
 outputs:
-  audits: .github/audits/results
-  cards: .github/plans/cards
-  implementations: .github/plans/implementations
+  audits: Hyperion/.github/audits/results
+  cards: Hyperion/.github/plans/cards
+  implementations: Hyperion/.github/plans/implementations
+  diagrams: Hyperion/.github/diagrams
 
-# Dicas de stack (não obrigatórias — discovery ainda vale se ausentes).
 stack_hints:
   - Node.js
   - Express
   - Prisma
   - PostgreSQL
-  - Neon
   - React
   - Vite
-  - Vercel
-  - GitHub Actions
 
-# Convenções de IDs usadas em requisitos e achados de auditoria.
 conventions:
   requirement_prefixes:
     - RF
+    - RN
     - RNF
+    - PULSO
   finding_prefixes:
     product-owner: PO
     application-security: SEC
@@ -75,6 +57,39 @@ conventions:
     ux-design: UX
     architecture: ARCH
 
-# Overlay de domínio (opcional). Complementa prompts genéricos; nunca os substitui.
+management:
+  backend: github
+
 audits:
-  overlay: .github/audits/overlays/pulso.md
+  overlay: null
+
+ci:
+  provider: github-actions
+  policy: detect
+  stack: node-npm
+  existing:
+    - .github/workflows/ci.yml
+    - .github/workflows/security.yml
+    - .github/workflows/labeler.yml
+  hyperion:
+    # Sync cards: workflow adaptado (kit nested). Security/validate do kit: off —
+    # Pulso já tem security.yml e o validate do kit assume layout na raiz.
+    cards_sync: true
+    kit_validation: false
+    security_scan: false
+    product_ci: false
+
+commands:
+  test: npm test --prefix Codigo/Pulso/api
+  lint: npm run lint --prefix Codigo/Pulso/api
+  build: npm run build
+  audit: npm audit --prefix Codigo/Pulso/api --audit-level=moderate
+
+memory:
+  auto_capture: true
+  decisions_file: Hyperion/.github/memory/DECISIONS.md
+
+uncertainties:
+  - Templates hyperion-* padrão assumem kit na raiz; sync-cards foi adaptado para kit.root=Hyperion
+  - Project number do GitHub Projects ainda não configurado (autoCreate no sync)
+  - Lint do web tem débito pré-existente (continue-on-error no CI)
