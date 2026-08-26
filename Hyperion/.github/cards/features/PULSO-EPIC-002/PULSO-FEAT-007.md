@@ -24,7 +24,7 @@ categories:
 
 ## 📝 Descrição
 
-Como **usuário autenticado**, quero ver meu saldo total e saldos separados por DINHEIRO, VA, VR e VT (com sugestão diária de VR), para entender minha disponibilidade financeira do mês.
+Como **usuário autenticado**, quero ver meu saldo total e saldos separados por DINHEIRO, VA e VR (com sugestão diária de VR), para entender minha disponibilidade financeira do mês.
 
 ## ✅ Critérios de Aceite
 
@@ -36,7 +36,7 @@ Como **usuário autenticado**, quero ver meu saldo total e saldos separados por 
 **Então** card principal mostra saldo formatado + badge de variação % vs. mês anterior (quando aplicável).
 
 ### Cenário 3 — Recursos
-**Então** carousel/grid de `ResourceCard` por tipo (DINHEIRO, VA, VR, VT) com scroll horizontal em mobile.
+**Então** carousel/grid de `ResourceCard` por tipo (DINHEIRO, VA, VR) com scroll horizontal em mobile.
 
 ### Cenário 4 — Destino pós-login
 **Quando** login/OAuth concluído,  

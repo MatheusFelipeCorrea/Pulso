@@ -35,7 +35,7 @@ Implementar seed de categorias, CRUD via modais na página de transações e val
 | `recursoCategoriaRules.js` | `validarRecursoCategoria`, `buildMensagemIncompativel` |
 | `categoryRoutes.js`, `tagRoutes.js` | REST categorias/tags |
 
-**Campo:** `Categoria.grupoBeneficio` enum (VA, VR, VT, ALIMENTACAO, etc.)
+**Campo:** `Categoria.grupoBeneficio` enum (VA, VR, ALIMENTACAO, etc.)
 
 ### Frontend (NOVO — CRIAR)
 
@@ -48,7 +48,7 @@ Implementar seed de categorias, CRUD via modais na página de transações e val
 
 ## 📐 Regras de Negócio
 
-- RF-025: categoria alimentação incompatível com VT
+- RF-025: categoria incompatível com o `grupoBeneficio` do recurso (ex.: transporte com VA/VR)
 - Categoria.tipo deve bater com transação.tipo
 - Tag nome único case-insensitive por usuário
 

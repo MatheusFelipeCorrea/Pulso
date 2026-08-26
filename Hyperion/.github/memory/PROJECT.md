@@ -8,7 +8,7 @@ Pulso
 
 ## Purpose
 
-Pulso é um sistema de gestão financeira pessoal para estagiários, estudantes e jovens em início de carreira. Diferencia recursos reais (salário) de benefícios com restrição de uso (VA, VR, VT), oferece insights via IA (Google Gemini), planejamento de viagens com câmbio e grupos para planejamento compartilhado. Interface em modo claro e escuro; o produto será gratuito.
+Pulso é um sistema de gestão financeira pessoal para estagiários, estudantes e jovens em início de carreira. Diferencia recursos reais (salário) de benefícios com restrição de uso (VA, VR), oferece insights via IA (Google Gemini), planejamento de viagens com câmbio e grupos para planejamento compartilhado. Interface em modo claro e escuro; o produto será gratuito.
 
 O nome remete a manter o pulso firme nas finanças: cada registro é uma batida rumo à estabilidade.
 
@@ -44,6 +44,6 @@ Kit Hyperion aninhado em `Hyperion/` (`kit.root: Hyperion`).
 | Term | Definition |
 |------|------------|
 | Pulso | Produto de gestão financeira pessoal deste repositório |
-| VA / VR / VT | Vale-alimentação, vale-refeição e vale-transporte — benefícios com restrição de uso |
+| VA / VR | Vale-alimentação e vale-refeição — benefícios com restrição de uso |
 | Recursos reais | Dinheiro de uso livre (ex.: salário), distinto dos benefícios restritos |
 | Hyperion | Kit de agents/skills copiado em `Hyperion/` |

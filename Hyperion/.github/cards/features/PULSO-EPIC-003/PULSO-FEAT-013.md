@@ -24,7 +24,7 @@ categories:
 
 ## 📝 Descrição
 
-Seed de categorias no cadastro; CRUD de categorias custom com `grupoBeneficio`; tags M:N; endpoint de sugestão por similaridade de descrição; bloqueio VT em categorias de alimentação via regra desacoplada do nome.
+Seed de categorias no cadastro; CRUD de categorias custom com `grupoBeneficio`; tags M:N; endpoint de sugestão por similaridade de descrição; bloqueio de categoria incompatível com o recurso via `grupoBeneficio`.
 
 ## ✅ Critérios de Aceite
 
@@ -43,7 +43,7 @@ Seed de categorias no cadastro; CRUD de categorias custom com `grupoBeneficio`; 
 **Então** retorna `categoriaId` sugerida por histórico (Dice/bigramas).
 
 ### Cenário 5 — RF-025
-**Quando** despesa categoria alimentação + recurso VT,  
+**Quando** despesa em categoria incompatível com o recurso (ex.: transporte + VA/VR),  
 **Então** retorna `400` com mensagem explicativa (`recursoCategoriaRules`).
 
 ## 🔗 Sub-issues

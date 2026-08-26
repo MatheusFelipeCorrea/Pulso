@@ -18,7 +18,7 @@ categories:
 
 # [TASK] QA — testes unitários de transações
 
-> **Contexto:** Regressão para CRUD, filtros, recorrência e regras VA/VR/VT.
+> **Contexto:** Regressão para CRUD, filtros, recorrência e regras VA/VR.
 
 ## 📝 Descrição
 

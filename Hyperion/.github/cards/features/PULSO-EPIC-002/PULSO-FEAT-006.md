@@ -17,7 +17,7 @@ categories:
 
 # [FEATURE] Backend — agregação GET /dashboard
 
-> **Contexto:** Endpoint único que compõe todos os blocos do dashboard reutilizando services existentes (transações, orçamento, metas, VT), evitando N+1 requests no frontend.
+> **Contexto:** Endpoint único que compõe todos os blocos do dashboard reutilizando services existentes (transações, orçamento, metas), evitando N+1 requests no frontend.
 
 **Refs:** RF-007–014 (dados)
 

@@ -26,12 +26,12 @@ categories:
 
 ## 📝 Descrição
 
-Suportar importação de extratos bancários (OFX, CSV, XLSX, PDF via Gemini), benefícios VA/VR/VT, preview editável com dedupe, mapeamento manual de colunas CSV e ajuste de saldo quando necessário.
+Suportar importação de extratos bancários (OFX, CSV, XLSX, PDF via Gemini), benefícios VA/VR, preview editável com dedupe, mapeamento manual de colunas CSV e ajuste de saldo quando necessário.
 
 ## ✅ Critérios de Aceite
 
 ### Cenário 1 — Upload
-**Quando** seleciono tipo (CONTA, VA, VR, VT) e arquivo válido,  
+**Quando** seleciono tipo (CONTA, VA, VR) e arquivo válido,  
 **Então** `POST /importacoes/analisar` retorna linhas parseadas ou pede mapeamento.
 
 ### Cenário 2 — Mapeamento CSV

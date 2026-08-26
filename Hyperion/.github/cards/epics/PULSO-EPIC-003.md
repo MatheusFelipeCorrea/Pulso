@@ -19,21 +19,21 @@ categories:
 
 # [EPIC] Gerenciamento de Transações
 
-> **Contexto:** Núcleo financeiro do Pulso — registrar, listar, filtrar, editar e excluir receitas, despesas e transferências; vincular categorias/tags; recorrência automática; validação recurso×categoria (VA/VR/VT); sugestão de categoria por histórico.
+> **Contexto:** Núcleo financeiro do Pulso — registrar, listar, filtrar, editar e excluir receitas, despesas e transferências; vincular categorias/tags; recorrência automática; validação recurso×categoria (VA/VR); sugestão de categoria por histórico.
 
 **Refs:** RF-015–025 · RF-140 · RF-141
 
 ## 🎯 Objetivos
 
 - CRUD de transações (receita, despesa, transferência) com validações de domínio
-- Categorias padrão + personalizadas com `grupoBeneficio` (VA/VR/VT)
+- Categorias padrão + personalizadas com `grupoBeneficio` (VA/VR)
 - Tags livres M:N com criação inline no formulário
 - Filtros por período, categoria, tipo, recurso; busca por descrição/tag
 - Cards de resumo (receitas, despesas, saldo) sincronizados com filtros
 - Recorrência RFC 5545 (semanal, quinzenal, mensal, anual) + job diário
 - Transferências entre recursos sem contabilizar em totais de receita/despesa (RF-140)
 - Sugestão automática de categoria ao digitar descrição (RF-141)
-- Impedir despesa de alimentação com recurso VT (RF-025 via `grupoBeneficio`)
+- Impedir despesa cuja categoria seja incompatível com o recurso (RF-025 via `grupoBeneficio`)
 - Exclusão recorrente "esta e futuras" preservando histórico passado
 
 ## 🎭 Telas e fluxos

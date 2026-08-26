@@ -37,7 +37,7 @@ Calcular cenários e alertas estruturados a partir do contexto.
 **Alertas**
 - Orçamento/categoria perto do limite
 - Meta com ritmo insuficiente para o prazo
-- Recurso (VA/VR/VT) com esgotamento previsto
+- Recurso (VA/VR) com esgotamento previsto
 
 Saída tipada para o prompt e para a UI (mesmo sem Gemini).
 

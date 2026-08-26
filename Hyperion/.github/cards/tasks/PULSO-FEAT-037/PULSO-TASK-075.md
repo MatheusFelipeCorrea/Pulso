@@ -30,7 +30,7 @@ Implementar seção hero e preview ilustrativo da interface autenticada.
 | Arquivo | Função |
 |---------|--------|
 | `LandingHero.jsx` | Badge gratuito, título gradient, CTAs, social proof |
-| `LandingDashboardPreview.jsx` | Mock sidebar + cards recursos (VA/VR/VT) |
+| `LandingDashboardPreview.jsx` | Mock sidebar + cards recursos (VA/VR) |
 
 **CTAs:**
 - Primário: `Link` → `/register` com `Button` primary

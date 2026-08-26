@@ -34,7 +34,7 @@ Criar models Prisma e migrations para `Transacao`, `Tag`, `TransacaoTag` e campo
 
 ### `schema.prisma` (NOVO — CRIAR)
 
-**Enums:** `TipoTransacao` (RECEITA, DESPESA, TRANSFERENCIA), `TipoRecurso` (DINHEIRO, VA, VR, VT, POUPANCA), `GrupoBeneficioCategoria`
+**Enums:** `TipoTransacao` (RECEITA, DESPESA, TRANSFERENCIA), `TipoRecurso` (DINHEIRO, VA, VR, POUPANCA), `GrupoBeneficioCategoria`
 
 **Migrations relevantes:**
 - `20260422195021_init`

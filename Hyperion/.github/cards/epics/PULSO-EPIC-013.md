@@ -29,7 +29,7 @@ categories:
 ## 🎯 Objetivos
 
 - Provider Gemini separado do PDF: `GEMINI_API_KEY_INSIGHTS` + `GEMINI_INSIGHTS_MODEL` (mesmo padrão de URL/`generateContent` do `pdfParser`)
-- Agregar contexto do usuário (transações, categorias, orçamento, metas, saldos/recursos, VT) — **nunca** dados de outros usuários
+- Agregar contexto do usuário (transações, categorias, orçamento, metas, saldos/recursos) — **nunca** dados de outros usuários
 - Resumo mensal em linguagem natural (RF-044)
 - Variação por categoria vs mês anterior / “você vs você mesmo” (RF-045, RF-143)
 - Score de saúde financeira 0–100 + persistência em `HistoricoScore` (RF-048, RN-127); alinhar/enriquecer `calcularSaudeFinanceira` do dashboard
@@ -52,7 +52,7 @@ categories:
 | Módulo | Integração |
 |--------|------------|
 | Gemini | Chave **Insights** distinta de `GEMINI_API_KEY_PDF` |
-| Transações / Orçamento / Metas / VT | Fonte do contexto agregado |
+| Transações / Orçamento / Metas / Recursos | Fonte do contexto agregado |
 | Dashboard | Score/saúde reutilizável ou sincronizado |
 | Notificações | `INSIGHT_IA` com `geradoPor: 'gemini'` + link `/insights` |
 | Cron | Job mensal (+ opcional score diário RN-127) |

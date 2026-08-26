@@ -46,7 +46,7 @@ categories:
 
 ## 🎯 Objetivos
 
-- Exibir saldo total do mês e saldos por recurso (DINHEIRO, VA, VR, VT) com variação vs. mês anterior (RF-007, RF-008)
+- Exibir saldo total do mês e saldos por recurso (DINHEIRO, VA, VR) com variação vs. mês anterior (RF-007, RF-008)
 - Gráfico receitas vs. despesas diárias do mês com seletor de período (RF-009)
 - Gráfico donut de gastos por categoria (RF-010)
 - Listar últimas transações, alertas de orçamento (≥80%), progresso de metas ativas (RF-011–013)
@@ -70,7 +70,6 @@ categories:
 | Transações | `transactionService.calcularResumo`, `transactionRepository.listarPorUsuario` |
 | Orçamento | `budgetService.obterStatusOrcamento` → alertas ≥80% |
 | Metas | `metaRepository.listarPorUsuario` (status ATIVA, limite 4) |
-| VT | `transportService.obterSaldoVt` para saldo VT em tempo real |
 | Importação | `POST /importacoes/analisar` + `POST /importacoes/confirmar` |
 | Notificações | `NotificationPanel` no header (MainLayout) — tipos linkam para `/dashboard` |
 
@@ -117,7 +116,7 @@ categories:
 
 # [FEATURE] Backend — agregação GET /dashboard
 
-> **Contexto:** Endpoint único que compõe todos os blocos do dashboard reutilizando services existentes (transações, orçamento, metas, VT), evitando N+1 requests no frontend.
+> **Contexto:** Endpoint único que compõe todos os blocos do dashboard reutilizando services existentes (transações, orçamento, metas), evitando N+1 requests no frontend.
 
 **Refs:** RF-007–014 (dados)
 
@@ -183,7 +182,7 @@ categories:
 
 ## 📝 Descrição
 
-Como **usuário autenticado**, quero ver meu saldo total e saldos separados por DINHEIRO, VA, VR e VT (com sugestão diária de VR), para entender minha disponibilidade financeira do mês.
+Como **usuário autenticado**, quero ver meu saldo total e saldos separados por DINHEIRO, VA e VR (com sugestão diária de VR), para entender minha disponibilidade financeira do mês.
 
 ## ✅ Critérios de Aceite
 
@@ -195,7 +194,7 @@ Como **usuário autenticado**, quero ver meu saldo total e saldos separados por 
 **Então** card principal mostra saldo formatado + badge de variação % vs. mês anterior (quando aplicável).
 
 ### Cenário 3 — Recursos
-**Então** carousel/grid de `ResourceCard` por tipo (DINHEIRO, VA, VR, VT) com scroll horizontal em mobile.
+**Então** carousel/grid de `ResourceCard` por tipo (DINHEIRO, VA, VR) com scroll horizontal em mobile.
 
 ### Cenário 4 — Destino pós-login
 **Quando** login/OAuth concluído,  
@@ -358,12 +357,12 @@ categories:
 
 ## 📝 Descrição
 
-Suportar importação de extratos bancários (OFX, CSV, XLSX, PDF via Gemini), benefícios VA/VR/VT, preview editável com dedupe, mapeamento manual de colunas CSV e ajuste de saldo quando necessário.
+Suportar importação de extratos bancários (OFX, CSV, XLSX, PDF via Gemini), benefícios VA/VR, preview editável com dedupe, mapeamento manual de colunas CSV e ajuste de saldo quando necessário.
 
 ## ✅ Critérios de Aceite
 
 ### Cenário 1 — Upload
-**Quando** seleciono tipo (CONTA, VA, VR, VT) e arquivo válido,  
+**Quando** seleciono tipo (CONTA, VA, VR) e arquivo válido,  
 **Então** `POST /importacoes/analisar` retorna linhas parseadas ou pede mapeamento.
 
 ### Cenário 2 — Mapeamento CSV
@@ -505,7 +504,6 @@ Criar em: `code/back/src/services/dashboardService.js`
 | `transactionRepository.listarPorUsuario` | Últimas transações (limite 25) |
 | `budgetService.obterStatusOrcamento` | Alertas ≥80% |
 | `metaRepository.listarPorUsuario` | Metas ATIVAS (limite 4) |
-| `transportService.obterSaldoVt` | Saldo VT real-time |
 | `resourceBalanceUtils` | `calcularSaldosPorRecurso`, `saldoTotalDisponivel`, `diasUteisRestantesNoMes` |
 | `monthUtils` | `mesReferenciaFromQuery`, `intervaloDoMes`, `mesAnterior` |
 
@@ -513,7 +511,7 @@ Criar em: `code/back/src/services/dashboardService.js`
 
 ## 📐 Regras de Negócio
 
-- Saldo total = soma DINHEIRO + VA + VR + VT
+- Saldo total = soma DINHEIRO + VA + VR
 - Sugestão diária VR = saldo VR / dias úteis restantes no mês
 - Alertas orçamento: categorias com `percentualUsado >= 80`
 - Score saúde: 0–100 baseado em fluxo, orçamento estourado e progresso de metas
@@ -683,7 +681,7 @@ Renderizar saldo total com badge de variação e carousel horizontal de recursos
 **Então** valor formatado BRL + `VariacaoBadge` (% vs. mês anterior quando `tipo: percentual`).
 
 ### Cenário 2 — Resource cards
-**Então** um card por `recursos[]` (DINHEIRO, VA, VR, VT) com ícone/cor de `resourceConfig.js`.
+**Então** um card por `recursos[]` (DINHEIRO, VA, VR) com ícone/cor de `resourceConfig.js`.
 
 ### Cenário 3 — Sugestão VR
 **Quando** recurso VR com `sugestaoDiaria`,  
@@ -935,7 +933,7 @@ Implementar parse multi-formato, sugestão de categorias, dedupe e gravação em
 | `POST` | `/api/importacoes/analisar` | Upload multipart → linhas + resumo + `precisaMapeamento` |
 | `POST` | `/api/importacoes/confirmar` | Grava linhas válidas; ajuste saldo se necessário |
 
-**Origens:** `CONTA`, `VA`, `VR`, `VT` — mapeiam recurso (`DINHEIRO`, `VA`, `VR`, `VT`)
+**Origens:** `CONTA`, `VA`, `VR` — mapeiam recurso (`DINHEIRO`, `VA`, `VR`)
 
 ## 🛠️ Implementação
 
@@ -1020,7 +1018,7 @@ Implementar wizard modal: escolher tipo → upload → (mapping CSV) → preview
 **Então** fluxo `pick` → `mapping?` → `preview` → `balance?` → confirmar.
 
 ### Cenário 2 — Tipos suportados
-**Então** CONTA (OFX/CSV/XLSX/PDF), VA/VR/VT conforme `importStatementTypes.js`.
+**Então** CONTA (OFX/CSV/XLSX/PDF), VA/VR conforme `importStatementTypes.js`.
 
 ### Cenário 3 — Preview
 **Então** editar categoria por linha, marcar ignorar duplicata, ver totais.

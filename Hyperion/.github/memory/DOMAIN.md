@@ -10,7 +10,7 @@ Fonte: README do produto. Sem modelagem formal ainda (`docs/3.requisitos.md` e `
 |--------|------------|----------------|
 | Usuário | Estagiário, estudante ou jovem em início de carreira | perfil financeiro em formação |
 | Recurso real | Dinheiro de uso livre (ex.: salário) | origem, valor |
-| Benefício restrito | Recurso com restrição de uso | tipo (VA, VR, VT), regras de uso |
+| Benefício restrito | Recurso com restrição de uso | tipo (VA, VR), regras de uso |
 | Insight | Sugestão gerada por IA | provedor planejado: Google Gemini |
 | Viagem | Planejamento de viagem com câmbio | câmbio integrado |
 | Grupo | Planejamento financeiro compartilhado | membros |
@@ -29,5 +29,5 @@ Fonte: README do produto. Sem modelagem formal ainda (`docs/3.requisitos.md` e `
 
 ## Business Rules
 
-- Benefícios VA/VR/VT não devem ser tratados como dinheiro livre.
+- Benefícios VA/VR não devem ser tratados como dinheiro livre.
 - Produto gratuito (visão atual do time).

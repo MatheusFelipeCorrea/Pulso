@@ -24,7 +24,7 @@ categories:
 
 ## 📝 Descrição
 
-Suites unitárias API e Web para fluxos críticos de transações, incluindo exclusão recorrente e validação VA/VR/VT.
+Suites unitárias API e Web para fluxos críticos de transações, incluindo exclusão recorrente e validação VA/VR.
 
 ## ✅ Critérios de Aceite
 

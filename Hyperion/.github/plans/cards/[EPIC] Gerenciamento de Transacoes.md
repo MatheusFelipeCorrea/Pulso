@@ -39,21 +39,21 @@ categories:
 
 # [EPIC] Gerenciamento de Transações
 
-> **Contexto:** Núcleo financeiro do Pulso — registrar, listar, filtrar, editar e excluir receitas, despesas e transferências; vincular categorias/tags; recorrência automática; validação recurso×categoria (VA/VR/VT); sugestão de categoria por histórico.
+> **Contexto:** Núcleo financeiro do Pulso — registrar, listar, filtrar, editar e excluir receitas, despesas e transferências; vincular categorias/tags; recorrência automática; validação recurso×categoria (VA/VR); sugestão de categoria por histórico.
 
 **Refs:** RF-015–025 · RF-140 · RF-141
 
 ## 🎯 Objetivos
 
 - CRUD de transações (receita, despesa, transferência) com validações de domínio
-- Categorias padrão + personalizadas com `grupoBeneficio` (VA/VR/VT)
+- Categorias padrão + personalizadas com `grupoBeneficio` (VA/VR)
 - Tags livres M:N com criação inline no formulário
 - Filtros por período, categoria, tipo, recurso; busca por descrição/tag
 - Cards de resumo (receitas, despesas, saldo) sincronizados com filtros
 - Recorrência RFC 5545 (semanal, quinzenal, mensal, anual) + job diário
 - Transferências entre recursos sem contabilizar em totais de receita/despesa (RF-140)
 - Sugestão automática de categoria ao digitar descrição (RF-141)
-- Impedir despesa de alimentação com recurso VT (RF-025 via `grupoBeneficio`)
+- Impedir despesa cuja categoria seja incompatível com o recurso (RF-025 via `grupoBeneficio`)
 - Exclusão recorrente "esta e futuras" preservando histórico passado
 
 ## 🎭 Telas e fluxos
@@ -180,7 +180,7 @@ categories:
 
 ## 📝 Descrição
 
-Seed de categorias no cadastro; CRUD de categorias custom com `grupoBeneficio`; tags M:N; endpoint de sugestão por similaridade de descrição; bloqueio VT em categorias de alimentação via regra desacoplada do nome.
+Seed de categorias no cadastro; CRUD de categorias custom com `grupoBeneficio`; tags M:N; endpoint de sugestão por similaridade de descrição; bloqueio de categoria incompatível com o recurso via `grupoBeneficio`.
 
 ## ✅ Critérios de Aceite
 
@@ -199,7 +199,7 @@ Seed de categorias no cadastro; CRUD de categorias custom com `grupoBeneficio`; 
 **Então** retorna `categoriaId` sugerida por histórico (Dice/bigramas).
 
 ### Cenário 5 — RF-025
-**Quando** despesa categoria alimentação + recurso VT,  
+**Quando** despesa em categoria incompatível com o recurso (ex.: transporte + VA/VR),  
 **Então** retorna `400` com mensagem explicativa (`recursoCategoriaRules`).
 
 ## 🔗 Sub-issues
@@ -411,7 +411,7 @@ categories:
 
 ## 📝 Descrição
 
-Suites unitárias API e Web para fluxos críticos de transações, incluindo exclusão recorrente e validação VA/VR/VT.
+Suites unitárias API e Web para fluxos críticos de transações, incluindo exclusão recorrente e validação VA/VR.
 
 ## ✅ Critérios de Aceite
 
@@ -470,7 +470,7 @@ Criar models Prisma e migrations para `Transacao`, `Tag`, `TransacaoTag` e campo
 
 ### `schema.prisma` (NOVO — CRIAR)
 
-**Enums:** `TipoTransacao` (RECEITA, DESPESA, TRANSFERENCIA), `TipoRecurso` (DINHEIRO, VA, VR, VT, POUPANCA), `GrupoBeneficioCategoria`
+**Enums:** `TipoTransacao` (RECEITA, DESPESA, TRANSFERENCIA), `TipoRecurso` (DINHEIRO, VA, VR, POUPANCA), `GrupoBeneficioCategoria`
 
 **Migrations relevantes:**
 - `20260422195021_init`
@@ -646,7 +646,7 @@ Implementar seed de categorias, CRUD via modais na página de transações e val
 | `recursoCategoriaRules.js` | `validarRecursoCategoria`, `buildMensagemIncompativel` |
 | `categoryRoutes.js`, `tagRoutes.js` | REST categorias/tags |
 
-**Campo:** `Categoria.grupoBeneficio` enum (VA, VR, VT, ALIMENTACAO, etc.)
+**Campo:** `Categoria.grupoBeneficio` enum (VA, VR, ALIMENTACAO, etc.)
 
 ### Frontend (NOVO — CRIAR)
 
@@ -659,7 +659,7 @@ Implementar seed de categorias, CRUD via modais na página de transações e val
 
 ## 📐 Regras de Negócio
 
-- RF-025: categoria alimentação incompatível com VT
+- RF-025: categoria incompatível com o `grupoBeneficio` do recurso (ex.: transporte com VA/VR)
 - Categoria.tipo deve bater com transação.tipo
 - Tag nome único case-insensitive por usuário
 
@@ -1064,7 +1064,7 @@ categories:
 
 # [TASK] QA — testes unitários de transações
 
-> **Contexto:** Regressão para CRUD, filtros, recorrência e regras VA/VR/VT.
+> **Contexto:** Regressão para CRUD, filtros, recorrência e regras VA/VR.
 
 ## 📝 Descrição
 

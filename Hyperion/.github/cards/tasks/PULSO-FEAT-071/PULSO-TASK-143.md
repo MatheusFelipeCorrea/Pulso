@@ -33,7 +33,7 @@ Implementar builder determinístico de contexto mensal.
 | `estabelecimentos` | Top descrições DESPESA (frequência, média, min) — base para sugestões tipo “almoçar em X” |
 | `orcamento` | Status do mês (`budgetService` / repository) |
 | `metas` | Ativas: progresso, prazo, restante |
-| `recursos` | Saldos / ritmo VT-VA-VR se disponível |
+| `recursos` | Saldos / ritmo VA-VR se disponível |
 | `perfil` | modoUso, rendaMensalPlanejada |
 
 Sempre `where: { usuarioId }`. Retornar objeto serializável e enxuto (agregados).

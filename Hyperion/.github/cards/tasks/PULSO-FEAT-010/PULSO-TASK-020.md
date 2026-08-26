@@ -31,7 +31,7 @@ Implementar parse multi-formato, sugestão de categorias, dedupe e gravação em
 | `POST` | `/api/importacoes/analisar` | Upload multipart → linhas + resumo + `precisaMapeamento` |
 | `POST` | `/api/importacoes/confirmar` | Grava linhas válidas; ajuste saldo se necessário |
 
-**Origens:** `CONTA`, `VA`, `VR`, `VT` — mapeiam recurso (`DINHEIRO`, `VA`, `VR`, `VT`)
+**Origens:** `CONTA`, `VA`, `VR` — mapeiam recurso (`DINHEIRO`, `VA`, `VR`)
 
 ## 🛠️ Implementação
 

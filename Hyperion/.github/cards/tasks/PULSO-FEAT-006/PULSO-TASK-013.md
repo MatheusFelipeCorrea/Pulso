@@ -51,7 +51,6 @@ Criar em: `code/back/src/services/dashboardService.js`
 | `transactionRepository.listarPorUsuario` | Últimas transações (limite 25) |
 | `budgetService.obterStatusOrcamento` | Alertas ≥80% |
 | `metaRepository.listarPorUsuario` | Metas ATIVAS (limite 4) |
-| `transportService.obterSaldoVt` | Saldo VT real-time |
 | `resourceBalanceUtils` | `calcularSaldosPorRecurso`, `saldoTotalDisponivel`, `diasUteisRestantesNoMes` |
 | `monthUtils` | `mesReferenciaFromQuery`, `intervaloDoMes`, `mesAnterior` |
 
@@ -59,7 +58,7 @@ Criar em: `code/back/src/services/dashboardService.js`
 
 ## 📐 Regras de Negócio
 
-- Saldo total = soma DINHEIRO + VA + VR + VT
+- Saldo total = soma DINHEIRO + VA + VR
 - Sugestão diária VR = saldo VR / dias úteis restantes no mês
 - Alertas orçamento: categorias com `percentualUsado >= 80`
 - Score saúde: 0–100 baseado em fluxo, orçamento estourado e progresso de metas

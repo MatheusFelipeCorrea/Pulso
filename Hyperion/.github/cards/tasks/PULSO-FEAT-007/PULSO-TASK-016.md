@@ -30,7 +30,7 @@ Renderizar saldo total com badge de variação e carousel horizontal de recursos
 **Então** valor formatado BRL + `VariacaoBadge` (% vs. mês anterior quando `tipo: percentual`).
 
 ### Cenário 2 — Resource cards
-**Então** um card por `recursos[]` (DINHEIRO, VA, VR, VT) com ícone/cor de `resourceConfig.js`.
+**Então** um card por `recursos[]` (DINHEIRO, VA, VR) com ícone/cor de `resourceConfig.js`.
 
 ### Cenário 3 — Sugestão VR
 **Quando** recurso VR com `sugestaoDiaria`,  

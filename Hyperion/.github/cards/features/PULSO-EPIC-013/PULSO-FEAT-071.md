@@ -34,7 +34,7 @@ Contexto mínimo por mês de referência:
 | Estabelecimentos | Frequência/média por descrição (ex.: almoço, delivery) quando houver dados |
 | Orçamento | Limites, % usado, estourados |
 | Metas | Progresso, prazo, valor restante |
-| Recursos | Saldos / ritmo VA-VR-VT se disponível |
+| Recursos | Saldos / ritmo VA-VR se disponível |
 | Perfil | `modoUso`, renda planejada (se houver) |
 
 - Filtrar sempre por `usuarioId` (isolamento total)

@@ -26,7 +26,7 @@ categories:
 
 ## 🎯 Objetivos
 
-- Exibir saldo total do mês e saldos por recurso (DINHEIRO, VA, VR, VT) com variação vs. mês anterior (RF-007, RF-008)
+- Exibir saldo total do mês e saldos por recurso (DINHEIRO, VA, VR) com variação vs. mês anterior (RF-007, RF-008)
 - Gráfico receitas vs. despesas diárias do mês com seletor de período (RF-009)
 - Gráfico donut de gastos por categoria (RF-010)
 - Listar últimas transações, alertas de orçamento (≥80%), progresso de metas ativas (RF-011–013)
@@ -50,7 +50,6 @@ categories:
 | Transações | `transactionService.calcularResumo`, `transactionRepository.listarPorUsuario` |
 | Orçamento | `budgetService.obterStatusOrcamento` → alertas ≥80% |
 | Metas | `metaRepository.listarPorUsuario` (status ATIVA, limite 4) |
-| VT | `transportService.obterSaldoVt` para saldo VT em tempo real |
 | Importação | `POST /importacoes/analisar` + `POST /importacoes/confirmar` |
 | Notificações | `NotificationPanel` no header (MainLayout) — tipos linkam para `/dashboard` |
 

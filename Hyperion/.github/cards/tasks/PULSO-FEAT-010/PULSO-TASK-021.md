@@ -30,7 +30,7 @@ Implementar wizard modal: escolher tipo → upload → (mapping CSV) → preview
 **Então** fluxo `pick` → `mapping?` → `preview` → `balance?` → confirmar.
 
 ### Cenário 2 — Tipos suportados
-**Então** CONTA (OFX/CSV/XLSX/PDF), VA/VR/VT conforme `importStatementTypes.js`.
+**Então** CONTA (OFX/CSV/XLSX/PDF), VA/VR conforme `importStatementTypes.js`.
 
 ### Cenário 3 — Preview
 **Então** editar categoria por linha, marcar ignorar duplicata, ver totais.
