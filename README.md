@@ -21,3 +21,11 @@ O nome "Pulso" remete à ideia de manter o pulso firme nas finanças, monitorar 
 ## Instruções de utilização
 
 *Em breve — será complementado quando a primeira versão do sistema estiver disponível.*
+
+## Cards (Hyperion / GitHub Project)
+
+O markdown em `Hyperion/.github/cards/` é a fonte do board. A pipeline **só no `main`** manda o repo para o Project.
+
+- Mexeu **no board** → `npm run cards:reverse` **antes** de commitar (igual `git pull`).
+- Mexeu **só no arquivo** → commit no `main` (ou PR) e a Action sincroniza.
+- Não faça push de card direto de uma branch velha para o `main` sem puxar o board; o YAML antigo pisa no que a equipe moveu no Project.

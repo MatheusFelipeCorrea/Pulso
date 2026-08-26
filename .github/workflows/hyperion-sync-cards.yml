@@ -1,6 +1,8 @@
 name: Hyperion — Sync Cards
 
 # Nested kit: cards and scripts live under Hyperion/.
+# Forward sync writes the shared GitHub Project. Only main may do that;
+# feature branches must not overwrite the board with stale YAML.
 
 on:
   workflow_dispatch:
@@ -14,10 +16,15 @@ on:
         required: false
         default: "forward"
   push:
+    branches: [main]
     paths:
       - "Hyperion/.github/cards/**/*.md"
       - "Hyperion/.github/cards/config/projects-map.json"
       - "Hyperion/scripts/cards-sync/**"
+
+concurrency:
+  group: hyperion-sync-cards-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
