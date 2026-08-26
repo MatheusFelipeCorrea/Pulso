@@ -589,56 +589,112 @@ async function getRepositoryNodeId(owner, name) {
   return data.repository.id;
 }
 
+/** CARD_ID line only — never PARENT_CARD_ID or a fuzzy GitHub search hit. */
+function parseCardIdFromIssueBody(body) {
+  const fromMeta = parseSyncMetadataFromDescription(body)?.meta?.CARD_ID;
+  if (fromMeta) {
+    const trimmed = String(fromMeta).trim();
+    if (trimmed) return trimmed;
+  }
+  const match = String(body || "").match(/(?:^|\n)CARD_ID:\s*(\S+)\s*(?:\r?\n|$)/);
+  return match?.[1] || null;
+}
+
+function issueBodyHasExactCardId(body, cardId) {
+  const wanted = String(cardId || "").trim();
+  return Boolean(wanted) && parseCardIdFromIssueBody(body) === wanted;
+}
+
+function isOpenIssueState(state) {
+  const normalized = String(state || "").toUpperCase();
+  return normalized === "OPEN" || normalized === "OPENED";
+}
+
+/** Prefer the exact CARD_ID match: open issue, then lowest number. Never a fuzzy neighbor. */
+function pickCanonicalIssueForCardId(issues, cardId) {
+  const wanted = String(cardId || "").trim();
+  const matches = (issues || []).filter((issue) => issueBodyHasExactCardId(issue?.body ?? issue?.description, wanted));
+  if (!matches.length) return null;
+  return [...matches].sort((a, b) => {
+    const openDelta = Number(isOpenIssueState(a.state)) - Number(isOpenIssueState(b.state));
+    if (openDelta) return -openDelta;
+    return Number(a.number || Number.MAX_SAFE_INTEGER) - Number(b.number || Number.MAX_SAFE_INTEGER);
+  })[0];
+}
+
 async function searchIssueByCardId(owner, name, cardId) {
   // Never attach/update kit sample issues unless maintainer opts in
   if (isKitSampleCardId(cardId) && !shouldIncludeKitSamples()) return null;
-  // is:issue excludes pull requests that might contain CARD_ID in a template body
-  const q = `repo:${owner}/${name} in:body "CARD_ID: ${cardId}" is:issue`;
+  // GitHub search tokenizes PULSO-EPIC-014 ≈ PULSO-FEAT-014; fetch a page and keep exact CARD_ID only.
+  const q = `repo:${owner}/${name} in:body "CARD_ID:" is:issue`;
   const data = await graphql(
-    `query($query: String!) { search(type: ISSUE, query: $query, first: 1) { nodes { ... on Issue { id number title url } } } }`,
-    { query: q }
+    `query($query: String!) {
+      search(type: ISSUE, query: $query, first: 50) {
+        nodes { ... on Issue { id number title url body state } }
+      }
+    }`,
+    { query: `${q} "${cardId}"` }
   );
-  return data.search.nodes[0] || null;
+  return pickCanonicalIssueForCardId(data.search?.nodes || [], cardId);
 }
 
 async function loadIssueMapByCardId(owner, name) {
-  const map = new Map();
-  const q = `repo:${owner}/${name} in:body "CARD_ID:" is:issue`;
+  const grouped = new Map();
   let endCursor = null;
   let hasNextPage = true;
   let skippedSamples = 0;
 
+  // List repo issues (not search): search is fuzzy and capped at 1000 hits.
   while (hasNextPage) {
     const data = await graphql(
-      `query($query: String!, $endCursor: String) {
-        search(type: ISSUE, query: $query, first: 50, after: $endCursor) {
-          pageInfo { hasNextPage endCursor }
-          nodes { ... on Issue { id number title url body } }
+      `query($owner: String!, $name: String!, $endCursor: String) {
+        repository(owner: $owner, name: $name) {
+          issues(first: 100, after: $endCursor, states: [OPEN, CLOSED]) {
+            pageInfo { hasNextPage endCursor }
+            nodes { id number title url body state }
+          }
         }
       }`,
-      { query: q, endCursor }
+      { owner, name, endCursor }
     );
 
-    for (const issue of data.search?.nodes || []) {
-      if (!issue?.id) continue; // skip PullRequest nodes if search ever returns them
-      const cardId = issue.body?.match(/CARD_ID:\s*(\S+)/)?.[1];
-      const sourceFile = issue.body?.match(/SOURCE_FILE:\s*(.+)/)?.[1]?.trim();
+    for (const issue of data.repository?.issues?.nodes || []) {
+      if (!issue?.id) continue;
+      const cardId = parseCardIdFromIssueBody(issue.body);
+      const sourceFile =
+        parseSyncMetadataFromDescription(issue.body)?.meta?.SOURCE_FILE?.trim() ||
+        issue.body?.match(/SOURCE_FILE:\s*(.+)/)?.[1]?.trim();
       if (!cardId) continue;
       if (isKitSampleRemoteArtifact({ cardId, sourceFile })) {
         skippedSamples += 1;
         continue;
       }
-      map.set(cardId, issue);
+      if (!grouped.has(cardId)) grouped.set(cardId, []);
+      grouped.get(cardId).push(issue);
     }
 
-    hasNextPage = Boolean(data.search?.pageInfo?.hasNextPage);
-    endCursor = data.search?.pageInfo?.endCursor || null;
+    hasNextPage = Boolean(data.repository?.issues?.pageInfo?.hasNextPage);
+    endCursor = data.repository?.issues?.pageInfo?.endCursor || null;
   }
 
   if (skippedSamples > 0) {
     log(
       `Ignored ${skippedSamples} remote kit sample issue(s) (EXAMPLE/TEMPLATE/SAMPLE — not mapped for sync).`
     );
+  }
+
+  const map = new Map();
+  for (const [cardId, issues] of grouped) {
+    const canonical = pickCanonicalIssueForCardId(issues, cardId);
+    if (!canonical) continue;
+    if (issues.length > 1) {
+      const ignored = issues
+        .filter((issue) => issue.number !== canonical.number)
+        .map((issue) => `#${issue.number}`)
+        .join(", ");
+      log(`CARD_ID ${cardId}: ${issues.length} remote issues; using #${canonical.number} (ignored ${ignored})`);
+    }
+    map.set(cardId, canonical);
   }
 
   return map;
@@ -1851,7 +1907,7 @@ async function runForwardSync() {
 
   // --- Real sync ---
   const repositoryId = await getRepositoryNodeId(repoOwner, repoName);
-  const issueByCardId = new Map();
+  const issueByCardId = await loadIssueMapByCardId(repoOwner, repoName);
   const issueExistedByCardId = new Map();
   const actions = [];
 
@@ -1859,10 +1915,16 @@ async function runForwardSync() {
     const issueTitle = buildIssueTitle(card);
     const issueBody = buildIssueBody(card);
 
-    const existing = await searchIssueByCardId(repoOwner, repoName, card.cardId);
+    const existing =
+      issueByCardId.get(card.cardId) || (await searchIssueByCardId(repoOwner, repoName, card.cardId));
 
     if (dryRun) {
-      actions.push({ action: existing ? "UPDATE" : "CREATE", cardId: card.cardId, title: issueTitle });
+      actions.push({
+        action: existing ? "UPDATE" : "CREATE",
+        cardId: card.cardId,
+        title: issueTitle,
+        number: existing?.number || null,
+      });
       issueByCardId.set(card.cardId, existing || { id: `DRY-${card.cardId}`, number: 0 });
       issueExistedByCardId.set(card.cardId, Boolean(existing));
       continue;
@@ -1892,15 +1954,6 @@ async function runForwardSync() {
   }
 
   if (!dryRun && issueByCardId.size) {
-    try {
-      const fullIssueMap = await loadIssueMapByCardId(repoOwner, repoName);
-      for (const [cardId, issue] of fullIssueMap) {
-        if (!issueByCardId.has(cardId)) issueByCardId.set(cardId, issue);
-      }
-    } catch (e) {
-      log(`Could not load full issue map for link enrichment: ${e.message}`);
-    }
-
     const linkContext = { issueByCardId, owner: repoOwner, name: repoName };
     for (const card of cardsToSync) {
       const issue = issueByCardId.get(card.cardId);
@@ -2028,6 +2081,13 @@ async function runForwardSync() {
   // Print summary
   if (dryRun) {
     printDryRunTable(cardsToSync, edges);
+    if (actions.length) {
+      log("");
+      log("Remote match (exact CARD_ID):");
+      for (const a of actions) {
+        log(JSON.stringify(a));
+      }
+    }
   } else {
     log("");
     log("=== SYNC COMPLETE ===");
@@ -2579,8 +2639,15 @@ async function runForwardSyncGitLab(repoConfig, management) {
       "GET"
     );
     const list = Array.isArray(data) ? data : [];
-    const exact = list.find((issue) => String(issue?.description || "").includes(`CARD_ID: ${card.cardId}`));
-    return exact || list[0] || null;
+    return pickCanonicalIssueForCardId(
+      list.map((issue) => ({
+        ...issue,
+        body: issue?.description,
+        number: issue?.iid ?? issue?.id,
+        state: issue?.state,
+      })),
+      card.cardId
+    );
   }
 
   async function gitlabCreateIssue(card) {
@@ -3180,25 +3247,8 @@ async function runReverseSync() {
   log(`Dry-run: ${dryRun ? "yes" : "no"}`);
   log("Direction: reverse (GitHub -> Markdown)");
 
-  const query = `repo:${repoOwner}/${repoName} in:body "CARD_ID:" is:issue`;
-  let issues = [];
-  let hasNextPage = true;
-  let endCursor = null;
-
-  while (hasNextPage) {
-    const data = await graphql(
-      `query($query: String!, $endCursor: String) {
-        search(type: ISSUE, query: $query, first: 50, after: $endCursor) {
-          pageInfo { hasNextPage endCursor }
-          nodes { ... on Issue { id number title body url updatedAt } }
-        }
-      }`,
-      { query, endCursor }
-    );
-    issues.push(...(data.search?.nodes || []));
-    hasNextPage = Boolean(data.search?.pageInfo?.hasNextPage);
-    endCursor = data.search?.pageInfo?.endCursor || null;
-  }
+  const issueByCardId = await loadIssueMapByCardId(repoOwner, repoName);
+  const issues = [...issueByCardId.values()];
 
   if (!issues.length) {
     log("No issues with CARD_ID found.");
@@ -3211,12 +3261,9 @@ async function runReverseSync() {
   for (const issue of issues) {
     if (!issue?.number) continue; // defensive: ignore non-Issue nodes
 
-    const metaMatch = issue.body?.match(/<!-- SYNC_METADATA.*?-->\r?\n([\s\S]*?)\r?\n<!-- \/SYNC_METADATA -->/);
-    if (!metaMatch) continue;
-
-    const metaLines = metaMatch[1];
-    const sourceFile = metaLines.match(/SOURCE_FILE:\s*(.+)/)?.[1]?.trim();
-    const cardId = metaLines.match(/CARD_ID:\s*(\S+)/)?.[1]?.trim();
+    const parsed = parseSyncMetadataFromDescription(issue.body);
+    const sourceFile = parsed?.meta?.SOURCE_FILE?.trim();
+    const cardId = parsed?.meta?.CARD_ID?.trim() || parseCardIdFromIssueBody(issue.body);
 
     if (!sourceFile) continue;
 
@@ -3287,6 +3334,9 @@ export {
   pickJiraTransition,
   buildJiraDescription,
   parseSyncMetadataFromDescription,
+  parseCardIdFromIssueBody,
+  issueBodyHasExactCardId,
+  pickCanonicalIssueForCardId,
   parseIssueSummaryTypeTitle,
   jiraIssueToCardMarkdown,
   remoteIssueToCardMarkdown,

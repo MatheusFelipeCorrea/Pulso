@@ -329,7 +329,7 @@ node scripts/cards-sync/watch.mjs
 | Auto-discover Project | Lists repo Projects; picks `[RepoName] Hyperion Project`, any Hyperion title, or sole project; saves `projectNumber` |
 | Auto-create Project | When none exists and `autoCreateProject: true` — links repo as default |
 | Issue body links | Parent, sub-issues, Hyperion footer on forward sync |
-| Incremental sync | `--only CARD_ID,...` or `CARDS_SYNC_ONLY` env (watch uses this); loads all issues for link resolution |
+| Incremental sync | `--only CARD_ID,...` or `CARDS_SYNC_ONLY` env (watch uses this); maps issues by exact `CARD_ID` in SYNC_METADATA (not GitHub search) |
 | Sync summary | Writes `.github/plans/cards/last-sync.md` after each forward sync |
 | Pre-commit hook | `npm run cards:hook` validates staged `.github/cards/*.md` |
 

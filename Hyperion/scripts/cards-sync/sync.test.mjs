@@ -19,6 +19,9 @@ import {
   pickJiraTransition,
   buildJiraDescription,
   parseSyncMetadataFromDescription,
+  parseCardIdFromIssueBody,
+  issueBodyHasExactCardId,
+  pickCanonicalIssueForCardId,
   parseIssueSummaryTypeTitle,
   jiraIssueToCardMarkdown,
   remoteIssueToCardMarkdown,
@@ -294,6 +297,47 @@ test("parseSyncMetadataFromDescription extracts meta and body", () => {
   assert.ok(parsed);
   assert.equal(parsed.meta.CARD_ID, "PROJ-1");
   assert.equal(parsed.bodyContent, "BODY TEXT");
+});
+
+function syncMetadataBody(cardId, parentCardId = null) {
+  const lines = [
+    "# body",
+    "<!-- SYNC_METADATA — do not edit below this line -->",
+    `CARD_ID: ${cardId}`,
+    "SOURCE_FILE: Hyperion/.github/cards/x.md",
+  ];
+  if (parentCardId) lines.push(`PARENT_CARD_ID: ${parentCardId}`);
+  lines.push("<!-- /SYNC_METADATA -->");
+  return lines.join("\n");
+}
+
+test("parseCardIdFromIssueBody ignores PARENT_CARD_ID and neighboring type prefixes", () => {
+  const feat = syncMetadataBody("PULSO-FEAT-014", "PULSO-EPIC-003");
+  const epic = syncMetadataBody("PULSO-EPIC-014");
+  const childOfNewEpic = syncMetadataBody("PULSO-FEAT-077", "PULSO-EPIC-014");
+
+  assert.equal(parseCardIdFromIssueBody(feat), "PULSO-FEAT-014");
+  assert.equal(parseCardIdFromIssueBody(epic), "PULSO-EPIC-014");
+  assert.equal(issueBodyHasExactCardId(feat, "PULSO-EPIC-014"), false);
+  assert.equal(issueBodyHasExactCardId(feat, "PULSO-FEAT-014"), true);
+  assert.equal(issueBodyHasExactCardId(childOfNewEpic, "PULSO-EPIC-014"), false);
+  assert.equal(issueBodyHasExactCardId(epic, "PULSO-EPIC-014"), true);
+});
+
+test("pickCanonicalIssueForCardId never returns a fuzzy neighbor and prefers the open original", () => {
+  const issues = [
+    { number: 118, state: "CLOSED", body: syncMetadataBody("PULSO-FEAT-014", "PULSO-EPIC-003") },
+    { number: 27, state: "OPEN", body: syncMetadataBody("PULSO-FEAT-014", "PULSO-EPIC-003") },
+    { number: 242, state: "OPEN", body: syncMetadataBody("PULSO-EPIC-014") },
+  ];
+
+  const feat = pickCanonicalIssueForCardId(issues, "PULSO-FEAT-014");
+  const epic = pickCanonicalIssueForCardId(issues, "PULSO-EPIC-014");
+  const missing = pickCanonicalIssueForCardId(issues, "PULSO-TASK-014");
+
+  assert.equal(feat.number, 27);
+  assert.equal(epic.number, 242);
+  assert.equal(missing, null);
 });
 
 test("parseIssueSummaryTypeTitle parses [Type] Title", () => {
