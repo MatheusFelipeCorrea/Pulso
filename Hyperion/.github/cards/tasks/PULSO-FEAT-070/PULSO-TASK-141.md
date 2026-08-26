@@ -6,12 +6,12 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-070
 due_date: null
 categories:
   - Backend
-  - Integrações
+  - Integração Externa
   - Inteligência Artificial
 ---
 

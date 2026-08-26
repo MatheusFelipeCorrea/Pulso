@@ -6,7 +6,7 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-067
 due_date: null
 categories:

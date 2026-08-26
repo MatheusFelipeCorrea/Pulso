@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-004
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** Camada REST autenticada para CRUD, listagem paginada e resumo agregado de metas pessoais.
 
-**Refs:** RF-026 · RF-031
+**Refs:** RF-029 · RF-034
 
 ## 📝 Descrição
 

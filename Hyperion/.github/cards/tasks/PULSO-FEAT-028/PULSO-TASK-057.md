@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-028
 due_date: null
 categories:
@@ -31,7 +31,7 @@ Implementar rota `/trips/:id` com layout principal, sidebar e card de meta.
 |---------|--------|
 | `pages/TripDetailPage.jsx` | Fetch viagem + cotação; estado modais |
 | `detail/TripDetailSummarySidebar.jsx` | Totais moeda/BRL, breakdown categorias |
-| `detail/TripDetailGoalCard.jsx` | Progresso meta RF-043 |
+| `detail/TripDetailGoalCard.jsx` | Progresso meta RF-047 |
 | `detail/TripDetailCategoryBadge.jsx` | Badge categoria despesa |
 | `utils/tripDetailUtils.js` | `buildCategoryBreakdown`, `calcTripTotalInCurrency` |
 | `utils/tripOriginStorage.js` | Origem persistida para passagens |

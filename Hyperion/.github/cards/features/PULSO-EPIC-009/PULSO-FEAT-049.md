@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-009
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** Página `/budget` com filtro de mês, cards de resumo e listas de categorias.
 
-**Refs:** RF-110 · RF-114 · RN-059
+**Refs:** RF-100 · RF-104 · RN-059
 
 ## 📝 Descrição
 

@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-054
 due_date: null
 categories:
@@ -16,7 +16,7 @@ categories:
 
 # [TASK] Backend — marcar comprado e transação
 
-> **Contexto:** RF-138 / RN-092–093 — “Comprei!” com despesa e conclusão de meta.
+> **Contexto:** RF-129 / RN-092–093 — “Comprei!” com despesa e conclusão de meta.
 
 ## 📝 Descrição
 

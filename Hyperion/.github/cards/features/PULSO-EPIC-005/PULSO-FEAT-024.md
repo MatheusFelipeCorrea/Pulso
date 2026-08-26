@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-005
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** CRUD de viagens pessoais com resolução de destino e vínculo opcional a meta.
 
-**Refs:** RF-037 · RF-042 · RF-043 · RN-072 · RN-073
+**Refs:** RF-041 · RF-046 · RF-047 · RN-072 · RN-073
 
 ## 📝 Descrição
 

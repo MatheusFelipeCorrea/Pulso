@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-012
 due_date: null
 categories:
@@ -20,7 +20,7 @@ categories:
 
 > **Contexto:** UI `/debts` com tabs, filtros, cards e modais.
 
-**Refs:** RF-126–132 · RN-078
+**Refs:** RF-117–123 · RN-078
 
 ## 📝 Descrição
 

@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-021
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 # [TASK] Frontend — GoalCard, goalStatusUtils e goals.css
 
-> **Contexto:** Cards de progresso, alertas de vencimento e layout responsivo (RF-028, RN-068).
+> **Contexto:** Cards de progresso, alertas de vencimento e layout responsivo (RF-031, RN-068).
 
 ## 📝 Descrição
 

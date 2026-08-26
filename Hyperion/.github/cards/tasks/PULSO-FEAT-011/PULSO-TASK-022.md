@@ -6,7 +6,7 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-011
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 # [TASK] Frontend — FAB quick-add chatbot
 
-> **Contexto:** RF-139 — atalho no dashboard para lançamento via linguagem natural.
+> **Contexto:** RF-015 — atalho no dashboard para lançamento via linguagem natural.
 
 ## 📝 Descrição
 
@@ -46,12 +46,12 @@ Adicionar FAB (floating action button) no dashboard que abre o chatbot em modo q
 | `components/features/dashboard/DashboardQuickAddFab.jsx` | FAB + handler open chatbot |
 | Integração com módulo Chatbot (a criar) | Parser NL → `POST /transacoes` |
 
-**Dependência externa:** módulo Chatbot/Insights (RF-139 bloqueado até existir)
+**Dependência externa:** módulo Chatbot/Insights (RF-015 bloqueado até existir)
 
 ## 📋 Resumo
 
 ### ✅ Concluído
-- RF-139 especificado como extensão do dashboard
+- RF-015 especificado como extensão do dashboard
 
 ### ⏳ Pendente
 - Implementar FAB e hook de abertura do chatbot

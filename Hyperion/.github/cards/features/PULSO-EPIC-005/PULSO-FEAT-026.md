@@ -6,12 +6,12 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-005
 due_date: null
 categories:
   - Backend
-  - Integrações
+  - Integração Externa
 ---
 
 # [FEATURE] Destinos, capas e estimativa de passagem

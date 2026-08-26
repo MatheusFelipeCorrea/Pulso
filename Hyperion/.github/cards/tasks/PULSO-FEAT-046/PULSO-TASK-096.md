@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-046
 due_date: null
 categories:
@@ -40,7 +40,7 @@ Implementar service principal, schemas Zod, controller e rotas.
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fluxos RF-109/113/114 especificados
+- Fluxos RF-099/113/114 especificados
 
 ### ⏳ Pendente
 - Implementar service core e HTTP

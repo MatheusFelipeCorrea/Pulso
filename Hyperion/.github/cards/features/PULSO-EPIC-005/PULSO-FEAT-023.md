@@ -6,12 +6,12 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-005
 due_date: null
 categories:
   - Backend
-  - Integrações
+  - Integração Externa
   - Regra de Negócio
 ---
 
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** Cotações, conversão, histórico e moedas favoritas via AwesomeAPI.
 
-**Refs:** RF-033 · RF-034 · RF-035 · RF-036 · RN-070 · RN-071
+**Refs:** RF-037 · RF-038 · RF-039 · RF-040 · RN-070 · RN-071
 
 ## 📝 Descrição
 
@@ -41,6 +41,7 @@ Expor endpoints autenticados em `/api/moedas` para catálogo, cotações, conver
 
 ## 🔗 Sub-issues
 
+- PULSO-TASK-049
 - PULSO-TASK-050
 
 ## 📋 Resumo
@@ -49,4 +50,4 @@ Expor endpoints autenticados em `/api/moedas` para catálogo, cotações, conver
 - Contratos HTTP e limites definidos
 
 ### ⏳ Pendente
-- PULSO-TASK-050 — service e rotas de moedas
+- PULSO-TASK-049–050 — persistência favoritas e service/rotas

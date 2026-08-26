@@ -1,12 +1,12 @@
 ---
 card_id: PULSO-TASK-029
-title: "Sugestão automática de categoria (RF-141)"
+title: "Sugestão automática de categoria (RF-028)"
 status: Backlog
 type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-013
 due_date: null
 categories:
@@ -16,7 +16,7 @@ categories:
   - Regra de Negócio
 ---
 
-# [TASK] Sugestão automática de categoria (RF-141)
+# [TASK] Sugestão automática de categoria (RF-028)
 
 > **Contexto:** Sugerir categoria com base em descrições similares do histórico do usuário.
 

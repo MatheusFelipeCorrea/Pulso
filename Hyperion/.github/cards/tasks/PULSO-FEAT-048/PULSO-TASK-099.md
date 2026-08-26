@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-048
 due_date: null
 categories:
@@ -40,7 +40,7 @@ Metadados: `{ categoriaId, mesReferencia, percentual }` · `linkAcao: '/budget'`
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Matriz RF-111/112 definida
+- Matriz RF-101/112 definida
 
 ### ⏳ Pendente
 - Implementar criação e dedup de alertas

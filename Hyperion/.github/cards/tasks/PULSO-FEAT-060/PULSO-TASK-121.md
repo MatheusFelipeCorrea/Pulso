@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-060
 due_date: null
 categories:
@@ -16,7 +16,7 @@ categories:
 
 # [TASK] Backend — marcar/desmarcar pago e quitação
 
-> **Contexto:** RF-118 / RN-085 — ciclo de pagamento e status da divisão.
+> **Contexto:** RF-109 / RN-085 — ciclo de pagamento e status da divisão.
 
 ## 📝 Descrição
 

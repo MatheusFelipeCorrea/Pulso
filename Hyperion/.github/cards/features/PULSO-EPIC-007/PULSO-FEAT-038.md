@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-007
 due_date: null
 categories:
@@ -20,7 +20,7 @@ categories:
 
 > **Contexto:** Chrome público reutilizável, download mobile, páginas legais e CSS responsivo.
 
-**Refs:** RF-085 · RF-087
+**Refs:** RF-081 · RF-083
 
 ## 📝 Descrição
 
@@ -40,6 +40,7 @@ Implementar header/footer compartilhados, seção mobile, termos/privacidade e f
 - PULSO-TASK-077
 - PULSO-TASK-078
 - PULSO-TASK-079
+- PULSO-TASK-080
 
 ## 📋 Resumo
 
@@ -47,4 +48,4 @@ Implementar header/footer compartilhados, seção mobile, termos/privacidade e f
 - Componentes chrome e legal spec definidos
 
 ### ⏳ Pendente
-- PULSO-TASK-077–079 — header, mobile e CSS
+- PULSO-TASK-077–080 — header, mobile, CSS e legal

@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-003
 due_date: null
 categories:
@@ -35,7 +35,7 @@ Implementar fluxo OAuth server-side e endpoint de exchange para o SPA consumir s
 
 ### `authService.js` (NOVO — CRIAR)
 
-Adicionar em: `code/back/src/services/authService.js`
+Adicionar em: `Codigo/Pulso/api/src/services/authService.js`
 
 ```javascript
 // authenticateGoogle(profile) — cria/vincula conta, seed categorias
@@ -52,7 +52,7 @@ Adicionar em: `code/back/src/services/authService.js`
 
 ### `passport.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/config/passport.js`
+Criar em: `Codigo/Pulso/api/src/config/passport.js`
 
 GoogleStrategy lazy via `ensureGoogleStrategy()` — evita crash sem env vars
 

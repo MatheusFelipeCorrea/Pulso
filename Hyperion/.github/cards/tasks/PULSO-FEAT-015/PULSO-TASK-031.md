@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-015
 due_date: null
 categories:
@@ -17,7 +17,7 @@ categories:
 
 # [TASK] Job recurringTransactions e recurrenceUtils
 
-> **Contexto:** RF-021 — geração automática de ocorrências recorrentes.
+> **Contexto:** RF-022 — geração automática de ocorrências recorrentes.
 
 ## 📝 Descrição
 
@@ -27,7 +27,7 @@ Job cron que avalia mães recorrentes e cria filhas no dia correto, respeitando 
 
 ### `recurringTransactions.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/jobs/recurringTransactions.js`
+Criar em: `Codigo/Pulso/api/src/jobs/recurringTransactions.js`
 
 - `runRecurringTransactions()` — lista mães, `isOccurrenceToday`, cria filha
 - Frequências: WEEKLY (INTERVAL), MONTHLY, YEARLY

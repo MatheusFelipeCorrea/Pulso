@@ -6,12 +6,12 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-055
 due_date: null
 categories:
   - Backend
-  - Integrações
+  - Integração Externa
 ---
 
 # [TASK] Backend — imagem do item (resolve e upload)

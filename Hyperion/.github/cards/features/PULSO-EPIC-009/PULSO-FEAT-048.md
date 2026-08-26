@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-009
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** Notificações de orçamento com deduplicação, job periódico e sync pós-transação.
 
-**Refs:** RF-111 · RF-112 · RN-056–058 · RN-060
+**Refs:** RF-101 · RF-102 · RN-056–058 · RN-060
 
 ## 📝 Descrição
 

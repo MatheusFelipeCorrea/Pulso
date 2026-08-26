@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-072
 due_date: null
 categories:
@@ -16,7 +16,7 @@ categories:
 
 # [TASK] Backend — projeções e alertas determinísticos
 
-> **Contexto:** RF-107–108 / RF-047 / RN-128 — números antes da narrativa da IA.
+> **Contexto:** RF-053–054 / RF-051 / RN-128 — números antes da narrativa da IA.
 
 ## 📝 Descrição
 

@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-006
 due_date: null
 categories:
@@ -33,13 +33,13 @@ Query opcional: `mes=YYYY-MM`
 
 ### `dashboardController.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/controllers/dashboardController.js`
+Criar em: `Codigo/Pulso/api/src/controllers/dashboardController.js`
 
 - `obterDashboard(req, res, next)`
 
 ### `dashboardRoutes.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/routes/dashboardRoutes.js`
+Criar em: `Codigo/Pulso/api/src/routes/dashboardRoutes.js`
 
 ```javascript
 router.get('/', authMiddleware, dashboardController.obterDashboard)

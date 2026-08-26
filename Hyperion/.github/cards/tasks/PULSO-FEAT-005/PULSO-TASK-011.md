@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-005
 due_date: null
 categories:
@@ -46,10 +46,10 @@ Garantir que rotas financeiras exijam sessão válida e rotas de login/cadastro 
 
 | Arquivo | Export |
 |---------|--------|
-| `code/front/src/components/routing/ProtectedRoute.jsx` | `ProtectedRoute`, `GuestRoute` |
-| `code/front/src/components/routing/AuthBootstrap.jsx` | Wrapper de sessão |
-| `code/front/src/config/appRoutes.js` | Paths centralizados do app |
-| `code/front/src/App.jsx` | Árvore de rotas pública vs `MainLayout` protegido |
+| `Codigo/Pulso/web/src/components/routing/ProtectedRoute.jsx` | `ProtectedRoute`, `GuestRoute` |
+| `Codigo/Pulso/web/src/components/routing/AuthBootstrap.jsx` | Wrapper de sessão |
+| `Codigo/Pulso/web/src/config/appRoutes.js` | Paths centralizados do app |
+| `Codigo/Pulso/web/src/App.jsx` | Árvore de rotas pública vs `MainLayout` protegido |
 
 ### Prefixos guest em `api.js` (NOVO — CRIAR)
 

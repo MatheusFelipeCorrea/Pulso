@@ -6,12 +6,12 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-031
 due_date: null
 categories:
   - Backend
-  - Integrações
+  - Integração Externa
   - Segurança
 ---
 
@@ -42,7 +42,7 @@ Implementar conexão, callback, status e desconexão do Google Agenda.
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fluxo RF-054/RF-057 especificado
+- Fluxo RF-062/RF-065 especificado
 
 ### ⏳ Pendente
 - Implementar OAuth service e crypto

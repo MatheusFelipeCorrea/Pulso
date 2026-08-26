@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-006
 due_date: null
 categories:
@@ -20,7 +20,7 @@ categories:
 
 > **Contexto:** Página `/calendar` com grade mensal, painel diário, Google Agenda e modais de lembrete.
 
-**Refs:** RF-054–058 · RF-058b · RN-100
+**Refs:** RF-062–067 · RF-067 · RN-100
 
 ## 📝 Descrição
 

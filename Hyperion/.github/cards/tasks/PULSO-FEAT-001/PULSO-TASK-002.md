@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-001
 due_date: null
 categories:
@@ -35,7 +35,7 @@ Implementar registro com validação Zod, hash bcrypt(12), envio SMTP, verifica�
 
 ### `authService.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/services/authService.js`
+Criar em: `Codigo/Pulso/api/src/services/authService.js`
 
 ```javascript
 // registerUser({ nome, email, senha, confirmarSenha })
@@ -49,31 +49,31 @@ Criar em: `code/back/src/services/authService.js`
 
 ### `authController.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/controllers/authController.js`
+Criar em: `Codigo/Pulso/api/src/controllers/authController.js`
 
 - `register`, `verifyEmail`, `resendVerification`
 
 ### `authRoutes.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/routes/authRoutes.js`
+Criar em: `Codigo/Pulso/api/src/routes/authRoutes.js`
 
 Montar rotas com rate limits: `authRegisterRateLimit`, `authVerifyEmailRateLimit`, `authResendVerificationRateLimit`
 
 ### `authSchemas.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/schemas/authSchemas.js`
+Criar em: `Codigo/Pulso/api/src/schemas/authSchemas.js`
 
 `registerSchema`, `verifyEmailSchema`, `resendVerificationSchema` + regex senha forte
 
 ### `emailProvider.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/providers/emailProvider.js`
+Criar em: `Codigo/Pulso/api/src/providers/emailProvider.js`
 
 - `sendVerificationEmail(email, token)`
 
 ### `prismaErrors.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/utils/prismaErrors.js`
+Criar em: `Codigo/Pulso/api/src/utils/prismaErrors.js`
 
 Mapear P2002 → 409 no cadastro
 

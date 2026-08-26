@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-072
 due_date: null
 categories:
@@ -16,7 +16,7 @@ categories:
 
 # [TASK] Backend — score de saúde e HistoricoScore
 
-> **Contexto:** RF-048 / RN-127 — score 0–100 persistido.
+> **Contexto:** RF-052 / RN-127 — score 0–100 persistido.
 
 ## 📝 Descrição
 

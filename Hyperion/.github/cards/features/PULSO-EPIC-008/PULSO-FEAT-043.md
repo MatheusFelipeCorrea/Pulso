@@ -6,7 +6,7 @@ type: Feature
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-008
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 > **Contexto:** Mensagens paginadas no grupo e eventos notificados aos membros.
 
-**Refs:** RF-102 · RN-120
+**Refs:** RF-098 · RN-120
 
 ## 📝 Descrição
 
@@ -35,7 +35,7 @@ Implementar chat do grupo e serviço de notificações de atividade.
 - Entrar/sair/removido, pretensão, meta criada, meta atingida, excluir grupo
 - Tipos: `GRUPO_ATIVIDADE`, `META_ATINGIDA`
 
-**Frontend:** polling ~3s; merge por id; pausa `visibilityState`
+**Frontend:** Socket.IO em tempo real + REST para histórico; reconnect com fallback
 
 ## 🔗 Sub-issues
 
@@ -44,7 +44,7 @@ Implementar chat do grupo e serviço de notificações de atividade.
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Eventos e chat RF-102 especificados
+- Eventos e chat RF-098 especificados
 
 ### ⏳ Pendente
 - PULSO-TASK-088 — chat e notificações

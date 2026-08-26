@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-013
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** Prompt + resposta JSON do Gemini personalizada por usuário.
 
-**Refs:** RF-044–046 · RF-143 · RF-NOVO-I1
+**Refs:** RF-048–050 · RF-055 · RF-NOVO-I1
 
 ## 📝 Descrição
 
@@ -31,11 +31,11 @@ Orquestrar chamada Gemini com contexto agregado e validar o JSON de saída.
 
 | Campo | Conteúdo |
 |-------|----------|
-| `resumoMensal` | Texto natural do mês (RF-044) |
-| `variacaoCategorias[]` | MoM + comentário (RF-045/143) |
+| `resumoMensal` | Texto natural do mês (RF-048) |
+| `variacaoCategorias[]` | MoM + comentário (RF-049/143) |
 | `score` | Valor/label/fatores (eco do cálculo determinístico + narrativa) |
 | `projecoes` | 3 cenários + `diasAteNegativo` |
-| `sugestoes[]` | Economia acionável (local mais barato, % delivery, etc.) (RF-046) |
+| `sugestoes[]` | Economia acionável (local mais barato, % delivery, etc.) (RF-050) |
 | `alertas[]` | Cobertura / metas / ritmo |
 | `educacao[]` | `{ tipo: instagram\|youtube\|artigo\|perfil, titulo, url, motivo }` (RF-NOVO-I1) |
 

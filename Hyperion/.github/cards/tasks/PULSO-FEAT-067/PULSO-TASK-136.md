@@ -6,7 +6,7 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-067
 due_date: null
 categories:
@@ -16,7 +16,7 @@ categories:
 
 # [TASK] Backend — debtAlertService e job
 
-> **Contexto:** RF-132 / RN-077 — alertas 7, 2 e 0 dias antes do prazo.
+> **Contexto:** RF-123 / RN-077 — alertas 7, 2 e 0 dias antes do prazo.
 
 ## 📝 Descrição
 

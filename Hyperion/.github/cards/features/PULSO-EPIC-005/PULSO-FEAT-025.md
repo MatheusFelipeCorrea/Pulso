@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-005
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 > **Contexto:** Gastos estimados por categoria e notas/checklists dentro de cada viagem.
 
-**Refs:** RF-038 · RF-039 · RF-041 · RN-069 · RN-074
+**Refs:** RF-042 · RF-043 · RF-045 · RN-069 · RN-074
 
 ## 📝 Descrição
 

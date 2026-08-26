@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-011
 due_date: null
 categories:
@@ -20,7 +20,7 @@ categories:
 
 > **Contexto:** UI `/expense-split` com resumo, ativas, histórico e modais.
 
-**Refs:** RF-115–120
+**Refs:** RF-106–111
 
 ## 📝 Descrição
 

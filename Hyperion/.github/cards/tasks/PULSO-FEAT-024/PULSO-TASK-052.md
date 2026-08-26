@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-024
 due_date: null
 categories:
@@ -41,7 +41,7 @@ Implementar service principal com `resolverDestinoPayload`, validações e endpo
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fluxos RF-037, RF-042, RF-043 documentados
+- Fluxos RF-041, RF-046, RF-047 documentados
 
 ### ⏳ Pendente
 - Implementar service CRUD e rotas base

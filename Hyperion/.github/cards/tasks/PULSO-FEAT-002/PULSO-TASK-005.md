@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-002
 due_date: null
 categories:
@@ -48,18 +48,18 @@ Como **usuário**, quero fazer login, manter sessão entre visitas e ser redirec
 
 | Arquivo | Função |
 |---------|--------|
-| `code/front/src/pages/Login.jsx` | Form login, lembrar-me, reenviar verificação, Google |
-| `code/front/src/components/routing/AuthBootstrap.jsx` | `getMe()` no mount |
-| `code/front/src/components/routing/ProtectedRoute.jsx` | Guards autenticado/guest |
-| `code/front/src/store/slices/authSlice.js` | `user`, `isAuthenticated`, `sessionChecked` |
+| `Codigo/Pulso/web/src/pages/Login.jsx` | Form login, lembrar-me, reenviar verificação, Google |
+| `Codigo/Pulso/web/src/components/routing/AuthBootstrap.jsx` | `getMe()` no mount |
+| `Codigo/Pulso/web/src/components/routing/ProtectedRoute.jsx` | Guards autenticado/guest |
+| `Codigo/Pulso/web/src/store/slices/authSlice.js` | `user`, `isAuthenticated`, `sessionChecked` |
 
 ### HTTP (NOVO — CRIAR)
 
 | Arquivo | Função |
 |---------|--------|
-| `code/front/src/services/api.js` | `withCredentials: true`, `refreshPromise` mutex, interceptor 401 |
-| `code/front/src/services/authService.js` | `login`, `refresh`, `logout`, `getMe` |
-| `code/front/src/config/defaultAuthenticatedRoute.js` | `/transactions` |
+| `Codigo/Pulso/web/src/services/api.js` | `withCredentials: true`, `refreshPromise` mutex, interceptor 401 |
+| `Codigo/Pulso/web/src/services/authService.js` | `login`, `refresh`, `logout`, `getMe` |
+| `Codigo/Pulso/web/src/config/defaultAuthenticatedRoute.js` | `/transactions` |
 
 Registrar em `App.jsx` — `/login` com `GuestRoute`; árvore protegida com `ProtectedRoute`
 

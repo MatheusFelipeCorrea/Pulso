@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-054
 due_date: null
 categories:
@@ -16,7 +16,7 @@ categories:
 
 # [TASK] Backend — vincular e desvincular meta
 
-> **Contexto:** RF-137 — associação item ↔ meta financeira.
+> **Contexto:** RF-128 — associação item ↔ meta financeira.
 
 ## 📝 Descrição
 

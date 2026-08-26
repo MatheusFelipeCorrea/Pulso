@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-012
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 > **Contexto:** Notificações `DIVIDA_COBRANCA` e retenção de quitadas.
 
-**Refs:** RF-132 · RN-077
+**Refs:** RF-123 · RN-077
 
 ## 📝 Descrição
 

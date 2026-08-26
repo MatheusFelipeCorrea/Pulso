@@ -6,7 +6,7 @@ type: Epic
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: null
 due_date: null
 categories:
@@ -56,8 +56,7 @@ categories:
 | Módulo | Integração |
 |--------|------------|
 | Categorias | `categoryService.seedCategoriasPadrao` no cadastro (email e Google) |
-| Gamificação | Criar `Sequencia` no cadastro |
-| Configurações | `ConfiguracaoUsuario` criada junto ao usuário (tema CLARO default) |
+| Configurações | `ConfiguracaoUsuario` criada junto ao usuário (tema CLARO, plano FREE) |
 | Cron | `unverifiedAccountCleanupJob` via `cronController.daily` |
 | Rotas protegidas | `authMiddleware` em `/auth/me` e demais módulos da API |
 

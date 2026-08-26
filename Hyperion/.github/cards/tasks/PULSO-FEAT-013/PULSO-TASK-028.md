@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-013
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 # [TASK] Categorias, tags e validação recurso×categoria
 
-> **Contexto:** RF-017–019, RF-025 — gestão de taxonomia e compatibilidade recurso/categoria.
+> **Contexto:** RF-019–020, RF-026 — gestão de taxonomia e compatibilidade recurso/categoria.
 
 ## 📝 Descrição
 
@@ -35,7 +35,7 @@ Implementar seed de categorias, CRUD via modais na página de transações e val
 | `recursoCategoriaRules.js` | `validarRecursoCategoria`, `buildMensagemIncompativel` |
 | `categoryRoutes.js`, `tagRoutes.js` | REST categorias/tags |
 
-**Campo:** `Categoria.grupoBeneficio` enum (VA, VR, ALIMENTACAO, etc.)
+**Campo:** `Categoria.grupoBeneficio` enum (VA, VR, ALIMENTACAO, etc.; VT legado rejeitado na API)
 
 ### Frontend (NOVO — CRIAR)
 
@@ -48,7 +48,7 @@ Implementar seed de categorias, CRUD via modais na página de transações e val
 
 ## 📐 Regras de Negócio
 
-- RF-025: categoria incompatível com o `grupoBeneficio` do recurso (ex.: transporte com VA/VR)
+- RF-026: recurso VT rejeitado; VA/VR incompatível com `grupoBeneficio` da categoria
 - Categoria.tipo deve bater com transação.tipo
 - Tag nome único case-insensitive por usuário
 

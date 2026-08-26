@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-007
 due_date: null
 categories:
@@ -53,7 +53,7 @@ Renderizar saldo total com badge de variação e carousel horizontal de recursos
 
 ### Backend util relacionado (NOVO — CRIAR)
 
-`code/back/src/utils/resourceBalanceUtils.js` — `RECURSOS_DASHBOARD`, `calcularSaldosPorRecurso`
+`Codigo/Pulso/api/src/utils/resourceBalanceUtils.js` — `RECURSOS_DASHBOARD`, `calcularSaldosPorRecurso`
 
 ## 📋 Resumo
 

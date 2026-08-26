@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-038
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 # [TASK] Frontend — landing.css responsivo
 
-> **Contexto:** Estilos da landing com paleta Vital Purple e suporte dark mode (RF-087).
+> **Contexto:** Estilos da landing com paleta Vital Purple e suporte dark mode (RF-083).
 
 ## 📝 Descrição
 

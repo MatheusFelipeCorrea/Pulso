@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-003
 due_date: null
 categories:
@@ -18,9 +18,9 @@ categories:
 
 # [FEATURE] Transferências entre recursos
 
-> **Contexto:** Movimentação entre recursos (ex.: DINHEIRO → POUPANCA) sem contabilizar como receita/despesa nos relatórios (RF-140).
+> **Contexto:** Movimentação entre recursos (ex.: DINHEIRO → POUPANCA) sem contabilizar como receita/despesa nos totais (RF-027).
 
-**Refs:** RF-140
+**Refs:** RF-027
 
 ## 📝 Descrição
 
@@ -45,7 +45,7 @@ Tipo `TRANSFERENCIA` com `recurso` origem e `recursoDestino` destino; sem `categ
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Spec RF-140 e enum `TipoRecurso` incluindo POUPANCA documentados
+- Spec RF-027 e enum `TipoRecurso` incluindo POUPANCA documentados
 
 ### ⏳ Pendente
 - PULSO-TASK-030 — backend + frontend transferências

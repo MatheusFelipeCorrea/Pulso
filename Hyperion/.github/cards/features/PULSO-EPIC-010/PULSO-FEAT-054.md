@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-010
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 > **Contexto:** Integração com metas e geração automática de transação ao comprar.
 
-**Refs:** RF-137 · RF-138 · RN-092 · RN-093
+**Refs:** RF-128 · RF-129 · RN-092 · RN-093
 
 ## 📝 Descrição
 
@@ -44,7 +44,7 @@ Permitir vínculo/desvínculo de meta e fluxo “Comprei!” com efeitos colater
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fluxos RF-137/138 definidos
+- Fluxos RF-128/138 definidos
 
 ### ⏳ Pendente
 - PULSO-TASK-110–111 — meta e comprar

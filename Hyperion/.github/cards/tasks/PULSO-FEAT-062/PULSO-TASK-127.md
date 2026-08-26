@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-062
 due_date: null
 categories:
@@ -32,7 +32,7 @@ Implementar modais do módulo e folha de estilos.
 |---------|--------|
 | `ExpenseSplitFormModal.jsx` | Criar/editar; tipo IGUAL/PERSONALIZADA; pagoPor |
 | `ExpenseSplitDetailsModal.jsx` | Lista participantes; pagar/despagar |
-| `ExpenseSplitReminderModal.jsx` | Selecionar pendentes → RF-120 |
+| `ExpenseSplitReminderModal.jsx` | Selecionar pendentes → RF-111 |
 | `DeleteExpenseSplitModal.jsx` | Confirmar exclusão |
 | `styles/expense-split.css` | Layout, cards, histórico, mobile |
 

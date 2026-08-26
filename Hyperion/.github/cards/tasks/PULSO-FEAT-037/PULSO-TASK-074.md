@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-037
 due_date: null
 categories:
@@ -21,7 +21,7 @@ categories:
 
 ## 📝 Descrição
 
-Centralizar dados estáticos da landing para fácil manutenção de copy e badges RF-086.
+Centralizar dados estáticos da landing para fácil manutenção de copy e badges RF-082.
 
 ## 🛠️ Implementação
 
@@ -43,7 +43,7 @@ Centralizar dados estáticos da landing para fácil manutenção de copy e badge
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Estrutura de dados RF-086 definida
+- Estrutura de dados RF-082 definida
 
 ### ⏳ Pendente
 - Implementar landingData.js

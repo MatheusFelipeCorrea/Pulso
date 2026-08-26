@@ -1,12 +1,12 @@
 ---
 card_id: PULSO-TASK-123
-title: "Backend — lembrete de cobrança (RF-120)"
+title: "Backend — lembrete de cobrança (RF-111)"
 status: Backlog
 type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-061
 due_date: null
 categories:
@@ -15,7 +15,7 @@ categories:
   - Regra de Negócio
 ---
 
-# [TASK] Backend — lembrete de cobrança (RF-120)
+# [TASK] Backend — lembrete de cobrança (RF-111)
 
 > **Contexto:** RN-086 — cria Lembrete de calendário para 1+ pendentes.
 
@@ -38,7 +38,7 @@ Implementar `POST /:id/lembrete` e cancelamento automático.
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fluxo RF-120 / RN-086 documentado
+- Fluxo RF-111 / RN-086 documentado
 
 ### ⏳ Pendente
 - Implementar lembrete de cobrança

@@ -6,7 +6,7 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-029
 due_date: null
 categories:
@@ -26,7 +26,7 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 
 ## 🛠️ Implementação
 
-### API — `code/back/tests/` (NOVO — CRIAR)
+### API — `Codigo/Pulso/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
@@ -39,7 +39,7 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 | `unit/constants/tripTransportRoutes.test.js` | Rotas transporte |
 | `unit/providers/geonamesProvider.test.js` | Provider GeoNames |
 
-### Web — `code/front/tests/` (NOVO — CRIAR)
+### Web — `Codigo/Pulso/web/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|

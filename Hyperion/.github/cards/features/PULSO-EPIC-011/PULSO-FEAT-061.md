@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-011
 due_date: null
 categories:
@@ -17,9 +17,9 @@ categories:
 
 # [FEATURE] Lembrete de cobrança e limpeza
 
-> **Contexto:** RF-120 cria Lembrete real; job remove quitadas antigas.
+> **Contexto:** RF-111 cria Lembrete real; job remove quitadas antigas.
 
-**Refs:** RF-120 · RN-086
+**Refs:** RF-111 · RN-086
 
 ## 📝 Descrição
 

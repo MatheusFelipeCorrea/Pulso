@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-002
 due_date: null
 categories:
@@ -36,7 +36,7 @@ Implementar endpoints de sessão: login emite tokens, refresh rotaciona, logout 
 
 ### `authService.js` (NOVO — CRIAR)
 
-Adicionar em: `code/back/src/services/authService.js`
+Adicionar em: `Codigo/Pulso/api/src/services/authService.js`
 
 ```javascript
 // loginUser({ email, senha, lembrarMe })
@@ -54,20 +54,20 @@ Adicionar em: `code/back/src/services/authService.js`
 
 ### `authCookies.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/utils/authCookies.js`
+Criar em: `Codigo/Pulso/api/src/utils/authCookies.js`
 
 Cookies `pulso_access` (15min) e `pulso_refresh` (`httpOnly`, `Secure` prod, `SameSite=none` prod / `lax` dev, `path=/api`)
 
 ### `tokenUtils.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/utils/tokenUtils.js`
+Criar em: `Codigo/Pulso/api/src/utils/tokenUtils.js`
 
 - Access JWT 15min · Refresh 7d (30d lembrar-me)
 - `createRefreshTokenValue()` — 48 bytes hex
 
 ### `authRepository.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/repositories/authRepository.js`
+Criar em: `Codigo/Pulso/api/src/repositories/authRepository.js`
 
 - `createRefreshToken`, `findRefreshToken`, `revokeRefreshToken`, `revokeAllRefreshTokensForUser`
 

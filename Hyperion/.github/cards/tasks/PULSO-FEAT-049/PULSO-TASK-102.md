@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-049
 due_date: null
 categories:
@@ -40,7 +40,7 @@ Filtro client: `budgetFilterUtils.filtrarCategoriasOrcamento`
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Componentes RF-110/114 mapeados
+- Componentes RF-100/114 mapeados
 
 ### ⏳ Pendente
 - Implementar cards e listas

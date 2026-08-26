@@ -1,12 +1,12 @@
 ---
 card_id: PULSO-TASK-086
-title: "Backend — viagem grupo, pretensões e RF-095"
+title: "Backend — viagem grupo, pretensões e RF-091"
 status: Backlog
 type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-041
 due_date: null
 categories:
@@ -14,7 +14,7 @@ categories:
   - Regra de Negócio
 ---
 
-# [TASK] Backend — viagem grupo, pretensões e RF-095
+# [TASK] Backend — viagem grupo, pretensões e RF-091
 
 > **Contexto:** Viagem compartilhada 1:1, despesas por membro e modo divisão.
 
@@ -42,7 +42,7 @@ Pretensões vinculadas a `adicionadoPorId`; permanecem ao sair (RN-115–117)
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Spec RF-092–095 definida
+- Spec RF-088–095 definida
 
 ### ⏳ Pendente
 - Implementar viagem grupo backend

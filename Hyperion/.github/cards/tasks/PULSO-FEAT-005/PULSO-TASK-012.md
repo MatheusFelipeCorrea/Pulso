@@ -6,7 +6,7 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-005
 due_date: null
 categories:
@@ -34,7 +34,7 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 
 ## 🛠️ Implementação
 
-### API — criar em `code/back/tests/` (NOVO — CRIAR)
+### API — criar em `Codigo/Pulso/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
@@ -45,7 +45,7 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 | `unit/utils/googleOAuth.test.js` | OAuth client |
 | `helpers/authMocks.js` | Mocks compartilhados |
 
-### Web — criar em `code/front/tests/` (NOVO — CRIAR)
+### Web — criar em `Codigo/Pulso/web/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
@@ -55,7 +55,7 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 
 ### Script manual (NOVO — CRIAR)
 
-`code/back/scripts/validate-auth-flow.js` — smoke de fluxo auth
+`Codigo/Pulso/api/scripts/validate-auth-flow.js` — smoke de fluxo auth
 
 ## 📋 Resumo
 

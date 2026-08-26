@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-003
 due_date: null
 categories:
@@ -17,9 +17,9 @@ categories:
 
 # [FEATURE] Backend — API de transações
 
-> **Contexto:** Camada REST para CRUD, listagem paginada, resumo agregado e opções de filtro (RF-015–022, RF-023).
+> **Contexto:** Camada REST para CRUD, listagem paginada, resumo agregado e opções de filtro (RF-016–023, RF-024).
 
-**Refs:** RF-015 · RF-016 · RF-022 · RF-023
+**Refs:** RF-016 · RF-017 · RF-023 · RF-024
 
 ## 📝 Descrição
 

@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-073
 due_date: null
 categories:
@@ -17,7 +17,7 @@ categories:
 
 # [TASK] Backend — sugestões e conteúdo educativo no prompt
 
-> **Contexto:** RF-046 + RF-NOVO-I1 — economia acionável e estudo financeiro.
+> **Contexto:** RF-050 + RF-NOVO-I1 — economia acionável e estudo financeiro.
 
 ## 📝 Descrição
 

@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-004
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** Registrar aportes, auto-conclusão, pausar/retomar, exclusão com reabertura e notificação de meta atingida.
 
-**Refs:** RF-027 · RF-031 · RF-032 · RN-062–066 · RN-063
+**Refs:** RF-030 · RF-034 · RF-035 · RN-062–066 · RN-063
 
 ## 📝 Descrição
 
@@ -38,7 +38,7 @@ Implementar fluxos de aporte e transições de status com validações de domín
 - Data aporte não futura
 - Pausar só ATIVA; retomar só PAUSADA
 - Conclusão manual só se `valorRestante <= 0`
-- Notificação `META_ATINGIDA` ao concluir via aporte (RF-032)
+- Notificação `META_ATINGIDA` ao concluir via aporte (RF-035)
 
 ## 🔗 Sub-issues
 

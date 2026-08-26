@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-012
 due_date: null
 categories:
@@ -16,9 +16,9 @@ categories:
 
 # [FEATURE] Saldo consolidado e contadores
 
-> **Contexto:** Resumo me devem / eu devo para cards e tabs (RF-130).
+> **Contexto:** Resumo me devem / eu devo para cards e tabs (RF-121).
 
-**Refs:** RF-130 · RF-131 · RN-080
+**Refs:** RF-121 · RF-122 · RN-080
 
 ## 📝 Descrição
 

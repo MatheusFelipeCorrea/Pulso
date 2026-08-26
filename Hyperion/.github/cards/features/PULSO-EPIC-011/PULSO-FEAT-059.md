@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-011
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 > **Contexto:** Cálculo determinístico de valores por participante (RNF-016).
 
-**Refs:** RF-116 · RF-117 · RN-082 · RN-083 · RNF-016
+**Refs:** RF-107 · RF-108 · RN-082 · RN-083 · RNF-016
 
 ## 📝 Descrição
 

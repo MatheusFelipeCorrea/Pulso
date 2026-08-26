@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-001
 due_date: null
 categories:
@@ -26,7 +26,7 @@ categories:
 
 ## 📝 Descrição
 
-Fluxo ponta a ponta de cadastro: formulário web → `POST /auth/register` → hash bcrypt → token verificação 24h → email SMTP → `GET /auth/verify-email/:token` → conta ativa. Deve incluir seed de categorias padrão e criação de `ConfiguracaoUsuario` + `Sequencia`.
+Fluxo ponta a ponta de cadastro: formulário web → `POST /auth/register` → hash bcrypt → token verificação 24h → email SMTP → `GET /auth/verify-email/:token` → conta ativa. Deve incluir seed de categorias padrão e criação de `ConfiguracaoUsuario` (plano FREE).
 
 ## ✅ Critérios de Aceite
 

@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-005
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** Hub `/trips` com conversor, favoritas, gráfico de câmbio e lista de viagens.
 
-**Refs:** RF-033–036 · RF-037 · RF-042
+**Refs:** RF-037–040 · RF-041 · RF-046
 
 ## 📝 Descrição
 
@@ -30,7 +30,7 @@ Implementar página principal integrando widgets de moeda e gestão de viagens c
 - Rota `/trips` em `App.jsx`
 - `TripQuickConverter` — conversão BRL ↔ moeda selecionada
 - `TripFavoriteCurrencies` + `AddFavoriteCurrencyModal` (até 8)
-- `TripExchangeChart` — histórico RF-035
+- `TripExchangeChart` — histórico RF-039
 - `TripList` + `TripCard` com navegação para detalhe
 - `TripFormModal` + `DeleteTripModal`
 - Criar meta inline via `GoalFormModal` quando necessário

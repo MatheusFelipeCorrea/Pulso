@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-040
 due_date: null
 categories:
@@ -39,7 +39,7 @@ Implementar service principal e middleware de rate limit para convites.
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fluxos RF-088–090 especificados
+- Fluxos RF-084–090 especificados
 
 ### ⏳ Pendente
 - Implementar service core e rotas

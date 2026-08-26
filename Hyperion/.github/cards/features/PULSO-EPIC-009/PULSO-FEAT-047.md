@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-009
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 > **Contexto:** Cálculo de gastos no mês, status visual (normal/alerta/estourado) e rollover RN-170.
 
-**Refs:** RF-110 · RF-114 · RF-150 · RN-055 · RN-059 · RN-170
+**Refs:** RF-100 · RF-104 · RF-105 · RN-055 · RN-059 · RN-170
 
 ## 📝 Descrição
 

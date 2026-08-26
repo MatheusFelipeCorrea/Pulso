@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-010
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** CRUD de itens desejados e painel agregado com resumo financeiro.
 
-**Refs:** RF-133
+**Refs:** RF-124
 
 ## 📝 Descrição
 

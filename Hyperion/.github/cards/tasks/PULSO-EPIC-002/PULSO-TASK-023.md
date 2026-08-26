@@ -6,7 +6,7 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-002
 due_date: null
 categories:
@@ -41,8 +41,8 @@ Criar folha de estilos do dashboard com grid adaptativo, safe-area mobile e toke
 
 | Arquivo | Escopo |
 |---------|--------|
-| `code/front/src/styles/dashboard.css` | Page layout, charts grid, balance, import modal |
-| `code/front/src/styles/pulso-components.css` | ResourceCard, NotificationPanel (parcial) |
+| `Codigo/Pulso/web/src/styles/dashboard.css` | Page layout, charts grid, balance, import modal |
+| `Codigo/Pulso/web/src/styles/pulso-components.css` | ResourceCard, NotificationPanel (parcial) |
 
 Importar em `DashboardPage.jsx` ou entry global de estilos.
 

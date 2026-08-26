@@ -6,7 +6,7 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-002
 due_date: null
 categories:
@@ -34,7 +34,7 @@ Garantir testes unitários para `dashboardService`, utils de import e smoke dos 
 
 ## 🛠️ Implementação
 
-### API — criar em `code/back/tests/` (NOVO — CRIAR)
+### API — criar em `Codigo/Pulso/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|

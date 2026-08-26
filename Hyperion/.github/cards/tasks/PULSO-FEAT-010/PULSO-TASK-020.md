@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-010
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 # [TASK] Backend — importação de extratos
 
-> **Contexto:** API de analyze/confirm para RF-155–158 e RF-160.
+> **Contexto:** API de analyze/confirm para RF-134–137 e RF-139.
 
 ## 📝 Descrição
 
@@ -31,13 +31,13 @@ Implementar parse multi-formato, sugestão de categorias, dedupe e gravação em
 | `POST` | `/api/importacoes/analisar` | Upload multipart → linhas + resumo + `precisaMapeamento` |
 | `POST` | `/api/importacoes/confirmar` | Grava linhas válidas; ajuste saldo se necessário |
 
-**Origens:** `CONTA`, `VA`, `VR` — mapeiam recurso (`DINHEIRO`, `VA`, `VR`)
+**Origens:** `CONTA`, `VA`, `VR` — mapeiam recurso (`DINHEIRO`, `VA`, `VR`); VT legado rejeitado na API
 
 ## 🛠️ Implementação
 
 ### Service (NOVO — CRIAR)
 
-`code/back/src/services/importService.js`
+`Codigo/Pulso/api/src/services/importService.js`
 
 ```javascript
 // analisarArquivo(usuarioId, { arquivo, origem, mapeamento })
@@ -46,7 +46,7 @@ Implementar parse multi-formato, sugestão de categorias, dedupe e gravação em
 
 ### Parsers (NOVO — CRIAR)
 
-`code/back/src/parsers/` — OFX, CSV (delimitador/encoding), XLSX, PDF (Gemini)
+`Codigo/Pulso/api/src/parsers/` — OFX, CSV (delimitador/encoding), XLSX, PDF (Gemini)
 
 ### Utils (NOVO — CRIAR)
 
@@ -70,9 +70,9 @@ Implementar parse multi-formato, sugestão de categorias, dedupe e gravação em
 
 ## 📐 Regras de Negócio
 
-- Dedupe: hash estável data+valor+descrição normalizada (RF-158)
+- Dedupe: hash estável data+valor+descrição normalizada (RF-137)
 - Categorização: regras + histórico + categoria ajuste saldo para benefícios
-- Preview obrigatório antes de confirmar (RF-157)
+- Preview obrigatório antes de confirmar (RF-136)
 
 ## 📋 Resumo
 

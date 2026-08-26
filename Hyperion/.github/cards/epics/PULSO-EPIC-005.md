@@ -6,7 +6,7 @@ type: Epic
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: null
 due_date: null
 categories:
@@ -14,7 +14,7 @@ categories:
   - Frontend
   - Web
   - Banco de Dados
-  - Integrações
+  - Integração Externa
   - Regra de Negócio
 ---
 
@@ -22,21 +22,21 @@ categories:
 
 > **Contexto:** Planejamento de viagens com pretensões de gasto por categoria, conversor e cotações de moedas, histórico de câmbio, favoritas, busca de destinos (GeoNames + catálogo), capas de destino e estimativas de passagem; vínculo 1:1 com meta financeira.
 
-**Refs:** RF-033–043 · RN-069–074
+**Refs:** RF-037–047 · RN-069–074
 
 ## 🎯 Objetivos
 
-- Cotações atualizadas via AwesomeAPI/Frankfurter com cache 5 min (RF-033, RN-071)
-- Conversor BRL ↔ moedas suportadas, inclusive par cruzado (RF-034)
-- Gráfico de histórico de cotação com ponto ao vivo de hoje (RF-035)
-- Moedas favoritas (até 8) com seed padrão USD/EUR/GBP (RF-036)
-- CRUD de viagens pessoais: destino, moeda, data prevista, múltiplas simultâneas (RF-037, RF-042)
-- Pretensões por 10 categorias (RN-074); total somado (RN-069); conversão BRL na UI (RF-039–040, RN-070)
+- Cotações atualizadas via AwesomeAPI/Frankfurter com cache 5 min (RF-037, RN-071)
+- Conversor BRL ↔ moedas suportadas, inclusive par cruzado (RF-038)
+- Gráfico de histórico de cotação com ponto ao vivo de hoje (RF-039)
+- Moedas favoritas (até 8) com seed padrão USD/EUR/GBP (RF-040)
+- CRUD de viagens pessoais: destino, moeda, data prevista, múltiplas simultâneas (RF-041, RF-046)
+- Pretensões por 10 categorias (RN-074); total somado (RN-069); conversão BRL na UI (RF-040–044, RN-070)
 - Observações com checklist, links e tipos (GERAL, CHECKLIST, LINK, DICA, DOCUMENTOS)
 - Resolução de destino: GeoNames, catálogo BR/internacional, aeroportos IATA
 - Capa de destino via Wikipedia/Commons no criar/editar (não no GET list)
 - Estimativa de passagem avião/ônibus/trem com ajuste sazonal (Duffel/Amadeus opcionais + fallback)
-- Vínculo viagem ↔ meta 1:1 com `@unique` em `metaId` (RF-043, RN-072, RN-073)
+- Vínculo viagem ↔ meta 1:1 com `@unique` em `metaId` (RF-047, RN-072, RN-073)
 
 ## 🎭 Telas e fluxos
 
@@ -71,7 +71,7 @@ categories:
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo RF-033–043 e RN-069–074 mapeado
+- Escopo RF-037–047 e RN-069–074 mapeado
 - Hierarquia Epic → 7 Features → 12 Tasks definida
 - Contratos API, providers e fluxos UI documentados como spec
 

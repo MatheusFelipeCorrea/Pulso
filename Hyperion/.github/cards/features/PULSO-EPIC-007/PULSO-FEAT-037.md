@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-007
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** Conteúdo da landing — hero, cards de funcionalidades, público, benefícios e depoimentos.
 
-**Refs:** RF-086
+**Refs:** RF-082
 
 ## 📝 Descrição
 
@@ -29,7 +29,7 @@ Implementar seções visuais com dados centralizados em `landingData.js` e previ
 
 - **Hero:** título, subtítulo, CTA primário `/register`, scroll secundário
 - **Highlights:** 4 destaques (IA, gratuito, privacidade, perfis)
-- **Features:** 8 cards (Dashboard, Metas, Viagens, IA, Chatbot, Gamificação, Grupos, Calendário) com badges opcionais
+- **Features:** 7 cards (Dashboard, Metas, Viagens, IA, Chatbot, Grupos, Calendário) com badges opcionais
 - **Audience:** 4 personas (estagiário, CLT, PJ, pessoa física)
 - **Benefits:** lista com checkmarks
 - **Testimonials:** 3 depoimentos
@@ -45,7 +45,7 @@ Implementar seções visuais com dados centralizados em `landingData.js` e previ
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Mapa de seções e dados RF-086 definido
+- Mapa de seções e dados RF-082 definido
 
 ### ⏳ Pendente
 - PULSO-TASK-074–076 — data, hero e sections

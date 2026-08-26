@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-062
 due_date: null
 categories:
@@ -37,7 +37,7 @@ Implementar cards de resumo, ativas e linhas de histórico.
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Componentes RF-119 mapeados
+- Componentes RF-110 mapeados
 
 ### ⏳ Pendente
 - Implementar cards e histórico

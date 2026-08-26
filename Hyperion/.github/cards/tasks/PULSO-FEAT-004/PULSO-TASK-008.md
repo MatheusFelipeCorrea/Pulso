@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-004
 due_date: null
 categories:
@@ -36,7 +36,7 @@ Implementar solicitação de reset por email, validação de token e definição
 
 ### `authService.js` (NOVO — CRIAR)
 
-Adicionar em: `code/back/src/services/authService.js`
+Adicionar em: `Codigo/Pulso/api/src/services/authService.js`
 
 ```javascript
 // requestPasswordReset(email) — anti-enumeração; ignora contas Google-only

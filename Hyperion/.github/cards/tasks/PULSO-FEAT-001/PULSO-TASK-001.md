@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-001
 due_date: null
 categories:
@@ -29,15 +29,14 @@ Como **sistema**, preciso modelar e migrar tabelas de usuário e configuração 
 
 ## 🛠️ Implementação
 
-### `code/back/prisma/schema.prisma` (NOVO — CRIAR)
+### `Codigo/Pulso/api/prisma/schema.prisma` (NOVO — CRIAR)
 
 Adicionar/criar models:
 
 | Model | Campos-chave |
 |-------|--------------|
 | `Usuario` | `nome`, `email` @unique, `senhaHash?`, `provedorAuth`, `googleId?` @unique, `verificado`, tokens verificação/reset |
-| `ConfiguracaoUsuario` | `usuarioId` @unique, `tema`, `gamificacaoAtiva`, defaults financeiros |
-| `Sequencia` | Criada no cadastro (gamificação) |
+| `ConfiguracaoUsuario` | `usuarioId` @unique, `tema`, `plano` FREE/PREMIUM, defaults financeiros |
 
 **Enum:** `ProvedorAuth` (EMAIL, GOOGLE)
 

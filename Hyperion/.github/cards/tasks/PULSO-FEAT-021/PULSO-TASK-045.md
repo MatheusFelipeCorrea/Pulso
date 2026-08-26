@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-021
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 # [TASK] Frontend — GoalFormModal e reserva de emergência
 
-> **Contexto:** Formulário criar/editar meta com atalho RF-142 e inferência de tipo.
+> **Contexto:** Formulário criar/editar meta com atalho RF-036 e inferência de tipo.
 
 ## 📝 Descrição
 
@@ -41,7 +41,7 @@ Campos:
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Spec de campos e fluxo RF-142 definida
+- Spec de campos e fluxo RF-036 definida
 
 ### ⏳ Pendente
 - Implementar GoalFormModal

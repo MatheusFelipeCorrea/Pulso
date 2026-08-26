@@ -6,7 +6,7 @@ type: Epic
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: null
 due_date: null
 categories:
@@ -20,14 +20,14 @@ categories:
 
 > **Contexto:** Landing page pública em `/` apresentando o Pulso — hero, funcionalidades, público-alvo, benefícios, depoimentos, CTAs e download do app; sem backend dedicado.
 
-**Refs:** RF-084–087
+**Refs:** RF-080–083
 
 ## 🎯 Objetivos
 
-- Homepage pública acessível sem autenticação (RF-084)
-- CTAs "Começar Grátis" → `/register` e "Entrar" → `/login` (RF-085)
-- Seções dos principais módulos com badges "Em breve"/"Beta" onde aplicável (RF-086)
-- Layout responsivo com paleta Vital Purple e dark mode (RF-087)
+- Homepage pública acessível sem autenticação (RF-080)
+- CTAs "Começar Grátis" → `/register` e "Entrar" → `/login` (RF-081)
+- Seções dos principais módulos com badges "Em breve"/"Beta" onde aplicável (RF-082)
+- Layout responsivo com paleta Vital Purple e dark mode (RF-083)
 - Redirect usuário autenticado via `DEFAULT_AUTHENTICATED_ROUTE`
 - Navegação por âncoras (`#funcionalidades`, `#para-quem`, etc.) + hash scroll
 - Header público compartilhado com login/cadastro
@@ -60,7 +60,7 @@ categories:
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo RF-084–087 mapeado
+- Escopo RF-080–083 mapeado
 - Hierarquia Epic → 4 Features → 8 Tasks definida
 
 ### ⏳ Pendente

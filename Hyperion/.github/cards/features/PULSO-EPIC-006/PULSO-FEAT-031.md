@@ -6,12 +6,12 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-006
 due_date: null
 categories:
   - Backend
-  - Integrações
+  - Integração Externa
   - Segurança
 ---
 
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** Conexão OAuth, calendário dedicado "Pulso", sync bidirecional e resync em lote.
 
-**Refs:** RF-054 · RF-056 · RF-057 · RF-058b · RN-096 · RN-097
+**Refs:** RF-062 · RF-064 · RF-065 · RF-067 · RN-096 · RN-097
 
 ## 📝 Descrição
 
@@ -38,7 +38,7 @@ Implementar fluxo OAuth Calendar, persistência de tokens criptografados, sync d
 
 **Sync:** `garantirCalendarioPulso`, `buildEventBody` com antecedência em minutos, recreate em 404
 
-**Import:** `importarAlteracoesDoGoogle` — título e data (RF-058b)
+**Import:** `importarAlteracoesDoGoogle` — título e data (RF-067)
 
 ## 🔗 Sub-issues
 

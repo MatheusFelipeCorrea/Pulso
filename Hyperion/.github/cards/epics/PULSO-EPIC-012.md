@@ -6,7 +6,7 @@ type: Epic
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: null
 due_date: null
 categories:
@@ -22,17 +22,17 @@ categories:
 
 > **Contexto:** Controle de empréstimos pessoais (me devem / eu devo) com pagamentos parciais, prazo, saldo consolidado, alertas de vencimento e histórico de quitadas — sem gerar transação automática.
 
-**Refs:** RF-126–132 · RN-075–080
+**Refs:** RF-117–123 · RN-075–080
 
 ## 🎯 Objetivos
 
-- Registrar empréstimo feito (ME_DEVEM) ou recebido (EU_DEVO) com valor, pessoa e data (RF-126–127, RN-075)
-- Definir prazo de devolução opcional (RF-128)
-- Marcar como paga / quitar saldo restante; registrar data de quitação (RF-129, RN-076)
+- Registrar empréstimo feito (ME_DEVEM) ou recebido (EU_DEVO) com valor, pessoa e data (RF-117–118, RN-075)
+- Definir prazo de devolução opcional (RF-119)
+- Marcar como paga / quitar saldo restante; registrar data de quitação (RF-120, RN-076)
 - Pagamentos parciais; excluir pagamento reabre se necessário (RF-NOVO-O1)
-- Saldo consolidado: total me devem vs eu devo (RF-130, RN-080)
-- Histórico de ativas e quitadas com tabs/filtros (RF-131)
-- Alertar próximo do vencimento (7, 2 e 0 dias) — `DIVIDA_COBRANCA` (RF-132, RN-077)
+- Saldo consolidado: total me devem vs eu devo (RF-121, RN-080)
+- Histórico de ativas e quitadas com tabs/filtros (RF-122)
+- Alertar próximo do vencimento (7, 2 e 0 dias) — `DIVIDA_COBRANCA` (RF-123, RN-077)
 - Badge “Vencida” quando prazo passou sem quitar (RN-078)
 - Dívida NÃO gera transação automaticamente (RN-079)
 - Limpeza automática de quitadas após 180 dias
@@ -63,7 +63,7 @@ categories:
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo RF-126–132 e RN-075–080 mapeado
+- Escopo RF-117–123 e RN-075–080 mapeado
 - Hierarquia Epic → 6 Features → 12 Tasks definida
 
 ### ⏳ Pendente

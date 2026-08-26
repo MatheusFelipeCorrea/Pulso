@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-014
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 # [TASK] Transferências — backend e formulário
 
-> **Contexto:** RF-140 — tipo TRANSFERENCIA ponta a ponta.
+> **Contexto:** RF-027 — tipo TRANSFERENCIA ponta a ponta.
 
 ## 📝 Descrição
 
@@ -48,7 +48,7 @@ Em `TransactionFormModal.jsx`:
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Spec RF-140 documentada
+- Spec RF-027 documentada
 
 ### ⏳ Pendente
 - Implementar branch transferência API + UI

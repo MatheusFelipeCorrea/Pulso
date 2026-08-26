@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-027
 due_date: null
 categories:
@@ -30,9 +30,9 @@ Implementar shell da página com conversor rápido, favoritas, gráfico históri
 | Arquivo | Função |
 |---------|--------|
 | `pages/TripsPage.jsx` | Orquestração; fetch paralelo moedas + viagens + metas |
-| `TripQuickConverter.jsx` | Conversão interativa RF-034 |
+| `TripQuickConverter.jsx` | Conversão interativa RF-038 |
 | `TripFavoriteCurrencies.jsx` | Cards favoritas com variação % |
-| `TripExchangeChart.jsx` | Gráfico histórico RF-035 |
+| `TripExchangeChart.jsx` | Gráfico histórico RF-039 |
 | `AddFavoriteCurrencyModal.jsx` | Adicionar favorita |
 | `services/moedaService.js` | Client HTTP moedas |
 | `services/viagemService.js` | Client HTTP viagens |

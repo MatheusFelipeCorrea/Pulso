@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-012
 due_date: null
 categories:
@@ -29,13 +29,13 @@ Implementar service e repository com listagem filtrada, agregados, validações 
 - `criarTransacao`, `editarTransacao`, `excluirTransacao`
 
 **Side-effects em criar:**
-- `incrementarStreak`, `gamificationService`, `notificationService`, `insightService`
+- `notificationService`, `insightService` (hooks pós-transação)
 
 ## 🛠️ Implementação
 
 ### `transactionService.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/services/transactionService.js`
+Criar em: `Codigo/Pulso/api/src/services/transactionService.js`
 
 ### `transactionRepository.js` (NOVO — CRIAR)
 

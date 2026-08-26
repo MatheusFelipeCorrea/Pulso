@@ -6,12 +6,12 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-023
 due_date: null
 categories:
   - Backend
-  - Integrações
+  - Integração Externa
 ---
 
 # [TASK] Backend — moedaService, provider e rotas
@@ -41,7 +41,7 @@ Implementar camada de moedas com catálogo, cache e CRUD de favoritas.
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Contratos RF-033–036 especificados
+- Contratos RF-037–040 especificados
 
 ### ⏳ Pendente
 - Implementar provider, service e rotas

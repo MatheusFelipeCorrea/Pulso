@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-012
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 > **Contexto:** Ciclo de pagamento e sincronização de quitação.
 
-**Refs:** RF-129 · RN-076 · RF-NOVO-O1
+**Refs:** RF-120 · RN-076 · RF-NOVO-O1
 
 ## 📝 Descrição
 

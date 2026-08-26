@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-007
 due_date: null
 categories:
@@ -44,11 +44,11 @@ Como **usuário**, quero acessar `/dashboard` após login e ver meu resumo finan
 
 | Arquivo | Função |
 |---------|--------|
-| `code/front/src/pages/DashboardPage.jsx` | Orquestra widgets + estado `periodo` |
-| `code/front/src/services/dashboardService.js` | `obterDashboard({ mes }, { signal })` |
-| `code/front/src/config/defaultAuthenticatedRoute.js` | Export `/dashboard` |
-| `code/front/src/config/sidebarNavigation.js` | Item menu dashboard |
-| `code/front/src/App.jsx` | Route `path="dashboard"` |
+| `Codigo/Pulso/web/src/pages/DashboardPage.jsx` | Orquestra widgets + estado `periodo` |
+| `Codigo/Pulso/web/src/services/dashboardService.js` | `obterDashboard({ mes }, { signal })` |
+| `Codigo/Pulso/web/src/config/defaultAuthenticatedRoute.js` | Export `/dashboard` |
+| `Codigo/Pulso/web/src/config/sidebarNavigation.js` | Item menu dashboard |
+| `Codigo/Pulso/web/src/App.jsx` | Route `path="dashboard"` |
 
 ## 📋 Resumo
 

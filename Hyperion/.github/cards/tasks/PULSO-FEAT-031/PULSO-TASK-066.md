@@ -6,12 +6,12 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-031
 due_date: null
 categories:
   - Backend
-  - Integrações
+  - Integração Externa
 ---
 
 # [TASK] Backend — googleCalendarSyncService
@@ -20,7 +20,7 @@ categories:
 
 ## 📝 Descrição
 
-Implementar serviço de sincronização com calendário "Pulso" e importação RF-058b.
+Implementar serviço de sincronização com calendário "Pulso" e importação RF-067.
 
 ## 🛠️ Implementação
 
@@ -31,7 +31,7 @@ Implementar serviço de sincronização com calendário "Pulso" e importação R
 | `garantirCalendarioPulso` | Cria ou reutiliza calendário "Pulso" |
 | `sincronizarLembrete` | insert/update evento; recreate em 404 |
 | `buildEventBody` | start/end com `horaLembrete`; reminders por antecedência |
-| `importarAlteracoesDoGoogle` | Atualiza titulo/data no Pulso (RF-058b) |
+| `importarAlteracoesDoGoogle` | Atualiza titulo/data no Pulso (RF-067) |
 | `sincronizarPendentes` | Escopos futuros/todos |
 | `contarPendentesSync` | Contadores para UI resync |
 | `removerEventoLembrete` | Delete evento ao desmarcar sync/pagar |
@@ -43,7 +43,7 @@ Implementar serviço de sincronização com calendário "Pulso" e importação R
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Contratos RF-056 e RF-058b definidos
+- Contratos RF-064 e RF-067 definidos
 
 ### ⏳ Pendente
 - Implementar sync service

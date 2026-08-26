@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-003
 due_date: null
 categories:
@@ -17,9 +17,9 @@ categories:
 
 # [FEATURE] Frontend — página de transações
 
-> **Contexto:** Tela principal `/transactions` com resumo, filtros, lista, paginação e modais (RF-015–024).
+> **Contexto:** Tela principal `/transactions` com resumo, filtros, lista, paginação e modais (RF-016–025).
 
-**Refs:** RF-015 · RF-016 · RF-022 · RF-023 · RF-024
+**Refs:** RF-016 · RF-017 · RF-023 · RF-024 · RF-025
 
 ## 📝 Descrição
 

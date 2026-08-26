@@ -6,7 +6,7 @@ type: Feature
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-002
 due_date: null
 categories:
@@ -19,9 +19,9 @@ categories:
 
 # [FEATURE] Quick-add via chatbot
 
-> **Contexto:** Botão de acesso rápido (FAB) no dashboard para registrar transação em linguagem natural via chatbot (RF-139). **Depende do módulo Chatbot/Insights.**
+> **Contexto:** Botão de acesso rápido (FAB) no dashboard para registrar transação em linguagem natural via chatbot (RF-015). **Depende do módulo Chatbot/Insights.**
 
-**Refs:** RF-139
+**Refs:** RF-015
 
 ## 📝 Descrição
 
@@ -47,7 +47,7 @@ Como **usuário**, quero um atalho no dashboard para abrir o chatbot e registrar
 ## 📋 Resumo
 
 ### ✅ Concluído
-- RF-139 documentado como extensão do dashboard
+- RF-015 documentado como extensão do dashboard
 
 ### ⏳ Pendente
 - PULSO-TASK-022 — FAB + integração chatbot (bloqueado até módulo Chatbot existir)

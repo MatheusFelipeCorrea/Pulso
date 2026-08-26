@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-020
 due_date: null
 categories:
@@ -17,7 +17,7 @@ categories:
 
 # [TASK] Backend — registrarAporte e notificação META_ATINGIDA
 
-> **Contexto:** Fluxo de aporte com auto-conclusão e alerta ao usuário (RF-032).
+> **Contexto:** Fluxo de aporte com auto-conclusão e alerta ao usuário (RF-035).
 
 ## 📝 Descrição
 
@@ -39,7 +39,7 @@ Implementar `registrarAporte` com `sincronizarConclusao` e integração a `notif
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fluxo RN-062–063 e RF-032 especificados
+- Fluxo RN-062–063 e RF-035 especificados
 
 ### ⏳ Pendente
 - Implementar registrarAporte e sincronizarConclusao

@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-018
 due_date: null
 categories:
@@ -36,7 +36,7 @@ Implementar repository Prisma e service com validações de prazo, valor-alvo e 
 - `valorAlvo` ≥ `valorAtual` na edição
 - Meta cancelada/concluída — regras de edição
 
-**Integração:** `gamificationService.processarAposCriarMeta` em criação
+**Integração:** notificação `META_ATINGIDA` em conclusão de meta
 
 ## 📋 Resumo
 

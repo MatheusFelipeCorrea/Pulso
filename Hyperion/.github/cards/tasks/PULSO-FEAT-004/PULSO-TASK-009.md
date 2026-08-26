@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-004
 due_date: null
 categories:
@@ -44,10 +44,10 @@ Como **usuário**, quero solicitar recuperação de senha, redefinir via link se
 
 | Arquivo | Rota |
 |---------|------|
-| `code/front/src/pages/ForgotPassword.jsx` | `/forgot-password` |
-| `code/front/src/pages/ForgotPasswordEmailSent.jsx` | `/forgot-password/email-sent` |
-| `code/front/src/pages/ResetPassword.jsx` | `/reset-password/:token` |
-| `code/front/src/pages/ResetPasswordSuccess.jsx` | `/reset-password/success` |
+| `Codigo/Pulso/web/src/pages/ForgotPassword.jsx` | `/forgot-password` |
+| `Codigo/Pulso/web/src/pages/ForgotPasswordEmailSent.jsx` | `/forgot-password/email-sent` |
+| `Codigo/Pulso/web/src/pages/ResetPassword.jsx` | `/reset-password/:token` |
+| `Codigo/Pulso/web/src/pages/ResetPasswordSuccess.jsx` | `/reset-password/success` |
 
 ### Componentes (NOVO — CRIAR)
 

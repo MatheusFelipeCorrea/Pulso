@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-006
 due_date: null
 categories:
@@ -32,7 +32,7 @@ Implementar `obterDashboard(usuarioId, query)` orchestrando resumo mensal, séri
 
 ### `dashboardService.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/services/dashboardService.js`
+Criar em: `Codigo/Pulso/api/src/services/dashboardService.js`
 
 ```javascript
 // obterDashboard(usuarioId, query)

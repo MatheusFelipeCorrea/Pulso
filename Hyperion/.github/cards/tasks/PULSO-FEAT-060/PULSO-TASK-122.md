@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-060
 due_date: null
 categories:
@@ -16,7 +16,7 @@ categories:
 
 # [TASK] Backend — saldo consolidado (resumo)
 
-> **Contexto:** RF-119 — quanto me devem vs quanto eu devo nas ativas.
+> **Contexto:** RF-110 — quanto me devem vs quanto eu devo nas ativas.
 
 ## 📝 Descrição
 
@@ -38,7 +38,7 @@ Retorno: `{ meDevem, euDevo, saldo: meDevem − euDevo, possuiDivisoes }`
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fórmula RF-119 definida
+- Fórmula RF-110 definida
 
 ### ⏳ Pendente
 - Implementar calcularResumo

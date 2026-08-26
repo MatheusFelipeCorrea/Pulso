@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-009
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** Camada REST autenticada para listar, salvar, remover e copiar limites mensais por categoria.
 
-**Refs:** RF-109 · RF-113 · RN-055
+**Refs:** RF-099 · RF-103 · RN-055
 
 ## 📝 Descrição
 

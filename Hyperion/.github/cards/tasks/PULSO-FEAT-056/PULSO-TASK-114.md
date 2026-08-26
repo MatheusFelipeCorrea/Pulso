@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-056
 due_date: null
 categories:
@@ -41,7 +41,7 @@ Utils web: `shouldShowImpactAlert` em `purchasePlanningUtils.js`
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Componentes RF-134–136 mapeados
+- Componentes RF-125–136 mapeados
 
 ### ⏳ Pendente
 - Implementar cards e sidebar

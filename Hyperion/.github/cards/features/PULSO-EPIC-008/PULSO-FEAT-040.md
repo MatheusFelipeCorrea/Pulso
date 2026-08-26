@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-008
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** CRUD, convites, membros e upload de imagem do grupo.
 
-**Refs:** RF-088–091 · RF-099–100 · RN-111–114
+**Refs:** RF-084–091 · RF-095–100 · RN-111–114
 
 ## 📝 Descrição
 

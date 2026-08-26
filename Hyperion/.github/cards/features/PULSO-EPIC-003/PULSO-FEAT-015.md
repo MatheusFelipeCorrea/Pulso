@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-003
 due_date: null
 categories:
@@ -17,9 +17,9 @@ categories:
 
 # [FEATURE] Recorrência e geração automática
 
-> **Contexto:** Transações recorrentes com RRULE e job cron que gera ocorrências filhas (RF-020, RF-021); exclusão inteligente preservando passado.
+> **Contexto:** Transações recorrentes com RRULE e job cron que gera ocorrências filhas (RF-021, RF-022); exclusão inteligente preservando passado.
 
-**Refs:** RF-020 · RF-021
+**Refs:** RF-021 · RF-022
 
 ## 📝 Descrição
 

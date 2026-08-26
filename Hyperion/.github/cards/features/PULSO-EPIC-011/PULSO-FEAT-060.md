@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-011
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 > **Contexto:** Marcar partes pagas, auto-quitar e consolidar quanto me devem / eu devo.
 
-**Refs:** RF-118 · RF-119 · RN-085
+**Refs:** RF-109 · RF-110 · RN-085
 
 ## 📝 Descrição
 
@@ -46,7 +46,7 @@ Bloqueios: não despagar quem `pagouAConta`; não pagar duas vezes
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fluxos RF-118/119 definidos
+- Fluxos RF-109/119 definidos
 
 ### ⏳ Pendente
 - PULSO-TASK-121–122 — pagamentos e resumo

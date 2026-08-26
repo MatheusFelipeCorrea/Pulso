@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-003
 due_date: null
 categories:
@@ -44,9 +44,9 @@ Como **usuário**, quero entrar com Google em um clique e ser autenticado automa
 
 | Arquivo | Rota |
 |---------|------|
-| `code/front/src/pages/AuthCallback.jsx` | `/auth/callback` |
-| `code/front/src/pages/Login.jsx` | Botão Google inline SVG |
-| `code/front/src/pages/Register.jsx` | Botão Google inline SVG |
+| `Codigo/Pulso/web/src/pages/AuthCallback.jsx` | `/auth/callback` |
+| `Codigo/Pulso/web/src/pages/Login.jsx` | Botão Google inline SVG |
+| `Codigo/Pulso/web/src/pages/Register.jsx` | Botão Google inline SVG |
 
 ### Serviços (NOVO — CRIAR)
 

@@ -6,12 +6,12 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-026
 due_date: null
 categories:
   - Backend
-  - Integrações
+  - Integração Externa
 ---
 
 # [TASK] Backend — destinos, capas e media-passagem

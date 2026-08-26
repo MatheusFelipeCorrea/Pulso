@@ -6,7 +6,7 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-045
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 # [TASK] QA — testes unitários e E2E de grupos
 
-> **Contexto:** Regressão para convites, membros, viagem, metas e RF-095.
+> **Contexto:** Regressão para convites, membros, viagem, metas e RF-091.
 
 ## 📝 Descrição
 
@@ -38,7 +38,7 @@ Implementar suites API, Web e Playwright.
 | Arquivo | Escopo |
 |---------|--------|
 | `unit/services/grupoService.test.js` | HTTP client |
-| `unit/utils/groupDetailUtils.test.js` | `calcularSaldosViagem` RF-095 |
+| `unit/utils/groupDetailUtils.test.js` | `calcularSaldosViagem` RF-091 |
 | `unit/utils/groupInvite.test.js` | Link convite |
 
 ### E2E — `web/e2e/` (NOVO — CRIAR)

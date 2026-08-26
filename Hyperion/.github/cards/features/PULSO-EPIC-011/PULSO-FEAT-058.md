@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-011
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** CRUD e listagens autenticadas em `/api/divisoes`.
 
-**Refs:** RF-115 · RN-081 · RN-084
+**Refs:** RF-106 · RN-081 · RN-084
 
 ## 📝 Descrição
 

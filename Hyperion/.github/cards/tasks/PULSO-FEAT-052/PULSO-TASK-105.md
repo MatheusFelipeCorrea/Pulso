@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-052
 due_date: null
 categories:
@@ -27,7 +27,7 @@ Criar model Prisma, enums e migrations.
 
 | Campo | Notas |
 |-------|-------|
-| nome, valorEstimado, prioridade | Core RF-133 |
+| nome, valorEstimado, prioridade | Core RF-124 |
 | categoria | Enum CategoriaItemCompra |
 | simularParcelas, parcelas | 1–48; default 12 |
 | metaId, status, compradoEm, transacaoId | Ciclo de vida |

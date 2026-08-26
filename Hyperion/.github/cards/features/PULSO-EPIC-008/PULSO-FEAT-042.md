@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-008
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 > **Contexto:** Até 5 metas ativas por grupo; aportes individuais com auto-conclusão.
 
-**Refs:** RF-096–097 · RN-118–119
+**Refs:** RF-092–093 · RN-118–119
 
 ## 📝 Descrição
 

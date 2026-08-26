@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-008
 due_date: null
 categories:
@@ -18,9 +18,9 @@ categories:
 
 # [FEATURE] Frontend — grupos lista e detalhe
 
-> **Contexto:** UI completa `/groups` e `/groups/:id` com modais e cards RF-101.
+> **Contexto:** UI completa `/groups` e `/groups/:id` com modais e cards RF-097.
 
-**Refs:** RF-088–102 · RF-095 · RF-101
+**Refs:** RF-084–098 · RF-091 · RF-097
 
 ## 📝 Descrição
 
@@ -35,11 +35,11 @@ Implementar páginas de lista e detalhe com todos os modais e cards integrados.
 
 **Detalhe (`/groups/:id`):**
 - `GroupDetailHeader` — imagem, editar, convite
-- `GroupDetailTripCard` — viagem, pretensões, toggle RF-095, saldos
+- `GroupDetailTripCard` — viagem, pretensões, toggle RF-091, saldos
 - `GroupDetailGoalCard` — metas, aportes
 - `GroupDetailMembersCard` — gerenciar membros
 - `GroupDetailChatCard` — chat + load more
-- Polling detalhe ~30s; chat ~3s
+- Chat em tempo real via Socket.IO; detalhe recarrega sob demanda
 
 **Redirect:** `/groups/join/:codigo`
 
@@ -52,7 +52,7 @@ Implementar páginas de lista e detalhe com todos os modais e cards integrados.
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Mapa de componentes RF-101 definido
+- Mapa de componentes RF-097 definido
 
 ### ⏳ Pendente
 - PULSO-TASK-089–091 — páginas, modais e estilos

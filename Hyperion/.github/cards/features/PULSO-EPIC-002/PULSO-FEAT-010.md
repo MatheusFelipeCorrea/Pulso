@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-002
 due_date: null
 categories:
@@ -20,9 +20,9 @@ categories:
 
 # [FEATURE] Importação de extratos via dashboard
 
-> **Contexto:** Fluxo upload → preview editável → confirmar, acionado pelo botão "Importar extrato" no dashboard (RF-155–158, RF-160).
+> **Contexto:** Fluxo upload → preview editável → confirmar, acionado pelo botão "Importar extrato" no dashboard (RF-134–137, RF-139).
 
-**Refs:** RF-155 · RF-156 · RF-157 · RF-158 · RF-160
+**Refs:** RF-134 · RF-135 · RF-136 · RF-137 · RF-139
 
 ## 📝 Descrição
 
@@ -31,7 +31,7 @@ Suportar importação de extratos bancários (OFX, CSV, XLSX, PDF via Gemini), b
 ## ✅ Critérios de Aceite
 
 ### Cenário 1 — Upload
-**Quando** seleciono tipo (CONTA, VA, VR) e arquivo válido,  
+**Quando** seleciono tipo (CONTA, VA, VR) e arquivo válido,
 **Então** `POST /importacoes/analisar` retorna linhas parseadas ou pede mapeamento.
 
 ### Cenário 2 — Mapeamento CSV
@@ -62,4 +62,4 @@ Suportar importação de extratos bancários (OFX, CSV, XLSX, PDF via Gemini), b
 ### ⏳ Pendente
 - PULSO-TASK-020 — backend parsers + importService
 - PULSO-TASK-021 — ImportStatementModal + steps frontend
-- RF-159 aprendizado de categorização (evolução futura)
+- RF-138 aprendizado de categorização (evolução futura)

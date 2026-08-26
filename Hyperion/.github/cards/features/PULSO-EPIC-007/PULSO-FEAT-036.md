@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-007
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** Página raiz `/` pública com redirect para usuários autenticados e CTAs de conversão.
 
-**Refs:** RF-084 · RF-085
+**Refs:** RF-080 · RF-081
 
 ## 📝 Descrição
 

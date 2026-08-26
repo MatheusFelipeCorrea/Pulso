@@ -6,7 +6,7 @@ type: Epic
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: null
 due_date: null
 categories:
@@ -22,7 +22,7 @@ categories:
 
 > **Contexto:** Painel central pós-login do Pulso — consolida saldos, gráficos, alertas de orçamento, metas ativas, saúde financeira e ponto de entrada para importação de extratos. Destino autenticado padrão: `/dashboard`.
 
-**Refs:** RF-007–014 · RF-155–158 · RF-160 · RF-139 (pendente)
+**Refs:** RF-007–015 · RF-134–137 · RF-139
 
 ## 🎯 Objetivos
 
@@ -31,8 +31,8 @@ categories:
 - Gráfico donut de gastos por categoria (RF-010)
 - Listar últimas transações, alertas de orçamento (≥80%), progresso de metas ativas (RF-011–013)
 - Score de saúde financeira com checklist explicativo (RF-014)
-- Importar extratos (OFX/CSV/XLSX/PDF) via modal no dashboard (RF-155–158, RF-160)
-- Quick-add via chatbot para lançamento em linguagem natural (RF-139 — pendente)
+- Importar extratos (OFX/CSV/XLSX/PDF) via modal no dashboard (RF-134–137, RF-139)
+- Quick-add via chatbot para lançamento em linguagem natural (RF-015 — pendente)
 
 ## 🎭 Telas e fluxos
 
@@ -65,13 +65,13 @@ categories:
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo mapeado nos RFs RF-007–014 e RF-155–158/160
+- Escopo mapeado nos RFs RF-007–015 e RF-134–137 / RF-139
 - Contrato agregado `GET /dashboard` especificado com payloads por seção
 - Hierarquia Epic → 6 Features → 12 Tasks definida
 
 ### ⏳ Pendente
 - Implementar endpoint agregado e todos os widgets frontend
 - Fluxo completo de importação via modal
-- RF-139 quick-add (depende módulo Chatbot)
-- RF-159 aprendizado de categorização na importação (fora do escopo mínimo deste epic)
+- RF-015 quick-add (depende módulo Chatbot)
+- RF-138 aprendizado de categorização na importação (fora do escopo mínimo deste epic)
 - Testes unitários dedicados para `dashboardService`

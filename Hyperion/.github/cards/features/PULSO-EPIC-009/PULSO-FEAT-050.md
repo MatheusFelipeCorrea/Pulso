@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-009
 due_date: null
 categories:
@@ -20,7 +20,7 @@ categories:
 
 > **Contexto:** Modal de edição em lote, toggle de rollover e folha de estilos.
 
-**Refs:** RF-109 · RF-113 · RF-150
+**Refs:** RF-099 · RF-103 · RF-105
 
 ## 📝 Descrição
 

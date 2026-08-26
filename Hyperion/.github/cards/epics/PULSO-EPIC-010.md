@@ -6,7 +6,7 @@ type: Epic
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: null
 due_date: null
 categories:
@@ -15,24 +15,24 @@ categories:
   - Web
   - Banco de Dados
   - Regra de Negócio
-  - Integrações
+  - Integração Externa
 ---
 
 # [EPIC] Planejamento de Compra
 
 > **Contexto:** Lista de desejos com prioridade, estimativa de tempo via sobra mensal, simulação à vista vs parcelado, alerta de comprometimento da renda, vínculo com meta e “Comprei!” gerando transação.
 
-**Refs:** RF-133–138 · RN-087–093
+**Refs:** RF-124–129 · RN-087–093
 
 ## 🎯 Objetivos
 
-- Registrar item desejado com nome, valor, prioridade e categoria (RF-133)
-- Calcular meses para comprar: valor ÷ sobra mensal (RF-134, RN-087)
+- Registrar item desejado com nome, valor, prioridade e categoria (RF-124)
+- Calcular meses para comprar: valor ÷ sobra mensal (RF-125, RN-087)
 - Sobra mensal = média (receita − despesa) dos últimos 3 meses (RN-088)
-- Simular à vista vs parcelado (nº de parcelas 1–48) (RF-135, RN-089)
-- Alertar comprometimento de parcelas vs renda (>20% atenção, >30% arriscado) (RF-136, RN-090–091)
-- Vincular item a meta existente ou criar meta no fluxo (RF-137)
-- Marcar “Comprei!” → cria despesa + conclui meta vinculada (RF-138, RN-092–093)
+- Simular à vista vs parcelado (nº de parcelas 1–48) (RF-126, RN-089)
+- Alertar comprometimento de parcelas vs renda (>20% atenção, >30% arriscado) (RF-127, RN-090–091)
+- Vincular item a meta existente ou criar meta no fluxo (RF-128)
+- Marcar “Comprei!” → cria despesa + conclui meta vinculada (RF-129, RN-092–093)
 - Imagem do item: URL, og:image do link, Wikimedia ou upload
 - Painel: resumo, dicas do dia, categorias, histórico de comprados
 
@@ -63,7 +63,7 @@ categories:
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo RF-133–138 e RN-087–093 mapeado
+- Escopo RF-124–129 e RN-087–093 mapeado
 - Hierarquia Epic → 6 Features → 12 Tasks definida
 
 ### ⏳ Pendente

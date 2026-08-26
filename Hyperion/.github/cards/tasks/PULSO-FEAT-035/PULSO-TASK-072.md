@@ -6,7 +6,7 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-035
 due_date: null
 categories:
@@ -26,13 +26,13 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 
 ## 🛠️ Implementação
 
-### API — `code/back/tests/` (NOVO — CRIAR)
+### API — `Codigo/Pulso/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
 | `unit/services/reminderService.test.js` | CRUD, sync failure RN-097, marcar pago |
 | `unit/services/reminderAlertService.test.js` | Alertas por antecedência |
-| `unit/services/googleCalendarSyncService.test.js` | Sync, import RF-058b |
+| `unit/services/googleCalendarSyncService.test.js` | Sync, import RF-067 |
 | `unit/services/googleCalendarService.test.js` | OAuth status |
 | `unit/services/calendarService.test.js` | Visão mês/dia |
 | `unit/jobs/reminderAlertJob.test.js` | Job alerta |
@@ -41,7 +41,7 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 | `unit/utils/reminderAntecedencia.test.js` | Mapas antecedência |
 | `unit/utils/googleTokenCrypto.test.js` | Criptografia tokens |
 
-### Web — `code/front/tests/` (NOVO — CRIAR)
+### Web — `Codigo/Pulso/web/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|

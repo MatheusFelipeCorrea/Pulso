@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-037
 due_date: null
 categories:
@@ -17,7 +17,7 @@ categories:
 
 # [TASK] Frontend — LandingHero e DashboardPreview
 
-> **Contexto:** Hero principal com CTAs RF-085 e mock visual do produto.
+> **Contexto:** Hero principal com CTAs RF-081 e mock visual do produto.
 
 ## 📝 Descrição
 

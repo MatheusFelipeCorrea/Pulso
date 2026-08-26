@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-006
 due_date: null
 categories:
@@ -19,7 +19,7 @@ categories:
 
 > **Contexto:** CRUD de lembretes financeiros com categorias, recorrência e hook de sync Google.
 
-**Refs:** RF-055 · RF-058 · RN-099
+**Refs:** RF-063 · RF-066 · RN-099
 
 ## 📝 Descrição
 

@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-013
 due_date: null
 categories:
@@ -20,7 +20,7 @@ categories:
 
 > **Contexto:** Substituir `InDevelopmentPage` em `/insights` por painel completo.
 
-**Refs:** RF-044–048 · RF-107–108 · RF-143 · RF-NOVO-I1
+**Refs:** RF-048–056 · RF-053–054 · RF-055 · RF-NOVO-I1
 
 ## 📝 Descrição
 

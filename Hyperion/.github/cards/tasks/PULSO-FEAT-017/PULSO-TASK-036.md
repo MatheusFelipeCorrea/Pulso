@@ -6,7 +6,7 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-017
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 # [TASK] QA — testes unitários de transações
 
-> **Contexto:** Regressão para CRUD, filtros, recorrência e regras VA/VR.
+> **Contexto:** Regressão para CRUD, filtros, recorrência e regras VA/VR (VT rejeitado).
 
 ## 📝 Descrição
 
@@ -26,18 +26,18 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 
 ## 🛠️ Implementação
 
-### API — `code/back/tests/` (NOVO — CRIAR)
+### API — `Codigo/Pulso/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
 | `unit/services/transactionService.test.js` | CRUD, resumo, exclusão recorrente |
 | `unit/services/transactionFilterService.test.js` | Filtros query |
 | `unit/jobs/recurringTransactions.test.js` | Geração filhas |
-| `unit/utils/recursoCategoriaRules.test.js` | RF-025 |
-| `unit/services/categorySuggestionService.test.js` | RF-141 |
+| `unit/utils/recursoCategoriaRules.test.js` | RF-026 |
+| `unit/services/categorySuggestionService.test.js` | RF-028 |
 | `unit/utils/transactionMapper.test.js` | DTO |
 
-### Web — `code/front/tests/` (NOVO — CRIAR)
+### Web — `Codigo/Pulso/web/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|

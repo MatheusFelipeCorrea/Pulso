@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-001
 due_date: null
 categories:
@@ -44,9 +44,9 @@ Como **visitante**, quero me cadastrar, saber que o email foi enviado e confirma
 
 | Arquivo | Rota |
 |---------|------|
-| `code/front/src/pages/Register.jsx` | `/register` |
-| `code/front/src/pages/RegisterEmailSent.jsx` | `/register/email-sent` |
-| `code/front/src/pages/VerifyEmail.jsx` | `/verify-email/:token` |
+| `Codigo/Pulso/web/src/pages/Register.jsx` | `/register` |
+| `Codigo/Pulso/web/src/pages/RegisterEmailSent.jsx` | `/register/email-sent` |
+| `Codigo/Pulso/web/src/pages/VerifyEmail.jsx` | `/verify-email/:token` |
 
 ### Componentes (NOVO — CRIAR)
 

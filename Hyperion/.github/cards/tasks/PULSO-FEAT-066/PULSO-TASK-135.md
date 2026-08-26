@@ -6,7 +6,7 @@ type: Task
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-066
 due_date: null
 categories:
@@ -16,7 +16,7 @@ categories:
 
 # [TASK] Backend — resumo consolidado e contadores
 
-> **Contexto:** RF-130 / RN-080 — totais me devem / eu devo.
+> **Contexto:** RF-121 / RN-080 — totais me devem / eu devo.
 
 ## 📝 Descrição
 

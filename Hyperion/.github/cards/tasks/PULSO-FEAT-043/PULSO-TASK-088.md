@@ -6,7 +6,7 @@ type: Task
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-043
 due_date: null
 categories:
@@ -38,7 +38,7 @@ Eventos notificados: entrar, sair, removido, pretensão, meta criada, meta ating
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Eventos RF-102 e RN-120 mapeados
+- Eventos RF-098 e RN-120 mapeados
 
 ### ⏳ Pendente
 - Implementar chat e notification service

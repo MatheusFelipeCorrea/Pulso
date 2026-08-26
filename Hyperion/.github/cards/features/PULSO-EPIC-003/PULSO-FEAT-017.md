@@ -6,7 +6,7 @@ type: Feature
 priority: Medium
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-003
 due_date: null
 categories:
@@ -24,7 +24,7 @@ categories:
 
 ## 📝 Descrição
 
-Suites unitárias API e Web para fluxos críticos de transações, incluindo exclusão recorrente e validação VA/VR.
+Suites unitárias API e Web para fluxos críticos de transações, incluindo exclusão recorrente e validação VA/VR (VT rejeitado).
 
 ## ✅ Critérios de Aceite
 

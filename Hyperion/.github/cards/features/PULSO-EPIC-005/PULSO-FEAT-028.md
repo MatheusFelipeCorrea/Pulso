@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-005
 due_date: null
 categories:
@@ -20,7 +20,7 @@ categories:
 
 > **Contexto:** Página `/trips/:id` com pretensões, observações, meta, totais em moeda/BRL e insights de transporte.
 
-**Refs:** RF-038–041 · RF-040 · RF-043 · RN-070
+**Refs:** RF-042–045 · RF-044 · RF-047 · RN-070
 
 ## 📝 Descrição
 
@@ -32,7 +32,7 @@ Implementar detalhe completo com sidebar de resumo, breakdown por categoria, se�
 - `TripDetailSummarySidebar` — total moeda + equivalente BRL (RN-070)
 - `TripDetailExpensesSection` + `TripExpenseFormModal` + delete
 - `TripDetailObservationsSection` + checklist/links
-- `TripDetailGoalCard` — vínculo meta RF-043
+- `TripDetailGoalCard` — vínculo meta RF-047
 - `TripTransportPriceInsights` + `TripOriginPicker` (origem persistida local)
 - `DestinationSearchPicker`, `CurrencySearchPicker`, `CurrencyFlag`
 

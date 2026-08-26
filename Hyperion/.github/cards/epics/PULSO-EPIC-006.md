@@ -6,7 +6,7 @@ type: Epic
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: null
 due_date: null
 categories:
@@ -14,7 +14,7 @@ categories:
   - Frontend
   - Web
   - Banco de Dados
-  - Integrações
+  - Integração Externa
   - Regra de Negócio
 ---
 
@@ -22,15 +22,15 @@ categories:
 
 > **Contexto:** Lembretes financeiros com categorias (52), antecedência configurável, flag pago, recorrência mensal ou a cada N dias; calendário financeiro unificando transações e vencimentos; sync bidirecional com Google Calendar (calendário "Pulso"), tokens OAuth criptografados.
 
-**Refs:** RF-054–058 · RF-058b · RN-094–100 · RN-169
+**Refs:** RF-062–067 · RF-067 · RN-094–100 · RN-169
 
 ## 🎯 Objetivos
 
-- CRUD de lembretes com título, valor opcional, data, hora, categoria e antecedência (RF-055, RF-058)
-- OAuth Google Calendar separado do login (`GOOGLE_CALENDAR_CALLBACK_URL`) (RF-054)
-- Sync opt-in: criar/atualizar eventos no calendário "Pulso" (RF-056, RN-096)
-- Desconectar Google a qualquer momento; remover eventos ao desativar sync (RF-057)
-- Import Google → Pulso: título e data ao abrir mês ou sync manual (RF-058b)
+- CRUD de lembretes com título, valor opcional, data, hora, categoria e antecedência (RF-063, RF-066)
+- OAuth Google Calendar separado do login (`GOOGLE_CALENDAR_CALLBACK_URL`) (RF-062)
+- Sync opt-in: criar/atualizar eventos no calendário "Pulso" (RF-064, RN-096)
+- Desconectar Google a qualquer momento; remover eventos ao desativar sync (RF-065)
+- Import Google → Pulso: título e data ao abrir mês ou sync manual (RF-067)
 - Falha de sync na criação preserva lembrete com `sincronizado: false` (RN-097)
 - Marcar como pago remove evento Google; não gera transação (RN-099)
 - Recorrência mensal gera instâncias; `repetirCadaDias` avança vencimento (RN-098)
@@ -70,7 +70,7 @@ categories:
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo RF-054–058, RF-058b e RN-094–100 mapeado
+- Escopo RF-062–067, RF-067 e RN-094–100 mapeado
 - Hierarquia Epic → 6 Features → 12 Tasks definida
 
 ### ⏳ Pendente

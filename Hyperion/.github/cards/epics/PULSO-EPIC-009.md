@@ -6,7 +6,7 @@ type: Epic
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: null
 due_date: null
 categories:
@@ -22,15 +22,15 @@ categories:
 
 > **Contexto:** Limites mensais por categoria de despesa, progresso visual, rollover opcional, alertas 80%/100% e cópia entre meses — sem bloquear o registro de transações.
 
-**Refs:** RF-109–114 · RF-150 · RN-055–060 · RN-170
+**Refs:** RF-099–105 · RF-105 · RN-055–060 · RN-170
 
 ## 🎯 Objetivos
 
-- Definir limite mensal de gasto por categoria de despesa (RF-109, RN-055)
-- Exibir progresso gasto vs limite e resumo do que ainda pode gastar (RF-110, RF-114)
-- Alertar em 80% e ao estourar 100% do limite (RF-111, RF-112, RN-056–057)
-- Editar limites a qualquer momento; lista vazia remove orçamentos do mês (RF-113)
-- Rollover ativável por categoria: sobra positiva do mês anterior soma ao limite ao criar o mês (RF-150, RN-170)
+- Definir limite mensal de gasto por categoria de despesa (RF-099, RN-055)
+- Exibir progresso gasto vs limite e resumo do que ainda pode gastar (RF-100, RF-104)
+- Alertar em 80% e ao estourar 100% do limite (RF-101, RF-102, RN-056–057)
+- Editar limites a qualquer momento; lista vazia remove orçamentos do mês (RF-103)
+- Rollover ativável por categoria: sobra positiva do mês anterior soma ao limite ao criar o mês (RF-105, RN-170)
 - Orçamento não bloqueia transação — apenas alerta (RN-058)
 - Warning permanente se orçamento total > renda planejada (RN-059)
 - Categorias sem limite não geram alertas (RN-060)
@@ -65,7 +65,7 @@ categories:
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo RF-109–114, RF-150 e RN-055–060 / RN-170 mapeado
+- Escopo RF-099–105, RF-105 e RN-055–060 / RN-170 mapeado
 - Hierarquia Epic → 6 Features → 12 Tasks definida
 
 ### ⏳ Pendente

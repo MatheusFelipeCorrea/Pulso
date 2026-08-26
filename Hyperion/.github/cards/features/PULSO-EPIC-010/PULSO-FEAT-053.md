@@ -6,7 +6,7 @@ type: Feature
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-010
 due_date: null
 categories:
@@ -18,7 +18,7 @@ categories:
 
 > **Contexto:** Motor de simulação financeira do planejamento de compra.
 
-**Refs:** RF-134–136 · RN-087–091
+**Refs:** RF-125–136 · RN-087–091
 
 ## 📝 Descrição
 

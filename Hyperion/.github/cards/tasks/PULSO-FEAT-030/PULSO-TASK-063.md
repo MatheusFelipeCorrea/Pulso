@@ -6,13 +6,13 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-030
 due_date: null
 categories:
   - Backend
   - Regra de Negócio
-  - Integrações
+  - Integração Externa
 ---
 
 # [TASK] Backend — reminderService CRUD e marcar pago

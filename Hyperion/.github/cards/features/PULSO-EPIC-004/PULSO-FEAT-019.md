@@ -6,7 +6,7 @@ type: Feature
 priority: High
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-EPIC-004
 due_date: null
 categories:
@@ -16,9 +16,9 @@ categories:
 
 # [FEATURE] Cálculos, progresso e reserva de emergência
 
-> **Contexto:** Utilitários de domínio para progresso, sugestão mensal, tipo curto/longo prazo e meta especial RF-142.
+> **Contexto:** Utilitários de domínio para progresso, sugestão mensal, tipo curto/longo prazo e meta especial RF-036.
 
-**Refs:** RF-029 · RF-030 · RF-142 · RN-067 · RN-068
+**Refs:** RF-032 · RF-033 · RF-036 · RN-067 · RN-068
 
 ## 📝 Descrição
 
@@ -43,7 +43,7 @@ Implementar cálculos compartilhados API/Web e endpoint de sugestão de reserva 
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fórmulas e contrato de sugestão RF-142 definidos
+- Fórmulas e contrato de sugestão RF-036 definidos
 
 ### ⏳ Pendente
 - PULSO-TASK-038–041 — utils, mapper e endpoint de sugestão

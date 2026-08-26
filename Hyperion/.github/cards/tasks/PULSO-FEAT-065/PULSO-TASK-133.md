@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-065
 due_date: null
 categories:
@@ -37,7 +37,7 @@ Rotas: POST `/:id/pagamentos`, DELETE `/:id/pagamentos/:pagamentoId`
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Regras RF-129 / RF-NOVO-O1 documentadas
+- Regras RF-120 / RF-NOVO-O1 documentadas
 
 ### ⏳ Pendente
 - Implementar pagamentos e sync

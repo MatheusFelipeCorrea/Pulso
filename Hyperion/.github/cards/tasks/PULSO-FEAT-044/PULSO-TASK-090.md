@@ -6,7 +6,7 @@ type: Task
 priority: Highest
 sprint: null
 story_points: null
-reporter: "Matheus Felipe Correa"
+reporter: null
 parent: PULSO-FEAT-044
 due_date: null
 categories:
@@ -17,7 +17,7 @@ categories:
 
 # [TASK] Frontend — GroupDetailPage e cards
 
-> **Contexto:** Painel RF-101 com 4 cards e modais integrados.
+> **Contexto:** Painel RF-097 com 4 cards e modais integrados.
 
 ## 📝 Descrição
 
@@ -29,12 +29,12 @@ Implementar detalhe do grupo com viagem, metas, membros e chat.
 
 | Arquivo | Função |
 |---------|--------|
-| `pages/GroupDetailPage.jsx` | Orquestração; polling 30s |
+| `pages/GroupDetailPage.jsx` | Orquestração; Socket.IO chat + REST |
 | `detail/GroupDetailHeader.jsx` | Imagem, editar, convite |
-| `detail/GroupDetailTripCard.jsx` | Viagem, RF-095 toggle, saldos |
+| `detail/GroupDetailTripCard.jsx` | Viagem, RF-091 toggle, saldos |
 | `detail/GroupDetailGoalCard.jsx` | Metas, aportes |
 | `detail/GroupDetailMembersCard.jsx` | Lista membros |
-| `detail/GroupDetailChatCard.jsx` | Chat polling 3s, load more |
+| `detail/GroupDetailChatCard.jsx` | Chat tempo real, load more histórico |
 | `GroupTripTransportChips.jsx` | Insights passagem |
 
 ### Modais reutilizados
@@ -46,7 +46,7 @@ Implementar detalhe do grupo com viagem, metas, membros e chat.
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Mapa RF-101 definido
+- Mapa RF-097 definido
 
 ### ⏳ Pendente
 - Implementar GroupDetailPage e cards
