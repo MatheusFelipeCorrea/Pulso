@@ -2,11 +2,11 @@
 
 **Alice Shikida, alice.salomao@pucminas.edu.br**
 
-**Matheus Felipe, email do aluno 2**
+**Matheus Felipe, Matheus.silva.882564@pucminas.edu.br**
 
 **Maria Clara Gomes, email do aluno 3**
 
-**Sofia Vasconcelos, sofia.silva.1525938@sga.pucminas.br**
+**Sofia Vasconcelos, sofia.silva.1525938@pucminas.edu.br**
 
 **Vinícius Simões, email**
 
