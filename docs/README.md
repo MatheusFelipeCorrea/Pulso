@@ -1,18 +1,24 @@
 # TITULO DO PROJETO
 
-**Nome completo do Aluno 1, email do aluno 1**
+**Alice Shikida, alice.salomao@pucminas.edu.br**
 
-**Nome completo do Aluno 2, email do aluno 2**
+**Matheus Felipe, email do aluno 2**
 
-**Nome completo do Aluno 3, email do aluno 3**
+**Maria Clara Gomes, email do aluno 3**
+
+**Sofia Vasconcelos, sofia.silva.1525938@sga.pucminas.br**
+
+**Vinícius Simões, email**
 
 ---
 
 Professores:
 
-**Prof. Nome do Prof 1**
+**Artur Martins Mol**
 
-**Prof. Nome do Prof 2**
+**João Paulo Carneiro Aramuni**
+
+**Leonardo Vilela Cardoso**
 
 ---
 
@@ -22,8 +28,8 @@ _Instituto de Informática e Ciências Exatas – Pontifícia Universidade de Mi
 
 ---
 
-_**Resumo**. Escrever aqui o resumo. O resumo deve contextualizar rapidamente o trabalho, descrever seu objetivo e, ao final,
-mostrar algum resultado relevante do trabalho (até 10 linhas)._
+_**Resumo**.
+O controle orçamentário pessoal no Brasil enfrenta desafios estruturais devido à fragmentação de rendas com restrições de uso, como salários e benefícios corporativos (VA e VR), e à gestão descentralizada de despesas compartilhadas. Este trabalho apresenta o projeto arquitetural do Pulso, uma aplicação web de gestão e planejamento financeiro voltada ao contexto brasileiro. Desenvolvido sobre uma arquitetura em camadas com React, Node.js e Prisma, o sistema integra a gestão de saldos por tipo de recurso, a divisão colaborativa de contas, o planejamento de viagens e a leitura inteligente de extratos assistida por IA (Gemini). Como resultado, a solução estabelece um ecossistema seguro e em conformidade com a LGPD, que reduz o esforço manual na consolidação de dados e elimina atritos sociais no rateio de despesas, promovendo previsibilidade e autonomia financeira ao usuário._
 
 ---
 
@@ -70,6 +76,6 @@ _Inclua o URL do repositório (Github, Bitbucket, etc) onde você armazenou o c�
 
 | Ambiente              | Plataforma        | Link de Acesso                |
 | --------------------- | ----------------- | ----------------------------- |
-| Repositório de código | GitHub            | https://github.com/XXXXXXX    |
+| Repositório de código | GitHub            | https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/tree/main/code    |
 | Hospedagem do site    | Heroku            | https://XXXXXXX.herokuapp.com |
 | Protótipo Interativo  | MavelApp ou Figma | https://figma.com/XXXXXXX     |
