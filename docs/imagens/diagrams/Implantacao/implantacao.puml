@@ -1,0 +1,80 @@
+@startuml pulso-implantacao
+' Pulso — Diagrama de Implantação
+' Versão: 2.1 (TI5) | Data: 2026-08-29
+' Web React + Mobile Flutter + API Node + RabbitMQ
+
+skinparam nodeStyle rectangle
+
+node "Dispositivo Web" as DeviceWeb {
+  artifact "Navegador" as Browser
+  artifact "SPA React\n(dist/)" as SPA
+  artifact "socket.io-client" as SocketWeb
+  Browser --> SPA
+  Browser --> SocketWeb
+}
+
+node "Dispositivo Mobile" as DeviceMobile #E3F2FD {
+  artifact "App Flutter\n(iOS / Android)" as FlutterApp
+  artifact "socket_io_client" as SocketMobile
+  FlutterApp --> SocketMobile
+}
+
+node "Servidor / Hospedagem" as Host {
+  artifact "Arquivos estáticos\n(Web build)" as Static
+  artifact "API Node.js\nExpress + server.js" as API
+  artifact "Socket.IO\n/api/socket.io" as SocketIO
+  artifact "Cron /api/cron/*\nnode-cron" as CronRoutes
+}
+
+cloud "Neon" as Neon {
+  database "PostgreSQL\n(pooler + direct)" as PG
+}
+
+cloud "Google Cloud" as Google {
+  artifact "OAuth 2.0\n(Auth + Calendar)" as OAuth
+  artifact "Calendar API" as CalAPI
+}
+
+cloud "Serviços de terceiros" as Third {
+  artifact "SMTP" as SMTP
+  artifact "AwesomeAPI" as Awesome
+  artifact "Gemini API" as Gemini
+}
+
+cloud "RabbitMQ\n(opcional — TI5)" as RabbitCloud {
+  artifact "pulso.alerts" as QAlerts
+  artifact "pulso.reminders" as QReminders
+  artifact "pulso.emails" as QEmails
+}
+
+SPA --> Static : HTTPS
+SPA --> API : /api/* JSON + JWT
+SocketWeb --> SocketIO : WebSocket
+FlutterApp --> API : /api/* JSON + JWT
+SocketMobile --> SocketIO : WebSocket
+API --> PG : Prisma
+API --> OAuth
+API --> CalAPI : Premium
+API --> SMTP
+API --> Awesome
+API --> Gemini
+API --> RabbitCloud : se RABBITMQ_URL
+CronRoutes --> API : jobs internos
+
+note right of DeviceMobile
+  **Flutter ⏳ planejado**
+  Mesma API que o web;
+  tokens em secure storage
+end note
+
+note bottom of Host
+  Processo long-running (Socket.IO + RabbitMQ).
+  Dev: web :5173 proxy → API :3333
+end note
+
+note bottom of RabbitCloud
+  Sem RABBITMQ_URL: fail-soft (modo direto)
+  Local: docker compose up -d (api/)
+end note
+
+@enduml

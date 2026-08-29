@@ -1,0 +1,131 @@
+@startuml pulso-modelo-dados
+' Pulso — Modelo de Dados (ER simplificado)
+' Versão: 1.0 (TI5) | Data: 2026-08-29
+
+skinparam linetype ortho
+
+entity "usuarios" as usuarios {
+  * id : cuid PK
+  --
+  nome : varchar
+  email : varchar UK
+  senha_hash : varchar
+  provedor_auth : enum
+  verificado : boolean
+}
+
+entity "configuracoes_usuario" as config {
+  * id : cuid PK
+  * usuario_id : cuid FK UK
+  --
+  plano : FREE | PREMIUM
+  tema : enum
+  modo_uso : enum
+  tokens_google : json
+}
+
+entity "transacoes" as transacoes {
+  * id : cuid PK
+  * usuario_id : cuid FK
+  categoria_id : cuid FK
+  --
+  tipo : RECEITA | DESPESA | TRANSFERENCIA
+  recurso : enum
+  valor : decimal
+  data : datetime
+  recorrente : boolean
+}
+
+entity "categorias" as categorias {
+  * id : cuid PK
+  usuario_id : cuid FK
+  --
+  nome : varchar
+  tipo : enum
+  grupo_beneficio : enum
+}
+
+entity "orcamentos" as orcamentos {
+  * id : cuid PK
+  * usuario_id : cuid FK
+  * categoria_id : cuid FK
+  --
+  mes_referencia : date
+  limite_valor : decimal
+}
+
+entity "metas" as metas {
+  * id : cuid PK
+  * usuario_id : cuid FK
+  --
+  valor_alvo : decimal
+  valor_atual : decimal
+  status : enum
+}
+
+entity "viagens" as viagens {
+  * id : cuid PK
+  * usuario_id : cuid FK
+  meta_id : cuid FK
+  --
+  destino : varchar
+  moeda : varchar
+}
+
+entity "grupos" as grupos {
+  * id : cuid PK
+  * criador_id : cuid FK
+  --
+  nome : varchar
+  codigo_convite : varchar UK
+  modo_divisao : enum
+}
+
+entity "membros_grupo" as membros {
+  * id : cuid PK
+  * grupo_id : cuid FK
+  * usuario_id : cuid FK
+  --
+  papel : ADMIN | MEMBRO
+}
+
+entity "mensagens_chat_grupo" as chat {
+  * id : cuid PK
+  * grupo_id : cuid FK
+  * usuario_id : cuid FK
+  --
+  conteudo : text
+  criado_em : datetime
+}
+
+entity "notificacoes" as notificacoes {
+  * id : cuid PK
+  * usuario_id : cuid FK
+  --
+  tipo : enum
+  titulo : varchar
+  lida : boolean
+}
+
+usuarios ||--|| config
+usuarios ||--o{ transacoes
+categorias ||--o{ transacoes
+usuarios ||--o{ categorias
+usuarios ||--o{ orcamentos
+categorias ||--o{ orcamentos
+usuarios ||--o{ metas
+usuarios ||--o{ viagens
+metas |o--o| viagens
+usuarios ||--o{ grupos : cria
+grupos ||--o{ membros
+usuarios ||--o{ membros
+grupos ||--o{ chat
+usuarios ||--o{ chat
+usuarios ||--o{ notificacoes
+
+note bottom
+  Modelo compartilhado por Web (React) e Mobile (Flutter).
+  Ver schema.prisma para entidades completas.
+end note
+
+@enduml

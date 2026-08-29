@@ -1,0 +1,48 @@
+@startuml pulso-comunicacao
+' Pulso — Diagrama de Comunicação
+' Cenário: Registrar transação (Web React ou Mobile Flutter)
+' Versão: 2.1 (TI5) | Data: 2026-08-29
+
+skinparam linetype ortho
+
+object ":Client UI\n(Web ou Flutter)" as Page
+object ":transactionService\n(cliente)" as TService
+object ":HTTP client\n(Axios / dio)" as Api
+object ":authMiddleware" as Auth
+object ":transactionController" as Ctrl
+object ":transactionService\n(API)" as Svc
+object ":transactionRepository" as Repo
+object ":Prisma Client" as Prisma
+object ":Categoria" as Cat
+object ":Transacao" as Tx
+object ":NotificacaoService" as Notif
+
+Page --> TService : 1: submeterFormulario(dados)
+TService --> Api : 2: POST /transacoes\n+ Bearer JWT
+Api --> Auth : 3: validarToken()
+Auth --> Ctrl : 4: create(req)
+Ctrl --> Svc : 5: criar(usuarioId, payload)
+Svc --> Cat : 6: validarCategoria()
+Svc --> Svc : 7: validarRecursoCategoria()\n(VA/VR; VT rejeitado)
+Svc --> Repo : 8: create(transacao)
+Repo --> Prisma : 9: transacao.create()
+Prisma --> Tx : 10: persistir
+Tx --> Repo : 11: entidade
+Repo --> Svc : 12: transacao
+Svc --> Notif : 13: notificarSeAplicavel()
+Notif --> Page : 14: (opcional) alerta
+Svc --> Ctrl : 15: resultado
+Ctrl --> Api : 16: 201 JSON
+Api --> TService : 17: response
+TService --> Page : 18: atualizarLista()
+
+note right of Svc
+  Mesmo fluxo para Web e Mobile.
+  Regras TI5:
+  - valor > 0
+  - Recursos: DINHEIRO, VA, VR, POUPANCA
+  - VT legado rejeitado na API
+  - VA/VR × grupoBeneficio
+end note
+
+@enduml

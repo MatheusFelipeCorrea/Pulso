@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-080
 title: "Requisitos funcionais, não funcionais e mecanismos"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
 sprint: "Sprint 1"
@@ -44,6 +44,7 @@ categories:
 
 ### ✅ Concluído
 - Inventário de RFs nos epics 001–013
+- Transcrição em `docs/3.requisitos.md` (RF-001–139, RNF-001–016, restrições e mecanismos); check vazio e status Pendente
 
 ### ⏳ Pendente
-- Transcrever e tabular na apostila
+- Revisão (In Revision): professor / preenchimento de Check e Status conforme a implementação avança

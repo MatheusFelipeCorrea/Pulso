@@ -1,0 +1,133 @@
+@startuml pulso-componentes
+' Pulso — Diagrama de Componentes
+' Versão: 2.1 (TI5) | Data: 2026-08-29
+' Clientes: Web React + Mobile Flutter → API Node única
+
+left to right direction
+skinparam componentStyle uml2
+skinparam linetype ortho
+
+interface "IREST API\n(JSON + JWT)" as IREST
+interface "ISocket.IO\n(/api/socket.io)" as ISocket
+interface "IAuthState" as IAuth
+interface "IUI Components" as IUI
+interface "IServiceLayer" as IService
+interface "IRepositoryLayer" as IRepo
+interface "IDatabase\n(Prisma)" as IDB
+interface "IEmailProvider" as IEmail
+interface "IOAuthProvider" as IOAuth
+interface "ICalendarProvider" as ICal
+interface "ICotacaoMoedas" as ICotacao
+interface "IAssistenteIA" as IIA
+interface "ICronEndpoint" as ICron
+interface "IMessageBroker\n(RabbitMQ)" as IRabbit
+
+package "Cliente Web (Browser)" #E9D5FF {
+  [Web App\nReact + Vite] as Web
+  [Pages & Features] as Features
+  [Design System] as DS
+  [Redux Store] as Store
+  [Services HTTP\nAxios] as HttpSvc
+  [Socket Client\ngrupos/chat] as SocketWeb
+
+  DS --() IUI
+  Web --( IUI
+  Features --( IUI
+  Features --( IAuth
+  Features --( IREST
+  Features --( ISocket
+  Store --() IAuth
+  HttpSvc --( IAuth
+  HttpSvc --( IREST
+  SocketWeb --( ISocket
+}
+
+package "Cliente Mobile (Flutter)" #DBEAFE {
+  [Mobile App\nFlutter / Dart] as Mobile
+  [Screens & Widgets] as Screens
+  [HTTP Client\ndio / http] as HttpMobile
+  [Secure Storage\nJWT] as SecureStore
+  [Socket Client\nsocket_io_client] as SocketMobile
+
+  Mobile --( IREST
+  Screens --( IREST
+  HttpMobile --( IREST
+  SecureStore --() IAuth
+  HttpMobile --( IAuth
+  SocketMobile --( ISocket
+}
+
+package "API Pulso (Node.js + Express)" {
+  [Middlewares\nauth, premium, zod, cors] as MW
+  [Controllers] as Ctrl
+  [Services\nregras de negócio] as Svc
+  [Repositories\nPrisma] as Repo
+  [Jobs / Cron] as Jobs
+  [Messaging\njobBridge + rabbit] as Msg
+  [Socket.IO\nGroup Chat] as SocketSrv
+  [Providers\nemail, OAuth] as Providers
+
+  MW --() IREST
+  Ctrl --( IService
+  Svc --() IService
+  Svc --( IRepo
+  Repo --() IRepo
+  Jobs --( IService
+  Jobs --( IRabbit
+  Msg --() IRabbit
+  Msg --( IService
+  SocketSrv --() ISocket
+  SocketSrv --( IService
+
+  Svc --( IEmail
+  Svc --( IOAuth
+  Svc --( ICal
+  Svc --( ICotacao
+  Svc --( IIA
+
+  Providers --() IEmail
+  Providers --() IOAuth
+  Providers --() ICal
+
+  MW --() ICron
+}
+
+package "Persistência" {
+  database "PostgreSQL\n(Neon)" as DB
+  DB --() IDB
+  Repo --( IDB
+}
+
+package "Serviços Externos" {
+  [Google OAuth] as GoogleAuth
+  [Google Calendar API] as GCal
+  [SMTP] as SMTP
+  [AwesomeAPI\nEconomia] as Awesome
+  [Gemini API] as Gemini
+  [RabbitMQ] as Rabbit
+  [Agendador\nnode-cron] as Cron
+
+  GoogleAuth --() IOAuth
+  GCal --() ICal
+  SMTP --() IEmail
+  Awesome --() ICotacao
+  Gemini --() IIA
+  Rabbit --() IRabbit
+  Cron --( ICron
+}
+
+note as N1
+  **TI5 — multi-cliente**
+  • Web React ✅ | Mobile Flutter ⏳ planejado
+  • API única /api — mesmas regras para ambos
+  • Freemium: requirePremium (Grupos, Viagens, Calendar)
+  • RabbitMQ opcional (fail-soft)
+  • VT / Relatórios / Gamificação fora do escopo
+end note
+
+note bottom of Mobile
+  Paridade gradual com web;
+  zero lógica de negócio no app
+end note
+
+@enduml

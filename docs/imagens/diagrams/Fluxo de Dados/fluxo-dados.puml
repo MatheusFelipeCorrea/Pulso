@@ -1,0 +1,59 @@
+@startuml pulso-fluxo-dados
+' Pulso — Fluxo de Dados (visão sistema)
+' Versão: 2.1 (TI5) | Data: 2026-08-29
+
+skinparam linetype ortho
+
+rectangle "Clientes" {
+  card "Web React\n(formulários, dashboard)" as InWeb
+  card "Mobile Flutter\n(screens)" as InMobile
+}
+
+rectangle "Entrada API" {
+  card "Importação extrato\n(web — OFX/CSV/PDF)" as InImport
+  card "OAuth Google" as InOAuth
+  card "Cron / RabbitMQ" as InJobs
+  card "Socket.IO\n(chat grupos)" as InSocket
+}
+
+rectangle "Processamento API (Node.js)" {
+  card "Controllers + Zod" as Ctrl
+  card "Services\n(regras de negócio)" as Svc
+  card "requirePremium\n(TI5)" as Premium
+}
+
+database "PostgreSQL\n(Neon)" as DB
+
+rectangle "Saída" {
+  card "JSON REST\n→ Web + Mobile" as OutJson
+  card "Notificações\nin-app" as OutNotif
+  card "E-mails SMTP\nvia pulso.emails" as OutEmail
+  card "Eventos Socket.IO\n→ Web + Mobile" as OutSocket
+  card "Google Calendar\n(Premium)" as OutGCal
+}
+
+InWeb --> Ctrl : HTTPS + JWT
+InMobile --> Ctrl : HTTPS + JWT
+InImport --> Ctrl : multipart
+InOAuth --> Ctrl : callback
+InJobs --> Ctrl : CRON_SECRET / filas
+InSocket --> Svc : mensagens chat
+
+Ctrl --> Premium : rotas Premium
+Premium --> Svc
+Svc --> DB : Prisma CRUD
+DB --> Svc : agregados
+
+Svc --> OutJson
+Svc --> OutNotif
+Svc --> OutEmail
+Svc --> OutSocket
+Svc --> OutGCal
+
+note bottom
+  **Multi-cliente:** mesma API, mesmos dados.
+  RabbitMQ: pulso.alerts | pulso.reminders | pulso.emails
+  (fail-soft sem RABBITMQ_URL)
+end note
+
+@enduml

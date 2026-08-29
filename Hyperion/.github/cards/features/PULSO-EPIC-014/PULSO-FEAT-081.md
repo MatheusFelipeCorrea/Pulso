@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-081
 title: "Modelagem e projeto arquitetural"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
 sprint: "Sprint 1"
@@ -44,6 +44,7 @@ categories:
 
 ### ✅ Concluído
 - Seções 4.1–4.3 do template mapeadas
+- Diagramas do Pulso anexados em `docs/4.modelagem.md` (Figs. 1–11) a partir de `docs/imagens/diagrams/`
 
 ### ⏳ Pendente
-- Redigir e gerar diagramas do Pulso
+- Revisão (In Revision): textos da visão lógica com o professor, se a apostila exigir mais detalhe por componente

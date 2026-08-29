@@ -1,0 +1,198 @@
+@startuml pulso-pacotes
+' Pulso — Diagrama de Pacotes
+' Versão: 2.1 (TI5) | Data: 2026-08-29
+' Monorepo: web (React) + api (Node) + mobile (Flutter — planejado)
+
+skinparam packageStyle rectangle
+
+package "Codigo.Pulso" {
+
+  package "web <<React>>" #E9D5FF {
+    package "src.pages" {
+      [DashboardPage]
+      [TransactionsPage]
+      [BudgetPage]
+      [CalendarPage]
+      [TripsPage / TripDetailPage]
+      [GoalsPage]
+      [DebtsPage]
+      [GroupsPage / GroupDetailPage]
+      [ExpenseSplitPage]
+      [PurchasePlanningPage]
+      [LandingPage]
+      [Auth pages]
+    }
+
+    package "src.components.features" {
+      [dashboard]
+      [transactions]
+      [budget]
+      [calendar]
+      [trips]
+      [goals]
+      [debts]
+      [groups]
+      [expense-split]
+      [purchase-planning]
+      [auth]
+      [landing]
+    }
+
+    package "src.components.layouts" {
+      [MainLayout]
+      [Sidebar]
+    }
+
+    package "src.design-system" {
+      [components]
+      [styles/tokens]
+      [utils]
+    }
+
+    package "src.services" {
+      [api.js]
+      [transactionService]
+      [budgetService]
+      [viagemService]
+      [metaService]
+      [grupoService]
+      [authService]
+      [dashboardService]
+    }
+
+    package "src.store" {
+      [authSlice]
+      [themeSlice]
+    }
+
+    package "src.config" {
+      [appRoutes]
+      [sidebarNavigation]
+    }
+  }
+
+  package "mobile <<Flutter>> ⏳" #DBEAFE {
+    package "lib.screens" {
+      [LoginScreen]
+      [DashboardScreen]
+      [TransactionsScreen]
+      [BudgetScreen]
+      [GoalsScreen]
+      [GroupsScreen]
+    }
+
+    package "lib.services" {
+      [api_client]
+      [auth_service]
+      [transaction_service]
+    }
+
+    package "lib.core" {
+      [secure_storage]
+      [socket_client]
+    }
+  }
+
+  package "api <<Node.js>>" {
+    package "src.routes" {
+      [authRoutes]
+      [transactionRoutes]
+      [categoryRoutes / tagRoutes]
+      [budgetRoutes]
+      [reminderRoutes]
+      [calendarRoutes]
+      [dashboardRoutes]
+      [importRoutes]
+      [viagemRoutes]
+      [metaRoutes]
+      [grupoRoutes]
+      [moedaRoutes]
+      [debtRoutes]
+      [expenseSplitRoutes]
+      [purchasePlanningRoutes]
+      [notificationRoutes]
+      [cronRoutes]
+    }
+
+    package "src.controllers" {
+      [authController]
+      [transactionController]
+      [viagemController]
+      [grupoController]
+      [dashboardController]
+    }
+
+    package "src.services" {
+      [transactionService]
+      [budgetService]
+      [viagemService]
+      [grupoService]
+      [authService]
+      [notificationService]
+      [dashboardService]
+    }
+
+    package "src.repositories" {
+      [transactionRepository]
+      [budgetRepository]
+      [viagemRepository]
+      [metaRepository]
+      [grupoRepository]
+    }
+
+    package "src.middlewares" {
+      [authMiddleware]
+      [requirePremium]
+      [validateMiddleware]
+      [errorMiddleware]
+    }
+
+    package "src.messaging" {
+      [rabbit.js]
+      [jobBridge.js]
+    }
+
+    package "src.socket" {
+      [groupChat.js]
+    }
+
+    package "src.jobs" {
+      [recurringTransactions]
+      [budgetAlertJob]
+      [reminderRecurrenceJob]
+      [debtAlertJob]
+      [tokenCleanupJob]
+    }
+
+    package "prisma" {
+      [schema.prisma]
+      [migrations]
+      [seed.js]
+    }
+  }
+}
+
+' --- Dependências principais ---
+[src.pages] ..> [src.components.features] : usa
+[src.components.features] ..> [src.design-system] : UI
+[src.components.features] ..> [src.services] : dados
+[src.services] ..> [api.js] : HTTP
+[lib.services] ..> [src.routes] : HTTP /api\n(mesmo contrato)
+[lib.core] ..> [src.socket] : WebSocket
+[src.routes] ..> [src.controllers]
+[src.controllers] ..> [src.services]
+[src.services] ..> [src.repositories]
+[src.repositories] ..> [schema.prisma]
+[src.routes] ..> [src.middlewares]
+[src.controllers] ..> [src.schemas] : validação
+[src.jobs] ..> [src.messaging] : publish
+[src.messaging] ..> [src.jobs] : consume
+
+note bottom
+  **TI5 multi-cliente**
+  • web + api ✅ no repo | mobile Flutter ⏳ planejado
+  • Grupos, Viagens, Calendar: PREMIUM (requirePremium)
+  • VT / Relatórios / Gamificação fora do produto
+end note
+
+@enduml

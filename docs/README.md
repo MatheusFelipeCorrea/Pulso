@@ -52,9 +52,10 @@ O controle orçamentário pessoal no Brasil enfrenta desafios estruturais devido
    3.4. Mecanismos Arquiteturais <br />
 
 4. [Modelagem](4.modelagem.md#modelagem "Modelagem e projeto arquitetural") <br />
-   4.1. Visão de Negócio <br />
-   4.2. Visão Lógica <br />
-   4.3. Modelo de dados (opcional) <br />
+   4.1. Histórias de usuário e casos de uso <br />
+   4.2. Visão lógica <br />
+   4.3. Modelo de dados <br />
+   4.4. Comportamento e fluxos <br />
 
 5. [Wireframes](5.wireframe.md#wireframes "Wireframes") <br />
 
