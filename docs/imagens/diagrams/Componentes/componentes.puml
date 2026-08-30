@@ -1,11 +1,16 @@
 @startuml pulso-componentes
 ' Pulso — Diagrama de Componentes
-' Versão: 2.1 (TI5) | Data: 2026-08-29
+' Versão: 2.2 (TI5) | Data: 2026-08-30
 ' Clientes: Web React + Mobile Flutter → API Node única
 
 left to right direction
 skinparam componentStyle uml2
-skinparam linetype ortho
+
+' --- Ajustes Antiespaguete ---
+skinparam linetype polyline
+skinparam ranksep 120
+skinparam nodesep 45
+' -----------------------------
 
 interface "IREST API\n(JSON + JWT)" as IREST
 interface "ISocket.IO\n(/api/socket.io)" as ISocket
@@ -30,13 +35,13 @@ package "Cliente Web (Browser)" #E9D5FF {
   [Services HTTP\nAxios] as HttpSvc
   [Socket Client\ngrupos/chat] as SocketWeb
 
-  DS --() IUI
+  DS -- IUI
   Web --( IUI
   Features --( IUI
   Features --( IAuth
   Features --( IREST
   Features --( ISocket
-  Store --() IAuth
+  Store -- IAuth
   HttpSvc --( IAuth
   HttpSvc --( IREST
   SocketWeb --( ISocket
@@ -52,7 +57,7 @@ package "Cliente Mobile (Flutter)" #DBEAFE {
   Mobile --( IREST
   Screens --( IREST
   HttpMobile --( IREST
-  SecureStore --() IAuth
+  SecureStore -- IAuth
   HttpMobile --( IAuth
   SocketMobile --( ISocket
 }
@@ -67,16 +72,16 @@ package "API Pulso (Node.js + Express)" {
   [Socket.IO\nGroup Chat] as SocketSrv
   [Providers\nemail, OAuth] as Providers
 
-  MW --() IREST
+  MW -- IREST
   Ctrl --( IService
-  Svc --() IService
+  Svc -- IService
   Svc --( IRepo
-  Repo --() IRepo
+  Repo -- IRepo
   Jobs --( IService
   Jobs --( IRabbit
-  Msg --() IRabbit
+  Msg -- IRabbit
   Msg --( IService
-  SocketSrv --() ISocket
+  SocketSrv -- ISocket
   SocketSrv --( IService
 
   Svc --( IEmail
@@ -85,16 +90,16 @@ package "API Pulso (Node.js + Express)" {
   Svc --( ICotacao
   Svc --( IIA
 
-  Providers --() IEmail
-  Providers --() IOAuth
-  Providers --() ICal
+  Providers -- IEmail
+  Providers -- IOAuth
+  Providers -- ICal
 
-  MW --() ICron
+  MW -- ICron
 }
 
 package "Persistência" {
   database "PostgreSQL\n(Neon)" as DB
-  DB --() IDB
+  DB -- IDB
   Repo --( IDB
 }
 
@@ -107,12 +112,12 @@ package "Serviços Externos" {
   [RabbitMQ] as Rabbit
   [Agendador\nnode-cron] as Cron
 
-  GoogleAuth --() IOAuth
-  GCal --() ICal
-  SMTP --() IEmail
-  Awesome --() ICotacao
-  Gemini --() IIA
-  Rabbit --() IRabbit
+  GoogleAuth -- IOAuth
+  GCal -- ICal
+  SMTP -- IEmail
+  Awesome -- ICotacao
+  Gemini -- IIA
+  Rabbit -- IRabbit
   Cron --( ICron
 }
 
