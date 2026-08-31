@@ -4,11 +4,11 @@
 
 **Matheus Felipe, Matheus.silva.882564@pucminas.edu.br**
 
-**Maria Clara Gomes, email do aluno 3**
+**Maria Clara Gomes, Maria.oliveira.1337652@sga.pucminas.br**
 
 **Sofia Vasconcelos, sofia.silva.1525938@pucminas.edu.br**
 
-**Vinícius Simões, email**
+**Vinícius Simões, vinicius.simoes@sga.pucminas.br**
 
 ---
 
