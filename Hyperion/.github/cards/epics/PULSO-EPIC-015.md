@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-EPIC-015
 title: "Protótipos de interface"
-status: Backlog
+status: "In Progress"
 type: Epic
 priority: Highest
 sprint: "Sprint 1"
@@ -20,7 +20,7 @@ categories:
 
 > **Contexto:** Protótipo de alta fidelidade (Figma) das telas já especificadas nos epics de produto. Uma feature por módulo. **Não** há card de layout nem de dark mode: o chrome `MainLayout` (sidebar/header) é pressuposto; **claro e escuro** vão juntos, tela a tela, em cada feature. Sem tasks: histórias, estados e critérios ficam no próprio card.
 
-**Produto:** `PULSO-EPIC-001`–`013` · **Apostila:** alimenta `PULSO-FEAT-082` (`docs/5`)
+**Produto:** `PULSO-EPIC-001`–`013`, `PULSO-EPIC-016` · **Apostila:** alimenta `PULSO-FEAT-082` (`docs/5`)
 
 ## 🎯 Objetivos
 
@@ -47,6 +47,7 @@ categories:
 | Divisão | `/expense-split` |
 | Dívidas | `/debts` |
 | Insights | `/insights` |
+| Chatbot | `/chatbot` |
 
 ## 🔗 Sub-issues
 
@@ -63,11 +64,12 @@ categories:
 - PULSO-FEAT-096
 - PULSO-FEAT-097
 - PULSO-FEAT-098
+- PULSO-FEAT-106
 
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Inventário de telas a partir dos epics 001–013
+- Inventário de telas a partir dos epics 001–013 e 016
 - Hierarquia Epic → Feature (sem Task; claro/escuro na mesma feature)
 
 ### ⏳ Pendente

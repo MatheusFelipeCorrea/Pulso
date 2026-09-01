@@ -19,7 +19,7 @@ categories:
 
 # [FEATURE] Quick-add via chatbot
 
-> **Contexto:** Botão de acesso rápido (FAB) no dashboard para registrar transação em linguagem natural via chatbot (RF-015). **Depende do módulo Chatbot/Insights.**
+> **Contexto:** Botão de acesso rápido (FAB) no dashboard para registrar transação em linguagem natural via chatbot (RF-015). **Depende de `PULSO-EPIC-016`.**
 
 **Refs:** RF-015
 

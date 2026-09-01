@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-EPIC-014
 title: "Documentação acadêmica"
-status: Backlog
+status: "In Progress"
 type: Epic
 priority: Highest
 sprint: "Sprint 1"

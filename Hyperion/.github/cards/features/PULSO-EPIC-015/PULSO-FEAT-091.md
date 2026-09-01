@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-091
 title: "Protótipo — viagens e moedas"
-status: Backlog
+status: "In Progress"
 type: Feature
 priority: High
 sprint: "Sprint 1"

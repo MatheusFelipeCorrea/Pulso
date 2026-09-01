@@ -46,7 +46,7 @@ Adicionar FAB (floating action button) no dashboard que abre o chatbot em modo q
 | `components/features/dashboard/DashboardQuickAddFab.jsx` | FAB + handler open chatbot |
 | Integração com módulo Chatbot (a criar) | Parser NL → `POST /transacoes` |
 
-**Dependência externa:** módulo Chatbot/Insights (RF-015 bloqueado até existir)
+**Dependência externa:** `PULSO-EPIC-016` (RF-015 bloqueado até o chat existir)
 
 ## 📋 Resumo
 

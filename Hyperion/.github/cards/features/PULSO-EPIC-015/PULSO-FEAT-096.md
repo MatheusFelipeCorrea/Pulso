@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-096
 title: "Protótipo — divisão de despesas"
-status: Backlog
+status: "In Progress"
 type: Feature
 priority: High
 sprint: "Sprint 1"

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-095
 title: "Protótipo — planejamento de compra"
-status: Backlog
+status: "In Progress"
 type: Feature
 priority: High
 sprint: "Sprint 1"

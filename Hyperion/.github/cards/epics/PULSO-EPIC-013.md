@@ -59,7 +59,7 @@ categories:
 
 ## 🚫 Fora de escopo
 
-- **Chatbot** (RF-057–061, RN-121–124/129–130) — épico separado
+- **Chatbot** (RF-057–061) — `PULSO-EPIC-016`
 - Revisão semanal guiada (RF-056) — evolução futura
 
 ## 🔗 Sub-issues

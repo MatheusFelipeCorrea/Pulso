@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-092
 title: "Protótipo — calendário e lembretes"
-status: Backlog
+status: "In Progress"
 type: Feature
 priority: High
 sprint: "Sprint 1"
