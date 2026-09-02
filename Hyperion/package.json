@@ -38,14 +38,24 @@
     "cards:sync": "node scripts/cards-sync/sync.mjs",
     "cards:dry-run": "node scripts/cards-sync/sync.mjs --dry-run",
     "cards:reverse": "node scripts/cards-sync/sync.mjs --reverse",
-    "cards:doctor": "node scripts/cards-sync/doctor.mjs --interactive",
+    "cards:doctor": "node scripts/cards-sync/doctor.mjs",
     "cards:watch": "node scripts/cards-sync/watch.mjs",
     "cards:hook": "node scripts/cards-sync/install-hook.mjs",
     "cards:labels-reset": "node scripts/cards-sync/labels-reset.mjs",
     "cards:migrate-layout": "node scripts/cards-sync/migrate-layout.mjs",
     "cards:test": "node --test scripts/cards-sync/*.test.mjs",
     "hyperion:test": "node --test scripts/hyperion/*.test.mjs",
-    "test": "npm run hyperion:test && npm run cards:test"
+    "test": "npm run hyperion:test && npm run cards:test",
+    "docs:prose-check": "node scripts/hyperion/docs-prose-check.mjs",
+    "hyperion:llm-eval": "node scripts/hyperion/llm-eval.mjs",
+    "hyperion:spec-review-verify": "node scripts/hyperion/spec-review-verify.mjs",
+    "hyperion:audit-verify": "node scripts/hyperion/audit-verify.mjs",
+    "hyperion:plan-verify": "node scripts/hyperion/plan-verify.mjs",
+    "hyperion:release-verify": "node scripts/hyperion/release-verify.mjs",
+    "hyperion:sbom": "npm sbom --sbom-format cyclonedx",
+    "cards:ci-sync": "node scripts/cards-sync/ci-sync.mjs",
+    "cards:pr-guard": "node scripts/cards-sync/pr-board-guard.mjs",
+    "cards:pr-recheck": "node scripts/cards-sync/report-pr-guard-check.mjs"
   },
   "engines": {
     "node": ">=20"

@@ -144,11 +144,12 @@ categories:
 Read from `.github/cards/config/projects-map.json`:
 - Prefer `labels` (array of label names) when present.
 - Otherwise load `labelsFile` using `locale` (defaults to `"en"`), e.g. `labels.{locale}.json`.
-- If neither exists, fall back to the default set below.
+- Each catalog entry is `{ name, color, description }` (v2) or a plain string (v1 legacy).
+- Use only `name` values from the loaded catalog in card `categories`.
 
-Backend, Banco de Dados, Bug, CI / CD, Cibersegurança, Documentação, Frontend, Infra / DevOps, Integração Externa, Inteligência Artificial, Protótipo, QA / Testes, Refatoração, Regra de Negócio, UX / UI, Arquitetura, Débito Técnico, Performance, Acessibilidade, Mobile, Analytics, Blocked
+Default PT-BR catalog includes: Backend, Banco de Dados, Bug, CI / CD, Cibersegurança, Documentação, Frontend, Web, Infra / DevOps, Integração Externa, Inteligência Artificial, Protótipo, QA / Testes, Refatoração, Regra de Negócio, UX / UI, Arquitetura, Débito Técnico, Performance, Acessibilidade, Mobile, Analytics, Blocked, Observabilidade, API, Auth / Identidade, i18n / L10n, Conformidade, Spike, Breaking change, Regressão, Hotfix, Design system, POC, Dados / ETL, Notificações, Migração, DevEx, Solicitação do cliente.
 
-The sync auto-creates any label from `categories` that does not exist in the repository. Users can add custom labels to the config files at any time.
+The sync auto-creates any label from `categories` that does not exist in the repository and keeps color/description in sync with the catalog.
 
 ### CARD_ID Generation Rules:
 
@@ -186,7 +187,7 @@ When project documentation is provided, use it to generate cards with REAL, ACCU
 - Know error handling and cross-cutting concerns
 - Determine which layers need new/modified files
 
-### .github/docs/exemplars.md *(if present and filled)*
+### .github/docs/reference/exemplars.md *(if present and filled)*
 - Reference existing exemplar files for new file creation
 - Example: 'Criar em: src/services/insumo.service.js — Seguir padrão de: src/services/fazenda.service.js'
 
@@ -241,6 +242,22 @@ If a card has `categories` containing `Protótipo` or `UX / UI`, the agent MUST:
    - `### PENDENTE`
 4. Never mark prototype as done unless the user confirms it exists.
 5. If user asks to evolve the card, update the SAME card file (`MODIFICAR`) instead of creating duplicates.
+
+### POC vs Prototype vs Spike — decision tree
+
+Use **one** exploratory label per card — never stack all three. Ask before assigning:
+
+| Question | If yes → label | Card shape |
+|----------|----------------|------------|
+| Need to **validate a business hypothesis** with minimal build (days, demo to stakeholders)? | **POC** | Short scope, success metric, throwaway code OK |
+| Need a **clickable UX** to align design + eng before full implementation? | **Protótipo** | Screens/flows, Figma link, accessibility notes — see Prototype-first above |
+| Need to **reduce technical uncertainty** (spike in time-boxed research)? | **Spike** | Time-box (e.g. 2–3 days), explicit question, deliverable = findings doc or ADR snippet |
+
+**Rules:**
+- Epic/Feature cards: use POC or Prototype at most **one** per epic unless user explicitly splits work.
+- Spike cards: always `type: Task` or `type: Story` with time-box in body; outcome is knowledge, not shipped feature.
+- If user says "experiment" without clarity, ask: *"Is this proving value (POC), UX (Protótipo), or tech risk (Spike)?"*
+- Default catalog descriptions: POC = business validation · Protótipo = UX/UI · Spike = technical exploration.
 
 ### After understanding
 - Present summary
@@ -342,7 +359,7 @@ Métodos NOVOS a adicionar:
 
 ### fazenda.service.js (NOVO — CRIAR)
 Criar em: `src/services/fazenda.service.js`  
-Seguir padrão de: arquivo de serviço equivalente listado em `.github/docs/exemplars.md`
+Seguir padrão de: arquivo de serviço equivalente listado em `.github/docs/reference/exemplars.md`
 
 ```javascript
 // criarFazenda(dados)
