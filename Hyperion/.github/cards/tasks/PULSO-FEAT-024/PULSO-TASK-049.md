@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-049
+card_id: "PULSO-TASK-049"
 title: "Banco de dados — viagens, despesas, observações e favoritas"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-024
+parent: "PULSO-FEAT-024"
 due_date: null
+board_sync_at: "2026-08-26T15:31:38.000Z"
 categories:
-  - Banco de Dados
-  - Regra de Negócio
+  - "Banco de Dados"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Banco de dados — viagens, despesas, observações e favoritas
 

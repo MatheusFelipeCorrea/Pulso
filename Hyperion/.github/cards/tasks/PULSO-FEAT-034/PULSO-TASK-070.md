@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-070
+card_id: "PULSO-TASK-070"
 title: "Frontend — ReminderFormModal e Google Agenda"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-034
+parent: "PULSO-FEAT-034"
 due_date: null
+board_sync_at: "2026-08-26T15:31:58.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Integração Externa
+  - "web"
+  - "Frontend"
+  - "Integração Externa"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — ReminderFormModal e Google Agenda
 

@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-073
+card_id: "PULSO-FEAT-073"
 title: "Geração LLM — resumo, sugestões e educação"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-013
+parent: "PULSO-EPIC-013"
 due_date: null
+board_sync_at: "2026-08-26T15:30:45.000Z"
 categories:
-  - Backend
-  - Inteligência Artificial
-  - Regra de Negócio
+  - "Backend"
+  - "Inteligência Artificial"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Geração LLM — resumo, sugestões e educação
 

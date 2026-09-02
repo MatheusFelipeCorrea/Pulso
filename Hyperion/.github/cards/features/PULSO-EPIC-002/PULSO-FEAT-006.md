@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-006
+card_id: "PULSO-FEAT-006"
 title: "Backend — agregação GET /dashboard"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-002
+parent: "PULSO-EPIC-002"
 due_date: null
+board_sync_at: "2026-08-26T15:29:40.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
-  - Arquitetura
+  - "Backend"
+  - "Regra de Negócio"
+  - "Arquitetura"
 ---
+
 
 # [FEATURE] Backend — agregação GET /dashboard
 

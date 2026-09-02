@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-038
+card_id: "PULSO-FEAT-038"
 title: "Header, footer, mobile e estilos"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-007
+parent: "PULSO-EPIC-007"
 due_date: null
+board_sync_at: "2026-08-26T15:30:10.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [FEATURE] Header, footer, mobile e estilos
 

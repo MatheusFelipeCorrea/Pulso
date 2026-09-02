@@ -1,17 +1,19 @@
 ---
-card_id: PULSO-TASK-117
+card_id: "PULSO-TASK-117"
 title: "Banco de dados — Divisao e participantes"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-058
+parent: "PULSO-FEAT-058"
 due_date: null
+board_sync_at: "2026-08-26T15:23:39.000Z"
 categories:
-  - Banco de Dados
+  - "Banco de Dados"
 ---
+
 
 # [TASK] Banco de dados — Divisao e participantes
 

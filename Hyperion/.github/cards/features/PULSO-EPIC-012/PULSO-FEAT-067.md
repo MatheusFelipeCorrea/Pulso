@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-067
+card_id: "PULSO-FEAT-067"
 title: "Alertas de vencimento e limpeza"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-012
+parent: "PULSO-EPIC-012"
 due_date: null
+board_sync_at: "2026-08-26T15:30:39.000Z"
 categories:
-  - Backend
-  - Notificações
+  - "Backend"
+  - "Notificações"
 ---
+
 
 # [FEATURE] Alertas de vencimento e limpeza
 

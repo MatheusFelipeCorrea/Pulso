@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-068
+card_id: "PULSO-TASK-068"
 title: "Backend — jobs alerta e recorrência"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-033
+parent: "PULSO-FEAT-033"
 due_date: null
+board_sync_at: "2026-08-26T15:31:56.000Z"
 categories:
-  - Backend
-  - Cron
-  - Notificações
+  - "Backend"
+  - "Notificações"
+  - "Cron"
 ---
+
 
 # [TASK] Backend — jobs alerta e recorrência
 

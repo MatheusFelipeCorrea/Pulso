@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-043
+card_id: "PULSO-FEAT-043"
 title: "Chat e notificações de grupo"
-status: Backlog
-type: Feature
-priority: Medium
+status: "Backlog"
+type: "Feature"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-008
+parent: "PULSO-EPIC-008"
 due_date: null
+board_sync_at: "2026-08-26T15:30:15.000Z"
 categories:
-  - Backend
-  - Notificações
+  - "Backend"
+  - "Notificações"
 ---
+
 
 # [FEATURE] Chat e notificações de grupo
 

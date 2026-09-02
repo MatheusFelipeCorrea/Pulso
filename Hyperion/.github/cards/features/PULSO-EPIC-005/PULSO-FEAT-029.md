@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-029
+card_id: "PULSO-FEAT-029"
 title: "QA — testes de viagens e moedas"
-status: Backlog
-type: Feature
-priority: Medium
+status: "Backlog"
+type: "Feature"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-005
+parent: "PULSO-EPIC-005"
 due_date: null
+board_sync_at: "2026-08-26T15:30:01.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [FEATURE] QA — testes de viagens e moedas
 

@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-048
+card_id: "PULSO-FEAT-048"
 title: "Alertas 80%/100% e jobs"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-009
+parent: "PULSO-EPIC-009"
 due_date: null
+board_sync_at: "2026-08-26T15:30:21.000Z"
 categories:
-  - Backend
-  - Notificações
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
+  - "Notificações"
 ---
+
 
 # [FEATURE] Alertas 80%/100% e jobs
 

@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-024
+card_id: "PULSO-TASK-024"
 title: "QA — testes dashboard e importação"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-002
+parent: "PULSO-EPIC-002"
 due_date: null
+board_sync_at: "2026-08-26T15:30:50.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [TASK] QA — testes dashboard e importação
 

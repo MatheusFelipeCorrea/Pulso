@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-021
+card_id: "PULSO-TASK-021"
 title: "Frontend — modal ImportStatementModal"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-010
+parent: "PULSO-FEAT-010"
 due_date: null
+board_sync_at: "2026-08-26T15:31:11.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Integração Externa
+  - "web"
+  - "Frontend"
+  - "Integração Externa"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — modal ImportStatementModal
 

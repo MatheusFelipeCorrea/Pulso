@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-149
+card_id: "PULSO-TASK-149"
 title: "Backend — job mensal e wire no cron"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-074
+parent: "PULSO-FEAT-074"
 due_date: null
+board_sync_at: "2026-08-26T15:29:13.000Z"
 categories:
-  - Backend
-  - Notificações
+  - "Backend"
+  - "Notificações"
 ---
+
 
 # [TASK] Backend — job mensal e wire no cron
 

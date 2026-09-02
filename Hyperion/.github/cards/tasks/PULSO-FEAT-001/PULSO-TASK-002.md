@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-002
+card_id: "PULSO-TASK-002"
 title: "Backend — cadastro, verificação e reenvio de email"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-001
+parent: "PULSO-FEAT-001"
 due_date: null
+board_sync_at: "2026-08-26T15:30:52.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
-  - Integração Externa
+  - "Backend"
+  - "Integração Externa"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — cadastro, verificação e reenvio de email
 

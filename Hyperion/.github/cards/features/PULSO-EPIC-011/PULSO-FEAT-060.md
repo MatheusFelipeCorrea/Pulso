@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-060
+card_id: "PULSO-FEAT-060"
 title: "Pagamentos, quitação e saldo"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-011
+parent: "PULSO-EPIC-011"
 due_date: null
+board_sync_at: "2026-08-26T15:30:33.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Pagamentos, quitação e saldo
 

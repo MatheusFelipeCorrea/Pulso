@@ -1,17 +1,19 @@
 ---
-card_id: PULSO-TASK-129
+card_id: "PULSO-TASK-129"
 title: "Banco de dados — Divida e PagamentoDivida"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-064
+parent: "PULSO-FEAT-064"
 due_date: null
+board_sync_at: "2026-08-26T15:23:52.000Z"
 categories:
-  - Banco de Dados
+  - "Banco de Dados"
 ---
+
 
 # [TASK] Banco de dados — Divida e PagamentoDivida
 

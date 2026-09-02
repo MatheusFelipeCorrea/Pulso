@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-073
+card_id: "PULSO-TASK-073"
 title: "Frontend — LandingPage e rotas públicas"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-036
+parent: "PULSO-FEAT-036"
 due_date: null
+board_sync_at: "2026-08-26T15:32:02.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — LandingPage e rotas públicas
 

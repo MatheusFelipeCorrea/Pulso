@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-027
+card_id: "PULSO-FEAT-027"
 title: "Frontend — página viagens e moedas"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-005
+parent: "PULSO-EPIC-005"
 due_date: null
+board_sync_at: "2026-08-26T15:29:59.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [FEATURE] Frontend — página viagens e moedas
 

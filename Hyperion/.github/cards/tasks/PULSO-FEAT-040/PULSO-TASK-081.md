@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-081
+card_id: "PULSO-TASK-081"
 title: "Banco de dados — Grupo e MembroGrupo"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-040
+parent: "PULSO-FEAT-040"
 due_date: null
+board_sync_at: "2026-08-26T15:32:09.000Z"
 categories:
-  - Banco de Dados
-  - Regra de Negócio
+  - "Banco de Dados"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Banco de dados — Grupo e MembroGrupo
 

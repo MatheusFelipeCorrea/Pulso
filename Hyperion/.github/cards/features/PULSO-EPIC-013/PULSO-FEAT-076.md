@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-076
+card_id: "PULSO-FEAT-076"
 title: "QA — testes de insights inteligentes"
-status: Backlog
-type: Feature
-priority: Medium
+status: "Backlog"
+type: "Feature"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-013
+parent: "PULSO-EPIC-013"
 due_date: null
+board_sync_at: "2026-08-26T15:30:48.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [FEATURE] QA — testes de insights inteligentes
 

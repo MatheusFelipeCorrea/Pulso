@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-052
+card_id: "PULSO-FEAT-052"
 title: "Backend — API e painel de planejamento"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-010
+parent: "PULSO-EPIC-010"
 due_date: null
+board_sync_at: "2026-08-26T15:30:25.000Z"
 categories:
-  - Backend
-  - Banco de Dados
-  - Regra de Negócio
+  - "Backend"
+  - "Banco de Dados"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Backend — API e painel de planejamento
 

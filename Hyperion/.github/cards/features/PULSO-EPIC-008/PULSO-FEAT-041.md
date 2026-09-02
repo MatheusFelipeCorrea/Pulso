@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-041
+card_id: "PULSO-FEAT-041"
 title: "Viagem compartilhada e divisão RF-095"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-008
+parent: "PULSO-EPIC-008"
 due_date: null
+board_sync_at: "2026-08-26T15:30:13.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Viagem compartilhada e divisão RF-095
 

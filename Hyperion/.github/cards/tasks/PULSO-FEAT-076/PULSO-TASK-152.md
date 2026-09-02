@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-152
+card_id: "PULSO-TASK-152"
 title: "QA — testes de insights inteligentes"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-076
+parent: "PULSO-FEAT-076"
 due_date: null
+board_sync_at: "2026-08-26T15:29:15.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [TASK] QA — testes de insights inteligentes
 

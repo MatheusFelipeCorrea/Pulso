@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-008
+card_id: "PULSO-TASK-008"
 title: "Backend — recuperação e reset de senha"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-004
+parent: "PULSO-FEAT-004"
 due_date: null
+board_sync_at: "2026-08-26T15:30:58.000Z"
 categories:
-  - Backend
-  - Integração Externa
-  - Cibersegurança
-  - Regra de Negócio
+  - "Backend"
+  - "Cibersegurança"
+  - "Integração Externa"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — recuperação e reset de senha
 

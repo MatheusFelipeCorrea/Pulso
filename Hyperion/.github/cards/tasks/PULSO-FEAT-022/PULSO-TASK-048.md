@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-048
+card_id: "PULSO-TASK-048"
 title: "QA — testes unitários de metas"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-022
+parent: "PULSO-FEAT-022"
 due_date: null
+board_sync_at: "2026-08-26T15:31:36.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [TASK] QA — testes unitários de metas
 

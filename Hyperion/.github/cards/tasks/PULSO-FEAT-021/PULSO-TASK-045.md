@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-045
+card_id: "PULSO-TASK-045"
 title: "Frontend — GoalFormModal e reserva de emergência"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-021
+parent: "PULSO-FEAT-021"
 due_date: null
+board_sync_at: "2026-08-26T15:31:33.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Regra de Negócio
+  - "web"
+  - "Frontend"
+  - "Regra de Negócio"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — GoalFormModal e reserva de emergência
 

@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-062
+card_id: "PULSO-TASK-062"
 title: "Backend — reminderRepository, mapper e categorias"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-030
+parent: "PULSO-FEAT-030"
 due_date: null
+board_sync_at: "2026-08-26T15:31:50.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — reminderRepository, mapper e categorias
 

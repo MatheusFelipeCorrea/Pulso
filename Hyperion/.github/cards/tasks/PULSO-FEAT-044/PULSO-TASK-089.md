@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-089
+card_id: "PULSO-TASK-089"
 title: "Frontend — GroupsPage e modais lista"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-044
+parent: "PULSO-FEAT-044"
 due_date: null
+board_sync_at: "2026-08-26T15:32:17.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — GroupsPage e modais lista
 

@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-047
+card_id: "PULSO-FEAT-047"
 title: "Rollover e status por categoria"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-009
+parent: "PULSO-EPIC-009"
 due_date: null
+board_sync_at: "2026-08-26T15:30:20.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Rollover e status por categoria
 

@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-146
+card_id: "PULSO-TASK-146"
 title: "Backend — prompt e orquestração generateInsights"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-073
+parent: "PULSO-FEAT-073"
 due_date: null
+board_sync_at: "2026-08-26T15:29:10.000Z"
 categories:
-  - Backend
-  - Inteligência Artificial
+  - "Backend"
+  - "Inteligência Artificial"
 ---
+
 
 # [TASK] Backend — prompt e orquestração generateInsights
 

@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-123
+card_id: "PULSO-TASK-123"
 title: "Backend — lembrete de cobrança (RF-120)"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-061
+parent: "PULSO-FEAT-061"
 due_date: null
+board_sync_at: "2026-08-26T15:23:46.000Z"
 categories:
-  - Backend
-  - Notificações
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
+  - "Notificações"
 ---
+
 
 # [TASK] Backend — lembrete de cobrança (RF-120)
 

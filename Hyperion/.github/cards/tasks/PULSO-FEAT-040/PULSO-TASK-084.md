@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-084
+card_id: "PULSO-TASK-084"
 title: "Backend — membros, sair e papéis"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-040
+parent: "PULSO-FEAT-040"
 due_date: null
+board_sync_at: "2026-08-26T15:32:12.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — membros, sair e papéis
 

@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-052
+card_id: "PULSO-TASK-052"
 title: "Backend — viagemService CRUD e resolução de destino"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-024
+parent: "PULSO-FEAT-024"
 due_date: null
+board_sync_at: "2026-08-26T15:31:40.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — viagemService CRUD e resolução de destino
 

@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-148
+card_id: "PULSO-TASK-148"
 title: "Backend — rotas /insights e regenerar"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-074
+parent: "PULSO-FEAT-074"
 due_date: null
+board_sync_at: "2026-08-26T15:29:12.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — rotas /insights e regenerar
 

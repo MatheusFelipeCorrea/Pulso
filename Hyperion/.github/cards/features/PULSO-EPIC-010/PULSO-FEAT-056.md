@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-056
+card_id: "PULSO-FEAT-056"
 title: "Frontend — página e componentes"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-010
+parent: "PULSO-EPIC-010"
 due_date: null
+board_sync_at: "2026-08-26T15:30:29.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [FEATURE] Frontend — página e componentes
 

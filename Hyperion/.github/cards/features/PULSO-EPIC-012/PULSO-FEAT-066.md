@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-066
+card_id: "PULSO-FEAT-066"
 title: "Saldo consolidado e contadores"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-012
+parent: "PULSO-EPIC-012"
 due_date: null
+board_sync_at: "2026-08-26T15:30:38.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Saldo consolidado e contadores
 

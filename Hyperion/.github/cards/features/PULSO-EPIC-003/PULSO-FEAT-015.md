@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-015
+card_id: "PULSO-FEAT-015"
 title: "Recorrência e geração automática"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-003
+parent: "PULSO-EPIC-003"
 due_date: null
+board_sync_at: "2026-08-26T15:29:48.000Z"
 categories:
-  - Backend
-  - Infra / DevOps
-  - Regra de Negócio
+  - "Backend"
+  - "Infra / DevOps"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Recorrência e geração automática
 

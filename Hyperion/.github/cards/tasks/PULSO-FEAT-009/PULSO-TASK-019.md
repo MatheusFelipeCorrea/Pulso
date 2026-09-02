@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-019
+card_id: "PULSO-TASK-019"
 title: "Saúde financeira — algoritmo e widget"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-009
+parent: "PULSO-FEAT-009"
 due_date: null
+board_sync_at: "2026-08-26T15:31:09.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Saúde financeira — algoritmo e widget
 

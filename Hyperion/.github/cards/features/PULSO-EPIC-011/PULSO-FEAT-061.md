@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-061
+card_id: "PULSO-FEAT-061"
 title: "Lembrete de cobrança e limpeza"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-011
+parent: "PULSO-EPIC-011"
 due_date: null
+board_sync_at: "2026-08-26T15:30:34.000Z"
 categories:
-  - Backend
-  - Notificações
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
+  - "Notificações"
 ---
+
 
 # [FEATURE] Lembrete de cobrança e limpeza
 

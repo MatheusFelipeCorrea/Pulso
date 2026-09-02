@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-116
+card_id: "PULSO-TASK-116"
 title: "QA — testes de planejamento de compra"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-057
+parent: "PULSO-FEAT-057"
 due_date: null
+board_sync_at: "2026-08-26T15:23:38.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [TASK] QA — testes de planejamento de compra
 

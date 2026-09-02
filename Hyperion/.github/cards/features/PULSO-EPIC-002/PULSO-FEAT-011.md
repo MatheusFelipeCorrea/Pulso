@@ -1,21 +1,23 @@
 ---
-card_id: PULSO-FEAT-011
+card_id: "PULSO-FEAT-011"
 title: "Quick-add via chatbot"
-status: Backlog
-type: Feature
-priority: Medium
+status: "Backlog"
+type: "Feature"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-002
+parent: "PULSO-EPIC-002"
 due_date: null
+board_sync_at: "2026-08-26T15:29:44.000Z"
 categories:
-  - Frontend
-  - Web
-  - Integração Externa
-  - Inteligência Artificial
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "Integração Externa"
+  - "Inteligência Artificial"
+  - "UX / UI"
 ---
+
 
 # [FEATURE] Quick-add via chatbot
 

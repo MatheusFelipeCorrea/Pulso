@@ -1,22 +1,24 @@
 ---
-card_id: PULSO-FEAT-005
+card_id: "PULSO-FEAT-005"
 title: "Proteção de rotas e infraestrutura de segurança"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-001
+parent: "PULSO-EPIC-001"
 due_date: null
+board_sync_at: "2026-08-26T15:29:39.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Cibersegurança
-  - QA / Testes
-  - Infra / DevOps
+  - "web"
+  - "Backend"
+  - "Cibersegurança"
+  - "Frontend"
+  - "Infra / DevOps"
+  - "QA / Testes"
 ---
+
 
 # [FEATURE] Proteção de rotas e infraestrutura de segurança
 

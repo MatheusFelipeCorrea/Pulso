@@ -1,22 +1,24 @@
 ---
-card_id: PULSO-EPIC-011
+card_id: "PULSO-EPIC-011"
 title: "Divisão de Despesas"
-status: Backlog
-type: Epic
-priority: Highest
+status: "Backlog"
+type: "Epic"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
 parent: null
 due_date: null
+board_sync_at: "2026-08-26T15:29:31.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Banco de Dados
-  - Regra de Negócio
-  - Notificações
+  - "web"
+  - "Backend"
+  - "Banco de Dados"
+  - "Frontend"
+  - "Regra de Negócio"
+  - "Notificações"
 ---
+
 
 # [EPIC] Divisão de Despesas
 

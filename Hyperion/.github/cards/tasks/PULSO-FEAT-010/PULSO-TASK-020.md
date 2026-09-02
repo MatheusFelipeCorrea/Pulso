@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-020
+card_id: "PULSO-TASK-020"
 title: "Backend — importação de extratos"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-010
+parent: "PULSO-FEAT-010"
 due_date: null
+board_sync_at: "2026-08-26T15:31:10.000Z"
 categories:
-  - Backend
-  - Integração Externa
-  - Regra de Negócio
-  - Inteligência Artificial
+  - "Backend"
+  - "Integração Externa"
+  - "Inteligência Artificial"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — importação de extratos
 

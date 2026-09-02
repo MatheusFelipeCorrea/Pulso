@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-040
+card_id: "PULSO-TASK-040"
 title: "Backend — metaRoutes, controller e schemas"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-018
+parent: "PULSO-FEAT-018"
 due_date: null
+board_sync_at: "2026-08-26T15:31:27.000Z"
 categories:
-  - Backend
-  - API
+  - "api"
+  - "Backend"
 ---
+
 
 # [TASK] Backend — metaRoutes, controller e schemas
 

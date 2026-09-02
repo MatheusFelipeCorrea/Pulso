@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-115
+card_id: "PULSO-TASK-115"
 title: "Frontend — modais, imagem e CSS"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-056
+parent: "PULSO-FEAT-056"
 due_date: null
+board_sync_at: "2026-08-26T15:23:37.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [TASK] Frontend — modais, imagem e CSS
 

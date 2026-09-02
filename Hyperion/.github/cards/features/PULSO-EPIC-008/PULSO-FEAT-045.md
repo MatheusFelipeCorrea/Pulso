@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-045
+card_id: "PULSO-FEAT-045"
 title: "QA — testes de grupos"
-status: Backlog
-type: Feature
-priority: Medium
+status: "Backlog"
+type: "Feature"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-008
+parent: "PULSO-EPIC-008"
 due_date: null
+board_sync_at: "2026-08-26T15:30:17.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [FEATURE] QA — testes de grupos
 

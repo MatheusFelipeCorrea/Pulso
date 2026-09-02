@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-035
+card_id: "PULSO-TASK-035"
 title: "Frontend — exclusão e estilos transactions.css"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-016
+parent: "PULSO-FEAT-016"
 due_date: null
+board_sync_at: "2026-08-26T15:31:23.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [TASK] Frontend — exclusão e estilos transactions.css
 

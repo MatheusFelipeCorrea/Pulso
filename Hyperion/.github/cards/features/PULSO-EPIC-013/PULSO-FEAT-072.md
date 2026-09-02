@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-072
+card_id: "PULSO-FEAT-072"
 title: "Score, projeções e alertas preditivos"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-013
+parent: "PULSO-EPIC-013"
 due_date: null
+board_sync_at: "2026-08-26T15:30:44.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Score, projeções e alertas preditivos
 

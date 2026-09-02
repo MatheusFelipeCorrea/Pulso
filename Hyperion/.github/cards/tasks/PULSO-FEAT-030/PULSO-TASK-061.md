@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-061
+card_id: "PULSO-TASK-061"
 title: "Banco de dados — Lembrete e config Google"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-030
+parent: "PULSO-FEAT-030"
 due_date: null
+board_sync_at: "2026-08-26T15:31:49.000Z"
 categories:
-  - Banco de Dados
-  - Regra de Negócio
+  - "Banco de Dados"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Banco de dados — Lembrete e config Google
 

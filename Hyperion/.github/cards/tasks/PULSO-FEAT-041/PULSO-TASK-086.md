@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-086
+card_id: "PULSO-TASK-086"
 title: "Backend — viagem grupo, pretensões e RF-095"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-041
+parent: "PULSO-FEAT-041"
 due_date: null
+board_sync_at: "2026-08-26T15:32:14.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — viagem grupo, pretensões e RF-095
 

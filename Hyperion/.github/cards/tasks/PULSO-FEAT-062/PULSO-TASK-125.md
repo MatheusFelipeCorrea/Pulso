@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-125
+card_id: "PULSO-TASK-125"
 title: "Frontend — ExpenseSplitPage e client"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-062
+parent: "PULSO-FEAT-062"
 due_date: null
+board_sync_at: "2026-08-26T15:23:48.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — ExpenseSplitPage e client
 

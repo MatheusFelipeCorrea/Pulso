@@ -1,21 +1,23 @@
 ---
-card_id: PULSO-FEAT-009
+card_id: "PULSO-FEAT-009"
 title: "Widgets resumo e saúde financeira"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-002
+parent: "PULSO-EPIC-002"
 due_date: null
+board_sync_at: "2026-08-26T15:29:42.000Z"
 categories:
-  - Frontend
-  - Web
-  - Backend
-  - UX / UI
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "Regra de Negócio"
+  - "UX / UI"
 ---
+
 
 # [FEATURE] Widgets resumo e saúde financeira
 

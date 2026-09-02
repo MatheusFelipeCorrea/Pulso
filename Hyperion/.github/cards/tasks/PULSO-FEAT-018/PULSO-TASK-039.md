@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-039
+card_id: "PULSO-TASK-039"
 title: "Backend — metaService e metaRepository"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-018
+parent: "PULSO-FEAT-018"
 due_date: null
+board_sync_at: "2026-08-26T15:31:26.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — metaService e metaRepository
 

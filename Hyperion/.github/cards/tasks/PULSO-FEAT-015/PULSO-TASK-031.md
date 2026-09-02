@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-031
+card_id: "PULSO-TASK-031"
 title: "Job recurringTransactions e recurrenceUtils"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-015
+parent: "PULSO-FEAT-015"
 due_date: null
+board_sync_at: "2026-08-26T15:31:19.000Z"
 categories:
-  - Backend
-  - Infra / DevOps
-  - Regra de Negócio
+  - "Backend"
+  - "Infra / DevOps"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Job recurringTransactions e recurrenceUtils
 

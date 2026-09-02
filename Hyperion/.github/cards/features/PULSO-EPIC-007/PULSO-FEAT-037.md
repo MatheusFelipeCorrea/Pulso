@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-037
+card_id: "PULSO-FEAT-037"
 title: "Seções de marketing e módulos"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-007
+parent: "PULSO-EPIC-007"
 due_date: null
+board_sync_at: "2026-08-26T15:30:09.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [FEATURE] Seções de marketing e módulos
 

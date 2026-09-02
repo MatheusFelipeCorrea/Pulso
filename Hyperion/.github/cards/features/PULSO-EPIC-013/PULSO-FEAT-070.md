@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-070
+card_id: "PULSO-FEAT-070"
 title: "Provider Gemini Insights e configuração"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-013
+parent: "PULSO-EPIC-013"
 due_date: null
+board_sync_at: "2026-08-26T15:30:42.000Z"
 categories:
-  - Backend
-  - Integração Externa
-  - Inteligência Artificial
+  - "Backend"
+  - "Integração Externa"
+  - "Inteligência Artificial"
 ---
+
 
 # [FEATURE] Provider Gemini Insights e configuração
 

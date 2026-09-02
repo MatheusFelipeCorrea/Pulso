@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-101
+card_id: "PULSO-TASK-101"
 title: "Frontend — BudgetPage e client HTTP"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-049
+parent: "PULSO-FEAT-049"
 due_date: null
+board_sync_at: "2026-08-26T15:32:29.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — BudgetPage e client HTTP
 

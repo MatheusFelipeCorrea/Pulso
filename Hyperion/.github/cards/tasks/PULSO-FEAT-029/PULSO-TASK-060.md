@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-060
+card_id: "PULSO-TASK-060"
 title: "QA — testes unitários viagens e moedas"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-029
+parent: "PULSO-FEAT-029"
 due_date: null
+board_sync_at: "2026-08-26T15:31:48.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [TASK] QA — testes unitários viagens e moedas
 

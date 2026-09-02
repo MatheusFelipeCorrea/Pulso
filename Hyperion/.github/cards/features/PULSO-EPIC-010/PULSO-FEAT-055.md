@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-055
+card_id: "PULSO-FEAT-055"
 title: "Imagens do item de compra"
-status: Backlog
-type: Feature
-priority: Medium
+status: "Backlog"
+type: "Feature"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-010
+parent: "PULSO-EPIC-010"
 due_date: null
+board_sync_at: "2026-08-26T15:30:28.000Z"
 categories:
-  - Backend
-  - Integração Externa
+  - "Backend"
+  - "Integração Externa"
 ---
+
 
 # [FEATURE] Imagens do item de compra
 

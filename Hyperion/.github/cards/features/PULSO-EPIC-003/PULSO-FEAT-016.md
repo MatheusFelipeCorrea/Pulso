@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-016
+card_id: "PULSO-FEAT-016"
 title: "Frontend — página de transações"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-003
+parent: "PULSO-EPIC-003"
 due_date: null
+board_sync_at: "2026-08-26T15:29:49.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [FEATURE] Frontend — página de transações
 

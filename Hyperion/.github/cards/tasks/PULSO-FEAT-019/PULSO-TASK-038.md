@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-038
+card_id: "PULSO-TASK-038"
 title: "Backend — metaBalanceUtils e metaMapper"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-019
+parent: "PULSO-FEAT-019"
 due_date: null
+board_sync_at: "2026-08-26T15:31:28.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — metaBalanceUtils e metaMapper
 

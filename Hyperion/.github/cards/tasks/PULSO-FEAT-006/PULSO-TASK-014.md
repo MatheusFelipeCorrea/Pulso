@@ -1,17 +1,19 @@
 ---
-card_id: PULSO-TASK-014
+card_id: "PULSO-TASK-014"
 title: "Backend — controller, routes e mount /dashboard"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-006
+parent: "PULSO-FEAT-006"
 due_date: null
+board_sync_at: "2026-08-26T15:31:04.000Z"
 categories:
-  - Backend
+  - "Backend"
 ---
+
 
 # [TASK] Backend — controller, routes e mount /dashboard
 

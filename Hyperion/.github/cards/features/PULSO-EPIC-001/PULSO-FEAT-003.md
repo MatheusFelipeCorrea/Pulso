@@ -1,21 +1,23 @@
 ---
-card_id: PULSO-FEAT-003
+card_id: "PULSO-FEAT-003"
 title: "Google OAuth 2.0"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-001
+parent: "PULSO-EPIC-001"
 due_date: null
+board_sync_at: "2026-08-26T15:29:37.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Integração Externa
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "Integração Externa"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Google OAuth 2.0
 

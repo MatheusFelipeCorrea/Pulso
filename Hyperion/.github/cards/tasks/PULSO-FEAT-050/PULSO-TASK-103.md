@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-103
+card_id: "PULSO-TASK-103"
 title: "Frontend — BudgetEditModal, CSS e utils"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-050
+parent: "PULSO-FEAT-050"
 due_date: null
+board_sync_at: "2026-08-26T15:32:31.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [TASK] Frontend — BudgetEditModal, CSS e utils
 

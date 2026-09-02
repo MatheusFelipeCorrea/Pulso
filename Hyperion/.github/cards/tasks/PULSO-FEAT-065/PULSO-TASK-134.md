@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-134
+card_id: "PULSO-TASK-134"
 title: "Backend — quitar, reabrir e excluir"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-065
+parent: "PULSO-FEAT-065"
 due_date: null
+board_sync_at: "2026-08-26T15:23:57.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — quitar, reabrir e excluir
 

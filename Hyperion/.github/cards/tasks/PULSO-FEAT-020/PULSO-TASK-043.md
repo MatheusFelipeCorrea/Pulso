@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-043
+card_id: "PULSO-TASK-043"
 title: "Backend — transições de status e excluirAporte com reabertura"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-020
+parent: "PULSO-FEAT-020"
 due_date: null
+board_sync_at: "2026-08-26T15:31:31.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — transições de status e excluirAporte com reabertura
 

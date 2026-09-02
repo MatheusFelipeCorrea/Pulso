@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-080
+card_id: "PULSO-TASK-080"
 title: "Frontend — páginas legais e QA"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-039
+parent: "PULSO-FEAT-039"
 due_date: null
+board_sync_at: "2026-08-26T15:32:08.000Z"
 categories:
-  - Frontend
-  - Web
-  - QA / Testes
+  - "web"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [TASK] Frontend — páginas legais e QA
 

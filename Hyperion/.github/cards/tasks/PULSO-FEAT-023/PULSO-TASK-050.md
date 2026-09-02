@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-050
+card_id: "PULSO-TASK-050"
 title: "Backend — moedaService, provider e rotas"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-023
+parent: "PULSO-FEAT-023"
 due_date: null
+board_sync_at: "2026-08-26T15:31:37.000Z"
 categories:
-  - Backend
-  - Integração Externa
+  - "Backend"
+  - "Integração Externa"
 ---
+
 
 # [TASK] Backend — moedaService, provider e rotas
 

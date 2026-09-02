@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-078
+card_id: "PULSO-TASK-078"
 title: "Frontend — seção mobile e phone mockup"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-038
+parent: "PULSO-FEAT-038"
 due_date: null
+board_sync_at: "2026-08-26T15:32:06.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [TASK] Frontend — seção mobile e phone mockup
 

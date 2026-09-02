@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-094
+card_id: "PULSO-TASK-094"
 title: "Backend — budgetRepository e gastos do mês"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-046
+parent: "PULSO-FEAT-046"
 due_date: null
+board_sync_at: "2026-08-26T15:32:22.000Z"
 categories:
-  - Backend
-  - Banco de Dados
+  - "Backend"
+  - "Banco de Dados"
 ---
+
 
 # [TASK] Backend — budgetRepository e gastos do mês
 

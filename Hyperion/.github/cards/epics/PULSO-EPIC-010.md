@@ -1,22 +1,24 @@
 ---
-card_id: PULSO-EPIC-010
+card_id: "PULSO-EPIC-010"
 title: "Planejamento de Compra"
-status: Backlog
-type: Epic
-priority: Highest
+status: "Backlog"
+type: "Epic"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
 parent: null
 due_date: null
+board_sync_at: "2026-08-26T15:29:30.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Banco de Dados
-  - Regra de Negócio
-  - Integração Externa
+  - "web"
+  - "Backend"
+  - "Banco de Dados"
+  - "Frontend"
+  - "Integração Externa"
+  - "Regra de Negócio"
 ---
+
 
 # [EPIC] Planejamento de Compra
 

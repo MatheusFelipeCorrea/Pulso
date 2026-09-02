@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-069
+card_id: "PULSO-FEAT-069"
 title: "QA — testes de dívidas"
-status: Backlog
-type: Feature
-priority: Medium
+status: "Backlog"
+type: "Feature"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-012
+parent: "PULSO-EPIC-012"
 due_date: null
+board_sync_at: "2026-08-26T15:30:41.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [FEATURE] QA — testes de dívidas
 

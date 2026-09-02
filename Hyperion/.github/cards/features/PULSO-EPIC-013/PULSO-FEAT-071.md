@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-071
+card_id: "PULSO-FEAT-071"
 title: "Agregação de contexto financeiro do usuário"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-013
+parent: "PULSO-EPIC-013"
 due_date: null
+board_sync_at: "2026-08-26T15:30:43.000Z"
 categories:
-  - Backend
-  - Banco de Dados
-  - Regra de Negócio
+  - "Backend"
+  - "Banco de Dados"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Agregação de contexto financeiro do usuário
 

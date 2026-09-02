@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-008
+card_id: "PULSO-FEAT-008"
 title: "Gráficos receitas/despesas e categorias"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-002
+parent: "PULSO-EPIC-002"
 due_date: null
+board_sync_at: "2026-08-26T15:29:41.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Regra de Negócio
+  - "web"
+  - "Frontend"
+  - "Regra de Negócio"
+  - "UX / UI"
 ---
+
 
 # [FEATURE] Gráficos receitas/despesas e categorias
 

@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-009
+card_id: "PULSO-TASK-009"
 title: "Frontend — telas de recuperação de senha"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-004
+parent: "PULSO-FEAT-004"
 due_date: null
+board_sync_at: "2026-08-26T15:30:59.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Regra de Negócio
+  - "web"
+  - "Frontend"
+  - "Regra de Negócio"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — telas de recuperação de senha
 

@@ -1,22 +1,24 @@
 ---
-card_id: PULSO-EPIC-012
+card_id: "PULSO-EPIC-012"
 title: "Dívidas Pessoais"
-status: Backlog
-type: Epic
-priority: Highest
+status: "Backlog"
+type: "Epic"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
 parent: null
 due_date: null
+board_sync_at: "2026-08-26T15:29:32.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Banco de Dados
-  - Regra de Negócio
-  - Notificações
+  - "web"
+  - "Backend"
+  - "Banco de Dados"
+  - "Frontend"
+  - "Regra de Negócio"
+  - "Notificações"
 ---
+
 
 # [EPIC] Dívidas Pessoais
 

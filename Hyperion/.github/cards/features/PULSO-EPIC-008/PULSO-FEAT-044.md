@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-044
+card_id: "PULSO-FEAT-044"
 title: "Frontend — grupos lista e detalhe"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-008
+parent: "PULSO-EPIC-008"
 due_date: null
+board_sync_at: "2026-08-26T15:30:16.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [FEATURE] Frontend — grupos lista e detalhe
 

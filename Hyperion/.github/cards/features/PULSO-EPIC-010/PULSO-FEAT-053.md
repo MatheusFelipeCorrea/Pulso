@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-053
+card_id: "PULSO-FEAT-053"
 title: "Cálculos — sobra, tempo e parcelas"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-010
+parent: "PULSO-EPIC-010"
 due_date: null
+board_sync_at: "2026-08-26T15:30:26.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Cálculos — sobra, tempo e parcelas
 

@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-050
+card_id: "PULSO-FEAT-050"
 title: "Frontend — edição de limites e estilos"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-009
+parent: "PULSO-EPIC-009"
 due_date: null
+board_sync_at: "2026-08-26T15:30:23.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [FEATURE] Frontend — edição de limites e estilos
 

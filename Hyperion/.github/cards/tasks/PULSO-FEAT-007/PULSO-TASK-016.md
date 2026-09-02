@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-016
+card_id: "PULSO-TASK-016"
 title: "Frontend — saldos e ResourceCard"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-007
+parent: "PULSO-FEAT-007"
 due_date: null
+board_sync_at: "2026-08-26T15:31:06.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Regra de Negócio
+  - "web"
+  - "Frontend"
+  - "Regra de Negócio"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — saldos e ResourceCard
 

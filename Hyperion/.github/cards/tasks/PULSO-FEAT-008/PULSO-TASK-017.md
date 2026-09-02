@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-017
+card_id: "PULSO-TASK-017"
 title: "Frontend — gráficos Recharts e seletor de mês"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-008
+parent: "PULSO-FEAT-008"
 due_date: null
+board_sync_at: "2026-08-26T15:31:07.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — gráficos Recharts e seletor de mês
 

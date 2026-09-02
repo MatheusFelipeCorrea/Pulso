@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-118
+card_id: "PULSO-TASK-118"
 title: "Backend — expenseSplitRepository e mapper"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-058
+parent: "PULSO-FEAT-058"
 due_date: null
+board_sync_at: "2026-08-26T15:23:40.000Z"
 categories:
-  - Backend
-  - Banco de Dados
+  - "Backend"
+  - "Banco de Dados"
 ---
+
 
 # [TASK] Backend — expenseSplitRepository e mapper
 

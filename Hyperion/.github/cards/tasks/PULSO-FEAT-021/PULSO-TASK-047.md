@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-047
+card_id: "PULSO-TASK-047"
 title: "Frontend — GoalCard, goalStatusUtils e goals.css"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-021
+parent: "PULSO-FEAT-021"
 due_date: null
+board_sync_at: "2026-08-26T15:31:35.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [TASK] Frontend — GoalCard, goalStatusUtils e goals.css
 

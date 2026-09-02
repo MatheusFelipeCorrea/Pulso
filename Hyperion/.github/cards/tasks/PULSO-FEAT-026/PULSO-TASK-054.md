@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-054
+card_id: "PULSO-TASK-054"
 title: "Backend — destinos, capas e media-passagem"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-026
+parent: "PULSO-FEAT-026"
 due_date: null
+board_sync_at: "2026-08-26T15:31:42.000Z"
 categories:
-  - Backend
-  - Integração Externa
+  - "Backend"
+  - "Integração Externa"
 ---
+
 
 # [TASK] Backend — destinos, capas e media-passagem
 
