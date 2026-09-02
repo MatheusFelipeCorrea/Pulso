@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-069
+card_id: "PULSO-TASK-069"
 title: "Frontend — CalendarPage e grade mensal"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-034
+parent: "PULSO-FEAT-034"
 due_date: null
+board_sync_at: "2026-08-26T15:31:57.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — CalendarPage e grade mensal
 

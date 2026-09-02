@@ -1,17 +1,19 @@
 ---
-card_id: PULSO-TASK-124
+card_id: "PULSO-TASK-124"
 title: "Backend — exclusão e cleanup 180 dias"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-061
+parent: "PULSO-FEAT-061"
 due_date: null
+board_sync_at: "2026-08-26T15:23:47.000Z"
 categories:
-  - Backend
+  - "Backend"
 ---
+
 
 # [TASK] Backend — exclusão e cleanup 180 dias
 

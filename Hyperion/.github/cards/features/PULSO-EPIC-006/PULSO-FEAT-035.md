@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-035
+card_id: "PULSO-FEAT-035"
 title: "QA — testes de lembretes"
-status: Backlog
-type: Feature
-priority: Medium
+status: "Backlog"
+type: "Feature"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-006
+parent: "PULSO-EPIC-006"
 due_date: null
+board_sync_at: "2026-08-26T15:30:07.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [FEATURE] QA — testes de lembretes
 

@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-121
+card_id: "PULSO-TASK-121"
 title: "Backend — marcar/desmarcar pago e quitação"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-060
+parent: "PULSO-FEAT-060"
 due_date: null
+board_sync_at: "2026-08-26T15:23:44.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — marcar/desmarcar pago e quitação
 

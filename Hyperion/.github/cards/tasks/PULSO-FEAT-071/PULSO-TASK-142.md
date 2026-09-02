@@ -1,17 +1,19 @@
 ---
-card_id: PULSO-TASK-142
+card_id: "PULSO-TASK-142"
 title: "Banco de dados — snapshot de insights"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-071
+parent: "PULSO-FEAT-071"
 due_date: null
+board_sync_at: "2026-08-26T15:29:06.000Z"
 categories:
-  - Banco de Dados
+  - "Banco de Dados"
 ---
+
 
 # [TASK] Banco de dados — snapshot de insights
 

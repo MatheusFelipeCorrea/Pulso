@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-026
+card_id: "PULSO-TASK-026"
 title: "Backend — transactionService e repository"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-012
+parent: "PULSO-FEAT-012"
 due_date: null
+board_sync_at: "2026-08-26T15:31:14.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — transactionService e repository
 

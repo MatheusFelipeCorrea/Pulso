@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-040
+card_id: "PULSO-FEAT-040"
 title: "Backend — API core de grupos"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-008
+parent: "PULSO-EPIC-008"
 due_date: null
+board_sync_at: "2026-08-26T15:30:12.000Z"
 categories:
-  - Backend
-  - Banco de Dados
-  - Regra de Negócio
+  - "Backend"
+  - "Banco de Dados"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Backend — API core de grupos
 

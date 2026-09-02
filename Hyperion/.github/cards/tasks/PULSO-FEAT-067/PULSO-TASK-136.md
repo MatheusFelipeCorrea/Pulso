@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-136
+card_id: "PULSO-TASK-136"
 title: "Backend — debtAlertService e job"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-067
+parent: "PULSO-FEAT-067"
 due_date: null
+board_sync_at: "2026-08-26T15:23:59.000Z"
 categories:
-  - Backend
-  - Notificações
+  - "Backend"
+  - "Notificações"
 ---
+
 
 # [TASK] Backend — debtAlertService e job
 

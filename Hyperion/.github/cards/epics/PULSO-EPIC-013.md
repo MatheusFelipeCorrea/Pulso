@@ -1,23 +1,25 @@
 ---
-card_id: PULSO-EPIC-013
+card_id: "PULSO-EPIC-013"
 title: "Insights Inteligentes"
-status: Backlog
-type: Epic
-priority: Highest
+status: "Backlog"
+type: "Epic"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
 parent: null
 due_date: null
+board_sync_at: "2026-08-26T15:29:33.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Integração Externa
-  - Inteligência Artificial
-  - Regra de Negócio
-  - Notificações
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "Integração Externa"
+  - "Inteligência Artificial"
+  - "Regra de Negócio"
+  - "Notificações"
 ---
+
 
 # [EPIC] Insights Inteligentes
 

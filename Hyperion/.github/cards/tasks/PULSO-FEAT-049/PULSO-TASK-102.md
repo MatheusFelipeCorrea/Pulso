@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-102
+card_id: "PULSO-TASK-102"
 title: "Frontend — cards de resumo e listas"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-049
+parent: "PULSO-FEAT-049"
 due_date: null
+board_sync_at: "2026-08-26T15:32:30.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — cards de resumo e listas
 

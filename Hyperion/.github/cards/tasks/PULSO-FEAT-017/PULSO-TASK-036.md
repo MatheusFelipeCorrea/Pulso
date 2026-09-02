@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-036
+card_id: "PULSO-TASK-036"
 title: "QA — testes unitários de transações"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-017
+parent: "PULSO-FEAT-017"
 due_date: null
+board_sync_at: "2026-08-26T15:31:24.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [TASK] QA — testes unitários de transações
 

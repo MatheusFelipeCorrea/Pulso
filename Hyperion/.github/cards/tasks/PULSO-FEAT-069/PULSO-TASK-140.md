@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-140
+card_id: "PULSO-TASK-140"
 title: "QA — testes de dívidas"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-069
+parent: "PULSO-FEAT-069"
 due_date: null
+board_sync_at: "2026-08-26T15:29:04.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [TASK] QA — testes de dívidas
 

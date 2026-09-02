@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-013
+card_id: "PULSO-FEAT-013"
 title: "Categorias, tags e sugestão automática"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-003
+parent: "PULSO-EPIC-003"
 due_date: null
+board_sync_at: "2026-08-26T15:29:46.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Categorias, tags e sugestão automática
 

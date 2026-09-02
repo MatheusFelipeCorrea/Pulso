@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-150
+card_id: "PULSO-TASK-150"
 title: "Frontend — InsightsPage e client"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-075
+parent: "PULSO-FEAT-075"
 due_date: null
+board_sync_at: "2026-08-26T15:29:14.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — InsightsPage e client
 

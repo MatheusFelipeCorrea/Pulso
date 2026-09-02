@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-018
+card_id: "PULSO-TASK-018"
 title: "Frontend — transações, alertas e metas"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-009
+parent: "PULSO-FEAT-009"
 due_date: null
+board_sync_at: "2026-08-26T15:31:08.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — transações, alertas e metas
 

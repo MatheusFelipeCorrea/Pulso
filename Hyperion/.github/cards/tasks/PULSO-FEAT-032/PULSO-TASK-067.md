@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-067
+card_id: "PULSO-TASK-067"
 title: "Backend — calendarService e rotas calendário"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-032
+parent: "PULSO-FEAT-032"
 due_date: null
+board_sync_at: "2026-08-26T15:31:55.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — calendarService e rotas calendário
 

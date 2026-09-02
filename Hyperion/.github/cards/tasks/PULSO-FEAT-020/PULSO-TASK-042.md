@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-042
+card_id: "PULSO-TASK-042"
 title: "Backend — registrarAporte e notificação META_ATINGIDA"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-020
+parent: "PULSO-FEAT-020"
 due_date: null
+board_sync_at: "2026-08-26T15:31:30.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
-  - Notificações
+  - "Backend"
+  - "Regra de Negócio"
+  - "Notificações"
 ---
+
 
 # [TASK] Backend — registrarAporte e notificação META_ATINGIDA
 

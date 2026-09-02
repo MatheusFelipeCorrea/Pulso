@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-039
+card_id: "PULSO-FEAT-039"
 title: "QA — testes da homepage"
-status: Backlog
-type: Feature
-priority: Medium
+status: "Backlog"
+type: "Feature"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-007
+parent: "PULSO-EPIC-007"
 due_date: null
+board_sync_at: "2026-08-26T15:30:11.000Z"
 categories:
-  - QA / Testes
-  - Frontend
-  - Web
+  - "web"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [FEATURE] QA — testes da homepage
 

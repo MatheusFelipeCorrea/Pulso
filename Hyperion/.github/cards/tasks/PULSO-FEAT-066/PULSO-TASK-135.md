@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-135
+card_id: "PULSO-TASK-135"
 title: "Backend — resumo consolidado e contadores"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-066
+parent: "PULSO-FEAT-066"
 due_date: null
+board_sync_at: "2026-08-26T15:23:58.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — resumo consolidado e contadores
 

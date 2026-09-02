@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-013
+card_id: "PULSO-TASK-013"
 title: "Backend — dashboardService.obterDashboard"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-006
+parent: "PULSO-FEAT-006"
 due_date: null
+board_sync_at: "2026-08-26T15:31:03.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
-  - Arquitetura
+  - "Backend"
+  - "Regra de Negócio"
+  - "Arquitetura"
 ---
+
 
 # [TASK] Backend — dashboardService.obterDashboard
 

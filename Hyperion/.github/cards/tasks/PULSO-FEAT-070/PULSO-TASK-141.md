@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-141
+card_id: "PULSO-TASK-141"
 title: "Backend — geminiInsightsProvider e env"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-070
+parent: "PULSO-FEAT-070"
 due_date: null
+board_sync_at: "2026-08-26T15:29:05.000Z"
 categories:
-  - Backend
-  - Integração Externa
-  - Inteligência Artificial
+  - "Backend"
+  - "Integração Externa"
+  - "Inteligência Artificial"
 ---
+
 
 # [TASK] Backend — geminiInsightsProvider e env
 

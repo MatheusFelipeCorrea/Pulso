@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-100
+card_id: "PULSO-TASK-100"
 title: "Backend — budgetAlertJob, cron e userSync"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-048
+parent: "PULSO-FEAT-048"
 due_date: null
+board_sync_at: "2026-08-26T15:32:28.000Z"
 categories:
-  - Backend
-  - Notificações
+  - "Backend"
+  - "Notificações"
 ---
+
 
 # [TASK] Backend — budgetAlertJob, cron e userSync
 

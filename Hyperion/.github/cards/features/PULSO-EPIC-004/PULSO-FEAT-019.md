@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-019
+card_id: "PULSO-FEAT-019"
 title: "Cálculos, progresso e reserva de emergência"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-004
+parent: "PULSO-EPIC-004"
 due_date: null
+board_sync_at: "2026-08-26T15:29:52.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Cálculos, progresso e reserva de emergência
 

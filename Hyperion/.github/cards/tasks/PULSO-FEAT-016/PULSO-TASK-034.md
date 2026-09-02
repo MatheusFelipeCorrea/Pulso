@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-034
+card_id: "PULSO-TASK-034"
 title: "Frontend — TransactionFormModal"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-016
+parent: "PULSO-FEAT-016"
 due_date: null
+board_sync_at: "2026-08-26T15:31:22.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Regra de Negócio
+  - "web"
+  - "Frontend"
+  - "Regra de Negócio"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — TransactionFormModal
 

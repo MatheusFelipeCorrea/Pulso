@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-041
+card_id: "PULSO-TASK-041"
 title: "Backend — sugestão reserva de emergência (RF-142)"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-019
+parent: "PULSO-FEAT-019"
 due_date: null
+board_sync_at: "2026-08-26T15:31:29.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — sugestão reserva de emergência (RF-142)
 

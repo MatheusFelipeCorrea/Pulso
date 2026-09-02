@@ -1,22 +1,24 @@
 ---
-card_id: PULSO-FEAT-001
+card_id: "PULSO-FEAT-001"
 title: "Cadastro e verificação de email"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-001
+parent: "PULSO-EPIC-001"
 due_date: null
+board_sync_at: "2026-08-26T15:29:34.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Banco de Dados
-  - Regra de Negócio
-  - Integração Externa
+  - "web"
+  - "Backend"
+  - "Banco de Dados"
+  - "Frontend"
+  - "Integração Externa"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Cadastro e verificação de email
 

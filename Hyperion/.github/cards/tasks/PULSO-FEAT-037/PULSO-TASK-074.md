@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-074
+card_id: "PULSO-TASK-074"
 title: "Frontend — landingData.js"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-037
+parent: "PULSO-FEAT-037"
 due_date: null
+board_sync_at: "2026-08-26T15:32:02.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — landingData.js
 

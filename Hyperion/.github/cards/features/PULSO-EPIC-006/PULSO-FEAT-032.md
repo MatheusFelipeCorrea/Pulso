@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-032
+card_id: "PULSO-FEAT-032"
 title: "Calendário financeiro — visão mês e dia"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-006
+parent: "PULSO-EPIC-006"
 due_date: null
+board_sync_at: "2026-08-26T15:30:04.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Calendário financeiro — visão mês e dia
 

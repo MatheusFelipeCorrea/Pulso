@@ -1,22 +1,24 @@
 ---
-card_id: PULSO-EPIC-005
+card_id: "PULSO-EPIC-005"
 title: "Viagens e Moedas"
-status: Backlog
-type: Epic
-priority: Highest
+status: "Backlog"
+type: "Epic"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
 parent: null
 due_date: null
+board_sync_at: "2026-08-26T15:29:25.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Banco de Dados
-  - Integração Externa
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Banco de Dados"
+  - "Frontend"
+  - "Integração Externa"
+  - "Regra de Negócio"
 ---
+
 
 # [EPIC] Viagens e Moedas
 

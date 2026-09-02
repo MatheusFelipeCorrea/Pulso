@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-091
+card_id: "PULSO-TASK-091"
 title: "Frontend — groups.css e utilitários"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-044
+parent: "PULSO-FEAT-044"
 due_date: null
+board_sync_at: "2026-08-26T15:32:19.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [TASK] Frontend — groups.css e utilitários
 

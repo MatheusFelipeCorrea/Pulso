@@ -1,22 +1,24 @@
 ---
-card_id: PULSO-EPIC-006
+card_id: "PULSO-EPIC-006"
 title: "Lembretes e Google Agenda"
-status: Backlog
-type: Epic
-priority: Highest
+status: "Backlog"
+type: "Epic"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
 parent: null
 due_date: null
+board_sync_at: "2026-08-26T15:29:26.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Banco de Dados
-  - Integração Externa
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Banco de Dados"
+  - "Frontend"
+  - "Integração Externa"
+  - "Regra de Negócio"
 ---
+
 
 # [EPIC] Lembretes e Google Agenda
 

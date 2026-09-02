@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-074
+card_id: "PULSO-FEAT-074"
 title: "API, cache, job e regenerar"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-013
+parent: "PULSO-EPIC-013"
 due_date: null
+board_sync_at: "2026-08-26T15:30:46.000Z"
 categories:
-  - Backend
-  - Notificações
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
+  - "Notificações"
 ---
+
 
 # [FEATURE] API, cache, job e regenerar
 

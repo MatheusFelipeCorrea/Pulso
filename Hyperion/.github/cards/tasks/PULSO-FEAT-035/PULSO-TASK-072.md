@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-072
+card_id: "PULSO-TASK-072"
 title: "QA — testes unitários de lembretes"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-035
+parent: "PULSO-FEAT-035"
 due_date: null
+board_sync_at: "2026-08-26T15:32:00.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [TASK] QA — testes unitários de lembretes
 

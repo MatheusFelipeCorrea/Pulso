@@ -1,21 +1,23 @@
 ---
-card_id: PULSO-FEAT-002
+card_id: "PULSO-FEAT-002"
 title: "Login, sessão JWT e logout"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-001
+parent: "PULSO-EPIC-001"
 due_date: null
+board_sync_at: "2026-08-26T15:29:36.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Cibersegurança
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Cibersegurança"
+  - "Frontend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Login, sessão JWT e logout
 

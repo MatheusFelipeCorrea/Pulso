@@ -1,22 +1,24 @@
 ---
-card_id: PULSO-EPIC-002
+card_id: "PULSO-EPIC-002"
 title: "Dashboard Principal"
-status: Backlog
-type: Epic
-priority: Highest
+status: "Backlog"
+type: "Epic"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
 parent: null
 due_date: null
+board_sync_at: "2026-08-26T15:29:22.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - UX / UI
-  - Regra de Negócio
-  - Integração Externa
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "Integração Externa"
+  - "Regra de Negócio"
+  - "UX / UI"
 ---
+
 
 # [EPIC] Dashboard Principal
 

@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-130
+card_id: "PULSO-TASK-130"
 title: "Backend — debtRepository e mappers"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-064
+parent: "PULSO-FEAT-064"
 due_date: null
+board_sync_at: "2026-08-26T15:23:53.000Z"
 categories:
-  - Backend
-  - Banco de Dados
+  - "Backend"
+  - "Banco de Dados"
 ---
+
 
 # [TASK] Backend — debtRepository e mappers
 

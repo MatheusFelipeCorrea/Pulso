@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-106
+card_id: "PULSO-TASK-106"
 title: "Backend — repository e mapper"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-052
+parent: "PULSO-FEAT-052"
 due_date: null
+board_sync_at: "2026-08-26T15:32:34.000Z"
 categories:
-  - Backend
-  - Banco de Dados
+  - "Backend"
+  - "Banco de Dados"
 ---
+
 
 # [TASK] Backend — repository e mapper
 

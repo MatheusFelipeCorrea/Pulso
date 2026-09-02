@@ -1,22 +1,24 @@
 ---
-card_id: PULSO-FEAT-010
+card_id: "PULSO-FEAT-010"
 title: "Importação de extratos via dashboard"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-002
+parent: "PULSO-EPIC-002"
 due_date: null
+board_sync_at: "2026-08-26T15:29:43.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Integração Externa
-  - Regra de Negócio
-  - Inteligência Artificial
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "Integração Externa"
+  - "Inteligência Artificial"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Importação de extratos via dashboard
 

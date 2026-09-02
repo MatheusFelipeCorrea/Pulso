@@ -1,22 +1,24 @@
 ---
-card_id: PULSO-EPIC-001
+card_id: "PULSO-EPIC-001"
 title: "Autenticação"
-status: Backlog
-type: Epic
-priority: Highest
+status: "Backlog"
+type: "Epic"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
 parent: null
 due_date: null
+board_sync_at: "2026-08-26T15:29:21.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Banco de Dados
-  - Cibersegurança
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Banco de Dados"
+  - "Cibersegurança"
+  - "Frontend"
+  - "Regra de Negócio"
 ---
+
 
 # [EPIC] Autenticação
 

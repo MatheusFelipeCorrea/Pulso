@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-028
+card_id: "PULSO-TASK-028"
 title: "Categorias, tags e validação recurso×categoria"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-013
+parent: "PULSO-FEAT-013"
 due_date: null
+board_sync_at: "2026-08-26T15:31:16.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Categorias, tags e validação recurso×categoria
 

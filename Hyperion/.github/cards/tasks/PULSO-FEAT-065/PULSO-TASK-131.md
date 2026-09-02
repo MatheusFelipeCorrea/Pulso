@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-131
+card_id: "PULSO-TASK-131"
 title: "Backend — debtBalanceUtils"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-065
+parent: "PULSO-FEAT-065"
 due_date: null
+board_sync_at: "2026-08-26T15:23:55.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — debtBalanceUtils
 

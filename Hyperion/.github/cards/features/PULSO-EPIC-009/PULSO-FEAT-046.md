@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-046
+card_id: "PULSO-FEAT-046"
 title: "Backend — API de orçamentos"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-009
+parent: "PULSO-EPIC-009"
 due_date: null
+board_sync_at: "2026-08-26T15:30:19.000Z"
 categories:
-  - Backend
-  - Banco de Dados
-  - Regra de Negócio
+  - "Backend"
+  - "Banco de Dados"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Backend — API de orçamentos
 

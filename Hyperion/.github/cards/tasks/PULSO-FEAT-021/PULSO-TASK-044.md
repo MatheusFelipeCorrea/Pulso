@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-044
+card_id: "PULSO-TASK-044"
 title: "Frontend — GoalsPage, tabs, filtros e sidebar"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-021
+parent: "PULSO-FEAT-021"
 due_date: null
+board_sync_at: "2026-08-26T15:31:32.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — GoalsPage, tabs, filtros e sidebar
 

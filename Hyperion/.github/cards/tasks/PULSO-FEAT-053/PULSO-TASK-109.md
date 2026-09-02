@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-109
+card_id: "PULSO-TASK-109"
 title: "Backend — sobra mensal e contexto financeiro"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-053
+parent: "PULSO-FEAT-053"
 due_date: null
+board_sync_at: "2026-08-26T15:32:37.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — sobra mensal e contexto financeiro
 

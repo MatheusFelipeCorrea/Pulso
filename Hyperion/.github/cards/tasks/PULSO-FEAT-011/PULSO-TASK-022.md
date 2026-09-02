@@ -1,21 +1,23 @@
 ---
-card_id: PULSO-TASK-022
+card_id: "PULSO-TASK-022"
 title: "Frontend — FAB quick-add chatbot"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-011
+parent: "PULSO-FEAT-011"
 due_date: null
+board_sync_at: "2026-08-26T15:31:12.000Z"
 categories:
-  - Frontend
-  - Web
-  - Integração Externa
-  - Inteligência Artificial
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "Integração Externa"
+  - "Inteligência Artificial"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — FAB quick-add chatbot
 

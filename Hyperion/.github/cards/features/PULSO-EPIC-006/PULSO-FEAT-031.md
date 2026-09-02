@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-031
+card_id: "PULSO-FEAT-031"
 title: "Google Calendar — OAuth e sincronização"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-006
+parent: "PULSO-EPIC-006"
 due_date: null
+board_sync_at: "2026-08-26T15:30:03.000Z"
 categories:
-  - Backend
-  - Integração Externa
-  - Segurança
+  - "Backend"
+  - "Integração Externa"
+  - "Segurança"
 ---
+
 
 # [FEATURE] Google Calendar — OAuth e sincronização
 

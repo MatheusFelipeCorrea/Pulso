@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-063
+card_id: "PULSO-TASK-063"
 title: "Backend — reminderService CRUD e marcar pago"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-030
+parent: "PULSO-FEAT-030"
 due_date: null
+board_sync_at: "2026-08-26T15:31:51.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
-  - Integração Externa
+  - "Backend"
+  - "Integração Externa"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — reminderService CRUD e marcar pago
 

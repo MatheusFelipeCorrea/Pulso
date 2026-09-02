@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-054
+card_id: "PULSO-FEAT-054"
 title: "Vincular meta e marcar comprado"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-010
+parent: "PULSO-EPIC-010"
 due_date: null
+board_sync_at: "2026-08-26T15:30:27.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Vincular meta e marcar comprado
 

@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-066
+card_id: "PULSO-TASK-066"
 title: "Backend — googleCalendarSyncService"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-031
+parent: "PULSO-FEAT-031"
 due_date: null
+board_sync_at: "2026-08-26T15:31:54.000Z"
 categories:
-  - Backend
-  - Integração Externa
+  - "Backend"
+  - "Integração Externa"
 ---
+
 
 # [TASK] Backend — googleCalendarSyncService
 

@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-051
+card_id: "PULSO-TASK-051"
 title: "Backend — viagemRepository e viagemMapper"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-024
+parent: "PULSO-FEAT-024"
 due_date: null
+board_sync_at: "2026-08-26T15:31:39.000Z"
 categories:
-  - Backend
-  - Banco de Dados
+  - "Backend"
+  - "Banco de Dados"
 ---
+
 
 # [TASK] Backend — viagemRepository e viagemMapper
 

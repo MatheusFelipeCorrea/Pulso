@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-EPIC-007
+card_id: "PULSO-EPIC-007"
 title: "Homepage Pública"
-status: Backlog
-type: Epic
-priority: High
+status: "Backlog"
+type: "Epic"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
 parent: null
 due_date: null
+board_sync_at: "2026-08-26T15:29:27.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [EPIC] Homepage Pública
 

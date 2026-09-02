@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-026
+card_id: "PULSO-FEAT-026"
 title: "Destinos, capas e estimativa de passagem"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-005
+parent: "PULSO-EPIC-005"
 due_date: null
+board_sync_at: "2026-08-26T15:29:58.000Z"
 categories:
-  - Backend
-  - Integração Externa
+  - "Backend"
+  - "Integração Externa"
 ---
+
 
 # [FEATURE] Destinos, capas e estimativa de passagem
 

@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-010
+card_id: "PULSO-TASK-010"
 title: "Backend — middleware, rate limit e job de limpeza"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-005
+parent: "PULSO-FEAT-005"
 due_date: null
+board_sync_at: "2026-08-26T15:31:00.000Z"
 categories:
-  - Backend
-  - Cibersegurança
-  - Infra / DevOps
+  - "Backend"
+  - "Cibersegurança"
+  - "Infra / DevOps"
 ---
+
 
 # [TASK] Backend — middleware, rate limit e job de limpeza
 

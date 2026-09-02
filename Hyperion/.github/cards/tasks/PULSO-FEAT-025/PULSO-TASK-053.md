@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-053
+card_id: "PULSO-TASK-053"
 title: "Backend — pretensões e observações"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-025
+parent: "PULSO-FEAT-025"
 due_date: null
+board_sync_at: "2026-08-26T15:31:41.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — pretensões e observações
 

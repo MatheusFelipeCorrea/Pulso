@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-020
+card_id: "PULSO-FEAT-020"
 title: "Aportes e ciclo de vida da meta"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-004
+parent: "PULSO-EPIC-004"
 due_date: null
+board_sync_at: "2026-08-26T15:29:53.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
-  - Notificações
+  - "Backend"
+  - "Regra de Negócio"
+  - "Notificações"
 ---
+
 
 # [FEATURE] Aportes e ciclo de vida da meta
 

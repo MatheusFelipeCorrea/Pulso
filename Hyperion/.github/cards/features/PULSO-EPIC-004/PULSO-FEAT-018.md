@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-018
+card_id: "PULSO-FEAT-018"
 title: "Backend — API de metas"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-004
+parent: "PULSO-EPIC-004"
 due_date: null
+board_sync_at: "2026-08-26T15:29:51.000Z"
 categories:
-  - Backend
-  - Banco de Dados
-  - Regra de Negócio
+  - "Backend"
+  - "Banco de Dados"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Backend — API de metas
 

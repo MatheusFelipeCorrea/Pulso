@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-007
+card_id: "PULSO-TASK-007"
 title: "Frontend — callback OAuth e botão Google"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-003
+parent: "PULSO-FEAT-003"
 due_date: null
+board_sync_at: "2026-08-26T15:30:57.000Z"
 categories:
-  - Frontend
-  - Web
-  - Integração Externa
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "Integração Externa"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — callback OAuth e botão Google
 

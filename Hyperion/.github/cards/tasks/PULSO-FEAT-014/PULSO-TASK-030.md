@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-030
+card_id: "PULSO-TASK-030"
 title: "Transferências — backend e formulário"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-014
+parent: "PULSO-FEAT-014"
 due_date: null
+board_sync_at: "2026-08-26T15:31:18.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Transferências — backend e formulário
 

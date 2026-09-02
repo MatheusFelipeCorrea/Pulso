@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-006
+card_id: "PULSO-TASK-006"
 title: "Backend — Google OAuth e exchange de sessão"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-003
+parent: "PULSO-FEAT-003"
 due_date: null
+board_sync_at: "2026-08-26T15:30:56.000Z"
 categories:
-  - Backend
-  - Integração Externa
-  - Regra de Negócio
+  - "Backend"
+  - "Integração Externa"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — Google OAuth e exchange de sessão
 

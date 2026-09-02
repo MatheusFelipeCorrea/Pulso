@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-132
+card_id: "PULSO-TASK-132"
 title: "Backend — debtService CRUD e rotas"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-064
+parent: "PULSO-FEAT-064"
 due_date: null
+board_sync_at: "2026-08-26T15:23:54.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — debtService CRUD e rotas
 

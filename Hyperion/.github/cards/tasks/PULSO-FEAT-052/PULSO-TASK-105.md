@@ -1,17 +1,19 @@
 ---
-card_id: PULSO-TASK-105
+card_id: "PULSO-TASK-105"
 title: "Banco de dados — ItemPlanejamentoCompra"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-052
+parent: "PULSO-FEAT-052"
 due_date: null
+board_sync_at: "2026-08-26T15:32:33.000Z"
 categories:
-  - Banco de Dados
+  - "Banco de Dados"
 ---
+
 
 # [TASK] Banco de dados — ItemPlanejamentoCompra
 

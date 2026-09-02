@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-071
+card_id: "PULSO-TASK-071"
 title: "Frontend — calendar.css e reminderUtils"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-034
+parent: "PULSO-FEAT-034"
 due_date: null
+board_sync_at: "2026-08-26T15:31:59.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [TASK] Frontend — calendar.css e reminderUtils
 

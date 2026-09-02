@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-046
+card_id: "PULSO-TASK-046"
 title: "Frontend — aportes, exclusão e GoalAportesSection"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-021
+parent: "PULSO-FEAT-021"
 due_date: null
+board_sync_at: "2026-08-26T15:31:34.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Regra de Negócio
+  - "web"
+  - "Frontend"
+  - "Regra de Negócio"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — aportes, exclusão e GoalAportesSection
 

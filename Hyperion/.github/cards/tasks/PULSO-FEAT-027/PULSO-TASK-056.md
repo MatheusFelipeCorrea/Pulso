@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-056
+card_id: "PULSO-TASK-056"
 title: "Frontend — TripFormModal, TripList e TripCard"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-027
+parent: "PULSO-FEAT-027"
 due_date: null
+board_sync_at: "2026-08-26T15:31:44.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — TripFormModal, TripList e TripCard
 

@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-098
+card_id: "PULSO-TASK-098"
 title: "Backend — budgetRolloverUtils (RN-170)"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-047
+parent: "PULSO-FEAT-047"
 due_date: null
+board_sync_at: "2026-08-26T15:32:26.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — budgetRolloverUtils (RN-170)
 

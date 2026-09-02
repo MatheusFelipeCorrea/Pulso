@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-139
+card_id: "PULSO-TASK-139"
 title: "Frontend — cards, modais, badges e CSS"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-068
+parent: "PULSO-FEAT-068"
 due_date: null
+board_sync_at: "2026-08-26T15:29:03.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [TASK] Frontend — cards, modais, badges e CSS
 

@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-093
+card_id: "PULSO-TASK-093"
 title: "Banco de dados — model Orcamento"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-046
+parent: "PULSO-FEAT-046"
 due_date: null
+board_sync_at: "2026-08-26T15:32:21.000Z"
 categories:
-  - Banco de Dados
-  - Regra de Negócio
+  - "Banco de Dados"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Banco de dados — model Orcamento
 

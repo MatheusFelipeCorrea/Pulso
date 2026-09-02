@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-TASK-145
+card_id: "PULSO-TASK-145"
 title: "Backend — projeções e alertas determinísticos"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-072
+parent: "PULSO-FEAT-072"
 due_date: null
+board_sync_at: "2026-08-26T15:29:09.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Backend — projeções e alertas determinísticos
 

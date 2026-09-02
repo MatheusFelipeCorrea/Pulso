@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-058
+card_id: "PULSO-TASK-058"
 title: "Frontend — pretensões, observações e transporte"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-028
+parent: "PULSO-FEAT-028"
 due_date: null
+board_sync_at: "2026-08-26T15:31:46.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — pretensões, observações e transporte
 

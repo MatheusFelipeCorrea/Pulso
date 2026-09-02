@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-058
+card_id: "PULSO-FEAT-058"
 title: "Backend — API core de divisões"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-011
+parent: "PULSO-EPIC-011"
 due_date: null
+board_sync_at: "2026-08-26T15:30:31.000Z"
 categories:
-  - Backend
-  - Banco de Dados
-  - Regra de Negócio
+  - "Backend"
+  - "Banco de Dados"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Backend — API core de divisões
 

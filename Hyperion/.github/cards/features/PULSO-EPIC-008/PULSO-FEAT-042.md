@@ -1,18 +1,20 @@
 ---
-card_id: PULSO-FEAT-042
+card_id: "PULSO-FEAT-042"
 title: "Metas compartilhadas e aportes"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-008
+parent: "PULSO-EPIC-008"
 due_date: null
+board_sync_at: "2026-08-26T15:30:14.000Z"
 categories:
-  - Backend
-  - Regra de Negócio
+  - "Backend"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Metas compartilhadas e aportes
 

@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-128
+card_id: "PULSO-TASK-128"
 title: "QA — testes de divisão de despesas"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-063
+parent: "PULSO-FEAT-063"
 due_date: null
+board_sync_at: "2026-08-26T15:23:51.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [TASK] QA — testes de divisão de despesas
 

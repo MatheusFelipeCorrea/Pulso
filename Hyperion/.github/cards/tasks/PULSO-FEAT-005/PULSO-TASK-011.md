@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-011
+card_id: "PULSO-TASK-011"
 title: "Frontend — guardas de rota autenticada"
-status: Backlog
-type: Task
-priority: High
+status: "Backlog"
+type: "Task"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-005
+parent: "PULSO-FEAT-005"
 due_date: null
+board_sync_at: "2026-08-26T15:31:01.000Z"
 categories:
-  - Frontend
-  - Web
-  - Cibersegurança
-  - UX / UI
+  - "web"
+  - "Cibersegurança"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — guardas de rota autenticada
 

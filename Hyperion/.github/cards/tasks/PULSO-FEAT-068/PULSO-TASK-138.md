@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-138
+card_id: "PULSO-TASK-138"
 title: "Frontend — DebtsPage e client"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-068
+parent: "PULSO-FEAT-068"
 due_date: null
+board_sync_at: "2026-08-26T15:29:03.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — DebtsPage e client
 

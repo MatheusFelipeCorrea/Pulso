@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-021
+card_id: "PULSO-FEAT-021"
 title: "Frontend — página de metas"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-004
+parent: "PULSO-EPIC-004"
 due_date: null
+board_sync_at: "2026-08-26T15:29:54.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [FEATURE] Frontend — página de metas
 

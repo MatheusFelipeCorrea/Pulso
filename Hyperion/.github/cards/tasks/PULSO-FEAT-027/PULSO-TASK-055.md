@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-055
+card_id: "PULSO-TASK-055"
 title: "Frontend — TripsPage, conversor e favoritas"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-027
+parent: "PULSO-FEAT-027"
 due_date: null
+board_sync_at: "2026-08-26T15:31:43.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — TripsPage, conversor e favoritas
 

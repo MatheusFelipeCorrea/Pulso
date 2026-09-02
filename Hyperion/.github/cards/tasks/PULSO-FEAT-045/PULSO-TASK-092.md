@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-092
+card_id: "PULSO-TASK-092"
 title: "QA — testes unitários e E2E de grupos"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-045
+parent: "PULSO-FEAT-045"
 due_date: null
+board_sync_at: "2026-08-26T15:32:20.000Z"
 categories:
-  - QA / Testes
-  - Backend
-  - Frontend
-  - Web
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "QA / Testes"
 ---
+
 
 # [TASK] QA — testes unitários e E2E de grupos
 

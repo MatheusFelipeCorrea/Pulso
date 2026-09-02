@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-FEAT-023
+card_id: "PULSO-FEAT-023"
 title: "Backend — API de moedas"
-status: Backlog
-type: Feature
-priority: Highest
+status: "Backlog"
+type: "Feature"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-005
+parent: "PULSO-EPIC-005"
 due_date: null
+board_sync_at: "2026-08-26T15:29:56.000Z"
 categories:
-  - Backend
-  - Integração Externa
-  - Regra de Negócio
+  - "Backend"
+  - "Integração Externa"
+  - "Regra de Negócio"
 ---
+
 
 # [FEATURE] Backend — API de moedas
 

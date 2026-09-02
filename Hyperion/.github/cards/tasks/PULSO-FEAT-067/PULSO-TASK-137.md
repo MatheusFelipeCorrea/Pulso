@@ -1,17 +1,19 @@
 ---
-card_id: PULSO-TASK-137
+card_id: "PULSO-TASK-137"
 title: "Backend — debtCleanupJob 180 dias"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-067
+parent: "PULSO-FEAT-067"
 due_date: null
+board_sync_at: "2026-08-26T15:29:02.000Z"
 categories:
-  - Backend
+  - "Backend"
 ---
+
 
 # [TASK] Backend — debtCleanupJob 180 dias
 

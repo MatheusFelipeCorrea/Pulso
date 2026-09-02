@@ -1,21 +1,23 @@
 ---
-card_id: PULSO-EPIC-003
+card_id: "PULSO-EPIC-003"
 title: "Gerenciamento de Transações"
-status: Backlog
-type: Epic
-priority: Highest
+status: "Backlog"
+type: "Epic"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
 parent: null
 due_date: null
+board_sync_at: "2026-08-26T15:29:23.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Banco de Dados
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Banco de Dados"
+  - "Frontend"
+  - "Regra de Negócio"
 ---
+
 
 # [EPIC] Gerenciamento de Transações
 

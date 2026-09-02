@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-FEAT-028
+card_id: "PULSO-FEAT-028"
 title: "Frontend — detalhe da viagem"
-status: Backlog
-type: Feature
-priority: High
+status: "Backlog"
+type: "Feature"
+priority: "High"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-EPIC-005
+parent: "PULSO-EPIC-005"
 due_date: null
+board_sync_at: "2026-08-26T15:30:00.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
-  - Mobile
+  - "web"
+  - "Frontend"
+  - "UX / UI"
+  - "Mobile"
 ---
+
 
 # [FEATURE] Frontend — detalhe da viagem
 

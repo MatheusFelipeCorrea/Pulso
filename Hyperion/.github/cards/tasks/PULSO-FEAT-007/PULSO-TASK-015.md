@@ -1,19 +1,21 @@
 ---
-card_id: PULSO-TASK-015
+card_id: "PULSO-TASK-015"
 title: "Frontend — DashboardPage e routing"
-status: Backlog
-type: Task
-priority: Highest
+status: "Backlog"
+type: "Task"
+priority: "Highest"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-007
+parent: "PULSO-FEAT-007"
 due_date: null
+board_sync_at: "2026-08-26T15:31:05.000Z"
 categories:
-  - Frontend
-  - Web
-  - UX / UI
+  - "web"
+  - "Frontend"
+  - "UX / UI"
 ---
+
 
 # [TASK] Frontend — DashboardPage e routing
 

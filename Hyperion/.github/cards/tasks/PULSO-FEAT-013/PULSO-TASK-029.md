@@ -1,20 +1,22 @@
 ---
-card_id: PULSO-TASK-029
+card_id: "PULSO-TASK-029"
 title: "Sugestão automática de categoria (RF-141)"
-status: Backlog
-type: Task
-priority: Medium
+status: "Backlog"
+type: "Task"
+priority: "Medium"
 sprint: null
 story_points: null
 reporter: null
-parent: PULSO-FEAT-013
+parent: "PULSO-FEAT-013"
 due_date: null
+board_sync_at: "2026-08-26T15:31:17.000Z"
 categories:
-  - Backend
-  - Frontend
-  - Web
-  - Regra de Negócio
+  - "web"
+  - "Backend"
+  - "Frontend"
+  - "Regra de Negócio"
 ---
+
 
 # [TASK] Sugestão automática de categoria (RF-141)
 
