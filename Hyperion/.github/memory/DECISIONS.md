@@ -6,7 +6,7 @@ Quick decisions that do not warrant a full ADR. For architecture, use `.github/d
 |----|------|----------|-----------|
 | D001 | 2026-08-26 | Kit Hyperion adotado aninhado em `Hyperion/` (`kit.root: Hyperion`) | Evita espalhar skills/scripts na raiz do produto PUC |
 | D002 | 2026-08-26 | Layout monorepo: `code/front` (React), `code/back` (Node), `code/mobile` (Flutter) | Combinado no setup; pastas PUC já existiam vazias |
-| D009 | 2026-09-08 | Pastas de código: `Codigo/{api,web,mobile}` (antes `code/{back,front,mobile}` e `Codigo/Pulso/{api,web}`) | Rename no repo; READMEs, `project.yml`, CI, specs e tasks apontam para os novos caminhos |
+| D009 | 2026-09-08 | Pastas de código: `Codigo/Pulso/{api,web,mobile}` (antes `code/{back,front,mobile}` e um flatten temporário em `Codigo/{api,web,mobile}`) | Código do produto fica sob `Codigo/Pulso/`; READMEs, `project.yml` e CI acompanham |
 | D003 | 2026-08-26 | Não scaffoldar apps agora; regenerar `project.yml` depois do init | Time começa o código depois; manifests ainda não existem |
 | D004 | 2026-08-26 | Board: GitHub (`management.backend: github`) | Remote origin em ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso |
 | D006 | 2026-08-26 | `package.json` na raiz só para atalhos `hyperion:*` / `cards:*` | Doctor avisava ausência; não é o app Node — apps ficam em `code/*` |

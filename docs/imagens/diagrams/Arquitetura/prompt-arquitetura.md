@@ -360,11 +360,11 @@ Salvar como: `Documentacao/04-Diagramas/Diagrama de Arquitetura/Arquitetura Puls
 | Área | Caminho |
 |------|---------|
 | Deploy / hospedagem | `Documentacao/02-Engenharia/Deploy/` |
-| RabbitMQ | `Codigo/api/src/messaging/rabbit.js` |
-| Rotas API | `Codigo/api/src/routes/index.js` |
-| Services | `Codigo/api/src/services/` |
-| Jobs | `Codigo/api/src/jobs/` |
-| Providers | `Codigo/api/src/providers/` |
-| Schema DB | `Codigo/api/prisma/schema.prisma` |
-| Frontend Web | `Codigo/web/src/` |
+| RabbitMQ | `Codigo/Pulso/api/src/messaging/rabbit.js` |
+| Rotas API | `Codigo/Pulso/api/src/routes/index.js` |
+| Services | `Codigo/Pulso/api/src/services/` |
+| Jobs | `Codigo/Pulso/api/src/jobs/` |
+| Providers | `Codigo/Pulso/api/src/providers/` |
+| Schema DB | `Codigo/Pulso/api/prisma/schema.prisma` |
+| Frontend Web | `Codigo/Pulso/web/src/` |
 | Mobile Flutter | planejado — mesma API REST + Socket.IO (RF roadmap) |

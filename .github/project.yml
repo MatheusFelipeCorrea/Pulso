@@ -14,23 +14,23 @@ layout: monorepo
 
 apps:
   api:
-    root: Codigo/api
+    root: Codigo/Pulso/api
     source_dirs:
-      - Codigo/api
+      - Codigo/Pulso/api
   web:
-    root: Codigo/web
+    root: Codigo/Pulso/web
     source_dirs:
-      - Codigo/web
+      - Codigo/Pulso/web
   mobile:
-    root: Codigo/mobile
+    root: Codigo/Pulso/mobile
     source_dirs:
-      - Codigo/mobile
+      - Codigo/Pulso/mobile
 
 docs:
   root: docs
   requirements: docs/3.requisitos.md
-  api_readme: Codigo/api/README.md
-  web_readme: Codigo/web/README.md
+  api_readme: Codigo/Pulso/api/README.md
+  web_readme: Codigo/Pulso/web/README.md
   blueprints: docs
   diagrams: docs/imagens
 
@@ -92,4 +92,4 @@ uncertainties:
   - Manifests ainda nao existem (package.json / pubspec.yaml). Apps serao scaffoldadas depois; regenerar project.yml via /discover.
   - Frameworks confirmados pelo time: React (web), Node (api), Flutter (mobile) — sem evidencia de imports ainda.
   - ORM, banco, deploy e comandos reais de test/lint/build indefinidos ate o scaffold.
-  - README do mobile existe em Codigo/mobile/README.md (schema so lista api_readme e web_readme).
+  - README do mobile existe em Codigo/Pulso/mobile/README.md (schema so lista api_readme e web_readme).

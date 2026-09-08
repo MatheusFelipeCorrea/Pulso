@@ -1,6 +1,6 @@
 # Código — API
 
-Backend do Pulso (`Codigo/api`).
+Backend do Pulso (`Codigo/Pulso/api`).
 
 - Stack planejada: **Node.js + Express**
 - Contrato: REST (`/api`) compartilhado com Web e Flutter
