@@ -968,7 +968,7 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 
 ## 🛠️ Implementação
 
-### API — `code/back/tests/` (NOVO — CRIAR)
+### API — `Codigo/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
@@ -983,7 +983,7 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 | `unit/utils/reminderAntecedencia.test.js` | Mapas antecedência |
 | `unit/utils/googleTokenCrypto.test.js` | Criptografia tokens |
 
-### Web — `code/front/tests/` (NOVO — CRIAR)
+### Web — `Codigo/web/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|

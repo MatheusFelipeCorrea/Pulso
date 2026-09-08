@@ -485,7 +485,7 @@ Implementar `obterDashboard(usuarioId, query)` orchestrando resumo mensal, séri
 
 ### `dashboardService.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/services/dashboardService.js`
+Criar em: `Codigo/api/src/services/dashboardService.js`
 
 ```javascript
 // obterDashboard(usuarioId, query)
@@ -561,13 +561,13 @@ Query opcional: `mes=YYYY-MM`
 
 ### `dashboardController.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/controllers/dashboardController.js`
+Criar em: `Codigo/api/src/controllers/dashboardController.js`
 
 - `obterDashboard(req, res, next)`
 
 ### `dashboardRoutes.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/routes/dashboardRoutes.js`
+Criar em: `Codigo/api/src/routes/dashboardRoutes.js`
 
 ```javascript
 router.get('/', authMiddleware, dashboardController.obterDashboard)
@@ -633,11 +633,11 @@ Como **usuário**, quero acessar `/dashboard` após login e ver meu resumo finan
 
 | Arquivo | Função |
 |---------|--------|
-| `code/front/src/pages/DashboardPage.jsx` | Orquestra widgets + estado `periodo` |
-| `code/front/src/services/dashboardService.js` | `obterDashboard({ mes }, { signal })` |
-| `code/front/src/config/defaultAuthenticatedRoute.js` | Export `/dashboard` |
-| `code/front/src/config/sidebarNavigation.js` | Item menu dashboard |
-| `code/front/src/App.jsx` | Route `path="dashboard"` |
+| `Codigo/web/src/pages/DashboardPage.jsx` | Orquestra widgets + estado `periodo` |
+| `Codigo/web/src/services/dashboardService.js` | `obterDashboard({ mes }, { signal })` |
+| `Codigo/web/src/config/defaultAuthenticatedRoute.js` | Export `/dashboard` |
+| `Codigo/web/src/config/sidebarNavigation.js` | Item menu dashboard |
+| `Codigo/web/src/App.jsx` | Route `path="dashboard"` |
 
 ## 📋 Resumo
 
@@ -704,7 +704,7 @@ Renderizar saldo total com badge de variação e carousel horizontal de recursos
 
 ### Backend util relacionado (NOVO — CRIAR)
 
-`code/back/src/utils/resourceBalanceUtils.js` — `RECURSOS_DASHBOARD`, `calcularSaldosPorRecurso`
+`Codigo/api/src/utils/resourceBalanceUtils.js` — `RECURSOS_DASHBOARD`, `calcularSaldosPorRecurso`
 
 ## 📋 Resumo
 
@@ -939,7 +939,7 @@ Implementar parse multi-formato, sugestão de categorias, dedupe e gravação em
 
 ### Service (NOVO — CRIAR)
 
-`code/back/src/services/importService.js`
+`Codigo/api/src/services/importService.js`
 
 ```javascript
 // analisarArquivo(usuarioId, { arquivo, origem, mapeamento })
@@ -948,7 +948,7 @@ Implementar parse multi-formato, sugestão de categorias, dedupe e gravação em
 
 ### Parsers (NOVO — CRIAR)
 
-`code/back/src/parsers/` — OFX, CSV (delimitador/encoding), XLSX, PDF (Gemini)
+`Codigo/api/src/parsers/` — OFX, CSV (delimitador/encoding), XLSX, PDF (Gemini)
 
 ### Utils (NOVO — CRIAR)
 
@@ -1159,8 +1159,8 @@ Criar folha de estilos do dashboard com grid adaptativo, safe-area mobile e toke
 
 | Arquivo | Escopo |
 |---------|--------|
-| `code/front/src/styles/dashboard.css` | Page layout, charts grid, balance, import modal |
-| `code/front/src/styles/pulso-components.css` | ResourceCard, NotificationPanel (parcial) |
+| `Codigo/web/src/styles/dashboard.css` | Page layout, charts grid, balance, import modal |
+| `Codigo/web/src/styles/pulso-components.css` | ResourceCard, NotificationPanel (parcial) |
 
 Importar em `DashboardPage.jsx` ou entry global de estilos.
 
@@ -1210,7 +1210,7 @@ Garantir testes unitários para `dashboardService`, utils de import e smoke dos 
 
 ## 🛠️ Implementação
 
-### API — criar em `code/back/tests/` (NOVO — CRIAR)
+### API — criar em `Codigo/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|

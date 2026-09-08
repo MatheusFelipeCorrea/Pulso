@@ -39,21 +39,21 @@ Implementar validação JWT em rotas protegidas, limitar abuso por IP e limpar c
 
 ### `authMiddleware.js` (NOVO — CRIAR)
 
-Criar em: `Codigo/Pulso/api/src/middlewares/authMiddleware.js`
+Criar em: `Codigo/api/src/middlewares/authMiddleware.js`
 
 - `getAccessTokenFromRequest` — cookie ou Bearer
 - `jwt.verify` → claims em `req.user`
 
 ### `authRateLimit.js` (NOVO — CRIAR)
 
-Criar em: `Codigo/Pulso/api/src/middlewares/authRateLimit.js`
+Criar em: `Codigo/api/src/middlewares/authRateLimit.js`
 
 9 instâncias independentes (`express-rate-limit`, 5/min/IP):
 `register`, `login`, `oauth/exchange`, `refresh`, `logout`, `forgot-password`, `reset-password`, `verify-email`, `resend-verification`
 
 ### `unverifiedAccountCleanupJob.js` (NOVO — CRIAR)
 
-Criar em: `Codigo/Pulso/api/src/jobs/unverifiedAccountCleanupJob.js`
+Criar em: `Codigo/api/src/jobs/unverifiedAccountCleanupJob.js`
 
 - `authRepository.deleteUnverifiedEmailAccountsOlderThan`
 - Invocar via `cronController.daily` e `server.js` (cron local)

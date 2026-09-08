@@ -34,7 +34,7 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 
 ## 🛠️ Implementação
 
-### API — criar em `Codigo/Pulso/api/tests/` (NOVO — CRIAR)
+### API — criar em `Codigo/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
@@ -45,7 +45,7 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 | `unit/utils/googleOAuth.test.js` | OAuth client |
 | `helpers/authMocks.js` | Mocks compartilhados |
 
-### Web — criar em `Codigo/Pulso/web/tests/` (NOVO — CRIAR)
+### Web — criar em `Codigo/web/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
@@ -55,7 +55,7 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 
 ### Script manual (NOVO — CRIAR)
 
-`Codigo/Pulso/api/scripts/validate-auth-flow.js` — smoke de fluxo auth
+`Codigo/api/scripts/validate-auth-flow.js` — smoke de fluxo auth
 
 ## 📋 Resumo
 

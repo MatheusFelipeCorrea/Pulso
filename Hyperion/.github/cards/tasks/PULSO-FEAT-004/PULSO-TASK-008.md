@@ -36,7 +36,7 @@ Implementar solicitação de reset por email, validação de token e definição
 
 ### `authService.js` (NOVO — CRIAR)
 
-Adicionar em: `Codigo/Pulso/api/src/services/authService.js`
+Adicionar em: `Codigo/api/src/services/authService.js`
 
 ```javascript
 // requestPasswordReset(email) — anti-enumeração; ignora contas Google-only

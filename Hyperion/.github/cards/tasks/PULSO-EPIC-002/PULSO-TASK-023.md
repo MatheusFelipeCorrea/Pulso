@@ -41,8 +41,8 @@ Criar folha de estilos do dashboard com grid adaptativo, safe-area mobile e toke
 
 | Arquivo | Escopo |
 |---------|--------|
-| `Codigo/Pulso/web/src/styles/dashboard.css` | Page layout, charts grid, balance, import modal |
-| `Codigo/Pulso/web/src/styles/pulso-components.css` | ResourceCard, NotificationPanel (parcial) |
+| `Codigo/web/src/styles/dashboard.css` | Page layout, charts grid, balance, import modal |
+| `Codigo/web/src/styles/pulso-components.css` | ResourceCard, NotificationPanel (parcial) |
 
 Importar em `DashboardPage.jsx` ou entry global de estilos.
 

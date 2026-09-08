@@ -34,7 +34,7 @@ Garantir testes unitários para `dashboardService`, utils de import e smoke dos 
 
 ## 🛠️ Implementação
 
-### API — criar em `Codigo/Pulso/api/tests/` (NOVO — CRIAR)
+### API — criar em `Codigo/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|

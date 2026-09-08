@@ -35,7 +35,7 @@ Implementar service e repository com listagem filtrada, agregados, validações 
 
 ### `transactionService.js` (NOVO — CRIAR)
 
-Criar em: `Codigo/Pulso/api/src/services/transactionService.js`
+Criar em: `Codigo/api/src/services/transactionService.js`
 
 ### `transactionRepository.js` (NOVO — CRIAR)
 

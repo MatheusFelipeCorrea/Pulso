@@ -12,7 +12,7 @@ Pulso é um sistema de gestão financeira pessoal para estagiários, estudantes 
 
 O nome remete a manter o pulso firme nas finanças: cada registro é uma batida rumo à estabilidade.
 
-Repositório acadêmico (PUC Minas — PMG-ES 2026-2, TI5). Código ainda não scaffoldado; pastas placeholder em `code/front`, `code/back` e `code/mobile`.
+Repositório acadêmico (PUC Minas — PMG-ES 2026-2, TI5). Código ainda não scaffoldado; pastas placeholder em `Codigo/web`, `Codigo/api` e `Codigo/mobile`.
 
 ## Team
 
@@ -26,9 +26,9 @@ Planejada (ainda sem manifests):
 
 | App | Pasta | Tecnologia |
 |-----|--------|------------|
-| Web | `code/front` | React |
-| API | `code/back` | Node.js |
-| Native | `code/mobile` | Flutter |
+| Web | `Codigo/web` | React |
+| API | `Codigo/api` | Node.js |
+| Native | `Codigo/mobile` | Flutter |
 
 Kit Hyperion aninhado em `Hyperion/` (`kit.root: Hyperion`).
 

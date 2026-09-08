@@ -27,7 +27,7 @@ Job cron que avalia mães recorrentes e cria filhas no dia correto, respeitando 
 
 ### `recurringTransactions.js` (NOVO — CRIAR)
 
-Criar em: `Codigo/Pulso/api/src/jobs/recurringTransactions.js`
+Criar em: `Codigo/api/src/jobs/recurringTransactions.js`
 
 - `runRecurringTransactions()` — lista mães, `isOccurrenceToday`, cria filha
 - Frequências: WEEKLY (INTERVAL), MONTHLY, YEARLY

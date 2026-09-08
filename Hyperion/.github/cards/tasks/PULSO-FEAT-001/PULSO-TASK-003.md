@@ -44,9 +44,9 @@ Como **visitante**, quero me cadastrar, saber que o email foi enviado e confirma
 
 | Arquivo | Rota |
 |---------|------|
-| `Codigo/Pulso/web/src/pages/Register.jsx` | `/register` |
-| `Codigo/Pulso/web/src/pages/RegisterEmailSent.jsx` | `/register/email-sent` |
-| `Codigo/Pulso/web/src/pages/VerifyEmail.jsx` | `/verify-email/:token` |
+| `Codigo/web/src/pages/Register.jsx` | `/register` |
+| `Codigo/web/src/pages/RegisterEmailSent.jsx` | `/register/email-sent` |
+| `Codigo/web/src/pages/VerifyEmail.jsx` | `/verify-email/:token` |
 
 ### Componentes (NOVO — CRIAR)
 

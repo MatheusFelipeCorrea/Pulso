@@ -48,18 +48,18 @@ Como **usuário**, quero fazer login, manter sessão entre visitas e ser redirec
 
 | Arquivo | Função |
 |---------|--------|
-| `Codigo/Pulso/web/src/pages/Login.jsx` | Form login, lembrar-me, reenviar verificação, Google |
-| `Codigo/Pulso/web/src/components/routing/AuthBootstrap.jsx` | `getMe()` no mount |
-| `Codigo/Pulso/web/src/components/routing/ProtectedRoute.jsx` | Guards autenticado/guest |
-| `Codigo/Pulso/web/src/store/slices/authSlice.js` | `user`, `isAuthenticated`, `sessionChecked` |
+| `Codigo/web/src/pages/Login.jsx` | Form login, lembrar-me, reenviar verificação, Google |
+| `Codigo/web/src/components/routing/AuthBootstrap.jsx` | `getMe()` no mount |
+| `Codigo/web/src/components/routing/ProtectedRoute.jsx` | Guards autenticado/guest |
+| `Codigo/web/src/store/slices/authSlice.js` | `user`, `isAuthenticated`, `sessionChecked` |
 
 ### HTTP (NOVO — CRIAR)
 
 | Arquivo | Função |
 |---------|--------|
-| `Codigo/Pulso/web/src/services/api.js` | `withCredentials: true`, `refreshPromise` mutex, interceptor 401 |
-| `Codigo/Pulso/web/src/services/authService.js` | `login`, `refresh`, `logout`, `getMe` |
-| `Codigo/Pulso/web/src/config/defaultAuthenticatedRoute.js` | `/transactions` |
+| `Codigo/web/src/services/api.js` | `withCredentials: true`, `refreshPromise` mutex, interceptor 401 |
+| `Codigo/web/src/services/authService.js` | `login`, `refresh`, `logout`, `getMe` |
+| `Codigo/web/src/config/defaultAuthenticatedRoute.js` | `/transactions` |
 
 Registrar em `App.jsx` — `/login` com `GuestRoute`; árvore protegida com `ProtectedRoute`
 

@@ -29,7 +29,7 @@ Como **sistema**, preciso modelar e migrar tabelas de usuário e configuração 
 
 ## 🛠️ Implementação
 
-### `Codigo/Pulso/api/prisma/schema.prisma` (NOVO — CRIAR)
+### `Codigo/api/prisma/schema.prisma` (NOVO — CRIAR)
 
 Adicionar/criar models:
 

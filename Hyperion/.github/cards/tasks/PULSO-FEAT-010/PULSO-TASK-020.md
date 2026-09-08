@@ -37,7 +37,7 @@ Implementar parse multi-formato, sugestão de categorias, dedupe e gravação em
 
 ### Service (NOVO — CRIAR)
 
-`Codigo/Pulso/api/src/services/importService.js`
+`Codigo/api/src/services/importService.js`
 
 ```javascript
 // analisarArquivo(usuarioId, { arquivo, origem, mapeamento })
@@ -46,7 +46,7 @@ Implementar parse multi-formato, sugestão de categorias, dedupe e gravação em
 
 ### Parsers (NOVO — CRIAR)
 
-`Codigo/Pulso/api/src/parsers/` — OFX, CSV (delimitador/encoding), XLSX, PDF (Gemini)
+`Codigo/api/src/parsers/` — OFX, CSV (delimitador/encoding), XLSX, PDF (Gemini)
 
 ### Utils (NOVO — CRIAR)
 

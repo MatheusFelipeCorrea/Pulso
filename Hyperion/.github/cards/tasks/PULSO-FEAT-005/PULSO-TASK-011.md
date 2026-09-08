@@ -46,10 +46,10 @@ Garantir que rotas financeiras exijam sessão válida e rotas de login/cadastro 
 
 | Arquivo | Export |
 |---------|--------|
-| `Codigo/Pulso/web/src/components/routing/ProtectedRoute.jsx` | `ProtectedRoute`, `GuestRoute` |
-| `Codigo/Pulso/web/src/components/routing/AuthBootstrap.jsx` | Wrapper de sessão |
-| `Codigo/Pulso/web/src/config/appRoutes.js` | Paths centralizados do app |
-| `Codigo/Pulso/web/src/App.jsx` | Árvore de rotas pública vs `MainLayout` protegido |
+| `Codigo/web/src/components/routing/ProtectedRoute.jsx` | `ProtectedRoute`, `GuestRoute` |
+| `Codigo/web/src/components/routing/AuthBootstrap.jsx` | Wrapper de sessão |
+| `Codigo/web/src/config/appRoutes.js` | Paths centralizados do app |
+| `Codigo/web/src/App.jsx` | Árvore de rotas pública vs `MainLayout` protegido |
 
 ### Prefixos guest em `api.js` (NOVO — CRIAR)
 

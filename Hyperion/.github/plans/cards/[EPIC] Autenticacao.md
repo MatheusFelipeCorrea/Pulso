@@ -476,7 +476,7 @@ Como **sistema**, preciso modelar e migrar tabelas de usuário e configuração 
 
 ## 🛠️ Implementação
 
-### `code/back/prisma/schema.prisma` (NOVO — CRIAR)
+### `Codigo/api/prisma/schema.prisma` (NOVO — CRIAR)
 
 Adicionar/criar models:
 
@@ -545,7 +545,7 @@ Implementar registro com validação Zod, hash bcrypt(12), envio SMTP, verifica�
 
 ### `authService.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/services/authService.js`
+Criar em: `Codigo/api/src/services/authService.js`
 
 ```javascript
 // registerUser({ nome, email, senha, confirmarSenha })
@@ -559,31 +559,31 @@ Criar em: `code/back/src/services/authService.js`
 
 ### `authController.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/controllers/authController.js`
+Criar em: `Codigo/api/src/controllers/authController.js`
 
 - `register`, `verifyEmail`, `resendVerification`
 
 ### `authRoutes.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/routes/authRoutes.js`
+Criar em: `Codigo/api/src/routes/authRoutes.js`
 
 Montar rotas com rate limits: `authRegisterRateLimit`, `authVerifyEmailRateLimit`, `authResendVerificationRateLimit`
 
 ### `authSchemas.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/schemas/authSchemas.js`
+Criar em: `Codigo/api/src/schemas/authSchemas.js`
 
 `registerSchema`, `verifyEmailSchema`, `resendVerificationSchema` + regex senha forte
 
 ### `emailProvider.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/providers/emailProvider.js`
+Criar em: `Codigo/api/src/providers/emailProvider.js`
 
 - `sendVerificationEmail(email, token)`
 
 ### `prismaErrors.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/utils/prismaErrors.js`
+Criar em: `Codigo/api/src/utils/prismaErrors.js`
 
 Mapear P2002 → 409 no cadastro
 
@@ -650,9 +650,9 @@ Como **visitante**, quero me cadastrar, saber que o email foi enviado e confirma
 
 | Arquivo | Rota |
 |---------|------|
-| `code/front/src/pages/Register.jsx` | `/register` |
-| `code/front/src/pages/RegisterEmailSent.jsx` | `/register/email-sent` |
-| `code/front/src/pages/VerifyEmail.jsx` | `/verify-email/:token` |
+| `Codigo/web/src/pages/Register.jsx` | `/register` |
+| `Codigo/web/src/pages/RegisterEmailSent.jsx` | `/register/email-sent` |
+| `Codigo/web/src/pages/VerifyEmail.jsx` | `/verify-email/:token` |
 
 ### Componentes (NOVO — CRIAR)
 
@@ -717,7 +717,7 @@ Implementar endpoints de sessão: login emite tokens, refresh rotaciona, logout 
 
 ### `authService.js` (NOVO — CRIAR)
 
-Adicionar em: `code/back/src/services/authService.js`
+Adicionar em: `Codigo/api/src/services/authService.js`
 
 ```javascript
 // loginUser({ email, senha, lembrarMe })
@@ -735,20 +735,20 @@ Adicionar em: `code/back/src/services/authService.js`
 
 ### `authCookies.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/utils/authCookies.js`
+Criar em: `Codigo/api/src/utils/authCookies.js`
 
 Cookies `pulso_access` (15min) e `pulso_refresh` (`httpOnly`, `Secure` prod, `SameSite=none` prod / `lax` dev, `path=/api`)
 
 ### `tokenUtils.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/utils/tokenUtils.js`
+Criar em: `Codigo/api/src/utils/tokenUtils.js`
 
 - Access JWT 15min · Refresh 7d (30d lembrar-me)
 - `createRefreshTokenValue()` — 48 bytes hex
 
 ### `authRepository.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/repositories/authRepository.js`
+Criar em: `Codigo/api/src/repositories/authRepository.js`
 
 - `createRefreshToken`, `findRefreshToken`, `revokeRefreshToken`, `revokeAllRefreshTokensForUser`
 
@@ -823,18 +823,18 @@ Como **usuário**, quero fazer login, manter sessão entre visitas e ser redirec
 
 | Arquivo | Função |
 |---------|--------|
-| `code/front/src/pages/Login.jsx` | Form login, lembrar-me, reenviar verificação, Google |
-| `code/front/src/components/routing/AuthBootstrap.jsx` | `getMe()` no mount |
-| `code/front/src/components/routing/ProtectedRoute.jsx` | Guards autenticado/guest |
-| `code/front/src/store/slices/authSlice.js` | `user`, `isAuthenticated`, `sessionChecked` |
+| `Codigo/web/src/pages/Login.jsx` | Form login, lembrar-me, reenviar verificação, Google |
+| `Codigo/web/src/components/routing/AuthBootstrap.jsx` | `getMe()` no mount |
+| `Codigo/web/src/components/routing/ProtectedRoute.jsx` | Guards autenticado/guest |
+| `Codigo/web/src/store/slices/authSlice.js` | `user`, `isAuthenticated`, `sessionChecked` |
 
 ### HTTP (NOVO — CRIAR)
 
 | Arquivo | Função |
 |---------|--------|
-| `code/front/src/services/api.js` | `withCredentials: true`, `refreshPromise` mutex, interceptor 401 |
-| `code/front/src/services/authService.js` | `login`, `refresh`, `logout`, `getMe` |
-| `code/front/src/config/defaultAuthenticatedRoute.js` | `/transactions` |
+| `Codigo/web/src/services/api.js` | `withCredentials: true`, `refreshPromise` mutex, interceptor 401 |
+| `Codigo/web/src/services/authService.js` | `login`, `refresh`, `logout`, `getMe` |
+| `Codigo/web/src/config/defaultAuthenticatedRoute.js` | `/transactions` |
 
 Registrar em `App.jsx` — `/login` com `GuestRoute`; árvore protegida com `ProtectedRoute`
 
@@ -886,7 +886,7 @@ Implementar fluxo OAuth server-side e endpoint de exchange para o SPA consumir s
 
 ### `authService.js` (NOVO — CRIAR)
 
-Adicionar em: `code/back/src/services/authService.js`
+Adicionar em: `Codigo/api/src/services/authService.js`
 
 ```javascript
 // authenticateGoogle(profile) — cria/vincula conta, seed categorias
@@ -903,7 +903,7 @@ Adicionar em: `code/back/src/services/authService.js`
 
 ### `passport.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/config/passport.js`
+Criar em: `Codigo/api/src/config/passport.js`
 
 GoogleStrategy lazy via `ensureGoogleStrategy()` — evita crash sem env vars
 
@@ -972,9 +972,9 @@ Como **usuário**, quero entrar com Google em um clique e ser autenticado automa
 
 | Arquivo | Rota |
 |---------|------|
-| `code/front/src/pages/AuthCallback.jsx` | `/auth/callback` |
-| `code/front/src/pages/Login.jsx` | Botão Google inline SVG |
-| `code/front/src/pages/Register.jsx` | Botão Google inline SVG |
+| `Codigo/web/src/pages/AuthCallback.jsx` | `/auth/callback` |
+| `Codigo/web/src/pages/Login.jsx` | Botão Google inline SVG |
+| `Codigo/web/src/pages/Register.jsx` | Botão Google inline SVG |
 
 ### Serviços (NOVO — CRIAR)
 
@@ -1032,7 +1032,7 @@ Implementar solicitação de reset por email, validação de token e definição
 
 ### `authService.js` (NOVO — CRIAR)
 
-Adicionar em: `code/back/src/services/authService.js`
+Adicionar em: `Codigo/api/src/services/authService.js`
 
 ```javascript
 // requestPasswordReset(email) — anti-enumeração; ignora contas Google-only
@@ -1116,10 +1116,10 @@ Como **usuário**, quero solicitar recuperação de senha, redefinir via link se
 
 | Arquivo | Rota |
 |---------|------|
-| `code/front/src/pages/ForgotPassword.jsx` | `/forgot-password` |
-| `code/front/src/pages/ForgotPasswordEmailSent.jsx` | `/forgot-password/email-sent` |
-| `code/front/src/pages/ResetPassword.jsx` | `/reset-password/:token` |
-| `code/front/src/pages/ResetPasswordSuccess.jsx` | `/reset-password/success` |
+| `Codigo/web/src/pages/ForgotPassword.jsx` | `/forgot-password` |
+| `Codigo/web/src/pages/ForgotPasswordEmailSent.jsx` | `/forgot-password/email-sent` |
+| `Codigo/web/src/pages/ResetPassword.jsx` | `/reset-password/:token` |
+| `Codigo/web/src/pages/ResetPasswordSuccess.jsx` | `/reset-password/success` |
 
 ### Componentes (NOVO — CRIAR)
 
@@ -1184,21 +1184,21 @@ Implementar validação JWT em rotas protegidas, limitar abuso por IP e limpar c
 
 ### `authMiddleware.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/middlewares/authMiddleware.js`
+Criar em: `Codigo/api/src/middlewares/authMiddleware.js`
 
 - `getAccessTokenFromRequest` — cookie ou Bearer
 - `jwt.verify` → claims em `req.user`
 
 ### `authRateLimit.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/middlewares/authRateLimit.js`
+Criar em: `Codigo/api/src/middlewares/authRateLimit.js`
 
 9 instâncias independentes (`express-rate-limit`, 5/min/IP):
 `register`, `login`, `oauth/exchange`, `refresh`, `logout`, `forgot-password`, `reset-password`, `verify-email`, `resend-verification`
 
 ### `unverifiedAccountCleanupJob.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/jobs/unverifiedAccountCleanupJob.js`
+Criar em: `Codigo/api/src/jobs/unverifiedAccountCleanupJob.js`
 
 - `authRepository.deleteUnverifiedEmailAccountsOlderThan`
 - Invocar via `cronController.daily` e `server.js` (cron local)
@@ -1270,10 +1270,10 @@ Garantir que rotas financeiras exijam sessão válida e rotas de login/cadastro 
 
 | Arquivo | Export |
 |---------|--------|
-| `code/front/src/components/routing/ProtectedRoute.jsx` | `ProtectedRoute`, `GuestRoute` |
-| `code/front/src/components/routing/AuthBootstrap.jsx` | Wrapper de sessão |
-| `code/front/src/config/appRoutes.js` | Paths centralizados do app |
-| `code/front/src/App.jsx` | Árvore de rotas pública vs `MainLayout` protegido |
+| `Codigo/web/src/components/routing/ProtectedRoute.jsx` | `ProtectedRoute`, `GuestRoute` |
+| `Codigo/web/src/components/routing/AuthBootstrap.jsx` | Wrapper de sessão |
+| `Codigo/web/src/config/appRoutes.js` | Paths centralizados do app |
+| `Codigo/web/src/App.jsx` | Árvore de rotas pública vs `MainLayout` protegido |
 
 ### Prefixos guest em `api.js` (NOVO — CRIAR)
 
@@ -1326,7 +1326,7 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 
 ## 🛠️ Implementação
 
-### API — criar em `code/back/tests/` (NOVO — CRIAR)
+### API — criar em `Codigo/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
@@ -1337,7 +1337,7 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 | `unit/utils/googleOAuth.test.js` | OAuth client |
 | `helpers/authMocks.js` | Mocks compartilhados |
 
-### Web — criar em `code/front/tests/` (NOVO — CRIAR)
+### Web — criar em `Codigo/web/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
@@ -1347,7 +1347,7 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 
 ### Script manual (NOVO — CRIAR)
 
-`code/back/scripts/validate-auth-flow.js` — smoke de fluxo auth
+`Codigo/api/scripts/validate-auth-flow.js` — smoke de fluxo auth
 
 ## 📋 Resumo
 

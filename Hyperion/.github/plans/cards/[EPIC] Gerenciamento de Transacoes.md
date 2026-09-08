@@ -523,7 +523,7 @@ Implementar service e repository com listagem filtrada, agregados, validações 
 
 ### `transactionService.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/services/transactionService.js`
+Criar em: `Codigo/api/src/services/transactionService.js`
 
 ### `transactionRepository.js` (NOVO — CRIAR)
 
@@ -814,7 +814,7 @@ Job cron que avalia mães recorrentes e cria filhas no dia correto, respeitando 
 
 ### `recurringTransactions.js` (NOVO — CRIAR)
 
-Criar em: `code/back/src/jobs/recurringTransactions.js`
+Criar em: `Codigo/api/src/jobs/recurringTransactions.js`
 
 - `runRecurringTransactions()` — lista mães, `isOccurrenceToday`, cria filha
 - Frequências: WEEKLY (INTERVAL), MONTHLY, YEARLY
@@ -1072,7 +1072,7 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 
 ## 🛠️ Implementação
 
-### API — `code/back/tests/` (NOVO — CRIAR)
+### API — `Codigo/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
@@ -1083,7 +1083,7 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 | `unit/services/categorySuggestionService.test.js` | RF-141 |
 | `unit/utils/transactionMapper.test.js` | DTO |
 
-### Web — `code/front/tests/` (NOVO — CRIAR)
+### Web — `Codigo/web/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|

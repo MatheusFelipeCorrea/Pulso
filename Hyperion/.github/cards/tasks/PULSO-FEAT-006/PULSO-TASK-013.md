@@ -32,7 +32,7 @@ Implementar `obterDashboard(usuarioId, query)` orchestrando resumo mensal, séri
 
 ### `dashboardService.js` (NOVO — CRIAR)
 
-Criar em: `Codigo/Pulso/api/src/services/dashboardService.js`
+Criar em: `Codigo/api/src/services/dashboardService.js`
 
 ```javascript
 // obterDashboard(usuarioId, query)

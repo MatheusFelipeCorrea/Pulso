@@ -18,9 +18,9 @@ Versão 2.1 (TI5). Fontes `.puml` e imagens renderizadas. A apostila anexa os PN
 
 ## Arquitetura multi-cliente
 
-- **Web:** React + Vite (`code/front`)
-- **Backend:** Node.js + Express (`code/back`) — API única `/api`
-- **Mobile:** Flutter — planejado; mesma REST + Socket.IO
+- **Web:** React + Vite (`Codigo/web`)
+- **Backend:** Node.js + Express (`Codigo/api`) — API única `/api`
+- **Mobile:** Flutter (`Codigo/mobile`) — mesma REST + Socket.IO
 
 Render (a partir desta pasta):
 

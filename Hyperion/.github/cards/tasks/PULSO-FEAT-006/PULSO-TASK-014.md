@@ -33,13 +33,13 @@ Query opcional: `mes=YYYY-MM`
 
 ### `dashboardController.js` (NOVO — CRIAR)
 
-Criar em: `Codigo/Pulso/api/src/controllers/dashboardController.js`
+Criar em: `Codigo/api/src/controllers/dashboardController.js`
 
 - `obterDashboard(req, res, next)`
 
 ### `dashboardRoutes.js` (NOVO — CRIAR)
 
-Criar em: `Codigo/Pulso/api/src/routes/dashboardRoutes.js`
+Criar em: `Codigo/api/src/routes/dashboardRoutes.js`
 
 ```javascript
 router.get('/', authMiddleware, dashboardController.obterDashboard)

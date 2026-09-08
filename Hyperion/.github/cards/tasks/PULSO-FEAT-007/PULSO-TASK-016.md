@@ -53,7 +53,7 @@ Renderizar saldo total com badge de variação e carousel horizontal de recursos
 
 ### Backend util relacionado (NOVO — CRIAR)
 
-`Codigo/Pulso/api/src/utils/resourceBalanceUtils.js` — `RECURSOS_DASHBOARD`, `calcularSaldosPorRecurso`
+`Codigo/api/src/utils/resourceBalanceUtils.js` — `RECURSOS_DASHBOARD`, `calcularSaldosPorRecurso`
 
 ## 📋 Resumo
 

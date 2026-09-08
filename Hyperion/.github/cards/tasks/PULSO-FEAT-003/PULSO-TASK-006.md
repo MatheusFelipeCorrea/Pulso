@@ -35,7 +35,7 @@ Implementar fluxo OAuth server-side e endpoint de exchange para o SPA consumir s
 
 ### `authService.js` (NOVO — CRIAR)
 
-Adicionar em: `Codigo/Pulso/api/src/services/authService.js`
+Adicionar em: `Codigo/api/src/services/authService.js`
 
 ```javascript
 // authenticateGoogle(profile) — cria/vincula conta, seed categorias
@@ -52,7 +52,7 @@ Adicionar em: `Codigo/Pulso/api/src/services/authService.js`
 
 ### `passport.js` (NOVO — CRIAR)
 
-Criar em: `Codigo/Pulso/api/src/config/passport.js`
+Criar em: `Codigo/api/src/config/passport.js`
 
 GoogleStrategy lazy via `ensureGoogleStrategy()` — evita crash sem env vars
 

@@ -44,11 +44,11 @@ Como **usuário**, quero acessar `/dashboard` após login e ver meu resumo finan
 
 | Arquivo | Função |
 |---------|--------|
-| `Codigo/Pulso/web/src/pages/DashboardPage.jsx` | Orquestra widgets + estado `periodo` |
-| `Codigo/Pulso/web/src/services/dashboardService.js` | `obterDashboard({ mes }, { signal })` |
-| `Codigo/Pulso/web/src/config/defaultAuthenticatedRoute.js` | Export `/dashboard` |
-| `Codigo/Pulso/web/src/config/sidebarNavigation.js` | Item menu dashboard |
-| `Codigo/Pulso/web/src/App.jsx` | Route `path="dashboard"` |
+| `Codigo/web/src/pages/DashboardPage.jsx` | Orquestra widgets + estado `periodo` |
+| `Codigo/web/src/services/dashboardService.js` | `obterDashboard({ mes }, { signal })` |
+| `Codigo/web/src/config/defaultAuthenticatedRoute.js` | Export `/dashboard` |
+| `Codigo/web/src/config/sidebarNavigation.js` | Item menu dashboard |
+| `Codigo/web/src/App.jsx` | Route `path="dashboard"` |
 
 ## 📋 Resumo
 

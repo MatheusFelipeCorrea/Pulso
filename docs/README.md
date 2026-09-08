@@ -77,6 +77,6 @@ _Inclua o URL do repositório (Github, Bitbucket, etc) onde você armazenou o c�
 
 | Ambiente              | Plataforma        | Link de Acesso                |
 | --------------------- | ----------------- | ----------------------------- |
-| Repositório de código | GitHub            | https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/tree/main/code    |
+| Repositório de código | GitHub            | https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/tree/main/Codigo    |
 | Hospedagem do site    | Heroku            | https://XXXXXXX.herokuapp.com |
 | Protótipo Interativo  | MavelApp ou Figma | https://figma.com/XXXXXXX     |

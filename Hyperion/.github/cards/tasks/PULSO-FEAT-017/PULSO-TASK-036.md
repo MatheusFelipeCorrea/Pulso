@@ -26,7 +26,7 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 
 ## 🛠️ Implementação
 
-### API — `Codigo/Pulso/api/tests/` (NOVO — CRIAR)
+### API — `Codigo/api/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|
@@ -37,7 +37,7 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 | `unit/services/categorySuggestionService.test.js` | RF-028 |
 | `unit/utils/transactionMapper.test.js` | DTO |
 
-### Web — `Codigo/Pulso/web/tests/` (NOVO — CRIAR)
+### Web — `Codigo/web/tests/` (NOVO — CRIAR)
 
 | Arquivo | Escopo |
 |---------|--------|

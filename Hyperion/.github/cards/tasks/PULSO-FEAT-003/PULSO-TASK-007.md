@@ -44,9 +44,9 @@ Como **usuário**, quero entrar com Google em um clique e ser autenticado automa
 
 | Arquivo | Rota |
 |---------|------|
-| `Codigo/Pulso/web/src/pages/AuthCallback.jsx` | `/auth/callback` |
-| `Codigo/Pulso/web/src/pages/Login.jsx` | Botão Google inline SVG |
-| `Codigo/Pulso/web/src/pages/Register.jsx` | Botão Google inline SVG |
+| `Codigo/web/src/pages/AuthCallback.jsx` | `/auth/callback` |
+| `Codigo/web/src/pages/Login.jsx` | Botão Google inline SVG |
+| `Codigo/web/src/pages/Register.jsx` | Botão Google inline SVG |
 
 ### Serviços (NOVO — CRIAR)
 

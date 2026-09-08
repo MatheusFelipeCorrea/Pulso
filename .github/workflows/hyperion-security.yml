@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Audit Node dependencies (product apps, when present)
-        if: hashFiles('code/back/package.json') != '' || hashFiles('code/front/package.json') != '' || hashFiles('package.json') != ''
+        if: hashFiles('Codigo/api/package.json') != '' || hashFiles('Codigo/web/package.json') != '' || hashFiles('package.json') != ''
         env:
           HYPERION_AUDIT_SOFT: ${{ vars.HYPERION_AUDIT_SOFT }}
         run: |
@@ -29,8 +29,8 @@ jobs:
             fi
           }
           audit_dir .
-          audit_dir code/back
-          audit_dir code/front
+          audit_dir Codigo/api
+          audit_dir Codigo/web
 
       - name: Check for secrets
         uses: trufflesecurity/trufflehog@v3.97.0

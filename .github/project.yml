@@ -14,23 +14,23 @@ layout: monorepo
 
 apps:
   api:
-    root: code/back
+    root: Codigo/api
     source_dirs:
-      - code/back
+      - Codigo/api
   web:
-    root: code/front
+    root: Codigo/web
     source_dirs:
-      - code/front
+      - Codigo/web
   mobile:
-    root: code/mobile
+    root: Codigo/mobile
     source_dirs:
-      - code/mobile
+      - Codigo/mobile
 
 docs:
   root: docs
   requirements: docs/3.requisitos.md
-  api_readme: code/back/README.md
-  web_readme: code/front/README.md
+  api_readme: Codigo/api/README.md
+  web_readme: Codigo/web/README.md
   blueprints: docs
   diagrams: docs/imagens
 
@@ -92,4 +92,4 @@ uncertainties:
   - Manifests ainda nao existem (package.json / pubspec.yaml). Apps serao scaffoldadas depois; regenerar project.yml via /discover.
   - Frameworks confirmados pelo time: React (web), Node (api), Flutter (mobile) — sem evidencia de imports ainda.
   - ORM, banco, deploy e comandos reais de test/lint/build indefinidos ate o scaffold.
-  - code/mobile README ainda nao existe no schema (so api_readme e web_readme).
+  - README do mobile existe em Codigo/mobile/README.md (schema so lista api_readme e web_readme).

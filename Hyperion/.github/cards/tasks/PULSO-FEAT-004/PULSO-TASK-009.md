@@ -44,10 +44,10 @@ Como **usuário**, quero solicitar recuperação de senha, redefinir via link se
 
 | Arquivo | Rota |
 |---------|------|
-| `Codigo/Pulso/web/src/pages/ForgotPassword.jsx` | `/forgot-password` |
-| `Codigo/Pulso/web/src/pages/ForgotPasswordEmailSent.jsx` | `/forgot-password/email-sent` |
-| `Codigo/Pulso/web/src/pages/ResetPassword.jsx` | `/reset-password/:token` |
-| `Codigo/Pulso/web/src/pages/ResetPasswordSuccess.jsx` | `/reset-password/success` |
+| `Codigo/web/src/pages/ForgotPassword.jsx` | `/forgot-password` |
+| `Codigo/web/src/pages/ForgotPasswordEmailSent.jsx` | `/forgot-password/email-sent` |
+| `Codigo/web/src/pages/ResetPassword.jsx` | `/reset-password/:token` |
+| `Codigo/web/src/pages/ResetPasswordSuccess.jsx` | `/reset-password/success` |
 
 ### Componentes (NOVO — CRIAR)
 
