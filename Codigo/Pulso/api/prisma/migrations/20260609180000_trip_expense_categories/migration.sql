@@ -1,0 +1,4 @@
+ALTER TYPE "CategoriaDespesaViagem" ADD VALUE 'DOCUMENTACAO';
+ALTER TYPE "CategoriaDespesaViagem" ADD VALUE 'SAUDE';
+ALTER TYPE "CategoriaDespesaViagem" ADD VALUE 'EMERGENCIAS';
+ALTER TYPE "CategoriaDespesaViagem" ADD VALUE 'ENTRETENIMENTO';
