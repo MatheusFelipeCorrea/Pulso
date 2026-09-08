@@ -1,0 +1,42 @@
+# Ata de Reunião - Pulso (Kick-off)
+
+## Informações
+**Data/hora:** 22/08/2026, 09:00  
+**Local:** Microsoft Teams  
+**Motivo da reunião:** Reunião de Abertura do Projeto e Definição de Escopo do Sistema Pulso  
+**Secretário:** Matheus Felipe  
+
+## Participantes
+Estiveram presentes na reunião:
+- Alice Shikida
+- Matheus Felipe
+- Maria Clara Gomes
+- Sofia Vasconcelos
+- Vinícius Simões
+
+## Pauta
+
+Item | Descrição
+---- | ----
+Item de Agenda 1 | • Apresentação do Termo de Abertura do Projeto (TAP) e objetivos do sistema Pulso<br>• Alinhamento do escopo inicial<br>• Definição da stack tecnológica principal<br>• Apresentação das personas e principais casos de uso
+Item de Agenda 2 | • Definição de papéis e responsabilidades dos integrantes da equipe<br>• Definição da arquitetura inicial e padrão do banco de dados<br>• Próximos passos para a Sprint 1
+
+## Notas e Decisões
+Item | Quem | Anotações |
+---- | ---- | ---- |
+Alinhamento de Escopo | Todos | O escopo do MVP focará na gestão de saldos por tipo de recurso (salário, VA/VR), divisão de despesas, viagens, calendário financeiro e leitura inteligente de extratos via IA. |
+Stack Tecnológica | Matheus Felipe | Confirmada a utilização de React + Vite para o Front-end, Node.js + Express para o Back-end, Prisma ORM e banco de dados PostgreSQL (Neon). |
+Papéis e Atribuições | Alice Shikida | Alice assumirá a liderança de Product Owner (PO); Matheus e Vinícius atuarão na arquitetura Back-end; Maria Clara e Sofia focarão no Front-end/UX. |
+Processos de Dev | Sofia Vasconcelos | O fluxo de trabalho utilizará o GitHub com convenção de Commits Semânticos, Pull Requests com aprovação obrigatória e CI/CD via GitHub Actions. |
+
+## Ações e pendências
+| Feito (S/N)? | Item | Responsável | Data para solução |
+| ---- | ---- | ---- | ---- |
+| N | Finalizar e publicar o repositório base no GitHub com os diretórios de arquitetura | Vinícius Simões | 25/08/2026 |
+| N | Detalhar os requisitos e critérios de aceite das Histórias de Usuário da Sprint 1 | Alice Shikida | 26/08/2026 |
+| N | Elaborar os protótipos de alta fidelidade das telas do Dashboard e Transações no Figma | Maria Clara Gomes | 27/08/2026 |
+| N | Configurar o ambiente do banco de dados relacional (PostgreSQL/Neon) e modelagem inicial do Prisma | Matheus Felipe | 28/08/2026 |
+| N | Estruturar a pipeline inicial de CI no GitHub Actions (lint e testes) | Sofia Vasconcelos | 29/08/2026 |
+
+## Outras notas e informações
+As reuniões semanais de alinhamento do time ocorrerão aos sábados, às 09:00, via Microsoft Teams. As pontas de dúvida do dia a dia serão tratadas via canal do Discord do projeto.
