@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-099
 title: "Artefatos de gerência, INPI e contribuição semanal"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
 sprint: "Sprint 1"

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-079
 title: "Nosso produto — visão, canvas e personas"
-status: "In Progress"
+status: "In Revision"
 type: Feature
 priority: High
 sprint: "Sprint 1"
