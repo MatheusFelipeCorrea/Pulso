@@ -8,7 +8,7 @@ sprint: "Sprint 1"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null
-due_date: null
+due_date: 2026-09-08
 categories:
   - Documentação
   - Arquitetura

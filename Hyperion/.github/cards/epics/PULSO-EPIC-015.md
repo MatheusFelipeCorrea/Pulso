@@ -4,11 +4,11 @@ title: "Protótipos de interface"
 status: "In Progress"
 type: Epic
 priority: Highest
-sprint: "Sprint 1"
+sprint: "Sprint 2"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null
-due_date: null
+due_date: 2026-09-08
 categories:
   - Protótipo
   - UX / UI
