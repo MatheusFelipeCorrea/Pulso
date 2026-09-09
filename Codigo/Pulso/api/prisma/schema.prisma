@@ -1,0 +1,1008 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  binaryTargets   = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum ProvedorAuth {
+  EMAIL
+  GOOGLE
+}
+
+enum TipoTransacao {
+  RECEITA
+  DESPESA
+  TRANSFERENCIA
+}
+
+enum TipoRecurso {
+  DINHEIRO
+  VA
+  VR
+  VT
+  POUPANCA
+}
+
+enum StatusMeta {
+  ATIVA
+  PAUSADA
+  CONCLUIDA
+  CANCELADA
+}
+
+enum TipoMeta {
+  CURTO_PRAZO
+  LONGO_PRAZO
+}
+
+enum TipoCategoria {
+  RECEITA
+  DESPESA
+}
+
+enum GrupoBeneficioCategoria {
+  ALIMENTACAO
+  COMPRAS
+  TRANSPORTE
+}
+
+enum CategoriaDespesaViagem {
+  TRANSPORTE
+  HOSPEDAGEM
+  ALIMENTACAO
+  PASSEIOS
+  COMPRAS
+  DOCUMENTACAO
+  SAUDE
+  EMERGENCIAS
+  ENTRETENIMENTO
+  OUTROS
+}
+
+enum Tema {
+  CLARO
+  ESCURO
+}
+
+enum CategoriaLembrete {
+  ALUGUEL
+  CONDOMINIO
+  IPTU
+  SEGURO_RESIDENCIAL
+  LUZ
+  AGUA
+  GAS
+  INTERNET
+  TELEFONE
+  TV_ASSINATURA
+  FATURA_CARTAO
+  EMPRESTIMO
+  FINANCIAMENTO
+  INVESTIMENTO
+  IMPOSTO
+  DECLARACAO_IR
+  IPVA
+  SEGURO_VEICULO
+  LICENCIAMENTO
+  REVISAO_VEICULO
+  MULTA
+  PLANO_SAUDE
+  CONSULTA
+  EXAME
+  MEDICAMENTO
+  ACADEMIA
+  MENSALIDADE_ESCOLA
+  MENSALIDADE_FACULDADE
+  CURSO
+  MATERIAL_ESCOLAR
+  STREAMING
+  SOFTWARE
+  DOMINIO
+  HOSPEDAGEM
+  NUVEM
+  VACINA_PET
+  CONSULTA_PET
+  RACAO_PET
+  NOTA_FISCAL
+  FOLHA_PAGAMENTO
+  CONTRATO
+  RENOVACAO_CONTRATO
+  CERTIDAO
+  ALVARA
+  ANIVERSARIO
+  REUNIAO
+  COMPROMISSO
+  VIAGEM
+  RENOVACAO_DOCUMENTO
+  RECORRENTE
+  PARCELAMENTO
+  OUTRO
+}
+
+enum AntecedenciaLembrete {
+  NO_DIA
+  UM_DIA
+  TRES_DIAS
+  CINCO_DIAS
+  UMA_SEMANA
+}
+
+enum PapelGrupo {
+  ADMIN
+  MEMBRO
+}
+
+enum ModoDivisaoGrupo {
+  PRETENSAO
+  IGUAL
+}
+
+enum NivelFinanceiro {
+  INICIANTE
+  CONSCIENTE
+  ESTRATEGISTA
+  INVESTIDOR
+}
+
+/// Modo de uso do app (RF-073) — badges perfil.* no frontend
+enum ModoUso {
+  ESTAGIARIO
+  CLT
+  PJ
+  PESSOA_FISICA
+}
+
+/// TI5 freemium
+enum Plano {
+  FREE
+  PREMIUM
+}
+
+/// Prioridade opcional em metas / itens (badges prioridade.*)
+enum Prioridade {
+  ALTA
+  MEDIA
+  BAIXA
+}
+
+enum TipoNotificacao {
+  RECEITA_REGISTRADA
+  DESPESA_REGISTRADA
+  TRANSFERENCIA_REGISTRADA
+  META_ATINGIDA
+  ALERTA_ORCAMENTO
+  ORCAMENTO_ESTOURADO
+  LEMBRETE_VENCIMENTO
+  STREAK
+  CONQUISTA
+  GRUPO_ATIVIDADE
+  DIVIDA_COBRANCA
+  INSIGHT_IA
+}
+
+enum DirecaoDivida {
+  ME_DEVEM
+  EU_DEVO
+}
+
+// ==========================================
+// USUÁRIOS
+// ==========================================
+
+model Usuario {
+  id           String       @id @default(cuid())
+  nome         String       @db.VarChar(120)
+  email        String       @unique @db.VarChar(180)
+  senhaHash    String?      @map("senha_hash")
+  urlAvatar    String?      @map("url_avatar")
+  provedorAuth ProvedorAuth @default(EMAIL) @map("provedor_auth")
+  googleId     String?      @unique @map("google_id")
+  verificado   Boolean      @default(false)
+  tokenVerificacaoEmail  String?   @map("token_verificacao_email") @db.VarChar(64)
+  tokenVerificacaoExpira DateTime? @map("token_verificacao_expira")
+  tokenResetSenha        String?   @map("token_reset_senha") @db.VarChar(64)
+  tokenResetExpira       DateTime? @map("token_reset_expira")
+  criadoEm     DateTime     @default(now()) @map("criado_em")
+  atualizadoEm DateTime     @updatedAt @map("atualizado_em")
+
+  configuracoes       ConfiguracaoUsuario?
+  tokensRenovacao     TokenRenovacao[]
+  transacoes          Transacao[]
+  categorias          Categoria[]
+  tags                Tag[]
+  metas               Meta[]
+  viagens             Viagem[]
+  lembretes           Lembrete[]
+  vendasVt            VendaVt[]
+  usosVt              UsoVt[]
+  sequencia           Sequencia?
+  conquistasUsuario   ConquistaUsuario[]
+  moedasFavoritas     MoedaFavorita[]
+  desafiosMensais     DesafioMensal[]
+  mensagensChat       MensagemChat[]
+  historicoScore      HistoricoScore[]
+  gruposCriados       Grupo[]              @relation("CriadorGrupo")
+  membrosGrupo        MembroGrupo[]
+  aportesGrupo        AporteMetaGrupo[]
+  despesasViagemGrupo DespesaViagemGrupo[]
+  mensagensChatGrupo  MensagemChatGrupo[]
+  orcamentos          Orcamento[]
+  notificacoes        Notificacao[]
+  dividas             Divida[]
+  divisoes            Divisao[]
+  itensPlanejamentoCompra ItemPlanejamentoCompra[]
+
+  @@index([email])
+  @@index([tokenVerificacaoEmail])
+  @@index([tokenResetSenha])
+  @@map("usuarios")
+}
+
+// ==========================================
+// CONFIGURAÇÕES DO USUÁRIO
+// ==========================================
+
+model ConfiguracaoUsuario {
+  id                   String   @id @default(cuid())
+  usuarioId            String   @unique @map("usuario_id")
+  valorSalario         Decimal  @default(0) @db.Decimal(12, 2) @map("valor_salario")
+  diaSalario           Int      @default(5) @map("dia_salario")
+  valorVa              Decimal  @default(0) @db.Decimal(12, 2) @map("valor_va")
+  diaVa                Int      @default(5) @map("dia_va")
+  valorVr              Decimal  @default(0) @db.Decimal(12, 2) @map("valor_vr")
+  diaVr                Int      @default(5) @map("dia_vr")
+  valorVt              Decimal  @default(0) @db.Decimal(12, 2) @map("valor_vt")
+  diaVt                Int      @default(5) @map("dia_vt")
+  tema                 Tema     @default(CLARO)
+  gamificacaoAtiva     Boolean  @default(true) @map("gamificacao_ativa")
+  googleCalendarAtivo  Boolean  @default(false) @map("google_calendar_ativo")
+  googleCalendarId     String?  @map("google_calendar_id")
+  googleCalendarEmail  String?  @map("google_calendar_email") @db.VarChar(180)
+  tokensGoogle         Json?    @map("tokens_google") // criptografado em repouso
+  limiteGastos         Decimal? @db.Decimal(12, 2) @map("limite_gastos")
+  rendaMensalPlanejada Decimal? @db.Decimal(12, 2) @map("renda_mensal_planejada")
+  valorPadraoPassagem  Decimal? @db.Decimal(10, 2) @map("valor_padrao_passagem")
+  vtHabilitado         Boolean? @map("vt_habilitado")
+  modoUso              ModoUso  @default(CLT) @map("modo_uso")
+  /// TI5 freemium FREE ou PREMIUM
+  plano                Plano    @default(FREE)
+  criadoEm             DateTime @default(now()) @map("criado_em")
+  atualizadoEm         DateTime @updatedAt @map("atualizado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("configuracoes_usuario")
+}
+
+// ==========================================
+// TOKENS DE RENOVAÇÃO
+// ==========================================
+
+model TokenRenovacao {
+  id         String    @id @default(cuid())
+  usuarioId  String    @map("usuario_id")
+  token      String    @unique
+  expiraEm   DateTime  @map("expira_em")
+  revogado   Boolean   @default(false)
+  criadoEm   DateTime  @default(now()) @map("criado_em")
+  revogadoEm DateTime? @map("revogado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId])
+  @@index([expiraEm])
+  @@map("tokens_renovacao")
+}
+
+// ==========================================
+// CATEGORIAS
+// ==========================================
+
+model Categoria {
+  id              String                   @id @default(cuid())
+  nome            String                   @db.VarChar(60)
+  icone           String?                  @db.VarChar(40)
+  cor             String                   @default("#7C3AED") @db.VarChar(7) // hex color (#RRGGBB)
+  tipo            TipoCategoria
+  padrao          Boolean                  @default(false)
+  grupoBeneficio  GrupoBeneficioCategoria? @map("grupo_beneficio")
+  usuarioId       String?                  @map("usuario_id")
+  criadoEm        DateTime                 @default(now()) @map("criado_em")
+
+  usuario        Usuario?        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  transacoes     Transacao[]
+  despesasViagem DespesaViagem[]
+  orcamentos     Orcamento[]
+
+  @@unique([usuarioId, nome, tipo])
+  @@index([usuarioId])
+  @@index([tipo])
+  @@map("categorias")
+}
+
+// ==========================================
+// TRANSAÇÕES
+// ==========================================
+
+model Transacao {
+  id               String        @id @default(cuid())
+  usuarioId        String        @map("usuario_id")
+  categoriaId      String?       @map("categoria_id") // nula em transferências (RF-027)
+  tipo             TipoTransacao
+  recurso          TipoRecurso
+  recursoDestino   TipoRecurso?  @map("recurso_destino") // usado apenas em TRANSFERENCIA
+  valor            Decimal       @db.Decimal(12, 2)
+  descricao        String?       @db.VarChar(255)
+  data             DateTime
+  recorrente       Boolean       @default(false)
+  regraRecorrencia String?       @map("regra_recorrencia") // RFC 5545 (RRULE)
+  paiId            String?       @map("pai_id") // referência à transação "mãe" recorrente
+  criadoEm         DateTime      @default(now()) @map("criado_em")
+  atualizadoEm     DateTime      @updatedAt @map("atualizado_em")
+
+  usuario   Usuario        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  categoria Categoria?     @relation(fields: [categoriaId], references: [id])
+  pai       Transacao?     @relation("TransacoesFilhas", fields: [paiId], references: [id], onDelete: SetNull)
+  filhas    Transacao[]    @relation("TransacoesFilhas")
+  tags      TransacaoTag[]
+  itemPlanejamentoCompra ItemPlanejamentoCompra?
+
+  @@index([usuarioId, data(sort: Desc)])
+  @@index([usuarioId, categoriaId])
+  @@index([usuarioId, tipo])
+  @@index([usuarioId, recurso])
+  @@index([usuarioId, recorrente])
+  @@map("transacoes")
+}
+
+// ==========================================
+// TAGS
+// ==========================================
+
+model Tag {
+  id        String  @id @default(cuid())
+  nome      String  @db.VarChar(40)
+  icone     String? @db.VarChar(40) // nome Lucide (ex: Tag, Laptop) — PulsoBadge
+  cor       String  @default("#71717A") @db.VarChar(7) // hex #RRGGBB
+  usuarioId String  @map("usuario_id")
+
+  usuario    Usuario        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  transacoes TransacaoTag[]
+
+  @@unique([usuarioId, nome])
+  @@index([usuarioId])
+  @@map("tags")
+}
+
+model TransacaoTag {
+  transacaoId String @map("transacao_id")
+  tagId       String @map("tag_id")
+
+  transacao Transacao @relation(fields: [transacaoId], references: [id], onDelete: Cascade)
+  tag       Tag       @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([transacaoId, tagId])
+  @@index([tagId])
+  @@map("transacoes_tags")
+}
+
+// ==========================================
+// METAS
+// ==========================================
+
+model Meta {
+  id           String     @id @default(cuid())
+  usuarioId    String     @map("usuario_id")
+  nome         String     @db.VarChar(100)
+  valorAlvo    Decimal    @db.Decimal(12, 2) @map("valor_alvo")
+  valorAtual   Decimal    @default(0) @db.Decimal(12, 2) @map("valor_atual")
+  prazo        DateTime
+  tipo         TipoMeta
+  status       StatusMeta @default(ATIVA)
+  prioridade   Prioridade?
+  descricao    String?    @db.VarChar(500)
+  concluidaEm  DateTime?  @map("concluida_em")
+  criadoEm     DateTime   @default(now()) @map("criado_em")
+  atualizadoEm DateTime   @updatedAt @map("atualizado_em")
+
+  usuario Usuario      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  aportes AporteMeta[]
+  viagens Viagem[]
+  itensPlanejamentoCompra ItemPlanejamentoCompra[]
+
+  @@index([usuarioId, status])
+  @@index([usuarioId, prazo])
+  @@map("metas")
+}
+
+model AporteMeta {
+  id       String   @id @default(cuid())
+  metaId   String   @map("meta_id")
+  valor    Decimal  @db.Decimal(12, 2)
+  data     DateTime
+  criadoEm DateTime @default(now()) @map("criado_em")
+
+  meta Meta @relation(fields: [metaId], references: [id], onDelete: Cascade)
+
+  @@index([metaId, data(sort: Desc)])
+  @@map("aportes_meta")
+}
+
+// ==========================================
+// VIAGENS
+// ==========================================
+
+enum TipoObservacaoViagem {
+  GERAL
+  CHECKLIST
+  LINK
+  DICA
+  DOCUMENTOS
+}
+
+model Viagem {
+  id           String   @id @default(cuid())
+  usuarioId    String   @map("usuario_id")
+  destino      String   @db.VarChar(120)
+  destinoMeta  Json?    @map("destino_meta")
+  moeda        String   @db.VarChar(3)
+  dataPrevista DateTime @map("data_prevista")
+  metaId       String?  @map("meta_id")
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  usuario      Usuario             @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  meta         Meta?               @relation(fields: [metaId], references: [id], onDelete: SetNull)
+  despesas     DespesaViagem[]
+  observacoes  ObservacaoViagem[]
+
+  @@unique([metaId])
+  @@index([usuarioId, dataPrevista])
+  @@map("viagens")
+}
+
+model ObservacaoViagem {
+  id           String                @id @default(cuid())
+  viagemId     String                @map("viagem_id")
+  titulo       String                @db.VarChar(120)
+  conteudo     String?               @db.VarChar(1000)
+  tipo         TipoObservacaoViagem? @default(GERAL)
+  linkUrl      String?               @map("link_url") @db.VarChar(500)
+  checklist    Json?
+  criadoEm     DateTime              @default(now()) @map("criado_em")
+  atualizadoEm DateTime              @updatedAt @map("atualizado_em")
+
+  viagem Viagem @relation(fields: [viagemId], references: [id], onDelete: Cascade)
+
+  @@index([viagemId])
+  @@map("observacoes_viagem")
+}
+
+model DespesaViagem {
+  id            String                 @id @default(cuid())
+  viagemId      String                 @map("viagem_id")
+  categoria     CategoriaDespesaViagem
+  categoriaId   String?                @map("categoria_id")
+  descricao     String?                @db.VarChar(255)
+  valorEstimado Decimal                @db.Decimal(12, 2) @map("valor_estimado")
+  criadoEm      DateTime               @default(now()) @map("criado_em")
+
+  viagem             Viagem     @relation(fields: [viagemId], references: [id], onDelete: Cascade)
+  categoriaVinculada Categoria? @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
+
+  @@index([viagemId])
+  @@map("despesas_viagem")
+}
+
+// ==========================================
+// MOEDAS FAVORITAS
+// ==========================================
+
+model MoedaFavorita {
+  id        String   @id @default(cuid())
+  usuarioId String   @map("usuario_id")
+  codigo    String   @db.VarChar(3) // USD, EUR, ARS...
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, codigo])
+  @@index([usuarioId])
+  @@map("moedas_favoritas")
+}
+
+// ==========================================
+// LEMBRETES
+// ==========================================
+
+model Lembrete {
+  id             String               @id @default(cuid())
+  usuarioId      String               @map("usuario_id")
+  titulo         String               @db.VarChar(120)
+  valor          Decimal?             @db.Decimal(12, 2)
+  dataVencimento DateTime             @map("data_vencimento")
+  horaLembrete   String               @default("10:00") @map("hora_lembrete")
+  antecedencia   AntecedenciaLembrete @default(UM_DIA)
+  categoria      CategoriaLembrete    @default(OUTRO) @map("categoria")
+  pago           Boolean              @default(false)
+  googleEventId      String?              @map("google_event_id")
+  sincronizado       Boolean              @default(false)
+  repetirMensal      Boolean              @default(false) @map("repetir_mensal")
+  diaRecorrencia     Int?                 @map("dia_recorrencia")
+  repetirCadaDias    Int?                 @map("repetir_cada_dias")
+  lembreteTemplateId String?              @map("lembrete_template_id")
+  criadoEm           DateTime             @default(now()) @map("criado_em")
+  atualizadoEm       DateTime             @updatedAt @map("atualizado_em")
+
+  usuario              Usuario               @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  template             Lembrete?             @relation("LembretesRecorrentes", fields: [lembreteTemplateId], references: [id], onDelete: SetNull)
+  gerados              Lembrete[]            @relation("LembretesRecorrentes")
+  divisaoParticipantes DivisaoParticipante[]
+
+  @@index([usuarioId, dataVencimento])
+  @@index([sincronizado])
+  @@index([repetirMensal])
+  @@index([lembreteTemplateId])
+  @@map("lembretes")
+}
+
+// ==========================================
+// VALE TRANSPORTE
+// ==========================================
+
+model VendaVt {
+  id               String    @id @default(cuid())
+  usuarioId        String    @map("usuario_id")
+  nomeComprador    String    @db.VarChar(120) @map("nome_comprador")
+  dataVenda        DateTime  @map("data_venda")
+  valorNominal     Decimal   @db.Decimal(12, 2) @map("valor_nominal")
+  valorRecebido    Decimal   @db.Decimal(12, 2) @map("valor_recebido")
+  criadoEm         DateTime  @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, dataVenda(sort: Desc)])
+  @@map("vendas_vt")
+}
+
+model UsoVt {
+  id               String   @id @default(cuid())
+  usuarioId        String   @map("usuario_id")
+  quantidade       Int
+  valorPorPassagem Decimal  @db.Decimal(10, 2) @map("valor_por_passagem")
+  data             DateTime
+  criadoEm         DateTime @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, data(sort: Desc)])
+  @@map("usos_vt")
+}
+
+// ==========================================
+// GAMIFICAÇÃO
+// ==========================================
+
+model Sequencia {
+  id              String          @id @default(cuid())
+  usuarioId       String          @unique @map("usuario_id")
+  sequenciaAtual  Int             @default(0) @map("sequencia_atual")
+  maiorSequencia  Int             @default(0) @map("maior_sequencia")
+  xp              Int             @default(0)
+  nivel           NivelFinanceiro @default(INICIANTE)
+  ultimaAtividade DateTime?       @map("ultima_atividade")
+  atualizadoEm    DateTime        @updatedAt @map("atualizado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("sequencias")
+}
+
+model Conquista {
+  id           String @id @default(cuid())
+  codigo       String @unique @db.VarChar(60) // identificador técnico (ex: PRIMEIRA_META)
+  nome         String @db.VarChar(100)
+  descricao    String @db.VarChar(255)
+  icone        String @db.VarChar(40)
+  criterio     Json // regras estruturadas
+  recompensaXp Int    @default(0) @map("recompensa_xp")
+
+  conquistasUsuario ConquistaUsuario[]
+
+  @@map("conquistas")
+}
+
+model ConquistaUsuario {
+  id             String   @id @default(cuid())
+  usuarioId      String   @map("usuario_id")
+  conquistaId    String   @map("conquista_id")
+  desbloqueadaEm DateTime @default(now()) @map("desbloqueada_em")
+
+  usuario   Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  conquista Conquista @relation(fields: [conquistaId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, conquistaId])
+  @@index([usuarioId])
+  @@map("conquistas_usuario")
+}
+
+model DesafioMensal {
+  id          String    @id @default(cuid())
+  usuarioId   String    @map("usuario_id")
+  titulo      String    @db.VarChar(120)
+  descricao   String    @db.VarChar(500)
+  criterio    Json
+  mes         Int // 1-12
+  ano         Int
+  progresso   Decimal   @default(0) @db.Decimal(5, 2) // 0-100
+  concluido   Boolean   @default(false)
+  concluidoEm DateTime? @map("concluido_em")
+  criadoEm    DateTime  @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, mes, ano])
+  @@index([usuarioId])
+  @@map("desafios_mensais")
+}
+
+// ==========================================
+// IA / CHATBOT
+// ==========================================
+
+model MensagemChat {
+  id        String   @id @default(cuid())
+  usuarioId String   @map("usuario_id")
+  papel     String   @db.VarChar(20) // "user" | "assistant"
+  conteudo  String   @db.Text
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, criadoEm(sort: Desc)])
+  @@map("mensagens_chat")
+}
+
+model HistoricoScore {
+  id        String   @id @default(cuid())
+  usuarioId String   @map("usuario_id")
+  score     Int
+  detalhes  Json?
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, criadoEm(sort: Desc)])
+  @@map("historico_score")
+}
+
+// ==========================================
+// GRUPOS
+// ==========================================
+
+model Grupo {
+  id            String   @id @default(cuid())
+  nome          String   @db.VarChar(100)
+  descricao     String?  @db.VarChar(500)
+  codigoConvite String   @unique @map("codigo_convite")
+  urlImagem     String?  @map("url_imagem") @db.VarChar(2048)
+  modoDivisao   ModoDivisaoGrupo @default(PRETENSAO) @map("modo_divisao")
+  criadorId     String   @map("criador_id")
+  criadoEm      DateTime @default(now()) @map("criado_em")
+  atualizadoEm  DateTime @updatedAt @map("atualizado_em")
+
+  criador   Usuario             @relation("CriadorGrupo", fields: [criadorId], references: [id], onDelete: Cascade)
+  membros   MembroGrupo[]
+  viagens   ViagemGrupo[]
+  metas     MetaGrupo[]
+  mensagens MensagemChatGrupo[]
+
+  @@index([criadorId])
+  @@map("grupos")
+}
+
+model MembroGrupo {
+  id        String     @id @default(cuid())
+  grupoId   String     @map("grupo_id")
+  usuarioId String     @map("usuario_id")
+  papel     PapelGrupo @default(MEMBRO)
+  entrouEm  DateTime   @default(now()) @map("entrou_em")
+
+  grupo   Grupo   @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([grupoId, usuarioId])
+  @@index([usuarioId])
+  @@map("membros_grupo")
+}
+
+model ViagemGrupo {
+  id           String   @id @default(cuid())
+  grupoId      String   @map("grupo_id")
+  destino      String   @db.VarChar(120)
+  destinoMeta  Json?    @map("destino_meta")
+  moeda        String   @db.VarChar(3)
+  dataPrevista DateTime @map("data_prevista")
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  grupo    Grupo                @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  despesas DespesaViagemGrupo[]
+
+  @@unique([grupoId])
+  @@index([grupoId])
+  @@map("viagens_grupo")
+}
+
+model DespesaViagemGrupo {
+  id              String                 @id @default(cuid())
+  viagemGrupoId   String                 @map("viagem_grupo_id")
+  adicionadoPorId String                 @map("adicionado_por_id")
+  categoria       CategoriaDespesaViagem
+  descricao       String?                @db.VarChar(255)
+  valorEstimado   Decimal                @db.Decimal(12, 2) @map("valor_estimado")
+  criadoEm        DateTime               @default(now()) @map("criado_em")
+
+  viagem        ViagemGrupo @relation(fields: [viagemGrupoId], references: [id], onDelete: Cascade)
+  adicionadoPor Usuario     @relation(fields: [adicionadoPorId], references: [id], onDelete: Cascade)
+
+  @@index([viagemGrupoId])
+  @@map("despesas_viagem_grupo")
+}
+
+model MetaGrupo {
+  id           String     @id @default(cuid())
+  grupoId      String     @map("grupo_id")
+  nome         String     @db.VarChar(100)
+  valorAlvo    Decimal    @db.Decimal(12, 2) @map("valor_alvo")
+  valorAtual   Decimal    @default(0) @db.Decimal(12, 2) @map("valor_atual")
+  prazo        DateTime
+  status       StatusMeta @default(ATIVA)
+  descricao    String?    @db.VarChar(500)
+  criadoEm     DateTime   @default(now()) @map("criado_em")
+  atualizadoEm DateTime   @updatedAt @map("atualizado_em")
+
+  grupo   Grupo             @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  aportes AporteMetaGrupo[]
+
+  @@index([grupoId, status])
+  @@map("metas_grupo")
+}
+
+model AporteMetaGrupo {
+  id          String   @id @default(cuid())
+  metaGrupoId String   @map("meta_grupo_id")
+  usuarioId   String   @map("usuario_id")
+  valor       Decimal  @db.Decimal(12, 2)
+  data        DateTime
+  criadoEm    DateTime @default(now()) @map("criado_em")
+
+  meta    MetaGrupo @relation(fields: [metaGrupoId], references: [id], onDelete: Cascade)
+  usuario Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([metaGrupoId, data(sort: Desc)])
+  @@index([usuarioId])
+  @@map("aportes_meta_grupo")
+}
+
+model MensagemChatGrupo {
+  id        String   @id @default(cuid())
+  grupoId   String   @map("grupo_id")
+  usuarioId String   @map("usuario_id")
+  conteudo  String   @db.Text
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  grupo   Grupo   @relation(fields: [grupoId], references: [id], onDelete: Cascade)
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([grupoId, criadoEm(sort: Desc)])
+  @@map("mensagens_chat_grupo")
+}
+
+// ==========================================
+// ORÇAMENTO MENSAL
+// ==========================================
+
+model Orcamento {
+  id            String   @id @default(cuid())
+  usuarioId     String   @map("usuario_id")
+  categoriaId   String   @map("categoria_id")
+  mesReferencia DateTime @map("mes_referencia") @db.Date
+  limiteValor   Decimal  @db.Decimal(12, 2) @map("limite_valor")
+  rolloverAtivo Boolean  @default(false) @map("rollover_ativo")
+  valorRollover Decimal  @default(0) @db.Decimal(12, 2) @map("valor_rollover")
+  criadoEm      DateTime @default(now()) @map("criado_em")
+  atualizadoEm  DateTime @updatedAt @map("atualizado_em")
+
+  usuario   Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  categoria Categoria @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, categoriaId, mesReferencia])
+  @@index([usuarioId, mesReferencia])
+  @@index([categoriaId])
+  @@map("orcamentos")
+}
+
+// ==========================================
+// DÍVIDAS / EMPRÉSTIMOS
+// ==========================================
+
+model Divida {
+  id             String         @id @default(cuid())
+  usuarioId      String         @map("usuario_id")
+  direcao        DirecaoDivida
+  nomePessoa     String         @map("nome_pessoa") @db.VarChar(120)
+  valor          Decimal        @db.Decimal(12, 2)
+  dataEmprestimo DateTime       @map("data_emprestimo")
+  prazoDevolucao DateTime?      @map("prazo_devolucao")
+  observacao     String?        @db.VarChar(250)
+  quitada        Boolean        @default(false)
+  dataQuitacao   DateTime?      @map("data_quitacao")
+  criadoEm       DateTime       @default(now()) @map("criado_em")
+  atualizadoEm   DateTime       @updatedAt @map("atualizado_em")
+
+  usuario    Usuario           @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  pagamentos PagamentoDivida[]
+
+  @@index([usuarioId])
+  @@index([usuarioId, quitada])
+  @@index([usuarioId, prazoDevolucao])
+  @@index([quitada, dataQuitacao])
+  @@map("dividas")
+}
+
+model PagamentoDivida {
+  id            String   @id @default(cuid())
+  dividaId      String   @map("divida_id")
+  valor         Decimal  @db.Decimal(12, 2)
+  dataPagamento DateTime @map("data_pagamento")
+  observacao    String?  @db.VarChar(250)
+  criadoEm      DateTime @default(now()) @map("criado_em")
+
+  divida Divida @relation(fields: [dividaId], references: [id], onDelete: Cascade)
+
+  @@index([dividaId, dataPagamento(sort: Desc)])
+  @@map("pagamentos_divida")
+}
+
+// ==========================================
+// DIVISÃO DE DESPESAS
+// ==========================================
+
+enum TipoRateioDivisao {
+  IGUAL
+  PERSONALIZADA
+}
+
+enum StatusDivisao {
+  ATIVA
+  QUITADA
+}
+
+enum StatusParticipanteDivisao {
+  PENDENTE
+  PAGO
+}
+
+model Divisao {
+  id           String            @id @default(cuid())
+  usuarioId    String            @map("usuario_id")
+  titulo       String            @db.VarChar(120)
+  valorTotal   Decimal           @db.Decimal(12, 2) @map("valor_total")
+  tipo         TipoRateioDivisao @default(IGUAL)
+  status       StatusDivisao     @default(ATIVA)
+  data         DateTime          @db.Date
+  icone        String?           @db.VarChar(40)
+  cor          String?           @db.VarChar(20)
+  observacao   String?           @db.VarChar(250)
+  quitadaEm    DateTime?         @map("quitada_em")
+  criadoEm     DateTime          @default(now()) @map("criado_em")
+  atualizadoEm DateTime          @updatedAt @map("atualizado_em")
+
+  usuario       Usuario               @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  participantes DivisaoParticipante[]
+
+  @@index([usuarioId])
+  @@index([usuarioId, status])
+  @@index([status, quitadaEm])
+  @@map("divisoes")
+}
+
+model DivisaoParticipante {
+  id            String                    @id @default(cuid())
+  divisaoId     String                    @map("divisao_id")
+  nome          String                    @db.VarChar(120)
+  valor         Decimal                   @db.Decimal(12, 2)
+  ehOrganizador Boolean                   @default(false) @map("eh_organizador")
+  pagouAConta   Boolean                   @default(false) @map("pagou_a_conta")
+  status        StatusParticipanteDivisao @default(PENDENTE)
+  dataPagamento DateTime?                 @map("data_pagamento")
+  criadoEm      DateTime                  @default(now()) @map("criado_em")
+  atualizadoEm  DateTime                  @updatedAt @map("atualizado_em")
+
+  divisao   Divisao    @relation(fields: [divisaoId], references: [id], onDelete: Cascade)
+  lembretes Lembrete[]
+
+  @@index([divisaoId])
+  @@index([divisaoId, status])
+  @@map("divisao_participantes")
+}
+
+// ==========================================
+// PLANEJAMENTO DE COMPRA
+// ==========================================
+
+enum StatusItemCompra {
+  DESEJADO
+  COMPRADO
+}
+
+enum CategoriaItemCompra {
+  ELETRONICOS
+  CASA_ELETRODOMESTICOS
+  VESTUARIO
+  VEICULO
+  ACESSORIOS
+  OUTROS
+}
+
+model ItemPlanejamentoCompra {
+  id              String              @id @default(cuid())
+  usuarioId       String              @map("usuario_id")
+  nome            String              @db.VarChar(120)
+  valorEstimado   Decimal             @db.Decimal(12, 2) @map("valor_estimado")
+  prioridade      Prioridade          @default(MEDIA)
+  categoria       CategoriaItemCompra @default(OUTROS)
+  observacoes     String?             @db.VarChar(300)
+  linkProduto     String?             @map("link_produto") @db.VarChar(500)
+  imagemUrl       String?             @map("imagem_url") @db.VarChar(2048)
+  simularParcelas Boolean             @default(true) @map("simular_parcelas")
+  parcelas        Int                 @default(12)
+  metaId          String?             @map("meta_id")
+  status          StatusItemCompra    @default(DESEJADO)
+  compradoEm      DateTime?           @map("comprado_em")
+  transacaoId     String?             @unique @map("transacao_id")
+  criadoEm        DateTime            @default(now()) @map("criado_em")
+  atualizadoEm    DateTime            @updatedAt @map("atualizado_em")
+
+  usuario   Usuario    @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  meta      Meta?      @relation(fields: [metaId], references: [id], onDelete: SetNull)
+  transacao Transacao? @relation(fields: [transacaoId], references: [id], onDelete: SetNull)
+
+  @@index([usuarioId, status])
+  @@index([usuarioId, criadoEm(sort: Desc)])
+  @@map("itens_planejamento_compra")
+}
+
+// ==========================================
+// NOTIFICAÇÕES
+// ==========================================
+
+model Notificacao {
+  id        String           @id @default(cuid())
+  usuarioId String           @map("usuario_id")
+  tipo      TipoNotificacao
+  titulo    String           @db.VarChar(120)
+  mensagem  String?          @db.VarChar(500)
+  lida      Boolean          @default(false)
+  linkAcao  String?          @db.VarChar(255) @map("link_acao")
+  metadados Json?
+  criadoEm  DateTime         @default(now()) @map("criado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, lida])
+  @@index([usuarioId, criadoEm(sort: Desc)])
+  @@index([tipo])
+  @@map("notificacoes")
+}
