@@ -2,8 +2,21 @@
 
 Backend do Pulso (`Codigo/Pulso/api`).
 
-- Stack planejada: **Node.js + Express**
+- Stack: **Node.js + Express** + Prisma + PostgreSQL (Neon)
 - Contrato: REST (`/api`) compartilhado com Web e Flutter
-- Persistência: PostgreSQL via Prisma (quando o scaffold existir)
+- Auth: JWT em cookie `httpOnly` + refresh rotativo; Google OAuth
 
-Placeholder até o init da API.
+## Como rodar
+
+```bash
+cd Codigo/Pulso/api
+cp .env.example .env   # preencha DATABASE_URL, JWT e SMTP
+npm install
+npm run db:generate
+npm run db:migrate
+npm run dev
+```
+
+Servidor: `http://localhost:3333`
+
+RabbitMQ opcional: `docker compose up -d` nesta pasta. Sem `RABBITMQ_URL`, jobs rodam em modo direto.

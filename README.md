@@ -20,7 +20,7 @@ O nome "Pulso" remete à ideia de manter o pulso firme nas finanças, monitorar 
 
 ## Instruções de utilização
 
-*Em breve — será complementado quando a primeira versão do sistema estiver disponível.*
+API e Web já sobem localmente (`Codigo/Pulso/api` e `Codigo/Pulso/web`). Detalhes em cada README da pasta. Hospedagem pública em breve.
 
 ## Cards (Hyperion / GitHub Project)
 

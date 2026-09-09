@@ -89,7 +89,6 @@ memory:
   project_file: Hyperion/.github/memory/PROJECT.md
 
 uncertainties:
-  - Manifests ainda nao existem (package.json / pubspec.yaml). Apps serao scaffoldadas depois; regenerar project.yml via /discover.
-  - Frameworks confirmados pelo time: React (web), Node (api), Flutter (mobile) — sem evidencia de imports ainda.
-  - ORM, banco, deploy e comandos reais de test/lint/build indefinidos ate o scaffold.
+  - Web e API ja tem package.json em Codigo/Pulso/{web,api}; Flutter (pubspec) ainda nao.
+  - Deploy de producao ainda indefinido (Vercel / Neon no codigo; URL publica em breve).
   - README do mobile existe em Codigo/Pulso/mobile/README.md (schema so lista api_readme e web_readme).
