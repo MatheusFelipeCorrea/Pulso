@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-005
 title: "Frontend — login e gestão de sessão"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: High
 sprint: null
@@ -62,6 +62,10 @@ Como **usuário**, quero fazer login, manter sessão entre visitas e ser redirec
 | `Codigo/web/src/config/defaultAuthenticatedRoute.js` | `/transactions` |
 
 Registrar em `App.jsx` — `/login` com `GuestRoute`; árvore protegida com `ProtectedRoute`
+
+## 🔗 Pull Requests
+
+- [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão JWT e logout (`feat/15`)
 
 ## 📋 Resumo
 

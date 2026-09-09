@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-037
 title: "Banco de dados — Meta e AporteMeta"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null

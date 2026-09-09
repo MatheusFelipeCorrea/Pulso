@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-081
 title: "Banco de dados — Grupo e MembroGrupo"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null

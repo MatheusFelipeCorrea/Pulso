@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-002
 title: "Backend — cadastro, verificação e reenvio de email"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null
@@ -82,6 +82,10 @@ Mapear P2002 → 409 no cadastro
 - Senha: min 8, maiúscula, minúscula, número, especial `@$!%*?&#` (RN-131)
 - bcrypt salt rounds = 12 (RN-132)
 - Login bloqueado até `verificado=true` (RN-137)
+
+## 🔗 Pull Requests
+
+- [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de banco e autenticação (`feat/14`)
 
 ## 📋 Resumo
 

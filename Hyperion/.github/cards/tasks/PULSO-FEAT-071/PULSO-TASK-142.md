@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-142
 title: "Banco de dados — snapshot de insights"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null

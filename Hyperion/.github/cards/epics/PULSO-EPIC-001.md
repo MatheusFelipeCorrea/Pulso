@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-EPIC-001
 title: "Autenticação"
-status: Backlog
+status: "In Progress"
 type: Epic
 priority: Highest
 sprint: null
@@ -67,6 +67,14 @@ categories:
 - PULSO-FEAT-003
 - PULSO-FEAT-004
 - PULSO-FEAT-005
+
+## 🔗 Pull Requests
+
+- [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de banco e autenticação
+- [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão JWT e logout
+- [#287](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/287) — Google OAuth 2.0
+- [#288](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/288) — Recuperação de senha
+- [#289](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/289) — UX da recuperação de senha
 
 ## 📋 Resumo
 

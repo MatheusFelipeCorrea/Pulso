@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-117
 title: "Banco de dados — Divisao e participantes"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null

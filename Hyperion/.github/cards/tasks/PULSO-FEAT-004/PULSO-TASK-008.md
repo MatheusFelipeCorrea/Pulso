@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-008
 title: "Backend — recuperação e reset de senha"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: High
 sprint: null
@@ -62,6 +62,10 @@ Adicionar em: `Codigo/api/src/services/authService.js`
 - Token reset expira 1h (RN-141)
 - Reset revoga todas sessões (RN-136)
 - Conta Google: resposta genérica sem email (segurança)
+
+## 🔗 Pull Requests
+
+- [#288](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/288) — Recuperação de senha (`feat/17`)
 
 ## 📋 Resumo
 

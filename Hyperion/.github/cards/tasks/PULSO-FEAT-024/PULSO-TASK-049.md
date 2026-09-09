@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-049
 title: "Banco de dados — viagens, despesas, observações e favoritas"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null

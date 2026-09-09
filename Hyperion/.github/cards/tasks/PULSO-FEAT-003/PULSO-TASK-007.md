@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-007
 title: "Frontend — callback OAuth e botão Google"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: High
 sprint: null
@@ -55,6 +55,10 @@ Como **usuário**, quero entrar com Google em um clique e ser autenticado automa
 - `utils/apiBaseUrl.js` — base URL para redirect OAuth
 
 Registrar em `App.jsx` — `/auth/callback` (pública, sem GuestRoute)
+
+## 🔗 Pull Requests
+
+- [#287](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/287) — Google OAuth 2.0 (`feat/16`)
 
 ## 📋 Resumo
 

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-006
 title: "Backend — Google OAuth e exchange de sessão"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null
@@ -63,6 +63,10 @@ GoogleStrategy lazy via `ensureGoogleStrategy()` — evita crash sem env vars
 - Conta Google nasce `verificado=true` (RN-138)
 - Email existente com senha → 409, não merge automático (RN-139)
 - Exchange token TTL 60s
+
+## 🔗 Pull Requests
+
+- [#287](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/287) — Google OAuth 2.0 (`feat/16`)
 
 ## 📋 Resumo
 

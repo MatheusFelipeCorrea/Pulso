@@ -38,6 +38,11 @@ categories:
 ### Cenário 4 — Ferramentas
 **Então** repositório = `https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso`; Heroku/placeholder some; Figma entra quando o epic de protótipos tiver link (pode ficar “em breve” até lá, sem URL falsa).
 
+## 🔗 Pull Requests
+
+- [#290](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/290) — Apostila, READMEs e mecanismos
+- [#291](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/291) — Protótipos de Auth na documentação
+
 ## 📋 Resumo
 
 ### ✅ Concluído
