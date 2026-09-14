@@ -17,6 +17,8 @@ const {
     createRefreshTokenValue,
     getRefreshTokenExpiry,
 } = require('../utils/tokenUtils');
+const { verifyIdToken } = require('../utils/googleOAuth');
+const { buildOAuthCallbackLocation } = require('../utils/googleReturnTo');
 
 const SENHA_FORTE_REGEX =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
@@ -454,7 +456,7 @@ const authenticateGoogle = async (profile) => {
     });
 };
 
-const buildGoogleCallbackRedirect = async (usuario) => {
+const buildGoogleCallbackRedirect = async (usuario, returnOrigin) => {
     const exchangeToken = jwt.sign(
         { type: 'oauth_exchange', sub: usuario.id },
         env.JWT_SECRET,
@@ -462,7 +464,7 @@ const buildGoogleCallbackRedirect = async (usuario) => {
     );
 
     const params = new URLSearchParams({ exchange: exchangeToken });
-    return `${env.FRONTEND_URL}/auth/callback?${params.toString()}`;
+    return buildOAuthCallbackLocation(returnOrigin, params);
 };
 
 const exchangeOAuthSession = async (exchangeToken) => {
@@ -494,7 +496,7 @@ const exchangeOAuthSession = async (exchangeToken) => {
     };
 };
 
-const buildGoogleErrorRedirect = (error) => {
+const buildGoogleErrorRedirect = (error, returnOrigin) => {
     const message =
         error instanceof AppError
             ? error.message
@@ -505,7 +507,34 @@ const buildGoogleErrorRedirect = (error) => {
         message,
     });
 
-    return `${env.FRONTEND_URL}/auth/callback?${params.toString()}`;
+    return buildOAuthCallbackLocation(returnOrigin, params);
+};
+
+const loginWithGoogleIdToken = async (idToken) => {
+    let payload;
+    try {
+        payload = await verifyIdToken(idToken);
+    } catch {
+        throw new AppError('Token Google inválido ou expirado.', 401);
+    }
+
+    if (!payload?.email) {
+        throw new AppError('Não foi possível obter o email da conta Google.', 400);
+    }
+
+    const usuario = await authenticateGoogle({
+        id: payload.sub,
+        displayName: payload.name,
+        emails: [{ value: payload.email }],
+        photos: payload.picture ? [{ value: payload.picture }] : [],
+    });
+
+    const tokens = await issueAuthTokens(usuario);
+
+    return {
+        ...tokens,
+        user: formatUserResponse(usuario),
+    };
 };
 
 /** TI5 demo — alterna FREE/PREMIUM sem billing */
@@ -543,4 +572,5 @@ module.exports = {
     buildGoogleCallbackRedirect,
     buildGoogleErrorRedirect,
     exchangeOAuthSession,
+    loginWithGoogleIdToken,
 };

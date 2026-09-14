@@ -27,6 +27,7 @@ const authForgotPasswordRateLimit = createAuthRouteRateLimit();
 const authResetPasswordRateLimit = createAuthRouteRateLimit();
 const authVerifyEmailRateLimit = createAuthRouteRateLimit();
 const authResendVerificationRateLimit = createAuthRouteRateLimit();
+const authGoogleMobileRateLimit = createAuthRouteRateLimit();
 
 /** @deprecated Use limitadores por rota — mantido para compatibilidade de imports antigos */
 const authSensitiveRateLimit = authLoginRateLimit;
@@ -42,4 +43,5 @@ module.exports = {
     authResetPasswordRateLimit,
     authVerifyEmailRateLimit,
     authResendVerificationRateLimit,
+    authGoogleMobileRateLimit,
 };

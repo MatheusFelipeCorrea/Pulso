@@ -55,6 +55,87 @@ describe('authController', () => {
         expect(res.json).toHaveBeenCalledWith({ user: session.user });
     });
 
+    it('login mobile devolve tokens no JSON e mantém cookies', async () => {
+        const session = {
+            accessToken: 'access',
+            refreshToken: 'refresh',
+            refreshExpiresAt: new Date(),
+            user: { id: 'u1', nome: 'Ana' },
+        };
+        authService.loginUser.mockResolvedValue(session);
+        const res = buildRes();
+
+        await authController.login(
+            { body: { email: 'a@b.com', senha: 'x' }, headers: { 'x-pulso-client': 'mobile' } },
+            res,
+            jest.fn()
+        );
+
+        expect(authCookies.setAuthCookies).toHaveBeenCalled();
+        expect(res.json).toHaveBeenCalledWith({
+            user: session.user,
+            accessToken: 'access',
+            refreshToken: 'refresh',
+        });
+    });
+
+    it('refresh web retorna apenas ok', async () => {
+        authCookies.getRefreshTokenFromRequest.mockReturnValue('rt');
+        authService.refreshAccessToken.mockResolvedValue({
+            accessToken: 'a2',
+            refreshToken: 'r2',
+            refreshExpiresAt: new Date(),
+        });
+        const res = buildRes();
+
+        await authController.refresh({ body: {}, headers: {} }, res, jest.fn());
+
+        expect(res.json).toHaveBeenCalledWith({ ok: true });
+    });
+
+    it('refresh mobile inclui o novo par de tokens', async () => {
+        authCookies.getRefreshTokenFromRequest.mockReturnValue('rt');
+        authService.refreshAccessToken.mockResolvedValue({
+            accessToken: 'a2',
+            refreshToken: 'r2',
+            refreshExpiresAt: new Date(),
+        });
+        const res = buildRes();
+
+        await authController.refresh(
+            { body: { refreshToken: 'rt' }, headers: { 'x-pulso-client': 'mobile' } },
+            res,
+            jest.fn()
+        );
+
+        expect(res.json).toHaveBeenCalledWith({
+            ok: true,
+            accessToken: 'a2',
+            refreshToken: 'r2',
+        });
+    });
+
+    it('googleMobile devolve sessão JSON sem redirect', async () => {
+        const session = {
+            accessToken: 'access',
+            refreshToken: 'refresh',
+            refreshExpiresAt: new Date(),
+            user: { id: 'u1', nome: 'Ana' },
+        };
+        authService.loginWithGoogleIdToken.mockResolvedValue(session);
+        const res = buildRes();
+
+        await authController.googleMobile({ body: { idToken: 'id-token' } }, res, jest.fn());
+
+        expect(authService.loginWithGoogleIdToken).toHaveBeenCalledWith('id-token');
+        expect(res.redirect).not.toHaveBeenCalled();
+        expect(res.json).toHaveBeenCalledWith({
+            user: session.user,
+            accessToken: 'access',
+            refreshToken: 'refresh',
+        });
+    });
+
     it('refresh exige cookie/body de refresh token', async () => {
         authCookies.getRefreshTokenFromRequest.mockReturnValue(null);
         const next = jest.fn();

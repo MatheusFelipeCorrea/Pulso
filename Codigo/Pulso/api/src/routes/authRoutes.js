@@ -14,8 +14,14 @@ const {
     authResetPasswordRateLimit,
     authVerifyEmailRateLimit,
     authResendVerificationRateLimit,
+    authGoogleMobileRateLimit,
 } = require('../middlewares/authRateLimit');
 const authService = require('../services/authService');
+const {
+    resolveOAuthReturnOrigin,
+    encodeGoogleReturnState,
+    decodeGoogleReturnState,
+} = require('../utils/googleReturnTo');
 const {
     registerSchema,
     verifyEmailSchema,
@@ -24,6 +30,7 @@ const {
     refreshSchema,
     logoutSchema,
     oauthExchangeSchema,
+    googleMobileSchema,
     forgotPasswordSchema,
     resetPasswordTokenSchema,
     resetPasswordSchema,
@@ -105,21 +112,27 @@ router.post(
     authController.resendVerification
 );
 
-router.get(
-    '/google',
-    (req, res, next) => {
-        try {
-            ensureGoogleStrategy();
-            next();
-        } catch (error) {
-            next(error);
-        }
-    },
-    passport.authenticate('google', {
+router.post(
+    '/google/mobile',
+    authGoogleMobileRateLimit,
+    validateMiddleware(googleMobileSchema),
+    authController.googleMobile
+);
+
+router.get('/google', (req, res, next) => {
+    try {
+        ensureGoogleStrategy();
+    } catch (error) {
+        return next(error);
+    }
+
+    const returnOrigin = resolveOAuthReturnOrigin(req.query.returnTo);
+    return passport.authenticate('google', {
         scope: ['profile', 'email'],
         session: false,
-    })
-);
+        state: encodeGoogleReturnState(returnOrigin),
+    })(req, res, next);
+});
 
 router.get('/google/callback', (req, res, next) => {
     try {
@@ -129,9 +142,11 @@ router.get('/google/callback', (req, res, next) => {
     }
 
     passport.authenticate('google', { session: false }, (err, user) => {
+        const returnOrigin = decodeGoogleReturnState(req.query?.state);
         if (err || !user) {
             const redirectUrl = authService.buildGoogleErrorRedirect(
-                err || new Error('Autenticação Google cancelada ou inválida.')
+                err || new Error('Autenticação Google cancelada ou inválida.'),
+                returnOrigin
             );
             return res.redirect(redirectUrl);
         }
