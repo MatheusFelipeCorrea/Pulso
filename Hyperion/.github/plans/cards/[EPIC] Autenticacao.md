@@ -8,8 +8,10 @@
 | Nível | ID | Título |
 |-------|-----|--------|
 | Epic | PULSO-EPIC-001 | Autenticação |
-| Feature | PULSO-FEAT-001–005 | Cadastro, sessão, OAuth, reset, segurança |
+| Feature | PULSO-FEAT-001–005 | Cadastro, sessão, OAuth, reset, segurança (Web) |
 | Task | PULSO-TASK-001–012 | DB, backend, frontend, QA |
+| Feature | PULSO-FEAT-107 | Auth Flutter (mesma API Node) |
+| Task | PULSO-TASK-160–162 | JSON sessão nativa, Flutter e-mail/senha, Google + deep links |
 
 ---
 
@@ -83,16 +85,18 @@ categories:
 - PULSO-FEAT-003
 - PULSO-FEAT-004
 - PULSO-FEAT-005
+- PULSO-FEAT-107
 
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Escopo do epic refinado com base nos RFs RF-001–006 e RNs RN-131–143
-- Hierarquia Epic → Feature → Task definida (5 features, 12 tasks)
+- Hierarquia Epic → Feature → Task definida (6 features: Web 001–005 + Flutter 107)
 - Contratos de API, telas e integrações documentados como spec de implementação
 
 ### ⏳ Pendente
-- Implementar PULSO-FEAT-001 a PULSO-FEAT-005
+- Implementar PULSO-FEAT-001 a PULSO-FEAT-005 (Web)
+- PULSO-FEAT-107 — Auth Flutter na mesma API Node
 - Validar fluxos ponta a ponta (cadastro → verificação → login → sessão → logout)
 - Cobertura de testes API e Web para todos os fluxos auth
 - Decidir login por nome (`Usuario.nome` sem `@unique`) vs. email-only
@@ -1360,3 +1364,335 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 - Opcional: suite E2E Playwright dedicada auth
 
 ---
+
+---
+
+---
+card_id: PULSO-FEAT-107
+title: "Auth Flutter (mesma API Node)"
+status: Backlog
+type: Feature
+priority: High
+sprint: null
+story_points: null
+reporter: "Matheus Felipe Correa"
+parent: PULSO-EPIC-001
+due_date: null
+categories:
+  - Mobile
+  - Backend
+  - Frontend
+  - Cibersegurança
+  - Integração Externa
+  - Regra de Negócio
+---
+
+# [FEATURE] Auth Flutter (mesma API Node)
+
+> **Contexto:** O app nativo em `Codigo/Pulso/mobile` ainda é placeholder. A API Node em `Codigo/Pulso/api` já cobre RF-001–006 (cadastro, Google web, login JWT, refresh, logout, recuperação). O Flutter deve **reutilizar essa API** — sem segundo backend. Apostila 3.4: cookie `httpOnly` na Web; **secure storage** no mobile. RF-140: o Flutter consome o mesmo REST.
+
+**Refs:** RF-001–006 · RF-140 · RN-131–143  
+**Spec:** `Hyperion/.github/plans/specs/PULSO-107-auth-flutter/`  
+**Protótipo:** `PULSO-FEAT-086` (telas auth Done)
+
+## 📝 Descrição
+
+Como **usuário do app Flutter**, eu quero **cadastrar, entrar, recuperar senha e autenticar com Google na mesma API Node da Web**, para que **a regra de negócio não seja duplicada e a sessão no telefone use secure storage**.
+
+Hoje `respondWithAuthSession` só seta cookies e o JSON de login é `{ user }` — o app nativo não consegue persistir JWT. `authCookies.js` **já lê** `Authorization: Bearer` e `body.refreshToken`. O gap é devolver os tokens no JSON para o cliente mobile, inicializar o Flutter e tratar Google nativo (Passport hoje redireciona para `FRONTEND_URL/auth/callback`).
+
+## ✅ Critérios de Aceite
+
+### Cenário 1 — Login e-mail/senha no Flutter
+**Dado** conta EMAIL verificada,  
+**Quando** o app envia `POST /api/auth/login` com header `X-Pulso-Client: mobile`,  
+**Então** o JSON inclui `accessToken`, `refreshToken` e `user`; o app persiste os tokens em secure storage e as próximas requests usam `Authorization: Bearer`.
+
+### Cenário 2 — Refresh rotativo
+**Dado** `refreshToken` válido no device,  
+**Quando** o interceptor chama `POST /api/auth/refresh` com `{ refreshToken }`,  
+**Então** a API devolve novo par no JSON; o app substitui os dois tokens; `GET /api/auth/me` com o novo Bearer retorna `200`.
+
+### Cenário 3 — Replay de refresh
+**Quando** um refresh já revogado é reenviado,  
+**Então** `401` e o app limpa o storage e volta ao login.
+
+### Cenário 4 — Cadastro, verificação e reset
+**Então** `POST /api/auth/register`, `GET /api/auth/verify-email/:token`, `POST /api/auth/forgot-password` e `POST /api/auth/reset-password/:token` usam o **mesmo contrato da Web**; links de e-mail continuam em `FRONTEND_URL` (deep link ou abrir Web).
+
+### Cenário 5 — Google nativo
+**Dado** ID token do SDK `google_sign_in`,  
+**Quando** `POST /api/auth/google/mobile` com `{ idToken }`,  
+**Então** a API valida no Google, localiza/cria o usuário (mesmo seed de categorias) e devolve sessão no JSON **sem** redirect para a SPA.
+
+### Cenário 6 — Web inalterada
+**Quando** o SPA chama login/refresh **sem** `X-Pulso-Client: mobile`,  
+**Então** o JSON **não** precisa expor os tokens; cookies `httpOnly` continuam bastando.
+
+## 🔗 Sub-issues
+
+- PULSO-TASK-160
+- PULSO-TASK-161
+- PULSO-TASK-162
+
+## 📋 Resumo
+
+### ✅ Concluído
+- Spec BDD e critérios alinhados à API existente (`authCookies` já aceita Bearer)
+- Decisão: **não** criar segundo backend; só JSON de sessão + Flutter + Google nativo
+
+### ⏳ Pendente
+- PULSO-TASK-160 — JSON `accessToken`/`refreshToken` para cliente nativo
+- PULSO-TASK-161 — init Flutter + cadastro/login/logout/`/me`/refresh
+- PULSO-TASK-162 — Google nativo + deep links verify/reset
+
+
+---
+
+---
+card_id: PULSO-TASK-160
+title: "API — JSON de sessão para cliente nativo"
+status: Backlog
+type: Task
+priority: High
+sprint: null
+story_points: null
+reporter: "Matheus Felipe Correa"
+parent: PULSO-FEAT-107
+due_date: null
+categories:
+  - Backend
+  - Cibersegurança
+  - Mobile
+---
+
+# [TASK] API — JSON de sessão para cliente nativo
+
+> **Contexto:** O Flutter não consegue persistir JWT porque login/refresh só setam cookies e o JSON omite os tokens. A leitura Bearer/`body.refreshToken` **já existe**.
+
+## 📝 Descrição
+
+Estender `respondWithAuthSession` e `refresh` para devolver `accessToken` e `refreshToken` no JSON quando o cliente se identifica como mobile. Cookies continuam sendo setados (compat Web / testes).
+
+## ✅ Critérios de Aceite
+
+**Dado** header `X-Pulso-Client: mobile`,  
+**Quando** `POST /api/auth/login` ou `POST /api/auth/oauth/exchange` sucedem,  
+**Então** o JSON inclui `accessToken`, `refreshToken` e `user` (além dos cookies).
+
+**Dado** o mesmo header (ou body com `refreshToken` de app),  
+**Quando** `POST /api/auth/refresh` sucede,  
+**Então** o JSON inclui o novo par — não só `{ ok: true }`.
+
+**Dado** request **sem** o header (SPA),  
+**Quando** login/refresh,  
+**Então** o contrato atual se mantém (`{ user }` / `{ ok: true }` + cookies).
+
+**Dado** testes unitários,  
+**Então** cobrir os dois clientes (mobile vs web) sem regressão de cookie.
+
+## 🛠️ Implementação
+
+### `authController.js` (EXISTENTE — MODIFICAR)
+
+Modificar em: `Codigo/Pulso/api/src/controllers/authController.js`
+
+- Helper `isMobileClient(req)` → `req.headers['x-pulso-client'] === 'mobile'`
+- `respondWithAuthSession(res, result, statusCode, { includeTokens })` — se `includeTokens`, acrescentar `accessToken` e `refreshToken` no JSON
+- `login` / `exchangeOAuth`: passar `includeTokens` quando mobile
+- `refresh`: se mobile, `res.json({ ok: true, accessToken, refreshToken })` em vez de só `{ ok: true }`
+
+### Testes (EXISTENTE — MODIFICAR / NOVO — CRIAR)
+
+- Extender testes do controller/service de auth em `Codigo/Pulso/api/tests/`
+- Garantir que o SPA sem o header **não** recebe tokens no body
+
+## 📐 Regras de Negócio
+
+- Access 15 min + refresh rotativo single-use (RN-138 / RN-139) — sem mudar TTL
+- Tokens no JSON **somente** para cliente nativo identificado; Web permanece cookie `httpOnly`
+
+## 📋 Resumo
+
+### ✅ Concluído
+- Gap mapeado: `respondWithAuthSession` omite tokens; `authCookies.js` já lê Bearer
+
+### ⏳ Pendente
+- Flag `X-Pulso-Client: mobile` em login, oauth/exchange e refresh
+- Testes dos dois contratos JSON
+
+
+---
+
+---
+card_id: PULSO-TASK-161
+title: "Flutter — init, e-mail/senha e sessão Bearer"
+status: Backlog
+type: Task
+priority: High
+sprint: null
+story_points: null
+reporter: "Matheus Felipe Correa"
+parent: PULSO-FEAT-107
+due_date: null
+categories:
+  - Mobile
+  - Frontend
+  - Cibersegurança
+  - UX / UI
+---
+
+# [TASK] Flutter — init, e-mail/senha e sessão Bearer
+
+> **Contexto:** `Codigo/Pulso/mobile` é README placeholder (sem `pubspec`). RF-140: o app consome a **mesma** API REST. Telas de referência: protótipo `PULSO-FEAT-086`.
+
+## 📝 Descrição
+
+Criar o projeto Flutter, cliente HTTP com Dio, persistência segura dos JWT e telas de cadastro/login/logout alinhadas às rotas `/api/auth/*` já existentes.
+
+## ✅ Critérios de Aceite
+
+**Dado** o app iniciado,  
+**Quando** há tokens válidos no secure storage,  
+**Então** chama `GET /api/auth/me` com Bearer e entra na área autenticada.
+
+**Dado** cadastro válido,  
+**Quando** `POST /api/auth/register`,  
+**Então** mostra o fluxo de e-mail enviado; login só após verificação (`verificado=true`).
+
+**Dado** login com e-mail/senha,  
+**Quando** `POST /api/auth/login` com `X-Pulso-Client: mobile`,  
+**Então** persiste `accessToken` e `refreshToken` em `flutter_secure_storage` (nunca SharedPreferences em texto).
+
+**Dado** access expirado,  
+**Quando** o interceptor recebe `401`,  
+**Então** tenta `POST /api/auth/refresh` com `{ refreshToken }`, grava o novo par e repete a request.
+
+**Dado** logout,  
+**Quando** `POST /api/auth/logout` com `{ refreshToken }`,  
+**Então** revoga no servidor e apaga o storage local.
+
+**Dado** forgot/reset,  
+**Então** usa `POST /api/auth/forgot-password` e, se o token chegar no app, `POST /api/auth/reset-password/:token` (deep link fica na TASK-162).
+
+## 🛠️ Implementação
+
+### `Codigo/Pulso/mobile/` (NOVO — CRIAR)
+
+- `flutter create` no placeholder; stack: Dio, `flutter_secure_storage`, go_router (ou Navigator 2)
+- Base URL apontando para a API Node (`Codigo/Pulso/api`)
+
+### Cliente HTTP (NOVO — CRIAR)
+
+Criar em: `Codigo/Pulso/mobile/lib/core/api/`
+
+- Interceptor: `Authorization: Bearer` + `X-Pulso-Client: mobile`
+- Refresh único (fila) para evitar replay paralelo do refresh token
+- 401 após refresh falho → limpa storage e rota de login
+
+### Auth feature (NOVO — CRIAR)
+
+Criar em: `Codigo/Pulso/mobile/lib/features/auth/`
+
+- `token_storage.dart` — secure storage
+- `auth_repository.dart` — register, login, refresh, logout, me, forgot, reset, resend
+- Telas alinhadas ao protótipo: cadastro, e-mail enviado, login, forgot, reset (claro/escuro se o tema do app já existir)
+
+## 📐 Regras de Negócio
+
+- Mesmas validações da Web (nome ≥3, senha forte, anti-enumeração no forgot)
+- JWT no device só em storage seguro (apostila 3.4)
+
+## 📋 Resumo
+
+### ✅ Concluído
+- Contrato REST mapeado; mobile ainda sem código
+
+### ⏳ Pendente
+- Scaffold Flutter + Dio + secure storage
+- Telas e-mail/senha + interceptor de refresh
+
+
+---
+
+---
+card_id: PULSO-TASK-162
+title: "Flutter — Google nativo e deep links de e-mail"
+status: Backlog
+type: Task
+priority: High
+sprint: null
+story_points: null
+reporter: "Matheus Felipe Correa"
+parent: PULSO-FEAT-107
+due_date: null
+categories:
+  - Mobile
+  - Backend
+  - Integração Externa
+  - Cibersegurança
+---
+
+# [TASK] Flutter — Google nativo e deep links de e-mail
+
+> **Contexto:** O Google da Web usa Passport (`GET /api/auth/google` → redirect `FRONTEND_URL/auth/callback?exchange=`). Isso não serve no app. E-mails de verify/reset apontam para `FRONTEND_URL/verify-email/` e `/reset-password/`.
+
+## 📝 Descrição
+
+Expor `POST /api/auth/google/mobile` que valida o ID token do SDK nativo (mesmo `findOrCreateGoogleUser` / seed de categorias da Web) e emitir sessão JSON. No Flutter, `google_sign_in` + deep links para os tokens de e-mail.
+
+## ✅ Critérios de Aceite
+
+**Dado** ID token válido do `google_sign_in`,  
+**Quando** `POST /api/auth/google/mobile` com `{ idToken }`,  
+**Então** a API valida audiência (client IDs Web/Android/iOS), localiza ou cria o usuário e devolve `accessToken`/`refreshToken`/`user` no JSON.
+
+**Dado** ID token inválido ou audiência errada,  
+**Então** `401`/`400` sem criar sessão.
+
+**Quando** o fluxo nativo sucede,  
+**Então** **não** redireciona para `FRONTEND_URL/auth/callback`.
+
+**Dado** e-mail de verificação ou reset,  
+**Quando** o usuário abre o link no celular com o app instalado,  
+**Então** o deep link entrega o token à tela Flutter **ou** o fluxo Web existente continua funcionando se o app não estiver instalado.
+
+**Dado** rate limit,  
+**Então** `POST /api/auth/google/mobile` tem instância própria (5 req/min/IP), como as outras rotas auth.
+
+## 🛠️ Implementação
+
+### API — Google mobile (NOVO — CRIAR / EXISTENTE — MODIFICAR)
+
+- Schema Zod `{ idToken }` em `Codigo/Pulso/api/src/schemas/authSchemas.js`
+- `authService.verifyGoogleIdToken(idToken)` via `google-auth-library` (`OAuth2Client.verifyIdToken`) já usada em `Codigo/Pulso/api/src/utils/googleOAuth.js`
+- Reusar `findOrCreate` Google + `issueAuthTokens` do `authService.js` (EXISTENTE)
+- Rota `POST /google/mobile` em `Codigo/Pulso/api/src/routes/authRoutes.js`
+- Novo limiter em `Codigo/Pulso/api/src/middlewares/authRateLimit.js`
+- Env: audiências extras se Android/iOS tiverem OAuth client IDs distintos (`GOOGLE_ANDROID_CLIENT_ID` / `GOOGLE_IOS_CLIENT_ID`) — não inventar valores; documentar no `.env.example`
+
+### Flutter (NOVO — CRIAR)
+
+- Pacote `google_sign_in` + POST do ID token
+- Deep links (`app_links` / associated domains) para `/verify-email/:token` e `/reset-password/:token` **ou** abrir a Web se o app não tratar o host
+
+### Testes (NOVO — CRIAR)
+
+- Unit: ID token inválido; usuário existente por `googleId`; e-mail já EMAIL (mesmo comportamento da Web)
+
+## 📐 Regras de Negócio
+
+- Mesmo seed de categorias e `ConfiguracaoUsuario` do cadastro Google web (RF-002)
+- Conta Google nasce verificada
+- E-mails continuam anti-enumeração; links não quebram a SPA
+
+## 📋 Resumo
+
+### ✅ Concluído
+- Fluxo Passport da SPA mapeado; endpoint nativo ainda não existe
+
+### ⏳ Pendente
+- `POST /api/auth/google/mobile` + validação de ID token
+- SDK Flutter + deep links verify/reset
+
+
