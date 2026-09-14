@@ -31,5 +31,16 @@
 **Total Sprint 1:** 26h
 
 # Sprint 2
+- Refinar o escopo do Epic de Autenticação e vincular os requisitos (RF-001–006)
 
-_(a preencher)_
+- Desenvolver as sub-features do Front-end Web (PULSO-FEAT-001 a 005) e app Flutter (#292)
+
+# Sprint 3
+
+- Revisão das melhorias apontadas nos protótipos de telas e no código parcial para garantir navegabilidade fluida.
+
+- Conexão das telas do front-end com o back-end para permitir navegação real com dados simulados/reais.
+
+- Consolidar o Fechamento da Sprint 3 e o Planejamento da Sprint 4
+
+
