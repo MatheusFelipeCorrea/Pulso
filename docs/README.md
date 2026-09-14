@@ -1,4 +1,4 @@
-# TITULO DO PROJETO
+# Pulso
 
 **Alice Shikida, alice.salomao@pucminas.edu.br**
 
