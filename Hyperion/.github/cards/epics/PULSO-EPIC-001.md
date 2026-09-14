@@ -4,7 +4,7 @@ title: "Autenticação"
 status: "In Progress"
 type: Epic
 priority: Highest
-sprint: null
+sprint: "Sprint 2"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null
