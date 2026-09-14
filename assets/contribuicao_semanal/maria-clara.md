@@ -29,4 +29,10 @@
 
 # Sprint 2
 
-_(a preencher)_
+- Mapear as 9 telas de fluxo de Auth no Figma (Cadastro, Login, Recuperação de Senha).
+- Desenvolver as sub-features do Front-end Web (PULSO-FEAT-001 a 005).
+- Desenvolver as sub-features do app Flutter (#292).
+
+# Sprint 3
+
+-
