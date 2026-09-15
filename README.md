@@ -14,9 +14,9 @@ O nome "Pulso" remete à ideia de manter o pulso firme nas finanças, monitorar 
 
 ## Professores responsáveis
 
-* Leonardo Vilela
-* João Paulo Aramuni
-* Arthur Mol
+- Leonardo Vilela Cardoso
+- Artur Martins Mol
+- João Paulo Carneiro Aramuni
 
 ## Instruções de utilização
 
