@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/config/app_config.dart';
 import 'package:pulso/core/storage/token_storage.dart';
@@ -8,6 +9,7 @@ import 'package:pulso/core/storage/token_storage.dart';
 class ApiClient {
   ApiClient({
     required this._tokenStorage,
+    this.onSessionExpired,
     Dio? dio,
     String? baseUrl,
   }) {
@@ -32,6 +34,7 @@ class ApiClient {
   }
 
   final TokenStorage _tokenStorage;
+  VoidCallback? onSessionExpired;
   late final Dio _dio;
   Completer<void>? _refreshLock;
 
@@ -73,15 +76,22 @@ class ApiClient {
       return handler.resolve(response);
     } catch (_) {
       await _tokenStorage.clear();
+      final expired = onSessionExpired;
+      if (expired != null) {
+        Future.microtask(expired);
+      }
       return handler.next(error);
     }
   }
 
   Future<void> _refreshTokens() async {
-    if (_refreshLock != null) {
-      return _refreshLock!.future;
+    final inflight = _refreshLock;
+    if (inflight != null) {
+      return inflight.future;
     }
-    _refreshLock = Completer<void>();
+    final lock = Completer<void>();
+    _refreshLock = lock;
+    lock.future.ignore();
     try {
       final refresh = await _tokenStorage.readRefresh();
       if (refresh == null || refresh.isEmpty) {
@@ -99,9 +109,9 @@ class ApiClient {
         throw ApiException('Sessão expirada. Faça login novamente.', statusCode: 401);
       }
       await _tokenStorage.save(accessToken: accessToken, refreshToken: refreshToken);
-      _refreshLock!.complete();
+      if (!lock.isCompleted) lock.complete();
     } catch (error) {
-      _refreshLock!.completeError(error);
+      if (!lock.isCompleted) lock.completeError(error);
       rethrow;
     } finally {
       _refreshLock = null;

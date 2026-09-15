@@ -11,8 +11,12 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final storage = TokenStorage();
-  final api = ApiClient(tokenStorage: storage);
-  final auth = AuthController(
+  late final AuthController auth;
+  final api = ApiClient(
+    tokenStorage: storage,
+    onSessionExpired: () => auth.clearLocalSession(),
+  );
+  auth = AuthController(
     repository: AuthRepository(api: api, storage: storage),
     storage: storage,
   );

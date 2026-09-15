@@ -94,7 +94,7 @@ class AuthRepository {
   Future<void> validateResetToken(String token) async {
     try {
       await _api.raw.get<Map<String, dynamic>>(
-        '/auth/reset-password/$token',
+        '/auth/reset-password/${Uri.encodeComponent(token)}',
         options: Options(extra: {'skipAuth': true}),
       );
     } on DioException catch (error) {
@@ -109,7 +109,7 @@ class AuthRepository {
   }) async {
     try {
       await _api.raw.post<Map<String, dynamic>>(
-        '/auth/reset-password/$token',
+        '/auth/reset-password/${Uri.encodeComponent(token)}',
         data: {'senha': senha, 'confirmarSenha': confirmarSenha},
         options: Options(extra: {'skipAuth': true}),
       );
@@ -121,7 +121,7 @@ class AuthRepository {
   Future<Map<String, dynamic>> verifyEmail(String token) async {
     try {
       final response = await _api.raw.get<Map<String, dynamic>>(
-        '/auth/verify-email/$token',
+        '/auth/verify-email/${Uri.encodeComponent(token)}',
         options: Options(extra: {'skipAuth': true}),
       );
       return response.data ?? {};

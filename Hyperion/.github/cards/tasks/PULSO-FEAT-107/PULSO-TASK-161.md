@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-161
 title: "Flutter — init, e-mail/senha e sessão Bearer"
-status: Backlog
+status: Done
 type: Task
 priority: High
 sprint: null
@@ -80,8 +80,8 @@ Criar em: `Codigo/Pulso/mobile/lib/features/auth/`
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Contrato REST mapeado; mobile ainda sem código
+- Scaffold Flutter + Dio + `flutter_secure_storage` + go_router
+- Telas e-mail/senha, termos/privacidade, interceptor de refresh e logout local no 401
 
 ### ⏳ Pendente
-- Scaffold Flutter + Dio + secure storage
-- Telas e-mail/senha + interceptor de refresh
+- Nenhum

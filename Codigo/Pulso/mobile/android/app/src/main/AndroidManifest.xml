@@ -34,6 +34,10 @@
                 <category android:name="android.intent.category.BROWSABLE"/>
                 <data android:scheme="http" android:host="localhost" android:pathPrefix="/verify-email"/>
                 <data android:scheme="http" android:host="localhost" android:pathPrefix="/reset-password"/>
+                <data android:scheme="http" android:host="127.0.0.1" android:pathPrefix="/verify-email"/>
+                <data android:scheme="http" android:host="127.0.0.1" android:pathPrefix="/reset-password"/>
+                <data android:scheme="https" android:host="localhost" android:pathPrefix="/verify-email"/>
+                <data android:scheme="https" android:host="localhost" android:pathPrefix="/reset-password"/>
             </intent-filter>
         </activity>
         <meta-data

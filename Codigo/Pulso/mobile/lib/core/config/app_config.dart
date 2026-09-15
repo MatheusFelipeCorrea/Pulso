@@ -5,6 +5,9 @@ class AppConfig {
   static const googleServerClientId = String.fromEnvironment(
     'GOOGLE_SERVER_CLIENT_ID',
   );
+  static const googleIosClientId = String.fromEnvironment(
+    'GOOGLE_IOS_CLIENT_ID',
+  );
 
   static String get apiBaseUrl {
     if (_fromEnv.isNotEmpty) return _fromEnv;

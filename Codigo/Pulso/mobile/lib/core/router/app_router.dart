@@ -2,7 +2,9 @@ import 'package:app_links/app_links.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pulso/features/auth/screens/auth_callback_screen.dart';
 import 'package:pulso/features/auth/screens/email_sent_screen.dart';
+import 'package:pulso/features/auth/legal/legal_content.dart';
 import 'package:pulso/features/auth/screens/forgot_password_screen.dart';
+import 'package:pulso/features/auth/screens/legal_document_screen.dart';
 import 'package:pulso/features/auth/screens/login_screen.dart';
 import 'package:pulso/features/auth/screens/register_screen.dart';
 import 'package:pulso/features/auth/screens/reset_password_screen.dart';
@@ -20,6 +22,8 @@ GoRouter createRouter(AuthController auth) {
       final loggingIn = state.matchedLocation == '/login' ||
           state.matchedLocation == '/register' ||
           state.matchedLocation == '/auth/callback' ||
+          state.matchedLocation == '/termos' ||
+          state.matchedLocation == '/privacidade' ||
           state.matchedLocation.startsWith('/register/') ||
           state.matchedLocation.startsWith('/forgot-password') ||
           state.matchedLocation.startsWith('/reset-password') ||
@@ -46,6 +50,20 @@ GoRouter createRouter(AuthController auth) {
       GoRoute(
         path: '/register',
         builder: (context, state) => const AuthPage(child: RegisterScreen()),
+      ),
+      GoRoute(
+        path: '/termos',
+        builder: (context, state) => const LegalDocumentScreen(
+          meta: termsOfUseMeta,
+          sections: termsOfUseSections,
+        ),
+      ),
+      GoRoute(
+        path: '/privacidade',
+        builder: (context, state) => const LegalDocumentScreen(
+          meta: privacyPolicyMeta,
+          sections: privacyPolicySections,
+        ),
       ),
       GoRoute(
         path: '/register/email-sent',
@@ -123,11 +141,15 @@ String? locationFromAuthUri(Uri uri) {
 
   if (path.contains('verify-email') || host == 'verify-email') {
     final token = tokenFrom('verify-email');
-    if (token != null && token.isNotEmpty) return '/verify-email/$token';
+    if (token != null && token.isNotEmpty) {
+      return '/verify-email/${Uri.encodeComponent(token)}';
+    }
   }
   if (path.contains('reset-password') || host == 'reset-password') {
     final token = tokenFrom('reset-password');
-    if (token != null && token.isNotEmpty) return '/reset-password/$token';
+    if (token != null && token.isNotEmpty) {
+      return '/reset-password/${Uri.encodeComponent(token)}';
+    }
   }
   return null;
 }

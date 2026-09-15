@@ -21,7 +21,10 @@ class AuthController extends ChangeNotifier {
 
   Future<void> bootstrap() async {
     final access = await _storage.readAccess();
-    if (access == null || access.isEmpty) {
+    final refresh = await _storage.readRefresh();
+    final hasAccess = access != null && access.isNotEmpty;
+    final hasRefresh = refresh != null && refresh.isNotEmpty;
+    if (!hasAccess && !hasRefresh) {
       status = AuthStatus.unauthenticated;
       notifyListeners();
       return;
@@ -34,6 +37,12 @@ class AuthController extends ChangeNotifier {
       user = null;
       status = AuthStatus.unauthenticated;
     }
+    notifyListeners();
+  }
+
+  void clearLocalSession() {
+    user = null;
+    status = AuthStatus.unauthenticated;
     notifyListeners();
   }
 

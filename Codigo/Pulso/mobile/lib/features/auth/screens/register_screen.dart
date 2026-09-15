@@ -1,8 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
+import 'package:pulso/core/theme/pulso_colors.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
+import 'package:pulso/features/auth/utils/email.dart';
 import 'package:pulso/features/auth/utils/password_strength.dart';
 import 'package:pulso/features/auth/widgets/auth_card.dart';
 import 'package:pulso/features/auth/widgets/auth_extras.dart';
@@ -28,6 +31,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? _emailError;
   String? _senhaError;
   String? _confirmarError;
+  late final TapGestureRecognizer _termosTap;
+  late final TapGestureRecognizer _privacidadeTap;
+
+  @override
+  void initState() {
+    super.initState();
+    _termosTap = TapGestureRecognizer()
+      ..onTap = () {
+        if (!mounted) return;
+        context.push('/termos');
+      };
+    _privacidadeTap = TapGestureRecognizer()
+      ..onTap = () {
+        if (!mounted) return;
+        context.push('/privacidade');
+      };
+  }
 
   @override
   void dispose() {
@@ -35,12 +55,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _email.dispose();
     _senha.dispose();
     _confirmar.dispose();
+    _termosTap.dispose();
+    _privacidadeTap.dispose();
     super.dispose();
   }
 
   bool get _isValid {
     return _nome.text.trim().length >= 3 &&
-        _email.text.contains('@') &&
+        isValidEmail(_email.text) &&
         senhaForteRegex.hasMatch(_senha.text) &&
         _senha.text == _confirmar.text &&
         _aceitarTermos;
@@ -49,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _validateLocal() {
     setState(() {
       _nomeError = _nome.text.trim().length < 3 ? 'Nome deve ter no mínimo 3 caracteres' : null;
-      _emailError = _email.text.contains('@') ? null : 'Email inválido';
+      _emailError = isValidEmail(_email.text) ? null : 'Email inválido';
       _senhaError = senhaForteRegex.hasMatch(_senha.text)
           ? null
           : 'Senha deve ter no mínimo 8 caracteres, 1 maiúscula, 1 número e 1 caractere especial.';
@@ -144,10 +166,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 value: _aceitarTermos,
                 onChanged: (value) => setState(() => _aceitarTermos = value ?? false),
               ),
-              const Expanded(
+              Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(top: 12),
-                  child: Text('Eu aceito os Termos de Uso e a Política de Privacidade.'),
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Text.rich(
+                    TextSpan(
+                      text: 'Eu aceito os ',
+                      children: [
+                        TextSpan(
+                          text: 'Termos de Uso',
+                          style: const TextStyle(
+                            color: PulsoColors.primary,
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: _termosTap,
+                        ),
+                        const TextSpan(text: ' e a '),
+                        TextSpan(
+                          text: 'Política de Privacidade',
+                          style: const TextStyle(
+                            color: PulsoColors.primary,
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.underline,
+                          ),
+                          recognizer: _privacidadeTap,
+                        ),
+                        const TextSpan(text: '.'),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],

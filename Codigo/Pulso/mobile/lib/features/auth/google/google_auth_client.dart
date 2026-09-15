@@ -14,7 +14,8 @@ class GoogleAuthClient {
 
   String get missingConfigMessage =>
       'Google Sign-In nativo precisa de GOOGLE_SERVER_CLIENT_ID '
-      '(mesmo Client ID web da API) e dos clients Android/iOS no Google Cloud.';
+      '(Client ID web da API). No iOS, passe também GOOGLE_IOS_CLIENT_ID. '
+      'Cadastre os clients Android/iOS no Google Cloud (SHA-1 no Android).';
 
   GoogleSignIn _ensureGoogle() {
     final existing = _google;
@@ -24,8 +25,14 @@ class GoogleAuthClient {
       throw ApiException(missingConfigMessage);
     }
 
+    String? nativeClientId;
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS) {
+      final iosClientId = AppConfig.googleIosClientId;
+      nativeClientId = iosClientId.isEmpty ? null : iosClientId;
+    }
     final client = GoogleSignIn(
       scopes: const ['email', 'profile'],
+      clientId: nativeClientId,
       serverClientId: AppConfig.googleServerClientId,
     );
     _google = client;
