@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-025
 title: "Banco de dados — transações, tags e vínculos"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null

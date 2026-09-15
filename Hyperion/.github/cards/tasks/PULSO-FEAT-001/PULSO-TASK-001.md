@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-001
 title: "Banco de dados — modelos de usuário e verificação"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null
@@ -49,6 +49,10 @@ Adicionar/criar models:
 - Email único por usuário
 - Conta email inicia `verificado=false`
 - Token verificação expira em 24h
+
+## 🔗 Pull Requests
+
+- [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de banco e autenticação (`feat/14`)
 
 ## 📋 Resumo
 

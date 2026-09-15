@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-005
 title: "Proteção de rotas e infraestrutura de segurança"
-status: Backlog
+status: "In Progress"
 type: Feature
 priority: Highest
 sprint: null
@@ -55,6 +55,11 @@ categories:
 - PULSO-TASK-010
 - PULSO-TASK-011
 - PULSO-TASK-012
+
+## 🔗 Pull Requests
+
+- [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de autenticação (`feat/14`)
+- [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão e guards (`feat/15`)
 
 ## 📋 Resumo
 

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-004
 title: "Backend — login, refresh, logout e cookies httpOnly"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null
@@ -80,6 +80,10 @@ Criar em: `Codigo/api/src/repositories/authRepository.js`
 - Access 15min (RN-133) · Refresh 7d/30d rotativo (RN-134)
 - Cookies httpOnly (RN-135)
 - Mensagens genéricas em falha de login (anti-enumeração)
+
+## 🔗 Pull Requests
+
+- [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão JWT e logout (`feat/15`)
 
 ## 📋 Resumo
 

@@ -22,21 +22,18 @@ Professores: Leonardo Vilela, João Paulo Aramuni, Arthur Mol.
 
 ## Stack
 
-Planejada (ainda sem manifests):
-
 | App | Pasta | Tecnologia |
 |-----|--------|------------|
-| Web | `Codigo/Pulso/web` | React |
-| API | `Codigo/Pulso/api` | Node.js |
-| Native | `Codigo/Pulso/mobile` | Flutter |
+| Web | `Codigo/Pulso/web` | React + Vite |
+| API | `Codigo/Pulso/api` | Node.js + Express + Prisma + PostgreSQL |
+| Native | `Codigo/Pulso/mobile` | Flutter (ainda sem scaffold) |
 
 Kit Hyperion aninhado em `Hyperion/` (`kit.root: Hyperion`).
 
 ## Constraints
 
 - Disciplina TI5 / PMG-ES — documentação PUC em `docs/`.
-- Apps ainda vazias: não inventar ORM, banco ou deploy até o scaffold.
-- Depois do init React/Node/Flutter, regenerar `project.yml` com `/discover`.
+- Web e API já têm `package.json`; mobile ainda é placeholder.
 - Produto 100% gratuito (visão do README).
 
 ## Glossary

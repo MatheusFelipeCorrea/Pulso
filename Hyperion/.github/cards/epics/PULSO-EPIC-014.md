@@ -58,6 +58,11 @@ categories:
 - PULSO-FEAT-085
 - PULSO-FEAT-099
 
+## 🔗 Pull Requests
+
+- [#290](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/290) — Apostila e READMEs
+- [#291](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/291) — Protótipos de Auth na documentação
+
 ## 📋 Resumo
 
 ### ✅ Concluído

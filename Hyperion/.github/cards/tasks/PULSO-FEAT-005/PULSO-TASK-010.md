@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-010
 title: "Backend — middleware, rate limit e job de limpeza"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null
@@ -65,6 +65,11 @@ Criar em: `Codigo/api/src/jobs/unverifiedAccountCleanupJob.js`
 ## 📐 Regras de Negócio
 
 - Rate limit IP 5/min por rota (RN-140)
+
+## 🔗 Pull Requests
+
+- [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de autenticação (`feat/14`)
+- [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão e guards (`feat/15`)
 
 ## 📋 Resumo
 

@@ -73,10 +73,9 @@ O controle orçamentário pessoal no Brasil enfrenta desafios estruturais devido
 
 # Ferramentas
 
-_Inclua o URL do repositório (Github, Bitbucket, etc) onde você armazenou o código da sua prova de conceito/protótipo arquitetural da aplicação como anexos. A inclusão da URL desse repositório de código servirá como base para garantir a autenticidade dos trabalhos._
-
-| Ambiente              | Plataforma        | Link de Acesso                |
-| --------------------- | ----------------- | ----------------------------- |
-| Repositório de código | GitHub            | https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/tree/main/Codigo    |
-| Hospedagem do site    | Heroku            | https://XXXXXXX.herokuapp.com |
-| Protótipo Interativo  | MavelApp ou Figma | https://figma.com/XXXXXXX     |
+| Ambiente              | Plataforma | Link de Acesso |
+| --------------------- | ---------- | -------------- |
+| Repositório de código | GitHub     | https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso |
+| Código das apps       | GitHub     | https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/tree/main/Codigo |
+| Hospedagem            | —          | Em breve |
+| Protótipos (export)   | Apostila   | [`docs/prototipos/`](prototipos/) — Figma em breve |

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-009
 title: "Frontend — telas de recuperação de senha"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: High
 sprint: null
@@ -60,6 +60,11 @@ Como **usuário**, quero solicitar recuperação de senha, redefinir via link se
 `authService.forgotPassword`, `validateResetToken`, `resetPassword`
 
 Registrar rotas em `App.jsx`
+
+## 🔗 Pull Requests
+
+- [#288](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/288) — Recuperação de senha (`feat/17`)
+- [#289](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/289) — UX da recuperação de senha (`feat/18`)
 
 ## 📋 Resumo
 

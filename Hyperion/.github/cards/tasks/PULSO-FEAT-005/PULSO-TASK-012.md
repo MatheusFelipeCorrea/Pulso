@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-012
 title: "QA — testes unitários de autenticação"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Medium
 sprint: null
@@ -56,6 +56,13 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 ### Script manual (NOVO — CRIAR)
 
 `Codigo/api/scripts/validate-auth-flow.js` — smoke de fluxo auth
+
+## 🔗 Pull Requests
+
+- [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de autenticação (`feat/14`)
+- [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão JWT e logout (`feat/15`)
+- [#287](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/287) — Google OAuth 2.0 (`feat/16`)
+- [#288](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/288) — Recuperação de senha (`feat/17`)
 
 ## 📋 Resumo
 

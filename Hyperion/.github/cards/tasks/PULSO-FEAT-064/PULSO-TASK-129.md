@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-129
 title: "Banco de dados — Divida e PagamentoDivida"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null

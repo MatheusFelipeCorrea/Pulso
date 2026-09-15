@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-003
 title: "Google OAuth 2.0"
-status: Backlog
+status: "In Progress"
 type: Feature
 priority: Highest
 sprint: null
@@ -53,6 +53,10 @@ Fluxo: botão Google → redirect `GET /auth/google` (Passport) → callback API
 
 - PULSO-TASK-006
 - PULSO-TASK-007
+
+## 🔗 Pull Requests
+
+- [#287](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/287) — Google OAuth 2.0 (`feat/16`)
 
 ## 📋 Resumo
 

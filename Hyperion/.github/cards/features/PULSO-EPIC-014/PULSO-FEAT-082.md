@@ -41,6 +41,11 @@ categories:
 ### Cenário 4 — Sem definição solta
 **Então** o texto de dicionário pode permanecer curto, mas não é a única coisa no arquivo.
 
+## 🔗 Pull Requests
+
+- [#290](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/290) — Seção 5 com exports de Auth
+- [#291](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/291) — Protótipos de Auth na apostila
+
 ## 📋 Resumo
 
 ### ✅ Concluído

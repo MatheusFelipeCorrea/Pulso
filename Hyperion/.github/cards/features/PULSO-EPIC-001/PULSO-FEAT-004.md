@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-004
 title: "Recuperação de senha"
-status: Backlog
+status: "In Progress"
 type: Feature
 priority: High
 sprint: null
@@ -54,6 +54,11 @@ Fluxo: `/forgot-password` → `POST /auth/forgot-password` → email com token 1
 
 - PULSO-TASK-008
 - PULSO-TASK-009
+
+## 🔗 Pull Requests
+
+- [#288](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/288) — Recuperação de senha (`feat/17`)
+- [#289](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/289) — UX da recuperação de senha (`feat/18`)
 
 ## 📋 Resumo
 

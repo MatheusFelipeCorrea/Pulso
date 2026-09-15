@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-086
 title: "Protótipo — autenticação"
-status: "In Progress"
+status: Done
 type: Feature
 priority: High
 sprint: "Sprint 1"
@@ -54,6 +54,11 @@ categories:
 
 ### Cenário 4 — Fora de escopo
 **Então** callback OAuth e rate-limit de API não ganham frame dedicado.
+
+## 🔗 Pull Requests
+
+- [#290](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/290) — Exports de Auth na apostila
+- [#291](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/291) — Protótipos de Auth (claro e escuro)
 
 ## 📋 Resumo
 

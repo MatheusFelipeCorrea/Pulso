@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-003
 title: "Frontend — telas de cadastro e verificação"
-status: Backlog
+status: "In Progress"
 type: Task
 priority: High
 sprint: null
@@ -61,6 +61,10 @@ Como **visitante**, quero me cadastrar, saber que o email foi enviado e confirma
 - `schemas/authSchemas.js` — `registerSchema` (+ `aceitarTermos`)
 
 Registrar rotas em `App.jsx` — `/register` com `GuestRoute`
+
+## 🔗 Pull Requests
+
+- [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de banco e autenticação (`feat/14`)
 
 ## 📋 Resumo
 

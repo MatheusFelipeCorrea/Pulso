@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-001
 title: "Cadastro e verificação de email"
-status: Backlog
+status: "In Progress"
 type: Feature
 priority: Highest
 sprint: null
@@ -56,6 +56,10 @@ Fluxo ponta a ponta de cadastro: formulário web → `POST /auth/register` → h
 - PULSO-TASK-001
 - PULSO-TASK-002
 - PULSO-TASK-003
+
+## 🔗 Pull Requests
+
+- [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de banco e autenticação (`feat/14`)
 
 ## 📋 Resumo
 
