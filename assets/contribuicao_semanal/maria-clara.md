@@ -35,4 +35,5 @@
 
 # Sprint 3
 
--
+-	Aplicação da Avaliação Heurística de Nielsen nas telas da aplicação para identificar falhas de usabilidade antes da entrega.
+-	Atualizar e corrigir os protótipos de interfaces no Figma
