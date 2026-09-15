@@ -4,9 +4,11 @@ class AppConfig {
   static const _fromEnv = String.fromEnvironment('API_BASE_URL');
   static const googleServerClientId = String.fromEnvironment(
     'GOOGLE_SERVER_CLIENT_ID',
+    defaultValue: '758052952163-rmaio9aiik5dvgnpb7cu9cqj96qmtkfr.apps.googleusercontent.com',
   );
   static const googleIosClientId = String.fromEnvironment(
     'GOOGLE_IOS_CLIENT_ID',
+    defaultValue: '758052952163-tmobd71odlg5elq05louk81labdth94u.apps.googleusercontent.com',
   );
 
   static String get apiBaseUrl {

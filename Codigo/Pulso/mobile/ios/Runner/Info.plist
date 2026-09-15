@@ -66,16 +66,28 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>GIDClientID</key>
+	<string>758052952163-tmobd71odlg5elq05louk81labdth94u.apps.googleusercontent.com</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>br.pucminas.pulso</string>
+			<string>pulso.pulso</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>pulso</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>google-sign-in</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.758052952163-tmobd71odlg5elq05louk81labdth94u</string>
 			</array>
 		</dict>
 	</array>

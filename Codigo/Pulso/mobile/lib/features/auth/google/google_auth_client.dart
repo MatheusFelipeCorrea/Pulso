@@ -13,9 +13,8 @@ class GoogleAuthClient {
   bool get isConfigured => AppConfig.googleServerClientId.isNotEmpty;
 
   String get missingConfigMessage =>
-      'Google Sign-In nativo precisa de GOOGLE_SERVER_CLIENT_ID '
-      '(Client ID web da API). No iOS, passe também GOOGLE_IOS_CLIENT_ID. '
-      'Cadastre os clients Android/iOS no Google Cloud (SHA-1 no Android).';
+      'Google Sign-In nativo precisa do Client ID web da API '
+      '(GOOGLE_SERVER_CLIENT_ID) e dos clients Android/iOS no mesmo projeto Cloud.';
 
   GoogleSignIn _ensureGoogle() {
     final existing = _google;

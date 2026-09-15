@@ -73,7 +73,7 @@ Hoje `respondWithAuthSession` só seta cookies e o JSON de login é `{ user }` �
 - Decisão: **não** criar segundo backend; só JSON de sessão + Flutter + Google nativo
 - PULSO-TASK-160 — JSON `accessToken`/`refreshToken` para cliente nativo (`X-Pulso-Client: mobile`)
 - PULSO-TASK-161 — Flutter Dio + secure storage + cadastro/login/logout/`/me`/refresh + termos
-- PULSO-TASK-162 — `POST /api/auth/google/mobile`, deep links `pulso://` e fallback Web em `FRONTEND_URL`
+- PULSO-TASK-162 — Google nativo (`pulso.pulso` + clients Cloud) + deep links `pulso://` e fallback Web
 
 ### ⏳ Pendente
-- Credenciais Google Cloud nativas (SHA-1 Android + client iOS + reversed URL scheme) — fora do repositório; documentado no README do mobile
+- Nenhum

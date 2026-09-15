@@ -1,4 +1,4 @@
-package br.pucminas.pulso.pulso
+package pulso.pulso
 
 import io.flutter.embedding.android.FlutterActivity
 

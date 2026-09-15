@@ -74,6 +74,7 @@ Expor `POST /api/auth/google/mobile` que valida o ID token do SDK nativo (mesmo 
 ### ✅ Concluído
 - `POST /api/auth/google/mobile` + validação de ID token (audiências Web/Android/iOS)
 - SDK Flutter nativo + redirect Web no preview; deep links `pulso://` nos e-mails (CTA web em `FRONTEND_URL`)
+- Clients Cloud Android/iOS no bundle `pulso.pulso`; `GIDClientID` e URL scheme reversed no iOS
 
 ### ⏳ Pendente
-- Registrar SHA-1 / client iOS no Google Cloud (credenciais da equipe; README do mobile)
+- Nenhum
