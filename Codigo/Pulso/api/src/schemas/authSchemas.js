@@ -62,6 +62,12 @@ const oauthExchangeSchema = z.object({
     }),
 });
 
+const googleMobileSchema = z.object({
+    body: z.object({
+        idToken: z.string().min(1, 'ID token Google é obrigatório'),
+    }),
+});
+
 const forgotPasswordSchema = z.object({
     body: z.object({
         email: z.string().email('Email inválido'),
@@ -100,6 +106,7 @@ module.exports = {
     refreshSchema,
     logoutSchema,
     oauthExchangeSchema,
+    googleMobileSchema,
     forgotPasswordSchema,
     resetPasswordTokenSchema,
     resetPasswordSchema,

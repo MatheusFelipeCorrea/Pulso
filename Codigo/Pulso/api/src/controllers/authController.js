@@ -5,20 +5,31 @@ const {
     getRefreshTokenFromRequest,
 } = require('../utils/authCookies');
 const AppError = require('../utils/appError');
+const { decodeGoogleReturnState } = require('../utils/googleReturnTo');
 
-const respondWithAuthSession = (res, result, statusCode = 200) => {
+const isMobileClient = (req) =>
+    String(req.headers?.['x-pulso-client'] || '').toLowerCase() === 'mobile';
+
+const respondWithAuthSession = (res, result, statusCode = 200, { includeTokens = false } = {}) => {
     setAuthCookies(res, {
         accessToken: result.accessToken,
         refreshToken: result.refreshToken,
         refreshExpiresAt: result.refreshExpiresAt,
     });
 
-    res.status(statusCode).json({
+    const body = {
         user: result.user ?? undefined,
         message: result.message ?? undefined,
         email: result.email ?? undefined,
         emailPendente: result.emailPendente ?? undefined,
-    });
+    };
+
+    if (includeTokens) {
+        body.accessToken = result.accessToken;
+        body.refreshToken = result.refreshToken;
+    }
+
+    res.status(statusCode).json(body);
 };
 
 const register = async (req, res, next) => {
@@ -31,11 +42,12 @@ const register = async (req, res, next) => {
 };
 
 const googleCallback = async (req, res) => {
+    const returnOrigin = decodeGoogleReturnState(req.query?.state);
     try {
-        const redirectUrl = await authService.buildGoogleCallbackRedirect(req.user);
+        const redirectUrl = await authService.buildGoogleCallbackRedirect(req.user, returnOrigin);
         res.redirect(redirectUrl);
     } catch (error) {
-        const redirectUrl = authService.buildGoogleErrorRedirect(error);
+        const redirectUrl = authService.buildGoogleErrorRedirect(error, returnOrigin);
         res.redirect(redirectUrl);
     }
 };
@@ -43,7 +55,16 @@ const googleCallback = async (req, res) => {
 const exchangeOAuth = async (req, res, next) => {
     try {
         const result = await authService.exchangeOAuthSession(req.body.exchange);
-        respondWithAuthSession(res, result);
+        respondWithAuthSession(res, result, 200, { includeTokens: isMobileClient(req) });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const googleMobile = async (req, res, next) => {
+    try {
+        const result = await authService.loginWithGoogleIdToken(req.body.idToken);
+        respondWithAuthSession(res, result, 200, { includeTokens: true });
     } catch (error) {
         next(error);
     }
@@ -70,7 +91,7 @@ const verifyEmail = async (req, res, next) => {
 const login = async (req, res, next) => {
     try {
         const result = await authService.loginUser(req.body);
-        respondWithAuthSession(res, result);
+        respondWithAuthSession(res, result, 200, { includeTokens: isMobileClient(req) });
     } catch (error) {
         next(error);
     }
@@ -89,7 +110,14 @@ const refresh = async (req, res, next) => {
             refreshToken: result.refreshToken,
             refreshExpiresAt: result.refreshExpiresAt,
         });
-        res.status(200).json({ ok: true });
+
+        const body = { ok: true };
+        if (isMobileClient(req)) {
+            body.accessToken = result.accessToken;
+            body.refreshToken = result.refreshToken;
+        }
+
+        res.status(200).json(body);
     } catch (error) {
         next(error);
     }
@@ -159,6 +187,7 @@ module.exports = {
     verifyEmail,
     resendVerification,
     googleCallback,
+    googleMobile,
     exchangeOAuth,
     login,
     refresh,

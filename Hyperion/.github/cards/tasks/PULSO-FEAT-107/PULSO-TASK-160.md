@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-160
 title: "API — JSON de sessão para cliente nativo"
-status: Backlog
+status: Done
 type: Task
 priority: High
 sprint: null
@@ -64,8 +64,9 @@ Modificar em: `Codigo/Pulso/api/src/controllers/authController.js`
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Gap mapeado: `respondWithAuthSession` omite tokens; `authCookies.js` já lê Bearer
+- `isMobileClient` + tokens no JSON de login/oauth/refresh para `X-Pulso-Client: mobile`
+- SPA sem o header permanece em cookies `httpOnly` (`{ user }` / `{ ok: true }`)
+- Testes unitários dos dois contratos JSON
 
 ### ⏳ Pendente
-- Flag `X-Pulso-Client: mobile` em login, oauth/exchange e refresh
-- Testes dos dois contratos JSON
+- Nenhum

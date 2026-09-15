@@ -2,7 +2,7 @@
  * Template HTML — verificação de email (compatível com clientes de email)
  */
 
-const buildVerificationEmailHtml = ({ verificationUrl, logoSrc, recipientEmail }) => {
+const buildVerificationEmailHtml = ({ verificationUrl, appUrl, logoSrc, recipientEmail }) => {
     const year = new Date().getFullYear();
 
     return `<!DOCTYPE html>
@@ -124,6 +124,13 @@ const buildVerificationEmailHtml = ({ verificationUrl, logoSrc, recipientEmail }
                     <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#7C3AED;word-break:break-all;">
                       <a href="${verificationUrl}" style="color:#7C3AED;text-decoration:underline;">${verificationUrl}</a>
                     </p>
+                    ${appUrl ? `
+                    <p style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#A1A1AA;">
+                      Se você tem o app Pulso instalado:
+                    </p>
+                    <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#7C3AED;word-break:break-all;">
+                      <a href="${appUrl}" style="color:#7C3AED;text-decoration:underline;">Abrir no aplicativo</a>
+                    </p>` : ''}
 
                   </td>
                 </tr>
@@ -163,7 +170,7 @@ const buildVerificationEmailHtml = ({ verificationUrl, logoSrc, recipientEmail }
 </html>`;
 };
 
-const buildVerificationEmailText = ({ verificationUrl, recipientEmail }) =>
+const buildVerificationEmailText = ({ verificationUrl, appUrl, recipientEmail }) =>
     [
         'Bem-vindo ao Pulso!',
         '',
@@ -172,6 +179,7 @@ const buildVerificationEmailText = ({ verificationUrl, recipientEmail }) =>
         recipientEmail,
         '',
         `Verificar email: ${verificationUrl}`,
+        ...(appUrl ? ['', `Abrir no aplicativo: ${appUrl}`] : []),
         '',
         'Este link expira em 24 horas.',
         '',

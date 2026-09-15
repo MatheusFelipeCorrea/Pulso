@@ -43,6 +43,7 @@ const resolveLogoForEmail = () => {
 
 const sendVerificationEmail = async (email, token) => {
     const verificationUrl = `${env.FRONTEND_URL}/verify-email/${token}`;
+    const appUrl = `pulso://verify-email?token=${encodeURIComponent(token)}`;
     const recipientEmail = email.trim().toLowerCase();
     const { logoSrc, attachments } = resolveLogoForEmail();
 
@@ -53,9 +54,10 @@ const sendVerificationEmail = async (email, token) => {
         },
         to: recipientEmail,
         subject: '✉️ Confirme seu email — Pulso',
-        text: buildVerificationEmailText({ verificationUrl, recipientEmail }),
+        text: buildVerificationEmailText({ verificationUrl, appUrl, recipientEmail }),
         html: buildVerificationEmailHtml({
             verificationUrl,
+            appUrl,
             logoSrc,
             recipientEmail,
         }),
@@ -65,6 +67,7 @@ const sendVerificationEmail = async (email, token) => {
 
 const sendPasswordResetEmail = async (email, token) => {
     const resetUrl = `${env.FRONTEND_URL}/reset-password/${token}`;
+    const appUrl = `pulso://reset-password?token=${encodeURIComponent(token)}`;
     const recipientEmail = email.trim().toLowerCase();
     const { logoSrc, attachments } = resolveLogoForEmail();
 
@@ -75,9 +78,10 @@ const sendPasswordResetEmail = async (email, token) => {
         },
         to: recipientEmail,
         subject: '🔒 Recuperação de senha — Pulso',
-        text: buildPasswordResetEmailText({ resetUrl, recipientEmail }),
+        text: buildPasswordResetEmailText({ resetUrl, appUrl, recipientEmail }),
         html: buildPasswordResetEmailHtml({
             resetUrl,
+            appUrl,
             logoSrc,
             recipientEmail,
         }),

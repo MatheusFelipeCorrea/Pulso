@@ -23,7 +23,7 @@ describe('authRateLimit middleware', () => {
         jest.isolateModules(() => {
             const limiters = require('../../../src/middlewares/authRateLimit');
 
-            expect(mockRateLimit).toHaveBeenCalledTimes(9);
+            expect(mockRateLimit).toHaveBeenCalledTimes(10);
             expect(limiters.authLoginRateLimit.instanceId).not.toBe(
                 limiters.authRegisterRateLimit.instanceId
             );

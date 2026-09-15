@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-107
 title: "Auth Flutter (mesma API Node)"
-status: Backlog
+status: Done
 type: Feature
 priority: High
 sprint: null
@@ -71,8 +71,9 @@ Hoje `respondWithAuthSession` só seta cookies e o JSON de login é `{ user }` �
 ### ✅ Concluído
 - Spec BDD e critérios alinhados à API existente (`authCookies` já aceita Bearer)
 - Decisão: **não** criar segundo backend; só JSON de sessão + Flutter + Google nativo
+- PULSO-TASK-160 — JSON `accessToken`/`refreshToken` para cliente nativo (`X-Pulso-Client: mobile`)
+- PULSO-TASK-161 — Flutter Dio + secure storage + cadastro/login/logout/`/me`/refresh + termos
+- PULSO-TASK-162 — Google nativo (`pulso.pulso` + clients Cloud) + deep links `pulso://` e fallback Web
 
 ### ⏳ Pendente
-- PULSO-TASK-160 — JSON `accessToken`/`refreshToken` para cliente nativo
-- PULSO-TASK-161 — init Flutter + cadastro/login/logout/`/me`/refresh
-- PULSO-TASK-162 — Google nativo + deep links verify/reset
+- Nenhum

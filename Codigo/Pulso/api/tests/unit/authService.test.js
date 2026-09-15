@@ -1,6 +1,14 @@
 const bcrypt = require('bcryptjs');
 const AppError = require('../../src/utils/appError');
+
+jest.mock('../../src/utils/googleOAuth', () => ({
+    createOAuthClient: jest.fn(),
+    getGoogleAudiences: jest.fn(() => ['test-client-id.apps.googleusercontent.com']),
+    verifyIdToken: jest.fn(),
+}));
+
 const authService = require('../../src/services/authService');
+const { verifyIdToken } = require('../../src/utils/googleOAuth');
 const { authRepositoryMock, emailProviderMock } = require('../helpers/authMocks');
 
 const validPassword = 'Pulso@123';
@@ -477,6 +485,20 @@ describe('authService', () => {
             expect(url).toContain('google_auth_failed');
             expect(url).toContain('message=Conta');
         });
+
+        it('devolve o Flutter web na rota hash quando a origem não é a SPA', async () => {
+            const url = await authService.buildGoogleCallbackRedirect(
+                {
+                    id: usuarioBase.id,
+                    email: usuarioBase.email,
+                    nome: usuarioBase.nome,
+                },
+                'http://127.0.0.1:8080'
+            );
+
+            expect(url).toContain('http://127.0.0.1:8080/#/auth/callback');
+            expect(url).toContain('exchange=');
+        });
     });
 
     describe('logoutUser', () => {
@@ -525,6 +547,46 @@ describe('authService', () => {
                 vtHabilitado: true,
                 valorPadraoPassagem: '4.80',
             });
+        });
+    });
+
+    describe('loginWithGoogleIdToken', () => {
+        it('rejeita ID token inválido', async () => {
+            verifyIdToken.mockRejectedValue(new Error('bad token'));
+
+            await expect(authService.loginWithGoogleIdToken('x')).rejects.toMatchObject({
+                statusCode: 401,
+                message: 'Token Google inválido ou expirado.',
+            });
+        });
+
+        it('rejeita payload sem email', async () => {
+            verifyIdToken.mockResolvedValue({ sub: 'g-1' });
+
+            await expect(authService.loginWithGoogleIdToken('x')).rejects.toMatchObject({
+                statusCode: 400,
+            });
+        });
+
+        it('emite sessão JSON para usuário Google existente', async () => {
+            verifyIdToken.mockResolvedValue({
+                sub: 'g-1',
+                email: usuarioBase.email,
+                name: usuarioBase.nome,
+            });
+            authRepositoryMock.findByGoogleId.mockResolvedValue({
+                ...usuarioBase,
+                googleId: 'g-1',
+                provedorAuth: 'GOOGLE',
+            });
+            authRepositoryMock.createRefreshToken.mockResolvedValue({ id: 'rt-g' });
+
+            const result = await authService.loginWithGoogleIdToken('id-token');
+
+            expect(result.accessToken).toBeTruthy();
+            expect(result.refreshToken).toBeTruthy();
+            expect(result.user.email).toBe(usuarioBase.email);
+            expect(authRepositoryMock.createUser).not.toHaveBeenCalled();
         });
     });
 });

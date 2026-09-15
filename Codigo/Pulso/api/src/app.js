@@ -15,7 +15,12 @@ if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
 }
 
 // Middlewares globais
-app.use(helmet());
+app.use(
+    helmet({
+        // API é chamada pelo Flutter web em outra origem (ex.: :8080 → :3333).
+        crossOriginResourcePolicy: { policy: 'cross-origin' },
+    })
+);
 const corsOrigins = (env.CORS_ORIGIN || '')
     .split(',')
     .map((o) => o.trim())
@@ -24,6 +29,7 @@ const corsOrigins = (env.CORS_ORIGIN || '')
 app.use(cors({
     origin: corsOrigins.length <= 1 ? corsOrigins[0] : corsOrigins,
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Pulso-Client'],
     exposedHeaders: ['X-Total-Count', 'X-Total-Pages', 'X-Current-Page'],
 }));
 app.use(cookieParser());

@@ -2,7 +2,7 @@
  * Template HTML — recuperação de senha
  */
 
-const buildPasswordResetEmailHtml = ({ resetUrl, logoSrc, recipientEmail }) => {
+const buildPasswordResetEmailHtml = ({ resetUrl, appUrl, logoSrc, recipientEmail }) => {
     const year = new Date().getFullYear();
 
     return `<!DOCTYPE html>
@@ -56,6 +56,11 @@ const buildPasswordResetEmailHtml = ({ resetUrl, logoSrc, recipientEmail }) => {
                     <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#71717A;">
                       Este link expira em <strong>1 hora</strong> por segurança.
                     </p>
+                    ${appUrl ? `
+                    <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#A1A1AA;">
+                      Se você tem o app Pulso instalado:
+                      <a href="${appUrl}" style="color:#7C3AED;text-decoration:underline;">abrir no aplicativo</a>.
+                    </p>` : ''}
                     <p style="margin:0;font-size:13px;line-height:1.6;color:#A1A1AA;">
                       Se você não solicitou esta recuperação, ignore este email com segurança.
                     </p>
@@ -77,13 +82,14 @@ const buildPasswordResetEmailHtml = ({ resetUrl, logoSrc, recipientEmail }) => {
 </html>`;
 };
 
-const buildPasswordResetEmailText = ({ resetUrl, recipientEmail }) =>
+const buildPasswordResetEmailText = ({ resetUrl, appUrl, recipientEmail }) =>
     [
         'Recuperação de senha — Pulso',
         '',
         `Você solicitou redefinir a senha da conta ${recipientEmail}.`,
         '',
         `Redefinir senha: ${resetUrl}`,
+        ...(appUrl ? ['', `Abrir no aplicativo: ${appUrl}`] : []),
         '',
         'Este link expira em 1 hora.',
         'Se você não solicitou, ignore este email.',

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-162
 title: "Flutter — Google nativo e deep links de e-mail"
-status: Backlog
+status: Done
 type: Task
 priority: High
 sprint: null
@@ -72,8 +72,9 @@ Expor `POST /api/auth/google/mobile` que valida o ID token do SDK nativo (mesmo 
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fluxo Passport da SPA mapeado; endpoint nativo ainda não existe
+- `POST /api/auth/google/mobile` + validação de ID token (audiências Web/Android/iOS)
+- SDK Flutter nativo + redirect Web no preview; deep links `pulso://` nos e-mails (CTA web em `FRONTEND_URL`)
+- Clients Cloud Android/iOS no bundle `pulso.pulso`; `GIDClientID` e URL scheme reversed no iOS
 
 ### ⏳ Pendente
-- `POST /api/auth/google/mobile` + validação de ID token
-- SDK Flutter + deep links verify/reset
+- Nenhum
