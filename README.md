@@ -6,11 +6,11 @@ O nome "Pulso" remete à ideia de manter o pulso firme nas finanças, monitorar 
 
 ## Alunos integrantes da equipe
 
-* Matheus Felipe
-* Alice Shikida
-* Maria Clara
-* Sofia Vasconcelos
-* Vinicius Simões
+* Matheus Felipe Correa da Silva
+* Alice Shikida Salomão
+* Maria Clara Gomes Silva de Oliveira
+* Sofia Vasconcelos Moreira e Silva
+* Vinícius Simões Viana
 
 ## Professores responsáveis
 
