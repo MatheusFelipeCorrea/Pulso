@@ -1,0 +1,25 @@
+flowchart TD
+  subgraph flutter [Flutter]
+    UI[Telas auth]
+    Store[Secure storage]
+    Dio[Dio + interceptor]
+  end
+
+  subgraph api [Node API existente]
+    Login["POST /auth/login"]
+    Refresh["POST /auth/refresh"]
+    Me["GET /auth/me"]
+    GoogleWeb["GET /auth/google — SPA"]
+    GoogleMobile["POST /auth/google/mobile — NOVO"]
+    Issue[issueAuthTokens]
+  end
+
+  UI --> Dio
+  Dio -->|Bearer access| Me
+  Dio -->|body refreshToken| Refresh
+  Login -->|JSON tokens se X-Pulso-Client mobile| Store
+  Refresh -->|novo par JSON| Store
+  GoogleWeb -->|redirect FRONTEND_URL| SPA[Web AuthCallback]
+  UI -->|idToken SDK| GoogleMobile
+  GoogleMobile --> Issue
+  Login --> Issue
