@@ -1,0 +1,38 @@
+flowchart TD
+  subgraph web [Web]
+    Reg["/register"]
+    Log["/login"]
+    CB["/auth/callback"]
+    Reset["/reset-password/:token"]
+    Guard[ProtectedRoute]
+  end
+
+  subgraph flutter [Flutter]
+    MobUI[Telas auth]
+    Store[Secure storage]
+  end
+
+  subgraph api [Node /api/auth]
+    Register["POST /register"]
+    Login["POST /login"]
+    Refresh["POST /refresh"]
+    Me["GET /me"]
+    GoogleWeb["GET /google"]
+    Exchange["POST /oauth/exchange"]
+    GoogleMob["POST /google/mobile"]
+    Forgot["POST /forgot-password"]
+    Cookies[cookies httpOnly]
+    JSON[JSON tokens se X-Pulso-Client mobile]
+  end
+
+  Reg --> Register
+  Log --> Login
+  Login --> Cookies
+  Login --> JSON
+  JSON --> Store
+  CB --> Exchange
+  Exchange --> Cookies
+  MobUI -->|idToken| GoogleMob
+  GoogleWeb --> CB
+  Guard --> Me
+  Reset --> Forgot
