@@ -31,16 +31,21 @@
 
 # Sprint 2
 
-- Redação da Seção 3 e Seção 4 do Documento de Arquitetura, com especificação dos contratos de API e do fluxo de sessão JWT/cookies httpOnly.
-- Atualização dos requisitos não funcionais e políticas de cibersegurança (LGPD), criação do arquivo de citação do repositório (Citation.cff) e padronização do template das Atas de Reunião Semanal.
-- Consolidação e formatação dos artefatos de Fechamento da Sprint 2 e elaboração do Planejamento da Sprint 3.
+- Seções 3 e 4 da apostila: contratos de API e fluxo de sessão JWT / cookies httpOnly.
+- RNFs, LGPD, `CITATION.cff` e template das atas semanais.
+- Fechamento da Sprint 2 e planejamento da Sprint 3.
+
+**Horas:** 30h
 
 **Total Sprint 2:** 30h
 
 # Sprint 3
 
-- Condução da Avaliação Heurística de Usabilidade (Heurísticas de Nielsen) nas telas do protótipo no Figma, com documentação dos relatórios de falhas e sugestões de melhoria de UI/UX.
-- Apoio ao Front-end nas correções de navegabilidade e criação do Módulo de Viagens com integração ao simulador de conversão de moedas.
-- Organização dos artefatos de entrega e consolidação do Fechamento da Sprint 3 / Planejamento da Sprint 4.
+- Transferências e QA de transações (`PULSO-FEAT-014` + `PULSO-FEAT-017`, tasks 030 e 036): testes de `TRANSFERENCIA`, suites API/Web (filtros, VA/VR, exclusão).
+- PR [#300](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/300) → Sprint-3 · issues [#27](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/27), [#30](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/30), [#152](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/152), [#124](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/124).
+- Avaliação heurística de usabilidade (Nielsen) no Figma, consolidada em `docs/6.avaliacao_heuristica.md` (com Maria Clara).
+- Organização dos artefatos de fechamento da Sprint 3.
 
-**Total Sprint 3:** 30h
+**Horas:** 22h
+
+**Total Sprint 3:** 22h

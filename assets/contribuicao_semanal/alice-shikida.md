@@ -31,16 +31,20 @@
 **Total Sprint 1:** 26h
 
 # Sprint 2
-- Refinar o escopo do Epic de Autenticação e vincular os requisitos (RF-001–006)
 
-- Desenvolver as sub-features do Front-end Web (PULSO-FEAT-001 a 005) e app Flutter (#292)
+- Recorte do épico de Autenticação (RF-001–006, RN-131–143) e acompanhamento das features 001–005 + Flutter 107.
+- Priorização do board da Sprint-2 e revisão de aceite das telas/auth.
+
+**Horas:** 10h
+
+**Total Sprint 2:** 10h
 
 # Sprint 3
 
-- Revisão das melhorias apontadas nos protótipos de telas e no código parcial para garantir navegabilidade fluida.
+- Categorias, tags e sugestão automática (`PULSO-FEAT-013`, tasks 028–029): seed, CRUD, `recursoCategoriaRules` (VA/VR; VT rejeitado), `categorySuggestionService`.
+- PR [#299](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/299) → Sprint-3 · issues [#26](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/26), [#116](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/116), [#117](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/117).
+- Revisão de aceite do núcleo de transações (012–017) e da FEAT-108 (mobile + protótipos, Backlog).
 
-- Conexão das telas do front-end com o back-end para permitir navegação real com dados simulados/reais.
+**Horas:** 14h
 
-- Consolidar o Fechamento da Sprint 3 e o Planejamento da Sprint 4
-
-
+**Total Sprint 3:** 14h
