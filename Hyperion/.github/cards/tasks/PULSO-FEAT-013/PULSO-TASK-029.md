@@ -1,6 +1,6 @@
 ---
 card_id: PULSO-TASK-029
-title: "SugestÃ£o automÃ¡tica de categoria (RF-028)"
+title: "Sugestão automática de categoria (RF-028)"
 status: Done
 type: Task
 priority: Medium
@@ -13,51 +13,51 @@ categories:
   - Backend
   - Frontend
   - Web
-  - Regra de NegÃ³cio
+  - Regra de Negócio
 ---
 
-# [TASK] SugestÃ£o automÃ¡tica de categoria (RF-028)
+# [TASK] Sugestão automática de categoria (RF-028)
 
-> **Contexto:** Sugerir categoria com base em descriÃ§Ãµes similares do histÃ³rico do usuÃ¡rio.
+> **Contexto:** Sugerir categoria com base em descrições similares do histórico do usuário.
 
-## ðŸ“ DescriÃ§Ã£o
+## 📝 Descrição
 
-Endpoint backend + debounce no formulÃ¡rio para preencher categoria automaticamente ao digitar descriÃ§Ã£o.
+Endpoint backend + debounce no formulário para preencher categoria automaticamente ao digitar descrição.
 
-## âœ… CritÃ©rios de Aceite
+## ✅ Critérios de Aceite
 
-**Quando** descriÃ§Ã£o â‰¥3 chars no form,  
-**EntÃ£o** apÃ³s 400ms chama `GET /transacoes/sugestao-categoria`; preenche select se confianÃ§a suficiente.
+**Quando** descrição ≥3 chars no form,  
+**Então** após 400ms chama `GET /transacoes/sugestao-categoria`; preenche select se confiança suficiente.
 
-## ðŸ› ï¸ ImplementaÃ§Ã£o
+## 🛠️ Implementação
 
-### Backend (NOVO â€” CRIAR)
+### Backend (NOVO — CRIAR)
 
-| Arquivo | FunÃ§Ã£o |
+| Arquivo | Função |
 |---------|--------|
-| `categorySuggestionService.js` | Orquestra histÃ³rico + utils |
+| `categorySuggestionService.js` | Orquestra histórico + utils |
 | `categorySuggestionUtils.js` | `similaridade`, `sugerirCategoriaId` (Dice bigramas) |
 | `transactionRepository.js` | `listarDescricoesPorTipo` |
 
-### Frontend (NOVO â€” CRIAR)
+### Frontend (NOVO — CRIAR)
 
 Em `TransactionFormModal.jsx`:
 - Debounce 400ms (`SUGESTAO_DEBOUNCE_MS`)
 - Flag `categoriaAutoSugerida` para UX
 - `transactionService.sugerirCategoria({ tipo, descricao })`
 
-## ðŸ‘¤ ResponsÃ¡vel
+
+## 👤 Responsável
 
 Alice Shikida (`aliceshikida`)
 
-## ðŸ”— Pull Requests
+## 🔗 Pull Requests
 
-- [#299](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/299) â€” `categorySuggestionService` / utils (`FEAT-013`) â†’ issue [#117](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/117)
+- [#299](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/299) — `categorySuggestionService` / utils (`FEAT-013`) → issue [#117](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/117)
+## 📋 Resumo
 
-## ðŸ“‹ Resumo
-
-### âœ… ConcluÃ­do
+### ✅ Concluído
 - Algoritmo e contrato API especificados
 
-### â³ Pendente
-- Implementar service + integraÃ§Ã£o no form
+### ⏳ Pendente
+- Implementar service + integração no form

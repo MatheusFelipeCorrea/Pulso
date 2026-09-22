@@ -1,6 +1,6 @@
 ---
 card_id: PULSO-TASK-032
-title: "ExclusÃ£o recorrente com preservaÃ§Ã£o de histÃ³rico"
+title: "Exclusão recorrente com preservação de histórico"
 status: Done
 type: Task
 priority: High
@@ -13,51 +13,51 @@ categories:
   - Backend
   - Frontend
   - Web
-  - Regra de NegÃ³cio
+  - Regra de Negócio
 ---
 
-# [TASK] ExclusÃ£o recorrente com preservaÃ§Ã£o de histÃ³rico
+# [TASK] Exclusão recorrente com preservação de histórico
 
-> **Contexto:** RF-NOVO-C1 â€” "excluir esta e futuras" sem apagar passado.
+> **Contexto:** RF-NOVO-C1 — "excluir esta e futuras" sem apagar passado.
 
-## ðŸ“ DescriÃ§Ã£o
+## 📝 Descrição
 
-Implementar `excluirTransacao` com flag `excluirFuturas` e UI de opÃ§Ãµes no DeleteTransactionModal.
+Implementar `excluirTransacao` com flag `excluirFuturas` e UI de opções no DeleteTransactionModal.
 
-## âœ… CritÃ©rios de Aceite
+## ✅ Critérios de Aceite
 
 **Quando** DELETE com `excluirFuturas=true`,  
-**EntÃ£o** remove filhas â‰¥ dataCorte; aplica UNTIL na mÃ£e; mantÃ©m filhas anteriores.
+**Então** remove filhas ≥ dataCorte; aplica UNTIL na mãe; mantém filhas anteriores.
 
-## ðŸ› ï¸ ImplementaÃ§Ã£o
+## 🛠️ Implementação
 
-### Backend (NOVO â€” CRIAR)
+### Backend (NOVO — CRIAR)
 
 Em `transactionService.excluirTransacao`:
-- Detectar mÃ£e vs. filha recorrente
+- Detectar mãe vs. filha recorrente
 - `transactionRepository.excluirRecorrentesFilhasAPartirDe`
 - `encerrarRecorrencia(paiId, novaRegra)`
 
-### Frontend (NOVO â€” CRIAR)
+### Frontend (NOVO — CRIAR)
 
-| Arquivo | FunÃ§Ã£o |
+| Arquivo | Função |
 |---------|--------|
-| `DeleteTransactionModal.jsx` | OpÃ§Ãµes: sÃ³ esta / esta e futuras |
+| `DeleteTransactionModal.jsx` | Opções: só esta / esta e futuras |
 | `transactionService.excluirTransacao` | Query params delete |
 
-## ðŸ‘¤ ResponsÃ¡vel
 
-VinÃ­cius SimÃµes (`ViniSimoesV`)
+## 👤 Responsável
 
-## ðŸ”— Pull Requests
+Vinícius Simões (`ViniSimoesV`)
 
-- [#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) â€” ExclusÃ£o recorrente (`FEAT-015`) â†’ issue [#155](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/155)
-- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) â€” `DeleteTransactionModal` (`FEAT-016`)
+## 🔗 Pull Requests
 
-## ðŸ“‹ Resumo
+- [#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) — Exclusão recorrente (`FEAT-015`) → issue [#155](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/155)
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) — `DeleteTransactionModal` (`FEAT-016`)
+## 📋 Resumo
 
-### âœ… ConcluÃ­do
+### ✅ Concluído
 - Comportamento RF-NOVO-C1 especificado
 
-### â³ Pendente
-- Implementar backend + modal de exclusÃ£o
+### ⏳ Pendente
+- Implementar backend + modal de exclusão

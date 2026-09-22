@@ -1,6 +1,6 @@
 ---
 card_id: PULSO-FEAT-015
-title: "RecorrÃªncia e geraÃ§Ã£o automÃ¡tica"
+title: "Recorrência e geração automática"
 status: Done
 type: Feature
 priority: High
@@ -12,52 +12,52 @@ due_date: null
 categories:
   - Backend
   - Infra / DevOps
-  - Regra de NegÃ³cio
+  - Regra de Negócio
 ---
 
-# [FEATURE] RecorrÃªncia e geraÃ§Ã£o automÃ¡tica
+# [FEATURE] Recorrência e geração automática
 
-> **Contexto:** TransaÃ§Ãµes recorrentes com RRULE e job cron que gera ocorrÃªncias filhas (RF-021, RF-022); exclusÃ£o inteligente preservando passado.
+> **Contexto:** Transações recorrentes com RRULE e job cron que gera ocorrências filhas (RF-021, RF-022); exclusão inteligente preservando passado.
 
-**Refs:** RF-021 Â· RF-022
+**Refs:** RF-021 · RF-022
 
-## ðŸ“ DescriÃ§Ã£o
+## 📝 Descrição
 
-MÃ£e recorrente com `regraRecorrencia` (RFC 5545); filhas com `paiId`; job `recurringTransactions` Ã s 00:05; exclusÃ£o "esta e futuras" aplica `UNTIL` na regra e remove filhas futuras.
+Mãe recorrente com `regraRecorrencia` (RFC 5545); filhas com `paiId`; job `recurringTransactions` às 00:05; exclusão "esta e futuras" aplica `UNTIL` na regra e remove filhas futuras.
 
-## âœ… CritÃ©rios de Aceite
+## ✅ Critérios de Aceite
 
-### CenÃ¡rio 1 â€” Criar recorrente
+### Cenário 1 — Criar recorrente
 **Quando** `recorrente=true` + `regraRecorrencia`,  
-**EntÃ£o** transaÃ§Ã£o mÃ£e criada; data futura permitida.
+**Então** transação mãe criada; data futura permitida.
 
-### CenÃ¡rio 2 â€” Job diÃ¡rio
-**EntÃ£o** gera filha se hoje Ã© dia de ocorrÃªncia e ainda nÃ£o existe filha do dia.
+### Cenário 2 — Job diário
+**Então** gera filha se hoje é dia de ocorrência e ainda não existe filha do dia.
 
-### CenÃ¡rio 3 â€” Excluir sÃ³ esta
-**EntÃ£o** remove apenas transaÃ§Ã£o selecionada.
+### Cenário 3 — Excluir só esta
+**Então** remove apenas transação selecionada.
 
-### CenÃ¡rio 4 â€” Excluir esta e futuras
-**EntÃ£o** remove filhas â‰¥ data corte; encerra mÃ£e com `UNTIL`; **preserva** filhas passadas.
+### Cenário 4 — Excluir esta e futuras
+**Então** remove filhas ≥ data corte; encerra mãe com `UNTIL`; **preserva** filhas passadas.
 
-## ðŸ”— Sub-issues
+## 🔗 Sub-issues
 
 - PULSO-TASK-031
 - PULSO-TASK-032
 
-## ðŸ‘¤ ResponsÃ¡vel
 
-VinÃ­cius SimÃµes (`ViniSimoesV`)
+## 👤 Responsável
 
-## ðŸ”— Pull Requests
+Vinícius Simões (`ViniSimoesV`)
 
-- [#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) â€” RecorrÃªncia e job diÃ¡rio (`FEAT-015`) â†’ issue [#28](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/28)
+## 🔗 Pull Requests
 
-## ðŸ“‹ Resumo
+- [#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) — Recorrência e job diário (`FEAT-015`) → issue [#28](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/28)
+## 📋 Resumo
 
-### âœ… ConcluÃ­do
-- Fluxos de recorrÃªncia e exclusÃ£o especificados (RF-NOVO-C1)
+### ✅ Concluído
+- Fluxos de recorrência e exclusão especificados (RF-NOVO-C1)
 
-### â³ Pendente
-- PULSO-TASK-031 â€” job + recurrenceUtils
-- PULSO-TASK-032 â€” excluirTransacao recorrente + UI DeleteTransactionModal
+### ⏳ Pendente
+- PULSO-TASK-031 — job + recurrenceUtils
+- PULSO-TASK-032 — excluirTransacao recorrente + UI DeleteTransactionModal

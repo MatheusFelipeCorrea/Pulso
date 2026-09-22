@@ -1,6 +1,6 @@
 ---
 card_id: PULSO-TASK-030
-title: "TransferÃªncias â€” backend e formulÃ¡rio"
+title: "Transferências — backend e formulário"
 status: Done
 type: Task
 priority: Highest
@@ -13,24 +13,24 @@ categories:
   - Backend
   - Frontend
   - Web
-  - Regra de NegÃ³cio
+  - Regra de Negócio
 ---
 
-# [TASK] TransferÃªncias â€” backend e formulÃ¡rio
+# [TASK] Transferências — backend e formulário
 
-> **Contexto:** RF-027 â€” tipo TRANSFERENCIA ponta a ponta.
+> **Contexto:** RF-027 — tipo TRANSFERENCIA ponta a ponta.
 
-## ðŸ“ DescriÃ§Ã£o
+## 📝 Descrição
 
-Implementar fluxo completo de transferÃªncia entre recursos no service e no TransactionFormModal.
+Implementar fluxo completo de transferência entre recursos no service e no TransactionFormModal.
 
-## âœ… CritÃ©rios de Aceite
+## ✅ Critérios de Aceite
 
-**EntÃ£o** criar/editar transferÃªncia valida origemâ‰ destino; UI oculta categoria; notificaÃ§Ã£o especÃ­fica.
+**Então** criar/editar transferência valida origem≠destino; UI oculta categoria; notificação específica.
 
-## ðŸ› ï¸ ImplementaÃ§Ã£o
+## 🛠️ Implementação
 
-### Backend (NOVO â€” CRIAR)
+### Backend (NOVO — CRIAR)
 
 Em `transactionService.criarTransacao` / `editarTransacao`:
 - Branch `tipo === 'TRANSFERENCIA'`
@@ -38,27 +38,27 @@ Em `transactionService.criarTransacao` / `editarTransacao`:
 
 Agregados em `calcularAgregados`: filtrar apenas RECEITA/DESPESA
 
-### Frontend (NOVO â€” CRIAR)
+### Frontend (NOVO — CRIAR)
 
 Em `TransactionFormModal.jsx`:
 - Toggle tipo inclui `TRANSFERENCIA`
 - Campos `recurso` + `recursoDestino`
 - `validarTransferencia()` em `transactionValidation.js`
 
-## ðŸ‘¤ ResponsÃ¡vel
+
+## 👤 Responsável
 
 Sofia Vasconcelos (`sofiavasconcelosms`)
 
-## ðŸ”— Pull Requests
+## 🔗 Pull Requests
 
-- [#300](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/300) â€” Testes de transferÃªncia (`FEAT-014` + `FEAT-017`) â†’ issue [#152](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/152)
-- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) â€” `TRANSFERENCIA` no service (`FEAT-012`)
-- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) â€” Toggle no formulÃ¡rio (`FEAT-016`)
+- [#300](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/300) — Testes de transferência (`FEAT-014` + `FEAT-017`) → issue [#152](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/152)
+- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) — `TRANSFERENCIA` no service (`FEAT-012`)
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) — Toggle no formulário (`FEAT-016`)
+## 📋 Resumo
 
-## ðŸ“‹ Resumo
-
-### âœ… ConcluÃ­do
+### ✅ Concluído
 - Spec RF-027 documentada
 
-### â³ Pendente
-- Implementar branch transferÃªncia API + UI
+### ⏳ Pendente
+- Implementar branch transferência API + UI

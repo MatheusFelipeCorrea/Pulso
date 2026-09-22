@@ -23,7 +23,9 @@ categories:
 
 > **Contexto:** Sistema completo de autenticação e autorização do Pulso — base de segurança para todos os módulos financeiros. Deve cobrir cadastro email/senha com verificação, login JWT (access + refresh rotativo), sessão em cookies `httpOnly` na Web e secure storage no Flutter, recuperação de senha, Google OAuth 2.0 (Passport na SPA + ID token no app), middleware de rotas protegidas e 9 telas auth responsivas (claro/escuro).
 
-**Refs:** RF-001–006 · RF-140 · RN-131–143
+**Refs:** RF-001–006 · RF-140 · RN-131–143  
+**Spec:** `Hyperion/.github/plans/specs/PULSO-EPIC-001-autenticacao/`  
+**Spec Flutter:** `Hyperion/.github/plans/specs/PULSO-107-auth-flutter/`
 
 ## 🎯 Objetivos
 

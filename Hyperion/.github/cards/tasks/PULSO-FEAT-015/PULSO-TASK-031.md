@@ -12,49 +12,49 @@ due_date: null
 categories:
   - Backend
   - Infra / DevOps
-  - Regra de NegÃ³cio
+  - Regra de Negócio
 ---
 
 # [TASK] Job recurringTransactions e recurrenceUtils
 
-> **Contexto:** RF-022 â€” geraÃ§Ã£o automÃ¡tica de ocorrÃªncias recorrentes.
+> **Contexto:** RF-022 — geração automática de ocorrências recorrentes.
 
-## ðŸ“ DescriÃ§Ã£o
+## 📝 Descrição
 
-Job cron que avalia mÃ£es recorrentes e cria filhas no dia correto, respeitando UNTIL e deduplicaÃ§Ã£o diÃ¡ria.
+Job cron que avalia mães recorrentes e cria filhas no dia correto, respeitando UNTIL e deduplicação diária.
 
-## ðŸ› ï¸ ImplementaÃ§Ã£o
+## 🛠️ Implementação
 
-### `recurringTransactions.js` (NOVO â€” CRIAR)
+### `recurringTransactions.js` (NOVO — CRIAR)
 
 Criar em: `Codigo/api/src/jobs/recurringTransactions.js`
 
-- `runRecurringTransactions()` â€” lista mÃ£es, `isOccurrenceToday`, cria filha
-- FrequÃªncias: WEEKLY (INTERVAL), MONTHLY, YEARLY
+- `runRecurringTransactions()` — lista mães, `isOccurrenceToday`, cria filha
+- Frequências: WEEKLY (INTERVAL), MONTHLY, YEARLY
 - Registro cron: `server.js` 00:05 + `cronController.daily`
 
-### `recurrenceUtils.js` (NOVO â€” CRIAR)
+### `recurrenceUtils.js` (NOVO — CRIAR)
 
 - `buildRecurrenceRule` (front espelha via `transactionRecurrence.js`)
 - `calcularUntilAPartirDoCorte`, `aplicarUntilNaRegra`
 - `startOfDay`
 
-### Form (NOVO â€” CRIAR)
+### Form (NOVO — CRIAR)
 
-`TransactionFormModal`: checkbox recorrente, frequÃªncia, atÃ© quando, `buildRecurrenceRule`
+`TransactionFormModal`: checkbox recorrente, frequência, até quando, `buildRecurrenceRule`
 
-## ðŸ‘¤ ResponsÃ¡vel
 
-VinÃ­cius SimÃµes (`ViniSimoesV`)
+## 👤 Responsável
 
-## ðŸ”— Pull Requests
+Vinícius Simões (`ViniSimoesV`)
 
-- [#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) â€” Job + `recurrenceUtils` (`FEAT-015`) â†’ issue [#119](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/119)
+## 🔗 Pull Requests
 
-## ðŸ“‹ Resumo
+- [#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) — Job + `recurrenceUtils` (`FEAT-015`) → issue [#119](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/119)
+## 📋 Resumo
 
-### âœ… ConcluÃ­do
-- LÃ³gica de ocorrÃªncia e RRULE bÃ¡sica especificada
+### ✅ Concluído
+- Lógica de ocorrência e RRULE básica especificada
 
-### â³ Pendente
+### ⏳ Pendente
 - Implementar job + utils + wire cron

@@ -1,6 +1,6 @@
 ---
 card_id: PULSO-FEAT-016
-title: "Frontend â€” pÃ¡gina de transaÃ§Ãµes"
+title: "Frontend — página de transações"
 status: Done
 type: Feature
 priority: Highest
@@ -15,50 +15,50 @@ categories:
   - UX / UI
 ---
 
-# [FEATURE] Frontend â€” pÃ¡gina de transaÃ§Ãµes
+# [FEATURE] Frontend — página de transações
 
-> **Contexto:** Tela principal `/transactions` com resumo, filtros, lista, paginaÃ§Ã£o e modais (RF-016â€“025).
+> **Contexto:** Tela principal `/transactions` com resumo, filtros, lista, paginação e modais (RF-016–025).
 
-**Refs:** RF-016 Â· RF-017 Â· RF-023 Â· RF-024 Â· RF-025
+**Refs:** RF-016 · RF-017 · RF-023 · RF-024 · RF-025
 
-## ðŸ“ DescriÃ§Ã£o
+## 📝 Descrição
 
-PÃ¡gina orquestra listagem + resumo paralelos; filtros pendentes vs. ativos; modais criar/editar/excluir; gestÃ£o inline de categorias e tags.
+Página orquestra listagem + resumo paralelos; filtros pendentes vs. ativos; modais criar/editar/excluir; gestão inline de categorias e tags.
 
-## âœ… CritÃ©rios de Aceite
+## ✅ Critérios de Aceite
 
-### CenÃ¡rio 1 â€” Listagem
-**EntÃ£o** transaÃ§Ãµes agrupadas por data; paginaÃ§Ã£o 10/pÃ¡gina; loading/error states.
+### Cenário 1 — Listagem
+**Então** transações agrupadas por data; paginação 10/página; loading/error states.
 
-### CenÃ¡rio 2 â€” Filtros
-**EntÃ£o** perÃ­odo, categoria, tipo, recurso, busca texto/tag; botÃµes Filtrar/Limpar.
+### Cenário 2 — Filtros
+**Então** período, categoria, tipo, recurso, busca texto/tag; botões Filtrar/Limpar.
 
-### CenÃ¡rio 3 â€” Resumo
-**EntÃ£o** cards receitas/despesas/saldo refletem filtros ativos.
+### Cenário 3 — Resumo
+**Então** cards receitas/despesas/saldo refletem filtros ativos.
 
-### CenÃ¡rio 4 â€” CRUD
-**EntÃ£o** modais criar/editar com validaÃ§Ã£o; toast sucesso/erro.
+### Cenário 4 — CRUD
+**Então** modais criar/editar com validação; toast sucesso/erro.
 
-## ðŸ”— Sub-issues
+## 🔗 Sub-issues
 
 - PULSO-TASK-033
 - PULSO-TASK-034
 - PULSO-TASK-035
 
-## ðŸ‘¤ ResponsÃ¡vel
+
+## 👤 Responsável
 
 Maria Clara (`mariaoliveira27`)
 
-## ðŸ”— Pull Requests
+## 🔗 Pull Requests
 
-- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) â€” PÃ¡gina de transaÃ§Ãµes (`FEAT-016`) â†’ issue [#29](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/29)
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) — Página de transações (`FEAT-016`) → issue [#29](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/29)
+## 📋 Resumo
 
-## ðŸ“‹ Resumo
-
-### âœ… ConcluÃ­do
+### ✅ Concluído
 - Spec de UX e componentes mapeada
 
-### â³ Pendente
-- PULSO-TASK-033 â€” TransactionsPage + listagem/filtros/resumo
-- PULSO-TASK-034 â€” TransactionFormModal
-- PULSO-TASK-035 â€” DeleteTransactionModal + estilos
+### ⏳ Pendente
+- PULSO-TASK-033 — TransactionsPage + listagem/filtros/resumo
+- PULSO-TASK-034 — TransactionFormModal
+- PULSO-TASK-035 — DeleteTransactionModal + estilos

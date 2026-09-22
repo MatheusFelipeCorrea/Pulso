@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-025
-title: "Banco de dados â€” transaÃ§Ãµes, tags e vÃ­nculos"
-status: Done
+title: "Banco de dados — transações, tags e vínculos"
+status: "In Progress"
 type: Task
 priority: Highest
 sprint: null
@@ -11,28 +11,28 @@ parent: PULSO-FEAT-012
 due_date: null
 categories:
   - Banco de Dados
-  - Regra de NegÃ³cio
+  - Regra de Negócio
 ---
 
-# [TASK] Banco de dados â€” transaÃ§Ãµes, tags e vÃ­nculos
+# [TASK] Banco de dados — transações, tags e vínculos
 
-> **Contexto:** Modelagem persistente para transaÃ§Ãµes financeiras e tags.
+> **Contexto:** Modelagem persistente para transações financeiras e tags.
 
-## ðŸ“ DescriÃ§Ã£o
+## 📝 Descrição
 
 Criar models Prisma e migrations para `Transacao`, `Tag`, `TransacaoTag` e campo `grupoBeneficio` em `Categoria`.
 
-## âœ… CritÃ©rios de Aceite
+## ✅ Critérios de Aceite
 
-**EntÃ£o** schema contÃ©m:
+**Então** schema contém:
 - `Transacao`: tipo, recurso, recursoDestino?, valor, data, recorrente, regraRecorrencia, paiId
-- `Tag`: nome Ãºnico por usuÃ¡rio, icone, cor
+- `Tag`: nome único por usuário, icone, cor
 - `TransacaoTag`: M:N
-- Ãndices: `[usuarioId, data]`, tipo, recurso, categoria, recorrente
+- Índices: `[usuarioId, data]`, tipo, recurso, categoria, recorrente
 
-## ðŸ› ï¸ ImplementaÃ§Ã£o
+## 🛠️ Implementação
 
-### `schema.prisma` (NOVO â€” CRIAR)
+### `schema.prisma` (NOVO — CRIAR)
 
 **Enums:** `TipoTransacao` (RECEITA, DESPESA, TRANSFERENCIA), `TipoRecurso` (DINHEIRO, VA, VR, POUPANCA), `GrupoBeneficioCategoria`
 
@@ -41,18 +41,18 @@ Criar models Prisma e migrations para `Transacao`, `Tag`, `TransacaoTag` e campo
 - `20260708100000_add_transferencia_poupanca`
 - `20260804120000_categoria_grupo_beneficio`
 
-## ðŸ‘¤ ResponsÃ¡vel
+
+## 👤 Responsável
 
 Matheus Felipe Correa (`MatheusFelipeCorrea`)
 
-## ðŸ”— Pull Requests
+## 🔗 Pull Requests
 
-- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) â€” Camada API de transaÃ§Ãµes (`FEAT-012`) â†’ issue [#113](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/113)
+- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) — Camada API de transações (`FEAT-012`) → issue [#113](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/113)
+## 📋 Resumo
 
-## ðŸ“‹ Resumo
+### ✅ Concluído
+- Spec de models e índices definida
 
-### âœ… ConcluÃ­do
-- Spec de models e Ã­ndices definida
-
-### â³ Pendente
+### ⏳ Pendente
 - Criar/aplicar migrations Prisma

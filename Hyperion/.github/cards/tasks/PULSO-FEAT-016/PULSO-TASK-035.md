@@ -1,6 +1,6 @@
 ---
 card_id: PULSO-TASK-035
-title: "Frontend â€” exclusÃ£o e estilos transactions.css"
+title: "Frontend — exclusão e estilos transactions.css"
 status: Done
 type: Task
 priority: High
@@ -16,39 +16,39 @@ categories:
   - Mobile
 ---
 
-# [TASK] Frontend â€” exclusÃ£o e estilos transactions.css
+# [TASK] Frontend — exclusão e estilos transactions.css
 
-> **Contexto:** Modal de exclusÃ£o recorrente + layout responsivo da pÃ¡gina.
+> **Contexto:** Modal de exclusão recorrente + layout responsivo da página.
 
-## ðŸ“ DescriÃ§Ã£o
+## 📝 Descrição
 
-Implementar confirmaÃ§Ã£o de delete com opÃ§Ãµes recorrentes e folha de estilos da pÃ¡gina de transaÃ§Ãµes.
+Implementar confirmação de delete com opções recorrentes e folha de estilos da página de transações.
 
-## ðŸ› ï¸ ImplementaÃ§Ã£o
+## 🛠️ Implementação
 
-### Componentes (NOVO â€” CRIAR)
+### Componentes (NOVO — CRIAR)
 
-| Arquivo | FunÃ§Ã£o |
+| Arquivo | Função |
 |---------|--------|
-| `DeleteTransactionModal.jsx` | Confirmar; opÃ§Ãµes recorrentes |
+| `DeleteTransactionModal.jsx` | Confirmar; opções recorrentes |
 | `styles/transactions.css` | Layout page, filtros, lista, modais, mobile |
 
-**Responsivo:** filtros empilham; lista legÃ­vel em mobile; CTAs full-width onde necessÃ¡rio
+**Responsivo:** filtros empilham; lista legível em mobile; CTAs full-width onde necessário
 
 Importar CSS na TransactionsPage ou bundle global.
 
-## ðŸ‘¤ ResponsÃ¡vel
+
+## 👤 Responsável
 
 Maria Clara (`mariaoliveira27`)
 
-## ðŸ”— Pull Requests
+## 🔗 Pull Requests
 
-- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) â€” exclusÃ£o e `transactions.css` (`FEAT-016`) â†’ issue [#123](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/123)
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) — exclusão e `transactions.css` (`FEAT-016`) → issue [#123](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/123)
+## 📋 Resumo
 
-## ðŸ“‹ Resumo
-
-### âœ… ConcluÃ­do
+### ✅ Concluído
 - Spec delete recorrente + breakpoints definidos
 
-### â³ Pendente
+### ⏳ Pendente
 - Implementar DeleteTransactionModal + transactions.css
