@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-012
 title: "Backend — API de transações"
-status: Backlog
+status: Done
 type: Feature
 priority: Highest
 sprint: null
@@ -42,6 +42,14 @@ Expor endpoints autenticados em `/api/transacoes` para criar, editar, excluir, l
 - PULSO-TASK-026
 - PULSO-TASK-027
 
+
+## 👤 Responsável
+
+Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
+## 🔗 Pull Requests
+
+- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) — Camada API de transações (`FEAT-012`) → issue [#25](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/25)
 ## 📋 Resumo
 
 ### ✅ Concluído

@@ -15,11 +15,11 @@ import './styles/globals.css'
 import './styles/auth.css' // PULSO-FEAT-001 — Register / email-sent / VerifyEmail + AuthLayout
 import './styles/legal.css'
 import './styles/landing.css'
-// TEMP Sprint-2: CSS de módulos ainda ausentes no repo
+import './styles/sidebar.css'
+import './styles/transactions.css'
+import './styles/categories.css'
+// TEMP: CSS de módulos ainda ausentes
 // import './styles/pulso-components.css'
-// import './styles/sidebar.css'
-// import './styles/transactions.css'
-// import './styles/categories.css'
 // import './styles/budget.css'
 // import './styles/calendar.css'
 // import './styles/debts.css'

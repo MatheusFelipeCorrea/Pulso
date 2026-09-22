@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-014
 title: "Transferências entre recursos"
-status: Backlog
+status: Done
 type: Feature
 priority: High
 sprint: null
@@ -42,6 +42,15 @@ Tipo `TRANSFERENCIA` com `recurso` origem e `recursoDestino` destino; sem `categ
 
 - PULSO-TASK-030
 
+
+## 👤 Responsável
+
+Sofia Vasconcelos (`sofiavasconcelosms`)
+
+## 🔗 Pull Requests
+
+- [#300](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/300) — Testes de transferência e QA (`FEAT-014` + `FEAT-017`) → issue [#27](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/27)
+- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) — Tipo `TRANSFERENCIA` no service da API (`FEAT-012`)
 ## 📋 Resumo
 
 ### ✅ Concluído

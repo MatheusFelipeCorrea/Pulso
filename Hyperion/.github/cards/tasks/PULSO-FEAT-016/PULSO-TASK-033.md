@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-033
 title: "Frontend — TransactionsPage, filtros e listagem"
-status: Backlog
+status: Done
 type: Task
 priority: Highest
 sprint: null
@@ -40,6 +40,14 @@ Implementar página principal com filtros pendentes/ativos, paginação e cards 
 
 **Rota:** `App.jsx` → `path="transactions"` sob MainLayout
 
+
+## 👤 Responsável
+
+Maria Clara (`mariaoliveira27`)
+
+## 🔗 Pull Requests
+
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) — `TransactionsPage`, filtros e lista (`FEAT-016`) → issue [#121](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/121)
 ## 📋 Resumo
 
 ### ✅ Concluído

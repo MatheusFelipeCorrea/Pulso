@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-015
 title: "Recorrência e geração automática"
-status: Backlog
+status: Done
 type: Feature
 priority: High
 sprint: null
@@ -45,6 +45,14 @@ Mãe recorrente com `regraRecorrencia` (RFC 5545); filhas com `paiId`; job `recu
 - PULSO-TASK-031
 - PULSO-TASK-032
 
+
+## 👤 Responsável
+
+Vinícius Simões (`ViniSimoesV`)
+
+## 🔗 Pull Requests
+
+- [#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) — Recorrência e job diário (`FEAT-015`) → issue [#28](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/28)
 ## 📋 Resumo
 
 ### ✅ Concluído

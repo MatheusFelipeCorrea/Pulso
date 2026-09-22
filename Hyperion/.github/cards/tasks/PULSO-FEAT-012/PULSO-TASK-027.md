@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-027
 title: "Backend — routes, controller e schemas"
-status: Backlog
+status: Done
 type: Task
 priority: Highest
 sprint: null
@@ -43,6 +43,14 @@ Handlers delegando ao service + `transactionFilterService.obterOpcoes`
 
 Constantes de recursos/frequências para `/filtros`
 
+
+## 👤 Responsável
+
+Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
+## 🔗 Pull Requests
+
+- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) — routes, controller e schemas (`FEAT-012`) → issue [#115](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/115)
 ## 📋 Resumo
 
 ### ✅ Concluído

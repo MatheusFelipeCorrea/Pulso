@@ -1,26 +1,13 @@
-const { runBudgetAlertJob } = require('../jobs/budgetAlertJob');
-const { runReminderAlertJob } = require('../jobs/reminderAlertJob');
-const { runReminderRecurrenceJob } = require('../jobs/reminderRecurrenceJob');
-const { runDebtAlertJob } = require('../jobs/debtAlertJob');
-const { runDebtCleanupJob } = require('../jobs/debtCleanupJob');
-const { runNotificationCleanup } = require('../jobs/notificationCleanupJob');
-const { runChatCleanupJob } = require('../jobs/chatCleanupJob');
-const { runExpenseSplitCleanupJob } = require('../jobs/expenseSplitCleanupJob');
 const { runTokenCleanup } = require('../jobs/tokenCleanupJob');
-const { runUnverifiedAccountCleanup } = require('../jobs/unverifiedAccountCleanupJob');
 const { runRecurringTransactions } = require('../jobs/recurringTransactions');
 const logger = require('../utils/logger');
 
+// Jobs de orçamento/dívida/chat ficam comentados — módulos ainda não estão neste repo.
 const tick = async (req, res, next) => {
     try {
-        const [budget, cleanup] = await Promise.all([
-            runBudgetAlertJob(),
-            runTokenCleanup(),
-        ]);
-
+        const cleanup = await runTokenCleanup();
         res.status(200).json({
             status: 'ok',
-            budget,
             cleanup,
         });
     } catch (error) {
@@ -29,35 +16,13 @@ const tick = async (req, res, next) => {
     }
 };
 
-/** Hobby Vercel: 1×/dia — roda todos os jobs agendados (10:00 BRT). */
 const daily = async (req, res, next) => {
     try {
-        const [budget, cleanup, reminders, debts] = await Promise.all([
-            runBudgetAlertJob(),
-            runTokenCleanup(),
-            runReminderAlertJob(),
-            runDebtAlertJob(),
-        ]);
-        const recurringReminders = await runReminderRecurrenceJob();
-        const debtCleanup = await runDebtCleanupJob();
-        const unverifiedAccounts = await runUnverifiedAccountCleanup();
-        const notificationCleanup = await runNotificationCleanup();
-        const chatCleanup = await runChatCleanupJob();
-        const expenseSplitCleanup = await runExpenseSplitCleanupJob();
+        const cleanup = await runTokenCleanup();
         await runRecurringTransactions();
-
         res.status(200).json({
             status: 'ok',
-            budget,
             cleanup,
-            reminders,
-            debts,
-            debtCleanup,
-            unverifiedAccounts,
-            notificationCleanup,
-            chatCleanup,
-            expenseSplitCleanup,
-            recurringReminders,
             recurring: true,
         });
     } catch (error) {

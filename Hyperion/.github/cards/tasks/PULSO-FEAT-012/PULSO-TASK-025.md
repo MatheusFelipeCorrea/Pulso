@@ -41,6 +41,14 @@ Criar models Prisma e migrations para `Transacao`, `Tag`, `TransacaoTag` e campo
 - `20260708100000_add_transferencia_poupanca`
 - `20260804120000_categoria_grupo_beneficio`
 
+
+## 👤 Responsável
+
+Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
+## 🔗 Pull Requests
+
+- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) — Camada API de transações (`FEAT-012`) → issue [#113](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/113)
 ## 📋 Resumo
 
 ### ✅ Concluído

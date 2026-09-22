@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-034
 title: "Frontend — TransactionFormModal"
-status: Backlog
+status: Done
 type: Task
 priority: Highest
 sprint: null
@@ -39,6 +39,14 @@ Campos:
 
 **Modos:** `create` | `edit` — hidrata form a partir de `transacao`
 
+
+## 👤 Responsável
+
+Maria Clara (`mariaoliveira27`)
+
+## 🔗 Pull Requests
+
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) — `TransactionFormModal` (`FEAT-016`) → issue [#122](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/122)
 ## 📋 Resumo
 
 ### ✅ Concluído

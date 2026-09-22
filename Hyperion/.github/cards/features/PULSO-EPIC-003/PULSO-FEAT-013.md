@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-013
 title: "Categorias, tags e sugestão automática"
-status: Backlog
+status: Done
 type: Feature
 priority: High
 sprint: null
@@ -51,6 +51,14 @@ Seed de categorias no cadastro; CRUD de categorias custom com `grupoBeneficio`; 
 - PULSO-TASK-028
 - PULSO-TASK-029
 
+
+## 👤 Responsável
+
+Alice Shikida (`aliceshikida`)
+
+## 🔗 Pull Requests
+
+- [#299](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/299) — Categorias, tags e sugestão (`FEAT-013`) → issue [#26](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/26)
 ## 📋 Resumo
 
 ### ✅ Concluído

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-026
 title: "Backend — transactionService e repository"
-status: Backlog
+status: Done
 type: Task
 priority: Highest
 sprint: null
@@ -58,6 +58,14 @@ Montagem de `where` Prisma a partir de query (período, categoria, tipo, recurso
 - TRANSFERENCIA: origem ≠ destino, sem categoria
 - Resumo exclui TRANSFERENCIA dos totais receita/despesa
 
+
+## 👤 Responsável
+
+Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
+## 🔗 Pull Requests
+
+- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) — `transactionService` / repository / filtros (`FEAT-012`) → issue [#114](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/114)
 ## 📋 Resumo
 
 ### ✅ Concluído

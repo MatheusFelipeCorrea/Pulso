@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-030
 title: "Transferências — backend e formulário"
-status: Backlog
+status: Done
 type: Task
 priority: Highest
 sprint: null
@@ -45,6 +45,16 @@ Em `TransactionFormModal.jsx`:
 - Campos `recurso` + `recursoDestino`
 - `validarTransferencia()` em `transactionValidation.js`
 
+
+## 👤 Responsável
+
+Sofia Vasconcelos (`sofiavasconcelosms`)
+
+## 🔗 Pull Requests
+
+- [#300](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/300) — Testes de transferência (`FEAT-014` + `FEAT-017`) → issue [#152](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/152)
+- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) — `TRANSFERENCIA` no service (`FEAT-012`)
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) — Toggle no formulário (`FEAT-016`)
 ## 📋 Resumo
 
 ### ✅ Concluído

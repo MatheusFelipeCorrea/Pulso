@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-016
 title: "Frontend — página de transações"
-status: Backlog
+status: Done
 type: Feature
 priority: Highest
 sprint: null
@@ -45,6 +45,14 @@ Página orquestra listagem + resumo paralelos; filtros pendentes vs. ativos; mod
 - PULSO-TASK-034
 - PULSO-TASK-035
 
+
+## 👤 Responsável
+
+Maria Clara (`mariaoliveira27`)
+
+## 🔗 Pull Requests
+
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) — Página de transações (`FEAT-016`) → issue [#29](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/29)
 ## 📋 Resumo
 
 ### ✅ Concluído
