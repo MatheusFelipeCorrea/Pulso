@@ -26,14 +26,14 @@ Professores: Leonardo Vilela, João Paulo Aramuni, Arthur Mol.
 |-----|--------|------------|
 | Web | `Codigo/Pulso/web` | React + Vite |
 | API | `Codigo/Pulso/api` | Node.js + Express + Prisma + PostgreSQL |
-| Native | `Codigo/Pulso/mobile` | Flutter (ainda sem scaffold) |
+| Native | `Codigo/Pulso/mobile` | Flutter (auth Sprint-2; transações FEAT-108) |
 
 Kit Hyperion aninhado em `Hyperion/` (`kit.root: Hyperion`).
 
 ## Constraints
 
 - Disciplina TI5 / PMG-ES — documentação PUC em `docs/`.
-- Web e API já têm `package.json`; mobile ainda é placeholder.
+- Web e API já têm `package.json`; Flutter tem auth; transações no app ainda não.
 - Produto 100% gratuito (visão do README).
 
 ## Glossary
