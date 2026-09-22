@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-013
-title: "Categorias, tags e sugestão automática"
-status: Backlog
+title: "Categorias, tags e sugestÃ£o automÃ¡tica"
+status: Done
 type: Feature
 priority: High
 sprint: null
@@ -13,49 +13,57 @@ categories:
   - Backend
   - Frontend
   - Web
-  - Regra de Negócio
+  - Regra de NegÃ³cio
 ---
 
-# [FEATURE] Categorias, tags e sugestão automática
+# [FEATURE] Categorias, tags e sugestÃ£o automÃ¡tica
 
-> **Contexto:** Categorias padrão/personalizadas, tags livres e inteligência de sugestão + validação recurso×categoria (RF-019–020, RF-026, RF-028).
+> **Contexto:** Categorias padrÃ£o/personalizadas, tags livres e inteligÃªncia de sugestÃ£o + validaÃ§Ã£o recursoÃ—categoria (RF-019â€“020, RF-026, RF-028).
 
-**Refs:** RF-018 · RF-019 · RF-020 · RF-026 · RF-028
+**Refs:** RF-018 Â· RF-019 Â· RF-020 Â· RF-026 Â· RF-028
 
-## 📝 Descrição
+## ðŸ“ DescriÃ§Ã£o
 
-Seed de categorias no cadastro; CRUD de categorias custom com `grupoBeneficio`; tags M:N; endpoint de sugestão por similaridade de descrição; validação VA/VR × categoria e rejeição de recurso VT.
+Seed de categorias no cadastro; CRUD de categorias custom com `grupoBeneficio`; tags M:N; endpoint de sugestÃ£o por similaridade de descriÃ§Ã£o; validaÃ§Ã£o VA/VR Ã— categoria e rejeiÃ§Ã£o de recurso VT.
 
-## ✅ Critérios de Aceite
+## âœ… CritÃ©rios de Aceite
 
-### Cenário 1 — Categorias padrão
-**Então** novo usuário recebe seed (`categoryService.seedCategoriasPadrao`).
+### CenÃ¡rio 1 â€” Categorias padrÃ£o
+**EntÃ£o** novo usuÃ¡rio recebe seed (`categoryService.seedCategoriasPadrao`).
 
-### Cenário 2 — Categoria custom
+### CenÃ¡rio 2 â€” Categoria custom
 **Quando** cria categoria DESPESA com `grupoBeneficio=VA`,  
-**Então** só aceita despesas com recurso VA.
+**EntÃ£o** sÃ³ aceita despesas com recurso VA.
 
-### Cenário 3 — Tags
-**Então** transação pode ter N tags; nome único por usuário.
+### CenÃ¡rio 3 â€” Tags
+**EntÃ£o** transaÃ§Ã£o pode ter N tags; nome Ãºnico por usuÃ¡rio.
 
-### Cenário 4 — Sugestão RF-028
+### CenÃ¡rio 4 â€” SugestÃ£o RF-028
 **Quando** `GET /transacoes/sugestao-categoria?tipo=&descricao=`,  
-**Então** retorna `categoriaId` sugerida por histórico (Dice/bigramas).
+**EntÃ£o** retorna `categoriaId` sugerida por histÃ³rico (Dice/bigramas).
 
-### Cenário 5 — RF-026
-**Quando** despesa com recurso VT ou VA/VR incompatível com `grupoBeneficio`,  
-**Então** retorna `400` com mensagem explicativa (`recursoCategoriaRules`).
+### CenÃ¡rio 5 â€” RF-026
+**Quando** despesa com recurso VT ou VA/VR incompatÃ­vel com `grupoBeneficio`,  
+**EntÃ£o** retorna `400` com mensagem explicativa (`recursoCategoriaRules`).
 
-## 🔗 Sub-issues
+## ðŸ”— Sub-issues
 
 - PULSO-TASK-028
 - PULSO-TASK-029
 
-## 📋 Resumo
+## ðŸ‘¤ ResponsÃ¡vel
 
-### ✅ Concluído
-- Regras de domínio e modais de gestão especificados
+Alice Shikida (`aliceshikida`)
 
-### ⏳ Pendente
-- PULSO-TASK-028 — validação recurso×categoria + modals categorias/tags
-- PULSO-TASK-029 — sugestão automática backend + debounce no form
+## ðŸ”— Pull Requests
+
+- [#299](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/299) â€” Categorias, tags e sugestÃ£o (`FEAT-013`) â†’ issue [#26](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/26)
+
+## ðŸ“‹ Resumo
+
+### âœ… ConcluÃ­do
+- Regras de domÃ­nio e modais de gestÃ£o especificados
+
+### â³ Pendente
+- PULSO-TASK-028 â€” validaÃ§Ã£o recursoÃ—categoria + modals categorias/tags
+- PULSO-TASK-029 â€” sugestÃ£o automÃ¡tica backend + debounce no form

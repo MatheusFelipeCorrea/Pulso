@@ -1,9 +1,10 @@
 const express = require('express');
 const authRoutes = require('./authRoutes');
-// TEMP Sprint-2: demais rotas comentadas até os arquivos existirem no repo (API sobe só com Auth).
-// const transactionRoutes = require('./transactionRoutes');
-// const categoryRoutes = require('./categoryRoutes');
-// const tagRoutes = require('./tagRoutes');
+const transactionRoutes = require('./transactionRoutes');
+const categoryRoutes = require('./categoryRoutes');
+const tagRoutes = require('./tagRoutes');
+const cronRoutes = require('./cronRoutes');
+// TEMP: demais módulos ainda não estão neste repo.
 // const budgetRoutes = require('./budgetRoutes');
 // const notificationRoutes = require('./notificationRoutes');
 // const reminderRoutes = require('./reminderRoutes');
@@ -15,7 +16,6 @@ const authRoutes = require('./authRoutes');
 // const viagemRoutes = require('./viagemRoutes');
 // const grupoRoutes = require('./grupoRoutes');
 // const purchasePlanningRoutes = require('./purchasePlanningRoutes');
-// const cronRoutes = require('./cronRoutes');
 // const syncRoutes = require('./syncRoutes');
 // const dashboardRoutes = require('./dashboardRoutes');
 // const importRoutes = require('./importRoutes');
@@ -23,9 +23,10 @@ const authRoutes = require('./authRoutes');
 const router = express.Router();
 
 router.use('/auth', authRoutes);
-// router.use('/transacoes', transactionRoutes);
-// router.use('/categorias', categoryRoutes);
-// router.use('/tags', tagRoutes);
+router.use('/transacoes', transactionRoutes);
+router.use('/categorias', categoryRoutes);
+router.use('/tags', tagRoutes);
+router.use('/cron', cronRoutes);
 // router.use('/orcamentos', budgetRoutes);
 // router.use('/notificacoes', notificationRoutes);
 // router.use('/lembretes', reminderRoutes);
@@ -37,7 +38,6 @@ router.use('/auth', authRoutes);
 // router.use('/viagens', viagemRoutes);
 // router.use('/grupos', grupoRoutes);
 // router.use('/planejamento-compra', purchasePlanningRoutes);
-// router.use('/cron', cronRoutes);
 // router.use('/sync', syncRoutes);
 // router.use('/dashboard', dashboardRoutes);
 // router.use('/importacoes', importRoutes);

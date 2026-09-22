@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-028
-title: "Categorias, tags e validação recurso×categoria"
-status: Backlog
+title: "Categorias, tags e validaÃ§Ã£o recursoÃ—categoria"
+status: Done
 type: Task
 priority: High
 sprint: null
@@ -13,22 +13,22 @@ categories:
   - Backend
   - Frontend
   - Web
-  - Regra de Negócio
+  - Regra de NegÃ³cio
 ---
 
-# [TASK] Categorias, tags e validação recurso×categoria
+# [TASK] Categorias, tags e validaÃ§Ã£o recursoÃ—categoria
 
-> **Contexto:** RF-019–020, RF-026 — gestão de taxonomia e compatibilidade recurso/categoria.
+> **Contexto:** RF-019â€“020, RF-026 â€” gestÃ£o de taxonomia e compatibilidade recurso/categoria.
 
-## 📝 Descrição
+## ðŸ“ DescriÃ§Ã£o
 
-Implementar seed de categorias, CRUD via modais na página de transações e validação `grupoBeneficio` no backend e frontend.
+Implementar seed de categorias, CRUD via modais na pÃ¡gina de transaÃ§Ãµes e validaÃ§Ã£o `grupoBeneficio` no backend e frontend.
 
-## 🛠️ Implementação
+## ðŸ› ï¸ ImplementaÃ§Ã£o
 
-### Backend (NOVO — CRIAR)
+### Backend (NOVO â€” CRIAR)
 
-| Arquivo | Função |
+| Arquivo | FunÃ§Ã£o |
 |---------|--------|
 | `categoryService.js` | `seedCategoriasPadrao`, CRUD |
 | `tagService.js` / `tagRepository.js` | CRUD tags |
@@ -37,25 +37,33 @@ Implementar seed de categorias, CRUD via modais na página de transações e val
 
 **Campo:** `Categoria.grupoBeneficio` enum (VA, VR, ALIMENTACAO, etc.; VT legado rejeitado na API)
 
-### Frontend (NOVO — CRIAR)
+### Frontend (NOVO â€” CRIAR)
 
-| Arquivo | Função |
+| Arquivo | FunÃ§Ã£o |
 |---------|--------|
 | `CategoryManageModal.jsx` | CRUD categorias + preset grupoBeneficio |
 | `TagManageModal.jsx` | CRUD tags |
 | `transactionValidation.js` | `validarRecursoCategoria` espelho client |
-| `useTransactionFilterOptions.js` | Hook cache opções `/filtros` |
+| `useTransactionFilterOptions.js` | Hook cache opÃ§Ãµes `/filtros` |
 
-## 📐 Regras de Negócio
+## ðŸ“ Regras de NegÃ³cio
 
-- RF-026: recurso VT rejeitado; VA/VR incompatível com `grupoBeneficio` da categoria
-- Categoria.tipo deve bater com transação.tipo
-- Tag nome único case-insensitive por usuário
+- RF-026: recurso VT rejeitado; VA/VR incompatÃ­vel com `grupoBeneficio` da categoria
+- Categoria.tipo deve bater com transaÃ§Ã£o.tipo
+- Tag nome Ãºnico case-insensitive por usuÃ¡rio
 
-## 📋 Resumo
+## ðŸ‘¤ ResponsÃ¡vel
 
-### ✅ Concluído
-- Spec de validação desacoplada do nome literal (RF-NOVO-C2/C3)
+Alice Shikida (`aliceshikida`)
 
-### ⏳ Pendente
-- Implementar rules + modais de gestão
+## ðŸ”— Pull Requests
+
+- [#299](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/299) â€” Categorias, tags e `recursoCategoriaRules` (`FEAT-013`) â†’ issue [#116](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/116)
+
+## ðŸ“‹ Resumo
+
+### âœ… ConcluÃ­do
+- Spec de validaÃ§Ã£o desacoplada do nome literal (RF-NOVO-C2/C3)
+
+### â³ Pendente
+- Implementar rules + modais de gestÃ£o

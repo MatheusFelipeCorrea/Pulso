@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-035
-title: "Frontend — exclusão e estilos transactions.css"
-status: Backlog
+title: "Frontend â€” exclusÃ£o e estilos transactions.css"
+status: Done
 type: Task
 priority: High
 sprint: null
@@ -16,31 +16,39 @@ categories:
   - Mobile
 ---
 
-# [TASK] Frontend — exclusão e estilos transactions.css
+# [TASK] Frontend â€” exclusÃ£o e estilos transactions.css
 
-> **Contexto:** Modal de exclusão recorrente + layout responsivo da página.
+> **Contexto:** Modal de exclusÃ£o recorrente + layout responsivo da pÃ¡gina.
 
-## 📝 Descrição
+## ðŸ“ DescriÃ§Ã£o
 
-Implementar confirmação de delete com opções recorrentes e folha de estilos da página de transações.
+Implementar confirmaÃ§Ã£o de delete com opÃ§Ãµes recorrentes e folha de estilos da pÃ¡gina de transaÃ§Ãµes.
 
-## 🛠️ Implementação
+## ðŸ› ï¸ ImplementaÃ§Ã£o
 
-### Componentes (NOVO — CRIAR)
+### Componentes (NOVO â€” CRIAR)
 
-| Arquivo | Função |
+| Arquivo | FunÃ§Ã£o |
 |---------|--------|
-| `DeleteTransactionModal.jsx` | Confirmar; opções recorrentes |
+| `DeleteTransactionModal.jsx` | Confirmar; opÃ§Ãµes recorrentes |
 | `styles/transactions.css` | Layout page, filtros, lista, modais, mobile |
 
-**Responsivo:** filtros empilham; lista legível em mobile; CTAs full-width onde necessário
+**Responsivo:** filtros empilham; lista legÃ­vel em mobile; CTAs full-width onde necessÃ¡rio
 
 Importar CSS na TransactionsPage ou bundle global.
 
-## 📋 Resumo
+## ðŸ‘¤ ResponsÃ¡vel
 
-### ✅ Concluído
+Maria Clara (`mariaoliveira27`)
+
+## ðŸ”— Pull Requests
+
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) â€” exclusÃ£o e `transactions.css` (`FEAT-016`) â†’ issue [#123](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/123)
+
+## ðŸ“‹ Resumo
+
+### âœ… ConcluÃ­do
 - Spec delete recorrente + breakpoints definidos
 
-### ⏳ Pendente
+### â³ Pendente
 - Implementar DeleteTransactionModal + transactions.css

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-033
-title: "Frontend — TransactionsPage, filtros e listagem"
-status: Backlog
+title: "Frontend â€” TransactionsPage, filtros e listagem"
+status: Done
 type: Task
 priority: Highest
 sprint: null
@@ -15,35 +15,43 @@ categories:
   - UX / UI
 ---
 
-# [TASK] Frontend — TransactionsPage, filtros e listagem
+# [TASK] Frontend â€” TransactionsPage, filtros e listagem
 
-> **Contexto:** Shell da página `/transactions` com dados paralelos lista + resumo.
+> **Contexto:** Shell da pÃ¡gina `/transactions` com dados paralelos lista + resumo.
 
-## 📝 Descrição
+## ðŸ“ DescriÃ§Ã£o
 
-Implementar página principal com filtros pendentes/ativos, paginação e cards de resumo.
+Implementar pÃ¡gina principal com filtros pendentes/ativos, paginaÃ§Ã£o e cards de resumo.
 
-## 🛠️ Implementação
+## ðŸ› ï¸ ImplementaÃ§Ã£o
 
-### Páginas e componentes (NOVO — CRIAR)
+### PÃ¡ginas e componentes (NOVO â€” CRIAR)
 
-| Arquivo | Função |
+| Arquivo | FunÃ§Ã£o |
 |---------|--------|
-| `pages/TransactionsPage.jsx` | Orquestração estado, modais, fetch |
+| `pages/TransactionsPage.jsx` | OrquestraÃ§Ã£o estado, modais, fetch |
 | `TransactionSummaryCards.jsx` | Receitas, despesas, saldo |
-| `TransactionFilters.jsx` | Período, categoria, tipo, recurso, busca |
+| `TransactionFilters.jsx` | PerÃ­odo, categoria, tipo, recurso, busca |
 | `TransactionList.jsx` | Lista agrupada por data |
 | `services/transactionService.js` | `buscarTransacoes`, `obterResumo`, CRUD |
 | `utils/transactionFilters.js` | `DEFAULT_TRANSACTION_FILTROS`, `buildTransactionApiFiltros` |
 
-**Padrão:** `AbortController` + `Promise.all` lista/resumo; paginação `limite: 10`
+**PadrÃ£o:** `AbortController` + `Promise.all` lista/resumo; paginaÃ§Ã£o `limite: 10`
 
-**Rota:** `App.jsx` → `path="transactions"` sob MainLayout
+**Rota:** `App.jsx` â†’ `path="transactions"` sob MainLayout
 
-## 📋 Resumo
+## ðŸ‘¤ ResponsÃ¡vel
 
-### ✅ Concluído
+Maria Clara (`mariaoliveira27`)
+
+## ðŸ”— Pull Requests
+
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) â€” `TransactionsPage`, filtros e lista (`FEAT-016`) â†’ issue [#121](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/121)
+
+## ðŸ“‹ Resumo
+
+### âœ… ConcluÃ­do
 - Spec de estado e fetch paralelo definida
 
-### ⏳ Pendente
-- Implementar página e componentes de listagem/filtro
+### â³ Pendente
+- Implementar pÃ¡gina e componentes de listagem/filtro

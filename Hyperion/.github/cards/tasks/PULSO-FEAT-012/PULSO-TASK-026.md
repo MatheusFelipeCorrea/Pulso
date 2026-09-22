@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-026
-title: "Backend — transactionService e repository"
-status: Backlog
+title: "Backend â€” transactionService e repository"
+status: Done
 type: Task
 priority: Highest
 sprint: null
@@ -11,57 +11,65 @@ parent: PULSO-FEAT-012
 due_date: null
 categories:
   - Backend
-  - Regra de Negócio
+  - Regra de NegÃ³cio
 ---
 
-# [TASK] Backend — transactionService e repository
+# [TASK] Backend â€” transactionService e repository
 
-> **Contexto:** Regras de negócio centrais para CRUD, resumo e side-effects.
+> **Contexto:** Regras de negÃ³cio centrais para CRUD, resumo e side-effects.
 
-## 📝 Descrição
+## ðŸ“ DescriÃ§Ã£o
 
-Implementar service e repository com listagem filtrada, agregados, validações e integrações pós-criação.
+Implementar service e repository com listagem filtrada, agregados, validaÃ§Ãµes e integraÃ§Ãµes pÃ³s-criaÃ§Ã£o.
 
-## ✅ Critérios de Aceite
+## âœ… CritÃ©rios de Aceite
 
-**Então** métodos:
-- `listarTransacoes`, `calcularResumo` (modos fluxo/benefício/carteira)
+**EntÃ£o** mÃ©todos:
+- `listarTransacoes`, `calcularResumo` (modos fluxo/benefÃ­cio/carteira)
 - `criarTransacao`, `editarTransacao`, `excluirTransacao`
 
 **Side-effects em criar:**
-- `notificationService`, `insightService` (hooks pós-transação)
+- `notificationService`, `insightService` (hooks pÃ³s-transaÃ§Ã£o)
 
-## 🛠️ Implementação
+## ðŸ› ï¸ ImplementaÃ§Ã£o
 
-### `transactionService.js` (NOVO — CRIAR)
+### `transactionService.js` (NOVO â€” CRIAR)
 
 Criar em: `Codigo/api/src/services/transactionService.js`
 
-### `transactionRepository.js` (NOVO — CRIAR)
+### `transactionRepository.js` (NOVO â€” CRIAR)
 
 - `listarPorUsuario`, `calcularAgregados`, `criar`, `atualizar`, `excluir`
 - `vincularTags`, `desvincularTags`, `listarRecorrentesMae`
 - `excluirRecorrentesFilhasAPartirDe`, `encerrarRecorrencia`
 
-### `transactionFilterService.js` (NOVO — CRIAR)
+### `transactionFilterService.js` (NOVO â€” CRIAR)
 
-Montagem de `where` Prisma a partir de query (período, categoria, tipo, recurso, busca)
+Montagem de `where` Prisma a partir de query (perÃ­odo, categoria, tipo, recurso, busca)
 
-### Utils (NOVO — CRIAR)
+### Utils (NOVO â€” CRIAR)
 
-- `transactionMapper.js` — DTO API
-- `resourceBalanceUtils.js` — saldos por recurso
+- `transactionMapper.js` â€” DTO API
+- `resourceBalanceUtils.js` â€” saldos por recurso
 
-## 📐 Regras de Negócio
+## ðŸ“ Regras de NegÃ³cio
 
 - Data futura bloqueada exceto recorrentes
-- TRANSFERENCIA: origem ≠ destino, sem categoria
+- TRANSFERENCIA: origem â‰  destino, sem categoria
 - Resumo exclui TRANSFERENCIA dos totais receita/despesa
 
-## 📋 Resumo
+## ðŸ‘¤ ResponsÃ¡vel
 
-### ✅ Concluído
+Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
+## ðŸ”— Pull Requests
+
+- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) â€” `transactionService` / repository / filtros (`FEAT-012`) â†’ issue [#114](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/114)
+
+## ðŸ“‹ Resumo
+
+### âœ… ConcluÃ­do
 - Assinaturas e side-effects documentados
 
-### ⏳ Pendente
+### â³ Pendente
 - Implementar service + repository + filter service

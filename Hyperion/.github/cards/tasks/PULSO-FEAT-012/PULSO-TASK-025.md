@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-025
-title: "Banco de dados — transações, tags e vínculos"
-status: "In Progress"
+title: "Banco de dados â€” transaÃ§Ãµes, tags e vÃ­nculos"
+status: Done
 type: Task
 priority: Highest
 sprint: null
@@ -11,28 +11,28 @@ parent: PULSO-FEAT-012
 due_date: null
 categories:
   - Banco de Dados
-  - Regra de Negócio
+  - Regra de NegÃ³cio
 ---
 
-# [TASK] Banco de dados — transações, tags e vínculos
+# [TASK] Banco de dados â€” transaÃ§Ãµes, tags e vÃ­nculos
 
-> **Contexto:** Modelagem persistente para transações financeiras e tags.
+> **Contexto:** Modelagem persistente para transaÃ§Ãµes financeiras e tags.
 
-## 📝 Descrição
+## ðŸ“ DescriÃ§Ã£o
 
 Criar models Prisma e migrations para `Transacao`, `Tag`, `TransacaoTag` e campo `grupoBeneficio` em `Categoria`.
 
-## ✅ Critérios de Aceite
+## âœ… CritÃ©rios de Aceite
 
-**Então** schema contém:
+**EntÃ£o** schema contÃ©m:
 - `Transacao`: tipo, recurso, recursoDestino?, valor, data, recorrente, regraRecorrencia, paiId
-- `Tag`: nome único por usuário, icone, cor
+- `Tag`: nome Ãºnico por usuÃ¡rio, icone, cor
 - `TransacaoTag`: M:N
-- Índices: `[usuarioId, data]`, tipo, recurso, categoria, recorrente
+- Ãndices: `[usuarioId, data]`, tipo, recurso, categoria, recorrente
 
-## 🛠️ Implementação
+## ðŸ› ï¸ ImplementaÃ§Ã£o
 
-### `schema.prisma` (NOVO — CRIAR)
+### `schema.prisma` (NOVO â€” CRIAR)
 
 **Enums:** `TipoTransacao` (RECEITA, DESPESA, TRANSFERENCIA), `TipoRecurso` (DINHEIRO, VA, VR, POUPANCA), `GrupoBeneficioCategoria`
 
@@ -41,10 +41,18 @@ Criar models Prisma e migrations para `Transacao`, `Tag`, `TransacaoTag` e campo
 - `20260708100000_add_transferencia_poupanca`
 - `20260804120000_categoria_grupo_beneficio`
 
-## 📋 Resumo
+## ðŸ‘¤ ResponsÃ¡vel
 
-### ✅ Concluído
-- Spec de models e índices definida
+Matheus Felipe Correa (`MatheusFelipeCorrea`)
 
-### ⏳ Pendente
+## ðŸ”— Pull Requests
+
+- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) â€” Camada API de transaÃ§Ãµes (`FEAT-012`) â†’ issue [#113](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/113)
+
+## ðŸ“‹ Resumo
+
+### âœ… ConcluÃ­do
+- Spec de models e Ã­ndices definida
+
+### â³ Pendente
 - Criar/aplicar migrations Prisma

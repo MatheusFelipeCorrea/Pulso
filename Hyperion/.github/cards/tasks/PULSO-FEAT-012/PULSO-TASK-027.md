@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-027
-title: "Backend — routes, controller e schemas"
-status: Backlog
+title: "Backend â€” routes, controller e schemas"
+status: Done
 type: Task
 priority: Highest
 sprint: null
@@ -13,40 +13,48 @@ categories:
   - Backend
 ---
 
-# [TASK] Backend — routes, controller e schemas
+# [TASK] Backend â€” routes, controller e schemas
 
 > **Contexto:** Camada HTTP para `/api/transacoes`.
 
-## 📝 Descrição
+## ðŸ“ DescriÃ§Ã£o
 
-Expor endpoints com validação Zod e auth middleware.
+Expor endpoints com validaÃ§Ã£o Zod e auth middleware.
 
-## 🛠️ Implementação
+## ðŸ› ï¸ ImplementaÃ§Ã£o
 
-### `transactionRoutes.js` (NOVO — CRIAR)
+### `transactionRoutes.js` (NOVO â€” CRIAR)
 
 Rotas: `GET /`, `GET /resumo`, `GET /filtros`, `GET /sugestao-categoria`, `POST /`, `PATCH /:id`, `DELETE /:id`
 
-### `transactionController.js` (NOVO — CRIAR)
+### `transactionController.js` (NOVO â€” CRIAR)
 
 Handlers delegando ao service + `transactionFilterService.obterOpcoes`
 
-### `transactionSchemas.js` (NOVO — CRIAR)
+### `transactionSchemas.js` (NOVO â€” CRIAR)
 
 `criarTransacaoSchema`, `editarTransacaoSchema`, `listarTransacoesQuerySchema`, `excluirTransacaoSchema`, `sugerirCategoriaQuerySchema`
 
-### `routes/index.js` (EXISTENTE — MODIFICAR)
+### `routes/index.js` (EXISTENTE â€” MODIFICAR)
 
 `router.use('/transacoes', transactionRoutes)`
 
-### `transactionOptions.js` (NOVO — CRIAR)
+### `transactionOptions.js` (NOVO â€” CRIAR)
 
-Constantes de recursos/frequências para `/filtros`
+Constantes de recursos/frequÃªncias para `/filtros`
 
-## 📋 Resumo
+## ðŸ‘¤ ResponsÃ¡vel
 
-### ✅ Concluído
+Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
+## ðŸ”— Pull Requests
+
+- [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298) â€” routes, controller e schemas (`FEAT-012`) â†’ issue [#115](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/115)
+
+## ðŸ“‹ Resumo
+
+### âœ… ConcluÃ­do
 - Mapa de rotas definido
 
-### ⏳ Pendente
+### â³ Pendente
 - Implementar controller, routes e schemas Zod
