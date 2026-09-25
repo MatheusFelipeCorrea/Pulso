@@ -45,10 +45,11 @@
 
 # Sprint 4
 
--Implementação de categorias, tags e validação recurso×categoria (Issue #116)
-	•	Feature de categorias, tags e sugestão automática (Issue #26)
-
-Sugestão Automática
-	•	Sugestão automática de categoria (RF-028) (Issue #117)
+- Implementação de categorias, tags e validação recurso×categoria (Issue #116)
+  
+- Feature de categorias, tags e sugestão automática (Issue #26)
+  
+- Sugestão Automática
+  (Sugestão automática de categoria (RF-028))(Issue #117)
 
 
