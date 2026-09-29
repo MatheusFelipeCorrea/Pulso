@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ChevronDown, LogOut, Moon, Settings, Sun, User } from 'lucide-react'
 import { Avatar } from '@/design-system/components/data-display/Avatar/Avatar.jsx'
+import { PulsoBadge } from '@/components/badges/PulsoBadge.jsx'
+import { badgeKindFromModoUso } from '@/components/badges/enumMappers'
 import { useTheme } from '@/design-system/hooks/useTheme.js'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { clearUser } from '@/store/slices/authSlice'
@@ -18,6 +20,7 @@ export function UserMenu({ compact = false }) {
 
   const nome = getUserDisplayName(user?.nome)
   const avatarUrl = user?.urlAvatar ?? null
+  const badgeKind = badgeKindFromModoUso(user?.modoUso ?? 'CLT') ?? 'perfil.clt'
 
   useEffect(() => {
     if (!open) return undefined
@@ -60,6 +63,7 @@ export function UserMenu({ compact = false }) {
           fallback="color"
         />
         {!compact ? <span className="user-menu__name">{nome}</span> : null}
+        <PulsoBadge kind={badgeKind} size="sm" className="user-menu__badge" />
         <ChevronDown
           size={14}
           className={`user-menu__chevron${open ? ' user-menu__chevron--open' : ''}`}

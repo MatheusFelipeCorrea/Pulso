@@ -1124,6 +1124,36 @@
   border-color: color-mix(in srgb, #a78bfa 40%, transparent);
 }
 
+/* ── Avatar ──────────────────────────────────────────────── */
+.ds-avatar {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 9999px;
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+}
+
+.ds-avatar--xs { width: 1.5rem; height: 1.5rem; font-size: 10px; }
+.ds-avatar--sm { width: 2rem; height: 2rem; font-size: 0.75rem; }
+.ds-avatar--md { width: 2.5rem; height: 2.5rem; font-size: 0.875rem; }
+.ds-avatar--lg { width: 4rem; height: 4rem; font-size: 1.125rem; }
+.ds-avatar--xl { width: 6rem; height: 6rem; font-size: 1.5rem; }
+
+.ds-avatar img,
+.ds-avatar > span {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+}
+
 /* ── Toast (protótipo DS) ──────────────────────────────────── */
 
 .ds-toast {

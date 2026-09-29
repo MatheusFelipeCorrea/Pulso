@@ -5,6 +5,7 @@ class PulsoUser {
     required this.email,
     this.urlAvatar,
     this.plano = 'FREE',
+    this.modoUso = 'CLT',
   });
 
   final String id;
@@ -12,6 +13,7 @@ class PulsoUser {
   final String email;
   final String? urlAvatar;
   final String plano;
+  final String modoUso;
 
   factory PulsoUser.fromJson(Map<String, dynamic> json) {
     return PulsoUser(
@@ -20,6 +22,7 @@ class PulsoUser {
       email: json['email'] as String? ?? '',
       urlAvatar: json['urlAvatar'] as String?,
       plano: json['plano'] as String? ?? 'FREE',
+      modoUso: json['modoUso'] as String? ?? 'CLT',
     );
   }
 }

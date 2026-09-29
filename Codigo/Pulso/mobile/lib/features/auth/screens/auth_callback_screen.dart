@@ -42,7 +42,7 @@ class _AuthCallbackScreenState extends State<AuthCallbackScreen> {
     try {
       await context.read<AuthController>().exchangeOAuth(exchange);
       if (!mounted) return;
-      context.go('/home');
+      context.go('/transactions');
     } catch (err) {
       if (!mounted) return;
       setState(() => _error = AuthController.messageOf(err));

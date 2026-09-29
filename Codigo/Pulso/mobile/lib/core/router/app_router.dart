@@ -11,11 +11,19 @@ import 'package:pulso/features/auth/screens/reset_password_screen.dart';
 import 'package:pulso/features/auth/screens/verify_email_screen.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/auth/widgets/auth_page.dart';
+import 'package:provider/provider.dart';
+import 'package:pulso/core/widgets/app_shell.dart';
 import 'package:pulso/features/home/screens/home_screen.dart';
+import 'package:pulso/features/transactions/data/transaction_models.dart';
+import 'package:pulso/features/transactions/data/transaction_repository.dart';
+import 'package:pulso/features/transactions/screens/categories_screen.dart';
+import 'package:pulso/features/transactions/screens/tags_screen.dart';
+import 'package:pulso/features/transactions/screens/transaction_form_screen.dart';
+import 'package:pulso/features/transactions/screens/transactions_screen.dart';
 
 GoRouter createRouter(AuthController auth) {
   return GoRouter(
-    initialLocation: auth.status == AuthStatus.authenticated ? '/home' : '/login',
+    initialLocation: auth.status == AuthStatus.authenticated ? '/transactions' : '/login',
     refreshListenable: auth,
     redirect: (context, state) {
       final loggedIn = auth.status == AuthStatus.authenticated;
@@ -31,8 +39,9 @@ GoRouter createRouter(AuthController auth) {
 
       if (!loggedIn && state.matchedLocation == '/home') return '/login';
       if (loggedIn && (state.matchedLocation == '/login' || state.matchedLocation == '/register')) {
-        return '/home';
+        return '/transactions';
       }
+      if (loggedIn && state.matchedLocation == '/home') return '/dashboard';
       if (!loggedIn && !loggingIn) return '/login';
       return null;
     },
@@ -104,8 +113,42 @@ GoRouter createRouter(AuthController auth) {
         ),
       ),
       GoRoute(
-        path: '/home',
-        builder: (context, state) => const HomeScreen(),
+        path: '/transactions/new',
+        builder: (context, state) => TransactionFormScreen(
+          repository: context.read<TransactionRepository>(),
+        ),
+      ),
+      GoRoute(
+        path: '/transactions/:id',
+        builder: (context, state) => TransactionFormScreen(
+          repository: context.read<TransactionRepository>(),
+          transacao: state.extra is PulsoTransacao ? state.extra as PulsoTransacao : null,
+        ),
+      ),
+      ShellRoute(
+        builder: (context, state, child) => AppShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/dashboard',
+            builder: (context, state) => const HomeScreen(),
+          ),
+          GoRoute(
+            path: '/transactions',
+            builder: (context, state) => const TransactionsScreen(),
+          ),
+          GoRoute(
+            path: '/categories',
+            builder: (context, state) => CategoriesScreen(
+              repository: context.read<TransactionRepository>(),
+            ),
+          ),
+          GoRoute(
+            path: '/tags',
+            builder: (context, state) => TagsScreen(
+              repository: context.read<TransactionRepository>(),
+            ),
+          ),
+        ],
       ),
     ],
   );
