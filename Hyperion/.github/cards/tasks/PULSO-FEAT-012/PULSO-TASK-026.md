@@ -72,4 +72,4 @@ Matheus Felipe Correa (`MatheusFelipeCorrea`)
 - Assinaturas e side-effects documentados
 
 ### ⏳ Pendente
-- Implementar service + repository + filter service
+- Nenhum

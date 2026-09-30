@@ -47,6 +47,10 @@ Sheets/telas de criar, editar e excluir transação; gestão mínima de categori
 
 Depende de FEAT-012 + FEAT-013 + FEAT-015 mergeados/descomentados na Sprint-3.
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

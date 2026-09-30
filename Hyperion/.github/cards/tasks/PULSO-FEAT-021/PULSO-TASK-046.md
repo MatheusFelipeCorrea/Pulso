@@ -45,4 +45,4 @@ Implementar fluxos de contribuição, confirmação de delete e seção de hist�
 - Fluxos de aporte e correção pós-conclusão especificados
 
 ### ⏳ Pendente
-- Implementar modais e GoalAportesSection
+- Nenhum

@@ -55,4 +55,4 @@ Matheus Felipe Correa (`MatheusFelipeCorrea`)
 - Spec de models e índices definida
 
 ### ⏳ Pendente
-- Criar/aplicar migrations Prisma
+- Nenhum

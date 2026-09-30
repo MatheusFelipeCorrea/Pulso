@@ -60,4 +60,4 @@ Alice Shikida (`aliceshikida`)
 - Algoritmo e contrato API especificados
 
 ### ⏳ Pendente
-- Implementar service + integração no form
+- Nenhum

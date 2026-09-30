@@ -44,4 +44,4 @@ Implementar camada de moedas com catálogo, cache e CRUD de favoritas.
 - Contratos RF-037–040 especificados
 
 ### ⏳ Pendente
-- Implementar provider, service e rotas
+- Nenhum

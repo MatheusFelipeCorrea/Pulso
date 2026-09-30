@@ -40,10 +40,14 @@ categories:
 ### Cenário 4 — Sem template
 **Então** some o exemplo de cadastro de produtos do administrador.
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Gap ATAM vs. domínio Pulso mapeado
 
 ### ⏳ Pendente
-- Redigir cenários e tabelas com base nos RNF
+- Nenhum

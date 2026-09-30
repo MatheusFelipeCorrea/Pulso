@@ -46,4 +46,4 @@ Implementar card visual de meta, utilitários de status/insight e folha de estil
 - Spec visual e utilitários definidos
 
 ### ⏳ Pendente
-- Implementar GoalCard, utils e goals.css
+- Nenhum

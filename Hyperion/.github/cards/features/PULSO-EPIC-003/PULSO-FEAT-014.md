@@ -57,4 +57,4 @@ Sofia Vasconcelos (`sofiavasconcelosms`)
 - Spec RF-027 e enum `TipoRecurso` incluindo POUPANCA documentados
 
 ### ⏳ Pendente
-- PULSO-TASK-030 — backend + frontend transferências
+- Nenhum

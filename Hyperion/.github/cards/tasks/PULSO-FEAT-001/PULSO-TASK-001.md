@@ -54,11 +54,14 @@ Adicionar/criar models:
 
 - [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de banco e autenticação (`feat/14`)
 
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Spec de models e relações definida
 
 ### ⏳ Pendente
-- Criar migration Prisma
-- Validar índices de lookup por token de verificação
+- Nenhum

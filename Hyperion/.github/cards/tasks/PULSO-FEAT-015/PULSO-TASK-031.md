@@ -57,4 +57,4 @@ Vinícius Simões (`ViniSimoesV`)
 - Lógica de ocorrência e RRULE básica especificada
 
 ### ⏳ Pendente
-- Implementar job + utils + wire cron
+- Nenhum

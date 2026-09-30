@@ -61,4 +61,4 @@ Sofia Vasconcelos (`sofiavasconcelosms`)
 - Spec RF-027 documentada
 
 ### ⏳ Pendente
-- Implementar branch transferência API + UI
+- Nenhum

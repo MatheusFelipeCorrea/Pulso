@@ -43,4 +43,4 @@ Criar models Prisma e migrations para viagens, pretensões, observações e favo
 - Spec de models e constraints definida
 
 ### ⏳ Pendente
-- Criar/aplicar migrations Prisma
+- Nenhum

@@ -63,12 +63,17 @@ categories:
 - [#290](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/290) — Apostila e READMEs
 - [#291](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/291) — Protótipos de Auth na documentação
 
+## 👤 Responsáveis
+
+- Alice Shikida (`aliceshikida`)
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Descoberta dos 9 arquivos em `docs/`
 - Hierarquia Epic → Feature (sem Task/Story em arquivo)
+- Apostila `docs/1`–`docs/6`, `docs/8` e `assets/` preenchidos
 
 ### ⏳ Pendente
-- Preencher cada feature
-- Encadear `docs/5` e `docs/6` com `PULSO-EPIC-015`
+- PULSO-FEAT-084 — telas do sistema construído (`docs/7` ainda é o template)

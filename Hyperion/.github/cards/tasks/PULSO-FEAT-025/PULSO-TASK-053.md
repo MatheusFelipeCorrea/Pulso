@@ -45,4 +45,4 @@ Retorno sempre: viagem mapeada atualizada
 - Payloads e categorias definidos
 
 ### ⏳ Pendente
-- Implementar CRUD despesas e observações
+- Nenhum

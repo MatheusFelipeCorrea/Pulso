@@ -69,6 +69,10 @@ Expor `POST /api/auth/google/mobile` que valida o ID token do SDK nativo (mesmo 
 - Conta Google nasce verificada
 - E-mails continuam anti-enumeração; links não quebram a SPA
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

@@ -45,4 +45,4 @@ Implementar shell da página com conversor rápido, favoritas, gráfico históri
 - Layout e fetch pattern definidos
 
 ### ⏳ Pendente
-- Implementar TripsPage e widgets de moeda
+- Nenhum

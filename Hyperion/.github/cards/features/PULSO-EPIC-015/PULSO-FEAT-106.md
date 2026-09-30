@@ -50,6 +50,11 @@ categories:
 ### Cenário 4 — Fora de escopo
 **Então** não se prototipa chave Gemini, rate limit de infra nem o miolo do prompt.
 
+## 👤 Responsáveis
+
+- Maria Clara (`mariaoliveira27`)
+- Alice Shikida (`aliceshikida`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

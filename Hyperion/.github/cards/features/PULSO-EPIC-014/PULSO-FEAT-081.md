@@ -40,6 +40,11 @@ categories:
 ### Cenário 4 — Modelo de dados
 **Então** 4.3, se incluído, é ER/tabelas do Pulso (ou justificativa de omissão); não o DER genérico do template.
 
+## 👤 Responsáveis
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+- Vinícius Simões (`ViniSimoesV`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
@@ -47,4 +52,4 @@ categories:
 - Diagramas do Pulso anexados em `docs/4.modelagem.md` (Figs. 1–11) a partir de `docs/imagens/diagrams/`
 
 ### ⏳ Pendente
-- Revisão (In Revision): textos da visão lógica com o professor, se a apostila exigir mais detalhe por componente
+- Nenhum

@@ -54,4 +54,4 @@ Maria Clara (`mariaoliveira27`)
 - Spec de estado e fetch paralelo definida
 
 ### ⏳ Pendente
-- Implementar página e componentes de listagem/filtro
+- Nenhum

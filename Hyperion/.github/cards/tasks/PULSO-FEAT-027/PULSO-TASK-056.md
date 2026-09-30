@@ -45,4 +45,4 @@ Integração: seleção de meta ativa; criar meta via `GoalFormModal`
 - Campos e pickers especificados
 
 ### ⏳ Pendente
-- Implementar lista, cards e modal de viagem
+- Nenhum

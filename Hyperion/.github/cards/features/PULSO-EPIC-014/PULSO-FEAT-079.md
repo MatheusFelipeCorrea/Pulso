@@ -40,10 +40,16 @@ categories:
 ### Cenário 4 — Consistência
 **Então** não reintroduz VT; produto gratuito e temas claro/escuro podem aparecer se já estiverem no README.
 
+## 👤 Responsáveis
+
+- Sofia Vasconcelos (`sofiavasconcelosms`)
+- Maria Clara (`mariaoliveira27`)
+- Alice Shikida (`aliceshikida`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Gap do template vs. README mapeado
 
 ### ⏳ Pendente
-- Redigir 2.1–2.3 e trocar imagens de exemplo
+- Nenhum

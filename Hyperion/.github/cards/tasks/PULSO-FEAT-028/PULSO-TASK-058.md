@@ -45,4 +45,4 @@ Implementar modais e seções de pretensões/observações plus widget de preço
 - Modais e seções especificados
 
 ### ⏳ Pendente
-- Implementar seções de detalhe e modais
+- Nenhum

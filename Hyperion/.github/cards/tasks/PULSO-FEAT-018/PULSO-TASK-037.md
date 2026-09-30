@@ -43,4 +43,4 @@ Criar models Prisma e migrations para `Meta` e `AporteMeta` com enums de tipo e 
 - Spec de models e índices definida
 
 ### ⏳ Pendente
-- Criar/aplicar migrations Prisma
+- Nenhum

@@ -48,4 +48,4 @@ Completar `editarMeta` com máquina de estados e `excluirAporte` que recalcula v
 - Máquina de estados e reabertura documentadas
 
 ### ⏳ Pendente
-- Implementar editarMeta (status) e excluirAporte
+- Nenhum

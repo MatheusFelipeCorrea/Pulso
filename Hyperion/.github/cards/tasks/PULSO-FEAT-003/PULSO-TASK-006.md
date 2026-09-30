@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-006
 title: "Backend — Google OAuth e exchange de sessão"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null
@@ -68,12 +68,14 @@ GoogleStrategy lazy via `ensureGoogleStrategy()` — evita crash sem env vars
 
 - [#287](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/287) — Google OAuth 2.0 (`feat/16`)
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Fluxo OAuth + exchange especificado
 
 ### ⏳ Pendente
-- Configurar Passport GoogleStrategy
-- Implementar callback redirect e exchange endpoint
-- Testes em `api/tests/unit/authService.test.js`
+- Nenhum

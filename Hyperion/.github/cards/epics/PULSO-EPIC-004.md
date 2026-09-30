@@ -64,6 +64,11 @@ categories:
 - PULSO-FEAT-022
 - PULSO-FEAT-109
 
+## 👤 Responsáveis
+
+- Alice Shikida (`aliceshikida`) — API (FEAT-018–020) e Flutter dados (TASK-167)
+- Maria Clara (`mariaoliveira27`) — Web (FEAT-021) e Flutter telas (TASK-168)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

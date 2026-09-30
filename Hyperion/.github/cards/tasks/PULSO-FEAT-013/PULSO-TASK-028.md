@@ -66,4 +66,4 @@ Alice Shikida (`aliceshikida`)
 - Spec de validação desacoplada do nome literal (RF-NOVO-C2/C3)
 
 ### ⏳ Pendente
-- Implementar rules + modais de gestão
+- Nenhum

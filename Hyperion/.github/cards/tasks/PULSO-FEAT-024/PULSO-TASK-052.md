@@ -44,4 +44,4 @@ Implementar service principal com `resolverDestinoPayload`, validações e endpo
 - Fluxos RF-041, RF-046, RF-047 documentados
 
 ### ⏳ Pendente
-- Implementar service CRUD e rotas base
+- Nenhum

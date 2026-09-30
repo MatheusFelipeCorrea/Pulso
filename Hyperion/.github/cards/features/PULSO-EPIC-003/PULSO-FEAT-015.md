@@ -59,5 +59,4 @@ Vinícius Simões (`ViniSimoesV`)
 - Fluxos de recorrência e exclusão especificados (RF-NOVO-C1)
 
 ### ⏳ Pendente
-- PULSO-TASK-031 — job + recurrenceUtils
-- PULSO-TASK-032 — excluirTransacao recorrente + UI DeleteTransactionModal
+- Nenhum

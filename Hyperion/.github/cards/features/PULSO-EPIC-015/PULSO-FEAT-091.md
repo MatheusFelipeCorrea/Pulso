@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-091
 title: "Protótipo — viagens e moedas"
-status: "In Progress"
+status: "Done"
 type: Feature
 priority: High
 sprint: "Sprint 1"
@@ -51,6 +51,10 @@ categories:
 
 ### Cenário 4 — Fora de escopo
 **Então** não se prototipa tela de “cache 5 min” nem escolha de provider Duffel; viagem de **grupo** fica na feature de grupos.
+
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
 
 ## 📋 Resumo
 

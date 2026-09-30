@@ -60,4 +60,4 @@ Vinícius Simões (`ViniSimoesV`)
 - Comportamento RF-NOVO-C1 especificado
 
 ### ⏳ Pendente
-- Implementar backend + modal de exclusão
+- Nenhum

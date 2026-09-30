@@ -51,4 +51,4 @@ Maria Clara (`mariaoliveira27`)
 - Spec delete recorrente + breakpoints definidos
 
 ### ⏳ Pendente
-- Implementar DeleteTransactionModal + transactions.css
+- Nenhum

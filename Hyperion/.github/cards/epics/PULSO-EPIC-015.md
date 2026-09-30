@@ -71,12 +71,17 @@ categories:
 - [#290](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/290) — Exports de Auth na apostila
 - [#291](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/291) — Protótipos de Auth
 
+## 👤 Responsáveis
+
+- Maria Clara (`mariaoliveira27`)
+- Alice Shikida (`aliceshikida`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Inventário de telas a partir dos epics 001–013 e 016
 - Hierarquia Epic → Feature (sem Task; claro/escuro na mesma feature)
+- Auth, homepage, transações, metas e viagens publicados na apostila
 
 ### ⏳ Pendente
-- Prototipar módulo a módulo no Figma
-- Publicar recorte em `docs/5` (`PULSO-FEAT-082`)
+- Demais módulos no Figma (calendário, grupos, orçamento, compras, divisão, dívidas, insights, chatbot)

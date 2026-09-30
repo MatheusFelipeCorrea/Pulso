@@ -66,6 +66,10 @@ Hoje o SPA autentica com cookies `httpOnly`. O app nativo persiste JWT no secure
 - PULSO-TASK-161
 - PULSO-TASK-162
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

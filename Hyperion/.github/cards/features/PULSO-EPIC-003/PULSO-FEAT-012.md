@@ -56,4 +56,4 @@ Matheus Felipe Correa (`MatheusFelipeCorrea`)
 - Contratos HTTP e payloads definidos
 
 ### ⏳ Pendente
-- PULSO-TASK-025–027 — persistência, service e rotas
+- Nenhum

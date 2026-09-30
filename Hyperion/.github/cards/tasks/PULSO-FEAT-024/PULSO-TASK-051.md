@@ -39,4 +39,4 @@ Implementar repository com includes de despesas, observações e meta; mapper co
 - Shape de resposta definido
 
 ### ⏳ Pendente
-- Implementar repository e mapper
+- Nenhum

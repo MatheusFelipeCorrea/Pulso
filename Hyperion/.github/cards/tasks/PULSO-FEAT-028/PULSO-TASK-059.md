@@ -46,4 +46,4 @@ Importar CSS em TripsPage/TripDetailPage ou bundle global.
 - Mapa de assets visuais definido
 
 ### ⏳ Pendente
-- Implementar trips.css e utilitários visuais
+- Nenhum

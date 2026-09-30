@@ -69,6 +69,12 @@ categories:
 - PULSO-FEAT-029
 - PULSO-FEAT-110
 
+## 👤 Responsáveis
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — moedas (FEAT-023) e Flutter moedas (TASK-171)
+- Vinícius Simões (`ViniSimoesV`) — API de viagens (FEAT-024–026) e Flutter dados (TASK-170)
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Web (FEAT-027–028) e Flutter telas (TASK-172)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

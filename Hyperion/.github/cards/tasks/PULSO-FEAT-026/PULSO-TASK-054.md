@@ -44,4 +44,4 @@ Implementar resolvers de destino, serviço de capa e preços de passagem com fal
 - Pipeline e providers documentados
 
 ### ⏳ Pendente
-- Implementar resolver, capas e flight price
+- Nenhum

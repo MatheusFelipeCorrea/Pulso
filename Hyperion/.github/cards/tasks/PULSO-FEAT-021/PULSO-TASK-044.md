@@ -48,4 +48,4 @@ Implementar página principal com tabs por status, busca, filtros de prazo, pagi
 - Spec de estado e layout definida
 
 ### ⏳ Pendente
-- Implementar página e componentes de listagem/resumo
+- Nenhum

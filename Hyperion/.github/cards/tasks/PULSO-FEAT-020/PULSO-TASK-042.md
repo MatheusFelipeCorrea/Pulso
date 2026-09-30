@@ -42,4 +42,4 @@ Implementar `registrarAporte` com `sincronizarConclusao` e integração a `notif
 - Fluxo RN-062–063 e RF-035 especificados
 
 ### ⏳ Pendente
-- Implementar registrarAporte e sincronizarConclusao
+- Nenhum

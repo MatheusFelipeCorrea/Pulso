@@ -44,4 +44,4 @@ Campos:
 - Spec de campos e fluxo RF-036 definida
 
 ### ⏳ Pendente
-- Implementar GoalFormModal
+- Nenhum

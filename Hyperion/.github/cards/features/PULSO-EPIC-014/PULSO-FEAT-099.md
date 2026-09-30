@@ -62,10 +62,15 @@ Partes interessadas e declaração de escopo: se a disciplina ainda pedir, criar
 ### Cenário 5 — Fora de escopo
 **Então** esta feature **não** cria nem preenche atas em `assets/atas/` (abertura, sprint, visita ao cliente).
 
+## 👤 Responsáveis
+
+- Sofia Vasconcelos (`sofiavasconcelosms`)
+- Alice Shikida (`aliceshikida`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Inventário de `assets/` e recorte sem cliente externo
 
 ### ⏳ Pendente
-- Preencher TAP, três documentos INPI e logs por aluno; atualizar índices
+- Nenhum

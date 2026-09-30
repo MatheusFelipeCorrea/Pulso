@@ -44,4 +44,4 @@ Implementar repository Prisma e service com validações de prazo, valor-alvo e 
 - Contratos de service e queries definidos
 
 ### ⏳ Pendente
-- Implementar repository e service base
+- Nenhum

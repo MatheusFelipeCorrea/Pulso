@@ -73,6 +73,10 @@ Como **equipe**, eu quero **os protótipos de transações publicados na apostil
 - [#309](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/309) — transações no Flutter
 - [#311](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/311) — UX Flutter alinhada à web
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

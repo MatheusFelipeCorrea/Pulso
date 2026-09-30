@@ -61,6 +61,10 @@ Modificar em: `Codigo/Pulso/api/src/controllers/authController.js`
 - Access 15 min + refresh rotativo single-use (RN-138 / RN-139) — sem mudar TTL
 - Tokens no JSON **somente** para cliente nativo identificado; Web permanece cookie `httpOnly`
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

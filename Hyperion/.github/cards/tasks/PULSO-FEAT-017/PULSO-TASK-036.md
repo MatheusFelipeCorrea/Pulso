@@ -61,4 +61,4 @@ Sofia Vasconcelos (`sofiavasconcelosms`)
 - Matriz de testes definida
 
 ### ⏳ Pendente
-- Escrever/expandir todas as suites listadas
+- Nenhum

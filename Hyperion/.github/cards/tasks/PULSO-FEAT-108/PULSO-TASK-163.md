@@ -47,6 +47,10 @@ Incluir recorte Transações no mesmo padrão do bloco de Auth.
 
 Exports PNG/WebP (ou frames Figma linkados) das telas acima.
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

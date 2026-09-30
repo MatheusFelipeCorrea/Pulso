@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-005
 title: "Proteção de rotas e infraestrutura de segurança"
-status: "In Progress"
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null
@@ -61,6 +61,10 @@ categories:
 - [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de autenticação (`feat/14`)
 - [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão e guards (`feat/15`)
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
@@ -68,6 +72,4 @@ categories:
 - Escopo de testes definido
 
 ### ⏳ Pendente
-- PULSO-TASK-010 — middleware + rate limit + job cleanup
-- PULSO-TASK-011 — guardas de rota no React Router
-- PULSO-TASK-012 — testes unitários API e Web
+- Nenhum

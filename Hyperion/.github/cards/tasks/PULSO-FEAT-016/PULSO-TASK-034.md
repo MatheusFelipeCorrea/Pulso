@@ -53,4 +53,4 @@ Maria Clara (`mariaoliveira27`)
 - Spec de campos e validações definida
 
 ### ⏳ Pendente
-- Implementar modal create/edit
+- Nenhum

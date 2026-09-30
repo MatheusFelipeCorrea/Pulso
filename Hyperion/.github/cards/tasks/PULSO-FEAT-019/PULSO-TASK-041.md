@@ -46,4 +46,4 @@ Implementar `sugerirReservaEmergencia` agregando despesas dos últimos 3 meses v
 - Contrato RF-036 e dependência em transações definidos
 
 ### ⏳ Pendente
-- Implementar agregação e endpoint
+- Nenhum

@@ -40,4 +40,4 @@ Registrar rotas `/metas` no app Express com middleware de autenticação e schem
 - Mapa de rotas e schemas definido
 
 ### ⏳ Pendente
-- Implementar routes, controller e schemas
+- Nenhum

@@ -57,4 +57,4 @@ Matheus Felipe Correa (`MatheusFelipeCorrea`)
 - Mapa de rotas definido
 
 ### ⏳ Pendente
-- Implementar controller, routes e schemas Zod
+- Nenhum

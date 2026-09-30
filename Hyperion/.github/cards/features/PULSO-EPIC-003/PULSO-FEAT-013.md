@@ -65,5 +65,4 @@ Alice Shikida (`aliceshikida`)
 - Regras de domínio e modais de gestão especificados
 
 ### ⏳ Pendente
-- PULSO-TASK-028 — validação recurso×categoria + modals categorias/tags
-- PULSO-TASK-029 — sugestão automática backend + debounce no form
+- Nenhum

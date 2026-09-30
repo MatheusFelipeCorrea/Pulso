@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-009
 title: "Frontend — telas de recuperação de senha"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: High
 sprint: null
@@ -66,11 +66,14 @@ Registrar rotas em `App.jsx`
 - [#288](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/288) — Recuperação de senha (`feat/17`)
 - [#289](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/289) — UX da recuperação de senha (`feat/18`)
 
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Spec de 4 telas e validação definida
 
 ### ⏳ Pendente
-- Implementar páginas do fluxo forgot/reset
-- Indicador de força de senha no reset
+- Nenhum

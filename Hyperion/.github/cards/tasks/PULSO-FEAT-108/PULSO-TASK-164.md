@@ -52,6 +52,10 @@ Rota autenticada `/transactions`.
 - Transferências **não** entram nos totais de receita/despesa do resumo
 - Sem segundo backend; mesma base URL da auth
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

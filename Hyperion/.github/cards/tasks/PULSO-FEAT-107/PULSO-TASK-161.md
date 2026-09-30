@@ -76,6 +76,10 @@ Em: `Codigo/Pulso/mobile/lib/features/auth/`
 - Mesmas validações da Web (nome ≥3, senha forte, anti-enumeração no forgot)
 - JWT no device só em storage seguro (apostila 3.4)
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

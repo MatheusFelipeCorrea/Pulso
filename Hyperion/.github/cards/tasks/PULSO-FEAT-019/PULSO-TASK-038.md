@@ -39,4 +39,4 @@ Implementar utilitários de progresso, sugestão mensal, inferência de tipo, ve
 - Fórmulas RN-067 e RN-068 especificadas
 
 ### ⏳ Pendente
-- Implementar utils e mapper
+- Nenhum

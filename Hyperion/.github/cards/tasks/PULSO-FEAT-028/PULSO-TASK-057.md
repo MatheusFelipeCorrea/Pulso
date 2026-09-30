@@ -46,4 +46,4 @@ Conversão BRL: fetch cotação moeda destino (RN-070)
 - Layout detalhe e utils definidos
 
 ### ⏳ Pendente
-- Implementar TripDetailPage e sidebar
+- Nenhum

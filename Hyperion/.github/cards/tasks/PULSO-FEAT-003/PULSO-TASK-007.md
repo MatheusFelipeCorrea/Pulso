@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-007
 title: "Frontend — callback OAuth e botão Google"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: High
 sprint: null
@@ -60,11 +60,14 @@ Registrar em `App.jsx` — `/auth/callback` (pública, sem GuestRoute)
 
 - [#287](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/287) — Google OAuth 2.0 (`feat/16`)
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Spec de estados loading/erro/sucesso na callback definida
 
 ### ⏳ Pendente
-- Implementar AuthCallback.jsx
-- Adicionar botão Google em Login e Register
+- Nenhum

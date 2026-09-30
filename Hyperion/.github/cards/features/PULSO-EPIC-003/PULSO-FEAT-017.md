@@ -52,4 +52,4 @@ Sofia Vasconcelos (`sofiavasconcelosms`)
 - Escopo de testes mapeado
 
 ### ⏳ Pendente
-- PULSO-TASK-036 — implementar/expandir suites
+- Nenhum
