@@ -18,7 +18,7 @@ categories:
 
 # [TASK] Documentação — subir protótipos de viagens e moedas
 
-> **Contexto:** `PULSO-FEAT-091` especifica os frames. Auth já tem exports em `docs/5.wireframe.md`; viagens ainda não.
+> **Contexto:** `PULSO-FEAT-091` especifica os frames. Auth e viagens/moedas estão em `docs/5.wireframe.md`.
 
 ## 📝 Descrição
 

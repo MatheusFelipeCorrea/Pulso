@@ -19,7 +19,7 @@ categories:
 
 # [FEATURE] Mobile Flutter e protótipos de metas
 
-> **Contexto:** A API (`PULSO-FEAT-018`) e a Web (`PULSO-FEAT-021`) cobrem RF-029–036. O Flutter em `Codigo/Pulso/mobile` precisa da mesma API `/api/metas`. Os frames de `PULSO-FEAT-090` entram na apostila (`docs/5.wireframe.md`) — a equipe sobe os exports nesta feature.
+> **Contexto:** A API (`PULSO-FEAT-018`) e a Web (`PULSO-FEAT-021`) cobrem RF-029–036. O Flutter consome `/api/metas`. Os frames de `PULSO-FEAT-090` estão em `docs/5.wireframe.md`.
 
 **Refs:** RF-029–036 · RF-140  
 **Protótipo (Figma):** `PULSO-FEAT-090`  

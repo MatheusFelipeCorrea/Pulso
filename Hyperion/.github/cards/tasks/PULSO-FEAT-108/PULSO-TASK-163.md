@@ -18,7 +18,7 @@ categories:
 
 # [TASK] Documentação — subir protótipos de transações
 
-> **Contexto:** `PULSO-FEAT-089` especifica os frames. `PULSO-FEAT-082` publica na apostila. Auth já tem exports em `docs/5.wireframe.md`; transações ainda não.
+> **Contexto:** `PULSO-FEAT-089` especifica os frames. `PULSO-FEAT-082` publica na apostila. Auth, transações, metas e viagens estão em `docs/5.wireframe.md`.
 
 ## 📝 Descrição
 

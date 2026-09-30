@@ -20,7 +20,7 @@ Versão 2.1 (TI5). Fontes `.puml` e imagens renderizadas. A apostila anexa os PN
 
 - **Web:** React + Vite (`Codigo/Pulso/web`)
 - **Backend:** Node.js + Express (`Codigo/Pulso/api`) — API única `/api`
-- **Mobile:** Flutter (`Codigo/Pulso/mobile`) — mesma REST + Socket.IO
+- **Mobile:** Flutter (`Codigo/Pulso/mobile`) — mesma REST (auth, transações, metas, viagens/moedas; grupos só no client). Socket.IO ainda não.
 
 Render (a partir desta pasta):
 

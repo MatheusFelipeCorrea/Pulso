@@ -18,7 +18,7 @@ categories:
 
 # [TASK] Documentação — subir protótipos de metas
 
-> **Contexto:** `PULSO-FEAT-090` especifica os frames. Auth já tem exports em `docs/5.wireframe.md`; metas ainda não.
+> **Contexto:** `PULSO-FEAT-090` especifica os frames. Auth e metas estão em `docs/5.wireframe.md`.
 
 ## 📝 Descrição
 

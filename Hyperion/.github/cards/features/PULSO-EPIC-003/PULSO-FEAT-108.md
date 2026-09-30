@@ -19,7 +19,7 @@ categories:
 
 # [FEATURE] Mobile Flutter e protótipos de transações
 
-> **Contexto:** A Web (FEAT-016) e a API (FEAT-012) cobrem RF-016–028. O Flutter em `Codigo/Pulso/mobile` ainda para no `/home` pós-auth. Os frames de `PULSO-FEAT-089` precisam entrar na apostila (`docs/5.wireframe.md`) e o app nativo deve consumir a **mesma** API `/api/transacoes`.
+> **Contexto:** A Web (FEAT-016) e a API (FEAT-012) cobrem RF-016–028. O Flutter em `Codigo/Pulso/mobile` consome `/api/transacoes` (lista, filtros, formulário e exclusão). Os frames de `PULSO-FEAT-089` estão em `docs/5.wireframe.md`.
 
 **Refs:** RF-016–028 · RF-140  
 **Spec do épico:** `Hyperion/.github/plans/specs/PULSO-EPIC-003-transacoes/`  

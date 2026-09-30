@@ -31,6 +31,7 @@ docs:
   requirements: docs/3.requisitos.md
   api_readme: Codigo/Pulso/api/README.md
   web_readme: Codigo/Pulso/web/README.md
+  mobile_readme: Codigo/Pulso/mobile/README.md
   blueprints: docs
   diagrams: docs/imagens
 
@@ -78,7 +79,7 @@ ci:
     product_ci: auto
 
 commands:
-  test: echo PULSO-apps-not-scaffolded-yet
+  test: null
   lint: null
   build: null
   audit: null
@@ -89,6 +90,6 @@ memory:
   project_file: Hyperion/.github/memory/PROJECT.md
 
 uncertainties:
-  - Web e API ja tem package.json em Codigo/Pulso/{web,api}; Flutter (pubspec) ainda nao.
   - Deploy de producao ainda indefinido (Vercel / Neon no codigo; URL publica em breve).
-  - README do mobile existe em Codigo/Pulso/mobile/README.md (schema so lista api_readme e web_readme).
+  - API de grupos existe no client (web/Flutter) mas a rota `/api/grupos` permanece comentada.
+  - Socket.IO (RF-140 tempo real) ainda nao esta no Flutter.
