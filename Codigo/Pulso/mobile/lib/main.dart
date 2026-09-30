@@ -6,6 +6,7 @@ import 'package:pulso/core/storage/token_storage.dart';
 import 'package:pulso/core/theme/theme_controller.dart';
 import 'package:pulso/features/auth/data/auth_repository.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
+import 'package:pulso/features/goals/data/goal_repository.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
 
 Future<void> main() async {
@@ -34,6 +35,7 @@ Future<void> main() async {
       theme: theme,
       router: router,
       transactions: TransactionRepository(api),
+      goals: GoalRepository(api),
     ),
   );
 }

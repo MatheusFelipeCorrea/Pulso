@@ -13,6 +13,9 @@ import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/auth/widgets/auth_page.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/widgets/app_shell.dart';
+import 'package:pulso/features/goals/data/goal_models.dart';
+import 'package:pulso/features/goals/screens/goal_form_screen.dart';
+import 'package:pulso/features/goals/screens/goals_screen.dart';
 import 'package:pulso/features/home/screens/home_screen.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
@@ -128,6 +131,12 @@ GoRouter createRouter(AuthController auth) {
           transacao: state.extra is PulsoTransacao ? state.extra as PulsoTransacao : null,
         ),
       ),
+      GoRoute(
+        path: '/goals/form',
+        builder: (context, state) => GoalFormScreen(
+          meta: state.extra is PulsoMeta ? state.extra as PulsoMeta : null,
+        ),
+      ),
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
         routes: [
@@ -151,6 +160,10 @@ GoRouter createRouter(AuthController auth) {
               repository: context.read<TransactionRepository>(),
             ),
           ),
+          GoRoute(
+            path: '/goals',
+            builder: (context, state) => const GoalsScreen(),
+          ),
         ],
       ),
     ],
@@ -159,6 +172,7 @@ GoRouter createRouter(AuthController auth) {
 
 bool _isKnownAuthedLocation(String loc) {
   if (loc == '/dashboard' || loc == '/transactions' || loc == '/categories' || loc == '/tags') return true;
+  if (loc == '/goals' || loc == '/goals/form') return true;
   if (loc == '/transactions/new' || loc.startsWith('/transactions/')) return true;
   if (loc == '/termos' || loc == '/privacidade') return true;
   return false;
