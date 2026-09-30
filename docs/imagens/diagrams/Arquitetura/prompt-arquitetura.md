@@ -50,14 +50,14 @@ ESQUERDA — USUÁRIOS E CLIENTES (WEB + MOBILE)
   → HTTPS/JSON + Bearer JWT → Backend Node
   → WebSocket → /api/socket.io
 
-─── CLIENTE 2: Mobile App (Flutter) — badge ⏳ Planejado (TI5) — cor azul clara ───
+─── CLIENTE 2: Mobile App (Flutter) — badge ✅ Implementado (Sprint-3: auth, transações, metas, viagens/moedas) — cor azul clara ───
   Tecnologias:
   • Flutter (Dart) — iOS + Android
   • HTTP client (dio ou http) → mesma API REST /api/*
   • Gerenciamento de estado (Provider / Riverpod / Bloc — genérico no diagrama)
   • Secure storage para tokens JWT (access + refresh)
-  • socket_io_client (chat grupos — mesmo endpoint /api/socket.io)
   • Google Sign-In nativo (OAuth → backend)
+  • Socket.IO ainda não no Flutter (RF-140 parcial)
 
   Escopo mobile (paridade gradual com web):
   • Auth, Dashboard, Transações, Orçamento, Metas, Notificações
@@ -308,7 +308,7 @@ RESTRIÇÕES FINAIS
 ═══════════════════════════════════════════════════════════════
 
 - Mostrar **dois clientes** (Web React + Mobile Flutter) apontando para o **mesmo** backend Node
-- Flutter com badge ⏳ Planejado; React com badge ✅ Implementado
+- Flutter com badge ✅ Implementado (paridade parcial); React com badge ✅ Implementado
 - Não incluir Vercel no diagrama
 - Destacar RabbitMQ com ícone e as 3 filas (pulso.alerts, pulso.reminders, pulso.emails)
 - Texto em português brasileiro
@@ -367,4 +367,4 @@ Salvar como: `Documentacao/04-Diagramas/Diagrama de Arquitetura/Arquitetura Puls
 | Providers | `Codigo/Pulso/api/src/providers/` |
 | Schema DB | `Codigo/Pulso/api/prisma/schema.prisma` |
 | Frontend Web | `Codigo/Pulso/web/src/` |
-| Mobile Flutter | planejado — mesma API REST + Socket.IO (RF roadmap) |
+| Mobile Flutter | `Codigo/Pulso/mobile` — REST (auth, transações, metas, viagens); Socket.IO ainda não |

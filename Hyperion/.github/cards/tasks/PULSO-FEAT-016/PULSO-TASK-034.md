@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-034
 title: "Frontend — TransactionFormModal"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-016
@@ -39,10 +39,18 @@ Campos:
 
 **Modos:** `create` | `edit` — hidrata form a partir de `transacao`
 
+
+## 👤 Responsável
+
+Maria Clara (`mariaoliveira27`)
+
+## 🔗 Pull Requests
+
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) — `TransactionFormModal` (`FEAT-016`) → issue [#122](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/122)
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Spec de campos e validações definida
 
 ### ⏳ Pendente
-- Implementar modal create/edit
+- Nenhum

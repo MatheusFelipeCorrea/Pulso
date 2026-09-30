@@ -52,6 +52,10 @@ categories:
 ### Cenário 4 — Fora de escopo
 **Então** não há tela de “criar transação a partir da dívida”; o card de produto proíbe isso.
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

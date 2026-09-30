@@ -113,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _google(String idToken) async {
     await context.read<AuthController>().loginWithGoogleIdToken(idToken);
     if (!mounted) return;
-    context.go('/home');
+    context.go('/transactions');
   }
 
   @override

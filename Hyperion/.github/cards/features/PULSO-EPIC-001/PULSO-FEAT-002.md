@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-002
 title: "Login, sessão JWT e logout"
-status: "In Progress"
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null
@@ -62,6 +62,10 @@ Login deve validar credenciais e exigir email verificado; emitir access JWT (15m
 
 - [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão JWT e logout (`feat/15`)
 
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
@@ -69,5 +73,4 @@ Login deve validar credenciais e exigir email verificado; emitir access JWT (15m
 - Critérios de aceite para login, refresh, logout e bootstrap
 
 ### ⏳ Pendente
-- PULSO-TASK-004 — backend login/refresh/logout/cookies
-- PULSO-TASK-005 — frontend login, interceptor e Redux
+- Nenhum

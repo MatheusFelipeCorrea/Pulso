@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-090
 title: "Protótipo — metas financeiras"
-status: "In Progress"
+status: "Done"
 type: Feature
 priority: High
 sprint: "Sprint 1"
@@ -51,6 +51,10 @@ categories:
 
 ### Cenário 4 — Fora de escopo
 **Então** metas de **grupo** ficam na feature de grupos, não aqui.
+
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
 
 ## 📋 Resumo
 

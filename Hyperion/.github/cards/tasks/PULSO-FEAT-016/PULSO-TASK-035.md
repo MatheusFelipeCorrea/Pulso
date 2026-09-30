@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-035
 title: "Frontend — exclusão e estilos transactions.css"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-016
@@ -37,10 +37,18 @@ Implementar confirmação de delete com opções recorrentes e folha de estilos 
 
 Importar CSS na TransactionsPage ou bundle global.
 
+
+## 👤 Responsável
+
+Maria Clara (`mariaoliveira27`)
+
+## 🔗 Pull Requests
+
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) — exclusão e `transactions.css` (`FEAT-016`) → issue [#123](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/123)
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Spec delete recorrente + breakpoints definidos
 
 ### ⏳ Pendente
-- Implementar DeleteTransactionModal + transactions.css
+- Nenhum

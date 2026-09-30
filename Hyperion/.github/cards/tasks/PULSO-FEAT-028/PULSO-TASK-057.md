@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-057
 title: "Frontend — TripDetailPage e sidebar"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-028
@@ -46,4 +46,4 @@ Conversão BRL: fetch cotação moeda destino (RN-070)
 - Layout detalhe e utils definidos
 
 ### ⏳ Pendente
-- Implementar TripDetailPage e sidebar
+- Nenhum

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-083
 title: "Avaliação heurística do Pulso"
-status: Backlog
+status: "Done"
 type: Feature
 priority: Medium
 sprint: "Sprint 1"
@@ -17,7 +17,7 @@ categories:
 
 # [FEATURE] Avaliação heurística do Pulso
 
-> **Contexto:** `docs/6.avaliacao_heuristica.md` está completo, mas avalia **“Crie seu jogo!”**, não o Pulso. Precisa **reescrever** com Nielsen sobre as telas prototipadas/construídas do Pulso.
+> **Contexto:** Avaliação Nielsen no Figma, consolidada em `docs/6.avaliacao_heuristica.md` por Sofia Vasconcelos e Maria Clara. Avaliadores do time Pulso.
 
 **Arquivo:** `docs/6.avaliacao_heuristica.md`  
 **Depende de:** `PULSO-EPIC-015` (e, se já houver UI, das telas reais)
@@ -41,10 +41,16 @@ categories:
 ### Cenário 4 — Relação com protótipo
 **Então** fica dito se a análise foi em Figma, wireframe ou build; inconsistências claro/escuro podem entrar como achados.
 
+## 👤 Responsáveis
+
+- Sofia Vasconcelos (`sofiavasconcelosms`)
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Documento atual identificado como de outro projeto
+- Avaliação Nielsen no Figma consolidada em `docs/6` (Sofia + Maria)
 
 ### ⏳ Pendente
-- Reescrever após ter telas para inspecionar
+- Nenhum

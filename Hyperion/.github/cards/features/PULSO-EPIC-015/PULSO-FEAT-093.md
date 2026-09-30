@@ -51,6 +51,10 @@ categories:
 ### Cenário 4 — Fora de escopo
 **Então** `/groups/join/:codigo` pode ser um estado de “entrando…”; Socket.IO não precisa de frame técnico.
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

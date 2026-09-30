@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-028
 title: "Categorias, tags e validação recurso×categoria"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-013
@@ -52,10 +52,18 @@ Implementar seed de categorias, CRUD via modais na página de transações e val
 - Categoria.tipo deve bater com transação.tipo
 - Tag nome único case-insensitive por usuário
 
+
+## 👤 Responsável
+
+Alice Shikida (`aliceshikida`)
+
+## 🔗 Pull Requests
+
+- [#299](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/299) — Categorias, tags e `recursoCategoriaRules` (`FEAT-013`) → issue [#116](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/116)
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Spec de validação desacoplada do nome literal (RF-NOVO-C2/C3)
 
 ### ⏳ Pendente
-- Implementar rules + modais de gestão
+- Nenhum

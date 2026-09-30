@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-040
 title: "Backend — metaRoutes, controller e schemas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-018
@@ -40,4 +40,4 @@ Registrar rotas `/metas` no app Express com middleware de autenticação e schem
 - Mapa de rotas e schemas definido
 
 ### ⏳ Pendente
-- Implementar routes, controller e schemas
+- Nenhum

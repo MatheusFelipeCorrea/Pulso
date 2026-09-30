@@ -79,12 +79,14 @@ export const FEATURES = [
     title: 'Grupos',
     description: 'Metas compartilhadas com amigos, família ou colegas.',
     tone: 'teal',
+    badge: 'Em breve',
   },
   {
     icon: CalendarDays,
     title: 'Calendário',
     description: 'Vencimentos, lembretes e compromissos financeiros.',
     tone: 'indigo',
+    badge: 'Em breve',
   },
 ]
 

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-003
 title: "Frontend — telas de cadastro e verificação"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: High
 sprint: null
@@ -66,12 +66,14 @@ Registrar rotas em `App.jsx` — `/register` com `GuestRoute`
 
 - [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de banco e autenticação (`feat/14`)
 
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Spec de telas, componentes e validação Zod definida
 
 ### ⏳ Pendente
-- Implementar 3 páginas + AuthLayout
-- Indicador de força de senha (`PasswordStrengthBar` + checklist)
-- Botão Google no cadastro (`loginWithGoogle`)
+- Nenhum

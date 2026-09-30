@@ -50,6 +50,10 @@ categories:
 ### Cenário 4 — Fora de escopo
 **Então** RF-015 (chatbot quick-add) pode ficar como indicação “em breve”, sem fluxo completo, salvo se o time quiser incluir depois.
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

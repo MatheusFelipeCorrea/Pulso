@@ -60,10 +60,15 @@ categories:
 - [#290](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/290) — Exports de Auth na apostila
 - [#291](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/291) — Protótipos de Auth (claro e escuro)
 
+## 👤 Responsáveis
+
+- Maria Clara (`mariaoliveira27`)
+- Alice Shikida (`aliceshikida`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Lista de telas auth (exceto callback)
 
 ### ⏳ Pendente
-- Frames Figma claro/escuro
+- Nenhum

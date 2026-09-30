@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-162
 title: "Flutter — Google nativo e deep links de e-mail"
-status: Done
+status: "In Revision"
 type: Task
 priority: High
 sprint: null
@@ -45,21 +45,21 @@ Expor `POST /api/auth/google/mobile` que valida o ID token do SDK nativo (mesmo 
 
 ## 🛠️ Implementação
 
-### API — Google mobile (NOVO — CRIAR / EXISTENTE — MODIFICAR)
+### API — Google mobile (EXISTENTE)
 
 - Schema Zod `{ idToken }` em `Codigo/Pulso/api/src/schemas/authSchemas.js`
 - `authService.verifyGoogleIdToken(idToken)` via `google-auth-library` (`OAuth2Client.verifyIdToken`) já usada em `Codigo/Pulso/api/src/utils/googleOAuth.js`
-- Reusar `findOrCreate` Google + `issueAuthTokens` do `authService.js` (EXISTENTE)
+- Reusar `findOrCreate` Google + `issueAuthTokens` do `authService.js`
 - Rota `POST /google/mobile` em `Codigo/Pulso/api/src/routes/authRoutes.js`
-- Novo limiter em `Codigo/Pulso/api/src/middlewares/authRateLimit.js`
-- Env: audiências extras se Android/iOS tiverem OAuth client IDs distintos (`GOOGLE_ANDROID_CLIENT_ID` / `GOOGLE_IOS_CLIENT_ID`) — não inventar valores; documentar no `.env.example`
+- Limiter em `Codigo/Pulso/api/src/middlewares/authRateLimit.js`
+- Env: audiências extras se Android/iOS tiverem OAuth client IDs distintos (`GOOGLE_ANDROID_CLIENT_ID` / `GOOGLE_IOS_CLIENT_ID`) — documentado no `.env.example`
 
-### Flutter (NOVO — CRIAR)
+### Flutter (EXISTENTE)
 
 - Pacote `google_sign_in` + POST do ID token
 - Deep links (`app_links` / associated domains) para `/verify-email/:token` e `/reset-password/:token` **ou** abrir a Web se o app não tratar o host
 
-### Testes (NOVO — CRIAR)
+### Testes (EXISTENTE)
 
 - Unit: ID token inválido; usuário existente por `googleId`; e-mail já EMAIL (mesmo comportamento da Web)
 
@@ -68,6 +68,10 @@ Expor `POST /api/auth/google/mobile` que valida o ID token do SDK nativo (mesmo 
 - Mesmo seed de categorias e `ConfiguracaoUsuario` do cadastro Google web (RF-002)
 - Conta Google nasce verificada
 - E-mails continuam anti-enumeração; links não quebram a SPA
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
 
 ## 📋 Resumo
 

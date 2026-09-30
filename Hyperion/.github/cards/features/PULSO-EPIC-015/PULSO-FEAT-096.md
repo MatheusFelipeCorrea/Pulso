@@ -53,6 +53,10 @@ categories:
 ### Cenário 4 — Fora de escopo
 **Então** o lembrete pode ser um CTA que “abre” o visual de lembrete; não duplicar o calendário inteiro.
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

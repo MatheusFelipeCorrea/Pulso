@@ -3,12 +3,24 @@ const {
     setAuthCookies,
     clearAuthCookies,
     getRefreshTokenFromRequest,
+    ACCESS_COOKIE,
+    REFRESH_COOKIE,
 } = require('../utils/authCookies');
 const AppError = require('../utils/appError');
 const { decodeGoogleReturnState } = require('../utils/googleReturnTo');
 
 const isMobileClient = (req) =>
     String(req.headers?.['x-pulso-client'] || '').toLowerCase() === 'mobile';
+
+/** Tokens no JSON só se for cliente mobile de verdade — não promover sessão cookie. */
+const wantsMobileTokens = (req) => {
+    if (!isMobileClient(req)) return false;
+    const hasBearer = String(req.headers?.authorization || '')
+        .toLowerCase()
+        .startsWith('bearer ');
+    if (hasBearer) return true;
+    return !req.cookies?.[ACCESS_COOKIE] && !req.cookies?.[REFRESH_COOKIE];
+};
 
 const respondWithAuthSession = (res, result, statusCode = 200, { includeTokens = false } = {}) => {
     setAuthCookies(res, {
@@ -55,7 +67,7 @@ const googleCallback = async (req, res) => {
 const exchangeOAuth = async (req, res, next) => {
     try {
         const result = await authService.exchangeOAuthSession(req.body.exchange);
-        respondWithAuthSession(res, result, 200, { includeTokens: isMobileClient(req) });
+        respondWithAuthSession(res, result, 200, { includeTokens: wantsMobileTokens(req) });
     } catch (error) {
         next(error);
     }
@@ -91,7 +103,7 @@ const verifyEmail = async (req, res, next) => {
 const login = async (req, res, next) => {
     try {
         const result = await authService.loginUser(req.body);
-        respondWithAuthSession(res, result, 200, { includeTokens: isMobileClient(req) });
+        respondWithAuthSession(res, result, 200, { includeTokens: wantsMobileTokens(req) });
     } catch (error) {
         next(error);
     }
@@ -112,7 +124,7 @@ const refresh = async (req, res, next) => {
         });
 
         const body = { ok: true };
-        if (isMobileClient(req)) {
+        if (wantsMobileTokens(req)) {
             body.accessToken = result.accessToken;
             body.refreshToken = result.refreshToken;
         }

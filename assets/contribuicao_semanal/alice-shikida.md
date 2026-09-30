@@ -31,25 +31,30 @@
 **Total Sprint 1:** 26h
 
 # Sprint 2
-- Refinar o escopo do Epic de Autenticação e vincular os requisitos (RF-001–006)
 
-- Desenvolver as sub-features do Front-end Web (PULSO-FEAT-001 a 005) e app Flutter (#292)
+- Recorte do épico de Autenticação (RF-001–006, RN-131–143) e acompanhamento das features 001–005 + Flutter 107.
+- Priorização do board da Sprint-2 e revisão de aceite das telas/auth.
 
-# Sprint 3
+**Horas:** 10h
 
-- Revisão das melhorias apontadas nos protótipos de telas e no código parcial para garantir navegabilidade fluida.
+**Total Sprint 2:** 10h
 
-- Conexão das telas do front-end com o back-end para permitir navegação real com dados simulados/reais.
+# Sprint 3 (16/09 a 30/09)
 
-- Consolidar o Fechamento da Sprint 3 e o Planejamento da Sprint 4
+### Semana 1 (16/09 - 22/09)
 
-# Sprint 4
+- Categorias, tags e sugestão automática (`PULSO-FEAT-013`, tasks 028–029): seed, CRUD, `recursoCategoriaRules` (VA/VR; VT rejeitado), `categorySuggestionService`.
+- PR [#299](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/299) → Sprint-3 · issues [#26](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/26), [#116](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/116), [#117](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/117).
+- Revisão de aceite do núcleo de transações (012–017) e da FEAT-108 (mobile + protótipos).
 
-- Implementação de categorias, tags e validação recurso×categoria (Issue #116)
-  
-- Feature de categorias, tags e sugestão automática (Issue #26)
-  
-- Sugestão Automática
-  (Sugestão automática de categoria (RF-028))(Issue #117)
+**Horas:** 14h
 
+### Semana 2 (23/09 - 30/09)
 
+- API de metas (`PULSO-FEAT-018`–`020`): CRUD, resumo, aportes, pause/retomar, sugestão de reserva — PR [#314](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/314) · issue [#31](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/31).
+- Flutter: camada de dados de metas (`PULSO-FEAT-109` / TASK-167) — PR [#320](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/320).
+- Aceite do módulo de metas (API + web + mobile) para In Revision.
+
+**Horas:** 16h
+
+**Total Sprint 3:** 30h

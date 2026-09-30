@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-054
 title: "Backend — destinos, capas e media-passagem"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-026
@@ -44,4 +44,4 @@ Implementar resolvers de destino, serviço de capa e preços de passagem com fal
 - Pipeline e providers documentados
 
 ### ⏳ Pendente
-- Implementar resolver, capas e flight price
+- Nenhum

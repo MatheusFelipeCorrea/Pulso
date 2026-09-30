@@ -6,6 +6,11 @@ import 'package:pulso/core/storage/token_storage.dart';
 import 'package:pulso/core/theme/theme_controller.dart';
 import 'package:pulso/features/auth/data/auth_repository.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
+import 'package:pulso/features/currency/data/currency_repository.dart';
+import 'package:pulso/features/goals/data/goal_repository.dart';
+import 'package:pulso/features/groups/data/group_repository.dart';
+import 'package:pulso/features/transactions/data/transaction_repository.dart';
+import 'package:pulso/features/trips/data/trip_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,5 +32,16 @@ Future<void> main() async {
   final router = createRouter(auth);
   bindAuthDeepLinks(router);
 
-  runApp(PulsoApp(auth: auth, theme: theme, router: router));
+  runApp(
+    PulsoApp(
+      auth: auth,
+      theme: theme,
+      router: router,
+      transactions: TransactionRepository(api),
+      goals: GoalRepository(api),
+      trips: TripRepository(api),
+      currencies: CurrencyRepository(api),
+      groups: GroupRepository(api),
+    ),
+  );
 }

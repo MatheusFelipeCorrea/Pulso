@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-025
 title: "Pretensões e observações de viagem"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-005
@@ -38,10 +38,11 @@ Implementar CRUD de pretensões (despesas) e observações aninhadas em viagens,
 
 - PULSO-TASK-053
 
+## 🔗 Pull Requests
+
+- [#316](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/316) — pretensões e observações na API
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Categorias e payloads definidos
-
-### ⏳ Pendente
-- PULSO-TASK-053 — despesas e observações backend
+- Despesas e observações mergeados na Sprint-3 (In Revision)

@@ -1071,15 +1071,15 @@
 }
 
 .ds-badge--soft.ds-badge--info {
-  background: color-mix(in srgb, #2563eb 12%, transparent);
-  color: #2563eb;
-  border-color: color-mix(in srgb, #2563eb 18%, transparent);
+  background: color-mix(in srgb, var(--ds-color-info) 12%, transparent);
+  color: var(--ds-color-info);
+  border-color: color-mix(in srgb, var(--ds-color-info) 18%, transparent);
 }
 
 .dark .ds-badge--soft.ds-badge--info {
-  background: color-mix(in srgb, #60a5fa 16%, transparent);
-  color: #60a5fa;
-  border-color: color-mix(in srgb, #60a5fa 22%, transparent);
+  background: color-mix(in srgb, var(--ds-color-info) 16%, transparent);
+  color: var(--ds-color-info);
+  border-color: color-mix(in srgb, var(--ds-color-info) 22%, transparent);
 }
 
 .ds-badge--soft.ds-badge--neutral {
@@ -1094,20 +1094,20 @@
 }
 
 .ds-badge--soft.ds-badge--cyan {
-  background: color-mix(in srgb, #0891b2 12%, transparent);
-  color: #0891b2;
-  border-color: color-mix(in srgb, #0891b2 18%, transparent);
+  background: color-mix(in srgb, var(--ds-color-cyan) 12%, transparent);
+  color: var(--ds-color-cyan);
+  border-color: color-mix(in srgb, var(--ds-color-cyan) 18%, transparent);
 }
 
 .dark .ds-badge--soft.ds-badge--cyan {
-  background: color-mix(in srgb, #22d3ee 16%, transparent);
-  color: #22d3ee;
+  background: color-mix(in srgb, var(--ds-color-cyan) 16%, transparent);
+  color: var(--ds-color-cyan);
 }
 
 .ds-badge--soft.ds-badge--orange {
-  background: color-mix(in srgb, #ea580c 12%, transparent);
-  color: #ea580c;
-  border-color: color-mix(in srgb, #ea580c 18%, transparent);
+  background: color-mix(in srgb, var(--ds-color-orange) 12%, transparent);
+  color: var(--ds-color-orange);
+  border-color: color-mix(in srgb, var(--ds-color-orange) 18%, transparent);
 }
 
 .ds-badge--outline {
@@ -1122,6 +1122,36 @@
 .dark .ds-badge--outline.ds-badge--primary {
   color: #a78bfa;
   border-color: color-mix(in srgb, #a78bfa 40%, transparent);
+}
+
+/* ── Avatar ──────────────────────────────────────────────── */
+.ds-avatar {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 9999px;
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+}
+
+.ds-avatar--xs { width: 1.5rem; height: 1.5rem; font-size: 10px; }
+.ds-avatar--sm { width: 2rem; height: 2rem; font-size: 0.75rem; }
+.ds-avatar--md { width: 2.5rem; height: 2.5rem; font-size: 0.875rem; }
+.ds-avatar--lg { width: 4rem; height: 4rem; font-size: 1.125rem; }
+.ds-avatar--xl { width: 6rem; height: 6rem; font-size: 1.5rem; }
+
+.ds-avatar img,
+.ds-avatar > span {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
 }
 
 /* ── Toast (protótipo DS) ──────────────────────────────────── */

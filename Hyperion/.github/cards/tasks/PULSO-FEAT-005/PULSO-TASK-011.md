@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-011
 title: "Frontend — guardas de rota autenticada"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: High
 sprint: null
@@ -59,12 +59,14 @@ Garantir que rotas financeiras exijam sessão válida e rotas de login/cadastro 
 
 - [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão e guards (`feat/15`)
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Spec de guards e árvore de rotas definida
 
 ### ⏳ Pendente
-- Implementar ProtectedRoute e GuestRoute
-- Integrar AuthBootstrap no App.jsx
-- Configurar GUEST_PATH_PREFIXES no interceptor
+- Nenhum

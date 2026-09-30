@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-089
 title: "Protótipo — transações"
-status: "In Progress"
+status: "Done"
 type: Feature
 priority: High
 sprint: "Sprint 1"
@@ -52,6 +52,10 @@ categories:
 
 ### Cenário 4 — Fora de escopo
 **Então** não se prototipa a tela de “job diário” de recorrência.
+
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
 
 ## 📋 Resumo
 

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-029
 title: "Sugestão automática de categoria (RF-028)"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-013
@@ -46,10 +46,18 @@ Em `TransactionFormModal.jsx`:
 - Flag `categoriaAutoSugerida` para UX
 - `transactionService.sugerirCategoria({ tipo, descricao })`
 
+
+## 👤 Responsável
+
+Alice Shikida (`aliceshikida`)
+
+## 🔗 Pull Requests
+
+- [#299](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/299) — `categorySuggestionService` / utils (`FEAT-013`) → issue [#117](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/117)
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Algoritmo e contrato API especificados
 
 ### ⏳ Pendente
-- Implementar service + integração no form
+- Nenhum

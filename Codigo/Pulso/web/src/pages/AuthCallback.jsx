@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 import { useDispatch } from 'react-redux'
@@ -7,6 +7,15 @@ import { Button, Alert, useToast } from '@/design-system/components'
 import { exchangeOAuth, getMe } from '@/services/authService'
 import { setUser } from '@/store/slices/authSlice'
 import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/defaultAuthenticatedRoute.js'
+
+function readExchangeFromLocation(searchParams) {
+  const fromQuery = searchParams.get('exchange')
+  if (fromQuery) return fromQuery
+  if (typeof window === 'undefined') return null
+  const hash = window.location.hash || ''
+  const match = hash.match(/(?:^#|&)?exchange=([^&]+)/)
+  return match ? decodeURIComponent(match[1]) : null
+}
 
 export default function AuthCallback() {
   const [searchParams] = useSearchParams()
@@ -17,7 +26,7 @@ export default function AuthCallback() {
 
   const error = searchParams.get('error')
   const message = searchParams.get('message')
-  const exchange = searchParams.get('exchange')
+  const exchange = useMemo(() => readExchangeFromLocation(searchParams), [searchParams])
 
   useEffect(() => {
     if (handledRef.current) return
@@ -34,6 +43,9 @@ export default function AuthCallback() {
         await exchangeOAuth(exchange)
         const user = await getMe()
         dispatch(setUser(user))
+        if (window.location.hash.includes('exchange=')) {
+          history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+        }
         navigate(DEFAULT_AUTHENTICATED_ROUTE, { replace: true })
       } catch {
         toast.error('Não foi possível concluir o login. Tente novamente.')

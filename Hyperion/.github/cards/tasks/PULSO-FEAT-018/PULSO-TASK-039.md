@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-039
 title: "Backend — metaService e metaRepository"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-018
@@ -44,4 +44,4 @@ Implementar repository Prisma e service com validações de prazo, valor-alvo e 
 - Contratos de service e queries definidos
 
 ### ⏳ Pendente
-- Implementar repository e service base
+- Nenhum

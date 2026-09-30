@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-036
 title: "QA — testes unitários de transações"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-017
@@ -47,10 +47,18 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 | `unit/hooks/useTransactionFilterOptions.test.js` | Hook filtros |
 | `unit/services/transactionService.test.js` | Chamadas HTTP |
 
+
+## 👤 Responsável
+
+Sofia Vasconcelos (`sofiavasconcelosms`)
+
+## 🔗 Pull Requests
+
+- [#300](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/300) — Suites unitárias API + Web (`FEAT-017`) → issue [#124](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/124)
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Matriz de testes definida
 
 ### ⏳ Pendente
-- Escrever/expandir todas as suites listadas
+- Nenhum

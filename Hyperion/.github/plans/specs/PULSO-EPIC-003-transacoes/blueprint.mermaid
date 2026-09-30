@@ -1,0 +1,32 @@
+flowchart TD
+  subgraph web [Web autenticada]
+    Dash[Dashboard stub]
+    Page["/transactions"]
+    Form[TransactionFormModal]
+    Cats[Category / Tag modals]
+  end
+
+  subgraph api [Node API]
+    Auth[authMiddleware]
+    Tx["/api/transacoes"]
+    Cat["/api/categorias"]
+    Tag["/api/tags"]
+    Cron["/api/cron/daily"]
+    Job[recurringTransactions]
+    Rules[recursoCategoriaRules]
+  end
+
+  subgraph mobile [Flutter FEAT-108]
+    MobUI[Telas transações]
+  end
+
+  Dash --> Page
+  Page --> Tx
+  Form --> Tx
+  Form --> Rules
+  Cats --> Cat
+  Cats --> Tag
+  Tx --> Auth
+  Cron --> Job
+  Job --> Tx
+  MobUI -.->|pendente Bearer| Tx

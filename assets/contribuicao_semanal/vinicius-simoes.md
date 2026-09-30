@@ -28,16 +28,29 @@
 
 # Sprint 2
 
-- Testes das rotas de autenticação e CRUD de movimentações no banco de dados e início dos testes na rota da API do Gemini. (8h)
-- Configurar as rotas do backend, middlewares de proteção e integração do Google OAuth. (10h)
-- Desenvolver as sub-features do Front-end Web (PULSO-FEAT-001 a 005) e app Flutter (#292). (6h)
-- Validar fluxos de autenticação ponta a ponta e garantir cobertura de testes. (4h)
+- Rotas de autenticação, middlewares e Google OAuth no backend.
+- Testes das rotas de auth e cobertura dos fluxos de sessão.
+- Apoio ao app Flutter (#292) no contrato da mesma API.
+
+**Horas:** 24h
 
 **Total Sprint 2:** 24h
 
-# Sprint 3
+# Sprint 3 (16/09 a 30/09)
 
-- Conexão das telas do front-end com o back-end para permitir navegação real com dados simulados/reais. (12h)
-- Ajustar o código do front-end e back-end para garantir a navegabilidade. (8h)
+### Semana 1 (16/09 - 22/09)
 
-**Total Sprint 3:** 20h
+- Recorrência e geração automática (`PULSO-FEAT-015`, tasks 031–032): `recurringTransactions`, `recurrenceUtils`, exclusão “esta e futuras”.
+- PR [#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) → Sprint-3 · issues [#28](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/28), [#119](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/119), [#155](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/155).
+- Commit extra de transações recentes / testes de sugestão (`4d031ab` no #302).
+
+**Horas:** 16h
+
+### Semana 2 (23/09 - 30/09)
+
+- API de viagens (`PULSO-FEAT-024`–`026`): CRUD, destinos, pretensões, observações — PR [#316](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/316) · issue [#37](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/37).
+- Flutter: camada de dados de viagens e grupos (`PULSO-FEAT-110` / TASK-170) — PR [#322](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/322).
+
+**Horas:** 16h
+
+**Total Sprint 3:** 32h

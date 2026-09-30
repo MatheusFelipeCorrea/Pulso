@@ -52,6 +52,10 @@ categories:
 ### Cenário 4 — Fora de escopo
 **Então** não se prototipa configuração de chave Gemini nem o job de fim de mês.
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

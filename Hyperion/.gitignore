@@ -3,12 +3,21 @@
 # Audit results
 .github/audits/results/*
 !.github/audits/results/.gitkeep
+!.github/audits/results/_summary/
+.github/audits/results/_summary/*
+!.github/audits/results/_summary/remediacoes-sprint-3.md
 
 # Plans — generated per session
 .github/plans/implementations/*
 !.github/plans/implementations/.gitkeep
 .github/plans/specs/*
 !.github/plans/specs/.gitkeep
+!.github/plans/specs/PULSO-107-auth-flutter/
+!.github/plans/specs/PULSO-107-auth-flutter/**
+!.github/plans/specs/PULSO-EPIC-001-autenticacao/
+!.github/plans/specs/PULSO-EPIC-001-autenticacao/**
+!.github/plans/specs/PULSO-EPIC-003-transacoes/
+!.github/plans/specs/PULSO-EPIC-003-transacoes/**
 .github/plans/reviews/*
 !.github/plans/reviews/.gitkeep
 .github/plans/migrations/*

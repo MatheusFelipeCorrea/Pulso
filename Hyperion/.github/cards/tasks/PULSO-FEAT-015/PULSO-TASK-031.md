@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-031
 title: "Job recurringTransactions e recurrenceUtils"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-015
@@ -43,10 +43,18 @@ Criar em: `Codigo/api/src/jobs/recurringTransactions.js`
 
 `TransactionFormModal`: checkbox recorrente, frequência, até quando, `buildRecurrenceRule`
 
+
+## 👤 Responsável
+
+Vinícius Simões (`ViniSimoesV`)
+
+## 🔗 Pull Requests
+
+- [#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) — Job + `recurrenceUtils` (`FEAT-015`) → issue [#119](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/119)
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Lógica de ocorrência e RRULE básica especificada
 
 ### ⏳ Pendente
-- Implementar job + utils + wire cron
+- Nenhum

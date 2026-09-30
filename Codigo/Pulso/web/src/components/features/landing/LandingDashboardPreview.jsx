@@ -26,7 +26,7 @@ const NAV = [
   {
     icon: Target,
     label: 'Planejamento & Metas',
-    children: ['Metas Financeiras', 'Viagens e Moedas', 'Grupos'],
+    children: ['Metas Financeiras', 'Viagens e Moedas'],
   },
   {
     icon: Brain,

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-004
 title: "Backend — login, refresh, logout e cookies httpOnly"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null
@@ -85,12 +85,14 @@ Criar em: `Codigo/api/src/repositories/authRepository.js`
 
 - [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão JWT e logout (`feat/15`)
 
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Arquitetura de tokens e cookies especificada
 
 ### ⏳ Pendente
-- Implementar login, refresh rotativo e logout
-- Criar utilitários de cookies e tokens
-- Model `TokenRenovacao` + repository
+- Nenhum

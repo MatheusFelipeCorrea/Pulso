@@ -8,7 +8,7 @@ export function UserInfoCard({ collapsed = false }) {
   const user = useAppSelector((state) => state.auth.user)
   const nome = getUserDisplayName(user?.nome)
   const avatarUrl = user?.urlAvatar ?? null
-  const badgeKind = badgeKindFromModoUso(user?.modoUso ?? 'ESTAGIARIO') ?? 'perfil.estagiario'
+  const badgeKind = badgeKindFromModoUso(user?.modoUso ?? 'CLT') ?? 'perfil.clt'
 
   if (collapsed) {
     return (

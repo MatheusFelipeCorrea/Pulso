@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-161
 title: "Flutter — init, e-mail/senha e sessão Bearer"
-status: Done
+status: "In Revision"
 type: Task
 priority: High
 sprint: null
@@ -18,11 +18,11 @@ categories:
 
 # [TASK] Flutter — init, e-mail/senha e sessão Bearer
 
-> **Contexto:** `Codigo/Pulso/mobile` é README placeholder (sem `pubspec`). RF-140: o app consome a **mesma** API REST. Telas de referência: protótipo `PULSO-FEAT-086`.
+> **Contexto:** `Codigo/Pulso/mobile` já tem o app Flutter (Dio, go_router, secure storage). RF-140: o app consome a **mesma** API REST. Telas de referência: protótipo `PULSO-FEAT-086`.
 
 ## 📝 Descrição
 
-Criar o projeto Flutter, cliente HTTP com Dio, persistência segura dos JWT e telas de cadastro/login/logout alinhadas às rotas `/api/auth/*` já existentes.
+Mantém o cliente HTTP (Dio), JWT no secure storage e as telas de cadastro/login/logout alinhadas às rotas `/api/auth/*`.
 
 ## ✅ Critérios de Aceite
 
@@ -51,31 +51,34 @@ Criar o projeto Flutter, cliente HTTP com Dio, persistência segura dos JWT e te
 
 ## 🛠️ Implementação
 
-### `Codigo/Pulso/mobile/` (NOVO — CRIAR)
+### `Codigo/Pulso/mobile/` (EXISTENTE)
 
-- `flutter create` no placeholder; stack: Dio, `flutter_secure_storage`, go_router (ou Navigator 2)
-- Base URL apontando para a API Node (`Codigo/Pulso/api`)
+App Flutter com Dio, `flutter_secure_storage` e go_router. Base URL aponta para a API Node (`Codigo/Pulso/api`).
 
-### Cliente HTTP (NOVO — CRIAR)
+### Cliente HTTP (EXISTENTE)
 
-Criar em: `Codigo/Pulso/mobile/lib/core/api/`
+Em: `Codigo/Pulso/mobile/lib/core/api/`
 
 - Interceptor: `Authorization: Bearer` + `X-Pulso-Client: mobile`
 - Refresh único (fila) para evitar replay paralelo do refresh token
 - 401 após refresh falho → limpa storage e rota de login
 
-### Auth feature (NOVO — CRIAR)
+### Auth feature (EXISTENTE)
 
-Criar em: `Codigo/Pulso/mobile/lib/features/auth/`
+Em: `Codigo/Pulso/mobile/lib/features/auth/`
 
 - `token_storage.dart` — secure storage
 - `auth_repository.dart` — register, login, refresh, logout, me, forgot, reset, resend
-- Telas alinhadas ao protótipo: cadastro, e-mail enviado, login, forgot, reset (claro/escuro se o tema do app já existir)
+- Telas alinhadas ao protótipo: cadastro, e-mail enviado, login, forgot, reset
 
 ## 📐 Regras de Negócio
 
 - Mesmas validações da Web (nome ≥3, senha forte, anti-enumeração no forgot)
 - JWT no device só em storage seguro (apostila 3.4)
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
 
 ## 📋 Resumo
 

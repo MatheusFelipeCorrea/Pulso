@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-046
 title: "Frontend — aportes, exclusão e GoalAportesSection"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-021
@@ -45,4 +45,4 @@ Implementar fluxos de contribuição, confirmação de delete e seção de hist�
 - Fluxos de aporte e correção pós-conclusão especificados
 
 ### ⏳ Pendente
-- Implementar modais e GoalAportesSection
+- Nenhum

@@ -51,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Bem-vindo de volta, $nome!')),
       );
-      context.go('/home');
+      context.go('/transactions');
     } on ApiException catch (error) {
       if (!mounted) return;
       if (error.isForbidden) {
@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _google(String idToken) async {
     await context.read<AuthController>().loginWithGoogleIdToken(idToken);
     if (!mounted) return;
-    context.go('/home');
+    context.go('/transactions');
   }
 
   @override

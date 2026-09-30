@@ -16,6 +16,7 @@ const testEnv = {
     CORS_ORIGIN: 'http://localhost:5173',
     FRONTEND_URL: 'http://localhost:5173',
     NODE_ENV: 'test',
+    RABBITMQ_URL: '',
 };
 
 Object.assign(process.env, testEnv);

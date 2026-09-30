@@ -29,11 +29,30 @@
 
 # Sprint 2
 
-- Mapear as 9 telas de fluxo de Auth no Figma (Cadastro, Login, Recuperação de Senha).
-- Desenvolver as sub-features do Front-end Web (PULSO-FEAT-001 a 005).
-- Desenvolver as sub-features do app Flutter (#292).
+- Fluxo de auth no Figma (cadastro, login, recuperação) alinhado às 9 rotas da Web.
+- Telas e componentes de cadastro/login/recuperação no front (`PULSO-FEAT-001` a `005`).
 
-# Sprint 3
+**Horas:** 12h
 
--	Aplicação da Avaliação Heurística de Nielsen nas telas da aplicação para identificar falhas de usabilidade antes da entrega.
--	Atualizar e corrigir os protótipos de interfaces no Figma
+**Total Sprint 2:** 12h
+
+# Sprint 3 (16/09 a 30/09)
+
+### Semana 1 (16/09 - 22/09)
+
+- Página de transações (`PULSO-FEAT-016`, tasks 033–035): `TransactionsPage`, filtros, lista, `TransactionFormModal`, exclusão e `transactions.css`.
+- PR [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) → Sprint-3 · issues [#29](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/29), [#121](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/121)–[#123](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/123).
+- Avaliação heurística (Nielsen) nas telas do protótipo, com Sofia (`docs/6.avaliacao_heuristica.md`).
+- Ajustes de protótipo no Figma (recorte autenticado / transações).
+
+**Horas:** 16h
+
+### Semana 2 (23/09 - 30/09)
+
+- Página de metas no web (`PULSO-FEAT-021`) — PR [#315](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/315) · issue [#34](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/34).
+- Flutter: telas de metas (`PULSO-FEAT-109` / TASK-168) — PR [#321](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/321).
+- Protótipos de metas (`PULSO-FEAT-090` / TASK-166) para publicar na apostila.
+
+**Horas:** 16h
+
+**Total Sprint 3:** 32h

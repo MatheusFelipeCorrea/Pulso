@@ -1,5 +1,6 @@
 import 'package:app_links/app_links.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pulso/features/account/screens/account_screen.dart';
 import 'package:pulso/features/auth/screens/auth_callback_screen.dart';
 import 'package:pulso/features/auth/screens/email_sent_screen.dart';
 import 'package:pulso/features/auth/legal/legal_content.dart';
@@ -11,11 +12,28 @@ import 'package:pulso/features/auth/screens/reset_password_screen.dart';
 import 'package:pulso/features/auth/screens/verify_email_screen.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/auth/widgets/auth_page.dart';
+import 'package:provider/provider.dart';
+import 'package:pulso/core/widgets/app_shell.dart';
+import 'package:pulso/features/goals/data/goal_models.dart';
+import 'package:pulso/features/goals/screens/goal_form_screen.dart';
+import 'package:pulso/features/goals/screens/goals_screen.dart';
+import 'package:pulso/features/groups/screens/group_form_screen.dart';
+import 'package:pulso/features/groups/screens/groups_screen.dart';
 import 'package:pulso/features/home/screens/home_screen.dart';
+import 'package:pulso/features/transactions/data/transaction_models.dart';
+import 'package:pulso/features/transactions/data/transaction_repository.dart';
+import 'package:pulso/features/transactions/screens/categories_screen.dart';
+import 'package:pulso/features/transactions/screens/tags_screen.dart';
+import 'package:pulso/features/transactions/screens/transaction_form_screen.dart';
+import 'package:pulso/features/transactions/screens/transactions_screen.dart';
+import 'package:pulso/features/trips/data/trip_models.dart';
+import 'package:pulso/features/trips/screens/trip_detail_screen.dart';
+import 'package:pulso/features/trips/screens/trip_form_screen.dart';
+import 'package:pulso/features/trips/screens/trips_screen.dart';
 
 GoRouter createRouter(AuthController auth) {
   return GoRouter(
-    initialLocation: auth.status == AuthStatus.authenticated ? '/home' : '/login',
+    initialLocation: auth.status == AuthStatus.authenticated ? '/transactions' : '/login',
     refreshListenable: auth,
     redirect: (context, state) {
       final loggedIn = auth.status == AuthStatus.authenticated;
@@ -31,9 +49,23 @@ GoRouter createRouter(AuthController auth) {
 
       if (!loggedIn && state.matchedLocation == '/home') return '/login';
       if (loggedIn && (state.matchedLocation == '/login' || state.matchedLocation == '/register')) {
-        return '/home';
+        return '/transactions';
+      }
+      if (loggedIn && (state.matchedLocation == '/home' || state.matchedLocation == '/dashboard')) {
+        return '/transactions';
+      }
+      if (loggedIn && (state.matchedLocation == '/groups' || state.matchedLocation.startsWith('/groups/'))) {
+        return '/transactions';
+      }
+      if (loggedIn &&
+          (state.matchedLocation == '/trips' || state.matchedLocation.startsWith('/trips/')) &&
+          auth.user?.plano != 'PREMIUM') {
+        return '/transactions';
       }
       if (!loggedIn && !loggingIn) return '/login';
+      if (loggedIn && !_isKnownAuthedLocation(state.matchedLocation)) {
+        return '/transactions';
+      }
       return null;
     },
     routes: [
@@ -104,11 +136,110 @@ GoRouter createRouter(AuthController auth) {
         ),
       ),
       GoRoute(
-        path: '/home',
-        builder: (context, state) => const HomeScreen(),
+        path: '/transactions/new',
+        builder: (context, state) => TransactionFormScreen(
+          repository: context.read<TransactionRepository>(),
+        ),
+      ),
+      GoRoute(
+        path: '/transactions/:id',
+        builder: (context, state) => TransactionFormScreen(
+          repository: context.read<TransactionRepository>(),
+          transacao: state.extra is PulsoTransacao ? state.extra as PulsoTransacao : null,
+        ),
+      ),
+      GoRoute(
+        path: '/goals/form',
+        builder: (context, state) => GoalFormScreen(
+          meta: state.extra is PulsoMeta ? state.extra as PulsoMeta : null,
+        ),
+      ),
+      GoRoute(
+        path: '/trips/new',
+        builder: (context, state) => const TripFormScreen(),
+      ),
+      GoRoute(
+        path: '/trips/:id/edit',
+        builder: (context, state) => TripFormScreen(
+          viagem: state.extra is PulsoViagem ? state.extra as PulsoViagem : null,
+        ),
+      ),
+      GoRoute(
+        path: '/trips/:id',
+        builder: (context, state) => TripDetailScreen(
+          viagemId: state.pathParameters['id'] ?? '',
+          viagem: state.extra is PulsoViagem ? state.extra as PulsoViagem : null,
+        ),
+      ),
+      GoRoute(
+        path: '/groups/new',
+        builder: (context, state) => const GroupFormScreen(),
+      ),
+      ShellRoute(
+        builder: (context, state, child) => AppShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/dashboard',
+            builder: (context, state) => const HomeScreen(),
+          ),
+          GoRoute(
+            path: '/transactions',
+            builder: (context, state) => const TransactionsScreen(),
+          ),
+          GoRoute(
+            path: '/categories',
+            builder: (context, state) => CategoriesScreen(
+              repository: context.read<TransactionRepository>(),
+            ),
+          ),
+          GoRoute(
+            path: '/tags',
+            builder: (context, state) => TagsScreen(
+              repository: context.read<TransactionRepository>(),
+            ),
+          ),
+          GoRoute(
+            path: '/profile',
+            builder: (context, state) => const AccountScreen(
+              title: 'Perfil',
+              subtitle: 'Dados da conta autenticada. Edição cadastral entra em um recorte futuro.',
+            ),
+          ),
+          GoRoute(
+            path: '/settings',
+            builder: (context, state) => const AccountScreen(
+              title: 'Configurações',
+              subtitle: 'Preferências de tema e dados da conta. Demais ajustes entram depois.',
+              showTheme: true,
+            ),
+          ),
+          GoRoute(
+            path: '/goals',
+            builder: (context, state) => const GoalsScreen(),
+          ),
+          GoRoute(
+            path: '/trips',
+            builder: (context, state) => const TripsScreen(),
+          ),
+          GoRoute(
+            path: '/groups',
+            builder: (context, state) => const GroupsScreen(),
+          ),
+        ],
       ),
     ],
   );
+}
+
+bool _isKnownAuthedLocation(String loc) {
+  if (loc == '/dashboard' || loc == '/transactions' || loc == '/categories' || loc == '/tags') return true;
+  if (loc == '/profile' || loc == '/settings') return true;
+  if (loc == '/goals' || loc == '/goals/form') return true;
+  if (loc == '/trips' || loc == '/trips/new' || loc.startsWith('/trips/')) return true;
+  if (loc == '/groups' || loc == '/groups/new') return true;
+  if (loc == '/transactions/new' || loc.startsWith('/transactions/')) return true;
+  if (loc == '/termos' || loc == '/privacidade') return true;
+  return false;
 }
 
 void bindAuthDeepLinks(GoRouter router) {

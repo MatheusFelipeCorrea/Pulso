@@ -52,12 +52,20 @@ const decodeGoogleReturnState = (state) => {
 };
 
 const buildOAuthCallbackLocation = (origin, params) => {
-    const query = params.toString();
+    const exchange = params.get('exchange');
+    const rest = new URLSearchParams(params);
+    rest.delete('exchange');
+    const query = rest.toString();
+    const qs = query ? `?${query}` : '';
+    const fragment = exchange ? `#exchange=${encodeURIComponent(exchange)}` : '';
+
     if (!origin || origin === frontendOrigin()) {
         const base = String(env.FRONTEND_URL || '').replace(/\/$/, '');
-        return `${base}/auth/callback?${query}`;
+        return `${base}/auth/callback${qs}${fragment}`;
     }
-    return `${origin}/#/auth/callback?${query}`;
+
+    const hashQuery = new URLSearchParams(params).toString();
+    return `${origin}/#/auth/callback?${hashQuery}`;
 };
 
 module.exports = {

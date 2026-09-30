@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-032
 title: "Exclusão recorrente com preservação de histórico"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-015
@@ -45,10 +45,19 @@ Em `transactionService.excluirTransacao`:
 | `DeleteTransactionModal.jsx` | Opções: só esta / esta e futuras |
 | `transactionService.excluirTransacao` | Query params delete |
 
+
+## 👤 Responsável
+
+Vinícius Simões (`ViniSimoesV`)
+
+## 🔗 Pull Requests
+
+- [#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) — Exclusão recorrente (`FEAT-015`) → issue [#155](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/155)
+- [#301](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/301) — `DeleteTransactionModal` (`FEAT-016`)
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Comportamento RF-NOVO-C1 especificado
 
 ### ⏳ Pendente
-- Implementar backend + modal de exclusão
+- Nenhum

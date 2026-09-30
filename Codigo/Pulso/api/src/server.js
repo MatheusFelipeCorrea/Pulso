@@ -7,18 +7,13 @@ const cron = require('node-cron');
 // TEMP Sprint-2: deps ainda ausentes no repo — desligados para a API subir (Auth).
 // const { initSocket } = require('./socket/groupChat');
 const { runTokenCleanup } = require('./jobs/tokenCleanupJob');
-// const { runRecurringTransactions } = require('./jobs/recurringTransactions');
+const { runRecurringTransactions } = require('./jobs/recurringTransactions');
+const { startMessagingWorkers } = require('./messaging/jobBridge');
+const { runUnverifiedAccountCleanup } = require('./jobs/unverifiedAccountCleanupJob');
 // const { runDebtCleanupJob } = require('./jobs/debtCleanupJob');
 // const { runNotificationCleanup } = require('./jobs/notificationCleanupJob');
 // const { runChatCleanupJob } = require('./jobs/chatCleanupJob');
 // const { runExpenseSplitCleanupJob } = require('./jobs/expenseSplitCleanupJob');
-// const {
-//     enqueueBudgetAlert,
-//     enqueueDebtAlert,
-//     enqueueReminderAlert,
-//     enqueueReminderRecurrence,
-//     startMessagingWorkers,
-// } = require('./messaging/jobBridge');
 
 const startTokenCleanupScheduler = () => {
     if (env.NODE_ENV === 'test') {
@@ -37,7 +32,37 @@ const startTokenCleanupScheduler = () => {
     logger.info('🧹 Agendador de limpeza de tokens ativo (hourly)');
 };
 
-// const startRecurringTransactionsScheduler = () => { ... };
+const startRecurringTransactionsScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule('5 0 * * *', async () => {
+        try {
+            await runRecurringTransactions();
+        } catch (error) {
+            logger.error(`Falha no job de transações recorrentes: ${error.message}`);
+        }
+    });
+
+    logger.info('🔄 Agendador de transações recorrentes ativo (diário 00:05)');
+};
+
+const startUnverifiedAccountCleanupScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule('20 3 * * *', async () => {
+        try {
+            await runUnverifiedAccountCleanup();
+        } catch (error) {
+            logger.error(`Falha na limpeza de contas não verificadas: ${error.message}`);
+        }
+    });
+
+    logger.info('🧹 Agendador de contas não verificadas ativo (diário 03:20)');
+};
 // const startBudgetAlertScheduler = () => { ... };
 // const startReminderAlertScheduler = () => { ... };
 // const startDebtCleanupScheduler = () => { ... };
@@ -55,9 +80,10 @@ const start = async () => {
 
         // Na Vercel os jobs rodam via /api/cron/* (vercel.json crons)
         if (!process.env.VERCEL) {
-            // await startMessagingWorkers();
+            await startMessagingWorkers();
             startTokenCleanupScheduler();
-            // startRecurringTransactionsScheduler();
+            startRecurringTransactionsScheduler();
+            startUnverifiedAccountCleanupScheduler();
             // startBudgetAlertScheduler();
             // startReminderAlertScheduler();
             // startReminderRecurrenceScheduler();
