@@ -35,6 +35,12 @@ class TransactionsController extends ChangeNotifier {
     }
   }
 
+  Future<void> clearExtraFilters() {
+    return applyFilters(
+      TransactionFilters(periodo: filters.periodo),
+    );
+  }
+
   Future<void> applyFilters(TransactionFilters next) async {
     filters = next;
     await _fetch();

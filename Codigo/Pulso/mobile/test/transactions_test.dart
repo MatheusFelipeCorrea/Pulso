@@ -84,6 +84,7 @@ void main() {
   });
 
   test('ícones de categoria seguem os nomes Lucide da Web', () {
+    expect(iconFromLucide('RefreshCw'), Icons.autorenew);
     expect(iconFromLucide('UtensilsCrossed'), Icons.restaurant);
     expect(iconFromLucide('GraduationCap'), Icons.school_outlined);
     expect(iconFromLucide('ShoppingBag'), Icons.shopping_bag_outlined);
