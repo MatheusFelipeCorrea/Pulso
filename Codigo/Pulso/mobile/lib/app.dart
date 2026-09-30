@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:pulso/core/theme/pulso_theme.dart';
 import 'package:pulso/core/theme/theme_controller.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
+import 'package:pulso/features/transactions/data/transaction_repository.dart';
+import 'package:pulso/features/transactions/state/transactions_controller.dart';
 
 class PulsoApp extends StatelessWidget {
   const PulsoApp({
@@ -11,11 +13,13 @@ class PulsoApp extends StatelessWidget {
     required this.auth,
     required this.theme,
     required this.router,
+    required this.transactions,
   });
 
   final AuthController auth;
   final ThemeController theme;
   final GoRouter router;
+  final TransactionRepository transactions;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +27,10 @@ class PulsoApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: auth),
         ChangeNotifierProvider.value(value: theme),
+        Provider<TransactionRepository>.value(value: transactions),
+        ChangeNotifierProvider(
+          create: (_) => TransactionsController(transactions),
+        ),
       ],
       child: AnimatedBuilder(
         animation: theme,
