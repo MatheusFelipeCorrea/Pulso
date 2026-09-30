@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pulso/core/api/api_exception.dart';
+import 'package:pulso/core/theme/pulso_tokens.dart';
+import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
 
@@ -62,57 +64,63 @@ class _TagsScreenState extends State<TagsScreen> {
       await _load();
     } on ApiException catch (err) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err.message)));
+      showPulsoSnack(context, err.message);
     }
   }
 
   Future<void> _excluir(PulsoTag tag) async {
+    final ok = await showPulsoConfirm(
+      context: context,
+      title: 'Excluir tag',
+      message: 'A tag "${tag.nome}" será excluída.',
+    );
+    if (ok != true) return;
     try {
       await widget.repository.excluirTag(tag.id);
       await _load();
     } on ApiException catch (err) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err.message)));
+      showPulsoSnack(context, err.message);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: _criar,
-        child: const Icon(Icons.add),
-      ),
-      body: loading
-          ? const Center(child: CircularProgressIndicator())
-          : error != null
-              ? Center(child: Text(error!))
-              : tags.isEmpty
-                  ? const Center(child: Text('Nenhuma tag ainda.'))
-                  : ListView.builder(
-                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 100),
-                      itemCount: tags.length + 1,
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                            child: Text(
-                              'Tags',
-                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
-                            ),
-                          );
-                        }
-                        final tag = tags[index - 1];
-                        return ListTile(
-                          leading: const Icon(Icons.label_outline),
-                          title: Text(tag.nome),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete_outline),
-                            onPressed: () => _excluir(tag),
-                          ),
-                        );
-                      },
-                    ),
+    if (loading) return const Center(child: CircularProgressIndicator());
+    if (error != null) {
+      return PulsoEmptyState(title: 'Erro', description: error!, actionLabel: 'Tentar de novo', onAction: _load);
+    }
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, PulsoTokens.space8),
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: FilledButton.icon(
+            onPressed: _criar,
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('Nova tag'),
+          ),
+        ),
+        const SizedBox(height: PulsoTokens.space3),
+        if (tags.isEmpty)
+          const PulsoEmptyState(
+            title: 'Nenhuma tag ainda',
+            description: 'Crie uma tag para organizar seus lançamentos.',
+          )
+        else
+          ...tags.map(
+            (tag) => ListTile(
+              leading: const Icon(Icons.label_outline),
+              title: Text(tag.nome),
+              trailing: IconButton(
+                tooltip: 'Excluir tag',
+                icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error),
+                onPressed: () => _excluir(tag),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

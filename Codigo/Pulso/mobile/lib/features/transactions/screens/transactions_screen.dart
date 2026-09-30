@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
+import 'package:pulso/core/theme/pulso_tokens.dart';
+import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/state/transactions_controller.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
 import 'package:pulso/features/transactions/widgets/delete_transaction_dialog.dart';
-import 'package:pulso/features/transactions/widgets/filters_sheet.dart';
 import 'package:pulso/features/transactions/widgets/summary_cards.dart';
 import 'package:pulso/features/transactions/widgets/transaction_tile.dart';
 
@@ -43,34 +44,21 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     }
   }
 
-  Future<void> _openFilters() async {
-    final controller = context.read<TransactionsController>();
-    final next = await showTransactionFiltersSheet(
-      context: context,
-      current: controller.filters,
-      options: controller.options,
-    );
-    if (next != null && mounted) await controller.applyFilters(next);
-  }
-
   Future<void> _confirmDelete(PulsoTransacao tx) async {
     final choice = await showDeleteTransactionDialog(context: context, transacao: tx);
     if (choice == null || !mounted) return;
     try {
       await context.read<TransactionsController>().excluir(tx, excluirFuturas: choice.excluirFuturas);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            choice.excluirFuturas
-                ? 'Recorrência encerrada. O histórico anterior foi mantido.'
-                : 'Transação excluída',
-          ),
-        ),
+      showPulsoSnack(
+        context,
+        choice.excluirFuturas
+            ? 'Recorrência encerrada. O histórico anterior foi mantido.'
+            : 'Transação excluída',
       );
     } on ApiException catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+      showPulsoSnack(context, error.message);
     }
   }
 
@@ -85,83 +73,121 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   Widget build(BuildContext context) {
     final controller = context.watch<TransactionsController>();
 
-    return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _openForm(),
-        icon: const Icon(Icons.add),
-        label: const Text('Nova'),
-      ),
-      body: RefreshIndicator(
-        onRefresh: controller.reload,
-        child: ListView(
-          controller: _scroll,
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
-          children: [
-            Text(
-              'Transações',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(height: 16),
-            Row(
+    return RefreshIndicator(
+      onRefresh: controller.reload,
+      child: ListView(
+        controller: _scroll,
+        padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, PulsoTokens.space8),
+        children: [
+          Row(
+            children: [
+              IconButton(
+                tooltip: 'Mês anterior',
+                onPressed: () => controller.shiftPeriod(-1),
+                icon: const Icon(Icons.chevron_left),
+              ),
+              Expanded(
+                child: Text(
+                  TransactionPeriod.label(controller.filters.periodo),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              IconButton(
+                tooltip: 'Próximo mês',
+                onPressed: () => controller.shiftPeriod(1),
+                icon: const Icon(Icons.chevron_right),
+              ),
+            ],
+          ),
+          const SizedBox(height: PulsoTokens.space2),
+          Wrap(
+            spacing: PulsoTokens.space2,
+            runSpacing: PulsoTokens.space2,
+            children: [
+              OutlinedButton.icon(
+                onPressed: () => context.push('/categories'),
+                icon: const Icon(Icons.category_outlined, size: 18),
+                label: const Text('Categorias'),
+              ),
+              OutlinedButton.icon(
+                onPressed: () => context.push('/tags'),
+                icon: const Icon(Icons.label_outline, size: 18),
+                label: const Text('Tags'),
+              ),
+            ],
+          ),
+          if (controller.filters.hasExtraFilters) ...[
+            const SizedBox(height: PulsoTokens.space2),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                IconButton(
-                  onPressed: () => controller.shiftPeriod(-1),
-                  icon: const Icon(Icons.chevron_left),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      TransactionPeriod.label(controller.filters.periodo),
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                    ),
+                if (controller.filters.tipo != 'TODOS')
+                  InputChip(label: Text(_tipoLabel(controller.filters.tipo)), onDeleted: () => controller.applyFilters(controller.filters.copyWith(tipo: 'TODOS'))),
+                if (controller.filters.recurso != 'TODOS')
+                  InputChip(label: Text(recursoLabel(controller.filters.recurso)), onDeleted: () => controller.applyFilters(controller.filters.copyWith(recurso: 'TODOS'))),
+                if (controller.filters.categoriaId != null)
+                  InputChip(
+                    label: const Text('Categoria'),
+                    onDeleted: () => controller.applyFilters(controller.filters.copyWith(clearCategoria: true)),
                   ),
-                ),
-                IconButton(
-                  onPressed: () => controller.shiftPeriod(1),
-                  icon: const Icon(Icons.chevron_right),
-                ),
-                IconButton(
-                  tooltip: 'Filtros',
-                  onPressed: _openFilters,
-                  icon: const Icon(Icons.tune),
-                ),
+                if (controller.filters.busca.trim().isNotEmpty)
+                  InputChip(
+                    label: Text('“${controller.filters.busca.trim()}”'),
+                    onDeleted: () => controller.applyFilters(controller.filters.copyWith(busca: '')),
+                  ),
+                TextButton(onPressed: controller.clearExtraFilters, child: const Text('Limpar')),
               ],
             ),
-            const SizedBox(height: 12),
-            TransactionSummaryCards(resumo: controller.resumo),
-            const SizedBox(height: 16),
-            if (controller.loading && controller.transacoes.isEmpty)
-              const Padding(
-                padding: EdgeInsets.only(top: 48),
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else if (controller.error != null && controller.transacoes.isEmpty)
-              Padding(
-                padding: const EdgeInsets.only(top: 32),
-                child: Column(
-                  children: [
-                    Text(controller.error!, textAlign: TextAlign.center),
-                    const SizedBox(height: 12),
-                    FilledButton(onPressed: controller.bootstrap, child: const Text('Tentar de novo')),
-                  ],
-                ),
-              )
-            else if (controller.transacoes.isEmpty)
-              const Padding(
-                padding: EdgeInsets.only(top: 48),
-                child: Center(child: Text('Nenhuma transação neste período.')),
-              )
-            else
-              ..._groupedTiles(controller.transacoes),
-            if (controller.loadingMore)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CircularProgressIndicator()),
-              ),
           ],
-        ),
+          const SizedBox(height: PulsoTokens.space3),
+          TransactionSummaryCards(resumo: controller.resumo, loading: controller.loading && controller.resumo == null),
+          const SizedBox(height: PulsoTokens.space4),
+          if (controller.loading && controller.transacoes.isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: PulsoTokens.space8),
+              child: Center(
+                child: Semantics(
+                  label: 'Carregando transações',
+                  child: const CircularProgressIndicator(),
+                ),
+              ),
+            )
+          else if (controller.error != null && controller.transacoes.isEmpty)
+            PulsoEmptyState(
+              title: 'Não foi possível carregar',
+              description: controller.error!,
+              actionLabel: 'Tentar de novo',
+              onAction: controller.bootstrap,
+            )
+          else if (controller.transacoes.isEmpty)
+            PulsoEmptyState(
+              title: 'Nenhuma transação encontrada',
+              description: 'Comece registrando uma!',
+              actionLabel: 'Nova transação',
+              onAction: () => _openForm(),
+            )
+          else
+            ..._groupedTiles(controller.transacoes),
+          if (controller.loadingMore)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: PulsoTokens.space4),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+        ],
       ),
     );
+  }
+
+  String _tipoLabel(String tipo) {
+    return switch (tipo) {
+      'RECEITA' => 'Receita',
+      'DESPESA' => 'Despesa',
+      'TRANSFERENCIA' => 'Transferência',
+      _ => tipo,
+    };
   }
 
   List<Widget> _groupedTiles(List<PulsoTransacao> items) {
@@ -173,7 +199,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     for (final entry in groups.entries) {
       widgets.add(
         Padding(
-          padding: const EdgeInsets.fromLTRB(4, 16, 4, 4),
+          padding: const EdgeInsets.fromLTRB(4, PulsoTokens.space4, 4, PulsoTokens.space1),
           child: Text(entry.key, style: Theme.of(context).textTheme.labelLarge),
         ),
       );

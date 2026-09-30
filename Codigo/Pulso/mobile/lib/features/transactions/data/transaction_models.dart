@@ -219,6 +219,12 @@ class TransactionFilters {
   final String? categoriaId;
   final String busca;
 
+  bool get hasExtraFilters =>
+      tipo != 'TODOS' ||
+      recurso != 'TODOS' ||
+      (categoriaId != null && categoriaId!.isNotEmpty) ||
+      busca.trim().isNotEmpty;
+
   TransactionFilters copyWith({
     String? periodo,
     String? tipo,

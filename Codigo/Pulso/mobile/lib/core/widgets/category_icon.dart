@@ -65,6 +65,38 @@ IconData iconFromLucide(String? name) {
       return Icons.savings_outlined;
     case 'ArrowLeftRight':
       return Icons.swap_horiz;
+    case 'RefreshCw':
+      return Icons.autorenew;
+    case 'Crown':
+      return Icons.workspace_premium_outlined;
+    case 'Play':
+      return Icons.play_arrow_outlined;
+    case 'Pause':
+      return Icons.pause_outlined;
+    case 'CheckCircle':
+      return Icons.check_circle_outline;
+    case 'XCircle':
+      return Icons.cancel_outlined;
+    case 'Clock':
+      return Icons.schedule;
+    case 'ArrowUp':
+      return Icons.arrow_upward;
+    case 'ArrowDown':
+      return Icons.arrow_downward;
+    case 'Minus':
+      return Icons.remove;
+    case 'User':
+      return Icons.person_outline;
+    case 'CalendarCheck':
+      return Icons.event_available_outlined;
+    case 'Hourglass':
+      return Icons.hourglass_empty;
+    case 'Sprout':
+      return Icons.eco_outlined;
+    case 'BarChart3':
+      return Icons.bar_chart;
+    case 'Info':
+      return Icons.info_outline;
     default:
       return Icons.label_outline;
   }

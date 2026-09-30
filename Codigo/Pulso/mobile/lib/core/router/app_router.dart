@@ -43,6 +43,9 @@ GoRouter createRouter(AuthController auth) {
       }
       if (loggedIn && state.matchedLocation == '/home') return '/dashboard';
       if (!loggedIn && !loggingIn) return '/login';
+      if (loggedIn && !_isKnownAuthedLocation(state.matchedLocation)) {
+        return '/transactions';
+      }
       return null;
     },
     routes: [
@@ -152,6 +155,13 @@ GoRouter createRouter(AuthController auth) {
       ),
     ],
   );
+}
+
+bool _isKnownAuthedLocation(String loc) {
+  if (loc == '/dashboard' || loc == '/transactions' || loc == '/categories' || loc == '/tags') return true;
+  if (loc == '/transactions/new' || loc.startsWith('/transactions/')) return true;
+  if (loc == '/termos' || loc == '/privacidade') return true;
+  return false;
 }
 
 void bindAuthDeepLinks(GoRouter router) {

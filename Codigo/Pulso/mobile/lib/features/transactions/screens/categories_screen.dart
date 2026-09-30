@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pulso/core/api/api_exception.dart';
+import 'package:pulso/core/theme/pulso_tokens.dart';
+import 'package:pulso/core/widgets/category_icon.dart';
+import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
 import 'package:pulso/features/transactions/utils/transaction_rules.dart';
-import 'package:pulso/core/widgets/category_icon.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key, required this.repository});
@@ -57,7 +59,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   decoration: const InputDecoration(labelText: 'Nome'),
                   textCapitalization: TextCapitalization.sentences,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: PulsoTokens.space3),
                 DropdownButtonFormField<String>(
                   initialValue: tipo,
                   decoration: const InputDecoration(labelText: 'Tipo'),
@@ -93,21 +95,15 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       await _load();
     } on ApiException catch (err) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err.message)));
+      showPulsoSnack(context, err.message);
     }
   }
 
   Future<void> _excluir(PulsoCategoria cat) async {
-    final ok = await showDialog<bool>(
+    final ok = await showPulsoConfirm(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Excluir categoria'),
-        content: Text('A categoria "${cat.nome}" será excluída.'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Excluir')),
-        ],
-      ),
+      title: 'Excluir categoria',
+      message: 'A categoria "${cat.nome}" será excluída.',
     );
     if (ok != true) return;
     try {
@@ -115,7 +111,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       await _load();
     } on ApiException catch (err) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err.message)));
+      showPulsoSnack(context, err.message);
     }
   }
 
@@ -124,51 +120,55 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     final personalizadas = categorias.where((cat) => !cat.padrao).toList();
     final padrao = categorias.where((cat) => cat.padrao).toList();
 
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: _criar,
-        child: const Icon(Icons.add),
-      ),
-      body: loading
-          ? const Center(child: CircularProgressIndicator())
-          : error != null
-              ? Center(child: Text(error!))
-              : ListView(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 100),
-                  children: [
-                    Text('Categorias', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 16),
-                    Text('Personalizadas', style: Theme.of(context).textTheme.titleMedium),
-                    if (personalizadas.isEmpty)
-                      const ListTile(title: Text('Nenhuma categoria própria ainda.')),
-                    ...personalizadas.map(
-                      (cat) => ListTile(
-                        leading: CategoryGlyph(
-                          icone: cat.icone,
-                          color: parseHexColor(cat.cor) ?? Theme.of(context).colorScheme.primary,
-                        ),
-                        title: Text(cat.nome),
-                        subtitle: Text(cat.tipo == 'RECEITA' ? 'Receita' : 'Despesa'),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete_outline),
-                          onPressed: () => _excluir(cat),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Text('Padrão', style: Theme.of(context).textTheme.titleMedium),
-                    ...padrao.map(
-                      (cat) => ListTile(
-                        leading: CategoryGlyph(
-                          icone: cat.icone,
-                          color: parseHexColor(cat.cor) ?? Theme.of(context).colorScheme.primary,
-                        ),
-                        title: Text(cat.nome),
-                        subtitle: Text(cat.tipo == 'RECEITA' ? 'Receita' : 'Despesa'),
-                      ),
-                    ),
-                  ],
-                ),
+    if (loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (error != null) {
+      return PulsoEmptyState(title: 'Erro', description: error!, actionLabel: 'Tentar de novo', onAction: _load);
+    }
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, PulsoTokens.space8),
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: FilledButton.icon(
+            onPressed: _criar,
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('Nova categoria'),
+          ),
+        ),
+        const SizedBox(height: PulsoTokens.space4),
+        Text('Personalizadas', style: Theme.of(context).textTheme.titleMedium),
+        if (personalizadas.isEmpty) const ListTile(title: Text('Nenhuma categoria própria ainda.')),
+        ...personalizadas.map(
+          (cat) => ListTile(
+            leading: CategoryGlyph(
+              icone: cat.icone,
+              color: parseHexColor(cat.cor) ?? Theme.of(context).colorScheme.primary,
+            ),
+            title: Text(cat.nome),
+            subtitle: Text(cat.tipo == 'RECEITA' ? 'Receita' : 'Despesa'),
+            trailing: IconButton(
+              tooltip: 'Excluir categoria',
+              icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error),
+              onPressed: () => _excluir(cat),
+            ),
+          ),
+        ),
+        const SizedBox(height: PulsoTokens.space4),
+        Text('Padrão', style: Theme.of(context).textTheme.titleMedium),
+        ...padrao.map(
+          (cat) => ListTile(
+            leading: CategoryGlyph(
+              icone: cat.icone,
+              color: parseHexColor(cat.cor) ?? Theme.of(context).colorScheme.primary,
+            ),
+            title: Text(cat.nome),
+            subtitle: Text(cat.tipo == 'RECEITA' ? 'Receita' : 'Despesa'),
+          ),
+        ),
+      ],
     );
   }
 }

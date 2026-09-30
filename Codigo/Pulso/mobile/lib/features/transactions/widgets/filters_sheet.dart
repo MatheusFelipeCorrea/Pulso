@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 
 Future<TransactionFilters?> showTransactionFiltersSheet({
@@ -45,44 +46,50 @@ class _FiltersSheetState extends State<_FiltersSheet> {
     super.dispose();
   }
 
+  TransactionFilters _built() {
+    return widget.current.copyWith(
+      tipo: tipo,
+      recurso: recurso,
+      categoriaId: categoriaId,
+      clearCategoria: categoriaId == null,
+      busca: busca.text,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final options = widget.options;
     return Padding(
       padding: EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 8,
-        bottom: 20 + MediaQuery.viewInsetsOf(context).bottom,
+        left: PulsoTokens.space5,
+        right: PulsoTokens.space5,
+        top: PulsoTokens.space2,
+        bottom: PulsoTokens.space5 + MediaQuery.viewInsetsOf(context).bottom,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text('Filtros', style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 16),
+          const SizedBox(height: PulsoTokens.space4),
           DropdownButtonFormField<String>(
             initialValue: tipo,
             decoration: const InputDecoration(labelText: 'Tipo'),
-            items: (options?.tipos ?? const [
-              FilterOption(value: 'TODOS', label: 'Todos'),
-            ])
+            items: (options?.tipos ?? const [FilterOption(value: 'TODOS', label: 'Todos')])
                 .map((item) => DropdownMenuItem(value: item.value, child: Text(item.label)))
                 .toList(),
             onChanged: (value) => setState(() => tipo = value ?? 'TODOS'),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: PulsoTokens.space3),
           DropdownButtonFormField<String>(
             initialValue: recurso,
             decoration: const InputDecoration(labelText: 'Recurso'),
-            items: (options?.recursos ?? const [
-              FilterOption(value: 'TODOS', label: 'Todos'),
-            ])
+            items: (options?.recursos ?? const [FilterOption(value: 'TODOS', label: 'Todos')])
                 .map((item) => DropdownMenuItem(value: item.value, child: Text(item.label)))
                 .toList(),
             onChanged: (value) => setState(() => recurso = value ?? 'TODOS'),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: PulsoTokens.space3),
           DropdownButtonFormField<String?>(
             initialValue: categoriaId,
             decoration: const InputDecoration(labelText: 'Categoria'),
@@ -94,7 +101,7 @@ class _FiltersSheetState extends State<_FiltersSheet> {
             ],
             onChanged: (value) => setState(() => categoriaId = value),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: PulsoTokens.space3),
           TextField(
             controller: busca,
             decoration: const InputDecoration(
@@ -102,21 +109,20 @@ class _FiltersSheetState extends State<_FiltersSheet> {
               hintText: 'Descrição ou tag',
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: PulsoTokens.space5),
           FilledButton(
+            onPressed: () => Navigator.pop(context, _built()),
+            child: const Text('Aplicar'),
+          ),
+          const SizedBox(height: PulsoTokens.space2),
+          OutlinedButton(
             onPressed: () {
               Navigator.pop(
                 context,
-                widget.current.copyWith(
-                  tipo: tipo,
-                  recurso: recurso,
-                  categoriaId: categoriaId,
-                  clearCategoria: categoriaId == null,
-                  busca: busca.text,
-                ),
+                TransactionFilters(periodo: widget.current.periodo),
               );
             },
-            child: const Text('Aplicar'),
+            child: const Text('Limpar'),
           ),
         ],
       ),

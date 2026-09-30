@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pulso/core/theme/pulso_tokens.dart';
+import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 
 Future<({bool excluirFuturas})?> showDeleteTransactionDialog({
@@ -10,54 +12,40 @@ Future<({bool excluirFuturas})?> showDeleteTransactionDialog({
       : (transacao.categoria?.nome ?? 'esta transação');
 
   if (transacao.isRecorrenteSerie) {
-    return showModalBottomSheet<({bool excluirFuturas})>(
+    return showDialog<({bool excluirFuturas})>(
       context: context,
-      showDragHandle: true,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('Excluir transação', style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 12),
-              Text(
-                'A transação "$label" faz parte de uma série recorrente. '
-                'Escolha se deseja excluir só esta ocorrência ou encerrar a série a partir desta data. '
-                'O histórico anterior será mantido.',
-              ),
-              const SizedBox(height: 20),
-              OutlinedButton(
-                onPressed: () => Navigator.pop(context, (excluirFuturas: false)),
-                child: const Text('Excluir só esta'),
-              ),
-              const SizedBox(height: 8),
-              FilledButton(
-                style: FilledButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.error),
-                onPressed: () => Navigator.pop(context, (excluirFuturas: true)),
-                child: const Text('Excluir esta e futuras'),
-              ),
-            ],
+        return AlertDialog(
+          title: const Text('Excluir transação'),
+          content: Text(
+            'A transação "$label" faz parte de uma série recorrente. '
+            'Escolha se deseja excluir só esta ocorrência ou encerrar a série a partir desta data. '
+            'O histórico anterior será mantido.',
           ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+            OutlinedButton(
+              onPressed: () => Navigator.pop(context, (excluirFuturas: false)),
+              child: const Text('Excluir só esta'),
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.error,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(0, PulsoTokens.buttonMd),
+              ),
+              onPressed: () => Navigator.pop(context, (excluirFuturas: true)),
+              child: const Text('Excluir esta e futuras'),
+            ),
+          ],
         );
       },
     );
   }
 
-  return showDialog<({bool excluirFuturas})>(
+  return showPulsoConfirm(
     context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Excluir transação'),
-      content: Text('A transação "$label" será excluída permanentemente.'),
-      actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
-        FilledButton(
-          style: FilledButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.error),
-          onPressed: () => Navigator.pop(context, (excluirFuturas: false)),
-          child: const Text('Excluir'),
-        ),
-      ],
-    ),
-  );
+    title: 'Excluir transação',
+    message: 'A transação "$label" será excluída permanentemente.',
+  ).then((ok) => ok == true ? (excluirFuturas: false) : null);
 }

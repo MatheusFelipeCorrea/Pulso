@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pulso/core/api/api_exception.dart';
-import 'package:pulso/core/theme/pulso_colors.dart';
+import 'package:pulso/core/theme/pulso_tokens.dart';
+import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
@@ -215,16 +216,13 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
         await widget.repository.criar(payload);
       }
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            isEdit
-                ? 'Transação atualizada com sucesso!'
-                : (recorrente
-                    ? 'Transação recorrente criada! Ela será gerada automaticamente.'
-                    : 'Transação criada com sucesso!'),
-          ),
-        ),
+      showPulsoSnack(
+        context,
+        isEdit
+            ? 'Transação atualizada com sucesso!'
+            : (recorrente
+                ? 'Transação recorrente criada! Ela será gerada automaticamente.'
+                : 'Transação criada com sucesso!'),
       );
       context.pop(true);
     } on ApiException catch (err) {
@@ -255,6 +253,35 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
     }
   }
 
+  Widget _tipoButton(String value, String label) {
+    final selected = tipo == value;
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 2),
+        child: selected
+          ? FilledButton(
+          style: FilledButton.styleFrom(
+            minimumSize: const Size(0, PulsoTokens.buttonMd),
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+          ),
+              onPressed: () {},
+              child: FittedBox(fit: BoxFit.scaleDown, child: Text(label, textAlign: TextAlign.center)),
+            )
+          : OutlinedButton(
+              onPressed: () {
+                setState(() {
+                  tipo = value;
+                  categoriaId = null;
+                  recursoDestino = null;
+                  sugerida = false;
+                });
+              },
+              child: FittedBox(fit: BoxFit.scaleDown, child: Text(label, textAlign: TextAlign.center)),
+            ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -262,39 +289,35 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
       body: loading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+              padding: const EdgeInsets.fromLTRB(PulsoTokens.space5, PulsoTokens.space3, PulsoTokens.space5, PulsoTokens.space8),
               children: [
-                SegmentedButton<String>(
-                  showSelectedIcon: false,
-                  segments: const [
-                    ButtonSegment(value: 'RECEITA', label: Text('Receita')),
-                    ButtonSegment(value: 'DESPESA', label: Text('Despesa')),
-                    ButtonSegment(value: 'TRANSFERENCIA', label: Text('Transf.')),
+                Row(
+                  children: [
+                    _tipoButton('RECEITA', 'Receita'),
+                    const SizedBox(width: PulsoTokens.space2),
+                    _tipoButton('DESPESA', 'Despesa'),
+                    const SizedBox(width: PulsoTokens.space2),
+                    _tipoButton('TRANSFERENCIA', 'Transferência'),
                   ],
-                  selected: {tipo},
-                  onSelectionChanged: (value) {
-                    setState(() {
-                      tipo = value.first;
-                      categoriaId = null;
-                      recursoDestino = null;
-                      sugerida = false;
-                    });
-                  },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: PulsoTokens.space4),
                 TextField(
                   controller: _valor,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   decoration: const InputDecoration(labelText: 'Valor', prefixText: 'R\$ '),
                 ),
-                const SizedBox(height: 12),
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text('Data'),
-                  subtitle: Text(formatDayHeader(data)),
-                  trailing: const Icon(Icons.calendar_today_outlined),
+                const SizedBox(height: PulsoTokens.space3),
+                InkWell(
                   onTap: () => _pickDate(fim: false),
+                  child: InputDecorator(
+                    decoration: const InputDecoration(
+                      labelText: 'Data',
+                      suffixIcon: Icon(Icons.calendar_today_outlined),
+                    ),
+                    child: Text(formatDayHeader(data)),
+                  ),
                 ),
+                const SizedBox(height: PulsoTokens.space3),
                 if (!isTransferencia) ...[
                   DropdownButtonFormField<String?>(
                     key: ValueKey('categoria-$tipo-$categoriaId'),
@@ -329,7 +352,7 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                     ],
                     onChanged: (value) => setState(() => recursoDestino = value),
                   ),
-                const SizedBox(height: 12),
+                const SizedBox(height: PulsoTokens.space3),
                 TextField(
                   controller: _descricao,
                   decoration: const InputDecoration(
@@ -337,7 +360,7 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                     hintText: 'Ex: Almoço no RU',
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: PulsoTokens.space3),
                 DropdownButtonFormField<String?>(
                   key: ValueKey('origem-$recurso'),
                   initialValue: recurso,
@@ -350,15 +373,7 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                   ],
                   onChanged: (value) => setState(() => recurso = value),
                 ),
-                const SizedBox(height: 16),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (final tag in tags)
-                      InputChip(label: Text(tag.nome), onDeleted: () => _removeTag(tag.nome)),
-                  ],
-                ),
+                const SizedBox(height: PulsoTokens.space3),
                 TextField(
                   controller: _tagInput,
                   decoration: const InputDecoration(
@@ -367,60 +382,82 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                   ),
                   onSubmitted: _addTag,
                 ),
-                if (!isEdit) ...[
-                  const SizedBox(height: 8),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: const Text('Repetir automaticamente'),
-                    value: recorrente,
-                    onChanged: (value) => setState(() => recorrente = value),
+                if (tags.isNotEmpty) ...[
+                  const SizedBox(height: PulsoTokens.space2),
+                  Wrap(
+                    spacing: PulsoTokens.space2,
+                    runSpacing: PulsoTokens.space2,
+                    children: [
+                      for (final tag in tags)
+                        InputChip(label: Text(tag.nome), onDeleted: () => _removeTag(tag.nome)),
+                    ],
                   ),
-                  if (recorrente) ...[
-                    DropdownButtonFormField<String>(
-                      initialValue: frequencia,
-                      decoration: const InputDecoration(labelText: 'Frequência'),
-                      items: (options?.frequencias ?? const [
-                        FilterOption(value: 'MENSAL', label: 'Mensal'),
-                      ])
-                          .map((item) => DropdownMenuItem(value: item.value, child: Text(item.label)))
-                          .toList(),
-                      onChanged: (value) => setState(() => frequencia = value ?? 'MENSAL'),
-                    ),
-                    const SizedBox(height: 12),
-                    DropdownButtonFormField<String>(
-                      initialValue: ateQuando,
-                      decoration: const InputDecoration(labelText: 'Até quando'),
-                      items: (options?.ateQuando ?? const [
-                        FilterOption(value: 'SEM_FIM', label: 'Sem fim'),
-                      ])
-                          .map((item) => DropdownMenuItem(value: item.value, child: Text(item.label)))
-                          .toList(),
-                      onChanged: (value) => setState(() => ateQuando = value ?? 'SEM_FIM'),
-                    ),
-                    if (ateQuando == 'DATA')
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: const Text('Data final'),
-                        subtitle: Text(dataFim == null ? 'Selecione' : formatDayHeader(dataFim!)),
-                        onTap: () => _pickDate(fim: true),
-                      ),
-                  ],
                 ],
+                if (!isEdit)
+                  ExpansionTile(
+                    tilePadding: EdgeInsets.zero,
+                    initiallyExpanded: recorrente,
+                    title: const Text('Repetir automaticamente'),
+                    children: [
+                      SwitchListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: const Text('Ativar recorrência'),
+                        value: recorrente,
+                        onChanged: (value) => setState(() => recorrente = value),
+                      ),
+                      if (recorrente) ...[
+                        DropdownButtonFormField<String>(
+                          initialValue: frequencia,
+                          decoration: const InputDecoration(labelText: 'Frequência'),
+                          items: (options?.frequencias ?? const [
+                            FilterOption(value: 'MENSAL', label: 'Mensal'),
+                          ])
+                              .map((item) => DropdownMenuItem(value: item.value, child: Text(item.label)))
+                              .toList(),
+                          onChanged: (value) => setState(() => frequencia = value ?? 'MENSAL'),
+                        ),
+                        const SizedBox(height: PulsoTokens.space3),
+                        DropdownButtonFormField<String>(
+                          initialValue: ateQuando,
+                          decoration: const InputDecoration(labelText: 'Até quando'),
+                          items: (options?.ateQuando ?? const [
+                            FilterOption(value: 'SEM_FIM', label: 'Sem fim'),
+                          ])
+                              .map((item) => DropdownMenuItem(value: item.value, child: Text(item.label)))
+                              .toList(),
+                          onChanged: (value) => setState(() => ateQuando = value ?? 'SEM_FIM'),
+                        ),
+                        if (ateQuando == 'DATA') ...[
+                          const SizedBox(height: PulsoTokens.space3),
+                          InkWell(
+                            onTap: () => _pickDate(fim: true),
+                            child: InputDecorator(
+                              decoration: const InputDecoration(labelText: 'Data final'),
+                              child: Text(dataFim == null ? 'Selecione' : formatDayHeader(dataFim!)),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ],
+                  ),
                 if (error != null) ...[
-                  const SizedBox(height: 12),
+                  const SizedBox(height: PulsoTokens.space3),
                   Text(error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                 ],
-                const SizedBox(height: 20),
+                const SizedBox(height: PulsoTokens.space5),
                 FilledButton(
                   onPressed: submitting ? null : _salvar,
                   child: submitting
-                      ? const SizedBox(height: 22, width: 22, child: CircularProgressIndicator(strokeWidth: 2))
+                      ? const SizedBox(height: 22, width: 22, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                       : const Text('Salvar'),
                 ),
                 if (isEdit) ...[
-                  const SizedBox(height: 8),
+                  const SizedBox(height: PulsoTokens.space2),
                   OutlinedButton(
-                    style: OutlinedButton.styleFrom(foregroundColor: PulsoColors.danger),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.error,
+                      side: BorderSide(color: Theme.of(context).colorScheme.error),
+                    ),
                     onPressed: submitting ? null : _excluir,
                     child: const Text('Excluir'),
                   ),
