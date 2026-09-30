@@ -53,7 +53,7 @@ Servidor **Node.js + Express** com arquitetura em camadas (routes → controller
 | **Grupos** (CRUD, convite, membros, viagem, metas, chat Socket.IO) | 🟡 Premium — ver gaps menores |
 | Insights, chatbot | 🔜 Schema / parcial |
 | Planos Free/Premium | ✅ Gate Premium em grupos, viagens e sync Google Calendar |
-| RabbitMQ (alerts + reminders + emails) | ✅ Opcional — fallback modo direto |
+| RabbitMQ (emails; filas alerts/reminders reservadas) | ✅ Opcional — fail-soft (cai o broker → SMTP/cron direto) |
 
 Prefixo global: **`/api`**
 
@@ -114,7 +114,7 @@ Pulso/api/
     ├── controllers/
     ├── services/        (+ importService, dashboardService, …)
     ├── repositories/
-    ├── messaging/       rabbit.js, jobBridge.js (alerts + reminders)
+    ├── messaging/       rabbit.js, emailBridge.js, jobBridge.js (emails + fail-soft)
     ├── parsers/         ofx, csv, xlsx, pdf (+ Gemini)
     ├── providers/       email, geonames, duffel, amadeus (+ templates)
     ├── schemas/
@@ -468,11 +468,12 @@ Prefixo: **`/api/grupos`** (todas 🔒).
 
 | Recurso | Detalhe |
 |---------|---------|
-| Filas | `pulso.alerts` (orçamento, dívidas) · `pulso.reminders` (lembretes) · `pulso.emails` (verificação / reset) |
-| Código | `src/messaging/rabbit.js`, `src/messaging/jobBridge.js` |
-| Fallback | Sem `RABBITMQ_URL`, jobs executam em modo direto |
+| Filas | `pulso.emails` (verificação / reset) · `pulso.alerts` / `pulso.reminders` (reservadas, jobs ainda não no repo) |
+| Código | `src/messaging/rabbit.js`, `src/messaging/emailBridge.js`, `src/messaging/jobBridge.js` |
+| Credencial | Só `RABBITMQ_URL` (ex. `amqp://pulso:pulso@localhost:5672` ou URL `amqps://` do provedor) |
+| Fail-soft | Sem URL, broker caído, publish falho ou Vercel: emails SMTP na hora |
 | Socket.IO | Path `/api/socket.io` — chat de grupos |
-| Deploy | API **long-running** — [TI5-Hospedagem.md](../Deploy/TI5-Hospedagem.md) |
+| Deploy | API **long-running** para consumers; Vercel ignora o broker |
 
 ---
 

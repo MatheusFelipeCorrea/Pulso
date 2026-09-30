@@ -19,4 +19,13 @@ npm run dev
 
 Servidor: `http://localhost:3333`
 
-RabbitMQ opcional: `docker compose up -d` nesta pasta. Sem `RABBITMQ_URL`, jobs rodam em modo direto.
+RabbitMQ é opcional e **fail-soft**: se o broker estiver fora, emails e jobs seguem no caminho direto (SMTP / cron). A única credencial é `RABBITMQ_URL` (usuário e senha vão dentro da URL).
+
+```bash
+# local
+docker compose up -d
+# no .env:
+# RABBITMQ_URL=amqp://pulso:pulso@localhost:5672
+```
+
+Painel: `http://localhost:15672` (usuário/senha `pulso`/`pulso`). Em nuvem, cole a URL `amqps://…` que o provedor gera. Sem a variável, ou na Vercel, nada quebra.

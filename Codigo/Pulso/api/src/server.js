@@ -8,17 +8,11 @@ const cron = require('node-cron');
 // const { initSocket } = require('./socket/groupChat');
 const { runTokenCleanup } = require('./jobs/tokenCleanupJob');
 const { runRecurringTransactions } = require('./jobs/recurringTransactions');
+const { startMessagingWorkers } = require('./messaging/jobBridge');
 // const { runDebtCleanupJob } = require('./jobs/debtCleanupJob');
 // const { runNotificationCleanup } = require('./jobs/notificationCleanupJob');
 // const { runChatCleanupJob } = require('./jobs/chatCleanupJob');
 // const { runExpenseSplitCleanupJob } = require('./jobs/expenseSplitCleanupJob');
-// const {
-//     enqueueBudgetAlert,
-//     enqueueDebtAlert,
-//     enqueueReminderAlert,
-//     enqueueReminderRecurrence,
-//     startMessagingWorkers,
-// } = require('./messaging/jobBridge');
 
 const startTokenCleanupScheduler = () => {
     if (env.NODE_ENV === 'test') {
@@ -69,7 +63,7 @@ const start = async () => {
 
         // Na Vercel os jobs rodam via /api/cron/* (vercel.json crons)
         if (!process.env.VERCEL) {
-            // await startMessagingWorkers();
+            await startMessagingWorkers();
             startTokenCleanupScheduler();
             startRecurringTransactionsScheduler();
             // startBudgetAlertScheduler();
