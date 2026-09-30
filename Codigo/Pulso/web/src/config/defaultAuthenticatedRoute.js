@@ -1,2 +1,2 @@
-/** Destino pós-login — Dashboard (RF-007+) */
-export const DEFAULT_AUTHENTICATED_ROUTE = '/dashboard'
+/** Destino pós-login — transações (dashboard ainda é stub). */
+export const DEFAULT_AUTHENTICATED_ROUTE = '/transactions'

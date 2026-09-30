@@ -9,6 +9,7 @@ const cron = require('node-cron');
 const { runTokenCleanup } = require('./jobs/tokenCleanupJob');
 const { runRecurringTransactions } = require('./jobs/recurringTransactions');
 const { startMessagingWorkers } = require('./messaging/jobBridge');
+const { runUnverifiedAccountCleanup } = require('./jobs/unverifiedAccountCleanupJob');
 // const { runDebtCleanupJob } = require('./jobs/debtCleanupJob');
 // const { runNotificationCleanup } = require('./jobs/notificationCleanupJob');
 // const { runChatCleanupJob } = require('./jobs/chatCleanupJob');
@@ -46,6 +47,22 @@ const startRecurringTransactionsScheduler = () => {
 
     logger.info('🔄 Agendador de transações recorrentes ativo (diário 00:05)');
 };
+
+const startUnverifiedAccountCleanupScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule('20 3 * * *', async () => {
+        try {
+            await runUnverifiedAccountCleanup();
+        } catch (error) {
+            logger.error(`Falha na limpeza de contas não verificadas: ${error.message}`);
+        }
+    });
+
+    logger.info('🧹 Agendador de contas não verificadas ativo (diário 03:20)');
+};
 // const startBudgetAlertScheduler = () => { ... };
 // const startReminderAlertScheduler = () => { ... };
 // const startDebtCleanupScheduler = () => { ... };
@@ -66,6 +83,7 @@ const start = async () => {
             await startMessagingWorkers();
             startTokenCleanupScheduler();
             startRecurringTransactionsScheduler();
+            startUnverifiedAccountCleanupScheduler();
             // startBudgetAlertScheduler();
             // startReminderAlertScheduler();
             // startReminderRecurrenceScheduler();

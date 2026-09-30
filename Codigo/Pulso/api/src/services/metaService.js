@@ -1,5 +1,6 @@
 const notificationService = require('./notificationService');
 const AppError = require('../utils/appError');
+const logger = require('../utils/logger');
 const metaRepository = require('../repositories/metaRepository');
 const transactionRepository = require('../repositories/transactionRepository');
 const { mapMeta } = require('../utils/metaMapper');
@@ -10,7 +11,6 @@ const {
     calcValorMensalSugerido,
     calcSugestaoReservaEmergencia,
     MESES_RESERVA_EMERGENCIA_PADRAO,
-    podeReceberAporte,
     metaEstaVencida,
 } = require('../utils/metaBalanceUtils');
 const {
@@ -61,20 +61,6 @@ const buscarMetaComAportes = async (metaId, usuarioId) => {
     if (!meta) {
         throw new AppError('Meta não encontrada', 404);
     }
-    return meta;
-};
-
-const sincronizarConclusao = async (meta) => {
-    const { valorRestante } = calcProgressoMeta(meta);
-
-    if (valorRestante <= 0 && meta.status !== 'CONCLUIDA') {
-        const atualizada = await metaRepository.atualizar(meta.id, meta.usuarioId, {
-            status: 'CONCLUIDA',
-            concluidaEm: new Date(),
-        });
-        return { ...atualizada, aportes: meta.aportes };
-    }
-
     return meta;
 };
 
@@ -295,9 +281,17 @@ const editarMeta = async (usuarioId, metaId, dados) => {
 };
 
 const registrarAporte = async (usuarioId, metaId, dados) => {
-    const meta = await buscarMetaComAportes(metaId, usuarioId);
+    const dataAporte = validarDataAporte(dados.data);
+    const resultado = await metaRepository.registrarAporteAtomico(usuarioId, metaId, {
+        valor: dados.valor,
+        data: dataAporte,
+    });
 
-    if (!podeReceberAporte(meta)) {
+    if (resultado.error === 'NOT_FOUND') {
+        throw new AppError('Meta não encontrada', 404);
+    }
+    if (resultado.error === 'CANNOT_RECEIVE') {
+        const meta = resultado.meta;
         if (meta.status === 'PAUSADA') {
             throw new AppError('Meta pausada não recebe aportes', 400);
         }
@@ -306,37 +300,24 @@ const registrarAporte = async (usuarioId, metaId, dados) => {
         }
         throw new AppError('Meta não está ativa', 400);
     }
-
-    const valorAporte = roundMoney(dados.valor);
-    const { valorRestante } = calcProgressoMeta(meta);
-
-    if (valorAporte > valorRestante) {
+    if (resultado.error === 'OVERFLOW') {
         throw new AppError('Valor do aporte não pode ultrapassar o que falta para atingir a meta', 400);
     }
 
-    const aporte = await metaRepository.criarAporte({
-        metaId,
-        valor: valorAporte,
-        data: validarDataAporte(dados.data),
-    });
+    const { aporte, metaAtualizada, concluiu } = resultado;
 
-    const novoValorAtual = roundMoney(Number(meta.valorAtual) + valorAporte);
-    let metaAtualizada = await metaRepository.atualizar(metaId, usuarioId, {
-        valorAtual: novoValorAtual,
-    });
-
-    const aportes = [aporte, ...meta.aportes];
-    const antesConclusao = metaAtualizada.status;
-    metaAtualizada = await sincronizarConclusao({ ...metaAtualizada, aportes });
-
-    if (antesConclusao !== 'CONCLUIDA' && metaAtualizada.status === 'CONCLUIDA') {
-        await notificationService.criarNotificacao(usuarioId, {
-            tipo: 'META_ATINGIDA',
-            titulo: 'Meta atingida',
-            mensagem: `Meta "${metaAtualizada.nome}" concluída!`,
-            linkAcao: '/goals',
-            metadados: { metaId: metaAtualizada.id, escopo: 'PESSOAL' },
-        });
+    if (concluiu) {
+        try {
+            await notificationService.criarNotificacao(usuarioId, {
+                tipo: 'META_ATINGIDA',
+                titulo: 'Meta atingida',
+                mensagem: `Meta "${metaAtualizada.nome}" concluída!`,
+                linkAcao: '/goals',
+                metadados: { metaId: metaAtualizada.id, escopo: 'PESSOAL' },
+            });
+        } catch (err) {
+            logger.warn(`Notificação de meta ignorada: ${err.message}`);
+        }
     }
 
     return {

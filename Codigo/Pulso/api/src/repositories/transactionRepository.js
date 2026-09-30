@@ -29,8 +29,10 @@ const buildWhere = (usuarioId, filtros = {}) => {
         }
     } else if (filtros.periodo) {
         const [year, month] = filtros.periodo.split('-').map(Number);
-        const inicio = new Date(year, month - 1, 1);
-        const fim = new Date(year, month, 0, 23, 59, 59, 999);
+        const pad = (n) => String(n).padStart(2, '0');
+        const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
+        const inicio = startOfDayInTimezone(`${year}-${pad(month)}-01`);
+        const fim = endOfDayInTimezone(`${year}-${pad(month)}-${pad(lastDay)}`);
         where.data = { gte: inicio, lte: fim };
     }
 

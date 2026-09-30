@@ -14,7 +14,6 @@ import { DeleteTripModal } from '@/components/features/trips/DeleteTripModal.jsx
 import * as moedaService from '@/services/moedaService.js'
 import * as viagemService from '@/services/viagemService.js'
 import * as metaService from '@/services/metaService.js'
-import * as grupoService from '@/services/grupoService.js'
 
 function formatRatesStatus(iso) {
   if (!iso) return null
@@ -45,7 +44,6 @@ export default function TripsPage() {
   const [ratesUpdatedAt, setRatesUpdatedAt] = useState(null)
   const [viagens, setViagens] = useState([])
   const [metas, setMetas] = useState([])
-  const [grupos, setGrupos] = useState([])
   const [loading, setLoading] = useState(true)
 
   const [formOpen, setFormOpen] = useState(false)
@@ -68,12 +66,11 @@ export default function TripsPage() {
   )
 
   const recarregar = useCallback(async () => {
-    const [catalogData, favoritasData, viagensData, metasData, gruposData] = await Promise.all([
+    const [catalogData, favoritasData, viagensData, metasData] = await Promise.all([
       moedaService.obterCatalogo(),
       moedaService.listarFavoritas(),
       viagemService.listarViagens(),
       metaService.buscarMetas({ status: 'ATIVA', limite: 50, pagina: 1 }),
-      grupoService.listarGrupos().catch(() => []),
     ])
 
     setCatalog(catalogData.moedas ?? [])
@@ -81,7 +78,6 @@ export default function TripsPage() {
     setRatesUpdatedAt(favoritasData.atualizadoEm ?? null)
     setViagens(viagensData ?? [])
     setMetas(metasData.metas ?? metasData ?? [])
-    setGrupos(gruposData ?? [])
   }, [])
 
   useEffect(() => {
@@ -122,10 +118,7 @@ export default function TripsPage() {
         toast.success('Viagem atualizada!')
       } else {
         const viagem = await viagemService.criarViagem(payload)
-        if (payload.grupoId) {
-          await grupoService.criarViagemGrupo(payload.grupoId, { viagemId: viagem.id })
-        }
-        toast.success(payload.grupoId ? 'Viagem criada e vinculada ao grupo!' : 'Viagem criada!')
+        toast.success('Viagem criada!')
       }
       setFormOpen(false)
       setSelected(null)
@@ -256,7 +249,6 @@ export default function TripsPage() {
         submitting={submitting}
         deleting={deleting}
         onCreateGoal={() => setGoalFormOpen(true)}
-        grupos={grupos}
       />
 
       <AddFavoriteCurrencyModal

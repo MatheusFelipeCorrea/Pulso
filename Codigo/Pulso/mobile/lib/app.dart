@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/theme/pulso_theme.dart';
@@ -58,6 +59,13 @@ class PulsoApp extends StatelessWidget {
           return MaterialApp.router(
             title: 'Pulso',
             debugShowCheckedModeBanner: false,
+            locale: const Locale('pt', 'BR'),
+            supportedLocales: const [Locale('pt', 'BR')],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
             theme: PulsoTheme.light(),
             darkTheme: PulsoTheme.dark(),
             themeMode: theme.mode,

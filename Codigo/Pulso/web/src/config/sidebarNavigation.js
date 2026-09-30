@@ -5,21 +5,11 @@
 
 export const SIDEBAR_NAV = [
   {
-    id: 'dashboard',
-    label: 'Dashboard',
-    path: '/dashboard',
-    icon: 'LayoutGrid',
-  },
-  {
     id: 'financeiro',
     label: 'Financeiro',
     icon: 'HandCoins',
     children: [
       { id: 'transacoes', label: 'Transações', path: '/transactions', icon: 'ArrowLeftRight' },
-      // TEMP: rotas abaixo ainda não existem neste repo
-      // { id: 'orcamento', label: 'Orçamento Mensal', path: '/budget', icon: 'PieChart' },
-      // { id: 'calendario', label: 'Calendário Financeiro', path: '/calendar', icon: 'CalendarDays' },
-      // { id: 'dividas', label: 'Dívidas', path: '/debts', icon: 'Landmark' },
     ],
   },
   {

@@ -445,6 +445,7 @@ export function TripFormModal({
                 ) : null}
               </section>
 
+              {grupoOptions.length ? (
               <section className="trip-form__section trip-form__section--muted">
                 <div className="trip-form__toggle-row">
                   <FormFieldLabel icon={Users} tone="purple">
@@ -477,6 +478,7 @@ export function TripFormModal({
                     : 'Participe de um grupo para vincular viagens compartilhadas.'}
                 </p>
               </section>
+              ) : null}
             </>
           ) : null}
 

@@ -48,7 +48,7 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Nova despesa'),
+          title: const Text('Nova pretensão'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -139,13 +139,13 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                     const SizedBox(height: PulsoTokens.space4),
                     Row(
                       children: [
-                        Text('Despesas', style: Theme.of(context).textTheme.titleSmall),
+                        Text('Pretensões de gastos', style: Theme.of(context).textTheme.titleSmall),
                         const Spacer(),
                         TextButton(onPressed: _addExpense, child: const Text('Adicionar')),
                       ],
                     ),
                     if (current.despesas.isEmpty)
-                      const Text('Nenhuma despesa ainda.')
+                      const Text('Nenhuma pretensão ainda.')
                     else
                       ...current.despesas.map(
                         (item) => ListTile(

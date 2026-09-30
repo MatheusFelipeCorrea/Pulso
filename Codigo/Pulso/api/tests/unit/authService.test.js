@@ -550,6 +550,14 @@ describe('authService', () => {
         });
     });
 
+    describe('setUserPlano', () => {
+        it('recusa auto-upgrade sem billing', async () => {
+            await expect(authService.setUserPlano('usr-1', 'PREMIUM')).rejects.toMatchObject({
+                statusCode: 403,
+            });
+        });
+    });
+
     describe('loginWithGoogleIdToken', () => {
         it('rejeita ID token inválido', async () => {
             verifyIdToken.mockRejectedValue(new Error('bad token'));

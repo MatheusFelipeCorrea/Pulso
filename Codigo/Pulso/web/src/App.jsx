@@ -15,11 +15,12 @@ import ResetPasswordSuccess from './pages/ResetPasswordSuccess'
 import TermsOfUse from './pages/TermsOfUse'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import LandingPage from './pages/LandingPage'
-import DashboardPage from './pages/DashboardPage'
 import TransactionsPage from './pages/TransactionsPage'
 import GoalsPage from './pages/GoalsPage'
 import TripsPage from './pages/TripsPage'
 import TripDetailPage from './pages/TripDetailPage.jsx'
+import AccountPage from './pages/AccountPage.jsx'
+import { PremiumRoute } from './components/routing/PremiumRoute.jsx'
 // TEMP: demais páginas ainda não estão neste repo.
 
 function App() {
@@ -65,11 +66,31 @@ function App() {
 
           <Route element={<ProtectedRoute />}>
             <Route element={<MainLayout />}>
-              <Route path="dashboard" element={<DashboardPage />} />
+              <Route path="dashboard" element={<Navigate to="/transactions" replace />} />
               <Route path="transactions" element={<TransactionsPage />} />
               <Route path="goals" element={<GoalsPage />} />
-              <Route path="trips" element={<TripsPage />} />
-              <Route path="trips/:id" element={<TripDetailPage />} />
+              <Route
+                path="profile"
+                element={
+                  <AccountPage
+                    title="Perfil"
+                    subtitle="Dados da conta autenticada. Edição cadastral entra em um recorte futuro."
+                  />
+                }
+              />
+              <Route
+                path="settings"
+                element={
+                  <AccountPage
+                    title="Configurações"
+                    subtitle="Preferências de tema ficam no menu do avatar. Demais ajustes entram depois."
+                  />
+                }
+              />
+              <Route element={<PremiumRoute />}>
+                <Route path="trips" element={<TripsPage />} />
+                <Route path="trips/:id" element={<TripDetailPage />} />
+              </Route>
             </Route>
           </Route>
 

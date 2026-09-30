@@ -24,6 +24,7 @@ const transactionService = require('../../../src/services/transactionService');
 describe('transactionService', () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        notificationService.criarNotificacao.mockResolvedValue(undefined);
         transactionRepository.listarRecursosDistintos.mockResolvedValue([]);
         transactionRepository.listarTransacoesRecurso.mockResolvedValue([]);
         require('../../../src/utils/transactionMapper').mapTransacao.mockImplementation((tx) => ({
@@ -187,6 +188,29 @@ describe('transactionService', () => {
 
         expect(transactionRepository.vincularTags).toHaveBeenCalledWith('tx1', ['tag1']);
         expect(result).toEqual({ id: 'tx1', mapped: true });
+    });
+
+    it('não falha o create se a notificação lançar', async () => {
+        categoryRepository.buscarPorId.mockResolvedValue({ id: 'c1', tipo: 'RECEITA', nome: 'Salário' });
+        tagRepository.buscarPorIds.mockResolvedValue([]);
+        transactionRepository.criar.mockResolvedValue({ id: 'tx1' });
+        transactionRepository.buscarPorId.mockResolvedValue({
+            id: 'tx1',
+            tipo: 'RECEITA',
+            valor: 10,
+        });
+        notificationService.criarNotificacao.mockRejectedValue(new Error('smtp down'));
+
+        const result = await transactionService.criarTransacao('u1', {
+            categoriaId: 'c1',
+            tipo: 'RECEITA',
+            recurso: 'DINHEIRO',
+            valor: 10,
+            data: '2026-01-10',
+            recorrente: false,
+        });
+
+        expect(result).toEqual({ id: 'tx1', tipo: 'RECEITA', valor: 10, mapped: true });
     });
 
     it('rejeita recorrente sem regra', async () => {

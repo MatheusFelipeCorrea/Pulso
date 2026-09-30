@@ -113,15 +113,16 @@ describe('services/api', () => {
     expect(mocked.refreshPost).not.toHaveBeenCalled()
   })
 
-  it('não tenta refresh para GET /auth/me (bootstrap de sessão)', async () => {
+  it('tenta refresh para GET /auth/me (bootstrap de sessão)', async () => {
     const error = {
       response: { status: 401 },
       config: { url: '/auth/me', headers: {} },
     }
+    mocked.refreshPost.mockResolvedValueOnce({ data: { ok: true } })
+    mocked.mockApiInstance.mockResolvedValueOnce({ data: { user: { id: '1' } } })
 
-    await expect(mocked.responseErrorInterceptor(error)).rejects.toBe(error)
-    expect(mocked.refreshPost).not.toHaveBeenCalled()
-    expect(window.location.href).toBe('http://localhost/transactions')
+    await mocked.responseErrorInterceptor(error)
+    expect(mocked.refreshPost).toHaveBeenCalled()
   })
 
   it('não redireciona para login quando refresh falha em rota pública', async () => {

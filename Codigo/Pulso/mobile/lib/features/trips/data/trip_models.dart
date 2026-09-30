@@ -93,15 +93,42 @@ class PulsoViagem {
 }
 
 class TripDestinationHint {
-  const TripDestinationHint({required this.label, this.moedaSugerida = 'BRL'});
+  const TripDestinationHint({
+    required this.label,
+    this.moedaSugerida = 'BRL',
+    this.raw = const {},
+  });
 
   final String label;
   final String moedaSugerida;
+  final Map<String, dynamic> raw;
+
+  Map<String, dynamic>? toDestinoMeta() {
+    final catalogId = raw['catalogId'] as String? ?? raw['id'] as String?;
+    final iata = raw['iata'] as String?;
+    final countryCode = raw['countryCode'] as String?;
+    if (catalogId == null || catalogId.isEmpty || iata == null || countryCode == null) {
+      return null;
+    }
+    return {
+      'source': raw['source'] ?? 'catalog',
+      'catalogId': catalogId,
+      'iata': iata,
+      'label': raw['label'] ?? label,
+      'countryCode': countryCode,
+      'countryName': raw['countryName'] ?? '',
+      'moedaSugerida': (raw['moedaSugerida'] as String? ?? moedaSugerida).toUpperCase(),
+      'domestic': raw['domestic'] == true,
+      if (raw['geonameId'] != null) 'geonameId': raw['geonameId'],
+      if (raw['region'] != null) 'region': raw['region'],
+    };
+  }
 
   factory TripDestinationHint.fromJson(Map<String, dynamic> json) {
     return TripDestinationHint(
       label: json['label'] as String? ?? json['destino'] as String? ?? '',
       moedaSugerida: (json['moedaSugerida'] as String? ?? 'BRL').toUpperCase(),
+      raw: json,
     );
   }
 }

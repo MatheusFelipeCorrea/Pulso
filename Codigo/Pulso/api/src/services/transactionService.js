@@ -9,6 +9,7 @@ const categoryRepository = require('../repositories/categoryRepository');
 const tagRepository = require('../repositories/tagRepository');
 const notificationService = require('./notificationService');
 const insightService = require('./insightService');
+const logger = require('../utils/logger');
 const { validarRecursoCategoria } = require('../utils/recursoCategoriaRules');
 const { mapTransacao } = require('../utils/transactionMapper');
 const { calcularSaldosPorRecurso } = require('../utils/resourceBalanceUtils');
@@ -283,8 +284,16 @@ const criarTransacao = async (usuarioId, dados) => {
 
     const completa = await transactionRepository.buscarPorId(transacao.id, usuarioId);
 
-    await notificarTransacaoRegistrada(usuarioId, completa, categoria);
-    await insightService.tentarGerarInsightAposTransacao(usuarioId);
+    try {
+        await notificarTransacaoRegistrada(usuarioId, completa, categoria);
+    } catch (err) {
+        logger.warn(`Notificação pós-transação ignorada: ${err.message}`);
+    }
+    try {
+        await insightService.tentarGerarInsightAposTransacao(usuarioId);
+    } catch (err) {
+        logger.warn(`Insight pós-transação ignorado: ${err.message}`);
+    }
 
     return mapTransacao(completa);
 };
