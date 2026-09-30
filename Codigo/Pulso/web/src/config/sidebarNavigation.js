@@ -22,10 +22,19 @@ export const SIDEBAR_NAV = [
       // { id: 'dividas', label: 'Dívidas', path: '/debts', icon: 'Landmark' },
     ],
   },
-  // {
-  //   id: 'planejamento',
-  //   ...
-  // },
+  {
+    id: 'planejamento',
+    label: 'Planejamento & Metas',
+    icon: 'Target',
+    children: [
+      { id: 'metas', label: 'Metas Financeiras', path: '/goals', icon: 'Target' },
+      { id: 'viagens', label: 'Viagens e Moedas', path: '/trips', icon: 'Plane' },
+      // TEMP: rotas abaixo ainda não existem neste repo
+      // { id: 'grupos', label: 'Grupos', path: '/groups', icon: 'Users' },
+      // { id: 'compra', label: 'Planejamento de Compra', path: '/purchase-planning', icon: 'ShoppingCart' },
+      // { id: 'divisao', label: 'Divisão de Despesas', path: '/expense-split', icon: 'Split' },
+    ],
+  },
 ]
 
 /** Itens fixos no rodapé da sidebar (seção Conta) */
