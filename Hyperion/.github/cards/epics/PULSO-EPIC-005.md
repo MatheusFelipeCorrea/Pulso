@@ -77,6 +77,6 @@ categories:
 - Hierarquia Epic → Features → Tasks definida
 
 ### ⏳ Pendente
-- PULSO-TASK-169 — protótipos de viagens/moedas na apostila
+- Revisão da apostila (protótipos já publicados)
 - API de grupos (client Flutter já consome o contrato)
 - Cache compartilhado de cotações (Redis) — evolução futura T5

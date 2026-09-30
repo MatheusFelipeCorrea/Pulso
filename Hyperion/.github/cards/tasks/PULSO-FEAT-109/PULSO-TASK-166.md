@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-166
 title: "Documentação — subir protótipos de metas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: "Sprint 3"
@@ -36,6 +36,7 @@ Exportar (ou embedar) os protótipos de metas no repositório e na seção 5 da 
 
 ### ✅ Concluído
 - Inventário de telas em `PULSO-FEAT-090`
+- Exports publicados em `docs/prototipos/Metas/` e na seção 5.3
 
 ### ⏳ Pendente
-- Exportar frames e publicar na apostila
+- Revisão na apostila (In Revision)

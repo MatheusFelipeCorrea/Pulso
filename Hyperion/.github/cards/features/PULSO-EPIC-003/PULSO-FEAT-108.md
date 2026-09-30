@@ -77,6 +77,7 @@ Como **equipe**, eu quero **os protótipos de transações publicados na apostil
 
 ### ✅ Concluído
 - Flutter lista, filtros, resumo, formulário e exclusão mergeados na Sprint-3
+- Protótipos na apostila (`docs/5.2`, TASK-163)
 
 ### ⏳ Pendente
-- PULSO-TASK-163 — subir protótipos na apostila
+- Revisão (In Revision)

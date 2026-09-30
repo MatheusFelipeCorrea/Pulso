@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-169
 title: "Documentação — subir protótipos de viagens e moedas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: "Sprint 3"
@@ -36,6 +36,7 @@ Exportar os protótipos de `/trips` e `/trips/:id` (conversor, lista, detalhe, n
 
 ### ✅ Concluído
 - Inventário de telas em `PULSO-FEAT-091`
+- Exports publicados em `docs/prototipos/Viagens e Moedas/` e na seção 5.4
 
 ### ⏳ Pendente
-- Exportar frames e publicar na apostila
+- Revisão na apostila (In Revision)

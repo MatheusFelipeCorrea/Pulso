@@ -78,6 +78,7 @@ Como **equipe**, eu quero **os protótipos de metas publicados na apostila**, pa
 
 ### ✅ Concluído
 - Flutter lista, formulário, aportes, pause/retomar e exclusão mergeados na Sprint-3
+- Protótipos na apostila (`docs/5.3`, TASK-166)
 
 ### ⏳ Pendente
-- PULSO-TASK-166 — subir protótipos na apostila
+- Revisão (In Revision)

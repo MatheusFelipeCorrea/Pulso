@@ -72,5 +72,5 @@ categories:
 - Hierarquia Epic → Features → Tasks definida
 
 ### ⏳ Pendente
-- PULSO-TASK-166 — protótipos de metas na apostila
+- Revisão da apostila (protótipos já publicados)
 - Metas de grupo (RF-092–093) — epic Grupos

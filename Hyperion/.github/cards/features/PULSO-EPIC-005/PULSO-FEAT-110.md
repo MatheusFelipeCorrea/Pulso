@@ -81,7 +81,8 @@ Como **equipe**, eu quero **os protótipos de viagens e moedas publicados na apo
 
 ### ✅ Concluído
 - Flutter viagens, moedas, grupos (client) e nav mergeados na Sprint-3
+- Protótipos na apostila (`docs/5.4`, TASK-169)
 
 ### ⏳ Pendente
-- PULSO-TASK-169 — subir protótipos na apostila
 - Ligar API de grupos no backend (fora deste card)
+- Revisão (In Revision)

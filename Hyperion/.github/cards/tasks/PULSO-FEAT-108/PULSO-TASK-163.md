@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-163
 title: "Documentação — subir protótipos de transações"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: null
@@ -51,6 +51,7 @@ Exports PNG/WebP (ou frames Figma linkados) das telas acima.
 
 ### ✅ Concluído
 - Inventário de telas em `PULSO-FEAT-089`
+- Exports publicados em `docs/prototipos/Transações/` e na seção 5.2
 
 ### ⏳ Pendente
-- Exportar frames e publicar na apostila
+- Revisão na apostila (In Revision)

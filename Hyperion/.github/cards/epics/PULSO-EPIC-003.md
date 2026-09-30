@@ -99,6 +99,6 @@ categories:
 - FEAT-012–017 (API + Web + QA) mergeados na Sprint-3
 
 ### ⏳ Pendente
-- PULSO-TASK-163 — protótipos de transações na apostila
+- Revisão da apostila (protótipos já publicados)
 - Concorrência otimista em edição (If-Match) — evolução futura
 - Indicador visual de recorrência na lista — opcional
