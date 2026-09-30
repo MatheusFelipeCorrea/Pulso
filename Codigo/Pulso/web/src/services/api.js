@@ -60,7 +60,6 @@ api.interceptors.response.use(
         const originalRequest = error.config
         const requestUrl = originalRequest?.url || ''
         const isRefreshRequest = requestUrl.includes('/auth/refresh')
-        const isSessionProbeRequest = requestUrl.includes('/auth/me')
         const isAuthRequest =
             requestUrl.includes('/auth/login') ||
             requestUrl.includes('/auth/register') ||
@@ -69,8 +68,7 @@ api.interceptors.response.use(
             requestUrl.includes('/auth/forgot-password') ||
             requestUrl.includes('/auth/reset-password') ||
             requestUrl.includes('/auth/oauth/exchange') ||
-            isRefreshRequest ||
-            isSessionProbeRequest
+            isRefreshRequest
 
         if (
             error.response?.status === 401 &&

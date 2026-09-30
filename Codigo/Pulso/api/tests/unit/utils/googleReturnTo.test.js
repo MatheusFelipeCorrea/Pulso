@@ -21,10 +21,10 @@ describe('googleReturnTo', () => {
         expect(decodeGoogleReturnState('nao-e-jwt')).toBe('http://localhost:5173');
     });
 
-    it('usa path da SPA no FRONTEND_URL e hash no Flutter web', () => {
+    it('usa path da SPA com exchange no hash e hash no Flutter web', () => {
         const params = new URLSearchParams({ exchange: 'abc' });
         expect(buildOAuthCallbackLocation('http://localhost:5173', params)).toBe(
-            'http://localhost:5173/auth/callback?exchange=abc'
+            'http://localhost:5173/auth/callback#exchange=abc'
         );
         expect(buildOAuthCallbackLocation('http://127.0.0.1:8080', params)).toBe(
             'http://127.0.0.1:8080/#/auth/callback?exchange=abc'

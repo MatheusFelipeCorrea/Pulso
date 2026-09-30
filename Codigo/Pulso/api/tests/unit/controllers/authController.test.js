@@ -3,6 +3,8 @@ jest.mock('../../../src/utils/authCookies', () => ({
     setAuthCookies: jest.fn(),
     clearAuthCookies: jest.fn(),
     getRefreshTokenFromRequest: jest.fn(),
+    ACCESS_COOKIE: 'pulso_access',
+    REFRESH_COOKIE: 'pulso_refresh',
 }));
 
 const authService = require('../../../src/services/authService');
@@ -52,6 +54,29 @@ describe('authController', () => {
             refreshExpiresAt: session.refreshExpiresAt,
         });
         expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({ user: session.user });
+    });
+
+    it('login mobile com sessão cookie NÃO devolve tokens no JSON', async () => {
+        const session = {
+            accessToken: 'access',
+            refreshToken: 'refresh',
+            refreshExpiresAt: new Date(),
+            user: { id: 'u1', nome: 'Ana' },
+        };
+        authService.loginUser.mockResolvedValue(session);
+        const res = buildRes();
+
+        await authController.login(
+            {
+                body: { email: 'a@b.com', senha: 'x' },
+                headers: { 'x-pulso-client': 'mobile' },
+                cookies: { pulso_access: 'cookie-at', pulso_refresh: 'cookie-rt' },
+            },
+            res,
+            jest.fn()
+        );
+
         expect(res.json).toHaveBeenCalledWith({ user: session.user });
     });
 

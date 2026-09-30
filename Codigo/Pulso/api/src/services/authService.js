@@ -27,6 +27,21 @@ const SALT_ROUNDS = 12;
 const TOKEN_VERIFICACAO_TTL_MS = 24 * 60 * 60 * 1000;
 const TOKEN_RESET_TTL_MS = 60 * 60 * 1000;
 const OAUTH_EXCHANGE_TTL = '60s';
+const usedExchangeJtis = new Map();
+
+const consumeExchangeJti = (jti) => {
+    const now = Date.now();
+    for (const [id, exp] of usedExchangeJtis) {
+        if (exp <= now) usedExchangeJtis.delete(id);
+    }
+    if (!jti) {
+        throw new AppError('Sessão OAuth inválida.', 400);
+    }
+    if (usedExchangeJtis.has(jti)) {
+        throw new AppError('Sessão OAuth já utilizada. Tente entrar com Google novamente.', 401);
+    }
+    usedExchangeJtis.set(jti, now + 70_000);
+};
 
 const maskEmail = (email) => {
     const [local, domain] = email.split('@');
@@ -458,7 +473,7 @@ const authenticateGoogle = async (profile) => {
 
 const buildGoogleCallbackRedirect = async (usuario, returnOrigin) => {
     const exchangeToken = jwt.sign(
-        { type: 'oauth_exchange', sub: usuario.id },
+        { type: 'oauth_exchange', sub: usuario.id, jti: crypto.randomUUID() },
         env.JWT_SECRET,
         { expiresIn: OAUTH_EXCHANGE_TTL }
     );
@@ -482,6 +497,8 @@ const exchangeOAuthSession = async (exchangeToken) => {
     if (decoded.type !== 'oauth_exchange' || !decoded.sub) {
         throw new AppError('Sessão OAuth inválida.', 400);
     }
+
+    consumeExchangeJti(decoded.jti);
 
     const usuario = await authRepository.findById(decoded.sub);
     if (!usuario) {
@@ -537,21 +554,12 @@ const loginWithGoogleIdToken = async (idToken) => {
     };
 };
 
-/** TI5 demo — alterna FREE/PREMIUM sem billing */
-const setUserPlano = async (usuarioId, plano) => {
-    const valor = String(plano || '').toUpperCase();
-    if (valor !== 'FREE' && valor !== 'PREMIUM') {
-        throw new AppError('Plano inválido. Use FREE ou PREMIUM.', 400);
-    }
-
-    await prisma.configuracaoUsuario.upsert({
-        where: { usuarioId },
-        update: { plano: valor },
-        create: { usuarioId, plano: valor, tema: 'CLARO' },
-    });
-
-    const usuario = await authRepository.findById(usuarioId);
-    return formatUserResponse(usuario);
+/** Sem billing: o cliente não pode se promover a PREMIUM. Plano fica no seed/admin. */
+const setUserPlano = async () => {
+    throw new AppError(
+        'Alteração de plano não está disponível. O Pulso ainda não tem billing.',
+        403
+    );
 };
 
 module.exports = {

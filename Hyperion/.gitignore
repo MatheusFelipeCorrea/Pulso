@@ -3,6 +3,9 @@
 # Audit results
 .github/audits/results/*
 !.github/audits/results/.gitkeep
+!.github/audits/results/_summary/
+.github/audits/results/_summary/*
+!.github/audits/results/_summary/remediacoes-sprint-3.md
 
 # Plans — generated per session
 .github/plans/implementations/*

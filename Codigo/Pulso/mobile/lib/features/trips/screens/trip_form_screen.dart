@@ -65,17 +65,29 @@ class _TripFormScreenState extends State<TripFormScreen> {
     setState(() => submitting = true);
     try {
       final repo = context.read<TripRepository>();
+      Map<String, dynamic>? destinoMeta;
+      try {
+        final hints = await repo.listarDestinos(q: _destino.text.trim());
+        for (final hint in hints) {
+          destinoMeta = hint.toDestinoMeta();
+          if (destinoMeta != null) break;
+        }
+      } on ApiException {
+        destinoMeta = null;
+      }
       if (isEdit) {
         await repo.editar(widget.viagem!.id, {
           'destino': _destino.text.trim(),
           'moeda': moeda,
           'dataPrevista': DateTime(data.year, data.month, data.day, 12).toUtc().toIso8601String(),
+          if (destinoMeta != null) 'destinoMeta': destinoMeta,
         });
       } else {
         await repo.criar(
           destino: _destino.text.trim(),
           moeda: moeda,
           dataPrevista: data,
+          destinoMeta: destinoMeta,
         );
       }
       if (!mounted) return;

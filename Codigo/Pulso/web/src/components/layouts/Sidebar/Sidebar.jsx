@@ -57,7 +57,7 @@ export function Sidebar({ mobile = false, onClose, sidebarState }) {
             {collapsed ? (
               <PulsoLogoMark size={32} className="sidebar-header__mark" />
             ) : (
-              <PulsoBrand to="/dashboard" showTagline className="sidebar-header__logo" />
+              <PulsoBrand to="/transactions" showTagline className="sidebar-header__logo" />
             )}
           </div>
           {!mobile && (

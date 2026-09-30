@@ -1,5 +1,10 @@
 const prisma = require('../config/database');
 const { startOfDayInTimezone, endOfDayInTimezone } = require('../utils/dateTimezone');
+const {
+    roundMoney,
+    calcProgressoMeta,
+    podeReceberAporte,
+} = require('../utils/metaBalanceUtils');
 
 const includeAportes = {
     aportes: {
@@ -127,6 +132,40 @@ const excluir = async (metaId, usuarioId) =>
 
 const criarAporte = async (dados) => prisma.aporteMeta.create({ data: dados });
 
+/** Aporte + incremento de valorAtual na mesma transação (lock FOR UPDATE). */
+const registrarAporteAtomico = async (usuarioId, metaId, { valor, data }) =>
+    prisma.$transaction(async (tx) => {
+        await tx.$executeRaw`
+            SELECT id FROM metas WHERE id = ${metaId} AND usuario_id = ${usuarioId} FOR UPDATE
+        `;
+        const meta = await tx.meta.findFirst({
+            where: { id: metaId, usuarioId },
+            include: includeAportes,
+        });
+        if (!meta) return { error: 'NOT_FOUND' };
+        if (!podeReceberAporte(meta)) return { error: 'CANNOT_RECEIVE', meta };
+
+        const valorAporte = roundMoney(valor);
+        const { valorRestante } = calcProgressoMeta(meta);
+        if (valorAporte > valorRestante) return { error: 'OVERFLOW' };
+
+        const aporte = await tx.aporteMeta.create({
+            data: { metaId, valor: valorAporte, data },
+        });
+        const novoValorAtual = roundMoney(Number(meta.valorAtual) + valorAporte);
+        const concluir =
+            novoValorAtual >= roundMoney(Number(meta.valorAlvo)) && meta.status !== 'CONCLUIDA';
+        const metaAtualizada = await tx.meta.update({
+            where: { id: metaId },
+            data: {
+                valorAtual: novoValorAtual,
+                ...(concluir ? { status: 'CONCLUIDA', concluidaEm: new Date() } : {}),
+            },
+            include: includeAportes,
+        });
+        return { aporte, metaAtualizada, concluiu: concluir };
+    });
+
 const buscarAporte = async (aporteId, metaId, usuarioId) =>
     prisma.aporteMeta.findFirst({
         where: {
@@ -152,6 +191,7 @@ module.exports = {
     atualizar,
     excluir,
     criarAporte,
+    registrarAporteAtomico,
     buscarAporte,
     excluirAporte,
 };

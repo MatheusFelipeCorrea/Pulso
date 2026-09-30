@@ -85,12 +85,24 @@ Color? parseHexColor(String? hex) {
 }
 
 double? parseMoney(String raw) {
-  final cleaned = raw
-      .trim()
-      .replaceAll('R\$', '')
-      .replaceAll(' ', '')
-      .replaceAll('.', '')
-      .replaceAll(',', '.');
+  var cleaned = raw.trim().replaceAll('R\$', '').replaceAll(' ', '');
   if (cleaned.isEmpty) return null;
+
+  final hasComma = cleaned.contains(',');
+  final hasDot = cleaned.contains('.');
+
+  if (hasComma && hasDot) {
+    cleaned = cleaned.replaceAll('.', '').replaceAll(',', '.');
+  } else if (hasComma) {
+    cleaned = cleaned.replaceAll(',', '.');
+  } else if (hasDot) {
+    final parts = cleaned.split('.');
+    if (parts.length == 2 && parts[1].length <= 2) {
+      // 10.50 — decimal
+    } else {
+      cleaned = cleaned.replaceAll('.', '');
+    }
+  }
+
   return double.tryParse(cleaned);
 }

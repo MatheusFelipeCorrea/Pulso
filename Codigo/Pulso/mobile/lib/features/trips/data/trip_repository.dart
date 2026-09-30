@@ -58,6 +58,7 @@ class TripRepository {
     required String moeda,
     required DateTime dataPrevista,
     String? metaId,
+    Map<String, dynamic>? destinoMeta,
   }) {
     return _guard(() async {
       final response = await _api.raw.post<Map<String, dynamic>>(
@@ -69,6 +70,7 @@ class TripRepository {
               .toUtc()
               .toIso8601String(),
           'metaId': ?metaId,
+          if (destinoMeta != null) 'destinoMeta': destinoMeta,
         },
       );
       return PulsoViagem.fromJson(response.data ?? {});

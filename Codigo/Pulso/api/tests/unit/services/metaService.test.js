@@ -70,14 +70,16 @@ describe('metaService', () => {
     });
 
     it('registra aporte parcial sem concluir meta', async () => {
-        metaRepository.buscarPorId.mockResolvedValue(metaBase({ valorAlvo: 200, valorAtual: 0 }));
-        metaRepository.criarAporte.mockResolvedValue({
-            id: 'ap-1',
-            valor: 50,
-            data: new Date('2026-06-10T12:00:00.000Z'),
-            criadoEm: new Date('2026-06-10T12:00:00.000Z'),
+        metaRepository.registrarAporteAtomico.mockResolvedValue({
+            aporte: {
+                id: 'ap-1',
+                valor: 50,
+                data: new Date('2026-06-10T12:00:00.000Z'),
+                criadoEm: new Date('2026-06-10T12:00:00.000Z'),
+            },
+            metaAtualizada: metaBase({ valorAlvo: 200, valorAtual: 50 }),
+            concluiu: false,
         });
-        metaRepository.atualizar.mockResolvedValue(metaBase({ valorAlvo: 200, valorAtual: 50 }));
 
         const result = await metaService.registrarAporte('usr-1', 'meta-1', {
             valor: 50,
@@ -90,23 +92,21 @@ describe('metaService', () => {
     });
 
     it('conclui meta quando aporte atinge valor alvo', async () => {
-        metaRepository.buscarPorId.mockResolvedValue(metaBase({ valorAlvo: 100, valorAtual: 80 }));
-        metaRepository.criarAporte.mockResolvedValue({
-            id: 'ap-2',
-            valor: 20,
-            data: new Date('2026-06-10T12:00:00.000Z'),
-            criadoEm: new Date('2026-06-10T12:00:00.000Z'),
+        metaRepository.registrarAporteAtomico.mockResolvedValue({
+            aporte: {
+                id: 'ap-2',
+                valor: 20,
+                data: new Date('2026-06-10T12:00:00.000Z'),
+                criadoEm: new Date('2026-06-10T12:00:00.000Z'),
+            },
+            metaAtualizada: metaBase({
+                valorAlvo: 100,
+                valorAtual: 100,
+                status: 'CONCLUIDA',
+                concluidaEm: new Date('2026-06-10T12:00:00.000Z'),
+            }),
+            concluiu: true,
         });
-        metaRepository.atualizar
-            .mockResolvedValueOnce(metaBase({ valorAlvo: 100, valorAtual: 100 }))
-            .mockResolvedValueOnce(
-                metaBase({
-                    valorAlvo: 100,
-                    valorAtual: 100,
-                    status: 'CONCLUIDA',
-                    concluidaEm: new Date('2026-06-10T12:00:00.000Z'),
-                })
-            );
 
         const result = await metaService.registrarAporte('usr-1', 'meta-1', {
             valor: 20,
@@ -148,7 +148,7 @@ describe('metaService', () => {
     });
 
     it('bloqueia aporte acima do saldo restante', async () => {
-        metaRepository.buscarPorId.mockResolvedValue(metaBase({ valorAlvo: 200, valorAtual: 150 }));
+        metaRepository.registrarAporteAtomico.mockResolvedValue({ error: 'OVERFLOW' });
 
         await expect(
             metaService.registrarAporte('usr-1', 'meta-1', {

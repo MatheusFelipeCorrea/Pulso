@@ -50,7 +50,17 @@ GoRouter createRouter(AuthController auth) {
       if (loggedIn && (state.matchedLocation == '/login' || state.matchedLocation == '/register')) {
         return '/transactions';
       }
-      if (loggedIn && state.matchedLocation == '/home') return '/dashboard';
+      if (loggedIn && (state.matchedLocation == '/home' || state.matchedLocation == '/dashboard')) {
+        return '/transactions';
+      }
+      if (loggedIn && (state.matchedLocation == '/groups' || state.matchedLocation.startsWith('/groups/'))) {
+        return '/transactions';
+      }
+      if (loggedIn &&
+          (state.matchedLocation == '/trips' || state.matchedLocation.startsWith('/trips/')) &&
+          auth.user?.plano != 'PREMIUM') {
+        return '/transactions';
+      }
       if (!loggedIn && !loggingIn) return '/login';
       if (loggedIn && !_isKnownAuthedLocation(state.matchedLocation)) {
         return '/transactions';

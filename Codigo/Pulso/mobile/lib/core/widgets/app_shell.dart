@@ -209,29 +209,18 @@ class PulsoSidebar extends StatelessWidget {
                 onTap: () => _go(context, '/transactions'),
               ),
               _NavTile(
-                icon: Icons.grid_view_outlined,
-                label: 'Início',
-                selected: location == '/dashboard',
-                onTap: () => _go(context, '/dashboard'),
-              ),
-              _NavTile(
                 icon: Icons.flag_outlined,
                 label: 'Metas',
                 selected: location == '/goals' || location.startsWith('/goals/'),
                 onTap: () => _go(context, '/goals'),
               ),
-              _NavTile(
-                icon: Icons.flight_takeoff,
-                label: 'Viagens e moedas',
-                selected: location == '/trips' || location.startsWith('/trips/'),
-                onTap: () => _go(context, '/trips'),
-              ),
-              _NavTile(
-                icon: Icons.groups_outlined,
-                label: 'Grupos',
-                selected: location == '/groups' || location.startsWith('/groups/'),
-                onTap: () => _go(context, '/groups'),
-              ),
+              if (user?.plano == 'PREMIUM')
+                _NavTile(
+                  icon: Icons.flight_takeoff,
+                  label: 'Viagens e moedas',
+                  selected: location == '/trips' || location.startsWith('/trips/'),
+                  onTap: () => _go(context, '/trips'),
+                ),
               const Spacer(),
               const Divider(height: 1),
               Padding(

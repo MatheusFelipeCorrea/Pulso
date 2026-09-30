@@ -9,3 +9,5 @@ Reference in `project.yml`:
 audits:
   overlay: .github/audits/overlays/your-project.md
 ```
+
+Status operacional do recorte Sprint-3 (módulos já entregues, sem hospedagem): [`sprint-3-recorte-feito.md`](./sprint-3-recorte-feito.md).

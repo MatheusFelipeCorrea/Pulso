@@ -57,6 +57,9 @@ void main() {
     expect(formatBrl(1234.5), 'R\$ 1.234,50');
     expect(formatBrl(-10), '-R\$ 10,00');
     expect(parseMoney('R\$ 1.234,50'), 1234.5);
+    expect(parseMoney('10.50'), 10.5);
+    expect(parseMoney('10,50'), 10.5);
+    expect(parseMoney('1.234'), 1234);
   });
 
   test('VA e VR seguem as mesmas regras de categoria da Web', () {
