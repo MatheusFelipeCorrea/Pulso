@@ -4,8 +4,15 @@ import 'package:provider/provider.dart';
 import 'package:pulso/core/theme/pulso_theme.dart';
 import 'package:pulso/core/theme/theme_controller.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
+import 'package:pulso/features/currency/data/currency_repository.dart';
+import 'package:pulso/features/goals/data/goal_repository.dart';
+import 'package:pulso/features/goals/state/goals_controller.dart';
+import 'package:pulso/features/groups/data/group_repository.dart';
+import 'package:pulso/features/groups/state/groups_controller.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
 import 'package:pulso/features/transactions/state/transactions_controller.dart';
+import 'package:pulso/features/trips/data/trip_repository.dart';
+import 'package:pulso/features/trips/state/trips_controller.dart';
 
 class PulsoApp extends StatelessWidget {
   const PulsoApp({
@@ -14,12 +21,20 @@ class PulsoApp extends StatelessWidget {
     required this.theme,
     required this.router,
     required this.transactions,
+    required this.goals,
+    required this.trips,
+    required this.currencies,
+    required this.groups,
   });
 
   final AuthController auth;
   final ThemeController theme;
   final GoRouter router;
   final TransactionRepository transactions;
+  final GoalRepository goals;
+  final TripRepository trips;
+  final CurrencyRepository currencies;
+  final GroupRepository groups;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +43,14 @@ class PulsoApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: auth),
         ChangeNotifierProvider.value(value: theme),
         Provider<TransactionRepository>.value(value: transactions),
-        ChangeNotifierProvider(
-          create: (_) => TransactionsController(transactions),
-        ),
+        Provider<GoalRepository>.value(value: goals),
+        Provider<TripRepository>.value(value: trips),
+        Provider<CurrencyRepository>.value(value: currencies),
+        Provider<GroupRepository>.value(value: groups),
+        ChangeNotifierProvider(create: (_) => TransactionsController(transactions)),
+        ChangeNotifierProvider(create: (_) => GoalsController(goals)),
+        ChangeNotifierProvider(create: (_) => TripsController(trips)),
+        ChangeNotifierProvider(create: (_) => GroupsController(groups)),
       ],
       child: AnimatedBuilder(
         animation: theme,

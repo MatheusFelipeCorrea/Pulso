@@ -47,6 +47,9 @@ class AppShell extends StatelessWidget {
     }
     if (location == '/categories') return const Text('Categorias');
     if (location == '/tags') return const Text('Tags');
+    if (location == '/goals') return const Text('Metas');
+    if (location == '/trips') return const Text('Viagens e moedas');
+    if (location == '/groups') return const Text('Grupos');
     if (location == '/dashboard') return const Text('Início');
     return const Text('Pulso');
   }
@@ -78,6 +81,57 @@ class AppShell extends StatelessWidget {
             onPressed: () => context.push('/transactions/new'),
             icon: const Icon(Icons.add, size: 18),
             label: const Text('Nova'),
+          ),
+        ),
+      ];
+    }
+    if (location == '/goals') {
+      return [
+        Padding(
+          padding: const EdgeInsets.only(right: PulsoTokens.space2),
+          child: FilledButton.icon(
+            style: FilledButton.styleFrom(
+              minimumSize: const Size(0, PulsoTokens.buttonMd),
+              padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            onPressed: () => context.push('/goals/form'),
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('Nova'),
+          ),
+        ),
+      ];
+    }
+    if (location == '/trips') {
+      return [
+        Padding(
+          padding: const EdgeInsets.only(right: PulsoTokens.space2),
+          child: FilledButton.icon(
+            style: FilledButton.styleFrom(
+              minimumSize: const Size(0, PulsoTokens.buttonMd),
+              padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            onPressed: () => context.push('/trips/new'),
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('Nova'),
+          ),
+        ),
+      ];
+    }
+    if (location == '/groups') {
+      return [
+        Padding(
+          padding: const EdgeInsets.only(right: PulsoTokens.space2),
+          child: FilledButton.icon(
+            style: FilledButton.styleFrom(
+              minimumSize: const Size(0, PulsoTokens.buttonMd),
+              padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            onPressed: () => context.push('/groups/new'),
+            icon: const Icon(Icons.add, size: 18),
+            label: const Text('Novo'),
           ),
         ),
       ];
@@ -159,6 +213,24 @@ class PulsoSidebar extends StatelessWidget {
                 label: 'Início',
                 selected: location == '/dashboard',
                 onTap: () => _go(context, '/dashboard'),
+              ),
+              _NavTile(
+                icon: Icons.flag_outlined,
+                label: 'Metas',
+                selected: location == '/goals' || location.startsWith('/goals/'),
+                onTap: () => _go(context, '/goals'),
+              ),
+              _NavTile(
+                icon: Icons.flight_takeoff,
+                label: 'Viagens e moedas',
+                selected: location == '/trips' || location.startsWith('/trips/'),
+                onTap: () => _go(context, '/trips'),
+              ),
+              _NavTile(
+                icon: Icons.groups_outlined,
+                label: 'Grupos',
+                selected: location == '/groups' || location.startsWith('/groups/'),
+                onTap: () => _go(context, '/groups'),
               ),
               const Spacer(),
               const Divider(height: 1),
