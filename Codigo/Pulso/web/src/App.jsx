@@ -17,6 +17,9 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import LandingPage from './pages/LandingPage'
 import DashboardPage from './pages/DashboardPage'
 import TransactionsPage from './pages/TransactionsPage'
+import GoalsPage from './pages/GoalsPage'
+import TripsPage from './pages/TripsPage'
+import TripDetailPage from './pages/TripDetailPage.jsx'
 // TEMP: demais páginas ainda não estão neste repo.
 
 function App() {
@@ -64,6 +67,9 @@ function App() {
             <Route element={<MainLayout />}>
               <Route path="dashboard" element={<DashboardPage />} />
               <Route path="transactions" element={<TransactionsPage />} />
+              <Route path="goals" element={<GoalsPage />} />
+              <Route path="trips" element={<TripsPage />} />
+              <Route path="trips/:id" element={<TripDetailPage />} />
             </Route>
           </Route>
 
