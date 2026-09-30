@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-078
 title: "Índice, equipe e ferramentas da apostila"
-status: "In Revision"
+status: Done
 type: Feature
 priority: High
 sprint: "Sprint 1"
@@ -15,7 +15,7 @@ categories:
 
 # [FEATURE] Índice, equipe e ferramentas da apostila
 
-> **Contexto:** `docs/README.md` ainda é o template PUC (Aluno 1…, resumo vazio, GitHub `XXXXXXX`, Heroku, Figma placeholder).
+> **Contexto:** `docs/README.md` com índice, equipe e ferramentas do Pulso.
 
 **Arquivo:** `docs/README.md`
 
@@ -43,10 +43,14 @@ categories:
 - [#290](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/290) — Apostila, READMEs e mecanismos
 - [#291](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/291) — Protótipos de Auth na documentação
 
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Estrutura do sumário PUC mapeada
 
 ### ⏳ Pendente
-- Substituir template por dados do Pulso
+- Nenhum

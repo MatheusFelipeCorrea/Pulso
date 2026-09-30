@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-004
 title: "Recuperação de senha"
-status: "In Progress"
+status: "In Revision"
 type: Feature
 priority: High
 sprint: null
@@ -60,6 +60,10 @@ Fluxo: `/forgot-password` → `POST /auth/forgot-password` → email com token 1
 - [#288](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/288) — Recuperação de senha (`feat/17`)
 - [#289](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/289) — UX da recuperação de senha (`feat/18`)
 
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
@@ -67,5 +71,4 @@ Fluxo: `/forgot-password` → `POST /auth/forgot-password` → email com token 1
 - Spec de anti-enumeração e revogação de sessões documentada
 
 ### ⏳ Pendente
-- PULSO-TASK-008 — backend forgot/reset + email
-- PULSO-TASK-009 — telas frontend do fluxo de reset
+- Nenhum

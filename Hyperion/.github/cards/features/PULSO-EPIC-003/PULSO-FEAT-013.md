@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-013
 title: "Categorias, tags e sugestão automática"
-status: Done
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-003
@@ -65,5 +65,4 @@ Alice Shikida (`aliceshikida`)
 - Regras de domínio e modais de gestão especificados
 
 ### ⏳ Pendente
-- PULSO-TASK-028 — validação recurso×categoria + modals categorias/tags
-- PULSO-TASK-029 — sugestão automática backend + debounce no form
+- Nenhum

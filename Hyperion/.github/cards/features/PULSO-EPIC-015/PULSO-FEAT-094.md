@@ -52,6 +52,10 @@ categories:
 ### Cenário 4 — Fora de escopo
 **Então** não se prototipa o job de notificação; o alerta visual na tela basta.
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

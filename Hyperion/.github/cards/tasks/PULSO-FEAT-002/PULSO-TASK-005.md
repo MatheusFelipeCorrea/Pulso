@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-005
 title: "Frontend — login e gestão de sessão"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: High
 sprint: null
@@ -67,12 +67,14 @@ Registrar em `App.jsx` — `/login` com `GuestRoute`; árvore protegida com `Pro
 
 - [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão JWT e logout (`feat/15`)
 
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Spec de bootstrap, interceptor e guards definida
 
 ### ⏳ Pendente
-- Implementar Login.jsx + AuthBootstrap
-- Mutex de refresh em `api.js`
-- Redux authSlice e ProtectedRoute/GuestRoute
+- Nenhum

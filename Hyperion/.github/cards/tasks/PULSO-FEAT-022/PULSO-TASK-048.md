@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-048
 title: "QA — testes unitários de metas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-022
@@ -48,4 +48,4 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 - Matriz de testes definida
 
 ### ⏳ Pendente
-- Escrever/expandir todas as suites listadas
+- Nenhum

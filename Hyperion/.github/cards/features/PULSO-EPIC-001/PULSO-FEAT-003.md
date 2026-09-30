@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-003
 title: "Google OAuth 2.0"
-status: "In Progress"
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null
@@ -58,6 +58,10 @@ Fluxo: botão Google → redirect `GET /auth/google` (Passport) → callback API
 
 - [#287](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/287) — Google OAuth 2.0 (`feat/16`)
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
@@ -65,5 +69,4 @@ Fluxo: botão Google → redirect `GET /auth/google` (Passport) → callback API
 - Variáveis de ambiente mapeadas (`GOOGLE_CLIENT_ID`, `GOOGLE_CALLBACK_URL`, etc.)
 
 ### ⏳ Pendente
-- PULSO-TASK-006 — backend Passport + exchange
-- PULSO-TASK-007 — frontend callback e botão Google
+- Nenhum

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-077
 title: "Revisar apresentação do projeto"
-status: "In Revision"
+status: Done
 type: Feature
 priority: Medium
 sprint: "Sprint 1"
@@ -40,10 +40,14 @@ categories:
 ### Cenário 4 — Sem retrabalho
 **Então** não se substitui a seção por template; mudanças são pontuais (typo, alinhamento, abreviatura).
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Documento já existe no repositório como texto Pulso
 
 ### ⏳ Pendente
-- Passada de revisão contra cards e README
+- Nenhum

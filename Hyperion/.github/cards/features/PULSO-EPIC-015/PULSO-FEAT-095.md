@@ -53,6 +53,10 @@ categories:
 ### Cenário 4 — Fora de escopo
 **Então** não se prototipa upload técnico (Wikimedia/og:image); um campo de imagem no modal basta.
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

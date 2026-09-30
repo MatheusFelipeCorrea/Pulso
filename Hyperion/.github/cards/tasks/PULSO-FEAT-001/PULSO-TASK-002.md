@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-002
 title: "Backend — cadastro, verificação e reenvio de email"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null
@@ -87,12 +87,14 @@ Mapear P2002 → 409 no cadastro
 
 - [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de banco e autenticação (`feat/14`)
 
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Contratos de endpoint e payloads definidos
 
 ### ⏳ Pendente
-- Implementar service, controller, routes e schemas
-- Integrar provider de email (SMTP)
-- Testes unitários em `api/tests/unit/authService.test.js`
+- Nenhum

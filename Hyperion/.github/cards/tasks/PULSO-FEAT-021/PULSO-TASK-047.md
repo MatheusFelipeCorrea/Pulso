@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-047
 title: "Frontend — GoalCard, goalStatusUtils e goals.css"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-021
@@ -46,4 +46,4 @@ Implementar card visual de meta, utilitários de status/insight e folha de estil
 - Spec visual e utilitários definidos
 
 ### ⏳ Pendente
-- Implementar GoalCard, utils e goals.css
+- Nenhum

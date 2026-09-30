@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-010
 title: "Backend — middleware, rate limit e job de limpeza"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null
@@ -71,12 +71,14 @@ Criar em: `Codigo/api/src/jobs/unverifiedAccountCleanupJob.js`
 - [#284](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/284) — Camadas de autenticação (`feat/14`)
 - [#286](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/286) — Login, sessão e guards (`feat/15`)
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Spec de middleware, rate limits e cron definida
 
 ### ⏳ Pendente
-- Implementar authMiddleware e authRateLimit
-- Criar job de cleanup de contas não verificadas
-- Montar rotas em `routes/index.js`
+- Nenhum

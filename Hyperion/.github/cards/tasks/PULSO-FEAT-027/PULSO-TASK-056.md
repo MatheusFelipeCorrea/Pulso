@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-056
 title: "Frontend — TripFormModal, TripList e TripCard"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-027
@@ -45,4 +45,4 @@ Integração: seleção de meta ativa; criar meta via `GoalFormModal`
 - Campos e pickers especificados
 
 ### ⏳ Pendente
-- Implementar lista, cards e modal de viagem
+- Nenhum

@@ -39,10 +39,14 @@ categories:
 ### Cenário 4 — Separação
 **Então** não duplica a seção 5: 5 = estrutura/protótipo; 7 = UI construída.
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Papel da seção 7 vs. 5 definido
 
 ### ⏳ Pendente
-- Screenshots quando houver frontend
+- `docs/7.solucao.md` ainda é o template — capturas do app construído (auth, transações, metas, viagens)

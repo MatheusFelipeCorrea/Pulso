@@ -50,10 +50,14 @@ categories:
 ### Cenário 4 — Fora de escopo
 **Então** não se prototipa o download real de APK/IPA; um bloco “em breve” basta.
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Rotas públicas mapeadas
 
 ### ⏳ Pendente
-- Frames Figma claro/escuro
+- Nenhum

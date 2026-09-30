@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-082
 title: "Wireframes na apostila"
-status: "In Progress"
+status: Done
 type: Feature
 priority: High
 sprint: "Sprint 1"
@@ -46,10 +46,15 @@ categories:
 - [#290](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/290) — Seção 5 com exports de Auth
 - [#291](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/291) — Protótipos de Auth na apostila
 
+## 👤 Responsáveis
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+- Alice Shikida (`aliceshikida`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Inventário de telas nos epics de produto
 
 ### ⏳ Pendente
-- Aguardar protótipos e montar `docs/5`
+- Nenhum

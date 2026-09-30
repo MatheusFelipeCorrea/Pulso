@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-031
 title: "Job recurringTransactions e recurrenceUtils"
-status: Done
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-015
@@ -57,4 +57,4 @@ Vinícius Simões (`ViniSimoesV`)
 - Lógica de ocorrência e RRULE básica especificada
 
 ### ⏳ Pendente
-- Implementar job + utils + wire cron
+- Nenhum

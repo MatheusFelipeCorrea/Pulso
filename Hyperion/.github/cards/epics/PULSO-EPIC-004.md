@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-EPIC-004
 title: "Metas Financeiras"
-status: Backlog
+status: "In Revision"
 type: Epic
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null
@@ -62,14 +62,20 @@ categories:
 - PULSO-FEAT-020
 - PULSO-FEAT-021
 - PULSO-FEAT-022
+- PULSO-FEAT-109
+
+## 👤 Responsáveis
+
+- Alice Shikida (`aliceshikida`) — API (FEAT-018–020) e Flutter dados (TASK-167)
+- Maria Clara (`mariaoliveira27`) — Web (FEAT-021) e Flutter telas (TASK-168)
 
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Escopo RF-029–036, RF-036 e RN-061–068 mapeado
-- Hierarquia Epic → 5 Features → 12 Tasks definida
-- Contratos API e fluxos de UI documentados como spec
+- API + Web + Flutter mergeados na Sprint-3 (In Revision)
+- Hierarquia Epic → Features → Tasks definida
 
 ### ⏳ Pendente
-- Implementar módulo completo backend + frontend
+- Revisão da apostila (protótipos já publicados)
 - Metas de grupo (RF-092–093) — epic Grupos

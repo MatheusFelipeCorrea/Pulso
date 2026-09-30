@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-008
 title: "Backend — recuperação e reset de senha"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: High
 sprint: null
@@ -67,12 +67,14 @@ Adicionar em: `Codigo/api/src/services/authService.js`
 
 - [#288](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/288) — Recuperação de senha (`feat/17`)
 
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Contratos e regras de anti-enumeração definidos
 
 ### ⏳ Pendente
-- Implementar endpoints forgot/reset
-- Integrar email de reset
-- Testes unitários do fluxo
+- Nenhum

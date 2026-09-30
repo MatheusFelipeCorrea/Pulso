@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-165
 title: "Flutter — formulário, categorias/tags e exclusão"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-108
@@ -47,10 +47,15 @@ Sheets/telas de criar, editar e excluir transação; gestão mínima de categori
 
 Depende de FEAT-012 + FEAT-013 + FEAT-015 mergeados/descomentados na Sprint-3.
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Regras de domínio documentadas no epic
+- Formulário, exclusão (simples e recorrente) e pickers no Flutter (Sprint-3)
 
 ### ⏳ Pendente
-- Implementar form, exclusão e pickers no Flutter
+- Nenhum

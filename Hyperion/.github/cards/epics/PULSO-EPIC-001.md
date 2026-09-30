@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-EPIC-001
 title: "Autenticação"
-status: "In Progress"
+status: "In Revision"
 type: Epic
 priority: Highest
 sprint: "Sprint 2"
@@ -81,16 +81,21 @@ categories:
 - [#288](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/288) — Recuperação de senha
 - [#289](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/289) — UX da recuperação de senha
 
+## 👤 Responsáveis
+
+- Alice Shikida (`aliceshikida`) — FEAT-001
+- Vinícius Simões (`ViniSimoesV`) — FEAT-002
+- Maria Clara (`mariaoliveira27`) — FEAT-003
+- Sofia Vasconcelos (`sofiavasconcelosms`) — FEAT-004
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — FEAT-005 + FEAT-107
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Escopo do epic refinado com base nos RFs RF-001–006 e RNs RN-131–143
 - Hierarquia Epic → Feature → Task definida (6 features: Web 001–005 + Flutter 107)
 - Contratos de API, telas e integrações documentados como spec de implementação
+- FEAT-001–005 (Web) e FEAT-107 (Flutter) mergeados
 
 ### ⏳ Pendente
-- Implementar PULSO-FEAT-001 a PULSO-FEAT-005 (Web)
-- PULSO-FEAT-107 — Auth Flutter na mesma API Node
-- Validar fluxos ponta a ponta (cadastro → verificação → login → sessão → logout)
-- Cobertura de testes API e Web para todos os fluxos auth
-- Decidir login por nome (`Usuario.nome` sem `@unique`) vs. email-only
+- Revisão (In Revision)

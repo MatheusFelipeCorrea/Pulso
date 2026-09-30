@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-025
 title: "Banco de dados — transações, tags e vínculos"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-012
@@ -55,4 +55,4 @@ Matheus Felipe Correa (`MatheusFelipeCorrea`)
 - Spec de models e índices definida
 
 ### ⏳ Pendente
-- Criar/aplicar migrations Prisma
+- Nenhum

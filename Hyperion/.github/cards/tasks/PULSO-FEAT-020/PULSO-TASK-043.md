@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-043
 title: "Backend — transições de status e excluirAporte com reabertura"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-020
@@ -48,4 +48,4 @@ Completar `editarMeta` com máquina de estados e `excluirAporte` que recalcula v
 - Máquina de estados e reabertura documentadas
 
 ### ⏳ Pendente
-- Implementar editarMeta (status) e excluirAporte
+- Nenhum

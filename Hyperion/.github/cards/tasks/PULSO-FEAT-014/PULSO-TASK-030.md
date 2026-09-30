@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-030
 title: "Transferências — backend e formulário"
-status: Done
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-014
@@ -61,4 +61,4 @@ Sofia Vasconcelos (`sofiavasconcelosms`)
 - Spec RF-027 documentada
 
 ### ⏳ Pendente
-- Implementar branch transferência API + UI
+- Nenhum

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-024
 title: "Backend — API de viagens"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-005
@@ -46,10 +46,19 @@ Expor endpoints em `/api/viagens` para listar, criar, editar, excluir e obter re
 - PULSO-TASK-051
 - PULSO-TASK-052
 
+## 👤 Responsável
+
+Vinícius Simões (`ViniSimoesV`)
+
+## 🔗 Issues
+
+- [#37](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/37) — PULSO-FEAT-024
+
+## 🔗 Pull Requests
+
+- [#316](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/316) — módulo de viagens na API
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Contratos e validações de domínio definidos
-
-### ⏳ Pendente
-- PULSO-TASK-049–052 — DB, repository, service e rotas
+- DB, repository, service e rotas mergeados na Sprint-3 (In Revision)

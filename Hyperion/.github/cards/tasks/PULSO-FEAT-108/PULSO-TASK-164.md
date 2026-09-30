@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-164
 title: "Flutter — lista, filtros e resumo de transações"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-108
@@ -17,7 +17,7 @@ categories:
 
 # [TASK] Flutter — lista, filtros e resumo de transações
 
-> **Contexto:** Auth Flutter (FEAT-107) já entrega sessão Bearer. `/home` é stub. A API de transações está nas PRs da Sprint-3 (`/api/transacoes`, `/resumo`, `/filtros`).
+> **Contexto:** Auth Flutter (FEAT-107) já entrega sessão Bearer. A API de transações está na Sprint-3 (`/api/transacoes`, `/resumo`, `/filtros`).
 
 ## 📝 Descrição
 
@@ -37,7 +37,7 @@ Criar o módulo `features/transactions` no app: rota autenticada, listagem agrup
 
 ## 🛠️ Implementação
 
-### `Codigo/Pulso/mobile/lib/features/transactions/` (NOVO — CRIAR)
+### `Codigo/Pulso/mobile/lib/features/transactions/` (EXISTENTE)
 
 - `data/transaction_repository.dart` — client REST
 - `screens/transactions_screen.dart` — lista + resumo
@@ -45,17 +45,22 @@ Criar o módulo `features/transactions` no app: rota autenticada, listagem agrup
 
 ### `app_router.dart` (EXISTENTE — MODIFICAR)
 
-Rota autenticada `/transactions` (sair do stub `/home` ou navegar a partir dele).
+Rota autenticada `/transactions`.
 
 ## 📐 Regras de Negócio
 
 - Transferências **não** entram nos totais de receita/despesa do resumo
 - Sem segundo backend; mesma base URL da auth
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Contrato HTTP já definido em FEAT-012
+- Contrato HTTP da FEAT-012
+- Lista, filtros, resumo e pull-to-refresh no Flutter (Sprint-3)
 
 ### ⏳ Pendente
-- Implementar tela e repository no Flutter
+- Nenhum

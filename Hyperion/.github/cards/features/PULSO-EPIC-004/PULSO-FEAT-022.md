@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-022
 title: "QA — testes de metas"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Medium
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-004
@@ -28,10 +28,11 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 
 - PULSO-TASK-048
 
+## 🔗 Pull Requests
+
+- [#314](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/314) · [#315](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/315) — testes de metas API/web
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Matriz de testes definida
-
-### ⏳ Pendente
-- PULSO-TASK-048 — implementar/expandir suites
+- Suites mergeadas na Sprint-3 (In Revision)

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-051
 title: "Backend — viagemRepository e viagemMapper"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-024
@@ -39,4 +39,4 @@ Implementar repository com includes de despesas, observações e meta; mapper co
 - Shape de resposta definido
 
 ### ⏳ Pendente
-- Implementar repository e mapper
+- Nenhum

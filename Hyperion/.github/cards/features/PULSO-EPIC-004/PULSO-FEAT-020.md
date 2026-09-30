@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-020
 title: "Aportes e ciclo de vida da meta"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-004
@@ -45,10 +45,11 @@ Implementar fluxos de aporte e transições de status com validações de domín
 - PULSO-TASK-042
 - PULSO-TASK-043
 
+## 🔗 Pull Requests
+
+- [#314](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/314) — aportes e ciclo de vida na API
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Máquina de estados e regras RN-062–066 documentadas
-
-### ⏳ Pendente
-- PULSO-TASK-042–043 — aportes, conclusão e transições
+- Aportes, conclusão e transições mergeados na Sprint-3 (In Revision)

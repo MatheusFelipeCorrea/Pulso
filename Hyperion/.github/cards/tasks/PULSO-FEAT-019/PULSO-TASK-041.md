@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-041
 title: "Backend — sugestão reserva de emergência (RF-036)"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-019
@@ -46,4 +46,4 @@ Implementar `sugerirReservaEmergencia` agregando despesas dos últimos 3 meses v
 - Contrato RF-036 e dependência em transações definidos
 
 ### ⏳ Pendente
-- Implementar agregação e endpoint
+- Nenhum

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-019
 title: "Cálculos, progresso e reserva de emergência"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-004
@@ -40,10 +40,11 @@ Implementar cálculos compartilhados API/Web e endpoint de sugestão de reserva 
 - PULSO-TASK-038
 - PULSO-TASK-041
 
+## 🔗 Pull Requests
+
+- [#314](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/314) — API de metas (cálculos e sugestão)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Fórmulas e contrato de sugestão RF-036 definidos
-
-### ⏳ Pendente
-- PULSO-TASK-038–041 — utils, mapper e endpoint de sugestão
+- Utils, mapper e endpoint de sugestão mergeados na Sprint-3 (In Revision)

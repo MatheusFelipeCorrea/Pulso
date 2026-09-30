@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-033
 title: "Frontend — TransactionsPage, filtros e listagem"
-status: Done
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-016
@@ -54,4 +54,4 @@ Maria Clara (`mariaoliveira27`)
 - Spec de estado e fetch paralelo definida
 
 ### ⏳ Pendente
-- Implementar página e componentes de listagem/filtro
+- Nenhum

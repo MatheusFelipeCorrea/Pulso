@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-012
 title: "Backend — API de transações"
-status: Done
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-003
@@ -56,4 +56,4 @@ Matheus Felipe Correa (`MatheusFelipeCorrea`)
 - Contratos HTTP e payloads definidos
 
 ### ⏳ Pendente
-- PULSO-TASK-025–027 — persistência, service e rotas
+- Nenhum

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-080
 title: "Requisitos funcionais, não funcionais e mecanismos"
-status: "In Revision"
+status: Done
 type: Feature
 priority: High
 sprint: "Sprint 1"
@@ -40,6 +40,11 @@ categories:
 ### Cenário 4 — Mecanismos
 **Então** 3.4 preenche Análise / Design / Implementação (persistência, front, back, integração OAuth/Gemini/cotações, log, teste, deploy) sem produto inventado além do que memória/cards já dizem; se o scaffold ainda não existir, a coluna Implementação pode dizer “a definir no scaffold” em vez de Hibernate.
 
+## 👤 Responsáveis
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+- Alice Shikida (`aliceshikida`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
@@ -47,4 +52,4 @@ categories:
 - Transcrição em `docs/3.requisitos.md` (RF-001–139, RNF-001–016, restrições e mecanismos); check vazio e status Pendente
 
 ### ⏳ Pendente
-- Revisão (In Revision): professor / preenchimento de Check e Status conforme a implementação avança
+- Nenhum

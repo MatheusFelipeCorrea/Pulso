@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-050
 title: "Backend — moedaService, provider e rotas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-023
@@ -44,4 +44,4 @@ Implementar camada de moedas com catálogo, cache e CRUD de favoritas.
 - Contratos RF-037–040 especificados
 
 ### ⏳ Pendente
-- Implementar provider, service e rotas
+- Nenhum

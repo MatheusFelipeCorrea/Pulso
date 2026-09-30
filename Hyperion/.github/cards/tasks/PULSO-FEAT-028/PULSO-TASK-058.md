@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-058
 title: "Frontend — pretensões, observações e transporte"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-028
@@ -45,4 +45,4 @@ Implementar modais e seções de pretensões/observações plus widget de preço
 - Modais e seções especificados
 
 ### ⏳ Pendente
-- Implementar seções de detalhe e modais
+- Nenhum

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-036
 title: "QA — testes unitários de transações"
-status: Done
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-017
@@ -61,4 +61,4 @@ Sofia Vasconcelos (`sofiavasconcelosms`)
 - Matriz de testes definida
 
 ### ⏳ Pendente
-- Escrever/expandir todas as suites listadas
+- Nenhum

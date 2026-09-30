@@ -51,6 +51,10 @@ categories:
 ### Cenário 4 — Fora de escopo
 **Então** tela de OAuth do Google pode ser um estado “redirecionando”, sem mockar o console Google.
 
+## 👤 Responsável
+
+- Maria Clara (`mariaoliveira27`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído

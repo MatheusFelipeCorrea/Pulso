@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-163
 title: "Documentação — subir protótipos de transações"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: null
@@ -18,7 +18,7 @@ categories:
 
 # [TASK] Documentação — subir protótipos de transações
 
-> **Contexto:** `PULSO-FEAT-089` especifica os frames. `PULSO-FEAT-082` publica na apostila. Auth já tem exports em `docs/5.wireframe.md`; transações ainda não.
+> **Contexto:** `PULSO-FEAT-089` especifica os frames. `PULSO-FEAT-082` publica na apostila. Auth, transações, metas e viagens estão em `docs/5.wireframe.md`.
 
 ## 📝 Descrição
 
@@ -47,10 +47,15 @@ Incluir recorte Transações no mesmo padrão do bloco de Auth.
 
 Exports PNG/WebP (ou frames Figma linkados) das telas acima.
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Inventário de telas em `PULSO-FEAT-089`
+- Exports publicados em `docs/prototipos/Transações/` e na seção 5.2
 
 ### ⏳ Pendente
-- Exportar frames e publicar na apostila
+- Revisão na apostila (In Revision)

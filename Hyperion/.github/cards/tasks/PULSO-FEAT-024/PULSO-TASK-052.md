@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-052
 title: "Backend — viagemService CRUD e resolução de destino"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-024
@@ -44,4 +44,4 @@ Implementar service principal com `resolverDestinoPayload`, validações e endpo
 - Fluxos RF-041, RF-046, RF-047 documentados
 
 ### ⏳ Pendente
-- Implementar service CRUD e rotas base
+- Nenhum

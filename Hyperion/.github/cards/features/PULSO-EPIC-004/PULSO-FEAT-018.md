@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-018
 title: "Backend — API de metas"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-004
@@ -43,10 +43,20 @@ Expor endpoints em `/api/metas` para criar, editar, excluir, listar com filtros 
 - PULSO-TASK-039
 - PULSO-TASK-040
 
+## 👤 Responsável
+
+Alice Shikida (`aliceshikida`)
+
+## 🔗 Issues
+
+- [#31](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/31) — PULSO-FEAT-018
+
+## 🔗 Pull Requests
+
+- [#314](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/314) — módulo de metas na API
+- [#318](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/318) — religamento das rotas
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Contratos HTTP e payloads definidos
-
-### ⏳ Pendente
-- PULSO-TASK-037–040 — persistência, service e rotas
+- Persistência, service e rotas mergeados na Sprint-3 (In Revision)

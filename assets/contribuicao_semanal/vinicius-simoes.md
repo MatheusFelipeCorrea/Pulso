@@ -36,7 +36,9 @@
 
 **Total Sprint 2:** 24h
 
-# Sprint 3
+# Sprint 3 (16/09 a 30/09)
+
+### Semana 1 (16/09 - 22/09)
 
 - Recorrência e geração automática (`PULSO-FEAT-015`, tasks 031–032): `recurringTransactions`, `recurrenceUtils`, exclusão “esta e futuras”.
 - PR [#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) → Sprint-3 · issues [#28](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/28), [#119](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/119), [#155](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/155).
@@ -44,4 +46,11 @@
 
 **Horas:** 16h
 
-**Total Sprint 3:** 16h
+### Semana 2 (23/09 - 30/09)
+
+- API de viagens (`PULSO-FEAT-024`–`026`): CRUD, destinos, pretensões, observações — PR [#316](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/316) · issue [#37](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/37).
+- Flutter: camada de dados de viagens e grupos (`PULSO-FEAT-110` / TASK-170) — PR [#322](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/322).
+
+**Horas:** 16h
+
+**Total Sprint 3:** 32h

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-060
 title: "QA — testes unitários viagens e moedas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-029
@@ -53,4 +53,4 @@ Implementar suites API e Web cobrindo fluxos críticos documentados no epic.
 - Matriz de testes definida
 
 ### ⏳ Pendente
-- Escrever/expandir todas as suites listadas
+- Nenhum

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-023
 title: "Backend — API de moedas"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-005
@@ -44,10 +44,19 @@ Expor endpoints autenticados em `/api/moedas` para catálogo, cotações, conver
 - PULSO-TASK-049
 - PULSO-TASK-050
 
+## 👤 Responsável
+
+Sofia Vasconcelos (`sofiavasconcelosms`)
+
+## 🔗 Issues
+
+- [#36](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/36) — PULSO-FEAT-023
+
+## 🔗 Pull Requests
+
+- [#313](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/313) — módulo de moedas (API e web)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Contratos HTTP e limites definidos
-
-### ⏳ Pendente
-- PULSO-TASK-049–050 — persistência favoritas e service/rotas
+- Catálogo, conversão, histórico e favoritas mergeados na Sprint-3 (In Revision)

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-012
 title: "QA — testes unitários de autenticação"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Medium
 sprint: null
@@ -64,12 +64,14 @@ Garantir regressão segura nos services, controllers, middlewares e camada web d
 - [#287](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/287) — Google OAuth 2.0 (`feat/16`)
 - [#288](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/288) — Recuperação de senha (`feat/17`)
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Escopo de testes mapeado por camada
 
 ### ⏳ Pendente
-- Escrever testes unitários API (service, controller, middlewares)
-- Escrever testes unitários Web (schemas, service, slice)
-- Opcional: suite E2E Playwright dedicada auth
+- Nenhum

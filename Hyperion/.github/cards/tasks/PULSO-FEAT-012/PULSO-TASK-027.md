@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-027
 title: "Backend — routes, controller e schemas"
-status: Done
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-012
@@ -57,4 +57,4 @@ Matheus Felipe Correa (`MatheusFelipeCorrea`)
 - Mapa de rotas definido
 
 ### ⏳ Pendente
-- Implementar controller, routes e schemas Zod
+- Nenhum

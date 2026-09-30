@@ -39,14 +39,26 @@
 
 **Total Sprint 2:** 18h
 
-# Sprint 3
+# Sprint 3 (16/09 a 30/09)
+
+### Semana 1 (16/09 - 22/09)
 
 - Camada API de transações (`PULSO-FEAT-012`): service, repository, rotas, schemas, filtros — PR [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298).
 - Abertura e conferência dos PRs do time na Sprint-3: [#298](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/298)–[#302](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/302) (Alice 013, Sofia 014+017, Maria 016, Vinícius 015).
 - Wire-up do módulo na Sprint-3 (rotas, job de recorrência, MainLayout, `/transactions`) — PR [#307](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/307).
-- Cards: FEAT-012–017 Done, responsáveis e links dos PRs; nova **FEAT-108** (mobile + protótipos) e issues [#303](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/303)–[#306](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/306).
+- Cards: FEAT-012–017 e **FEAT-108** (mobile + protótipos) · issues [#303](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/303)–[#306](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/306).
 - Specs de rastreio: `PULSO-EPIC-003-transacoes` e `PULSO-EPIC-001-autenticacao`.
+- Flutter de transações — PR [#309](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/309).
 
 **Horas:** 22h
 
-**Total Sprint 3:** 22h
+### Semana 2 (23/09 - 30/09)
+
+- Viagens no web (`PULSO-FEAT-027`/`028`) — PR [#312](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/312).
+- Religa metas, viagens e moedas (rotas API, páginas, sidebar) — PRs [#317](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/317)–[#319](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/319).
+- Flutter: telas de viagens e grupos + nav (`PULSO-FEAT-110` / TASK-172) — PR [#324](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/324).
+- Board Project #726: pente-fino local × board; cards entregues em In Revision; FEAT-109 e FEAT-110 (Flutter metas / viagens e moedas).
+
+**Horas:** 20h
+
+**Total Sprint 3:** 42h

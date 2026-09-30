@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-015
 title: "Recorrência e geração automática"
-status: Done
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-003
@@ -59,5 +59,4 @@ Vinícius Simões (`ViniSimoesV`)
 - Fluxos de recorrência e exclusão especificados (RF-NOVO-C1)
 
 ### ⏳ Pendente
-- PULSO-TASK-031 — job + recurrenceUtils
-- PULSO-TASK-032 — excluirTransacao recorrente + UI DeleteTransactionModal
+- Nenhum

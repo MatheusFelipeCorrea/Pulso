@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-014
 title: "Transferências entre recursos"
-status: Done
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-003
@@ -57,4 +57,4 @@ Sofia Vasconcelos (`sofiavasconcelosms`)
 - Spec RF-027 e enum `TipoRecurso` incluindo POUPANCA documentados
 
 ### ⏳ Pendente
-- PULSO-TASK-030 — backend + frontend transferências
+- Nenhum
