@@ -20,7 +20,7 @@ categories:
 
 # [FEATURE] Auth Flutter (mesma API Node)
 
-> **Contexto:** O app nativo em `Codigo/Pulso/mobile` ainda é placeholder. A API Node em `Codigo/Pulso/api` já cobre RF-001–006 (cadastro, Google web, login JWT, refresh, logout, recuperação). O Flutter deve **reutilizar essa API** — sem segundo backend. Apostila 3.4: cookie `httpOnly` na Web; **secure storage** no mobile. RF-140: o Flutter consome o mesmo REST.
+> **Contexto:** O app nativo em `Codigo/Pulso/mobile` reutiliza a API Node em `Codigo/Pulso/api` (RF-001–006). Apostila 3.4: cookie `httpOnly` na Web; **secure storage** no mobile. RF-140: o Flutter consome o mesmo REST.
 
 **Refs:** RF-001–006 · RF-140 · RN-131–143  
 **Spec:** `Hyperion/.github/plans/specs/PULSO-107-auth-flutter/`  
@@ -30,7 +30,7 @@ categories:
 
 Como **usuário do app Flutter**, eu quero **cadastrar, entrar, recuperar senha e autenticar com Google na mesma API Node da Web**, para que **a regra de negócio não seja duplicada e a sessão no telefone use secure storage**.
 
-Hoje `respondWithAuthSession` só seta cookies e o JSON de login é `{ user }` — o app nativo não consegue persistir JWT. `authCookies.js` **já lê** `Authorization: Bearer` e `body.refreshToken`. O gap é devolver os tokens no JSON para o cliente mobile, inicializar o Flutter e tratar Google nativo (Passport hoje redireciona para `FRONTEND_URL/auth/callback`).
+Hoje o SPA autentica com cookies `httpOnly`. O app nativo persiste JWT no secure storage: login/refresh com `X-Pulso-Client: mobile` devolvem `accessToken` e `refreshToken` no JSON. Google no telefone usa `POST /api/auth/google/mobile` (ID token), sem redirect para a SPA.
 
 ## ✅ Critérios de Aceite
 

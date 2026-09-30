@@ -51,6 +51,7 @@ Depende de FEAT-012 + FEAT-013 + FEAT-015 mergeados/descomentados na Sprint-3.
 
 ### ✅ Concluído
 - Regras de domínio documentadas no epic
+- Formulário, exclusão (simples e recorrente) e pickers no Flutter (Sprint-3)
 
 ### ⏳ Pendente
-- Implementar form, exclusão e pickers no Flutter
+- Nenhum

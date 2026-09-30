@@ -55,7 +55,8 @@ Rota autenticada `/transactions` (sair do stub `/home` ou navegar a partir dele)
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Contrato HTTP já definido em FEAT-012
+- Contrato HTTP da FEAT-012
+- Lista, filtros, resumo e pull-to-refresh no Flutter (Sprint-3)
 
 ### ⏳ Pendente
-- Implementar tela e repository no Flutter
+- Nenhum

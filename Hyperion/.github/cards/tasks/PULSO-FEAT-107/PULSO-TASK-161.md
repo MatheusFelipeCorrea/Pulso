@@ -18,11 +18,11 @@ categories:
 
 # [TASK] Flutter — init, e-mail/senha e sessão Bearer
 
-> **Contexto:** `Codigo/Pulso/mobile` é README placeholder (sem `pubspec`). RF-140: o app consome a **mesma** API REST. Telas de referência: protótipo `PULSO-FEAT-086`.
+> **Contexto:** `Codigo/Pulso/mobile` já tem o app Flutter (Dio, go_router, secure storage). RF-140: o app consome a **mesma** API REST. Telas de referência: protótipo `PULSO-FEAT-086`.
 
 ## 📝 Descrição
 
-Criar o projeto Flutter, cliente HTTP com Dio, persistência segura dos JWT e telas de cadastro/login/logout alinhadas às rotas `/api/auth/*` já existentes.
+Mantém o cliente HTTP (Dio), JWT no secure storage e as telas de cadastro/login/logout alinhadas às rotas `/api/auth/*`.
 
 ## ✅ Critérios de Aceite
 
