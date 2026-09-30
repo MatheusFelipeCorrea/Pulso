@@ -51,26 +51,25 @@ Mantém o cliente HTTP (Dio), JWT no secure storage e as telas de cadastro/login
 
 ## 🛠️ Implementação
 
-### `Codigo/Pulso/mobile/` (NOVO — CRIAR)
+### `Codigo/Pulso/mobile/` (EXISTENTE)
 
-- `flutter create` no placeholder; stack: Dio, `flutter_secure_storage`, go_router (ou Navigator 2)
-- Base URL apontando para a API Node (`Codigo/Pulso/api`)
+App Flutter com Dio, `flutter_secure_storage` e go_router. Base URL aponta para a API Node (`Codigo/Pulso/api`).
 
-### Cliente HTTP (NOVO — CRIAR)
+### Cliente HTTP (EXISTENTE)
 
-Criar em: `Codigo/Pulso/mobile/lib/core/api/`
+Em: `Codigo/Pulso/mobile/lib/core/api/`
 
 - Interceptor: `Authorization: Bearer` + `X-Pulso-Client: mobile`
 - Refresh único (fila) para evitar replay paralelo do refresh token
 - 401 após refresh falho → limpa storage e rota de login
 
-### Auth feature (NOVO — CRIAR)
+### Auth feature (EXISTENTE)
 
-Criar em: `Codigo/Pulso/mobile/lib/features/auth/`
+Em: `Codigo/Pulso/mobile/lib/features/auth/`
 
 - `token_storage.dart` — secure storage
 - `auth_repository.dart` — register, login, refresh, logout, me, forgot, reset, resend
-- Telas alinhadas ao protótipo: cadastro, e-mail enviado, login, forgot, reset (claro/escuro se o tema do app já existir)
+- Telas alinhadas ao protótipo: cadastro, e-mail enviado, login, forgot, reset
 
 ## 📐 Regras de Negócio
 

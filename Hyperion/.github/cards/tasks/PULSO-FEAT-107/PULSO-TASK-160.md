@@ -17,11 +17,11 @@ categories:
 
 # [TASK] API — JSON de sessão para cliente nativo
 
-> **Contexto:** O Flutter não consegue persistir JWT porque login/refresh só setam cookies e o JSON omite os tokens. A leitura Bearer/`body.refreshToken` **já existe**.
+> **Contexto:** A leitura Bearer/`body.refreshToken` já existia. O gap era devolver os tokens no JSON para o cliente nativo, sem mudar o contrato de cookies da Web.
 
 ## 📝 Descrição
 
-Estender `respondWithAuthSession` e `refresh` para devolver `accessToken` e `refreshToken` no JSON quando o cliente se identifica como mobile. Cookies continuam sendo setados (compat Web / testes).
+`respondWithAuthSession` e `refresh` devolvem `accessToken` e `refreshToken` no JSON quando o cliente se identifica como mobile. Cookies continuam sendo setados (compat Web / testes).
 
 ## ✅ Critérios de Aceite
 
