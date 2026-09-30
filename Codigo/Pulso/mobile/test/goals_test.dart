@@ -3,11 +3,14 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pulso/core/api/api_client.dart';
 import 'package:pulso/core/storage/token_storage.dart';
+import 'package:pulso/core/widgets/pulso_badge.dart';
 import 'package:pulso/features/goals/data/goal_models.dart';
 import 'package:pulso/features/goals/data/goal_repository.dart';
+import 'package:pulso/features/goals/utils/goal_icon_rules.dart';
 
 class _ScriptedAdapter implements HttpClientAdapter {
   _ScriptedAdapter(this._handler);
@@ -82,5 +85,21 @@ void main() {
     final page = await GoalRepository(ApiClient(tokenStorage: TokenStorage(), dio: dio)).listar(const GoalFilters());
     expect(page.total, 1);
     expect(page.metas.first.nome, 'Viagem');
+  });
+
+  test('icone da meta segue o nome, como na web', () {
+    expect(goalIconForName('Viagem para Paris'), Icons.flight);
+    expect(goalIconForName('Reserva de emergência'), Icons.savings_outlined);
+    expect(goalIconForName('Casa nova'), Icons.home_outlined);
+    expect(goalIconForName('Carro'), Icons.directions_car_outlined);
+    expect(goalIconForName('Algo aleatório'), Icons.flag_outlined);
+  });
+
+  test('badges de status e tipo da meta seguem o catálogo da web', () {
+    expect(badgeKindFromMetaStatus('ATIVA'), PulsoBadgeKind.metaStatusAtiva);
+    expect(badgeKindFromMetaStatus('CONCLUIDA'), PulsoBadgeKind.metaStatusConcluida);
+    expect(badgeKindFromMetaTipo('CURTO_PRAZO'), PulsoBadgeKind.metaTipoCurto);
+    expect(badgeStyleForKind(PulsoBadgeKind.metaStatusConcluida, Brightness.light).label, 'Concluída');
+    expect(badgeStyleForKind(PulsoBadgeKind.metaTipoLongo, Brightness.light).rounded, isTrue);
   });
 }

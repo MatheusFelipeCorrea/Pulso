@@ -3,12 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/theme/pulso_colors.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
-import 'package:pulso/core/theme/theme_controller.dart';
 import 'package:pulso/core/widgets/pulso_badge.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/auth/widgets/pulso_brand.dart';
 import 'package:pulso/features/transactions/state/transactions_controller.dart';
-import 'package:pulso/features/transactions/utils/formatters.dart';
 import 'package:pulso/features/transactions/widgets/filters_sheet.dart';
 
 class AppShell extends StatelessWidget {
@@ -19,39 +17,76 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
-    final tx = context.watch<TransactionsController>();
+    final premium = context.watch<AuthController>().user?.plano == 'PREMIUM';
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: location == '/transactions' ? 64 : kToolbarHeight,
-        title: _title(context, location, tx),
+        title: const PulsoBrand(height: 26),
         actions: _actions(context, location),
       ),
       drawer: const PulsoSidebar(),
+      floatingActionButton: _fab(context, location),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _navIndex(location, premium),
+        onDestinationSelected: (index) => _onNav(context, index, premium),
+        destinations: [
+          const NavigationDestination(
+            icon: Icon(Icons.swap_horiz),
+            selectedIcon: Icon(Icons.swap_horiz),
+            label: 'Transações',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.gps_fixed),
+            selectedIcon: Icon(Icons.gps_fixed),
+            label: 'Metas',
+          ),
+          if (premium)
+            const NavigationDestination(
+              icon: Icon(Icons.flight_takeoff_outlined),
+              selectedIcon: Icon(Icons.flight_takeoff),
+              label: 'Viagens',
+            ),
+        ],
+      ),
       body: child,
     );
   }
 
-  Widget _title(BuildContext context, String location, TransactionsController tx) {
-    if (location.startsWith('/transactions') && !location.contains('/new')) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Transações', style: Theme.of(context).textTheme.titleMedium),
-          Text(
-            TransactionPeriod.label(tx.filters.periodo),
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-        ],
+  int _navIndex(String location, bool premium) {
+    if (location.startsWith('/goals')) return 1;
+    if (premium && location.startsWith('/trips')) return 2;
+    return 0;
+  }
+
+  void _onNav(BuildContext context, int index, bool premium) {
+    if (index == 0) context.go('/transactions');
+    if (index == 1) context.go('/goals');
+    if (premium && index == 2) context.go('/trips');
+  }
+
+  Widget? _fab(BuildContext context, String location) {
+    if (location == '/transactions') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/transactions/new'),
+        icon: const Icon(Icons.add),
+        label: const Text('Nova'),
       );
     }
-    if (location == '/categories') return const Text('Categorias');
-    if (location == '/tags') return const Text('Tags');
-    if (location == '/goals') return const Text('Metas');
-    if (location == '/trips') return const Text('Viagens e moedas');
-    if (location == '/groups') return const Text('Grupos');
-    if (location == '/dashboard') return const Text('Início');
-    return const Text('Pulso');
+    if (location == '/goals') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/goals/form'),
+        icon: const Icon(Icons.add),
+        label: const Text('Nova'),
+      );
+    }
+    if (location == '/trips') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/trips/new'),
+        icon: const Icon(Icons.add),
+        label: const Text('Nova'),
+      );
+    }
+    return null;
   }
 
   List<Widget> _actions(BuildContext context, String location) {
@@ -70,91 +105,54 @@ class AppShell extends StatelessWidget {
           },
           icon: const Icon(Icons.tune),
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: PulsoTokens.space2),
-          child: FilledButton.icon(
-            style: FilledButton.styleFrom(
-              minimumSize: const Size(0, PulsoTokens.buttonMd),
-              padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            onPressed: () => context.push('/transactions/new'),
-            icon: const Icon(Icons.add, size: 18),
-            label: const Text('Nova'),
-          ),
-        ),
-      ];
-    }
-    if (location == '/goals') {
-      return [
-        Padding(
-          padding: const EdgeInsets.only(right: PulsoTokens.space2),
-          child: FilledButton.icon(
-            style: FilledButton.styleFrom(
-              minimumSize: const Size(0, PulsoTokens.buttonMd),
-              padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            onPressed: () => context.push('/goals/form'),
-            icon: const Icon(Icons.add, size: 18),
-            label: const Text('Nova'),
-          ),
-        ),
-      ];
-    }
-    if (location == '/trips') {
-      return [
-        Padding(
-          padding: const EdgeInsets.only(right: PulsoTokens.space2),
-          child: FilledButton.icon(
-            style: FilledButton.styleFrom(
-              minimumSize: const Size(0, PulsoTokens.buttonMd),
-              padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            onPressed: () => context.push('/trips/new'),
-            icon: const Icon(Icons.add, size: 18),
-            label: const Text('Nova'),
-          ),
-        ),
-      ];
-    }
-    if (location == '/groups') {
-      return [
-        Padding(
-          padding: const EdgeInsets.only(right: PulsoTokens.space2),
-          child: FilledButton.icon(
-            style: FilledButton.styleFrom(
-              minimumSize: const Size(0, PulsoTokens.buttonMd),
-              padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3),
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            onPressed: () => context.push('/groups/new'),
-            icon: const Icon(Icons.add, size: 18),
-            label: const Text('Novo'),
-          ),
-        ),
+        const SizedBox(width: PulsoTokens.space1),
       ];
     }
     return const [];
   }
 }
 
-class PulsoSidebar extends StatelessWidget {
+class PulsoSidebar extends StatefulWidget {
   const PulsoSidebar({super.key});
+
+  @override
+  State<PulsoSidebar> createState() => _PulsoSidebarState();
+}
+
+class _PulsoSidebarState extends State<PulsoSidebar> {
+  final _busca = TextEditingController();
+
+  @override
+  void dispose() {
+    _busca.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthController>();
-    final theme = context.watch<ThemeController>();
     final user = auth.user;
     final location = GoRouterState.of(context).uri.path;
     final initials = _initials(user?.nome ?? '');
     final brightness = Theme.of(context).brightness;
     final kind = badgeKindFromModoUso(user?.modoUso);
+    final scheme = Theme.of(context).colorScheme;
+    final query = _busca.text.trim().toLowerCase();
+    final premium = user?.plano == 'PREMIUM';
+
+    bool matches(String label) => query.isEmpty || label.toLowerCase().contains(query);
+
+    final showTransacoes = matches('Transações') || matches('Financeiro');
+    final showMetas = matches('Metas Financeiras') || matches('Planejamento');
+    final showViagens = premium && (matches('Viagens e Moedas') || matches('Planejamento'));
+    final showFinanceiro = showTransacoes;
+    final showPlanejamento = showMetas || showViagens;
+    final showPerfil = matches('Perfil') || matches('Conta');
+    final showSettings = matches('Configurações') || matches('Conta');
+    final showSair = matches('Sair') || matches('Conta');
 
     return Drawer(
-      width: 280,
+      width: 300,
       child: SafeArea(
         child: Semantics(
           container: true,
@@ -167,20 +165,37 @@ class PulsoSidebar extends StatelessWidget {
                 child: PulsoBrand(height: 28, showTagline: true),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(PulsoTokens.space3, PulsoTokens.space2, PulsoTokens.space3, PulsoTokens.space3),
+                padding: const EdgeInsets.fromLTRB(PulsoTokens.space3, 0, PulsoTokens.space3, PulsoTokens.space2),
+                child: TextField(
+                  controller: _busca,
+                  onChanged: (_) => setState(() {}),
+                  decoration: const InputDecoration(
+                    hintText: 'Buscar...',
+                    prefixIcon: Icon(Icons.search, size: 18),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(PulsoTokens.space3, PulsoTokens.space1, PulsoTokens.space3, PulsoTokens.space3),
                 child: Container(
                   padding: const EdgeInsets.all(PulsoTokens.space3),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
+                    color: scheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(PulsoTokens.radiusLg),
-                    border: Border.all(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.6)),
+                    border: Border.all(color: scheme.outline.withValues(alpha: 0.6)),
                   ),
                   child: Row(
                     children: [
                       CircleAvatar(
                         backgroundColor: PulsoColors.button,
                         foregroundColor: Colors.white,
-                        child: Text(initials, style: const TextStyle(fontWeight: FontWeight.w700)),
+                        backgroundImage: (user?.urlAvatar ?? '').isNotEmpty
+                            ? NetworkImage(user!.urlAvatar!)
+                            : null,
+                        child: (user?.urlAvatar ?? '').isEmpty
+                            ? Text(initials, style: const TextStyle(fontWeight: FontWeight.w700))
+                            : null,
                       ),
                       const SizedBox(width: PulsoTokens.space3),
                       Expanded(
@@ -193,8 +208,10 @@ class PulsoSidebar extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
-                            const SizedBox(height: 6),
-                            if (kind != null) PulsoBadge.kind(kind: kind, brightness: brightness, compact: true),
+                            if (kind != null) ...[
+                              const SizedBox(height: 6),
+                              PulsoBadge.kind(kind: kind, brightness: brightness, compact: true),
+                            ],
                           ],
                         ),
                       ),
@@ -202,53 +219,75 @@ class PulsoSidebar extends StatelessWidget {
                   ),
                 ),
               ),
-              _NavTile(
-                icon: Icons.swap_horiz,
-                label: 'Transações',
-                selected: location == '/transactions' || location.startsWith('/transactions/'),
-                onTap: () => _go(context, '/transactions'),
-              ),
-              _NavTile(
-                icon: Icons.flag_outlined,
-                label: 'Metas',
-                selected: location == '/goals' || location.startsWith('/goals/'),
-                onTap: () => _go(context, '/goals'),
-              ),
-              if (user?.plano == 'PREMIUM')
-                _NavTile(
-                  icon: Icons.flight_takeoff,
-                  label: 'Viagens e moedas',
-                  selected: location == '/trips' || location.startsWith('/trips/'),
-                  onTap: () => _go(context, '/trips'),
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    if (showFinanceiro) ...[
+                      const _GroupHeader(icon: Icons.payments_outlined, label: 'Financeiro'),
+                      if (showTransacoes)
+                        _NavTile(
+                          icon: Icons.swap_horiz,
+                          label: 'Transações',
+                          selected: location == '/transactions' || location.startsWith('/transactions/'),
+                          onTap: () => _go(context, '/transactions'),
+                        ),
+                    ],
+                    if (showPlanejamento) ...[
+                      const _GroupHeader(icon: Icons.gps_fixed, label: 'Planejamento & Metas'),
+                      if (showMetas)
+                        _NavTile(
+                          icon: Icons.gps_fixed,
+                          label: 'Metas Financeiras',
+                          selected: location == '/goals' || location.startsWith('/goals/'),
+                          onTap: () => _go(context, '/goals'),
+                        ),
+                      if (showViagens)
+                        _NavTile(
+                          icon: Icons.flight_takeoff,
+                          label: 'Viagens e Moedas',
+                          selected: location == '/trips' || location.startsWith('/trips/'),
+                          onTap: () => _go(context, '/trips'),
+                        ),
+                    ],
+                  ],
                 ),
-              const Spacer(),
+              ),
               const Divider(height: 1),
               Padding(
-                padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 0),
-                child: Text('CONTA', style: Theme.of(context).textTheme.labelSmall),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3, vertical: PulsoTokens.space2),
-                child: SegmentedButton<ThemeMode>(
-                  showSelectedIcon: false,
-                  style: const ButtonStyle(visualDensity: VisualDensity.compact),
-                  segments: const [
-                    ButtonSegment(value: ThemeMode.light, label: Text('Claro'), icon: Icon(Icons.light_mode, size: 16)),
-                    ButtonSegment(value: ThemeMode.dark, label: Text('Escuro'), icon: Icon(Icons.dark_mode, size: 16)),
+                padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, PulsoTokens.space1),
+                child: Row(
+                  children: [
+                    Icon(Icons.person_outline, size: 16, color: scheme.onSurfaceVariant),
+                    const SizedBox(width: 6),
+                    Text('Conta', style: Theme.of(context).textTheme.labelSmall),
                   ],
-                  selected: {theme.mode == ThemeMode.dark ? ThemeMode.dark : ThemeMode.light},
-                  onSelectionChanged: (value) => theme.setMode(value.first),
                 ),
               ),
-              ListTile(
-                leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
-                title: Text('Sair', style: TextStyle(color: Theme.of(context).colorScheme.error)),
-                onTap: () async {
-                  Navigator.pop(context);
-                  await auth.logout();
-                  if (context.mounted) context.go('/login');
-                },
-              ),
+              if (showPerfil)
+                _NavTile(
+                  icon: Icons.person_outline,
+                  label: 'Perfil',
+                  selected: location == '/profile',
+                  onTap: () => _go(context, '/profile'),
+                ),
+              if (showSettings)
+                _NavTile(
+                  icon: Icons.settings_outlined,
+                  label: 'Configurações',
+                  selected: location == '/settings',
+                  onTap: () => _go(context, '/settings'),
+                ),
+              if (showSair)
+                ListTile(
+                  leading: Icon(Icons.logout, color: scheme.error),
+                  title: Text('Sair', style: TextStyle(color: scheme.error, fontWeight: FontWeight.w600)),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    await auth.logout();
+                    if (context.mounted) context.go('/login');
+                  },
+                ),
             ],
           ),
         ),
@@ -269,6 +308,28 @@ class PulsoSidebar extends StatelessWidget {
   }
 }
 
+class _GroupHeader extends StatelessWidget {
+  const _GroupHeader({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space3, PulsoTokens.space4, PulsoTokens.space1),
+      child: Row(
+        children: [
+          Icon(icon, size: 16, color: scheme.onSurfaceVariant),
+          const SizedBox(width: 8),
+          Text(label.toUpperCase(), style: Theme.of(context).textTheme.labelSmall),
+        ],
+      ),
+    );
+  }
+}
+
 class _NavTile extends StatelessWidget {
   const _NavTile({
     required this.icon,
@@ -284,19 +345,25 @@ class _NavTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(icon, color: selected ? PulsoColors.accent(Theme.of(context).brightness) : null),
-      title: Text(
-        label,
-        style: TextStyle(
-          color: selected ? PulsoColors.accent(Theme.of(context).brightness) : null,
-          fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+    final scheme = Theme.of(context).colorScheme;
+    final accent = PulsoColors.accent(Theme.of(context).brightness);
+    final color = selected ? accent : scheme.onSurfaceVariant;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space2),
+      child: ListTile(
+        leading: Icon(icon, color: color),
+        title: Text(
+          label,
+          style: TextStyle(
+            color: selected ? accent : scheme.onSurface,
+            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+          ),
         ),
+        selected: selected,
+        selectedTileColor: PulsoColors.primary.withValues(alpha: 0.1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        onTap: onTap,
       ),
-      selected: selected,
-      selectedTileColor: PulsoColors.primary.withValues(alpha: 0.1),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      onTap: onTap,
     );
   }
 }

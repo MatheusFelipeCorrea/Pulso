@@ -18,7 +18,7 @@ class PulsoIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = danger ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary;
+    final color = danger ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurfaceVariant;
     return IconButton(
       tooltip: tooltip,
       onPressed: onPressed,
@@ -38,23 +38,34 @@ class PulsoEmptyState extends StatelessWidget {
     super.key,
     required this.title,
     required this.description,
+    this.icon = Icons.inbox_outlined,
     this.actionLabel,
     this.onAction,
   });
 
   final String title;
   final String description;
+  final IconData icon;
   final String? actionLabel;
   final VoidCallback? onAction;
 
   @override
   Widget build(BuildContext context) {
+    final accent = PulsoColors.accent(Theme.of(context).brightness);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: PulsoTokens.space10, horizontal: PulsoTokens.space4),
       child: Column(
         children: [
-          Icon(Icons.inbox_outlined, size: 40, color: PulsoColors.accent(Theme.of(context).brightness)),
-          const SizedBox(height: PulsoTokens.space3),
+          Container(
+            width: 72,
+            height: 72,
+            decoration: BoxDecoration(
+              color: accent.withValues(alpha: 0.12),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 32, color: accent),
+          ),
+          const SizedBox(height: PulsoTokens.space4),
           Text(title, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
           const SizedBox(height: PulsoTokens.space2),
           Text(
@@ -68,6 +79,83 @@ class PulsoEmptyState extends StatelessWidget {
             const SizedBox(height: PulsoTokens.space4),
             FilledButton(onPressed: onAction, child: Text(actionLabel!)),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+enum PulsoAlertType { info, success, warning, error }
+
+class PulsoAlert extends StatelessWidget {
+  const PulsoAlert({
+    super.key,
+    required this.message,
+    this.title,
+    this.type = PulsoAlertType.info,
+    this.icon,
+  });
+
+  final String message;
+  final String? title;
+  final PulsoAlertType type;
+  final IconData? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final color = switch (type) {
+      PulsoAlertType.info => PulsoColors.infoOf(brightness),
+      PulsoAlertType.success => PulsoColors.successOf(brightness),
+      PulsoAlertType.warning => PulsoColors.warningOf(brightness),
+      PulsoAlertType.error => PulsoColors.dangerOf(brightness),
+    };
+    final fallbackIcon = switch (type) {
+      PulsoAlertType.info => Icons.info_outline,
+      PulsoAlertType.success => Icons.check_circle_outline,
+      PulsoAlertType.warning => Icons.lightbulb_outline,
+      PulsoAlertType.error => Icons.cancel_outlined,
+    };
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(PulsoTokens.space4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border(left: BorderSide(color: color, width: 4)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 28,
+            height: 28,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            child: Icon(icon ?? fallbackIcon, size: 16, color: Colors.white),
+          ),
+          const SizedBox(width: PulsoTokens.space3),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (title != null) ...[
+                  Text(
+                    title!,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(color: color),
+                  ),
+                  const SizedBox(height: 2),
+                ],
+                Text(
+                  message,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: color,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

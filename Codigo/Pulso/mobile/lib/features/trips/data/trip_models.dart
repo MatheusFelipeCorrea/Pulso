@@ -58,6 +58,7 @@ class PulsoViagem {
     required this.moeda,
     required this.dataPrevista,
     this.metaId,
+    this.coverImageUrl,
     this.totalBrl = 0,
     this.despesas = const [],
     this.observacoes = const [],
@@ -68,6 +69,7 @@ class PulsoViagem {
   final String moeda;
   final DateTime dataPrevista;
   final String? metaId;
+  final String? coverImageUrl;
   final double totalBrl;
   final List<TripExpense> despesas;
   final List<TripNote> observacoes;
@@ -79,6 +81,7 @@ class PulsoViagem {
       moeda: json['moeda'] as String? ?? 'BRL',
       dataPrevista: tripDate(json['dataPrevista']),
       metaId: json['metaId'] as String?,
+      coverImageUrl: _coverFrom(json),
       totalBrl: tripNum(json['totalBrl']),
       despesas: (json['despesas'] as List<dynamic>? ?? const [])
           .whereType<Map<String, dynamic>>()
@@ -89,6 +92,19 @@ class PulsoViagem {
           .map(TripNote.fromJson)
           .toList(),
     );
+  }
+
+  static String? _coverFrom(Map<String, dynamic> json) {
+    final meta = json['destinoMeta'];
+    if (meta is Map && meta['coverImageUrl'] is String) {
+      final url = (meta['coverImageUrl'] as String).trim();
+      if (url.isNotEmpty) return url;
+    }
+    if (json['coverImageUrl'] is String) {
+      final url = (json['coverImageUrl'] as String).trim();
+      if (url.isNotEmpty) return url;
+    }
+    return null;
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:app_links/app_links.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pulso/features/account/screens/account_screen.dart';
 import 'package:pulso/features/auth/screens/auth_callback_screen.dart';
 import 'package:pulso/features/auth/screens/email_sent_screen.dart';
 import 'package:pulso/features/auth/legal/legal_content.dart';
@@ -198,6 +199,21 @@ GoRouter createRouter(AuthController auth) {
             ),
           ),
           GoRoute(
+            path: '/profile',
+            builder: (context, state) => const AccountScreen(
+              title: 'Perfil',
+              subtitle: 'Dados da conta autenticada. Edição cadastral entra em um recorte futuro.',
+            ),
+          ),
+          GoRoute(
+            path: '/settings',
+            builder: (context, state) => const AccountScreen(
+              title: 'Configurações',
+              subtitle: 'Preferências de tema e dados da conta. Demais ajustes entram depois.',
+              showTheme: true,
+            ),
+          ),
+          GoRoute(
             path: '/goals',
             builder: (context, state) => const GoalsScreen(),
           ),
@@ -217,6 +233,7 @@ GoRouter createRouter(AuthController auth) {
 
 bool _isKnownAuthedLocation(String loc) {
   if (loc == '/dashboard' || loc == '/transactions' || loc == '/categories' || loc == '/tags') return true;
+  if (loc == '/profile' || loc == '/settings') return true;
   if (loc == '/goals' || loc == '/goals/form') return true;
   if (loc == '/trips' || loc == '/trips/new' || loc.startsWith('/trips/')) return true;
   if (loc == '/groups' || loc == '/groups/new') return true;

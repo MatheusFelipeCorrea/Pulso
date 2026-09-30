@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
+import 'package:pulso/core/widgets/pulso_page.dart';
+import 'package:pulso/core/widgets/currency_flag.dart';
 import 'package:pulso/features/currency/data/currency_models.dart';
 import 'package:pulso/features/currency/data/currency_repository.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
@@ -112,12 +114,30 @@ class _TripFormScreenState extends State<TripFormScreen> {
           : ListView(
               padding: const EdgeInsets.all(PulsoTokens.space4),
               children: [
+                PulsoPageHeader(
+                  title: isEdit ? 'Editar viagem' : 'Nova viagem',
+                  subtitle: 'Informe destino, moeda e data prevista. O app busca a mesma ficha de destino da web.',
+                  icon: Icons.flight_takeoff,
+                ),
                 TextField(controller: _destino, decoration: const InputDecoration(labelText: 'Destino')),
                 const SizedBox(height: PulsoTokens.space3),
                 DropdownButtonFormField<String>(
                   initialValue: codes.contains(moeda) ? moeda : codes.first,
                   decoration: const InputDecoration(labelText: 'Moeda'),
-                  items: codes.map((code) => DropdownMenuItem(value: code, child: Text(code))).toList(),
+                  items: codes
+                      .map(
+                        (code) => DropdownMenuItem(
+                          value: code,
+                          child: Row(
+                            children: [
+                              CurrencyFlag(code: code, size: 20),
+                              const SizedBox(width: 8),
+                              Text(code),
+                            ],
+                          ),
+                        ),
+                      )
+                      .toList(),
                   onChanged: (value) => setState(() => moeda = value ?? moeda),
                 ),
                 const SizedBox(height: PulsoTokens.space3),

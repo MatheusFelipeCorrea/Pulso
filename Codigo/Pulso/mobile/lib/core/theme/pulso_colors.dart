@@ -68,6 +68,9 @@ class PulsoColors {
   static Color successOf(Brightness brightness) =>
       brightness == Brightness.dark ? successDark : success;
 
+  static Color warningOf(Brightness brightness) =>
+      brightness == Brightness.dark ? warningDark : warning;
+
   static Color dangerOf(Brightness brightness) =>
       brightness == Brightness.dark ? dangerDark : danger;
 

@@ -25,4 +25,10 @@ class TripsController extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> excluir(String id) async {
+    await _repository.excluir(id);
+    viagens = viagens.where((item) => item.id != id).toList();
+    notifyListeners();
+  }
 }

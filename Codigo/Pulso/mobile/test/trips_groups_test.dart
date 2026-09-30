@@ -3,7 +3,9 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pulso/features/trips/utils/trip_expense_meta.dart';
 import 'package:pulso/core/api/api_client.dart';
 import 'package:pulso/core/storage/token_storage.dart';
 import 'package:pulso/features/groups/data/group_repository.dart';
@@ -70,5 +72,11 @@ void main() {
     final list = await GroupRepository(ApiClient(tokenStorage: TokenStorage(), dio: dio)).listar();
     expect(list.single.nome, 'Família');
     expect(list.single.quantidadeMembros, 3);
+  });
+
+  test('pretensões de viagem usam as mesmas categorias e cores da web', () {
+    expect(tripExpenseMeta('TRANSPORTE').label, 'Passagens');
+    expect(tripExpenseMeta('EMERGENCIAS').icon, Icons.health_and_safety_outlined);
+    expect(tripExpenseCatalog, hasLength(10));
   });
 }

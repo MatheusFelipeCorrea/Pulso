@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
+import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/goals/data/goal_models.dart';
 import 'package:pulso/features/goals/data/goal_repository.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
@@ -114,6 +115,11 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
       body: ListView(
         padding: const EdgeInsets.all(PulsoTokens.space4),
         children: [
+          PulsoPageHeader(
+            title: isEdit ? 'Editar meta' : 'Nova meta',
+            subtitle: 'Defina valor alvo, prazo e se é curto ou longo prazo.',
+            icon: Icons.gps_fixed,
+          ),
           TextField(controller: _nome, decoration: const InputDecoration(labelText: 'Nome')),
           const SizedBox(height: PulsoTokens.space3),
           TextField(
@@ -132,8 +138,8 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
           const SizedBox(height: PulsoTokens.space2),
           SegmentedButton<String>(
             segments: const [
-              ButtonSegment(value: 'CURTO_PRAZO', label: Text('Curto prazo')),
-              ButtonSegment(value: 'LONGO_PRAZO', label: Text('Longo prazo')),
+              ButtonSegment(value: 'CURTO_PRAZO', label: Text('Curto prazo'), icon: Icon(Icons.schedule, size: 16)),
+              ButtonSegment(value: 'LONGO_PRAZO', label: Text('Longo prazo'), icon: Icon(Icons.calendar_today_outlined, size: 16)),
             ],
             selected: {tipo},
             onSelectionChanged: (value) => setState(() => tipo = value.first),

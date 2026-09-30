@@ -3,6 +3,24 @@ import 'package:flutter/material.dart';
 /// Mapeia os nomes Lucide persistidos em `Categoria.icone` (mesmos da Web).
 IconData iconFromLucide(String? name) {
   switch (name) {
+    case 'HandCoins':
+      return Icons.payments_outlined;
+    case 'Target':
+      return Icons.gps_fixed;
+    case 'Settings':
+      return Icons.settings_outlined;
+    case 'Lightbulb':
+      return Icons.lightbulb_outline;
+    case 'Layers':
+      return Icons.layers_outlined;
+    case 'LogOut':
+      return Icons.logout;
+    case 'Pencil':
+      return Icons.edit_outlined;
+    case 'Trash2':
+      return Icons.delete_outline;
+    case 'Plus':
+      return Icons.add;
     case 'Tag':
       return Icons.label_outline;
     case 'Banknote':
@@ -25,6 +43,16 @@ IconData iconFromLucide(String? name) {
       return Icons.school_outlined;
     case 'Home':
       return Icons.home_outlined;
+    case 'Bed':
+      return Icons.hotel_outlined;
+    case 'MapPin':
+      return Icons.place_outlined;
+    case 'FileText':
+      return Icons.description_outlined;
+    case 'ShieldAlert':
+      return Icons.health_and_safety_outlined;
+    case 'Clapperboard':
+      return Icons.movie_outlined;
     case 'HeartPulse':
       return Icons.favorite_outline;
     case 'ShoppingBag':
@@ -107,7 +135,7 @@ class CategoryGlyph extends StatelessWidget {
     super.key,
     required this.icone,
     required this.color,
-    this.size = 18,
+    this.size = 40,
   });
 
   final String? icone;
@@ -116,10 +144,14 @@ class CategoryGlyph extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      backgroundColor: color.withValues(alpha: 0.16),
-      foregroundColor: color,
-      child: Icon(iconFromLucide(icone), size: size),
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.16),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon(iconFromLucide(icone), size: size * 0.48, color: color),
     );
   }
 }

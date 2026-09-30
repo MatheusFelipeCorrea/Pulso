@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
+import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/state/transactions_controller.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
@@ -77,43 +78,51 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       onRefresh: controller.reload,
       child: ListView(
         controller: _scroll,
-        padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, PulsoTokens.space8),
+        padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
         children: [
-          Row(
-            children: [
-              IconButton(
-                tooltip: 'Mês anterior',
-                onPressed: () => controller.shiftPeriod(-1),
-                icon: const Icon(Icons.chevron_left),
-              ),
-              Expanded(
-                child: Text(
-                  TransactionPeriod.label(controller.filters.periodo),
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ),
-              IconButton(
-                tooltip: 'Próximo mês',
-                onPressed: () => controller.shiftPeriod(1),
-                icon: const Icon(Icons.chevron_right),
-              ),
-            ],
+          PulsoPageHeader(
+            title: 'Transações',
+            subtitle: 'Acompanhe receitas, despesas e o saldo do período.',
+            icon: Icons.swap_horiz,
           ),
-          const SizedBox(height: PulsoTokens.space2),
+          PulsoSurface(
+            padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space2, vertical: PulsoTokens.space1),
+            child: Row(
+              children: [
+                IconButton(
+                  tooltip: 'Mês anterior',
+                  onPressed: () => controller.shiftPeriod(-1),
+                  icon: const Icon(Icons.chevron_left),
+                ),
+                Expanded(
+                  child: Text(
+                    TransactionPeriod.label(controller.filters.periodo),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+                IconButton(
+                  tooltip: 'Próximo mês',
+                  onPressed: () => controller.shiftPeriod(1),
+                  icon: const Icon(Icons.chevron_right),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: PulsoTokens.space3),
           Wrap(
             spacing: PulsoTokens.space2,
             runSpacing: PulsoTokens.space2,
             children: [
               OutlinedButton.icon(
-                onPressed: () => context.push('/categories'),
-                icon: const Icon(Icons.category_outlined, size: 18),
-                label: const Text('Categorias'),
+                onPressed: () => context.push('/tags'),
+                icon: const Icon(Icons.label_outline, size: 16),
+                label: const Text('Tags'),
               ),
               OutlinedButton.icon(
-                onPressed: () => context.push('/tags'),
-                icon: const Icon(Icons.label_outline, size: 18),
-                label: const Text('Tags'),
+                onPressed: () => context.push('/categories'),
+                icon: const Icon(Icons.layers_outlined, size: 16),
+                label: const Text('Categorias'),
               ),
             ],
           ),
@@ -165,7 +174,8 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
           else if (controller.transacoes.isEmpty)
             PulsoEmptyState(
               title: 'Nenhuma transação encontrada',
-              description: 'Comece registrando uma!',
+              description: 'Comece registrando uma receita ou despesa neste período.',
+              icon: Icons.receipt_long_outlined,
               actionLabel: 'Nova transação',
               onAction: () => _openForm(),
             )
@@ -199,8 +209,13 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     for (final entry in groups.entries) {
       widgets.add(
         Padding(
-          padding: const EdgeInsets.fromLTRB(4, PulsoTokens.space4, 4, PulsoTokens.space1),
-          child: Text(entry.key, style: Theme.of(context).textTheme.labelLarge),
+          padding: const EdgeInsets.fromLTRB(4, PulsoTokens.space5, 4, PulsoTokens.space2),
+          child: Text(
+            entry.key,
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
         ),
       );
       widgets.addAll(

@@ -3,6 +3,7 @@ import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/category_icon.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
+import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
@@ -128,8 +129,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     }
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, PulsoTokens.space8),
+      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
       children: [
+        const PulsoPageHeader(
+          title: 'Categorias',
+          subtitle: 'Organize receitas e despesas com as mesmas categorias da web.',
+          icon: Icons.layers_outlined,
+        ),
         Align(
           alignment: Alignment.centerLeft,
           child: FilledButton.icon(
@@ -140,32 +146,50 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         ),
         const SizedBox(height: PulsoTokens.space4),
         Text('Personalizadas', style: Theme.of(context).textTheme.titleMedium),
-        if (personalizadas.isEmpty) const ListTile(title: Text('Nenhuma categoria própria ainda.')),
-        ...personalizadas.map(
-          (cat) => ListTile(
-            leading: CategoryGlyph(
-              icone: cat.icone,
-              color: parseHexColor(cat.cor) ?? Theme.of(context).colorScheme.primary,
-            ),
-            title: Text(cat.nome),
-            subtitle: Text(cat.tipo == 'RECEITA' ? 'Receita' : 'Despesa'),
-            trailing: IconButton(
-              tooltip: 'Excluir categoria',
-              icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error),
-              onPressed: () => _excluir(cat),
+        const SizedBox(height: PulsoTokens.space2),
+        if (personalizadas.isEmpty)
+          const PulsoSurface(child: Text('Nenhuma categoria própria ainda.'))
+        else
+          ...personalizadas.map(
+            (cat) => Padding(
+              padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
+              child: PulsoSurface(
+                padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3, vertical: PulsoTokens.space2),
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: CategoryGlyph(
+                    icone: cat.icone,
+                    color: parseHexColor(cat.cor) ?? Theme.of(context).colorScheme.primary,
+                  ),
+                  title: Text(cat.nome),
+                  subtitle: Text(cat.tipo == 'RECEITA' ? 'Receita' : 'Despesa'),
+                  trailing: IconButton(
+                    tooltip: 'Excluir categoria',
+                    icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error),
+                    onPressed: () => _excluir(cat),
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
         const SizedBox(height: PulsoTokens.space4),
         Text('Padrão', style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: PulsoTokens.space2),
         ...padrao.map(
-          (cat) => ListTile(
-            leading: CategoryGlyph(
-              icone: cat.icone,
-              color: parseHexColor(cat.cor) ?? Theme.of(context).colorScheme.primary,
+          (cat) => Padding(
+            padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
+            child: PulsoSurface(
+              padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3, vertical: PulsoTokens.space2),
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: CategoryGlyph(
+                  icone: cat.icone,
+                  color: parseHexColor(cat.cor) ?? Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(cat.nome),
+                subtitle: Text(cat.tipo == 'RECEITA' ? 'Receita' : 'Despesa'),
+              ),
             ),
-            title: Text(cat.nome),
-            subtitle: Text(cat.tipo == 'RECEITA' ? 'Receita' : 'Despesa'),
           ),
         ),
       ],

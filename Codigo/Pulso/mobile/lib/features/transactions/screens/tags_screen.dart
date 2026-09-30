@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
+import 'package:pulso/core/widgets/category_icon.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
+import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
+import 'package:pulso/features/transactions/utils/formatters.dart';
 
 class TagsScreen extends StatefulWidget {
   const TagsScreen({super.key, required this.repository});
@@ -92,8 +95,13 @@ class _TagsScreenState extends State<TagsScreen> {
     }
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, PulsoTokens.space8),
+      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
       children: [
+        const PulsoPageHeader(
+          title: 'Tags',
+          subtitle: 'Marque lançamentos para filtrar depois, como na web.',
+          icon: Icons.label_outline,
+        ),
         Align(
           alignment: Alignment.centerLeft,
           child: FilledButton.icon(
@@ -107,16 +115,27 @@ class _TagsScreenState extends State<TagsScreen> {
           const PulsoEmptyState(
             title: 'Nenhuma tag ainda',
             description: 'Crie uma tag para organizar seus lançamentos.',
+            icon: Icons.label_outline,
           )
         else
           ...tags.map(
-            (tag) => ListTile(
-              leading: const Icon(Icons.label_outline),
-              title: Text(tag.nome),
-              trailing: IconButton(
-                tooltip: 'Excluir tag',
-                icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error),
-                onPressed: () => _excluir(tag),
+            (tag) => Padding(
+              padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
+              child: PulsoSurface(
+                padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3, vertical: PulsoTokens.space1),
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: CategoryGlyph(
+                    icone: tag.icone ?? 'Tag',
+                    color: parseHexColor(tag.cor) ?? Theme.of(context).colorScheme.primary,
+                  ),
+                  title: Text(tag.nome),
+                  trailing: IconButton(
+                    tooltip: 'Excluir tag',
+                    icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error),
+                    onPressed: () => _excluir(tag),
+                  ),
+                ),
               ),
             ),
           ),

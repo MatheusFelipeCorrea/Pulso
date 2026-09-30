@@ -62,4 +62,30 @@ class CurrencyRepository {
       await _api.raw.delete<void>('/moedas/favoritas/$codigo');
     });
   }
+
+  Future<List<FavoriteCurrency>> listarCotacoes(List<String> codigos) {
+    return _guard(() async {
+      final response = await _api.raw.get<dynamic>(
+        '/moedas/cotacoes',
+        queryParameters: {
+          if (codigos.isNotEmpty) 'codigos': codigos.join(','),
+        },
+      );
+      final data = response.data;
+      final list = data is List
+          ? data
+          : (data is Map && data['cotacoes'] is List ? data['cotacoes'] as List : const []);
+      return list.whereType<Map<String, dynamic>>().map(FavoriteCurrency.fromJson).toList();
+    });
+  }
+
+  Future<CurrencyHistory> obterHistorico({String codigo = 'USD', int dias = 30}) {
+    return _guard(() async {
+      final response = await _api.raw.get<Map<String, dynamic>>(
+        '/moedas/historico',
+        queryParameters: {'codigo': codigo, 'dias': dias},
+      );
+      return CurrencyHistory.fromJson(response.data ?? {});
+    });
+  }
 }

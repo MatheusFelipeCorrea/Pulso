@@ -87,6 +87,21 @@ class PulsoMeta {
   }
 }
 
+class GoalCategorySlice {
+  const GoalCategorySlice({this.quantidade = 0, this.total = 0});
+
+  final int quantidade;
+  final double total;
+
+  factory GoalCategorySlice.fromJson(dynamic json) {
+    if (json is! Map) return const GoalCategorySlice();
+    return GoalCategorySlice(
+      quantidade: goalNum(json['quantidade']).round(),
+      total: goalNum(json['total']),
+    );
+  }
+}
+
 class GoalResumo {
   const GoalResumo({
     required this.totalEmMetas,
@@ -94,6 +109,10 @@ class GoalResumo {
     required this.progressoMedio,
     required this.metasAtivas,
     required this.sugestaoMensal,
+    this.curtoPrazo = const GoalCategorySlice(),
+    this.longoPrazo = const GoalCategorySlice(),
+    this.concluidas = const GoalCategorySlice(),
+    this.pausadas = const GoalCategorySlice(),
   });
 
   final double totalEmMetas;
@@ -101,14 +120,25 @@ class GoalResumo {
   final double progressoMedio;
   final int metasAtivas;
   final double sugestaoMensal;
+  final GoalCategorySlice curtoPrazo;
+  final GoalCategorySlice longoPrazo;
+  final GoalCategorySlice concluidas;
+  final GoalCategorySlice pausadas;
 
   factory GoalResumo.fromJson(Map<String, dynamic> json) {
+    final categorias = json['categorias'] is Map<String, dynamic>
+        ? json['categorias'] as Map<String, dynamic>
+        : const <String, dynamic>{};
     return GoalResumo(
       totalEmMetas: goalNum(json['totalEmMetas']),
       totalAcumulado: goalNum(json['totalAcumulado']),
       progressoMedio: goalNum(json['progressoMedio']),
       metasAtivas: goalNum(json['metasAtivas']).round(),
       sugestaoMensal: goalNum(json['sugestaoMensal']),
+      curtoPrazo: GoalCategorySlice.fromJson(categorias['curtoPrazo']),
+      longoPrazo: GoalCategorySlice.fromJson(categorias['longoPrazo']),
+      concluidas: GoalCategorySlice.fromJson(categorias['concluidas']),
+      pausadas: GoalCategorySlice.fromJson(categorias['pausadas']),
     );
   }
 }

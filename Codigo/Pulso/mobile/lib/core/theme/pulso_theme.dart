@@ -209,9 +209,14 @@ class PulsoTheme {
           ),
         ),
       ),
+      iconTheme: IconThemeData(color: scheme.onSurfaceVariant, size: 22),
+      listTileTheme: ListTileThemeData(
+        iconColor: scheme.onSurfaceVariant,
+        textColor: scheme.onSurface,
+      ),
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
-          foregroundColor: scheme.primary,
+          foregroundColor: scheme.onSurfaceVariant,
           minimumSize: const Size(PulsoTokens.buttonMd, PulsoTokens.buttonMd),
           shape: const CircleBorder(),
         ),
@@ -245,9 +250,31 @@ class PulsoTheme {
           }),
         ),
       ),
+      navigationBarTheme: NavigationBarThemeData(
+        height: 68,
+        elevation: 0,
+        backgroundColor: isDark ? PulsoColors.darkCard : PulsoColors.lightCard,
+        indicatorColor: PulsoColors.button.withValues(alpha: 0.14),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return GoogleFonts.inter(
+            fontSize: 12,
+            fontWeight: selected ? PulsoTokens.weightSemibold : PulsoTokens.weightMedium,
+            color: selected ? PulsoColors.button : scheme.onSurfaceVariant,
+          );
+        }),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return IconThemeData(
+            size: 22,
+            color: selected ? PulsoColors.button : scheme.onSurfaceVariant,
+          );
+        }),
+      ),
       cardTheme: CardThemeData(
         color: scheme.surface,
         elevation: 0,
+        margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(PulsoTokens.radiusXl),
           side: BorderSide(color: scheme.outline),
@@ -279,7 +306,7 @@ class PulsoTheme {
       expansionTileTheme: ExpansionTileThemeData(
         shape: const Border(),
         collapsedShape: const Border(),
-        iconColor: scheme.primary,
+        iconColor: scheme.onSurfaceVariant,
       ),
     );
   }

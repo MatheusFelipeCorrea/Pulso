@@ -4,6 +4,7 @@ import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/category_icon.dart';
 import 'package:pulso/core/widgets/pulso_badge.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
+import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
 
@@ -42,18 +43,16 @@ class TransactionTile extends StatelessWidget {
         ? 'Transferência ${formatBrl(transacao.valor)}'
         : (isReceita ? 'Receita ${formatBrl(transacao.valor)}' : 'Despesa ${formatBrl(transacao.valor)}');
 
-    return InkWell(
-      onTap: onEdit,
-      borderRadius: BorderRadius.circular(PulsoTokens.radiusMd),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: PulsoTokens.space2),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
+      child: PulsoSurface(
+        padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3, vertical: PulsoTokens.space3),
+        onTap: onEdit,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CategoryGlyph(
               icone: isTransferencia ? 'ArrowLeftRight' : transacao.categoria?.icone,
               color: color,
-              size: 18,
             ),
             const SizedBox(width: PulsoTokens.space3),
             Expanded(
@@ -61,41 +60,69 @@ class TransactionTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleSmall),
-                  const SizedBox(height: PulsoTokens.space1),
-                  Wrap(
+                  const SizedBox(height: 4),
+                      Wrap(
                     spacing: 6,
                     runSpacing: 4,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       if (recursoKind != null)
                         PulsoBadge.kind(kind: recursoKind, brightness: brightness, compact: true),
-                      if (transacao.isRecorrenteSerie)
-                        Tooltip(
-                          message: 'Transação recorrente',
-                          child: Icon(Icons.autorenew, size: 14, color: PulsoColors.infoOf(brightness)),
+                      if (transacao.categoria?.nome != null && transacao.descricao?.trim().isNotEmpty == true)
+                        Text(
+                          transacao.categoria!.nome,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
+                      if (transacao.isRecorrenteSerie)
+                        PulsoBadge.kind(
+                          kind: PulsoBadgeKind.transacaoRecorrente,
+                          brightness: brightness,
+                          compact: true,
+                        ),
+                      ...transacao.tags.map(
+                        (tag) => PulsoBadge.custom(
+                          label: tag.nome,
+                          icon: iconFromLucide(tag.icone ?? 'Tag'),
+                          color: parseHexColor(tag.cor) ?? PulsoColors.infoOf(brightness),
+                          compact: true,
+                        ),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
             const SizedBox(width: PulsoTokens.space2),
-            Semantics(
-              label: semanticsAmount,
-              child: Text(
-                amountText,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: amountColor,
-                      fontWeight: PulsoTokens.weightBold,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Semantics(
+                  label: semanticsAmount,
+                  child: Text(
+                    amountText,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: amountColor,
+                          fontWeight: PulsoTokens.weightBold,
+                        ),
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    PulsoIconButton(
+                      tooltip: 'Editar transação',
+                      onPressed: onEdit,
+                      icon: Icons.edit_outlined,
                     ),
-              ),
-            ),
-            PulsoIconButton(icon: Icons.edit_outlined, tooltip: 'Editar transação', onPressed: onEdit),
-            PulsoIconButton(
-              icon: Icons.delete_outline,
-              tooltip: 'Excluir transação',
-              onPressed: onDelete,
-              danger: true,
+                    PulsoIconButton(
+                      tooltip: 'Excluir transação',
+                      onPressed: onDelete,
+                      icon: Icons.delete_outline,
+                      danger: true,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/theme/pulso_theme.dart';
 import 'package:pulso/core/theme/theme_controller.dart';
+import 'package:pulso/core/widgets/pulso_app_frame.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/currency/data/currency_repository.dart';
 import 'package:pulso/features/goals/data/goal_repository.dart';
@@ -69,6 +70,7 @@ class PulsoApp extends StatelessWidget {
             theme: PulsoTheme.light(),
             darkTheme: PulsoTheme.dark(),
             themeMode: theme.mode,
+            builder: (context, child) => PulsoAppFrame(child: child ?? const SizedBox.shrink()),
             routerConfig: router,
           );
         },

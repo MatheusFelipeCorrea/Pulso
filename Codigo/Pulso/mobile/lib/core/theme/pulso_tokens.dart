@@ -53,4 +53,8 @@ abstract final class PulsoTokens {
   static List<BoxShadow> shadowMd(bool isDark) => isDark
       ? const []
       : const [BoxShadow(color: Color(0x1A000000), blurRadius: 6, offset: Offset(0, 4))];
+
+  static List<BoxShadow> shadowLg(bool isDark) => isDark
+      ? const [BoxShadow(color: Color(0x66000000), blurRadius: 24, offset: Offset(0, 12))]
+      : const [BoxShadow(color: Color(0x337C3AED), blurRadius: 24, offset: Offset(0, 10))];
 }

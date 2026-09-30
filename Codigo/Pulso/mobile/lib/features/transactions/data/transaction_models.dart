@@ -112,12 +112,16 @@ class TransactionResumo {
     required this.receitas,
     required this.despesas,
     required this.saldo,
+    this.quantidadeReceitas = 0,
+    this.quantidadeDespesas = 0,
     this.modo,
   });
 
   final double receitas;
   final double despesas;
   final double saldo;
+  final int quantidadeReceitas;
+  final int quantidadeDespesas;
   final String? modo;
 
   factory TransactionResumo.fromJson(Map<String, dynamic> json) {
@@ -125,6 +129,8 @@ class TransactionResumo {
       receitas: _asMoney((json['receitas'] as Map?)?['total']),
       despesas: _asMoney((json['despesas'] as Map?)?['total']),
       saldo: _asMoney(json['saldo']),
+      quantidadeReceitas: _asInt((json['receitas'] as Map?)?['quantidade']),
+      quantidadeDespesas: _asInt((json['despesas'] as Map?)?['quantidade']),
       modo: json['modo'] as String?,
     );
   }
@@ -258,5 +264,12 @@ class TransactionFilters {
 double _asMoney(dynamic value) {
   if (value is num) return value.toDouble();
   if (value is String) return double.tryParse(value) ?? 0;
+  return 0;
+}
+
+int _asInt(dynamic value) {
+  if (value is int) return value;
+  if (value is num) return value.round();
+  if (value is String) return int.tryParse(value) ?? 0;
   return 0;
 }
