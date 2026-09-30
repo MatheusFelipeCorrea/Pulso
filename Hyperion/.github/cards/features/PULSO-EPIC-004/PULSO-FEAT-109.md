@@ -67,6 +67,13 @@ Como **equipe**, eu quero **os protótipos de metas publicados na apostila**, pa
 - [#320](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/320) — camada de dados (Alice)
 - [#321](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/321) — telas (Maria Clara)
 
+## 🔗 Issues
+
+- [#334](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/334) — PULSO-FEAT-109
+- [#335](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/335) — PULSO-TASK-166
+- [#336](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/336) — PULSO-TASK-167
+- [#337](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/337) — PULSO-TASK-168
+
 ## 📋 Resumo
 
 ### ✅ Concluído

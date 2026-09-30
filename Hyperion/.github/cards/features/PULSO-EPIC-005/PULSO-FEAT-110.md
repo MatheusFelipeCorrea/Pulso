@@ -69,6 +69,14 @@ Como **equipe**, eu quero **os protótipos de viagens e moedas publicados na apo
 - [#323](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/323) — moedas (Sofia)
 - [#324](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/324) — telas (Matheus)
 
+## 🔗 Issues
+
+- [#338](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/338) — PULSO-FEAT-110
+- [#339](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/339) — PULSO-TASK-169
+- [#340](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/340) — PULSO-TASK-170
+- [#341](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/341) — PULSO-TASK-171
+- [#342](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/342) — PULSO-TASK-172
+
 ## 📋 Resumo
 
 ### ✅ Concluído
