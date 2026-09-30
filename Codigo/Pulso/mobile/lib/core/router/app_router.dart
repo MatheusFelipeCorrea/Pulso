@@ -16,6 +16,8 @@ import 'package:pulso/core/widgets/app_shell.dart';
 import 'package:pulso/features/goals/data/goal_models.dart';
 import 'package:pulso/features/goals/screens/goal_form_screen.dart';
 import 'package:pulso/features/goals/screens/goals_screen.dart';
+import 'package:pulso/features/groups/screens/group_form_screen.dart';
+import 'package:pulso/features/groups/screens/groups_screen.dart';
 import 'package:pulso/features/home/screens/home_screen.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
@@ -23,6 +25,10 @@ import 'package:pulso/features/transactions/screens/categories_screen.dart';
 import 'package:pulso/features/transactions/screens/tags_screen.dart';
 import 'package:pulso/features/transactions/screens/transaction_form_screen.dart';
 import 'package:pulso/features/transactions/screens/transactions_screen.dart';
+import 'package:pulso/features/trips/data/trip_models.dart';
+import 'package:pulso/features/trips/screens/trip_detail_screen.dart';
+import 'package:pulso/features/trips/screens/trip_form_screen.dart';
+import 'package:pulso/features/trips/screens/trips_screen.dart';
 
 GoRouter createRouter(AuthController auth) {
   return GoRouter(
@@ -137,6 +143,27 @@ GoRouter createRouter(AuthController auth) {
           meta: state.extra is PulsoMeta ? state.extra as PulsoMeta : null,
         ),
       ),
+      GoRoute(
+        path: '/trips/new',
+        builder: (context, state) => const TripFormScreen(),
+      ),
+      GoRoute(
+        path: '/trips/:id/edit',
+        builder: (context, state) => TripFormScreen(
+          viagem: state.extra is PulsoViagem ? state.extra as PulsoViagem : null,
+        ),
+      ),
+      GoRoute(
+        path: '/trips/:id',
+        builder: (context, state) => TripDetailScreen(
+          viagemId: state.pathParameters['id'] ?? '',
+          viagem: state.extra is PulsoViagem ? state.extra as PulsoViagem : null,
+        ),
+      ),
+      GoRoute(
+        path: '/groups/new',
+        builder: (context, state) => const GroupFormScreen(),
+      ),
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
         routes: [
@@ -164,6 +191,14 @@ GoRouter createRouter(AuthController auth) {
             path: '/goals',
             builder: (context, state) => const GoalsScreen(),
           ),
+          GoRoute(
+            path: '/trips',
+            builder: (context, state) => const TripsScreen(),
+          ),
+          GoRoute(
+            path: '/groups',
+            builder: (context, state) => const GroupsScreen(),
+          ),
         ],
       ),
     ],
@@ -173,6 +208,8 @@ GoRouter createRouter(AuthController auth) {
 bool _isKnownAuthedLocation(String loc) {
   if (loc == '/dashboard' || loc == '/transactions' || loc == '/categories' || loc == '/tags') return true;
   if (loc == '/goals' || loc == '/goals/form') return true;
+  if (loc == '/trips' || loc == '/trips/new' || loc.startsWith('/trips/')) return true;
+  if (loc == '/groups' || loc == '/groups/new') return true;
   if (loc == '/transactions/new' || loc.startsWith('/transactions/')) return true;
   if (loc == '/termos' || loc == '/privacidade') return true;
   return false;
