@@ -39,12 +39,22 @@
 
 **Total Sprint 2:** 10h
 
-# Sprint 3
+# Sprint 3 (16/09 a 30/09)
+
+### Semana 1 (16/09 - 22/09)
 
 - Categorias, tags e sugestão automática (`PULSO-FEAT-013`, tasks 028–029): seed, CRUD, `recursoCategoriaRules` (VA/VR; VT rejeitado), `categorySuggestionService`.
 - PR [#299](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/299) → Sprint-3 · issues [#26](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/26), [#116](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/116), [#117](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/117).
-- Revisão de aceite do núcleo de transações (012–017) e da FEAT-108 (mobile + protótipos, Backlog).
+- Revisão de aceite do núcleo de transações (012–017) e da FEAT-108 (mobile + protótipos).
 
 **Horas:** 14h
 
-**Total Sprint 3:** 14h
+### Semana 2 (23/09 - 30/09)
+
+- API de metas (`PULSO-FEAT-018`–`020`): CRUD, resumo, aportes, pause/retomar, sugestão de reserva — PR [#314](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/314) · issue [#31](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/31).
+- Flutter: camada de dados de metas (`PULSO-FEAT-109` / TASK-167) — PR [#320](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/320).
+- Aceite do módulo de metas (API + web + mobile) para In Revision.
+
+**Horas:** 16h
+
+**Total Sprint 3:** 30h

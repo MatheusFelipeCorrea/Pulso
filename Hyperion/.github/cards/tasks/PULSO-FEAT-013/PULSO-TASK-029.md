@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-029
 title: "Sugestão automática de categoria (RF-028)"
-status: Done
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-013

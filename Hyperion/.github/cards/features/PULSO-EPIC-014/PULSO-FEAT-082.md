@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-082
 title: "Wireframes na apostila"
-status: "In Progress"
+status: Done
 type: Feature
 priority: High
 sprint: "Sprint 1"

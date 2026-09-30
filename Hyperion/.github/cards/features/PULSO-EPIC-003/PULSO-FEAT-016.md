@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-016
 title: "Frontend — página de transações"
-status: Done
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-003

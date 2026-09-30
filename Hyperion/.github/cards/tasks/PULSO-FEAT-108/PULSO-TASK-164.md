@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-164
 title: "Flutter — lista, filtros e resumo de transações"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-108

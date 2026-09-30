@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-028
 title: "Categorias, tags e validação recurso×categoria"
-status: Done
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-013

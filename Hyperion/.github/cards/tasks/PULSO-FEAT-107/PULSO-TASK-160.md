@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-160
 title: "API — JSON de sessão para cliente nativo"
-status: Done
+status: "In Revision"
 type: Task
 priority: High
 sprint: null

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-077
 title: "Revisar apresentação do projeto"
-status: "In Revision"
+status: Done
 type: Feature
 priority: Medium
 sprint: "Sprint 1"

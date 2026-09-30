@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-085
 title: "Avaliação da arquitetura (ATAM)"
-status: "In Revision"
+status: Done
 type: Feature
 priority: Medium
 sprint: "Sprint 1"

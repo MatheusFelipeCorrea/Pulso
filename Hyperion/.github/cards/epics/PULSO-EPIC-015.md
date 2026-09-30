@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-EPIC-015
 title: "Protótipos de interface"
-status: "In Progress"
+status: Done
 type: Epic
 priority: Highest
 sprint: "Sprint 2"

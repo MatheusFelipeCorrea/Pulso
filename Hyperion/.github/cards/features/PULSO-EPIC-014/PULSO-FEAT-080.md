@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-080
 title: "Requisitos funcionais, não funcionais e mecanismos"
-status: "In Revision"
+status: Done
 type: Feature
 priority: High
 sprint: "Sprint 1"

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-EPIC-003
 title: "Gerenciamento de Transações"
-status: "In Progress"
+status: "In Revision"
 type: Epic
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null
@@ -99,6 +99,6 @@ categories:
 - FEAT-012–017 (API + Web + QA) mergeados na Sprint-3
 
 ### ⏳ Pendente
-- PULSO-FEAT-108 — Flutter e protótipos na apostila
+- PULSO-TASK-163 — protótipos de transações na apostila
 - Concorrência otimista em edição (If-Match) — evolução futura
 - Indicador visual de recorrência na lista — opcional

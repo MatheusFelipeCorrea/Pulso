@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-027
 title: "Frontend — página viagens e moedas"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-005
@@ -41,10 +41,20 @@ Implementar página principal integrando widgets de moeda e gestão de viagens c
 - PULSO-TASK-055
 - PULSO-TASK-056
 
+## 👤 Responsável
+
+Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
+## 🔗 Issues
+
+- [#40](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/40) — PULSO-FEAT-027
+
+## 🔗 Pull Requests
+
+- [#312](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/312) — módulo de viagens no web
+- [#313](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/313) — conversor/moedas na página
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Layout e componentes da página definidos
-
-### ⏳ Pendente
-- PULSO-TASK-055–056 — página, conversor e modais de viagem
+- Página, conversor e lista mergeados na Sprint-3 (In Revision)

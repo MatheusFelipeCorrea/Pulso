@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-052
 title: "Backend — viagemService CRUD e resolução de destino"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-024

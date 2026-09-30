@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-021
 title: "Frontend — página de metas"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-004
@@ -44,10 +44,19 @@ Implementar página de metas com tabs por status, filtros, cards de progresso, s
 - PULSO-TASK-046
 - PULSO-TASK-047
 
+## 👤 Responsável
+
+Maria Clara (`mariaoliveira27`)
+
+## 🔗 Issues
+
+- [#34](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/34) — PULSO-FEAT-021
+
+## 🔗 Pull Requests
+
+- [#315](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/315) — módulo de metas no web
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Mapa de componentes e fluxos de UI definido
-
-### ⏳ Pendente
-- PULSO-TASK-044–047 — página, modais e estilos
+- Página, modais e estilos mergeados na Sprint-3 (In Revision)

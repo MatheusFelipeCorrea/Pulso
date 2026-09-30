@@ -26,14 +26,14 @@ Professores: Leonardo Vilela, João Paulo Aramuni, Arthur Mol.
 |-----|--------|------------|
 | Web | `Codigo/Pulso/web` | React + Vite |
 | API | `Codigo/Pulso/api` | Node.js + Express + Prisma + PostgreSQL |
-| Native | `Codigo/Pulso/mobile` | Flutter (auth Sprint-2; transações FEAT-108) |
+| Native | `Codigo/Pulso/mobile` | Flutter (auth, transações, metas, viagens/moedas; grupos no client) |
 
 Kit Hyperion aninhado em `Hyperion/` (`kit.root: Hyperion`).
 
 ## Constraints
 
 - Disciplina TI5 / PMG-ES — documentação PUC em `docs/`.
-- Web e API já têm `package.json`; Flutter tem auth; transações no app ainda não.
+- Web e API já têm `package.json`; Flutter tem auth, transações, metas e viagens/moedas na Sprint-3 (grupos só no client até a API ser ligada).
 - Produto 100% gratuito (visão do README).
 
 ## Glossary

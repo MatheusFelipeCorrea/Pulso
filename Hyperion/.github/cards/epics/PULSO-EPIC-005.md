@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-EPIC-005
 title: "Viagens e Moedas"
-status: Backlog
+status: "In Revision"
 type: Epic
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null
@@ -67,15 +67,16 @@ categories:
 - PULSO-FEAT-027
 - PULSO-FEAT-028
 - PULSO-FEAT-029
+- PULSO-FEAT-110
 
 ## 📋 Resumo
 
 ### ✅ Concluído
 - Escopo RF-037–047 e RN-069–074 mapeado
-- Hierarquia Epic → 7 Features → 12 Tasks definida
-- Contratos API, providers e fluxos UI documentados como spec
+- API + Web + Flutter mergeados na Sprint-3 (In Revision)
+- Hierarquia Epic → Features → Tasks definida
 
 ### ⏳ Pendente
-- Implementar módulo completo backend + frontend
+- PULSO-TASK-169 — protótipos de viagens/moedas na apostila
+- API de grupos (client Flutter já consome o contrato)
 - Cache compartilhado de cotações (Redis) — evolução futura T5
-- Capa assíncrona na criação — melhoria de performance

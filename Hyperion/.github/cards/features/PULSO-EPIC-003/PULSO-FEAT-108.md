@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-108
 title: "Mobile Flutter e protótipos de transações"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-003
@@ -68,12 +68,15 @@ Como **equipe**, eu quero **os protótipos de transações publicados na apostil
 - [#305](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/305) — PULSO-TASK-164
 - [#306](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/306) — PULSO-TASK-165
 
+## 🔗 Pull Requests
+
+- [#309](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/309) — transações no Flutter
+- [#311](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/311) — UX Flutter alinhada à web
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo mobile + publicação dos frames de `PULSO-FEAT-089`
+- Flutter lista, filtros, resumo, formulário e exclusão mergeados na Sprint-3
 
 ### ⏳ Pendente
 - PULSO-TASK-163 — subir protótipos na apostila
-- PULSO-TASK-164 — Flutter lista, filtros e resumo
-- PULSO-TASK-165 — Flutter formulário, tags/categorias e exclusão

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-037
 title: "Banco de dados — Meta e AporteMeta"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-018

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-078
 title: "Índice, equipe e ferramentas da apostila"
-status: "In Revision"
+status: Done
 type: Feature
 priority: High
 sprint: "Sprint 1"

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-028
 title: "Frontend — detalhe da viagem"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-005
@@ -42,10 +42,11 @@ Implementar detalhe completo com sidebar de resumo, breakdown por categoria, se�
 - PULSO-TASK-058
 - PULSO-TASK-059
 
+## 🔗 Pull Requests
+
+- [#312](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/312) — detalhe da viagem no web
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Mapa de componentes de detalhe definido
-
-### ⏳ Pendente
-- PULSO-TASK-057–059 — detalhe, modais e estilos
+- Detalhe, modais e estilos mergeados na Sprint-3 (In Revision)

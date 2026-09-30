@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-162
 title: "Flutter — Google nativo e deep links de e-mail"
-status: Done
+status: "In Revision"
 type: Task
 priority: High
 sprint: null

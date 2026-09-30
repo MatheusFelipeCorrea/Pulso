@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-059
 title: "Frontend — trips.css e utilitários visuais"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-028

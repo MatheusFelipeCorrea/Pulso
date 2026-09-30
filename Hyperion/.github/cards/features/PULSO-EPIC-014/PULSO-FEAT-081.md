@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-081
 title: "Modelagem e projeto arquitetural"
-status: "In Revision"
+status: Done
 type: Feature
 priority: High
 sprint: "Sprint 1"

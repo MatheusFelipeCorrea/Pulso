@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-026
 title: "Backend — transactionService e repository"
-status: Done
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-012

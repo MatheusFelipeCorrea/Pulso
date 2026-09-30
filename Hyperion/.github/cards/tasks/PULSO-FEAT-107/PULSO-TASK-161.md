@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-161
 title: "Flutter — init, e-mail/senha e sessão Bearer"
-status: Done
+status: "In Revision"
 type: Task
 priority: High
 sprint: null

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-042
 title: "Backend — registrarAporte e notificação META_ATINGIDA"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-020

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-035
 title: "Frontend — exclusão e estilos transactions.css"
-status: Done
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 3"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-016
