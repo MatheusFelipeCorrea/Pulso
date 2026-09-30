@@ -1,7 +1,8 @@
 import { describe, it } from 'vitest'
 
 // TEMP Sprint-3: TripsPage importa componentes de moedas (TripQuickConverter, TripFavoriteCurrencies,
-// TripExchangeChart) que entram no PR de moedas. Descomentar o teste abaixo depois do merge dele.
+// TripExchangeChart, do PR #313) e o grupoService (do PR #317). Descomentar o teste abaixo depois
+// do merge dos dois.
 describe('TripsPage', () => {
   it.todo('renderiza sem quebrar')
 })
