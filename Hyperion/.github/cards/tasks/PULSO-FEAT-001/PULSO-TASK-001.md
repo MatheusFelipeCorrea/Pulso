@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-001
 title: "Banco de dados — modelos de usuário e verificação"
-status: "In Revision"
+status: Done
 type: Task
 priority: Highest
 sprint: null

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-003
 title: "Frontend — telas de cadastro e verificação"
-status: "In Revision"
+status: Done
 type: Task
 priority: High
 sprint: null

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-009
 title: "Frontend — telas de recuperação de senha"
-status: "In Revision"
+status: Done
 type: Task
 priority: High
 sprint: null

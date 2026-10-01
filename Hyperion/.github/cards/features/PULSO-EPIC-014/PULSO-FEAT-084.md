@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-084
 title: "Solução — telas do sistema construído"
-status: Backlog
+status: Done
 type: Feature
 priority: Low
 sprint: "Sprint 1"

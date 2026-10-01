@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-094
 title: "Protótipo — orçamento mensal"
-status: "In Progress"
+status: Done
 type: Feature
 priority: High
 sprint: "Sprint 1"

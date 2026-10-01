@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-003
 title: "Google OAuth 2.0"
-status: "In Revision"
+status: Done
 type: Feature
 priority: Highest
 sprint: null

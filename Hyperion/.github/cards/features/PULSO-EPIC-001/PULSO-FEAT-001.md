@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-001
 title: "Cadastro e verificação de email"
-status: "In Revision"
+status: Done
 type: Feature
 priority: Highest
 sprint: null

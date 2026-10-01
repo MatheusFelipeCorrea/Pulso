@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-004
 title: "Recuperação de senha"
-status: "In Revision"
+status: Done
 type: Feature
 priority: High
 sprint: null

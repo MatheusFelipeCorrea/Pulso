@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-005
 title: "Proteção de rotas e infraestrutura de segurança"
-status: "In Revision"
+status: Done
 type: Feature
 priority: Highest
 sprint: null

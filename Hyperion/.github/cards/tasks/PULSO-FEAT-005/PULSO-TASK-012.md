@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-012
 title: "QA — testes unitários de autenticação"
-status: "In Revision"
+status: Done
 type: Task
 priority: Medium
 sprint: null

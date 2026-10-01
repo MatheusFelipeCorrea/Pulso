@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-002
 title: "Backend — cadastro, verificação e reenvio de email"
-status: "In Revision"
+status: Done
 type: Task
 priority: Highest
 sprint: null

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-010
 title: "Backend — middleware, rate limit e job de limpeza"
-status: "In Revision"
+status: Done
 type: Task
 priority: Highest
 sprint: null

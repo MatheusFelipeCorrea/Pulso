@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-EPIC-001
 title: "Autenticação"
-status: "In Revision"
+status: Done
 type: Epic
 priority: Highest
 sprint: "Sprint 2"

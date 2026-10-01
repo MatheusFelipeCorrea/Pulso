@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-008
 title: "Backend — recuperação e reset de senha"
-status: "In Revision"
+status: Done
 type: Task
 priority: High
 sprint: null

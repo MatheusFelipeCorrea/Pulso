@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-002
 title: "Login, sessão JWT e logout"
-status: "In Revision"
+status: Done
 type: Feature
 priority: Highest
 sprint: null

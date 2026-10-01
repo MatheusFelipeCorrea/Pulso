@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-004
 title: "Backend — login, refresh, logout e cookies httpOnly"
-status: "In Revision"
+status: Done
 type: Task
 priority: Highest
 sprint: null

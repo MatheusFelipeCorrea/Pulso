@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-005
 title: "Frontend — login e gestão de sessão"
-status: "In Revision"
+status: Done
 type: Task
 priority: High
 sprint: null

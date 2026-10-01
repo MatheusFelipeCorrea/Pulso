@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-006
 title: "Backend — Google OAuth e exchange de sessão"
-status: "In Revision"
+status: Done
 type: Task
 priority: Highest
 sprint: null

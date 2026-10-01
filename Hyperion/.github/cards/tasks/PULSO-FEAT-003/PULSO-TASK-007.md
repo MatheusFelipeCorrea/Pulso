@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-007
 title: "Frontend — callback OAuth e botão Google"
-status: "In Revision"
+status: Done
 type: Task
 priority: High
 sprint: null

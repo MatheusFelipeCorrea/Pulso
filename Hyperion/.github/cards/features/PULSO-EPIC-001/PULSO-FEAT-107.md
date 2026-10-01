@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-107
 title: "Auth Flutter (mesma API Node)"
-status: "In Revision"
+status: Done
 type: Feature
 priority: High
 sprint: null
