@@ -45,7 +45,7 @@ function normalizeCacheKey(value) {
     .trim()
 }
 
-function resizeWikiThumbnail(url, maxWidth) {
+function _resizeWikiThumbnail(url, maxWidth) {
   if (!url) return null
   const match = url.match(/\/(\d+)px-/)
   if (!match || !maxWidth) return url

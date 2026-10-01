@@ -117,7 +117,7 @@ export default function TripsPage() {
         await viagemService.editarViagem(selected.id, payload)
         toast.success('Viagem atualizada!')
       } else {
-        const viagem = await viagemService.criarViagem(payload)
+        await viagemService.criarViagem(payload)
         toast.success('Viagem criada!')
       }
       setFormOpen(false)

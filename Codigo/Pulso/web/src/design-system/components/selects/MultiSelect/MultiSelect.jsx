@@ -20,7 +20,7 @@ export const MultiSelect = ({
   className,
   maxChipsVisible = 3,
   allSelectedLabel = 'Todos selecionados',
-  noneSelectedLabel = 'Nenhum selecionado',
+  noneSelectedLabel: _noneSelectedLabel = 'Nenhum selecionado',
 }) => {
   const generatedId = useId()
   const id = idProp ?? generatedId

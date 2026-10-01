@@ -160,7 +160,7 @@ const obterHistorico = async (codigo, dias = 30) => {
 };
 
 const listarFavoritas = async (usuarioId) => {
-    let favoritas = [];
+    let favoritas;
     try {
         favoritas = await moedaFavoritaRepository.listarPorUsuario(usuarioId);
     } catch (error) {

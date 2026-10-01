@@ -40,7 +40,7 @@ function shouldIncludeRegion(city, region, country) {
     return true;
 }
 
-function formatDestinoLabel({ name, region, countryCode, countryName }) {
+function formatDestinoLabel({ name, region: _region, countryCode, countryName }) {
     const city = String(name ?? '').trim();
     const country = getCountryMeta(countryCode).countryName || countryName || countryCode;
 

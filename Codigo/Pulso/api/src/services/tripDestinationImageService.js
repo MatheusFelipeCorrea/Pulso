@@ -58,7 +58,7 @@ function isPlaceWikiSummary(data) {
     return true;
 }
 
-function resizeWikiThumbnail(url, maxWidth) {
+function _resizeWikiThumbnail(url, maxWidth) {
     if (!url) return null;
     const match = url.match(/\/(\d+)px-/);
     if (!match || !maxWidth) return url;
@@ -77,7 +77,7 @@ function normalizeWikiThumbWidth(url, width = WIKI_THUMB_WIDTH) {
     return url.replace(/\/(\d+)px-/, `/${width}px-`);
 }
 
-function isBrokenCoverUrl(url) {
+function _isBrokenCoverUrl(url) {
     return typeof url === 'string' && /\/420px-/.test(url);
 }
 

@@ -10,7 +10,7 @@ const {
 const DEFAULT_ORIGIN_LEGACY = DEFAULT_ORIGIN;
 
 /** Estimativas legadas — preferir tripTransportRoutes */
-const GROUND_TRANSPORT_BY_IATA = {
+const _GROUND_TRANSPORT_BY_IATA = {
     EZE: {
         busConvencionalBrl: 580,
         buserBrl: null,
@@ -73,7 +73,7 @@ const GROUND_TRANSPORT_BY_IATA = {
     },
 };
 
-const SOUTH_AMERICA_BUS_IATA = new Set(['EZE', 'MVD', 'ASU', 'SCL', 'LIM', 'BOG']);
+const _SOUTH_AMERICA_BUS_IATA = new Set(['EZE', 'MVD', 'ASU', 'SCL', 'LIM', 'BOG']);
 
 const DESTINATION_AIRPORTS = buildDestinationAirports();
 
