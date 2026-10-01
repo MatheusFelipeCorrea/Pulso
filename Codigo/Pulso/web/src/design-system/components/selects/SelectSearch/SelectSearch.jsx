@@ -1,6 +1,5 @@
 import { useId, useState, useMemo, useCallback, useEffect } from 'react'
 import { Search } from 'lucide-react'
-import { cn } from '../../../utils/cn.js'
 import { Spinner } from '../../feedback/Spinner/Spinner.jsx'
 import { useSelectDropdown } from '../shared/useSelectDropdown.js'
 import { selectDropdownVariants } from '../shared/select.styles.jsx'

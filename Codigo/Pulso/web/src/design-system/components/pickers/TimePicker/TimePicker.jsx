@@ -8,7 +8,7 @@ import { usePickerDropdown } from '../shared/usePickerDropdown.js'
 import { PickerTrigger } from '../shared/PickerTrigger.jsx'
 import { pickerDropdownVariants } from '../shared/picker.styles.jsx'
 
-function parseTime(value, format24 = true) {
+function parseTime(value, _format24 = true) {
   if (!value) return { hour: 0, minute: 0, period: 'AM' }
   const match24 = value.match(/^(\d{1,2}):(\d{2})$/)
   if (match24) {

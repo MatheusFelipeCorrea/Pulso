@@ -3,7 +3,7 @@ const globals = require('globals');
 
 module.exports = [
   {
-    ignores: ['node_modules/**', 'coverage/**', 'prisma/migrations/**'],
+    ignores: ['node_modules/**', 'coverage/**', 'prisma/migrations/**', 'scripts/**'],
   },
   {
     files: ['**/*.js'],
@@ -17,7 +17,10 @@ module.exports = [
     },
     rules: {
       ...js.configs.recommended.rules,
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
+      'no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
     },
   },
 ];

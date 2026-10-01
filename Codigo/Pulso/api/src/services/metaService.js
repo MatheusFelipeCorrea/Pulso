@@ -16,7 +16,6 @@ const {
 const {
     formatDateOnly,
     parseVencimentoDate,
-    startOfDayInTimezone,
     todayInTimezone,
 } = require('../utils/dateTimezone');
 

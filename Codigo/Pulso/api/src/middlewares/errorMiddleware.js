@@ -1,6 +1,6 @@
 const logger = require('../utils/logger');
 const { isPrismaUniqueViolation, mapPrismaUniqueViolation } = require('../utils/prismaErrors');
-const errorMiddleware = (err, req, res, next) => {
+const errorMiddleware = (err, req, res, _next) => {
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
         return res.status(400).json({
             status: 'error',

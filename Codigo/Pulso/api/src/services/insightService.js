@@ -1,6 +1,6 @@
 const prisma = require('../config/database');
 const notificationService = require('./notificationService');
-const { todayInTimezone, formatDateOnly } = require('../utils/dateTimezone');
+const { todayInTimezone } = require('../utils/dateTimezone');
 
 const mesReferenciaAtual = () => {
     const hoje = todayInTimezone();

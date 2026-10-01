@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 const authRepository = require('../repositories/authRepository');
-const prisma = require('../config/database');
 const {
     enqueueVerificationEmail,
     enqueuePasswordResetEmail,

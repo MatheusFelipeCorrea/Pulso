@@ -30,7 +30,7 @@ const CATEGORIAS_DESPESA = [
     'OUTROS',
 ];
 
-const TIPOS_OBSERVACAO = ['GERAL', 'CHECKLIST', 'LINK', 'DICA', 'DOCUMENTOS'];
+const _TIPOS_OBSERVACAO = ['GERAL', 'CHECKLIST', 'LINK', 'DICA', 'DOCUMENTOS'];
 
 const parseDate = (input) => {
     if (input instanceof Date) return input;
@@ -363,7 +363,6 @@ const validarObservacao = (dados) => {
     } else if (linkUrl !== null) {
         linkUrl = String(linkUrl).trim();
         try {
-            // eslint-disable-next-line no-new
             new URL(linkUrl);
         } catch {
             throw new AppError('Informe uma URL válida para o link', 400);
@@ -423,7 +422,6 @@ const editarObservacao = async (usuarioId, viagemId, observacaoId, dados) => {
         } else {
             linkUrl = String(linkUrl).trim();
             try {
-                // eslint-disable-next-line no-new
                 new URL(linkUrl);
             } catch {
                 throw new AppError('Informe uma URL válida para o link', 400);
@@ -476,7 +474,7 @@ const listarDestinosViagem = async ({ q, limit } = {}) => {
     const destinos = places
         .map((place) => tripDestinationResolver.resolveFromGeoNamesPlace(place))
         .filter(Boolean)
-        .map(({ destinoMeta, ...entry }) => entry);
+        .map(({ destinoMeta: _destinoMeta, ...entry }) => entry);
 
     return {
         destinos,
