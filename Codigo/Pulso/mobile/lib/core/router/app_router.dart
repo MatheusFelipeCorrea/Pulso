@@ -12,6 +12,8 @@ import 'package:pulso/features/auth/screens/reset_password_screen.dart';
 import 'package:pulso/features/auth/screens/verify_email_screen.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/auth/widgets/auth_page.dart';
+import 'package:pulso/features/budget/screens/budget_edit_screen.dart';
+import 'package:pulso/features/budget/screens/budget_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/widgets/app_shell.dart';
 import 'package:pulso/features/goals/data/goal_models.dart';
@@ -155,6 +157,10 @@ GoRouter createRouter(AuthController auth) {
         ),
       ),
       GoRoute(
+        path: '/budget/edit',
+        builder: (context, state) => const BudgetEditScreen(),
+      ),
+      GoRoute(
         path: '/trips/new',
         builder: (context, state) => const TripFormScreen(),
       ),
@@ -218,6 +224,10 @@ GoRouter createRouter(AuthController auth) {
             builder: (context, state) => const GoalsScreen(),
           ),
           GoRoute(
+            path: '/budget',
+            builder: (context, state) => const BudgetScreen(),
+          ),
+          GoRoute(
             path: '/trips',
             builder: (context, state) => const TripsScreen(),
           ),
@@ -235,6 +245,7 @@ bool _isKnownAuthedLocation(String loc) {
   if (loc == '/dashboard' || loc == '/transactions' || loc == '/categories' || loc == '/tags') return true;
   if (loc == '/profile' || loc == '/settings') return true;
   if (loc == '/goals' || loc == '/goals/form') return true;
+  if (loc == '/budget' || loc == '/budget/edit') return true;
   if (loc == '/trips' || loc == '/trips/new' || loc.startsWith('/trips/')) return true;
   if (loc == '/groups' || loc == '/groups/new') return true;
   if (loc == '/transactions/new' || loc.startsWith('/transactions/')) return true;
