@@ -59,6 +59,7 @@ categories:
 - PULSO-FEAT-055
 - PULSO-FEAT-056
 - PULSO-FEAT-057
+- PULSO-FEAT-113
 
 ## 📋 Resumo
 
