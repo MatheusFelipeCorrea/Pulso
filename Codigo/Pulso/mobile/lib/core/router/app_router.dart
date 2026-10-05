@@ -20,6 +20,9 @@ import 'package:pulso/features/goals/screens/goals_screen.dart';
 import 'package:pulso/features/groups/screens/group_form_screen.dart';
 import 'package:pulso/features/groups/screens/groups_screen.dart';
 import 'package:pulso/features/home/screens/home_screen.dart';
+import 'package:pulso/features/purchase/data/purchase_models.dart';
+import 'package:pulso/features/purchase/screens/purchase_item_form_screen.dart';
+import 'package:pulso/features/purchase/screens/purchase_planning_screen.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
 import 'package:pulso/features/transactions/screens/categories_screen.dart';
@@ -172,6 +175,12 @@ GoRouter createRouter(AuthController auth) {
         ),
       ),
       GoRoute(
+        path: '/purchase-planning/form',
+        builder: (context, state) => PurchaseItemFormScreen(
+          item: state.extra is PurchaseItem ? state.extra as PurchaseItem : null,
+        ),
+      ),
+      GoRoute(
         path: '/groups/new',
         builder: (context, state) => const GroupFormScreen(),
       ),
@@ -222,6 +231,10 @@ GoRouter createRouter(AuthController auth) {
             builder: (context, state) => const TripsScreen(),
           ),
           GoRoute(
+            path: '/purchase-planning',
+            builder: (context, state) => const PurchasePlanningScreen(),
+          ),
+          GoRoute(
             path: '/groups',
             builder: (context, state) => const GroupsScreen(),
           ),
@@ -236,6 +249,7 @@ bool _isKnownAuthedLocation(String loc) {
   if (loc == '/profile' || loc == '/settings') return true;
   if (loc == '/goals' || loc == '/goals/form') return true;
   if (loc == '/trips' || loc == '/trips/new' || loc.startsWith('/trips/')) return true;
+  if (loc == '/purchase-planning' || loc == '/purchase-planning/form') return true;
   if (loc == '/groups' || loc == '/groups/new') return true;
   if (loc == '/transactions/new' || loc.startsWith('/transactions/')) return true;
   if (loc == '/termos' || loc == '/privacidade') return true;

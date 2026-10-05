@@ -11,6 +11,8 @@ import 'package:pulso/features/goals/data/goal_repository.dart';
 import 'package:pulso/features/goals/state/goals_controller.dart';
 import 'package:pulso/features/groups/data/group_repository.dart';
 import 'package:pulso/features/groups/state/groups_controller.dart';
+import 'package:pulso/features/purchase/data/purchase_repository.dart';
+import 'package:pulso/features/purchase/state/purchase_controller.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
 import 'package:pulso/features/transactions/state/transactions_controller.dart';
 import 'package:pulso/features/trips/data/trip_repository.dart';
@@ -25,6 +27,7 @@ class PulsoApp extends StatelessWidget {
     required this.transactions,
     required this.goals,
     required this.trips,
+    required this.purchase,
     required this.currencies,
     required this.groups,
   });
@@ -35,6 +38,7 @@ class PulsoApp extends StatelessWidget {
   final TransactionRepository transactions;
   final GoalRepository goals;
   final TripRepository trips;
+  final PurchasePlanningRepository purchase;
   final CurrencyRepository currencies;
   final GroupRepository groups;
 
@@ -47,11 +51,13 @@ class PulsoApp extends StatelessWidget {
         Provider<TransactionRepository>.value(value: transactions),
         Provider<GoalRepository>.value(value: goals),
         Provider<TripRepository>.value(value: trips),
+        Provider<PurchasePlanningRepository>.value(value: purchase),
         Provider<CurrencyRepository>.value(value: currencies),
         Provider<GroupRepository>.value(value: groups),
         ChangeNotifierProvider(create: (_) => TransactionsController(transactions)),
         ChangeNotifierProvider(create: (_) => GoalsController(goals)),
         ChangeNotifierProvider(create: (_) => TripsController(trips)),
+        ChangeNotifierProvider(create: (_) => PurchaseController(purchase)),
         ChangeNotifierProvider(create: (_) => GroupsController(groups)),
       ],
       child: AnimatedBuilder(
