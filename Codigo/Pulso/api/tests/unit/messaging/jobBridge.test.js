@@ -1,15 +1,30 @@
 jest.mock('../../../src/messaging/rabbit', () => ({
+    QUEUES: { ALERTS: 'pulso.alerts', REMINDERS: 'pulso.reminders', EMAILS: 'pulso.emails' },
     isBrokerEnabled: jest.fn(),
     getChannel: jest.fn(),
+    consume: jest.fn().mockResolvedValue(undefined),
+    publishOrRun: jest.fn(),
 }));
 
 jest.mock('../../../src/messaging/emailBridge', () => ({
     startEmailConsumers: jest.fn().mockResolvedValue(undefined),
 }));
 
+jest.mock('../../../src/jobs/budgetAlertJob', () => ({ runBudgetAlertJob: jest.fn() }));
+jest.mock('../../../src/jobs/reminderAlertJob', () => ({ runReminderAlertJob: jest.fn() }));
+jest.mock('../../../src/jobs/reminderRecurrenceJob', () => ({ runReminderRecurrenceJob: jest.fn() }));
+
 const messaging = require('../../../src/messaging/rabbit');
 const { startEmailConsumers } = require('../../../src/messaging/emailBridge');
-const { startMessagingWorkers } = require('../../../src/messaging/jobBridge');
+const { runBudgetAlertJob } = require('../../../src/jobs/budgetAlertJob');
+const { runReminderAlertJob } = require('../../../src/jobs/reminderAlertJob');
+const { runReminderRecurrenceJob } = require('../../../src/jobs/reminderRecurrenceJob');
+const {
+    startMessagingWorkers,
+    enqueueBudgetAlert,
+    enqueueReminderAlert,
+    enqueueReminderRecurrence,
+} = require('../../../src/messaging/jobBridge');
 const logger = require('../../../src/utils/logger');
 
 describe('jobBridge', () => {
@@ -62,5 +77,49 @@ describe('jobBridge', () => {
         await startMessagingWorkers();
 
         expect(startEmailConsumers).toHaveBeenCalled();
+        expect(messaging.consume).toHaveBeenCalledWith('pulso.alerts', expect.any(Function));
+        expect(messaging.consume).toHaveBeenCalledWith('pulso.reminders', expect.any(Function));
+    });
+
+    it('consumer de lembretes roda o job conforme o tipo da mensagem', async () => {
+        messaging.isBrokerEnabled.mockReturnValue(true);
+        messaging.getChannel.mockResolvedValue({ sendToQueue: jest.fn() });
+        messaging.consume.mockClear();
+
+        await startMessagingWorkers();
+
+        const reminderHandler = messaging.consume.mock.calls.find(([q]) => q === 'pulso.reminders')[1];
+        await reminderHandler({ type: 'reminder_recurrence' });
+        await reminderHandler({ type: 'reminder_alert' });
+        const alertHandler = messaging.consume.mock.calls.find(([q]) => q === 'pulso.alerts')[1];
+        await alertHandler({ type: 'budget_alert' });
+
+        expect(runReminderRecurrenceJob).toHaveBeenCalledTimes(1);
+        expect(runReminderAlertJob).toHaveBeenCalledTimes(1);
+        expect(runBudgetAlertJob).toHaveBeenCalledTimes(1);
+    });
+
+    it('enfileira alertas de orçamento e lembretes nas filas certas', async () => {
+        messaging.publishOrRun.mockResolvedValue('queued');
+
+        await enqueueBudgetAlert();
+        await enqueueReminderAlert();
+        await enqueueReminderRecurrence();
+
+        expect(messaging.publishOrRun).toHaveBeenCalledWith(
+            'pulso.alerts',
+            { type: 'budget_alert' },
+            runBudgetAlertJob
+        );
+        expect(messaging.publishOrRun).toHaveBeenCalledWith(
+            'pulso.reminders',
+            { type: 'reminder_alert' },
+            runReminderAlertJob
+        );
+        expect(messaging.publishOrRun).toHaveBeenCalledWith(
+            'pulso.reminders',
+            { type: 'reminder_recurrence' },
+            runReminderRecurrenceJob
+        );
     });
 });

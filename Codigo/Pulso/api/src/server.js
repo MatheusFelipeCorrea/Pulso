@@ -8,7 +8,12 @@ const cron = require('node-cron');
 // const { initSocket } = require('./socket/groupChat');
 const { runTokenCleanup } = require('./jobs/tokenCleanupJob');
 const { runRecurringTransactions } = require('./jobs/recurringTransactions');
-const { startMessagingWorkers } = require('./messaging/jobBridge');
+const {
+    startMessagingWorkers,
+    enqueueBudgetAlert,
+    enqueueReminderAlert,
+    enqueueReminderRecurrence,
+} = require('./messaging/jobBridge');
 const { runUnverifiedAccountCleanup } = require('./jobs/unverifiedAccountCleanupJob');
 // const { runDebtCleanupJob } = require('./jobs/debtCleanupJob');
 // const { runNotificationCleanup } = require('./jobs/notificationCleanupJob');
@@ -63,11 +68,66 @@ const startUnverifiedAccountCleanupScheduler = () => {
 
     logger.info('🧹 Agendador de contas não verificadas ativo (diário 03:20)');
 };
-// const startBudgetAlertScheduler = () => { ... };
-// const startReminderAlertScheduler = () => { ... };
+
+const startBudgetAlertScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule('*/20 * * * *', async () => {
+        try {
+            await enqueueBudgetAlert();
+        } catch (error) {
+            logger.error(`Falha no job de alertas de orçamento: ${error.message}`);
+        }
+    });
+
+    logger.info('📊 Agendador de alertas de orçamento ativo (a cada 20 min)');
+};
+
+const startReminderAlertScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule(
+        '0 10 * * *',
+        async () => {
+            try {
+                await enqueueReminderAlert();
+            } catch (error) {
+                logger.error(`Falha no job de lembretes: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🔔 Agendador de lembretes ativo (diário 10:00 BRT)');
+};
+
+const startReminderRecurrenceScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule(
+        '5 0 * * *',
+        async () => {
+            try {
+                await enqueueReminderRecurrence();
+            } catch (error) {
+                logger.error(`Falha no job de recorrência de lembretes: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🔁 Agendador de recorrência de lembretes ativo (diário 00:05 BRT)');
+};
+
+// TEMP: módulos de dívidas, notificações, chat e divisão ainda não estão neste repo.
 // const startDebtCleanupScheduler = () => { ... };
 // const startDebtAlertScheduler = () => { ... };
-// const startReminderRecurrenceScheduler = () => { ... };
 // const startNotificationCleanupScheduler = () => { ... };
 // const startChatCleanupScheduler = () => { ... };
 // const startExpenseSplitCleanupScheduler = () => { ... };
@@ -84,9 +144,9 @@ const start = async () => {
             startTokenCleanupScheduler();
             startRecurringTransactionsScheduler();
             startUnverifiedAccountCleanupScheduler();
-            // startBudgetAlertScheduler();
-            // startReminderAlertScheduler();
-            // startReminderRecurrenceScheduler();
+            startBudgetAlertScheduler();
+            startReminderAlertScheduler();
+            startReminderRecurrenceScheduler();
             // startDebtCleanupScheduler();
             // startDebtAlertScheduler();
             // startNotificationCleanupScheduler();
