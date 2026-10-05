@@ -20,6 +20,9 @@ import GoalsPage from './pages/GoalsPage'
 import TripsPage from './pages/TripsPage'
 import TripDetailPage from './pages/TripDetailPage.jsx'
 import AccountPage from './pages/AccountPage.jsx'
+import CalendarPage from './pages/CalendarPage'
+import BudgetPage from './pages/BudgetPage'
+import PurchasePlanningPage from './pages/PurchasePlanningPage'
 import { PremiumRoute } from './components/routing/PremiumRoute.jsx'
 // TEMP: demais páginas ainda não estão neste repo.
 
@@ -69,6 +72,9 @@ function App() {
               <Route path="dashboard" element={<Navigate to="/transactions" replace />} />
               <Route path="transactions" element={<TransactionsPage />} />
               <Route path="goals" element={<GoalsPage />} />
+              <Route path="budget" element={<BudgetPage />} />
+              <Route path="calendar" element={<CalendarPage />} />
+              <Route path="purchase-planning" element={<PurchasePlanningPage />} />
               <Route
                 path="profile"
                 element={
