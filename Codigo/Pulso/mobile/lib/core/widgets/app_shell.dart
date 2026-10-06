@@ -79,6 +79,13 @@ class AppShell extends StatelessWidget {
         label: const Text('Nova'),
       );
     }
+    if (location == '/budget') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/budget/edit'),
+        icon: const Icon(Icons.edit_outlined),
+        label: const Text('Editar'),
+      );
+    }
     if (location == '/trips') {
       return FloatingActionButton.extended(
         onPressed: () => context.push('/trips/new'),
@@ -143,9 +150,10 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     bool matches(String label) => query.isEmpty || label.toLowerCase().contains(query);
 
     final showTransacoes = matches('Transações') || matches('Financeiro');
+    final showOrcamento = matches('Orçamento') || matches('Financeiro');
     final showMetas = matches('Metas Financeiras') || matches('Planejamento');
     final showViagens = premium && (matches('Viagens e Moedas') || matches('Planejamento'));
-    final showFinanceiro = showTransacoes;
+    final showFinanceiro = showTransacoes || showOrcamento;
     final showPlanejamento = showMetas || showViagens;
     final showPerfil = matches('Perfil') || matches('Conta');
     final showSettings = matches('Configurações') || matches('Conta');
@@ -231,6 +239,13 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                           label: 'Transações',
                           selected: location == '/transactions' || location.startsWith('/transactions/'),
                           onTap: () => _go(context, '/transactions'),
+                        ),
+                      if (showOrcamento)
+                        _NavTile(
+                          icon: Icons.pie_chart_outline,
+                          label: 'Orçamento Mensal',
+                          selected: location == '/budget' || location.startsWith('/budget/'),
+                          onTap: () => _go(context, '/budget'),
                         ),
                     ],
                     if (showPlanejamento) ...[
