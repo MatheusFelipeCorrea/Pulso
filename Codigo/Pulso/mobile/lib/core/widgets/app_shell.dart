@@ -100,6 +100,13 @@ class AppShell extends StatelessWidget {
         label: const Text('Nova'),
       );
     }
+    if (location == '/purchase-planning') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/purchase-planning/form'),
+        icon: const Icon(Icons.add),
+        label: const Text('Novo'),
+      );
+    }
     return null;
   }
 
@@ -160,9 +167,10 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     final showCalendario = matches('Calendário') || matches('Financeiro');
     final showOrcamento = matches('Orçamento') || matches('Financeiro');
     final showMetas = matches('Metas Financeiras') || matches('Planejamento');
+    final showCompra = matches('Planejamento de Compra') || matches('Planejamento');
     final showViagens = premium && (matches('Viagens e Moedas') || matches('Planejamento'));
     final showFinanceiro = showTransacoes || showCalendario || showOrcamento;
-    final showPlanejamento = showMetas || showViagens;
+    final showPlanejamento = showMetas || showViagens || showCompra;
     final showPerfil = matches('Perfil') || matches('Conta');
     final showSettings = matches('Configurações') || matches('Conta');
     final showSair = matches('Sair') || matches('Conta');
@@ -271,6 +279,13 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                           label: 'Metas Financeiras',
                           selected: location == '/goals' || location.startsWith('/goals/'),
                           onTap: () => _go(context, '/goals'),
+                        ),
+                      if (showCompra)
+                        _NavTile(
+                          icon: Icons.shopping_cart_outlined,
+                          label: 'Planejamento de Compra',
+                          selected: location == '/purchase-planning' || location.startsWith('/purchase-planning/'),
+                          onTap: () => _go(context, '/purchase-planning'),
                         ),
                       if (showViagens)
                         _NavTile(

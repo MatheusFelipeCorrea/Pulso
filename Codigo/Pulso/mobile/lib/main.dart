@@ -11,6 +11,7 @@ import 'package:pulso/features/calendar/data/calendar_repository.dart';
 import 'package:pulso/features/currency/data/currency_repository.dart';
 import 'package:pulso/features/goals/data/goal_repository.dart';
 import 'package:pulso/features/groups/data/group_repository.dart';
+import 'package:pulso/features/purchase/data/purchase_repository.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
 import 'package:pulso/features/trips/data/trip_repository.dart';
 
@@ -45,6 +46,7 @@ Future<void> main() async {
       goals: GoalRepository(api),
       budget: BudgetRepository(api),
       trips: TripRepository(api),
+      purchase: PurchasePlanningRepository(api),
       currencies: CurrencyRepository(api),
       groups: GroupRepository(api),
     ),
