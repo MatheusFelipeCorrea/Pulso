@@ -12,8 +12,13 @@ import 'package:pulso/features/auth/screens/reset_password_screen.dart';
 import 'package:pulso/features/auth/screens/verify_email_screen.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/auth/widgets/auth_page.dart';
+import 'package:pulso/features/budget/screens/budget_edit_screen.dart';
+import 'package:pulso/features/budget/screens/budget_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/widgets/app_shell.dart';
+import 'package:pulso/features/calendar/data/calendar_models.dart';
+import 'package:pulso/features/calendar/screens/calendar_screen.dart';
+import 'package:pulso/features/calendar/screens/reminder_form_screen.dart';
 import 'package:pulso/features/goals/data/goal_models.dart';
 import 'package:pulso/features/goals/screens/goal_form_screen.dart';
 import 'package:pulso/features/goals/screens/goals_screen.dart';
@@ -152,10 +157,20 @@ GoRouter createRouter(AuthController auth) {
         ),
       ),
       GoRoute(
+        path: '/calendar/reminder',
+        builder: (context, state) => ReminderFormScreen(
+          lembrete: state.extra is PulsoLembrete ? state.extra as PulsoLembrete : null,
+        ),
+      ),
+      GoRoute(
         path: '/goals/form',
         builder: (context, state) => GoalFormScreen(
           meta: state.extra is PulsoMeta ? state.extra as PulsoMeta : null,
         ),
+      ),
+      GoRoute(
+        path: '/budget/edit',
+        builder: (context, state) => const BudgetEditScreen(),
       ),
       GoRoute(
         path: '/trips/new',
@@ -196,6 +211,10 @@ GoRouter createRouter(AuthController auth) {
             builder: (context, state) => const TransactionsScreen(),
           ),
           GoRoute(
+            path: '/calendar',
+            builder: (context, state) => const CalendarScreen(),
+          ),
+          GoRoute(
             path: '/categories',
             builder: (context, state) => CategoriesScreen(
               repository: context.read<TransactionRepository>(),
@@ -227,6 +246,10 @@ GoRouter createRouter(AuthController auth) {
             builder: (context, state) => const GoalsScreen(),
           ),
           GoRoute(
+            path: '/budget',
+            builder: (context, state) => const BudgetScreen(),
+          ),
+          GoRoute(
             path: '/trips',
             builder: (context, state) => const TripsScreen(),
           ),
@@ -246,8 +269,10 @@ GoRouter createRouter(AuthController auth) {
 
 bool _isKnownAuthedLocation(String loc) {
   if (loc == '/dashboard' || loc == '/transactions' || loc == '/categories' || loc == '/tags') return true;
+  if (loc == '/calendar' || loc == '/calendar/reminder') return true;
   if (loc == '/profile' || loc == '/settings') return true;
   if (loc == '/goals' || loc == '/goals/form') return true;
+  if (loc == '/budget' || loc == '/budget/edit') return true;
   if (loc == '/trips' || loc == '/trips/new' || loc.startsWith('/trips/')) return true;
   if (loc == '/purchase-planning' || loc == '/purchase-planning/form') return true;
   if (loc == '/groups' || loc == '/groups/new') return true;
