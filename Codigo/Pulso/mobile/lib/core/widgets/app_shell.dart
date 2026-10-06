@@ -72,6 +72,13 @@ class AppShell extends StatelessWidget {
         label: const Text('Nova'),
       );
     }
+    if (location == '/calendar') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/calendar/reminder'),
+        icon: const Icon(Icons.add),
+        label: const Text('Lembrete'),
+      );
+    }
     if (location == '/goals') {
       return FloatingActionButton.extended(
         onPressed: () => context.push('/goals/form'),
@@ -143,9 +150,10 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     bool matches(String label) => query.isEmpty || label.toLowerCase().contains(query);
 
     final showTransacoes = matches('Transações') || matches('Financeiro');
+    final showCalendario = matches('Calendário') || matches('Financeiro');
     final showMetas = matches('Metas Financeiras') || matches('Planejamento');
     final showViagens = premium && (matches('Viagens e Moedas') || matches('Planejamento'));
-    final showFinanceiro = showTransacoes;
+    final showFinanceiro = showTransacoes || showCalendario;
     final showPlanejamento = showMetas || showViagens;
     final showPerfil = matches('Perfil') || matches('Conta');
     final showSettings = matches('Configurações') || matches('Conta');
@@ -231,6 +239,13 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                           label: 'Transações',
                           selected: location == '/transactions' || location.startsWith('/transactions/'),
                           onTap: () => _go(context, '/transactions'),
+                        ),
+                      if (showCalendario)
+                        _NavTile(
+                          icon: Icons.calendar_month_outlined,
+                          label: 'Calendário Financeiro',
+                          selected: location == '/calendar' || location.startsWith('/calendar/'),
+                          onTap: () => _go(context, '/calendar'),
                         ),
                     ],
                     if (showPlanejamento) ...[

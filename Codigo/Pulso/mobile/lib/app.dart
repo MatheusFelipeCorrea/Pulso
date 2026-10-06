@@ -6,6 +6,8 @@ import 'package:pulso/core/theme/pulso_theme.dart';
 import 'package:pulso/core/theme/theme_controller.dart';
 import 'package:pulso/core/widgets/pulso_app_frame.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
+import 'package:pulso/features/calendar/data/calendar_repository.dart';
+import 'package:pulso/features/calendar/state/calendar_controller.dart';
 import 'package:pulso/features/currency/data/currency_repository.dart';
 import 'package:pulso/features/goals/data/goal_repository.dart';
 import 'package:pulso/features/goals/state/goals_controller.dart';
@@ -23,6 +25,8 @@ class PulsoApp extends StatelessWidget {
     required this.theme,
     required this.router,
     required this.transactions,
+    required this.calendar,
+    required this.reminders,
     required this.goals,
     required this.trips,
     required this.currencies,
@@ -33,6 +37,8 @@ class PulsoApp extends StatelessWidget {
   final ThemeController theme;
   final GoRouter router;
   final TransactionRepository transactions;
+  final CalendarRepository calendar;
+  final ReminderRepository reminders;
   final GoalRepository goals;
   final TripRepository trips;
   final CurrencyRepository currencies;
@@ -45,11 +51,14 @@ class PulsoApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: auth),
         ChangeNotifierProvider.value(value: theme),
         Provider<TransactionRepository>.value(value: transactions),
+        Provider<CalendarRepository>.value(value: calendar),
+        Provider<ReminderRepository>.value(value: reminders),
         Provider<GoalRepository>.value(value: goals),
         Provider<TripRepository>.value(value: trips),
         Provider<CurrencyRepository>.value(value: currencies),
         Provider<GroupRepository>.value(value: groups),
         ChangeNotifierProvider(create: (_) => TransactionsController(transactions)),
+        ChangeNotifierProvider(create: (_) => CalendarController(calendar, reminders)),
         ChangeNotifierProvider(create: (_) => GoalsController(goals)),
         ChangeNotifierProvider(create: (_) => TripsController(trips)),
         ChangeNotifierProvider(create: (_) => GroupsController(groups)),
