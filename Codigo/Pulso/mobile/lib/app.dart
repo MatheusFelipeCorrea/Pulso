@@ -6,6 +6,8 @@ import 'package:pulso/core/theme/pulso_theme.dart';
 import 'package:pulso/core/theme/theme_controller.dart';
 import 'package:pulso/core/widgets/pulso_app_frame.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
+import 'package:pulso/features/budget/data/budget_repository.dart';
+import 'package:pulso/features/budget/state/budget_controller.dart';
 import 'package:pulso/features/calendar/data/calendar_repository.dart';
 import 'package:pulso/features/calendar/state/calendar_controller.dart';
 import 'package:pulso/features/currency/data/currency_repository.dart';
@@ -28,6 +30,7 @@ class PulsoApp extends StatelessWidget {
     required this.calendar,
     required this.reminders,
     required this.goals,
+    required this.budget,
     required this.trips,
     required this.currencies,
     required this.groups,
@@ -40,6 +43,7 @@ class PulsoApp extends StatelessWidget {
   final CalendarRepository calendar;
   final ReminderRepository reminders;
   final GoalRepository goals;
+  final BudgetRepository budget;
   final TripRepository trips;
   final CurrencyRepository currencies;
   final GroupRepository groups;
@@ -54,12 +58,14 @@ class PulsoApp extends StatelessWidget {
         Provider<CalendarRepository>.value(value: calendar),
         Provider<ReminderRepository>.value(value: reminders),
         Provider<GoalRepository>.value(value: goals),
+        Provider<BudgetRepository>.value(value: budget),
         Provider<TripRepository>.value(value: trips),
         Provider<CurrencyRepository>.value(value: currencies),
         Provider<GroupRepository>.value(value: groups),
         ChangeNotifierProvider(create: (_) => TransactionsController(transactions)),
         ChangeNotifierProvider(create: (_) => CalendarController(calendar, reminders)),
         ChangeNotifierProvider(create: (_) => GoalsController(goals)),
+        ChangeNotifierProvider(create: (_) => BudgetController(budget)),
         ChangeNotifierProvider(create: (_) => TripsController(trips)),
         ChangeNotifierProvider(create: (_) => GroupsController(groups)),
       ],

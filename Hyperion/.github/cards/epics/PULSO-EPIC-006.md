@@ -66,6 +66,7 @@ categories:
 - PULSO-FEAT-033
 - PULSO-FEAT-034
 - PULSO-FEAT-035
+- PULSO-FEAT-111
 
 ## 📋 Resumo
 

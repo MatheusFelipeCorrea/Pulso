@@ -61,6 +61,7 @@ categories:
 - PULSO-FEAT-049
 - PULSO-FEAT-050
 - PULSO-FEAT-051
+- PULSO-FEAT-112
 
 ## 📋 Resumo
 
