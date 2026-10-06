@@ -3,9 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/theme/pulso_colors.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
+import 'package:pulso/core/widgets/category_icon.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/calendar/data/calendar_models.dart';
+import 'package:pulso/features/calendar/data/reminder_visuals.dart';
 import 'package:pulso/features/calendar/state/calendar_controller.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
 
@@ -39,7 +41,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
         children: [
           PulsoPageHeader(
-            title: 'Calendário financeiro',
+            title: 'Calendário Financeiro',
             subtitle: 'Vencimentos, transações e lembretes no mesmo mês.',
             icon: Icons.calendar_month_outlined,
             trailing: Row(
@@ -51,19 +53,46 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ],
             ),
           ),
-          if (controller.google?.conectado == true)
-            PulsoSurface(
-              margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
-              child: Text('Google Agenda conectada${controller.google?.email != null ? ' · ${controller.google!.email}' : ''}'),
-            )
-          else
-            PulsoSurface(
-              margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
-              child: Text(
-                'Para sincronizar com o Google Agenda, conecte pelo web em Calendário (OAuth).',
-                style: TextStyle(color: scheme.onSurfaceVariant),
-              ),
+          PulsoSurface(
+            margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
+            child: Row(
+              children: [
+                const _GoogleAgendaIcon(),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text('Google Agenda', style: Theme.of(context).textTheme.titleSmall),
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: controller.google?.conectado == true
+                                  ? PulsoColors.successOf(scheme.brightness)
+                                  : scheme.outline,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(controller.google?.conectado == true ? 'Conectado' : 'Não conectado'),
+                        ],
+                      ),
+                      Text(
+                        controller.google?.conectado == true
+                            ? (controller.google?.email ?? 'Sincronização ativa')
+                            : 'Conecte pelo web em Calendário para sincronizar lembretes.',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
+          ),
           if (controller.loading && visao == null)
             const Padding(padding: EdgeInsets.all(32), child: Center(child: CircularProgressIndicator()))
           else if (controller.error != null)
@@ -137,42 +166,96 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 }
 
+class _GoogleAgendaIcon extends StatelessWidget {
+  const _GoogleAgendaIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xFFDADCE0)),
+      ),
+      child: Column(
+        children: [
+          Container(
+            height: 12,
+            decoration: const BoxDecoration(
+              color: Color(0xFF1A73E8),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(7)),
+            ),
+          ),
+          const Expanded(
+            child: Center(
+              child: Text('31', style: TextStyle(color: Color(0xFF1A73E8), fontWeight: FontWeight.w800, fontSize: 13)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _Kpis extends StatelessWidget {
   const _Kpis({required this.resumo});
   final CalendarMonthResumo resumo;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(child: _KpiCard(label: 'Receitas', value: formatBrl(resumo.receitasTotal), color: PulsoColors.successOf(Theme.of(context).brightness))),
-        const SizedBox(width: PulsoTokens.space2),
-        Expanded(child: _KpiCard(label: 'Despesas', value: formatBrl(resumo.despesasTotal), color: PulsoColors.dangerOf(Theme.of(context).brightness))),
-        const SizedBox(width: PulsoTokens.space2),
-        Expanded(child: _KpiCard(label: 'Saldo', value: formatBrl(resumo.saldo), color: PulsoColors.accent(Theme.of(context).brightness))),
-      ],
+    final brightness = Theme.of(context).brightness;
+    return PulsoSurface(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(child: Text('Resumo do mês', style: Theme.of(context).textTheme.titleMedium)),
+              PulsoSoftIcon(icon: Icons.smart_toy_outlined, color: PulsoColors.accent(brightness), size: 36),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Insights com IA em breve. Por enquanto, acompanhe os números abaixo.',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          const SizedBox(height: PulsoTokens.space3),
+          PulsoHScroll(
+            height: 118,
+            itemWidth: 148,
+            children: [
+              _KpiCard(label: 'Receitas', value: formatBrl(resumo.receitasTotal), icon: Icons.arrow_upward, color: PulsoColors.successOf(brightness)),
+              _KpiCard(label: 'Despesas', value: formatBrl(resumo.despesasTotal), icon: Icons.arrow_downward, color: PulsoColors.dangerOf(brightness)),
+              _KpiCard(label: 'Saldo', value: formatBrl(resumo.saldo), icon: Icons.swap_horiz, color: PulsoColors.accent(brightness)),
+              _KpiCard(label: 'Transações', value: '${resumo.totalTransacoes}', icon: Icons.list_alt_outlined, color: PulsoColors.infoOf(brightness)),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
 
 class _KpiCard extends StatelessWidget {
-  const _KpiCard({required this.label, required this.value, required this.color});
+  const _KpiCard({required this.label, required this.value, required this.color, required this.icon});
   final String label;
   final String value;
   final Color color;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
-    return PulsoSurface(
-      padding: const EdgeInsets.all(PulsoTokens.space3),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: Theme.of(context).textTheme.labelSmall),
-          const SizedBox(height: 6),
-          Text(value, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: color, fontWeight: FontWeight.w700)),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        PulsoSoftIcon(icon: icon, color: color, size: 28),
+        const SizedBox(height: 8),
+        Text(label, style: Theme.of(context).textTheme.labelSmall),
+        const SizedBox(height: 4),
+        Text(value, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: color, fontWeight: FontWeight.w700)),
+      ],
     );
   }
 }
@@ -261,20 +344,97 @@ class _DayPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    final scheme = Theme.of(context).colorScheme;
     return PulsoSurface(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Dia ${detalhe.data.split('-').reversed.take(2).toList().reversed.join('/')}', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: PulsoTokens.space2),
-          Text('Receitas ${formatBrl(detalhe.receitas)} · Despesas ${formatBrl(detalhe.despesas)} · ${detalhe.transacoesCount} transações'),
+          Text(formatDayTitle(detalhe.data), style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: PulsoTokens.space3),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(PulsoTokens.space3),
+            decoration: BoxDecoration(
+              color: scheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Receitas: ${formatBrl(detalhe.receitas)}', style: TextStyle(color: PulsoColors.successOf(brightness))),
+                const SizedBox(height: 4),
+                Text('Despesas: ${formatBrl(detalhe.despesas)}', style: TextStyle(color: PulsoColors.dangerOf(brightness))),
+                const SizedBox(height: 6),
+                Text('Saldo: ${formatBrl(detalhe.saldo)}', style: Theme.of(context).textTheme.titleSmall),
+              ],
+            ),
+          ),
+          const SizedBox(height: PulsoTokens.space4),
+          Text('TRANSAÇÕES DO DIA', style: Theme.of(context).textTheme.labelSmall?.copyWith(letterSpacing: 0.6, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 10),
+          if (detalhe.transacoes.isEmpty)
+            _EmptyHint(icon: Icons.inbox_outlined, text: 'Nenhuma transação neste dia.')
+          else
+            ...detalhe.transacoes.map((tx) {
+              final receita = tx.tipo == 'RECEITA';
+              final color = parseHexColor(tx.categoria?.cor) ??
+                  (receita ? PulsoColors.successOf(brightness) : PulsoColors.dangerOf(brightness));
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  children: [
+                    CategoryGlyph(icone: tx.categoria?.icone, color: color, size: 32),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        tx.descricao?.trim().isNotEmpty == true ? tx.descricao!.trim() : (tx.categoria?.nome ?? 'Transação'),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Text(
+                      '${receita ? '+' : '-'}${formatBrl(tx.valor)}',
+                      style: TextStyle(
+                        color: receita ? PulsoColors.successOf(brightness) : PulsoColors.dangerOf(brightness),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          const SizedBox(height: PulsoTokens.space3),
+          Text('LEMBRETES / VENCIMENTOS', style: Theme.of(context).textTheme.labelSmall?.copyWith(letterSpacing: 0.6, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 10),
           if (detalhe.lembretes.isEmpty)
-            const Text('Nenhum lembrete neste dia.')
+            const _EmptyHint(icon: Icons.notifications_none_outlined, text: 'Nenhum lembrete neste dia.')
           else
             ...detalhe.lembretes.map(
               (item) => _LembreteTile(lembrete: item, onTap: () => onLembrete(item), onPagar: () => onPagar(item), onExcluir: () => onExcluir(item)),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EmptyHint extends StatelessWidget {
+  const _EmptyHint({required this.icon, required this.text});
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: Theme.of(context).colorScheme.onSurfaceVariant),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(text, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+          ),
         ],
       ),
     );
@@ -291,15 +451,18 @@ class _LembreteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final meta = reminderMeta(lembrete.categoria);
     return ListTile(
       contentPadding: EdgeInsets.zero,
       onTap: onTap,
+      leading: CategoryGlyph(icone: meta.lucide, color: meta.color, size: 40),
       title: Text(lembrete.titulo),
       subtitle: Text(
-        '${lembrete.categoriaLabel ?? lembrete.categoria} · ${lembrete.horaLembrete}${lembrete.temValor ? ' · ${formatBrl(lembrete.valor!)}' : ''}',
+        '${lembrete.categoriaLabel ?? meta.label} · ${lembrete.horaLembrete}${lembrete.temValor ? ' · ${formatBrl(lembrete.valor!)}' : ''}',
       ),
       trailing: Wrap(
         children: [
+          if (lembrete.sincronizado) const Icon(Icons.cloud_outlined, size: 18),
           if (!lembrete.pago)
             IconButton(tooltip: lembrete.temValor ? 'Pago' : 'Feito', onPressed: onPagar, icon: const Icon(Icons.check_circle_outline)),
           IconButton(tooltip: 'Excluir', onPressed: onExcluir, icon: const Icon(Icons.delete_outline)),

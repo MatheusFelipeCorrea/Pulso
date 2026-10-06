@@ -159,6 +159,36 @@ class PulsoSoftIcon extends StatelessWidget {
   }
 }
 
+class PulsoHScroll extends StatelessWidget {
+  const PulsoHScroll({
+    super.key,
+    required this.children,
+    this.height = 136,
+    this.itemWidth = 176,
+    this.gap = PulsoTokens.space2,
+  });
+
+  final List<Widget> children;
+  final double height;
+  final double itemWidth;
+  final double gap;
+
+  @override
+  Widget build(BuildContext context) {
+    if (children.isEmpty) return const SizedBox.shrink();
+    return SizedBox(
+      height: height,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        itemCount: children.length,
+        separatorBuilder: (context, index) => SizedBox(width: gap),
+        itemBuilder: (context, index) => SizedBox(width: itemWidth, child: children[index]),
+      ),
+    );
+  }
+}
+
 class PulsoFormScaffold extends StatelessWidget {
   const PulsoFormScaffold({
     super.key,

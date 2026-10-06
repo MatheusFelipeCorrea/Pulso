@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
+import 'package:pulso/core/widgets/category_icon.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/purchase/data/purchase_models.dart';
@@ -22,6 +23,8 @@ class _PurchaseItemFormScreenState extends State<PurchaseItemFormScreen> {
   final _nome = TextEditingController();
   final _valor = TextEditingController();
   final _obs = TextEditingController();
+  final _link = TextEditingController();
+  final _imagem = TextEditingController();
   String _prioridade = 'MEDIA';
   String _categoria = 'OUTROS';
   bool _simular = true;
@@ -36,6 +39,8 @@ class _PurchaseItemFormScreenState extends State<PurchaseItemFormScreen> {
       _nome.text = item.nome;
       _valor.text = item.valorEstimado.toStringAsFixed(2);
       _obs.text = item.observacoes ?? '';
+      _link.text = item.linkProduto ?? '';
+      _imagem.text = item.imagemUrl ?? '';
       _prioridade = item.prioridade;
       _categoria = item.categoria;
       _simular = item.simularParcelas;
@@ -48,6 +53,8 @@ class _PurchaseItemFormScreenState extends State<PurchaseItemFormScreen> {
     _nome.dispose();
     _valor.dispose();
     _obs.dispose();
+    _link.dispose();
+    _imagem.dispose();
     super.dispose();
   }
 
@@ -67,6 +74,9 @@ class _PurchaseItemFormScreenState extends State<PurchaseItemFormScreen> {
         'prioridade': _prioridade,
         'categoria': _categoria,
         'observacoes': _obs.text.trim().isEmpty ? null : _obs.text.trim(),
+        'linkProduto': _link.text.trim().isEmpty ? null : _link.text.trim(),
+        'imagemUrl': _imagem.text.trim().isEmpty ? null : _imagem.text.trim(),
+        'buscarImagemAuto': true,
         'simularParcelas': _simular,
         'parcelas': _parcelas,
       };
@@ -105,16 +115,60 @@ class _PurchaseItemFormScreenState extends State<PurchaseItemFormScreen> {
           DropdownButtonFormField<String>(
             initialValue: _prioridade,
             decoration: const InputDecoration(labelText: 'Prioridade'),
-            items: purchasePrioridades.map((item) => DropdownMenuItem(value: item, child: Text(item))).toList(),
+            items: const [
+              DropdownMenuItem(value: 'ALTA', child: Text('Alta')),
+              DropdownMenuItem(value: 'MEDIA', child: Text('Média')),
+              DropdownMenuItem(value: 'BAIXA', child: Text('Baixa')),
+            ],
             onChanged: (value) => setState(() => _prioridade = value ?? 'MEDIA'),
           ),
           const SizedBox(height: PulsoTokens.space3),
           DropdownButtonFormField<String>(
             initialValue: purchaseCategorias.containsKey(_categoria) ? _categoria : 'OUTROS',
             decoration: const InputDecoration(labelText: 'Categoria'),
-            items: purchaseCategorias.entries.map((entry) => DropdownMenuItem(value: entry.key, child: Text(entry.value))).toList(),
+            items: purchaseCategorias.entries.map((entry) {
+              final look = purchaseLook(entry.key);
+              return DropdownMenuItem(
+                value: entry.key,
+                child: Row(
+                  children: [
+                    Icon(iconFromLucide(look.lucide), size: 18, color: look.color),
+                    const SizedBox(width: 10),
+                    Text(entry.value),
+                  ],
+                ),
+              );
+            }).toList(),
             onChanged: (value) => setState(() => _categoria = value ?? 'OUTROS'),
           ),
+          const SizedBox(height: PulsoTokens.space3),
+          TextField(
+            controller: _link,
+            decoration: const InputDecoration(labelText: 'Link do produto', prefixIcon: Icon(Icons.link)),
+          ),
+          const SizedBox(height: PulsoTokens.space3),
+          TextField(
+            controller: _imagem,
+            decoration: const InputDecoration(labelText: 'URL da imagem', prefixIcon: Icon(Icons.image_outlined)),
+            onChanged: (_) => setState(() {}),
+          ),
+          if (_imagem.text.trim().isNotEmpty) ...[
+            const SizedBox(height: PulsoTokens.space3),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                _imagem.text.trim(),
+                height: 120,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
+                errorBuilder: (_, _, _) {
+                  final look = purchaseLook(_categoria);
+                  return CategoryGlyph(icone: look.lucide, color: look.color, size: 72);
+                },
+              ),
+            ),
+          ],
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: const Text('Simular parcelas'),

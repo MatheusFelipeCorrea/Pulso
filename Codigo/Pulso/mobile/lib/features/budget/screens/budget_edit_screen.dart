@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
+import 'package:pulso/core/theme/pulso_colors.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
+import 'package:pulso/core/widgets/category_icon.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/budget/data/budget_models.dart';
@@ -28,6 +30,8 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
         _Row(
           categoriaId: item.categoriaId,
           nome: item.categoriaNome,
+          icone: item.categoriaIcone,
+          cor: item.categoriaCor,
           limite: TextEditingController(text: item.limiteValor.toStringAsFixed(2)),
           rollover: item.rolloverAtivo,
         ),
@@ -78,6 +82,12 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
                 children: [
                   Row(
                     children: [
+                      CategoryGlyph(
+                        icone: row.icone,
+                        color: parseHexColor(row.cor) ?? PulsoColors.accent(Theme.of(context).brightness),
+                        size: 36,
+                      ),
+                      const SizedBox(width: 10),
                       Expanded(child: Text(row.nome, style: Theme.of(context).textTheme.titleSmall)),
                       IconButton(
                         onPressed: () => setState(() => _rows.remove(row)),
@@ -104,13 +114,37 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(labelText: 'Adicionar categoria'),
               items: livres
-                  .map((item) => DropdownMenuItem(value: item.id, child: Text(item.nome)))
+                  .map(
+                    (item) => DropdownMenuItem(
+                      value: item.id,
+                      child: Row(
+                        children: [
+                          CategoryGlyph(
+                            icone: item.icone,
+                            color: parseHexColor(item.cor) ?? PulsoColors.accent(Theme.of(context).brightness),
+                            size: 28,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(item.nome),
+                        ],
+                      ),
+                    ),
+                  )
                   .toList(),
               onChanged: (id) {
                 if (id == null) return;
                 final cat = livres.firstWhere((item) => item.id == id);
                 setState(() {
-                  _rows.add(_Row(categoriaId: cat.id, nome: cat.nome, limite: TextEditingController(), rollover: false));
+                  _rows.add(
+                    _Row(
+                      categoriaId: cat.id,
+                      nome: cat.nome,
+                      icone: cat.icone,
+                      cor: cat.cor,
+                      limite: TextEditingController(),
+                      rollover: false,
+                    ),
+                  );
                 });
               },
             ),
@@ -123,10 +157,19 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
 }
 
 class _Row {
-  _Row({required this.categoriaId, required this.nome, required this.limite, required this.rollover});
+  _Row({
+    required this.categoriaId,
+    required this.nome,
+    required this.limite,
+    required this.rollover,
+    this.icone,
+    this.cor,
+  });
 
   final String categoriaId;
   final String nome;
+  final String? icone;
+  final String? cor;
   final TextEditingController limite;
   bool rollover;
 }

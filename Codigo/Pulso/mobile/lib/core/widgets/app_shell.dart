@@ -9,6 +9,8 @@ import 'package:pulso/features/auth/widgets/pulso_brand.dart';
 import 'package:pulso/features/transactions/state/transactions_controller.dart';
 import 'package:pulso/features/transactions/widgets/filters_sheet.dart';
 
+const _sidebarWidth = 300.0;
+
 class AppShell extends StatelessWidget {
   const AppShell({super.key, required this.child});
 
@@ -142,6 +144,7 @@ class PulsoSidebar extends StatefulWidget {
 
 class _PulsoSidebarState extends State<PulsoSidebar> {
   final _busca = TextEditingController();
+  final _open = <String>{'financeiro', 'planejamento', 'conta'};
 
   @override
   void dispose() {
@@ -149,8 +152,22 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     super.dispose();
   }
 
+  void _toggle(String id) {
+    setState(() {
+      if (_open.contains(id)) {
+        _open.remove(id);
+      } else {
+        _open.add(id);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Drawer(width: _sidebarWidth, child: SafeArea(child: _body(context)));
+  }
+
+  Widget _body(BuildContext context) {
     final auth = context.watch<AuthController>();
     final user = auth.user;
     final location = GoRouterState.of(context).uri.path;
@@ -159,9 +176,9 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     final kind = badgeKindFromModoUso(user?.modoUso);
     final scheme = Theme.of(context).colorScheme;
     final query = _busca.text.trim().toLowerCase();
+    final searching = query.isNotEmpty;
     final premium = user?.plano == 'PREMIUM';
-
-    bool matches(String label) => query.isEmpty || label.toLowerCase().contains(query);
+    bool matches(String label) => !searching || label.toLowerCase().contains(query);
 
     final showTransacoes = matches('Transações') || matches('Financeiro');
     final showCalendario = matches('Calendário') || matches('Financeiro');
@@ -174,141 +191,153 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     final showPerfil = matches('Perfil') || matches('Conta');
     final showSettings = matches('Configurações') || matches('Conta');
     final showSair = matches('Sair') || matches('Conta');
+    final showConta = showPerfil || showSettings || showSair;
 
-    return Drawer(
-      width: 300,
-      child: SafeArea(
-        child: Semantics(
-          container: true,
-          label: 'Navegação principal',
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(PulsoTokens.space5, PulsoTokens.space3, PulsoTokens.space4, PulsoTokens.space2),
-                child: PulsoBrand(height: 28, showTagline: true),
+    final financeiroOpen = searching || _open.contains('financeiro');
+    final planejamentoOpen = searching || _open.contains('planejamento');
+    final contaOpen = searching || _open.contains('conta');
+
+    return Semantics(
+      container: true,
+      label: 'Navegação principal',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Padding(
+            padding: EdgeInsets.fromLTRB(PulsoTokens.space5, PulsoTokens.space3, PulsoTokens.space4, PulsoTokens.space2),
+            child: PulsoBrand(height: 28, showTagline: true),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(PulsoTokens.space3, 0, PulsoTokens.space3, PulsoTokens.space2),
+            child: TextField(
+              controller: _busca,
+              onChanged: (_) => setState(() {}),
+              decoration: const InputDecoration(
+                hintText: 'Buscar...',
+                prefixIcon: Icon(Icons.search, size: 18),
+                isDense: true,
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(PulsoTokens.space3, 0, PulsoTokens.space3, PulsoTokens.space2),
-                child: TextField(
-                  controller: _busca,
-                  onChanged: (_) => setState(() {}),
-                  decoration: const InputDecoration(
-                    hintText: 'Buscar...',
-                    prefixIcon: Icon(Icons.search, size: 18),
-                    isDense: true,
-                  ),
-                ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(PulsoTokens.space3, PulsoTokens.space1, PulsoTokens.space3, PulsoTokens.space3),
+            child: Container(
+              padding: const EdgeInsets.all(PulsoTokens.space3),
+              decoration: BoxDecoration(
+                color: scheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(PulsoTokens.radiusLg),
+                border: Border.all(color: scheme.outline.withValues(alpha: 0.6)),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(PulsoTokens.space3, PulsoTokens.space1, PulsoTokens.space3, PulsoTokens.space3),
-                child: Container(
-                  padding: const EdgeInsets.all(PulsoTokens.space3),
-                  decoration: BoxDecoration(
-                    color: scheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(PulsoTokens.radiusLg),
-                    border: Border.all(color: scheme.outline.withValues(alpha: 0.6)),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: PulsoColors.button,
+                    foregroundColor: Colors.white,
+                    backgroundImage: (user?.urlAvatar ?? '').isNotEmpty ? NetworkImage(user!.urlAvatar!) : null,
+                    child: (user?.urlAvatar ?? '').isEmpty
+                        ? Text(initials, style: const TextStyle(fontWeight: FontWeight.w700))
+                        : null,
                   ),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: PulsoColors.button,
-                        foregroundColor: Colors.white,
-                        backgroundImage: (user?.urlAvatar ?? '').isNotEmpty
-                            ? NetworkImage(user!.urlAvatar!)
-                            : null,
-                        child: (user?.urlAvatar ?? '').isEmpty
-                            ? Text(initials, style: const TextStyle(fontWeight: FontWeight.w700))
-                            : null,
+                  const SizedBox(width: PulsoTokens.space3),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          user?.nome ?? 'Usuário',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        if (kind != null) ...[
+                          const SizedBox(height: 6),
+                          PulsoBadge.kind(kind: kind, brightness: brightness, compact: true),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                if (showFinanceiro) ...[
+                  _SectionHeader(
+                    icon: Icons.payments_outlined,
+                    label: 'Financeiro',
+                    open: financeiroOpen,
+                    onTap: () => _toggle('financeiro'),
+                  ),
+                  if (financeiroOpen) ...[
+                    if (showTransacoes)
+                      _NavTile(
+                        icon: Icons.swap_horiz,
+                        label: 'Transações',
+                        selected: location == '/transactions' || location.startsWith('/transactions/'),
+                        onTap: () => _go(context, '/transactions'),
                       ),
-                      const SizedBox(width: PulsoTokens.space3),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              user?.nome ?? 'Usuário',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                            if (kind != null) ...[
-                              const SizedBox(height: 6),
-                              PulsoBadge.kind(kind: kind, brightness: brightness, compact: true),
-                            ],
-                          ],
-                        ),
+                    if (showCalendario)
+                      _NavTile(
+                        icon: Icons.calendar_month_outlined,
+                        label: 'Calendário Financeiro',
+                        selected: location == '/calendar' || location.startsWith('/calendar/'),
+                        onTap: () => _go(context, '/calendar'),
                       ),
-                    ],
+                    if (showOrcamento)
+                      _NavTile(
+                        icon: Icons.pie_chart_outline,
+                        label: 'Orçamento Mensal',
+                        selected: location == '/budget' || location.startsWith('/budget/'),
+                        onTap: () => _go(context, '/budget'),
+                      ),
+                  ],
+                ],
+                if (showPlanejamento) ...[
+                  _SectionHeader(
+                    icon: Icons.gps_fixed,
+                    label: 'Planejamento & Metas',
+                    open: planejamentoOpen,
+                    onTap: () => _toggle('planejamento'),
                   ),
-                ),
-              ),
-              Expanded(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    if (showFinanceiro) ...[
-                      const _GroupHeader(icon: Icons.payments_outlined, label: 'Financeiro'),
-                      if (showTransacoes)
-                        _NavTile(
-                          icon: Icons.swap_horiz,
-                          label: 'Transações',
-                          selected: location == '/transactions' || location.startsWith('/transactions/'),
-                          onTap: () => _go(context, '/transactions'),
-                        ),
-                      if (showCalendario)
-                        _NavTile(
-                          icon: Icons.calendar_month_outlined,
-                          label: 'Calendário Financeiro',
-                          selected: location == '/calendar' || location.startsWith('/calendar/'),
-                          onTap: () => _go(context, '/calendar'),
-                        ),
-                      if (showOrcamento)
-                        _NavTile(
-                          icon: Icons.pie_chart_outline,
-                          label: 'Orçamento Mensal',
-                          selected: location == '/budget' || location.startsWith('/budget/'),
-                          onTap: () => _go(context, '/budget'),
-                        ),
-                    ],
-                    if (showPlanejamento) ...[
-                      const _GroupHeader(icon: Icons.gps_fixed, label: 'Planejamento & Metas'),
-                      if (showMetas)
-                        _NavTile(
-                          icon: Icons.gps_fixed,
-                          label: 'Metas Financeiras',
-                          selected: location == '/goals' || location.startsWith('/goals/'),
-                          onTap: () => _go(context, '/goals'),
-                        ),
-                      if (showCompra)
-                        _NavTile(
-                          icon: Icons.shopping_cart_outlined,
-                          label: 'Planejamento de Compra',
-                          selected: location == '/purchase-planning' || location.startsWith('/purchase-planning/'),
-                          onTap: () => _go(context, '/purchase-planning'),
-                        ),
-                      if (showViagens)
-                        _NavTile(
-                          icon: Icons.flight_takeoff,
-                          label: 'Viagens e Moedas',
-                          selected: location == '/trips' || location.startsWith('/trips/'),
-                          onTap: () => _go(context, '/trips'),
-                        ),
-                    ],
+                  if (planejamentoOpen) ...[
+                    if (showMetas)
+                      _NavTile(
+                        icon: Icons.gps_fixed,
+                        label: 'Metas Financeiras',
+                        selected: location == '/goals' || location.startsWith('/goals/'),
+                        onTap: () => _go(context, '/goals'),
+                      ),
+                    if (showCompra)
+                      _NavTile(
+                        icon: Icons.shopping_cart_outlined,
+                        label: 'Planejamento de Compra',
+                        selected: location == '/purchase-planning' || location.startsWith('/purchase-planning/'),
+                        onTap: () => _go(context, '/purchase-planning'),
+                      ),
+                    if (showViagens)
+                      _NavTile(
+                        icon: Icons.flight_takeoff,
+                        label: 'Viagens e Moedas',
+                        selected: location == '/trips' || location.startsWith('/trips/'),
+                        onTap: () => _go(context, '/trips'),
+                      ),
                   ],
-                ),
-              ),
-              const Divider(height: 1),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, PulsoTokens.space1),
-                child: Row(
-                  children: [
-                    Icon(Icons.person_outline, size: 16, color: scheme.onSurfaceVariant),
-                    const SizedBox(width: 6),
-                    Text('Conta', style: Theme.of(context).textTheme.labelSmall),
-                  ],
-                ),
-              ),
+                ],
+              ],
+            ),
+          ),
+          const Divider(height: 1),
+          if (showConta) ...[
+            _SectionHeader(
+              icon: Icons.person_outline,
+              label: 'Conta',
+              open: contaOpen,
+              onTap: () => _toggle('conta'),
+            ),
+            if (contaOpen) ...[
               if (showPerfil)
                 _NavTile(
                   icon: Icons.person_outline,
@@ -326,16 +355,17 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
               if (showSair)
                 ListTile(
                   leading: Icon(Icons.logout, color: scheme.error),
-                  title: Text('Sair', style: TextStyle(color: scheme.error, fontWeight: FontWeight.w600)),
+                  title: Text('Sair', style: TextStyle(color: scheme.error, fontWeight: FontWeight.w600, fontSize: PulsoTokens.fontSm)),
                   onTap: () async {
+                    if (!context.mounted) return;
                     Navigator.pop(context);
                     await auth.logout();
                     if (context.mounted) context.go('/login');
                   },
                 ),
             ],
-          ),
-        ),
+          ],
+        ],
       ),
     );
   }
@@ -353,23 +383,41 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
   }
 }
 
-class _GroupHeader extends StatelessWidget {
-  const _GroupHeader({required this.icon, required this.label});
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({
+    required this.icon,
+    required this.label,
+    required this.open,
+    required this.onTap,
+  });
 
   final IconData icon;
   final String label;
+  final bool open;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final accent = PulsoColors.accent(Theme.of(context).brightness);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space3, PulsoTokens.space4, PulsoTokens.space1),
-      child: Row(
-        children: [
-          Icon(icon, size: 16, color: scheme.onSurfaceVariant),
-          const SizedBox(width: 8),
-          Text(label.toUpperCase(), style: Theme.of(context).textTheme.labelSmall),
-        ],
+      padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space2),
+      child: ListTile(
+        onTap: onTap,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        leading: Icon(icon, color: open ? scheme.onSurfaceVariant : accent),
+        title: Text(
+          label,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                fontSize: open ? PulsoTokens.fontSm : PulsoTokens.fontMd,
+                fontWeight: FontWeight.w700,
+              ),
+        ),
+        trailing: AnimatedRotation(
+          turns: open ? 0.5 : 0,
+          duration: PulsoTokens.durationNormal,
+          child: Icon(Icons.expand_more, color: scheme.onSurfaceVariant),
+        ),
       ),
     );
   }
@@ -394,14 +442,16 @@ class _NavTile extends StatelessWidget {
     final accent = PulsoColors.accent(Theme.of(context).brightness);
     final color = selected ? accent : scheme.onSurfaceVariant;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space2),
+      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, 0, PulsoTokens.space2, 0),
       child: ListTile(
-        leading: Icon(icon, color: color),
+        dense: true,
+        leading: Icon(icon, color: color, size: 20),
         title: Text(
           label,
           style: TextStyle(
             color: selected ? accent : scheme.onSurface,
             fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            fontSize: PulsoTokens.fontSm,
           ),
         ),
         selected: selected,

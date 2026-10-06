@@ -1,3 +1,5 @@
+import 'package:pulso/features/transactions/data/transaction_models.dart';
+
 double _num(dynamic value) {
   if (value is num) return value.toDouble();
   return double.tryParse('$value') ?? 0;
@@ -20,13 +22,24 @@ const reminderAntecedenciaOptions = {
 const reminderCategoriaOptions = {
   'ALUGUEL': 'Aluguel',
   'CONDOMINIO': 'Condomínio',
-  'LUZ': 'Luz',
+  'IPTU': 'IPTU',
+  'LUZ': 'Conta de luz',
   'AGUA': 'Água',
+  'GAS': 'Gás',
   'INTERNET': 'Internet',
+  'TELEFONE': 'Telefone',
+  'TV_ASSINATURA': 'TV / Assinatura',
   'FATURA_CARTAO': 'Fatura do cartão',
   'EMPRESTIMO': 'Empréstimo',
+  'FINANCIAMENTO': 'Financiamento',
+  'IPVA': 'IPVA',
   'PLANO_SAUDE': 'Plano de saúde',
+  'CONSULTA': 'Consulta',
   'STREAMING': 'Streaming',
+  'SOFTWARE': 'Software',
+  'ANIVERSARIO': 'Aniversário',
+  'VIAGEM': 'Viagem',
+  'RECORRENTE': 'Recorrente',
   'OUTRO': 'Outro',
 };
 
@@ -180,6 +193,7 @@ class CalendarDayDetail {
   const CalendarDayDetail({
     required this.data,
     this.lembretes = const [],
+    this.transacoes = const [],
     this.receitas = 0,
     this.despesas = 0,
     this.saldo = 0,
@@ -188,6 +202,7 @@ class CalendarDayDetail {
 
   final String data;
   final List<PulsoLembrete> lembretes;
+  final List<PulsoTransacao> transacoes;
   final double receitas;
   final double despesas;
   final double saldo;
@@ -195,13 +210,17 @@ class CalendarDayDetail {
 
   factory CalendarDayDetail.fromJson(Map<String, dynamic> json) {
     final totais = json['totais'] as Map<String, dynamic>? ?? const {};
-    final transacoes = json['transacoes'] as List<dynamic>? ?? const [];
+    final transacoes = (json['transacoes'] as List<dynamic>? ?? const [])
+        .whereType<Map<String, dynamic>>()
+        .map(PulsoTransacao.fromJson)
+        .toList();
     return CalendarDayDetail(
       data: json['data'] as String? ?? '',
       lembretes: (json['lembretes'] as List<dynamic>? ?? const [])
           .whereType<Map<String, dynamic>>()
           .map(PulsoLembrete.fromJson)
           .toList(),
+      transacoes: transacoes,
       receitas: _num(totais['receitas']),
       despesas: _num(totais['despesas']),
       saldo: _num(totais['saldo']),

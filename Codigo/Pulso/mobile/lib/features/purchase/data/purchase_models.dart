@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 double _num(dynamic value) {
   if (value is num) return value.toDouble();
   return double.tryParse('$value') ?? 0;
@@ -19,6 +21,24 @@ const purchaseCategorias = {
   'ACESSORIOS': 'Acessórios',
   'OUTROS': 'Outros',
 };
+
+class PurchaseCategoryLook {
+  const PurchaseCategoryLook({required this.lucide, required this.color});
+  final String lucide;
+  final Color color;
+}
+
+const purchaseCategoryLooks = {
+  'ELETRONICOS': PurchaseCategoryLook(lucide: 'Smartphone', color: Color(0xFF3B82F6)),
+  'CASA_ELETRODOMESTICOS': PurchaseCategoryLook(lucide: 'Home', color: Color(0xFF7C3AED)),
+  'VESTUARIO': PurchaseCategoryLook(lucide: 'Shirt', color: Color(0xFFEC4899)),
+  'VEICULO': PurchaseCategoryLook(lucide: 'Car', color: Color(0xFF06B6D4)),
+  'ACESSORIOS': PurchaseCategoryLook(lucide: 'ShoppingBag', color: Color(0xFFF59E0B)),
+  'OUTROS': PurchaseCategoryLook(lucide: 'Sparkles', color: Color(0xFF94A3B8)),
+};
+
+PurchaseCategoryLook purchaseLook(String? categoria) =>
+    purchaseCategoryLooks[categoria] ?? purchaseCategoryLooks['OUTROS']!;
 
 class PurchaseMetaLink {
   const PurchaseMetaLink({
@@ -137,7 +157,9 @@ class PurchaseComprado {
     required this.id,
     required this.nome,
     required this.valorEstimado,
+    this.categoria = 'OUTROS',
     this.categoriaLabel,
+    this.imagemUrl,
     this.diasNaLista,
     this.compradoEm,
   });
@@ -145,7 +167,9 @@ class PurchaseComprado {
   final String id;
   final String nome;
   final double valorEstimado;
+  final String categoria;
   final String? categoriaLabel;
+  final String? imagemUrl;
   final int? diasNaLista;
   final DateTime? compradoEm;
 
@@ -154,9 +178,27 @@ class PurchaseComprado {
       id: json['id'] as String? ?? '',
       nome: json['nome'] as String? ?? '',
       valorEstimado: _num(json['valorEstimado']),
+      categoria: json['categoria'] as String? ?? 'OUTROS',
       categoriaLabel: json['categoriaLabel'] as String?,
+      imagemUrl: json['imagemUrl'] as String?,
       diasNaLista: json['diasNaLista'] is num ? (json['diasNaLista'] as num).toInt() : null,
       compradoEm: _dateOrNull(json['compradoEm']),
+    );
+  }
+}
+
+class PurchaseCategoriaShare {
+  const PurchaseCategoriaShare({required this.label, this.quantidade = 0, this.total = 0});
+
+  final String label;
+  final int quantidade;
+  final double total;
+
+  factory PurchaseCategoriaShare.fromJson(Map<String, dynamic> json) {
+    return PurchaseCategoriaShare(
+      label: json['label'] as String? ?? '',
+      quantidade: json['quantidade'] is num ? (json['quantidade'] as num).toInt() : 0,
+      total: _num(json['total']),
     );
   }
 }
@@ -168,6 +210,7 @@ class PurchaseResumo {
     this.mediaImpactoRenda = 0,
     this.rendaMensal = 0,
     this.sobraMensal = 0,
+    this.categorias = const {},
     this.dicas = const [],
   });
 
@@ -176,15 +219,26 @@ class PurchaseResumo {
   final double mediaImpactoRenda;
   final double rendaMensal;
   final double sobraMensal;
+  final Map<String, PurchaseCategoriaShare> categorias;
   final List<String> dicas;
 
   factory PurchaseResumo.fromJson(Map<String, dynamic> json) {
+    final rawCats = json['categorias'];
+    final categorias = <String, PurchaseCategoriaShare>{};
+    if (rawCats is Map) {
+      for (final entry in rawCats.entries) {
+        if (entry.value is Map<String, dynamic>) {
+          categorias['${entry.key}'] = PurchaseCategoriaShare.fromJson(entry.value as Map<String, dynamic>);
+        }
+      }
+    }
     return PurchaseResumo(
       totalValor: _num(json['totalValor']),
       totalItens: json['totalItens'] is num ? (json['totalItens'] as num).toInt() : 0,
       mediaImpactoRenda: _num(json['mediaImpactoRenda']),
       rendaMensal: _num(json['rendaMensal']),
       sobraMensal: _num(json['sobraMensal']),
+      categorias: categorias,
       dicas: (json['dicas'] as List<dynamic>? ?? const [])
           .map((item) => item is Map ? '${item['texto'] ?? ''}' : '$item')
           .where((text) => text.isNotEmpty)

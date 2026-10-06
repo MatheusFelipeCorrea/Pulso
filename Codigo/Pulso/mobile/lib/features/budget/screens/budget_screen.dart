@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_colors.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
+import 'package:pulso/core/widgets/category_icon.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/budget/data/budget_models.dart';
@@ -32,6 +33,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
     final controller = context.watch<BudgetController>();
     final status = controller.status;
     final resumo = status?.resumo;
+    final brightness = Theme.of(context).brightness;
 
     return RefreshIndicator(
       onRefresh: controller.reload,
@@ -39,8 +41,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
         padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
         children: [
           PulsoPageHeader(
-            title: 'Orçamento mensal',
-            subtitle: 'Limites por categoria, progresso e rollover opcional.',
+            title: 'Orçamento Mensal',
+            subtitle: 'Defina limites por categoria e acompanhe seus gastos no período.',
             icon: Icons.pie_chart_outline,
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -59,42 +61,95 @@ class _BudgetScreenState extends State<BudgetScreen> {
             if (resumo.orcamentoExcedeRenda)
               PulsoSurface(
                 margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
-                child: Text(
-                  'O orçamento total ultrapassa a renda planejada (${formatBrl(status.rendaMensalPlanejada)}).',
-                  style: TextStyle(color: PulsoColors.warningOf(Theme.of(context).brightness)),
+                child: Row(
+                  children: [
+                    Icon(Icons.warning_amber_rounded, color: PulsoColors.warningOf(brightness)),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'Seu orçamento total (${formatBrl(resumo.orcamentoTotal)}) excede a renda planejada (${formatBrl(status.rendaMensalPlanejada)}).',
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            Row(
+            const PulsoSectionHeader(title: 'Visão geral do orçamento', icon: Icons.insights_outlined),
+            PulsoHScroll(
+              height: 148,
+              itemWidth: 188,
               children: [
-                Expanded(child: _Stat(label: 'Limite', value: formatBrl(resumo.orcamentoTotal))),
-                const SizedBox(width: PulsoTokens.space2),
-                Expanded(child: _Stat(label: 'Gasto', value: formatBrl(resumo.gastoTotal))),
-                const SizedBox(width: PulsoTokens.space2),
-                Expanded(child: _Stat(label: 'Restante', value: formatBrl(resumo.restanteTotal))),
+                _Metric(
+                  label: 'Total do orçamento',
+                  value: formatBrl(resumo.orcamentoTotal),
+                  icon: Icons.account_balance_wallet_outlined,
+                  color: PulsoColors.accent(brightness),
+                ),
+                _Metric(
+                  label: 'Total já gasto',
+                  value: formatBrl(resumo.gastoTotal),
+                  icon: Icons.trending_down,
+                  color: PulsoColors.dangerOf(brightness),
+                ),
+                _Metric(
+                  label: 'Restante disponível',
+                  value: formatBrl(resumo.restanteTotal),
+                  icon: Icons.savings_outlined,
+                  color: PulsoColors.successOf(brightness),
+                ),
               ],
+            ),
+            const SizedBox(height: PulsoTokens.space3),
+            PulsoSurface(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LinearProgressIndicator(
+                    value: (resumo.percentualUsado / 100).clamp(0, 1),
+                    minHeight: 10,
+                    borderRadius: BorderRadius.circular(99),
+                    color: PulsoColors.accent(brightness),
+                    backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  ),
+                  const SizedBox(height: 8),
+                  Text('${resumo.percentualUsado.round()}% do orçamento utilizado'),
+                ],
+              ),
             ),
             const SizedBox(height: PulsoTokens.space4),
             if (status.categorias.isEmpty)
               PulsoEmptyState(
-                title: 'Sem limites neste mês',
-                description: 'Copie o mês anterior ou defina os limites das categorias de despesa.',
+                title: 'Nenhum limite definido para este mês',
+                description: 'Reaproveite os limites do mês anterior ou comece um orçamento novo.',
                 icon: Icons.pie_chart_outline,
-                actionLabel: 'Copiar mês anterior',
+                actionLabel: 'Usar limites do mês anterior',
                 onAction: _copiar,
               )
-            else
-              ...status.categorias.map((item) => Padding(
-                    padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
-                    child: _CategoryCard(item: item),
-                  )),
+            else ...[
+              const PulsoSectionHeader(title: 'Orçamento por categoria', icon: Icons.category_outlined),
+              ...status.categorias.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
+                  child: _CategoryCard(item: item),
+                ),
+              ),
+            ],
             if (status.categoriasSemOrcamento.isNotEmpty) ...[
               const SizedBox(height: PulsoTokens.space3),
-              const PulsoSectionHeader(title: 'Sem limite', icon: Icons.category_outlined),
+              const PulsoSectionHeader(title: 'Categorias sem limite', icon: Icons.add_circle_outline),
               ...status.categoriasSemOrcamento.map(
                 (item) => ListTile(
                   contentPadding: EdgeInsets.zero,
+                  leading: CategoryGlyph(
+                    icone: item.icone,
+                    color: parseHexColor(item.cor) ?? PulsoColors.accent(brightness),
+                    size: 36,
+                  ),
                   title: Text(item.nome),
-                  trailing: TextButton(onPressed: () => context.push('/budget/edit'), child: const Text('Definir')),
+                  trailing: TextButton.icon(
+                    onPressed: () => context.push('/budget/edit'),
+                    icon: const Icon(Icons.edit_outlined, size: 16),
+                    label: const Text('Definir'),
+                  ),
                 ),
               ),
             ],
@@ -116,10 +171,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
   }
 }
 
-class _Stat extends StatelessWidget {
-  const _Stat({required this.label, required this.value});
+class _Metric extends StatelessWidget {
+  const _Metric({required this.label, required this.value, required this.icon, required this.color});
   final String label;
   final String value;
+  final IconData icon;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -128,9 +185,11 @@ class _Stat extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          PulsoSoftIcon(icon: icon, color: color, size: 32),
+          const SizedBox(height: PulsoTokens.space3),
           Text(label, style: Theme.of(context).textTheme.labelSmall),
-          const SizedBox(height: 6),
-          Text(value, style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+          const SizedBox(height: 4),
+          Text(value, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: color, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -143,11 +202,12 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final color = switch (item.status) {
-      'estourado' => PulsoColors.dangerOf(Theme.of(context).brightness),
-      'alerta' => PulsoColors.warningOf(Theme.of(context).brightness),
-      _ => PulsoColors.accent(Theme.of(context).brightness),
+    final brightness = Theme.of(context).brightness;
+    final catColor = parseHexColor(item.categoriaCor) ?? PulsoColors.accent(brightness);
+    final statusColor = switch (item.status) {
+      'estourado' => PulsoColors.dangerOf(brightness),
+      'alerta' => PulsoColors.warningOf(brightness),
+      _ => catColor,
     };
     return PulsoSurface(
       child: Column(
@@ -155,20 +215,48 @@ class _CategoryCard extends StatelessWidget {
         children: [
           Row(
             children: [
+              CategoryGlyph(icone: item.categoriaIcone, color: catColor, size: 40),
+              const SizedBox(width: 12),
               Expanded(child: Text(item.categoriaNome, style: Theme.of(context).textTheme.titleSmall)),
-              Text('${item.percentualUsado.round()}%', style: TextStyle(color: color, fontWeight: FontWeight.w700)),
+              Text('${item.percentualUsado.round()}%', style: TextStyle(color: statusColor, fontWeight: FontWeight.w700)),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           LinearProgressIndicator(
             value: (item.percentualUsado / 100).clamp(0, 1),
-            color: color,
-            backgroundColor: scheme.surfaceContainerHighest,
+            minHeight: 8,
+            borderRadius: BorderRadius.circular(99),
+            color: statusColor,
+            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
           ),
           const SizedBox(height: 8),
-          Text('${formatBrl(item.gastoValor)} de ${formatBrl(item.limiteValor)} · resta ${formatBrl(item.restanteValor)}'),
-          if (item.valorRollover > 0)
-            Text('Rollover ${formatBrl(item.valorRollover)}', style: Theme.of(context).textTheme.labelSmall),
+          Text('${formatBrl(item.gastoValor)} / ${formatBrl(item.limiteValor)} · resta ${formatBrl(item.restanteValor)}'),
+          if (item.valorRollover > 0 || item.status != 'normal') ...[
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: [
+                if (item.valorRollover > 0)
+                  Chip(
+                    avatar: const Icon(Icons.autorenew, size: 14),
+                    label: Text('+ ${formatBrl(item.valorRollover)}'),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                if (item.status == 'alerta')
+                  Chip(
+                    avatar: Icon(Icons.notifications_outlined, size: 14, color: PulsoColors.warningOf(brightness)),
+                    label: const Text('80%'),
+                    visualDensity: VisualDensity.compact,
+                  ),
+                if (item.status == 'estourado')
+                  Chip(
+                    avatar: Icon(Icons.warning_amber_rounded, size: 14, color: PulsoColors.dangerOf(brightness)),
+                    label: const Text('Estourou!'),
+                    visualDensity: VisualDensity.compact,
+                  ),
+              ],
+            ),
+          ],
         ],
       ),
     );

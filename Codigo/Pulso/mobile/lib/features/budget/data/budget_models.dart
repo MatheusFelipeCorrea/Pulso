@@ -34,6 +34,8 @@ class BudgetCategoria {
   const BudgetCategoria({
     required this.categoriaId,
     required this.categoriaNome,
+    this.categoriaIcone,
+    this.categoriaCor,
     this.limiteValor = 0,
     this.gastoValor = 0,
     this.restanteValor = 0,
@@ -45,6 +47,8 @@ class BudgetCategoria {
 
   final String categoriaId;
   final String categoriaNome;
+  final String? categoriaIcone;
+  final String? categoriaCor;
   final double limiteValor;
   final double gastoValor;
   final double restanteValor;
@@ -57,6 +61,8 @@ class BudgetCategoria {
     return BudgetCategoria(
       categoriaId: json['categoriaId'] as String? ?? '',
       categoriaNome: json['categoriaNome'] as String? ?? '',
+      categoriaIcone: json['categoriaIcone'] as String?,
+      categoriaCor: json['categoriaCor'] as String?,
       limiteValor: _num(json['limiteValor']),
       gastoValor: _num(json['gastoValor']),
       restanteValor: _num(json['restanteValor']),
@@ -69,15 +75,19 @@ class BudgetCategoria {
 }
 
 class BudgetCategoriaLivre {
-  const BudgetCategoriaLivre({required this.id, required this.nome});
+  const BudgetCategoriaLivre({required this.id, required this.nome, this.icone, this.cor});
 
   final String id;
   final String nome;
+  final String? icone;
+  final String? cor;
 
   factory BudgetCategoriaLivre.fromJson(Map<String, dynamic> json) {
     return BudgetCategoriaLivre(
       id: json['id'] as String? ?? '',
       nome: json['nome'] as String? ?? '',
+      icone: json['icone'] as String?,
+      cor: json['cor'] as String?,
     );
   }
 }

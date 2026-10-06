@@ -5,6 +5,7 @@ import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/calendar/data/calendar_models.dart';
+import 'package:pulso/features/calendar/data/reminder_visuals.dart';
 import 'package:pulso/features/calendar/state/calendar_controller.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
 
@@ -136,9 +137,19 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
           DropdownButtonFormField<String>(
             initialValue: reminderCategoriaOptions.containsKey(_categoria) ? _categoria : 'OUTRO',
             decoration: const InputDecoration(labelText: 'Categoria'),
-            items: reminderCategoriaOptions.entries
-                .map((entry) => DropdownMenuItem(value: entry.key, child: Text(entry.value)))
-                .toList(),
+            items: reminderCategoriaOptions.entries.map((entry) {
+              final meta = reminderMeta(entry.key);
+              return DropdownMenuItem(
+                value: entry.key,
+                child: Row(
+                  children: [
+                    Icon(meta.icon, size: 18, color: meta.color),
+                    const SizedBox(width: 10),
+                    Text(entry.value),
+                  ],
+                ),
+              );
+            }).toList(),
             onChanged: (value) => setState(() => _categoria = value ?? 'OUTRO'),
           ),
           SwitchListTile(

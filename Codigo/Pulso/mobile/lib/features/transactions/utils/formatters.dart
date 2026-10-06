@@ -106,3 +106,23 @@ double? parseMoney(String raw) {
 
   return double.tryParse(cleaned);
 }
+
+const _mesesLongos = [
+  'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
+  'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro',
+];
+
+const _mesesCurtos = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+
+String formatDayTitle(String isoDate) {
+  final parts = isoDate.split('-');
+  if (parts.length < 3) return isoDate;
+  final day = int.tryParse(parts[2]) ?? 0;
+  final month = int.tryParse(parts[1]) ?? 1;
+  return '$day de ${_mesesLongos[(month - 1).clamp(0, 11)]}';
+}
+
+String formatShortDate(DateTime? date) {
+  if (date == null) return '—';
+  return '${date.day.toString().padLeft(2, '0')} ${_mesesCurtos[(date.month - 1).clamp(0, 11)]} ${date.year}';
+}
