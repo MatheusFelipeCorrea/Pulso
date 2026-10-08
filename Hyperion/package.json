@@ -38,6 +38,7 @@
     "cards:sync": "node scripts/cards-sync/sync.mjs",
     "cards:dry-run": "node scripts/cards-sync/sync.mjs --dry-run",
     "cards:reverse": "node scripts/cards-sync/sync.mjs --reverse",
+    "cards:auto": "node scripts/cards-sync/sync.mjs --auto",
     "cards:doctor": "node scripts/cards-sync/doctor.mjs --interactive",
     "cards:watch": "node scripts/cards-sync/watch.mjs",
     "cards:hook": "node scripts/cards-sync/install-hook.mjs",
