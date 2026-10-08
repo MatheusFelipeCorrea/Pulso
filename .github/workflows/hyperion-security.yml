@@ -4,6 +4,10 @@ on:
   schedule:
     - cron: "0 9 * * 1"
   workflow_dispatch:
+  push:
+    branches: [main, "Sprint-*"]
+  pull_request:
+    branches: [main, "Sprint-*"]
 
 permissions:
   contents: read
@@ -18,7 +22,9 @@ jobs:
           fetch-depth: 0
 
       - name: Audit Node dependencies (product apps, when present)
-        if: hashFiles('Codigo/Pulso/api/package.json') != '' || hashFiles('Codigo/Pulso/web/package.json') != '' || hashFiles('package.json') != ''
+        if: >
+          (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') &&
+          (hashFiles('Codigo/Pulso/api/package.json') != '' || hashFiles('Codigo/Pulso/web/package.json') != '' || hashFiles('package.json') != '')
         env:
           HYPERION_AUDIT_SOFT: ${{ vars.HYPERION_AUDIT_SOFT }}
         run: |
