@@ -67,8 +67,12 @@ class PulsoApp extends StatelessWidget {
         Provider<PurchasePlanningRepository>.value(value: purchase),
         Provider<CurrencyRepository>.value(value: currencies),
         Provider<GroupRepository>.value(value: groups),
-        ChangeNotifierProvider(create: (_) => TransactionsController(transactions)),
-        ChangeNotifierProvider(create: (_) => CalendarController(calendar, reminders)),
+        ChangeNotifierProvider(
+          create: (_) => TransactionsController(transactions),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => CalendarController(calendar, reminders),
+        ),
         ChangeNotifierProvider(create: (_) => GoalsController(goals)),
         ChangeNotifierProvider(create: (_) => BudgetController(budget)),
         ChangeNotifierProvider(create: (_) => TripsController(trips)),
@@ -91,7 +95,8 @@ class PulsoApp extends StatelessWidget {
             theme: PulsoTheme.light(),
             darkTheme: PulsoTheme.dark(),
             themeMode: theme.mode,
-            builder: (context, child) => PulsoAppFrame(child: child ?? const SizedBox.shrink()),
+            builder: (context, child) =>
+                PulsoAppFrame(child: child ?? const SizedBox.shrink()),
             routerConfig: router,
           );
         },

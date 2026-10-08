@@ -5,7 +5,8 @@
  * 3) Wikimedia Commons / Wikipedia pelo nome do produto
  */
 
-const WIKI_USER_AGENT = 'PulsoApp/1.0 (https://github.com/MatheusFelipeCorrea/Pulso; compras@pulso.local)';
+const WIKI_USER_AGENT =
+    'PulsoApp/1.0 (https://github.com/MatheusFelipeCorrea/Pulso; compras@pulso.local)';
 const IMAGE_EXT = /\.(jpe?g|png|webp|gif|avif)(\?|$)/i;
 const FETCH_TIMEOUT_MS = 9000;
 

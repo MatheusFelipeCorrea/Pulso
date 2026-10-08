@@ -81,8 +81,8 @@ function getFlightFallback(origin, destination) {
         return destination.fallbackBrl;
     }
 
-    const gruBaseline = FLIGHT_ROUTE_OVERRIDES[routeKey('GRU', destination.iata)]
-        ?? destination.fallbackBrl;
+    const gruBaseline =
+        FLIGHT_ROUTE_OVERRIDES[routeKey('GRU', destination.iata)] ?? destination.fallbackBrl;
 
     return Math.round(gruBaseline * (origin.flightFactor ?? 1.08));
 }

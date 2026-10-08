@@ -13,11 +13,7 @@ const {
     MESES_RESERVA_EMERGENCIA_PADRAO,
     metaEstaVencida,
 } = require('../utils/metaBalanceUtils');
-const {
-    formatDateOnly,
-    parseVencimentoDate,
-    todayInTimezone,
-} = require('../utils/dateTimezone');
+const { formatDateOnly, parseVencimentoDate, todayInTimezone } = require('../utils/dateTimezone');
 
 const parseDate = (input) => {
     if (input instanceof Date) return input;
@@ -175,7 +171,10 @@ const calcularResumo = async (usuarioId) => {
 
 const MESES_HISTORICO_GASTO_MEDIO = 3;
 
-const sugerirReservaEmergencia = async (usuarioId, { meses = MESES_RESERVA_EMERGENCIA_PADRAO } = {}) => {
+const sugerirReservaEmergencia = async (
+    usuarioId,
+    { meses = MESES_RESERVA_EMERGENCIA_PADRAO } = {}
+) => {
     const hoje = new Date();
     const inicioMesAtual = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
     const dataInicio = new Date(
@@ -183,7 +182,15 @@ const sugerirReservaEmergencia = async (usuarioId, { meses = MESES_RESERVA_EMERG
         inicioMesAtual.getMonth() - MESES_HISTORICO_GASTO_MEDIO,
         1
     );
-    const dataFim = new Date(inicioMesAtual.getFullYear(), inicioMesAtual.getMonth(), 0, 23, 59, 59, 999);
+    const dataFim = new Date(
+        inicioMesAtual.getFullYear(),
+        inicioMesAtual.getMonth(),
+        0,
+        23,
+        59,
+        59,
+        999
+    );
 
     const agregados = await transactionRepository.calcularAgregados(usuarioId, {
         dataInicio,
@@ -255,7 +262,10 @@ const editarMeta = async (usuarioId, metaId, dados) => {
 
     if (dados.status !== undefined) {
         if (dados.status === 'CANCELADA' && meta.status !== 'CANCELADA') {
-            throw new AppError('Use a exclusão para remover metas. Metas canceladas não podem ser reativadas', 400);
+            throw new AppError(
+                'Use a exclusão para remover metas. Metas canceladas não podem ser reativadas',
+                400
+            );
         }
         if (dados.status === 'PAUSADA' && meta.status !== 'ATIVA') {
             throw new AppError('Somente metas ativas podem ser pausadas', 400);
@@ -300,7 +310,10 @@ const registrarAporte = async (usuarioId, metaId, dados) => {
         throw new AppError('Meta não está ativa', 400);
     }
     if (resultado.error === 'OVERFLOW') {
-        throw new AppError('Valor do aporte não pode ultrapassar o que falta para atingir a meta', 400);
+        throw new AppError(
+            'Valor do aporte não pode ultrapassar o que falta para atingir a meta',
+            400
+        );
     }
 
     const { aporte, metaAtualizada, concluiu } = resultado;

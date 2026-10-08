@@ -16,35 +16,35 @@ import { skeletonVariants } from './Skeleton.styles.jsx'
  * ```
  */
 export const Skeleton = ({
-  variant = 'text',
-  width,
-  height,
-  size = 40,
-  className,
-  style,
-  ...rest
+    variant = 'text',
+    width,
+    height,
+    size = 40,
+    className,
+    style,
+    ...rest
 }) => {
-  const dimensionStyle = {
-    ...(width != null && {
-      width: typeof width === 'number' ? `${width}px` : width,
-    }),
-    ...(height != null && {
-      height: typeof height === 'number' ? `${height}px` : height,
-    }),
-    ...(variant === 'avatar' && {
-      width: size,
-      height: size,
-    }),
-  }
+    const dimensionStyle = {
+        ...(width != null && {
+            width: typeof width === 'number' ? `${width}px` : width,
+        }),
+        ...(height != null && {
+            height: typeof height === 'number' ? `${height}px` : height,
+        }),
+        ...(variant === 'avatar' && {
+            width: size,
+            height: size,
+        }),
+    }
 
-  return (
-    <div
-      aria-hidden="true"
-      className={cn(skeletonVariants({ variant }), className)}
-      style={{ ...dimensionStyle, ...style }}
-      {...rest}
-    />
-  )
+    return (
+        <div
+            aria-hidden="true"
+            className={cn(skeletonVariants({ variant }), className)}
+            style={{ ...dimensionStyle, ...style }}
+            {...rest}
+        />
+    )
 }
 
 Skeleton.displayName = 'Skeleton'

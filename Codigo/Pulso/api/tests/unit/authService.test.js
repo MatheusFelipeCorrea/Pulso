@@ -255,11 +255,11 @@ describe('authService', () => {
         it('rejeita email inexistente', async () => {
             authRepositoryMock.findByEmail.mockResolvedValue(null);
 
-            await expect(authService.resendVerificationEmail('missing@pulso.dev')).rejects.toMatchObject(
-                {
-                    statusCode: 404,
-                }
-            );
+            await expect(
+                authService.resendVerificationEmail('missing@pulso.dev')
+            ).rejects.toMatchObject({
+                statusCode: 404,
+            });
         });
 
         it('rejeita conta já verificada', async () => {
@@ -286,11 +286,11 @@ describe('authService', () => {
                 provedorAuth: 'GOOGLE',
             });
 
-            await expect(authService.resendVerificationEmail('google@pulso.dev')).rejects.toMatchObject(
-                {
-                    statusCode: 400,
-                }
-            );
+            await expect(
+                authService.resendVerificationEmail('google@pulso.dev')
+            ).rejects.toMatchObject({
+                statusCode: 400,
+            });
         });
 
         it('atualiza token e reenvia email', async () => {

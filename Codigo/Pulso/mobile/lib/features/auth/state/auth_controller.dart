@@ -8,10 +8,7 @@ import 'package:pulso/features/auth/data/user_model.dart';
 enum AuthStatus { unknown, unauthenticated, authenticated }
 
 class AuthController extends ChangeNotifier {
-  AuthController({
-    required this._repository,
-    required this._storage,
-  });
+  AuthController({required this._repository, required this._storage});
 
   final AuthRepository _repository;
   final TokenStorage _storage;
@@ -90,9 +87,11 @@ class AuthController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> forgotPassword(String email) => _repository.forgotPassword(email);
+  Future<void> forgotPassword(String email) =>
+      _repository.forgotPassword(email);
 
-  Future<void> validateResetToken(String token) => _repository.validateResetToken(token);
+  Future<void> validateResetToken(String token) =>
+      _repository.validateResetToken(token);
 
   Future<void> resetPassword({
     required String token,
@@ -106,9 +105,11 @@ class AuthController extends ChangeNotifier {
     );
   }
 
-  Future<Map<String, dynamic>> verifyEmail(String token) => _repository.verifyEmail(token);
+  Future<Map<String, dynamic>> verifyEmail(String token) =>
+      _repository.verifyEmail(token);
 
-  Future<void> resendVerification(String email) => _repository.resendVerification(email);
+  Future<void> resendVerification(String email) =>
+      _repository.resendVerification(email);
 
   void _setAuthenticated(PulsoUser next) {
     user = next;

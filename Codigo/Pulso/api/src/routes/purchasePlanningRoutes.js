@@ -10,7 +10,9 @@ const {
     comprarItemSchema,
     resolverImagemSchema,
 } = require('../schemas/purchasePlanningSchemas');
-const { handlePurchaseItemImageUpload } = require('../middlewares/purchaseItemImageUploadMiddleware');
+const {
+    handlePurchaseItemImageUpload,
+} = require('../middlewares/purchaseItemImageUploadMiddleware');
 
 const router = express.Router();
 
@@ -23,7 +25,12 @@ router.post(
     purchasePlanningController.resolverImagem
 );
 
-router.post('/', authMiddleware, validateMiddleware(criarItemSchema), purchasePlanningController.criar);
+router.post(
+    '/',
+    authMiddleware,
+    validateMiddleware(criarItemSchema),
+    purchasePlanningController.criar
+);
 
 router.patch(
     '/:id',

@@ -10,7 +10,6 @@ DateTime _date(dynamic value) {
   return DateTime.tryParse('$value') ?? DateTime.now();
 }
 
-
 const reminderAntecedenciaOptions = {
   'NO_DIA': 'No dia',
   'UM_DIA': '1 dia antes',
@@ -93,8 +92,12 @@ class PulsoLembrete {
       pago: json['pago'] == true,
       sincronizado: json['sincronizado'] == true,
       repetirMensal: json['repetirMensal'] == true,
-      diaRecorrencia: json['diaRecorrencia'] is num ? (json['diaRecorrencia'] as num).toInt() : null,
-      diasAteVencimento: json['diasAteVencimento'] is num ? (json['diasAteVencimento'] as num).toInt() : null,
+      diaRecorrencia: json['diaRecorrencia'] is num
+          ? (json['diaRecorrencia'] as num).toInt()
+          : null,
+      diasAteVencimento: json['diasAteVencimento'] is num
+          ? (json['diasAteVencimento'] as num).toInt()
+          : null,
     );
   }
 }
@@ -126,7 +129,9 @@ class CalendarDayMarker {
       temDespesa: json['temDespesa'] == true,
       temLembrete: json['temLembrete'] == true,
       temRecebimentoFixo: json['temRecebimentoFixo'] == true,
-      lembretes: json['lembretes'] is num ? (json['lembretes'] as num).toInt() : 0,
+      lembretes: json['lembretes'] is num
+          ? (json['lembretes'] as num).toInt()
+          : 0,
     );
   }
 }
@@ -149,7 +154,9 @@ class CalendarMonthResumo {
       receitasTotal: _num(json['receitasTotal']),
       despesasTotal: _num(json['despesasTotal']),
       saldo: _num(json['saldo']),
-      totalTransacoes: json['totalTransacoes'] is num ? (json['totalTransacoes'] as num).toInt() : 0,
+      totalTransacoes: json['totalTransacoes'] is num
+          ? (json['totalTransacoes'] as num).toInt()
+          : 0,
     );
   }
 }
@@ -173,18 +180,23 @@ class CalendarMonthView {
     if (rawDias is Map) {
       for (final entry in rawDias.entries) {
         if (entry.value is Map<String, dynamic>) {
-          dias['${entry.key}'] = CalendarDayMarker.fromJson(entry.value as Map<String, dynamic>);
+          dias['${entry.key}'] = CalendarDayMarker.fromJson(
+            entry.value as Map<String, dynamic>,
+          );
         }
       }
     }
     return CalendarMonthView(
       mes: json['mes'] as String? ?? '',
-      resumo: CalendarMonthResumo.fromJson(json['resumo'] as Map<String, dynamic>? ?? const {}),
+      resumo: CalendarMonthResumo.fromJson(
+        json['resumo'] as Map<String, dynamic>? ?? const {},
+      ),
       dias: dias,
-      proximosVencimentos: (json['proximosVencimentos'] as List<dynamic>? ?? const [])
-          .whereType<Map<String, dynamic>>()
-          .map(PulsoLembrete.fromJson)
-          .toList(),
+      proximosVencimentos:
+          (json['proximosVencimentos'] as List<dynamic>? ?? const [])
+              .whereType<Map<String, dynamic>>()
+              .map(PulsoLembrete.fromJson)
+              .toList(),
     );
   }
 }

@@ -17,7 +17,9 @@ class TransactionRepository {
 
   Future<TransactionFilterOptions> obterOpcoes() {
     return _guard(() async {
-      final response = await _api.raw.get<Map<String, dynamic>>('/transacoes/filtros');
+      final response = await _api.raw.get<Map<String, dynamic>>(
+        '/transacoes/filtros',
+      );
       return TransactionFilterOptions.fromJson(response.data ?? {});
     });
   }
@@ -26,13 +28,18 @@ class TransactionRepository {
     return _guard(() async {
       final response = await _api.raw.get<Map<String, dynamic>>(
         '/transacoes/resumo',
-        queryParameters: filtros.toQuery(pagina: 1)..remove('pagina')..remove('limite'),
+        queryParameters: filtros.toQuery(pagina: 1)
+          ..remove('pagina')
+          ..remove('limite'),
       );
       return TransactionResumo.fromJson(response.data ?? {});
     });
   }
 
-  Future<TransactionListPage> listar(TransactionFilters filtros, {required int pagina}) {
+  Future<TransactionListPage> listar(
+    TransactionFilters filtros, {
+    required int pagina,
+  }) {
     return _guard(() async {
       final response = await _api.raw.get<List<dynamic>>(
         '/transacoes',
@@ -46,14 +53,18 @@ class TransactionRepository {
       final headers = response.headers;
       return TransactionListPage(
         transacoes: items,
-        total: int.tryParse(headers.value('x-total-count') ?? '') ?? items.length,
+        total:
+            int.tryParse(headers.value('x-total-count') ?? '') ?? items.length,
         paginas: int.tryParse(headers.value('x-total-pages') ?? '') ?? 1,
         pagina: int.tryParse(headers.value('x-current-page') ?? '') ?? pagina,
       );
     });
   }
 
-  Future<String?> sugerirCategoria({required String tipo, required String descricao}) {
+  Future<String?> sugerirCategoria({
+    required String tipo,
+    required String descricao,
+  }) {
     return _guard(() async {
       final response = await _api.raw.get<Map<String, dynamic>>(
         '/transacoes/sugestao-categoria',
@@ -65,25 +76,36 @@ class TransactionRepository {
 
   Future<PulsoTransacao> criar(Map<String, dynamic> payload) {
     return _guard(() async {
-      final response = await _api.raw.post<Map<String, dynamic>>('/transacoes', data: payload);
+      final response = await _api.raw.post<Map<String, dynamic>>(
+        '/transacoes',
+        data: payload,
+      );
       return PulsoTransacao.fromJson(response.data ?? {});
     });
   }
 
   Future<PulsoTransacao> atualizar(String id, Map<String, dynamic> payload) {
     return _guard(() async {
-      final response = await _api.raw.patch<Map<String, dynamic>>('/transacoes/$id', data: payload);
+      final response = await _api.raw.patch<Map<String, dynamic>>(
+        '/transacoes/$id',
+        data: payload,
+      );
       return PulsoTransacao.fromJson(response.data ?? {});
     });
   }
 
-  Future<void> excluir(String id, {bool excluirFuturas = false, DateTime? dataCorte}) {
+  Future<void> excluir(
+    String id, {
+    bool excluirFuturas = false,
+    DateTime? dataCorte,
+  }) {
     return _guard(() async {
       await _api.raw.delete<void>(
         '/transacoes/$id',
         queryParameters: {
           'excluirFuturas': excluirFuturas ? 'true' : 'false',
-          if (excluirFuturas && dataCorte != null) 'dataCorte': dataCorte.toUtc().toIso8601String(),
+          if (excluirFuturas && dataCorte != null)
+            'dataCorte': dataCorte.toUtc().toIso8601String(),
         },
       );
     });
@@ -101,7 +123,10 @@ class TransactionRepository {
 
   Future<PulsoCategoria> criarCategoria(Map<String, dynamic> payload) {
     return _guard(() async {
-      final response = await _api.raw.post<Map<String, dynamic>>('/categorias', data: payload);
+      final response = await _api.raw.post<Map<String, dynamic>>(
+        '/categorias',
+        data: payload,
+      );
       return PulsoCategoria.fromJson(response.data ?? {});
     });
   }
@@ -115,7 +140,10 @@ class TransactionRepository {
   Future<List<PulsoTag>> listarTags() {
     return _guard(() async {
       final response = await _api.raw.get<List<dynamic>>('/tags');
-      return (response.data ?? []).whereType<Map<String, dynamic>>().map(PulsoTag.fromJson).toList();
+      return (response.data ?? [])
+          .whereType<Map<String, dynamic>>()
+          .map(PulsoTag.fromJson)
+          .toList();
     });
   }
 

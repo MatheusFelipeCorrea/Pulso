@@ -41,13 +41,28 @@ jobs:
         working-directory: ${{ matrix.dir }}
         run: npm ci
 
-      - name: Lint / test / build (lockfile atual)
+      - name: Lint
+        working-directory: ${{ matrix.dir }}
+        run: npm run lint --if-present
+
+      - name: Format check
+        working-directory: ${{ matrix.dir }}
+        run: npm run format:check --if-present
+
+      - name: Testes
+        working-directory: ${{ matrix.dir }}
+        run: npm run ${{ matrix.test_script }} --if-present
+
+      - name: Cobertura
         working-directory: ${{ matrix.dir }}
         run: |
           set -e
-          npm run lint --if-present
-          npm run ${{ matrix.test_script }} --if-present
-          npm run build --if-present
+          npm run test:coverage --if-present
+          node "${GITHUB_WORKSPACE}/.github/scripts/print-coverage.js" coverage/coverage-summary.json "${{ matrix.name }}"
+
+      - name: Build
+        working-directory: ${{ matrix.dir }}
+        run: npm run build --if-present
 
       - name: Audit fix + updates compatíveis (reverte se quebrar)
         id: safe
@@ -66,10 +81,17 @@ jobs:
           }
 
           npm audit fix || true
-          npm update
+          if ! npm update; then
+            revert_deps "npm update falhou"
+            exit 0
+          fi
 
           if ! npm run lint --if-present; then
             revert_deps "update quebrou o lint"
+            exit 0
+          fi
+          if ! npm run format:check --if-present; then
+            revert_deps "update quebrou o format"
             exit 0
           fi
           if ! npm run ${{ matrix.test_script }} --if-present; then
@@ -107,6 +129,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -116,11 +143,57 @@ jobs:
       - name: Pub get
         run: flutter pub get
 
+      - name: Format check
+        run: dart format --output=none --set-exit-if-changed lib test
+
       - name: Analyze
         run: flutter analyze --no-fatal-infos
 
-      - name: Test
+      - name: Testes
         run: flutter test
+
+      - name: Cobertura
+        run: |
+          set -e
+          flutter test --coverage
+          node "${GITHUB_WORKSPACE}/.github/scripts/print-coverage.js" coverage/lcov.info mobile --ignore=screens,widgets,main.dart,app.dart,state,app_router.dart,repository.dart,google_auth,theme_controller,web_oauth
+
+  rabbitmq:
+    name: rabbitmq
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Codigo/Pulso/api
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Validate compose
+        run: docker compose config
+
+      - name: Pull image
+        run: docker compose pull
+
+      - name: Start broker
+        run: docker compose up -d --wait --wait-timeout 60
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: Codigo/Pulso/api/package-lock.json
+
+      - name: AMQP smoke
+        env:
+          RABBITMQ_URL: amqp://pulso:pulso@localhost:5672
+        run: |
+          set -e
+          npm ci --ignore-scripts
+          npm run rabbit:check
+
+      - name: Stop broker
+        if: always()
+        run: docker compose down -v
 
   commit-safe-deps:
     name: commit safe deps

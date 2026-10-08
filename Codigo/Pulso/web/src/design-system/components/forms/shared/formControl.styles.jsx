@@ -5,11 +5,11 @@ export const formDescriptionVariants = cva('text-xs text-[var(--ds-color-text-se
 export const formErrorVariants = cva('text-xs text-[var(--ds-color-danger)]')
 
 export const formControlRowVariants = cva('flex gap-3', {
-  variants: {
-    align: {
-      start: 'items-start',
-      center: 'items-center',
+    variants: {
+        align: {
+            start: 'items-start',
+            center: 'items-center',
+        },
     },
-  },
-  defaultVariants: { align: 'start' },
+    defaultVariants: { align: 'start' },
 })

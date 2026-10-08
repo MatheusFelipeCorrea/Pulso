@@ -28,7 +28,11 @@ class AuthScaffold extends StatelessWidget {
                   IconButton(
                     tooltip: isDark ? 'Tema claro' : 'Tema escuro',
                     onPressed: onToggleTheme,
-                    icon: Icon(isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
+                    icon: Icon(
+                      isDark
+                          ? Icons.light_mode_outlined
+                          : Icons.dark_mode_outlined,
+                    ),
                   ),
                 ],
               ),

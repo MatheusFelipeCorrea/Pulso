@@ -15,235 +15,253 @@ import { addMonths, subMonths, startOfDay, isSameDay } from '../shared/calendarU
 import { DEFAULT_RANGE_PRESETS } from '../shared/dateRangePresets.js'
 
 function formatRangeTrigger(start, end) {
-  if (!start && !end) return null
-  if (start && end && isSameMonth(start, end) && start.getDate() === 1) {
-    const monthEnd = endOfMonth(start)
-    if (isSameDay(end, monthEnd)) {
-      return format(start, 'MMM yyyy', { locale: ptBR })
+    if (!start && !end) return null
+    if (start && end && isSameMonth(start, end) && start.getDate() === 1) {
+        const monthEnd = endOfMonth(start)
+        if (isSameDay(end, monthEnd)) {
+            return format(start, 'MMM yyyy', { locale: ptBR })
+        }
     }
-  }
-  if (start && end) {
-    return `${format(start, 'dd/MM/yyyy', { locale: ptBR })} → ${format(end, 'dd/MM/yyyy', { locale: ptBR })}`
-  }
-  if (start) {
-    return `${format(start, 'dd/MM/yyyy', { locale: ptBR })} → Data fim`
-  }
-  return null
+    if (start && end) {
+        return `${format(start, 'dd/MM/yyyy', { locale: ptBR })} → ${format(end, 'dd/MM/yyyy', { locale: ptBR })}`
+    }
+    if (start) {
+        return `${format(start, 'dd/MM/yyyy', { locale: ptBR })} → Data fim`
+    }
+    return null
 }
 
 /** DateRangePicker — seleção de intervalo com presets e confirmar "Aplicar" */
 export const DateRangePicker = ({
-  startDate = null,
-  endDate = null,
-  onChange,
-  presets = DEFAULT_RANGE_PRESETS,
-  minDate,
-  maxDate,
-  error,
-  disabled = false,
-  label,
-  id: idProp,
-  className,
-  fullWidth = false,
+    startDate = null,
+    endDate = null,
+    onChange,
+    presets = DEFAULT_RANGE_PRESETS,
+    minDate,
+    maxDate,
+    error,
+    disabled = false,
+    label,
+    id: idProp,
+    className,
+    fullWidth = false,
 }) => {
-  const generatedId = useId()
-  const id = idProp ?? generatedId
-  const isMobile = useIsMobile()
-  const { isOpen, toggle, close, ref } = usePickerDropdown(disabled)
+    const generatedId = useId()
+    const id = idProp ?? generatedId
+    const isMobile = useIsMobile()
+    const { isOpen, toggle, close, ref } = usePickerDropdown(disabled)
 
-  const [viewMonth, setViewMonth] = useState(() => startDate ?? new Date())
-  const [pendingStart, setPendingStart] = useState(startDate)
-  const [pendingEnd, setPendingEnd] = useState(endDate)
-  const [hoverDay, setHoverDay] = useState(null)
-  const [activePreset, setActivePreset] = useState(null)
+    const [viewMonth, setViewMonth] = useState(() => startDate ?? new Date())
+    const [pendingStart, setPendingStart] = useState(startDate)
+    const [pendingEnd, setPendingEnd] = useState(endDate)
+    const [hoverDay, setHoverDay] = useState(null)
+    const [activePreset, setActivePreset] = useState(null)
 
-  useEffect(() => {
-    if (isOpen) {
-      setPendingStart(startDate)
-      setPendingEnd(endDate)
-      setHoverDay(null)
-      setActivePreset(null)
+    useEffect(() => {
+        if (isOpen) {
+            setPendingStart(startDate)
+            setPendingEnd(endDate)
+            setHoverDay(null)
+            setActivePreset(null)
+        }
+    }, [isOpen, startDate, endDate])
+
+    const validationError =
+        error ??
+        (pendingStart && pendingEnd && pendingStart > pendingEnd
+            ? 'A data final deve ser igual ou posterior à inicial.'
+            : undefined)
+
+    const displayValue = formatRangeTrigger(startDate, endDate)
+    const isMonthLabel = displayValue && !displayValue.includes('→')
+
+    const handleDayClick = (day) => {
+        const d = startOfDay(day)
+        setActivePreset(null)
+        if (!pendingStart || (pendingStart && pendingEnd)) {
+            setPendingStart(d)
+            setPendingEnd(null)
+        } else {
+            if (d < pendingStart) {
+                setPendingEnd(pendingStart)
+                setPendingStart(d)
+            } else {
+                setPendingEnd(d)
+            }
+        }
+        setHoverDay(null)
     }
-  }, [isOpen, startDate, endDate])
 
-  const validationError =
-    error ??
-    (pendingStart && pendingEnd && pendingStart > pendingEnd
-      ? 'A data final deve ser igual ou posterior à inicial.'
-      : undefined)
-
-  const displayValue = formatRangeTrigger(startDate, endDate)
-  const isMonthLabel = displayValue && !displayValue.includes('→')
-
-  const handleDayClick = (day) => {
-    const d = startOfDay(day)
-    setActivePreset(null)
-    if (!pendingStart || (pendingStart && pendingEnd)) {
-      setPendingStart(d)
-      setPendingEnd(null)
-    } else {
-      if (d < pendingStart) {
-        setPendingEnd(pendingStart)
-        setPendingStart(d)
-      } else {
-        setPendingEnd(d)
-      }
+    const handlePreset = (preset) => {
+        const { start, end } = preset.getValue()
+        setPendingStart(startOfDay(start))
+        setPendingEnd(startOfDay(end))
+        setActivePreset(preset.id)
     }
-    setHoverDay(null)
-  }
 
-  const handlePreset = (preset) => {
-    const { start, end } = preset.getValue()
-    setPendingStart(startOfDay(start))
-    setPendingEnd(startOfDay(end))
-    setActivePreset(preset.id)
-  }
-
-  const handleApply = () => {
-    if (pendingStart && pendingEnd && pendingStart <= pendingEnd) {
-      onChange?.({ start: pendingStart, end: pendingEnd })
-      close()
+    const handleApply = () => {
+        if (pendingStart && pendingEnd && pendingStart <= pendingEnd) {
+            onChange?.({ start: pendingStart, end: pendingEnd })
+            close()
+        }
     }
-  }
 
-  const handleClear = () => {
-    setPendingStart(null)
-    setPendingEnd(null)
-    setActivePreset(null)
-    setHoverDay(null)
-  }
+    const handleClear = () => {
+        setPendingStart(null)
+        setPendingEnd(null)
+        setActivePreset(null)
+        setHoverDay(null)
+    }
 
-  const secondMonth = addMonths(viewMonth, 1)
+    const secondMonth = addMonths(viewMonth, 1)
 
-  return (
-    <SelectFieldWrapper
-      label={label}
-      error={validationError}
-      disabled={disabled}
-      isOpen={isOpen}
-      id={id}
-      className={className}
-    >
-      <div ref={ref} className={cn('relative w-full', !fullWidth && 'max-w-md')}>
-        <PickerTrigger
-          id={id}
-          open={isOpen}
-          error={Boolean(validationError)}
-          disabled={disabled}
-          onClick={toggle}
-          aria-haspopup="dialog"
-          aria-expanded={isOpen}
-          leftIcon={
-            disabled ? (
-              <Lock size={20} className="text-[var(--ds-color-placeholder)]" />
-            ) : (
-              <Calendar size={20} className="text-[var(--ds-color-placeholder)]" />
-            )
-          }
-          rightIcon={
-            isMonthLabel ? (
-              <ChevronDown
-                size={20}
-                className={cn(
-                  'text-[var(--ds-color-placeholder)] transition-transform duration-[var(--ds-transition-fast)]',
-                  isOpen && 'rotate-180'
-                )}
-              />
-            ) : null
-          }
+    return (
+        <SelectFieldWrapper
+            label={label}
+            error={validationError}
+            disabled={disabled}
+            isOpen={isOpen}
+            id={id}
+            className={className}
         >
-          {displayValue ? (
-            <span className="text-[var(--ds-color-text)] capitalize">{displayValue}</span>
-          ) : (
-            <span className="text-[var(--ds-color-placeholder)]">Data início → Data fim</span>
-          )}
-        </PickerTrigger>
+            <div ref={ref} className={cn('relative w-full', !fullWidth && 'max-w-md')}>
+                <PickerTrigger
+                    id={id}
+                    open={isOpen}
+                    error={Boolean(validationError)}
+                    disabled={disabled}
+                    onClick={toggle}
+                    aria-haspopup="dialog"
+                    aria-expanded={isOpen}
+                    leftIcon={
+                        disabled ? (
+                            <Lock size={20} className="text-[var(--ds-color-placeholder)]" />
+                        ) : (
+                            <Calendar size={20} className="text-[var(--ds-color-placeholder)]" />
+                        )
+                    }
+                    rightIcon={
+                        isMonthLabel ? (
+                            <ChevronDown
+                                size={20}
+                                className={cn(
+                                    'text-[var(--ds-color-placeholder)] transition-transform duration-[var(--ds-transition-fast)]',
+                                    isOpen && 'rotate-180'
+                                )}
+                            />
+                        ) : null
+                    }
+                >
+                    {displayValue ? (
+                        <span className="text-[var(--ds-color-text)] capitalize">
+                            {displayValue}
+                        </span>
+                    ) : (
+                        <span className="text-[var(--ds-color-placeholder)]">
+                            Data início → Data fim
+                        </span>
+                    )}
+                </PickerTrigger>
 
-        {isOpen && (
-          <div
-            className={cn(
-              pickerDropdownVariants(),
-              'ds-picker-dropdown--range left-0 right-auto flex w-[min(100vw-1.5rem,40rem)] max-w-[calc(100vw-1.5rem)] min-w-0 flex-col md:min-w-[640px]'
-            )}
-            role="dialog"
-          >
-            <div className={cn('ds-range-picker__body', isMobile ? 'flex-col' : 'flex-row')}>
-              {!isMobile && (
-                <aside className="ds-range-picker__presets">
-                  <p className="ds-range-picker__presets-title">Atalhos</p>
-                  <div className="ds-range-picker__presets-list">
-                    {presets.map((preset) => (
-                      <button
-                        key={preset.id}
-                        type="button"
-                        onClick={() => handlePreset(preset)}
-                        data-active={activePreset === preset.id ? 'true' : 'false'}
-                        className="ds-range-preset"
-                      >
-                        <span>{preset.label}</span>
-                        {activePreset === preset.id && <Check size={14} aria-hidden="true" />}
-                      </button>
-                    ))}
-                  </div>
-                </aside>
-              )}
+                {isOpen && (
+                    <div
+                        className={cn(
+                            pickerDropdownVariants(),
+                            'ds-picker-dropdown--range left-0 right-auto flex w-[min(100vw-1.5rem,40rem)] max-w-[calc(100vw-1.5rem)] min-w-0 flex-col md:min-w-[640px]'
+                        )}
+                        role="dialog"
+                    >
+                        <div
+                            className={cn(
+                                'ds-range-picker__body',
+                                isMobile ? 'flex-col' : 'flex-row'
+                            )}
+                        >
+                            {!isMobile && (
+                                <aside className="ds-range-picker__presets">
+                                    <p className="ds-range-picker__presets-title">Atalhos</p>
+                                    <div className="ds-range-picker__presets-list">
+                                        {presets.map((preset) => (
+                                            <button
+                                                key={preset.id}
+                                                type="button"
+                                                onClick={() => handlePreset(preset)}
+                                                data-active={
+                                                    activePreset === preset.id ? 'true' : 'false'
+                                                }
+                                                className="ds-range-preset"
+                                            >
+                                                <span>{preset.label}</span>
+                                                {activePreset === preset.id && (
+                                                    <Check size={14} aria-hidden="true" />
+                                                )}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </aside>
+                            )}
 
-              <div className={cn('ds-range-picker__calendars', isMobile ? 'flex-col' : 'flex-row')}>
-                <div className="ds-range-picker__month">
-                  <CalendarHeader
-                    month={viewMonth}
-                    onPrev={() => setViewMonth((m) => subMonths(m, 1))}
-                    onNext={() => setViewMonth((m) => addMonths(m, 1))}
-                  />
-                  <CalendarGrid
-                    month={viewMonth}
-                    rangeStart={pendingStart}
-                    rangeEnd={pendingEnd}
-                    hoverDay={hoverDay}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    onDayClick={handleDayClick}
-                    onDayHover={setHoverDay}
-                  />
-                </div>
-                {!isMobile && (
-                  <div className="ds-range-picker__month ds-range-picker__month--next">
-                    <CalendarHeader
-                      month={secondMonth}
-                      onPrev={() => setViewMonth((m) => subMonths(m, 1))}
-                      onNext={() => setViewMonth((m) => addMonths(m, 1))}
-                    />
-                    <CalendarGrid
-                      month={secondMonth}
-                      rangeStart={pendingStart}
-                      rangeEnd={pendingEnd}
-                      hoverDay={hoverDay}
-                      minDate={minDate}
-                      maxDate={maxDate}
-                      onDayClick={handleDayClick}
-                      onDayHover={setHoverDay}
-                    />
-                  </div>
+                            <div
+                                className={cn(
+                                    'ds-range-picker__calendars',
+                                    isMobile ? 'flex-col' : 'flex-row'
+                                )}
+                            >
+                                <div className="ds-range-picker__month">
+                                    <CalendarHeader
+                                        month={viewMonth}
+                                        onPrev={() => setViewMonth((m) => subMonths(m, 1))}
+                                        onNext={() => setViewMonth((m) => addMonths(m, 1))}
+                                    />
+                                    <CalendarGrid
+                                        month={viewMonth}
+                                        rangeStart={pendingStart}
+                                        rangeEnd={pendingEnd}
+                                        hoverDay={hoverDay}
+                                        minDate={minDate}
+                                        maxDate={maxDate}
+                                        onDayClick={handleDayClick}
+                                        onDayHover={setHoverDay}
+                                    />
+                                </div>
+                                {!isMobile && (
+                                    <div className="ds-range-picker__month ds-range-picker__month--next">
+                                        <CalendarHeader
+                                            month={secondMonth}
+                                            onPrev={() => setViewMonth((m) => subMonths(m, 1))}
+                                            onNext={() => setViewMonth((m) => addMonths(m, 1))}
+                                        />
+                                        <CalendarGrid
+                                            month={secondMonth}
+                                            rangeStart={pendingStart}
+                                            rangeEnd={pendingEnd}
+                                            hoverDay={hoverDay}
+                                            minDate={minDate}
+                                            maxDate={maxDate}
+                                            onDayClick={handleDayClick}
+                                            onDayHover={setHoverDay}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <footer className="ds-range-picker__footer">
+                            <Button variant="ghost" size="sm" onClick={handleClear}>
+                                Limpar
+                            </Button>
+                            <Button
+                                variant="primary"
+                                size="sm"
+                                onClick={handleApply}
+                                disabled={!pendingStart || !pendingEnd || pendingStart > pendingEnd}
+                            >
+                                Aplicar
+                            </Button>
+                        </footer>
+                    </div>
                 )}
-              </div>
             </div>
-
-            <footer className="ds-range-picker__footer">
-              <Button variant="ghost" size="sm" onClick={handleClear}>
-                Limpar
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={handleApply}
-                disabled={!pendingStart || !pendingEnd || pendingStart > pendingEnd}
-              >
-                Aplicar
-              </Button>
-            </footer>
-          </div>
-        )}
-      </div>
-    </SelectFieldWrapper>
-  )
+        </SelectFieldWrapper>
+    )
 }

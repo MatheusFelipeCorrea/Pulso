@@ -2,7 +2,12 @@ const prisma = require('../config/database');
 const AppError = require('../utils/appError');
 const { mapTransacao } = require('../utils/transactionMapper');
 const { mapLembrete } = require('../utils/reminderMapper');
-const { mesReferenciaFromQuery, intervaloDoMes, mesAnterior, mesReferenciaToQuery } = require('../utils/monthUtils');
+const {
+    mesReferenciaFromQuery,
+    intervaloDoMes,
+    mesAnterior,
+    mesReferenciaToQuery,
+} = require('../utils/monthUtils');
 const reminderRepository = require('../repositories/reminderRepository');
 const { startOfDay, endOfDay, diasAteVencimento } = require('./reminderService');
 const { formatDateOnly } = require('../utils/dateTimezone');
@@ -151,14 +156,8 @@ const obterVisaoMes = async (usuarioId, query) => {
         mes: mesReferenciaToQuery(mesReferencia),
         resumo: {
             ...resumo,
-            variacaoReceitas: buildVariacao(
-                resumo.receitasTotal,
-                resumoAnterior.receitasTotal
-            ),
-            variacaoDespesas: buildVariacao(
-                resumo.despesasTotal,
-                resumoAnterior.despesasTotal
-            ),
+            variacaoReceitas: buildVariacao(resumo.receitasTotal, resumoAnterior.receitasTotal),
+            variacaoDespesas: buildVariacao(resumo.despesasTotal, resumoAnterior.despesasTotal),
             variacaoSaldo: buildVariacao(resumo.saldo, resumoAnterior.saldo),
             variacaoTransacoes: buildVariacao(
                 resumo.totalTransacoes,

@@ -30,7 +30,8 @@ const enqueueReminderRecurrence = async () => {
         { type: 'reminder_recurrence' },
         runReminderRecurrenceJob
     );
-    if (mode === 'queued') logger.info('📤 Recorrência lembretes: job enfileirado em pulso.reminders');
+    if (mode === 'queued')
+        logger.info('📤 Recorrência lembretes: job enfileirado em pulso.reminders');
 };
 
 const startAlertConsumers = async () => {
@@ -56,7 +57,9 @@ const startReminderConsumers = async () => {
 const startMessagingWorkers = async () => {
     if (!messaging.isBrokerEnabled()) {
         if (process.env.VERCEL) {
-            logger.info('⏭️  RabbitMQ desativado na Vercel (serverless) — jobs e emails em modo direto');
+            logger.info(
+                '⏭️  RabbitMQ desativado na Vercel (serverless) — jobs e emails em modo direto'
+            );
             return;
         }
         logger.info('⏭️  RabbitMQ não configurado (RABBITMQ_URL) — jobs e emails em modo direto');

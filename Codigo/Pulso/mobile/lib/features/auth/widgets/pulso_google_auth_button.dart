@@ -37,9 +37,9 @@ class _PulsoGoogleAuthButtonState extends State<PulsoGoogleAuthButton> {
       await widget.onIdToken(idToken);
     } catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AuthController.messageOf(error))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(AuthController.messageOf(error))));
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -52,10 +52,10 @@ class _PulsoGoogleAuthButtonState extends State<PulsoGoogleAuthButton> {
         GoogleAuthClient.instance.missingConfigMessage,
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? PulsoColors.darkSecondary
-                  : PulsoColors.lightSecondary,
-            ),
+          color: Theme.of(context).brightness == Brightness.dark
+              ? PulsoColors.darkSecondary
+              : PulsoColors.lightSecondary,
+        ),
       );
     }
 

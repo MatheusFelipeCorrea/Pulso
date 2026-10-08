@@ -70,11 +70,7 @@ api.interceptors.response.use(
             requestUrl.includes('/auth/oauth/exchange') ||
             isRefreshRequest
 
-        if (
-            error.response?.status === 401 &&
-            !originalRequest._retry &&
-            !isAuthRequest
-        ) {
+        if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
             originalRequest._retry = true
 
             try {

@@ -38,7 +38,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
     return RefreshIndicator(
       onRefresh: controller.reload,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
+        padding: const EdgeInsets.fromLTRB(
+          PulsoTokens.space4,
+          PulsoTokens.space2,
+          PulsoTokens.space4,
+          96,
+        ),
         children: [
           PulsoPageHeader(
             title: 'Orçamento Mensal',
@@ -47,23 +52,42 @@ class _BudgetScreenState extends State<BudgetScreen> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                IconButton(onPressed: () => controller.shiftMonth(-1), icon: const Icon(Icons.chevron_left)),
-                Text(TransactionPeriod.label(controller.mes), style: Theme.of(context).textTheme.titleSmall),
-                IconButton(onPressed: () => controller.shiftMonth(1), icon: const Icon(Icons.chevron_right)),
+                IconButton(
+                  onPressed: () => controller.shiftMonth(-1),
+                  icon: const Icon(Icons.chevron_left),
+                ),
+                Text(
+                  TransactionPeriod.label(controller.mes),
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                IconButton(
+                  onPressed: () => controller.shiftMonth(1),
+                  icon: const Icon(Icons.chevron_right),
+                ),
               ],
             ),
           ),
           if (controller.loading && status == null)
-            const Padding(padding: EdgeInsets.all(32), child: Center(child: CircularProgressIndicator()))
+            const Padding(
+              padding: EdgeInsets.all(32),
+              child: Center(child: CircularProgressIndicator()),
+            )
           else if (controller.error != null)
-            PulsoEmptyState(title: 'Não foi possível carregar', description: controller.error!, icon: Icons.error_outline)
+            PulsoEmptyState(
+              title: 'Não foi possível carregar',
+              description: controller.error!,
+              icon: Icons.error_outline,
+            )
           else if (status != null && resumo != null) ...[
             if (resumo.orcamentoExcedeRenda)
               PulsoSurface(
                 margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
                 child: Row(
                   children: [
-                    Icon(Icons.warning_amber_rounded, color: PulsoColors.warningOf(brightness)),
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      color: PulsoColors.warningOf(brightness),
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
@@ -73,7 +97,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   ],
                 ),
               ),
-            const PulsoSectionHeader(title: 'Visão geral do orçamento', icon: Icons.insights_outlined),
+            const PulsoSectionHeader(
+              title: 'Visão geral do orçamento',
+              icon: Icons.insights_outlined,
+            ),
             PulsoHScroll(
               height: 148,
               itemWidth: 188,
@@ -108,10 +135,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
                     minHeight: 10,
                     borderRadius: BorderRadius.circular(99),
                     color: PulsoColors.accent(brightness),
-                    backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    backgroundColor: Theme.of(context)
+                        .colorScheme
+                        .surfaceContainerHighest,
                   ),
                   const SizedBox(height: 8),
-                  Text('${resumo.percentualUsado.round()}% do orçamento utilizado'),
+                  Text(
+                    '${resumo.percentualUsado.round()}% do orçamento utilizado',
+                  ),
                 ],
               ),
             ),
@@ -125,7 +156,10 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 onAction: _copiar,
               )
             else ...[
-              const PulsoSectionHeader(title: 'Orçamento por categoria', icon: Icons.category_outlined),
+              const PulsoSectionHeader(
+                title: 'Orçamento por categoria',
+                icon: Icons.category_outlined,
+              ),
               ...status.categorias.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
@@ -135,13 +169,18 @@ class _BudgetScreenState extends State<BudgetScreen> {
             ],
             if (status.categoriasSemOrcamento.isNotEmpty) ...[
               const SizedBox(height: PulsoTokens.space3),
-              const PulsoSectionHeader(title: 'Categorias sem limite', icon: Icons.add_circle_outline),
+              const PulsoSectionHeader(
+                title: 'Categorias sem limite',
+                icon: Icons.add_circle_outline,
+              ),
               ...status.categoriasSemOrcamento.map(
                 (item) => ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: CategoryGlyph(
                     icone: item.icone,
-                    color: parseHexColor(item.cor) ?? PulsoColors.accent(brightness),
+                    color:
+                        parseHexColor(item.cor) ??
+                        PulsoColors.accent(brightness),
                     size: 36,
                   ),
                   title: Text(item.nome),
@@ -172,7 +211,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
 }
 
 class _Metric extends StatelessWidget {
-  const _Metric({required this.label, required this.value, required this.icon, required this.color});
+  const _Metric({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
   final String label;
   final String value;
   final IconData icon;
@@ -189,7 +233,11 @@ class _Metric extends StatelessWidget {
           const SizedBox(height: PulsoTokens.space3),
           Text(label, style: Theme.of(context).textTheme.labelSmall),
           const SizedBox(height: 4),
-          Text(value, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: color, fontWeight: FontWeight.w700)),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.titleSmall
+                ?.copyWith(color: color, fontWeight: FontWeight.w700),
+          ),
         ],
       ),
     );
@@ -203,7 +251,8 @@ class _CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
-    final catColor = parseHexColor(item.categoriaCor) ?? PulsoColors.accent(brightness);
+    final catColor =
+        parseHexColor(item.categoriaCor) ?? PulsoColors.accent(brightness);
     final statusColor = switch (item.status) {
       'estourado' => PulsoColors.dangerOf(brightness),
       'alerta' => PulsoColors.warningOf(brightness),
@@ -215,10 +264,25 @@ class _CategoryCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              CategoryGlyph(icone: item.categoriaIcone, color: catColor, size: 40),
+              CategoryGlyph(
+                icone: item.categoriaIcone,
+                color: catColor,
+                size: 40,
+              ),
               const SizedBox(width: 12),
-              Expanded(child: Text(item.categoriaNome, style: Theme.of(context).textTheme.titleSmall)),
-              Text('${item.percentualUsado.round()}%', style: TextStyle(color: statusColor, fontWeight: FontWeight.w700)),
+              Expanded(
+                child: Text(
+                  item.categoriaNome,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              Text(
+                '${item.percentualUsado.round()}%',
+                style: TextStyle(
+                  color: statusColor,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 10),
@@ -227,10 +291,14 @@ class _CategoryCard extends StatelessWidget {
             minHeight: 8,
             borderRadius: BorderRadius.circular(99),
             color: statusColor,
-            backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+            backgroundColor: Theme.of(context)
+                .colorScheme
+                .surfaceContainerHighest,
           ),
           const SizedBox(height: 8),
-          Text('${formatBrl(item.gastoValor)} / ${formatBrl(item.limiteValor)} · resta ${formatBrl(item.restanteValor)}'),
+          Text(
+            '${formatBrl(item.gastoValor)} / ${formatBrl(item.limiteValor)} · resta ${formatBrl(item.restanteValor)}',
+          ),
           if (item.valorRollover > 0 || item.status != 'normal') ...[
             const SizedBox(height: 8),
             Wrap(
@@ -244,13 +312,21 @@ class _CategoryCard extends StatelessWidget {
                   ),
                 if (item.status == 'alerta')
                   Chip(
-                    avatar: Icon(Icons.notifications_outlined, size: 14, color: PulsoColors.warningOf(brightness)),
+                    avatar: Icon(
+                      Icons.notifications_outlined,
+                      size: 14,
+                      color: PulsoColors.warningOf(brightness),
+                    ),
                     label: const Text('80%'),
                     visualDensity: VisualDensity.compact,
                   ),
                 if (item.status == 'estourado')
                   Chip(
-                    avatar: Icon(Icons.warning_amber_rounded, size: 14, color: PulsoColors.dangerOf(brightness)),
+                    avatar: Icon(
+                      Icons.warning_amber_rounded,
+                      size: 14,
+                      color: PulsoColors.dangerOf(brightness),
+                    ),
                     label: const Text('Estourou!'),
                     visualDensity: VisualDensity.compact,
                   ),

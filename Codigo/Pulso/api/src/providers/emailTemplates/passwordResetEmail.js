@@ -56,11 +56,15 @@ const buildPasswordResetEmailHtml = ({ resetUrl, appUrl, logoSrc, recipientEmail
                     <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#71717A;">
                       Este link expira em <strong>1 hora</strong> por segurança.
                     </p>
-                    ${appUrl ? `
+                    ${
+                        appUrl
+                            ? `
                     <p style="margin:0 0 8px;font-size:13px;line-height:1.6;color:#A1A1AA;">
                       Se você tem o app Pulso instalado:
                       <a href="${appUrl}" style="color:#7C3AED;text-decoration:underline;">abrir no aplicativo</a>.
-                    </p>` : ''}
+                    </p>`
+                            : ''
+                    }
                     <p style="margin:0;font-size:13px;line-height:1.6;color:#A1A1AA;">
                       Se você não solicitou esta recuperação, ignore este email com segurança.
                     </p>

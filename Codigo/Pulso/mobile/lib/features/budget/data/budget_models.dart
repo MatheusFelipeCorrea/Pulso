@@ -3,7 +3,6 @@ double _num(dynamic value) {
   return double.tryParse('$value') ?? 0;
 }
 
-
 class BudgetResumo {
   const BudgetResumo({
     this.orcamentoTotal = 0,
@@ -75,7 +74,12 @@ class BudgetCategoria {
 }
 
 class BudgetCategoriaLivre {
-  const BudgetCategoriaLivre({required this.id, required this.nome, this.icone, this.cor});
+  const BudgetCategoriaLivre({
+    required this.id,
+    required this.nome,
+    this.icone,
+    this.cor,
+  });
 
   final String id;
   final String nome;
@@ -114,15 +118,18 @@ class BudgetStatus {
       mesReferencia: json['mesReferencia'] as String? ?? '',
       mesQuery: json['mesQuery'] as String?,
       rendaMensalPlanejada: _num(json['rendaMensalPlanejada']),
-      resumo: BudgetResumo.fromJson(json['resumo'] as Map<String, dynamic>? ?? const {}),
+      resumo: BudgetResumo.fromJson(
+        json['resumo'] as Map<String, dynamic>? ?? const {},
+      ),
       categorias: (json['categorias'] as List<dynamic>? ?? const [])
           .whereType<Map<String, dynamic>>()
           .map(BudgetCategoria.fromJson)
           .toList(),
-      categoriasSemOrcamento: (json['categoriasSemOrcamento'] as List<dynamic>? ?? const [])
-          .whereType<Map<String, dynamic>>()
-          .map(BudgetCategoriaLivre.fromJson)
-          .toList(),
+      categoriasSemOrcamento:
+          (json['categoriasSemOrcamento'] as List<dynamic>? ?? const [])
+              .whereType<Map<String, dynamic>>()
+              .map(BudgetCategoriaLivre.fromJson)
+              .toList(),
     );
   }
 }
@@ -139,8 +146,8 @@ class BudgetLimiteInput {
   final bool rolloverAtivo;
 
   Map<String, dynamic> toJson() => {
-        'categoriaId': categoriaId,
-        'limiteValor': limiteValor,
-        'rolloverAtivo': rolloverAtivo,
-      };
+    'categoriaId': categoriaId,
+    'limiteValor': limiteValor,
+    'rolloverAtivo': rolloverAtivo,
+  };
 }

@@ -1,7 +1,4 @@
-const {
-    mapOrcamento,
-    calcularStatusCategoria,
-} = require('../../../src/utils/budgetMapper');
+const { mapOrcamento, calcularStatusCategoria } = require('../../../src/utils/budgetMapper');
 
 describe('budgetMapper', () => {
     it('mapOrcamento mapeia campos e converte limiteValor para número', () => {

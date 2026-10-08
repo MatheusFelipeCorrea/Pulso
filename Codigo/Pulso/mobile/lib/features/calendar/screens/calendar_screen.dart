@@ -38,7 +38,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return RefreshIndicator(
       onRefresh: controller.reload,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
+        padding: const EdgeInsets.fromLTRB(
+          PulsoTokens.space4,
+          PulsoTokens.space2,
+          PulsoTokens.space4,
+          96,
+        ),
         children: [
           PulsoPageHeader(
             title: 'Calendário Financeiro',
@@ -47,9 +52,18 @@ class _CalendarScreenState extends State<CalendarScreen> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                IconButton(onPressed: () => controller.shiftMonth(-1), icon: const Icon(Icons.chevron_left)),
-                Text(TransactionPeriod.label(controller.mes), style: Theme.of(context).textTheme.titleSmall),
-                IconButton(onPressed: () => controller.shiftMonth(1), icon: const Icon(Icons.chevron_right)),
+                IconButton(
+                  onPressed: () => controller.shiftMonth(-1),
+                  icon: const Icon(Icons.chevron_left),
+                ),
+                Text(
+                  TransactionPeriod.label(controller.mes),
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                IconButton(
+                  onPressed: () => controller.shiftMonth(1),
+                  icon: const Icon(Icons.chevron_right),
+                ),
               ],
             ),
           ),
@@ -65,7 +79,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     children: [
                       Row(
                         children: [
-                          Text('Google Agenda', style: Theme.of(context).textTheme.titleSmall),
+                          Text(
+                            'Google Agenda',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
                           const SizedBox(width: 8),
                           Container(
                             width: 8,
@@ -78,12 +95,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          Text(controller.google?.conectado == true ? 'Conectado' : 'Não conectado'),
+                          Text(
+                            controller.google?.conectado == true
+                                ? 'Conectado'
+                                : 'Não conectado',
+                          ),
                         ],
                       ),
                       Text(
                         controller.google?.conectado == true
-                            ? (controller.google?.email ?? 'Sincronização ativa')
+                            ? (controller.google?.email ??
+                                  'Sincronização ativa')
                             : 'Conecte pelo web em Calendário para sincronizar lembretes.',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
@@ -94,9 +116,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
             ),
           ),
           if (controller.loading && visao == null)
-            const Padding(padding: EdgeInsets.all(32), child: Center(child: CircularProgressIndicator()))
+            const Padding(
+              padding: EdgeInsets.all(32),
+              child: Center(child: CircularProgressIndicator()),
+            )
           else if (controller.error != null)
-            PulsoEmptyState(title: 'Não foi possível carregar', description: controller.error!, icon: Icons.error_outline)
+            PulsoEmptyState(
+              title: 'Não foi possível carregar',
+              description: controller.error!,
+              icon: Icons.error_outline,
+            )
           else if (visao != null) ...[
             _Kpis(resumo: visao.resumo),
             const SizedBox(height: PulsoTokens.space4),
@@ -115,7 +144,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 onExcluir: _excluir,
               ),
             const SizedBox(height: PulsoTokens.space4),
-            PulsoSectionHeader(title: 'Próximos vencimentos', icon: Icons.notifications_active_outlined),
+            PulsoSectionHeader(
+              title: 'Próximos vencimentos',
+              icon: Icons.notifications_active_outlined,
+            ),
             if (visao.proximosVencimentos.isEmpty)
               PulsoEmptyState(
                 title: 'Nenhum vencimento',
@@ -126,7 +158,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ...visao.proximosVencimentos.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
-                  child: _LembreteTile(lembrete: item, onTap: () => _openLembrete(item), onPagar: () => _pagar(item), onExcluir: () => _excluir(item)),
+                  child: _LembreteTile(
+                    lembrete: item,
+                    onTap: () => _openLembrete(item),
+                    onPagar: () => _pagar(item),
+                    onExcluir: () => _excluir(item),
+                  ),
                 ),
               ),
           ],
@@ -145,7 +182,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
     try {
       await context.read<CalendarController>().pagar(lembrete);
       if (!mounted) return;
-      showPulsoSnack(context, lembrete.temValor ? 'Marcado como pago' : 'Marcado como feito');
+      showPulsoSnack(
+        context,
+        lembrete.temValor ? 'Marcado como pago' : 'Marcado como feito',
+      );
     } catch (error) {
       if (!mounted) return;
       showPulsoSnack(context, '$error');
@@ -153,7 +193,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
 
   Future<void> _excluir(PulsoLembrete lembrete) async {
-    final ok = await showPulsoConfirm(context: context, title: 'Excluir lembrete', message: 'Excluir “${lembrete.titulo}”?');
+    final ok = await showPulsoConfirm(
+      context: context,
+      title: 'Excluir lembrete',
+      message: 'Excluir “${lembrete.titulo}”?',
+    );
     if (ok != true || !mounted) return;
     try {
       await context.read<CalendarController>().excluir(lembrete);
@@ -190,7 +234,14 @@ class _GoogleAgendaIcon extends StatelessWidget {
           ),
           const Expanded(
             child: Center(
-              child: Text('31', style: TextStyle(color: Color(0xFF1A73E8), fontWeight: FontWeight.w800, fontSize: 13)),
+              child: Text(
+                '31',
+                style: TextStyle(
+                  color: Color(0xFF1A73E8),
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13,
+                ),
+              ),
             ),
           ),
         ],
@@ -212,8 +263,17 @@ class _Kpis extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: Text('Resumo do mês', style: Theme.of(context).textTheme.titleMedium)),
-              PulsoSoftIcon(icon: Icons.smart_toy_outlined, color: PulsoColors.accent(brightness), size: 36),
+              Expanded(
+                child: Text(
+                  'Resumo do mês',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              PulsoSoftIcon(
+                icon: Icons.smart_toy_outlined,
+                color: PulsoColors.accent(brightness),
+                size: 36,
+              ),
             ],
           ),
           const SizedBox(height: 6),
@@ -226,10 +286,30 @@ class _Kpis extends StatelessWidget {
             height: 118,
             itemWidth: 148,
             children: [
-              _KpiCard(label: 'Receitas', value: formatBrl(resumo.receitasTotal), icon: Icons.arrow_upward, color: PulsoColors.successOf(brightness)),
-              _KpiCard(label: 'Despesas', value: formatBrl(resumo.despesasTotal), icon: Icons.arrow_downward, color: PulsoColors.dangerOf(brightness)),
-              _KpiCard(label: 'Saldo', value: formatBrl(resumo.saldo), icon: Icons.swap_horiz, color: PulsoColors.accent(brightness)),
-              _KpiCard(label: 'Transações', value: '${resumo.totalTransacoes}', icon: Icons.list_alt_outlined, color: PulsoColors.infoOf(brightness)),
+              _KpiCard(
+                label: 'Receitas',
+                value: formatBrl(resumo.receitasTotal),
+                icon: Icons.arrow_upward,
+                color: PulsoColors.successOf(brightness),
+              ),
+              _KpiCard(
+                label: 'Despesas',
+                value: formatBrl(resumo.despesasTotal),
+                icon: Icons.arrow_downward,
+                color: PulsoColors.dangerOf(brightness),
+              ),
+              _KpiCard(
+                label: 'Saldo',
+                value: formatBrl(resumo.saldo),
+                icon: Icons.swap_horiz,
+                color: PulsoColors.accent(brightness),
+              ),
+              _KpiCard(
+                label: 'Transações',
+                value: '${resumo.totalTransacoes}',
+                icon: Icons.list_alt_outlined,
+                color: PulsoColors.infoOf(brightness),
+              ),
             ],
           ),
         ],
@@ -239,7 +319,12 @@ class _Kpis extends StatelessWidget {
 }
 
 class _KpiCard extends StatelessWidget {
-  const _KpiCard({required this.label, required this.value, required this.color, required this.icon});
+  const _KpiCard({
+    required this.label,
+    required this.value,
+    required this.color,
+    required this.icon,
+  });
   final String label;
   final String value;
   final Color color;
@@ -254,14 +339,25 @@ class _KpiCard extends StatelessWidget {
         const SizedBox(height: 8),
         Text(label, style: Theme.of(context).textTheme.labelSmall),
         const SizedBox(height: 4),
-        Text(value, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.titleSmall?.copyWith(color: color, fontWeight: FontWeight.w700)),
+        Text(
+          value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleSmall
+              ?.copyWith(color: color, fontWeight: FontWeight.w700),
+        ),
       ],
     );
   }
 }
 
 class _MonthGrid extends StatelessWidget {
-  const _MonthGrid({required this.mes, required this.dias, required this.selected, required this.onSelect});
+  const _MonthGrid({
+    required this.mes,
+    required this.dias,
+    required this.selected,
+    required this.onSelect,
+  });
 
   final String mes;
   final Map<String, CalendarDayMarker> dias;
@@ -279,7 +375,11 @@ class _MonthGrid extends StatelessWidget {
     final cells = <Widget>[];
     const labels = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
     for (final label in labels) {
-      cells.add(Center(child: Text(label, style: Theme.of(context).textTheme.labelSmall)));
+      cells.add(
+        Center(
+          child: Text(label, style: Theme.of(context).textTheme.labelSmall),
+        ),
+      );
     }
     for (var i = 0; i < startWeekday; i++) {
       cells.add(const SizedBox.shrink());
@@ -294,13 +394,20 @@ class _MonthGrid extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           child: Container(
             decoration: BoxDecoration(
-              color: isSelected ? PulsoColors.primary.withValues(alpha: 0.12) : null,
+              color: isSelected
+                  ? PulsoColors.primary.withValues(alpha: 0.12)
+                  : null,
               borderRadius: BorderRadius.circular(10),
             ),
             padding: const EdgeInsets.symmetric(vertical: 6),
             child: Column(
               children: [
-                Text('$day', style: TextStyle(fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500)),
+                Text(
+                  '$day',
+                  style: TextStyle(
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  ),
+                ),
                 const SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -327,15 +434,20 @@ class _MonthGrid extends StatelessWidget {
   }
 
   Widget _dot(Color color) => Container(
-        width: 5,
-        height: 5,
-        margin: const EdgeInsets.symmetric(horizontal: 1),
-        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-      );
+    width: 5,
+    height: 5,
+    margin: const EdgeInsets.symmetric(horizontal: 1),
+    decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+  );
 }
 
 class _DayPanel extends StatelessWidget {
-  const _DayPanel({required this.detalhe, required this.onLembrete, required this.onPagar, required this.onExcluir});
+  const _DayPanel({
+    required this.detalhe,
+    required this.onLembrete,
+    required this.onPagar,
+    required this.onExcluir,
+  });
 
   final CalendarDayDetail detalhe;
   final Future<void> Function(PulsoLembrete lembrete) onLembrete;
@@ -350,7 +462,10 @@ class _DayPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(formatDayTitle(detalhe.data), style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            formatDayTitle(detalhe.data),
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: PulsoTokens.space3),
           Container(
             width: double.infinity,
@@ -362,33 +477,58 @@ class _DayPanel extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Receitas: ${formatBrl(detalhe.receitas)}', style: TextStyle(color: PulsoColors.successOf(brightness))),
+                Text(
+                  'Receitas: ${formatBrl(detalhe.receitas)}',
+                  style: TextStyle(color: PulsoColors.successOf(brightness)),
+                ),
                 const SizedBox(height: 4),
-                Text('Despesas: ${formatBrl(detalhe.despesas)}', style: TextStyle(color: PulsoColors.dangerOf(brightness))),
+                Text(
+                  'Despesas: ${formatBrl(detalhe.despesas)}',
+                  style: TextStyle(color: PulsoColors.dangerOf(brightness)),
+                ),
                 const SizedBox(height: 6),
-                Text('Saldo: ${formatBrl(detalhe.saldo)}', style: Theme.of(context).textTheme.titleSmall),
+                Text(
+                  'Saldo: ${formatBrl(detalhe.saldo)}',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
               ],
             ),
           ),
           const SizedBox(height: PulsoTokens.space4),
-          Text('TRANSAÇÕES DO DIA', style: Theme.of(context).textTheme.labelSmall?.copyWith(letterSpacing: 0.6, fontWeight: FontWeight.w700)),
+          Text(
+            'TRANSAÇÕES DO DIA',
+            style: Theme.of(context).textTheme.labelSmall
+                ?.copyWith(letterSpacing: 0.6, fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 10),
           if (detalhe.transacoes.isEmpty)
-            _EmptyHint(icon: Icons.inbox_outlined, text: 'Nenhuma transação neste dia.')
+            _EmptyHint(
+              icon: Icons.inbox_outlined,
+              text: 'Nenhuma transação neste dia.',
+            )
           else
             ...detalhe.transacoes.map((tx) {
               final receita = tx.tipo == 'RECEITA';
-              final color = parseHexColor(tx.categoria?.cor) ??
-                  (receita ? PulsoColors.successOf(brightness) : PulsoColors.dangerOf(brightness));
+              final color =
+                  parseHexColor(tx.categoria?.cor) ??
+                  (receita
+                      ? PulsoColors.successOf(brightness)
+                      : PulsoColors.dangerOf(brightness));
               return Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Row(
                   children: [
-                    CategoryGlyph(icone: tx.categoria?.icone, color: color, size: 32),
+                    CategoryGlyph(
+                      icone: tx.categoria?.icone,
+                      color: color,
+                      size: 32,
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        tx.descricao?.trim().isNotEmpty == true ? tx.descricao!.trim() : (tx.categoria?.nome ?? 'Transação'),
+                        tx.descricao?.trim().isNotEmpty == true
+                            ? tx.descricao!.trim()
+                            : (tx.categoria?.nome ?? 'Transação'),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -396,7 +536,9 @@ class _DayPanel extends StatelessWidget {
                     Text(
                       '${receita ? '+' : '-'}${formatBrl(tx.valor)}',
                       style: TextStyle(
-                        color: receita ? PulsoColors.successOf(brightness) : PulsoColors.dangerOf(brightness),
+                        color: receita
+                            ? PulsoColors.successOf(brightness)
+                            : PulsoColors.dangerOf(brightness),
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -405,13 +547,25 @@ class _DayPanel extends StatelessWidget {
               );
             }),
           const SizedBox(height: PulsoTokens.space3),
-          Text('LEMBRETES / VENCIMENTOS', style: Theme.of(context).textTheme.labelSmall?.copyWith(letterSpacing: 0.6, fontWeight: FontWeight.w700)),
+          Text(
+            'LEMBRETES / VENCIMENTOS',
+            style: Theme.of(context).textTheme.labelSmall
+                ?.copyWith(letterSpacing: 0.6, fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 10),
           if (detalhe.lembretes.isEmpty)
-            const _EmptyHint(icon: Icons.notifications_none_outlined, text: 'Nenhum lembrete neste dia.')
+            const _EmptyHint(
+              icon: Icons.notifications_none_outlined,
+              text: 'Nenhum lembrete neste dia.',
+            )
           else
             ...detalhe.lembretes.map(
-              (item) => _LembreteTile(lembrete: item, onTap: () => onLembrete(item), onPagar: () => onPagar(item), onExcluir: () => onExcluir(item)),
+              (item) => _LembreteTile(
+                lembrete: item,
+                onTap: () => onLembrete(item),
+                onPagar: () => onPagar(item),
+                onExcluir: () => onExcluir(item),
+              ),
             ),
         ],
       ),
@@ -430,10 +584,19 @@ class _EmptyHint extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Icon(icon, size: 18, color: Theme.of(context).colorScheme.onSurfaceVariant),
+          Icon(
+            icon,
+            size: 18,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(text, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
           ),
         ],
       ),
@@ -442,7 +605,12 @@ class _EmptyHint extends StatelessWidget {
 }
 
 class _LembreteTile extends StatelessWidget {
-  const _LembreteTile({required this.lembrete, required this.onTap, required this.onPagar, required this.onExcluir});
+  const _LembreteTile({
+    required this.lembrete,
+    required this.onTap,
+    required this.onPagar,
+    required this.onExcluir,
+  });
 
   final PulsoLembrete lembrete;
   final VoidCallback onTap;
@@ -464,8 +632,16 @@ class _LembreteTile extends StatelessWidget {
         children: [
           if (lembrete.sincronizado) const Icon(Icons.cloud_outlined, size: 18),
           if (!lembrete.pago)
-            IconButton(tooltip: lembrete.temValor ? 'Pago' : 'Feito', onPressed: onPagar, icon: const Icon(Icons.check_circle_outline)),
-          IconButton(tooltip: 'Excluir', onPressed: onExcluir, icon: const Icon(Icons.delete_outline)),
+            IconButton(
+              tooltip: lembrete.temValor ? 'Pago' : 'Feito',
+              onPressed: onPagar,
+              icon: const Icon(Icons.check_circle_outline),
+            ),
+          IconButton(
+            tooltip: 'Excluir',
+            onPressed: onExcluir,
+            icon: const Icon(Icons.delete_outline),
+          ),
         ],
       ),
     );

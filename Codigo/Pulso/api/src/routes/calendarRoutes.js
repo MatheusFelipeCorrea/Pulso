@@ -9,7 +9,12 @@ const router = express.Router();
 
 router.get('/mes', authMiddleware, validateMiddleware(queryMesSchema), calendarController.obterMes);
 
-router.get('/dia', authMiddleware, validateMiddleware(queryDataSchema), calendarController.obterDia);
+router.get(
+    '/dia',
+    authMiddleware,
+    validateMiddleware(queryDataSchema),
+    calendarController.obterDia
+);
 
 router.get('/google/status', authMiddleware, requirePremium, calendarController.obterStatusGoogle);
 
@@ -17,9 +22,19 @@ router.get('/google/url', authMiddleware, requirePremium, calendarController.obt
 
 router.get('/google/callback', calendarController.callbackGoogle);
 
-router.post('/google/desconectar', authMiddleware, requirePremium, calendarController.desconectarGoogle);
+router.post(
+    '/google/desconectar',
+    authMiddleware,
+    requirePremium,
+    calendarController.desconectarGoogle
+);
 
-router.get('/google/sync/pendentes', authMiddleware, requirePremium, calendarController.obterPendentesSyncGoogle);
+router.get(
+    '/google/sync/pendentes',
+    authMiddleware,
+    requirePremium,
+    calendarController.obterPendentesSyncGoogle
+);
 
 router.post(
     '/google/sync',

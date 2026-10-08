@@ -1,6 +1,6 @@
 /**
  * Design System Utils
- * 
+ *
  * Utilitários genéricos para formatação e composição de classes.
  */
 
@@ -10,10 +10,10 @@ export { formatDate, formatDateRelative } from './formatDate.js'
 export { formatNumber } from './formatNumber.js'
 export { stringToHue, getInitials } from './stringToHue.js'
 export {
-  getProgressPercent,
-  getProgressFillPercent,
-  getHealthVariant,
-  getHealthLabel,
-  resolveProgressVariant,
+    getProgressPercent,
+    getProgressFillPercent,
+    getHealthVariant,
+    getHealthLabel,
+    resolveProgressVariant,
 } from './progressUtils.js'
 export { getPaginationRange, getPaginationInfoRange } from './paginationUtils.js'

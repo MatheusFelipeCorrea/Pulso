@@ -32,8 +32,8 @@ class GoalTile extends StatelessWidget {
     final barColor = meta.status == 'CONCLUIDA'
         ? PulsoColors.successOf(brightness)
         : meta.status == 'PAUSADA'
-            ? PulsoColors.warningOf(brightness)
-            : PulsoColors.accent(brightness);
+        ? PulsoColors.warningOf(brightness)
+        : PulsoColors.accent(brightness);
     final amountColor = meta.status == 'PAUSADA'
         ? PulsoColors.warningOf(brightness)
         : const Color(0xFF16A34A);
@@ -52,46 +52,74 @@ class GoalTile extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PulsoSoftIcon(icon: goalIconForName(meta.nome), color: barColor),
+                PulsoSoftIcon(
+                  icon: goalIconForName(meta.nome),
+                  color: barColor,
+                ),
                 const SizedBox(width: PulsoTokens.space3),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(meta.nome, style: Theme.of(context).textTheme.titleSmall),
+                      Text(
+                        meta.nome,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
                       const SizedBox(height: 6),
                       Wrap(
                         spacing: 6,
                         runSpacing: 6,
                         children: [
                           if (tipoKind != null)
-                            PulsoBadge.kind(kind: tipoKind, brightness: brightness, compact: true),
+                            PulsoBadge.kind(
+                              kind: tipoKind,
+                              brightness: brightness,
+                              compact: true,
+                            ),
                           if (statusKind != null)
-                            PulsoBadge.kind(kind: statusKind, brightness: brightness, compact: true),
+                            PulsoBadge.kind(
+                              kind: statusKind,
+                              brightness: brightness,
+                              compact: true,
+                            ),
                           if (prioridadeKind != null)
-                            PulsoBadge.kind(kind: prioridadeKind, brightness: brightness, compact: true),
+                            PulsoBadge.kind(
+                              kind: prioridadeKind,
+                              brightness: brightness,
+                              compact: true,
+                            ),
                         ],
                       ),
                       const SizedBox(height: 6),
-                      Text(_deadlineLabel(meta), style: Theme.of(context).textTheme.bodySmall),
+                      Text(
+                        _deadlineLabel(meta),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                     ],
                   ),
                 ),
                 if (meta.status == 'CONCLUIDA')
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
-                      color: PulsoColors.successOf(brightness).withValues(alpha: 0.12),
+                      color: PulsoColors.successOf(brightness)
+                          .withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: PulsoColors.successOf(brightness).withValues(alpha: 0.3)),
+                      border: Border.all(
+                        color: PulsoColors.successOf(brightness)
+                            .withValues(alpha: 0.3),
+                      ),
                     ),
                     child: Text(
                       'CONCLUÍDA',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: PulsoColors.successOf(brightness),
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0.4,
-                          ),
+                        color: PulsoColors.successOf(brightness),
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.4,
+                      ),
                     ),
                   ),
               ],
@@ -103,9 +131,9 @@ class GoalTile extends StatelessWidget {
                   child: Text(
                     '${formatBrl(meta.valorAtual)} de ${formatBrl(meta.valorAlvo)}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: amountColor,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      color: amountColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
                 Text(
@@ -142,9 +170,9 @@ class GoalTile extends StatelessWidget {
                     child: Text(
                       _insight(meta),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: insight.foreground,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        color: insight.foreground,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -164,8 +192,15 @@ class GoalTile extends StatelessWidget {
                     const SizedBox(width: PulsoTokens.space2),
                     OutlinedButton.icon(
                       onPressed: onTogglePause,
-                      icon: Icon(meta.status == 'PAUSADA' ? Icons.play_arrow : Icons.pause, size: 16),
-                      label: Text(meta.status == 'PAUSADA' ? 'Retomar' : 'Pausar'),
+                      icon: Icon(
+                        meta.status == 'PAUSADA'
+                            ? Icons.play_arrow
+                            : Icons.pause,
+                        size: 16,
+                      ),
+                      label: Text(
+                        meta.status == 'PAUSADA' ? 'Retomar' : 'Pausar',
+                      ),
                     ),
                   ],
                   const Spacer(),
@@ -199,9 +234,12 @@ class GoalTile extends StatelessWidget {
   }
 
   String _insight(PulsoMeta meta) {
-    if (meta.status == 'CONCLUIDA') return 'Parabéns! Meta concluída com sucesso.';
-    if (meta.status == 'PAUSADA') return 'Meta pausada. Retome quando quiser continuar guardando.';
-    if (meta.vencida) return 'Prazo vencido. Ajuste o prazo ou aumente seus aportes para retomar o plano.';
+    if (meta.status == 'CONCLUIDA')
+      return 'Parabéns! Meta concluída com sucesso.';
+    if (meta.status == 'PAUSADA')
+      return 'Meta pausada. Retome quando quiser continuar guardando.';
+    if (meta.vencida)
+      return 'Prazo vencido. Ajuste o prazo ou aumente seus aportes para retomar o plano.';
     if (meta.valorMensalSugerido > 0) {
       return 'Guarde ${formatBrl(meta.valorMensalSugerido)}/mês para atingir no prazo.';
     }

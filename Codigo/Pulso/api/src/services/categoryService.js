@@ -51,7 +51,11 @@ const atualizarCategoria = async (usuarioId, id, body) => {
     if (body.nome != null) {
         const nome = body.nome.trim();
         if (nome !== existente.nome) {
-            const duplicada = await categoryRepository.buscarPorNome(usuarioId, nome, existente.tipo);
+            const duplicada = await categoryRepository.buscarPorNome(
+                usuarioId,
+                nome,
+                existente.tipo
+            );
             if (duplicada && duplicada.id !== id) {
                 throw new AppError('Já existe uma categoria com este nome para este tipo', 409);
             }

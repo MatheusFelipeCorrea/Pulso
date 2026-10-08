@@ -1,10 +1,5 @@
 class PulsoTag {
-  const PulsoTag({
-    required this.id,
-    required this.nome,
-    this.icone,
-    this.cor,
-  });
+  const PulsoTag({required this.id, required this.nome, this.icone, this.cor});
 
   final String id;
   final String nome;
@@ -82,17 +77,18 @@ class PulsoTransacao {
   final PulsoCategoria? categoria;
   final List<PulsoTag> tags;
 
-  bool get isRecorrenteSerie => recorrente || (paiId != null && paiId!.isNotEmpty);
+  bool get isRecorrenteSerie =>
+      recorrente || (paiId != null && paiId!.isNotEmpty);
 
   factory PulsoTransacao.fromJson(Map<String, dynamic> json) {
     return PulsoTransacao(
-      id: json['id'] as String,
-      tipo: json['tipo'] as String,
-      recurso: json['recurso'] as String,
+      id: _asRequiredString(json['id']),
+      tipo: _asRequiredString(json['tipo'], 'DESPESA'),
+      recurso: _asRequiredString(json['recurso'], 'PESSOAL'),
       recursoDestino: json['recursoDestino'] as String?,
       valor: _asMoney(json['valor']),
       descricao: json['descricao'] as String?,
-      data: DateTime.parse(json['data'] as String).toLocal(),
+      data: _asDate(json['data']),
       recorrente: json['recorrente'] == true,
       regraRecorrencia: json['regraRecorrencia'] as String?,
       paiId: json['paiId'] as String?,
@@ -253,12 +249,28 @@ class TransactionFilters {
       'periodo': periodo,
       if (tipo != 'TODOS') 'tipo': tipo,
       if (recurso != 'TODOS') 'recurso': recurso,
-      if (categoriaId != null && categoriaId!.isNotEmpty) 'categoria': categoriaId,
+      if (categoriaId != null && categoriaId!.isNotEmpty)
+        'categoria': categoriaId,
       if (busca.trim().isNotEmpty) 'busca': busca.trim(),
       'pagina': pagina,
       'limite': limite,
     };
   }
+}
+
+String _asRequiredString(dynamic value, [String fallback = '']) {
+  if (value == null) return fallback;
+  if (value is String) return value;
+  return value.toString();
+}
+
+DateTime _asDate(dynamic value) {
+  if (value is DateTime) return value.toLocal();
+  if (value is String && value.isNotEmpty) {
+    return DateTime.tryParse(value)?.toLocal() ??
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
+  }
+  return DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
 }
 
 double _asMoney(dynamic value) {

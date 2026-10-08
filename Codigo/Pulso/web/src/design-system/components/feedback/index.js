@@ -1,6 +1,6 @@
 /**
  * Design System - Feedback Components
- * 
+ *
  * Componentes de feedback visual: spinners, toasts, alerts, skeletons
  */
 

@@ -39,7 +39,9 @@ enum PulsoBadgeKind {
 }
 
 PulsoBadgeStyle badgeStyleForKind(PulsoBadgeKind kind, Brightness brightness) {
-  Color primary() => brightness == Brightness.dark ? PulsoColors.primaryLight : PulsoColors.primary;
+  Color primary() => brightness == Brightness.dark
+      ? PulsoColors.primaryLight
+      : PulsoColors.primary;
   Color info() => PulsoColors.infoOf(brightness);
   Color cyan() => PulsoColors.cyanOf(brightness);
   Color orange() => PulsoColors.orangeOf(brightness);
@@ -50,102 +52,102 @@ PulsoBadgeStyle badgeStyleForKind(PulsoBadgeKind kind, Brightness brightness) {
 
   return switch (kind) {
     PulsoBadgeKind.perfilEstagiario => PulsoBadgeStyle(
-        label: 'Estagiário',
-        icon: Icons.school_outlined,
-        color: primary(),
-      ),
+      label: 'Estagiário',
+      icon: Icons.school_outlined,
+      color: primary(),
+    ),
     PulsoBadgeKind.perfilClt => PulsoBadgeStyle(
-        label: 'CLT',
-        icon: Icons.work_outline,
-        color: info(),
-      ),
+      label: 'CLT',
+      icon: Icons.work_outline,
+      color: info(),
+    ),
     PulsoBadgeKind.perfilPj => PulsoBadgeStyle(
-        label: 'PJ/Freelancer',
-        icon: Icons.laptop_mac,
-        color: cyan(),
-      ),
+      label: 'PJ/Freelancer',
+      icon: Icons.laptop_mac,
+      color: cyan(),
+    ),
     PulsoBadgeKind.perfilPf => PulsoBadgeStyle(
-        label: 'Pessoa Física',
-        icon: Icons.person_outline,
-        color: neutral(),
-      ),
+      label: 'Pessoa Física',
+      icon: Icons.person_outline,
+      color: neutral(),
+    ),
     PulsoBadgeKind.recursoDinheiro => PulsoBadgeStyle(
-        label: 'Dinheiro',
-        icon: Icons.attach_money,
-        color: primary(),
-      ),
+      label: 'Dinheiro',
+      icon: Icons.attach_money,
+      color: primary(),
+    ),
     PulsoBadgeKind.recursoVa => PulsoBadgeStyle(
-        label: 'VA',
-        icon: Icons.apple,
-        color: success(),
-      ),
+      label: 'VA',
+      icon: Icons.apple,
+      color: success(),
+    ),
     PulsoBadgeKind.recursoVr => PulsoBadgeStyle(
-        label: 'VR',
-        icon: Icons.restaurant,
-        color: orange(),
-      ),
+      label: 'VR',
+      icon: Icons.restaurant,
+      color: orange(),
+    ),
     PulsoBadgeKind.recursoVt => PulsoBadgeStyle(
-        label: 'VT',
-        icon: Icons.directions_bus,
-        color: info(),
-      ),
+      label: 'VT',
+      icon: Icons.directions_bus,
+      color: info(),
+    ),
     PulsoBadgeKind.recursoPoupanca => PulsoBadgeStyle(
-        label: 'Poupança',
-        icon: Icons.savings_outlined,
-        color: cyan(),
-      ),
+      label: 'Poupança',
+      icon: Icons.savings_outlined,
+      color: cyan(),
+    ),
     PulsoBadgeKind.transacaoRecorrente => PulsoBadgeStyle(
-        label: 'Recorrente',
-        icon: Icons.autorenew,
-        color: info(),
-      ),
+      label: 'Recorrente',
+      icon: Icons.autorenew,
+      color: info(),
+    ),
     PulsoBadgeKind.metaStatusAtiva => PulsoBadgeStyle(
-        label: 'Ativa',
-        icon: Icons.play_arrow_outlined,
-        color: primary(),
-      ),
+      label: 'Ativa',
+      icon: Icons.play_arrow_outlined,
+      color: primary(),
+    ),
     PulsoBadgeKind.metaStatusPausada => PulsoBadgeStyle(
-        label: 'Pausada',
-        icon: Icons.pause_outlined,
-        color: warning(),
-      ),
+      label: 'Pausada',
+      icon: Icons.pause_outlined,
+      color: warning(),
+    ),
     PulsoBadgeKind.metaStatusConcluida => PulsoBadgeStyle(
-        label: 'Concluída',
-        icon: Icons.check_circle_outline,
-        color: success(),
-      ),
+      label: 'Concluída',
+      icon: Icons.check_circle_outline,
+      color: success(),
+    ),
     PulsoBadgeKind.metaStatusCancelada => PulsoBadgeStyle(
-        label: 'Cancelada',
-        icon: Icons.cancel_outlined,
-        color: danger(),
-      ),
+      label: 'Cancelada',
+      icon: Icons.cancel_outlined,
+      color: danger(),
+    ),
     PulsoBadgeKind.metaTipoCurto => PulsoBadgeStyle(
-        label: 'Curto prazo',
-        icon: Icons.schedule,
-        color: cyan(),
-        rounded: true,
-      ),
+      label: 'Curto prazo',
+      icon: Icons.schedule,
+      color: cyan(),
+      rounded: true,
+    ),
     PulsoBadgeKind.metaTipoLongo => PulsoBadgeStyle(
-        label: 'Longo prazo',
-        icon: Icons.calendar_today_outlined,
-        color: primary(),
-        rounded: true,
-      ),
+      label: 'Longo prazo',
+      icon: Icons.calendar_today_outlined,
+      color: primary(),
+      rounded: true,
+    ),
     PulsoBadgeKind.prioridadeAlta => PulsoBadgeStyle(
-        label: 'Alta',
-        icon: Icons.arrow_upward,
-        color: danger(),
-      ),
+      label: 'Alta',
+      icon: Icons.arrow_upward,
+      color: danger(),
+    ),
     PulsoBadgeKind.prioridadeMedia => PulsoBadgeStyle(
-        label: 'Média',
-        icon: Icons.remove,
-        color: warning(),
-      ),
+      label: 'Média',
+      icon: Icons.remove,
+      color: warning(),
+    ),
     PulsoBadgeKind.prioridadeBaixa => PulsoBadgeStyle(
-        label: 'Baixa',
-        icon: Icons.arrow_downward,
-        color: success(),
-      ),
+      label: 'Baixa',
+      icon: Icons.arrow_downward,
+      color: success(),
+    ),
   };
 }
 
@@ -161,7 +163,10 @@ PulsoBadgeKind? badgeKindFromModoUso(String? modoUso) {
 
 /// Compatível com testes que leem `.label` sem BuildContext.
 PulsoBadgeStyle badgeFromModoUso(String? modoUso) {
-  return badgeStyleForKind(badgeKindFromModoUso(modoUso) ?? PulsoBadgeKind.perfilClt, Brightness.light);
+  return badgeStyleForKind(
+    badgeKindFromModoUso(modoUso) ?? PulsoBadgeKind.perfilClt,
+    Brightness.light,
+  );
 }
 
 PulsoBadgeKind? badgeKindFromRecurso(String? recurso) {
@@ -234,7 +239,12 @@ class PulsoBadge extends StatelessWidget {
   }) {
     return PulsoBadge(
       key: key,
-      style: PulsoBadgeStyle(label: label, icon: icon, color: color, rounded: rounded),
+      style: PulsoBadgeStyle(
+        label: label,
+        icon: icon,
+        color: color,
+        rounded: rounded,
+      ),
       compact: compact,
     );
   }
@@ -251,7 +261,9 @@ class PulsoBadge extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: style.color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(style.rounded ? PulsoTokens.radiusMd : PulsoTokens.radiusFull),
+        borderRadius: BorderRadius.circular(
+          style.rounded ? PulsoTokens.radiusMd : PulsoTokens.radiusFull,
+        ),
         border: Border.all(color: style.color.withValues(alpha: 0.18)),
       ),
       child: Row(

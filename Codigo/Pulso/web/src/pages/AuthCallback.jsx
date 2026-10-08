@@ -9,108 +9,108 @@ import { setUser } from '@/store/slices/authSlice'
 import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/defaultAuthenticatedRoute.js'
 
 function readExchangeFromLocation(searchParams) {
-  const fromQuery = searchParams.get('exchange')
-  if (fromQuery) return fromQuery
-  if (typeof window === 'undefined') return null
-  const hash = window.location.hash || ''
-  const match = hash.match(/(?:^#|&)?exchange=([^&]+)/)
-  return match ? decodeURIComponent(match[1]) : null
+    const fromQuery = searchParams.get('exchange')
+    if (fromQuery) return fromQuery
+    if (typeof window === 'undefined') return null
+    const hash = window.location.hash || ''
+    const match = hash.match(/(?:^#|&)?exchange=([^&]+)/)
+    return match ? decodeURIComponent(match[1]) : null
 }
 
 export default function AuthCallback() {
-  const [searchParams] = useSearchParams()
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const toast = useToast()
-  const handledRef = useRef(false)
+    const [searchParams] = useSearchParams()
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const toast = useToast()
+    const handledRef = useRef(false)
 
-  const error = searchParams.get('error')
-  const message = searchParams.get('message')
-  const exchange = useMemo(() => readExchangeFromLocation(searchParams), [searchParams])
+    const error = searchParams.get('error')
+    const message = searchParams.get('message')
+    const exchange = useMemo(() => readExchangeFromLocation(searchParams), [searchParams])
 
-  useEffect(() => {
-    if (handledRef.current) return
+    useEffect(() => {
+        if (handledRef.current) return
 
-    if (error || !exchange) {
-      handledRef.current = true
-      return
-    }
-
-    handledRef.current = true
-
-    const completeLogin = async () => {
-      try {
-        await exchangeOAuth(exchange)
-        const user = await getMe()
-        dispatch(setUser(user))
-        if (window.location.hash.includes('exchange=')) {
-          history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+        if (error || !exchange) {
+            handledRef.current = true
+            return
         }
-        navigate(DEFAULT_AUTHENTICATED_ROUTE, { replace: true })
-      } catch {
-        toast.error('Não foi possível concluir o login. Tente novamente.')
-        navigate('/login', { replace: true })
-      }
+
+        handledRef.current = true
+
+        const completeLogin = async () => {
+            try {
+                await exchangeOAuth(exchange)
+                const user = await getMe()
+                dispatch(setUser(user))
+                if (window.location.hash.includes('exchange=')) {
+                    history.replaceState(
+                        null,
+                        '',
+                        `${window.location.pathname}${window.location.search}`
+                    )
+                }
+                navigate(DEFAULT_AUTHENTICATED_ROUTE, { replace: true })
+            } catch {
+                toast.error('Não foi possível concluir o login. Tente novamente.')
+                navigate('/login', { replace: true })
+            }
+        }
+
+        completeLogin()
+    }, [dispatch, error, exchange, navigate, toast])
+
+    if (error) {
+        return (
+            <AuthLayout activeAuth="login" heroVariant="login">
+                <div className="auth-card text-center">
+                    <h1 className="auth-card-title">Não foi possível entrar</h1>
+                    <p className="auth-card-subtitle">
+                        {message || 'A autenticação com Google não pôde ser concluída.'}
+                    </p>
+                    <div className="mt-6 text-left">
+                        <Alert
+                            type="error"
+                            title="O que fazer agora?"
+                            message="Tente novamente com Google ou faça login com email e senha."
+                        />
+                    </div>
+                    <Link to="/login" className="mt-8 block">
+                        <Button variant="primary" size="lg" fullWidth>
+                            Voltar ao Login
+                        </Button>
+                    </Link>
+                </div>
+            </AuthLayout>
+        )
     }
 
-    completeLogin()
-  }, [dispatch, error, exchange, navigate, toast])
+    if (!exchange) {
+        return (
+            <AuthLayout activeAuth="login" heroVariant="login">
+                <div className="auth-card text-center">
+                    <h1 className="auth-card-title">Link inválido</h1>
+                    <p className="auth-card-subtitle">
+                        Não encontramos credenciais válidas neste link.
+                    </p>
+                    <Link to="/login" className="mt-8 block">
+                        <Button variant="primary" size="lg" fullWidth>
+                            Ir para o Login
+                        </Button>
+                    </Link>
+                </div>
+            </AuthLayout>
+        )
+    }
 
-  if (error) {
     return (
-      <AuthLayout activeAuth="login" heroVariant="login">
-        <div className="auth-card text-center">
-          <h1 className="auth-card-title">Não foi possível entrar</h1>
-          <p className="auth-card-subtitle">
-            {message || 'A autenticação com Google não pôde ser concluída.'}
-          </p>
-          <div className="mt-6 text-left">
-            <Alert
-              type="error"
-              title="O que fazer agora?"
-              message="Tente novamente com Google ou faça login com email e senha."
-            />
-          </div>
-          <Link to="/login" className="mt-8 block">
-            <Button variant="primary" size="lg" fullWidth>
-              Voltar ao Login
-            </Button>
-          </Link>
-        </div>
-      </AuthLayout>
+        <AuthLayout activeAuth="login" heroVariant="login">
+            <div className="auth-card flex flex-col items-center justify-center py-12 text-center">
+                <Loader2 className="animate-spin text-[#7C3AED]" size={40} strokeWidth={1.75} />
+                <p className="mt-4 text-sm text-[var(--ds-color-text-secondary)]">
+                    Entrando no Pulso...
+                </p>
+            </div>
+        </AuthLayout>
     )
-  }
-
-  if (!exchange) {
-    return (
-      <AuthLayout activeAuth="login" heroVariant="login">
-        <div className="auth-card text-center">
-          <h1 className="auth-card-title">Link inválido</h1>
-          <p className="auth-card-subtitle">
-            Não encontramos credenciais válidas neste link.
-          </p>
-          <Link to="/login" className="mt-8 block">
-            <Button variant="primary" size="lg" fullWidth>
-              Ir para o Login
-            </Button>
-          </Link>
-        </div>
-      </AuthLayout>
-    )
-  }
-
-  return (
-    <AuthLayout activeAuth="login" heroVariant="login">
-      <div className="auth-card flex flex-col items-center justify-center py-12 text-center">
-        <Loader2
-          className="animate-spin text-[#7C3AED]"
-          size={40}
-          strokeWidth={1.75}
-        />
-        <p className="mt-4 text-sm text-[var(--ds-color-text-secondary)]">
-          Entrando no Pulso...
-        </p>
-      </div>
-    </AuthLayout>
-  )
 }

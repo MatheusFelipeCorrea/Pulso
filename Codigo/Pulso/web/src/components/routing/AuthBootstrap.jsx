@@ -7,26 +7,26 @@ import { getMe } from '@/services/authService'
  * Restaura sessão a partir dos cookies httpOnly (GET /me).
  */
 export function AuthBootstrap({ children }) {
-  const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    let cancelled = false
+    useEffect(() => {
+        let cancelled = false
 
-    getMe()
-      .then((user) => {
-        if (!cancelled && user) dispatch(setUser(user))
-      })
-      .catch(() => {
-        if (!cancelled) dispatch(clearUser())
-      })
-      .finally(() => {
-        if (!cancelled) dispatch(setSessionChecked())
-      })
+        getMe()
+            .then((user) => {
+                if (!cancelled && user) dispatch(setUser(user))
+            })
+            .catch(() => {
+                if (!cancelled) dispatch(clearUser())
+            })
+            .finally(() => {
+                if (!cancelled) dispatch(setSessionChecked())
+            })
 
-    return () => {
-      cancelled = true
-    }
-  }, [dispatch])
+        return () => {
+            cancelled = true
+        }
+    }, [dispatch])
 
-  return children
+    return children
 }

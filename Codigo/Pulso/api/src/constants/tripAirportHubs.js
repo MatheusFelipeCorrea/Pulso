@@ -71,7 +71,10 @@ const TRIP_AIRPORT_HUBS = [
 const HUB_BY_IATA = new Map(
     TRIP_AIRPORT_HUBS.map((hub) => [
         hub.iata,
-        { ...hub, fallbackBrl: getHubFallbackBrl(hub.iata, { international: hub.countryCode !== 'BR' }) },
+        {
+            ...hub,
+            fallbackBrl: getHubFallbackBrl(hub.iata, { international: hub.countryCode !== 'BR' }),
+        },
     ])
 );
 
@@ -114,7 +117,9 @@ function findNearestAirportHub({ lat, lng, countryCode }) {
 
     return {
         ...bestHub,
-        fallbackBrl: getHubFallbackBrl(bestHub.iata, { international: bestHub.countryCode !== 'BR' }),
+        fallbackBrl: getHubFallbackBrl(bestHub.iata, {
+            international: bestHub.countryCode !== 'BR',
+        }),
         distanceKm: Math.round(haversineKm(latitude, longitude, bestHub.lat, bestHub.lng)),
     };
 }

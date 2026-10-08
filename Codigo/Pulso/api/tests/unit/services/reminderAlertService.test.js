@@ -24,7 +24,9 @@ describe('reminderAlertService', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         dateTimezone.todayInTimezone.mockReturnValue('2026-01-10');
-        dateTimezone.formatDateOnly.mockImplementation((d) => new Date(d).toISOString().slice(0, 10));
+        dateTimezone.formatDateOnly.mockImplementation((d) =>
+            new Date(d).toISOString().slice(0, 10)
+        );
         dateTimezone.addDays.mockImplementation((date, days) => {
             const base = new Date(date);
             base.setDate(base.getDate() + days);

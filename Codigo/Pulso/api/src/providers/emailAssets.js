@@ -24,8 +24,7 @@ const getLogoAttachment = () => {
 const getLogoSrc = () => `cid:${LOGO_CID}`;
 
 /** Fallback URL pública quando CID não estiver disponível. */
-const getLogoPublicUrl = (frontendUrl) =>
-    `${frontendUrl.replace(/\/$/, '')}/brand/LogoMClaro.png`;
+const getLogoPublicUrl = (frontendUrl) => `${frontendUrl.replace(/\/$/, '')}/brand/LogoMClaro.png`;
 
 module.exports = {
     LOGO_CID,

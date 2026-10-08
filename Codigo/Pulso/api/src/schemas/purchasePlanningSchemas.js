@@ -24,16 +24,14 @@ const criarItemSchema = z.object({
         prioridade: prioridadeSchema.optional().default('MEDIA'),
         categoria: categoriaSchema.optional(),
         observacoes: z.string().max(300).optional().nullable(),
-        linkProduto: z
-            .preprocess(
-                (value) => (value === '' || value == null ? null : value),
-                z.string().url().max(500).nullable().optional()
-            ),
-        imagemUrl: z
-            .preprocess(
-                (value) => (value === '' || value == null ? null : value),
-                z.string().url().max(2048).nullable().optional()
-            ),
+        linkProduto: z.preprocess(
+            (value) => (value === '' || value == null ? null : value),
+            z.string().url().max(500).nullable().optional()
+        ),
+        imagemUrl: z.preprocess(
+            (value) => (value === '' || value == null ? null : value),
+            z.string().url().max(2048).nullable().optional()
+        ),
         buscarImagemAuto: z.boolean().optional().default(true),
         simularParcelas: z.boolean().optional().default(true),
         parcelas: z.coerce.number().int().min(1).max(48).optional().default(12),
@@ -52,16 +50,14 @@ const editarItemSchema = z.object({
             prioridade: prioridadeSchema.optional(),
             categoria: categoriaSchema.optional(),
             observacoes: z.string().max(300).optional().nullable(),
-            linkProduto: z
-            .preprocess(
+            linkProduto: z.preprocess(
                 (value) => (value === '' || value == null ? null : value),
                 z.string().url().max(500).nullable().optional()
             ),
-            imagemUrl: z
-                .preprocess(
-                    (value) => (value === '' || value == null ? null : value),
-                    z.string().url().max(2048).nullable().optional()
-                ),
+            imagemUrl: z.preprocess(
+                (value) => (value === '' || value == null ? null : value),
+                z.string().url().max(2048).nullable().optional()
+            ),
             buscarImagemAuto: z.boolean().optional(),
             simularParcelas: z.boolean().optional(),
             parcelas: z.coerce.number().int().min(1).max(48).optional(),
@@ -98,16 +94,14 @@ const comprarItemSchema = z.object({
 const resolverImagemSchema = z.object({
     body: z.object({
         nome: z.string().trim().min(1).max(120).optional(),
-        imagemUrl: z
-            .preprocess(
-                (value) => (value === '' || value == null ? null : value),
-                z.string().url().max(2048).nullable().optional()
-            ),
-        linkProduto: z
-            .preprocess(
-                (value) => (value === '' || value == null ? null : value),
-                z.string().url().max(500).nullable().optional()
-            ),
+        imagemUrl: z.preprocess(
+            (value) => (value === '' || value == null ? null : value),
+            z.string().url().max(2048).nullable().optional()
+        ),
+        linkProduto: z.preprocess(
+            (value) => (value === '' || value == null ? null : value),
+            z.string().url().max(500).nullable().optional()
+        ),
         buscarNaInternet: z.boolean().optional().default(true),
     }),
 });

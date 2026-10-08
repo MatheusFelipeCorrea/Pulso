@@ -163,11 +163,10 @@ const listarTransacoes = async (usuarioId, filtros) => {
     const pagina = Number(filtros.pagina) || 1;
     const limite = Number(filtros.limite) || 10;
 
-    const { transacoes, total } = await transactionRepository.listarPorUsuario(
-        usuarioId,
-        filtros,
-        { pagina, limite }
-    );
+    const { transacoes, total } = await transactionRepository.listarPorUsuario(usuarioId, filtros, {
+        pagina,
+        limite,
+    });
 
     const paginas = Math.max(1, Math.ceil(total / limite));
 
@@ -188,8 +187,13 @@ const calcularResumo = async (usuarioId, filtros) => {
     let candidatosCarteira = [];
 
     if (!recursoSaldo || recursoSaldo === 'TODOS') {
-        const recursosNoPeriodo = await transactionRepository.listarRecursosDistintos(usuarioId, filtros);
-        candidatosCarteira = (recursosNoPeriodo ?? []).filter((item) => RECURSOS_SALDO_ACUMULADO.has(item));
+        const recursosNoPeriodo = await transactionRepository.listarRecursosDistintos(
+            usuarioId,
+            filtros
+        );
+        candidatosCarteira = (recursosNoPeriodo ?? []).filter((item) =>
+            RECURSOS_SALDO_ACUMULADO.has(item)
+        );
         if (candidatosCarteira.length === 1) {
             recursoSaldo = candidatosCarteira[0];
         }
@@ -357,7 +361,12 @@ const editarTransacao = async (usuarioId, transacaoId, dados) => {
     return mapTransacao(atualizada);
 };
 
-const excluirTransacao = async (usuarioId, transacaoId, excluirFuturas = false, dataCorte = null) => {
+const excluirTransacao = async (
+    usuarioId,
+    transacaoId,
+    excluirFuturas = false,
+    dataCorte = null
+) => {
     const existente = await transactionRepository.buscarPorId(transacaoId, usuarioId);
     if (!existente) {
         throw new AppError('Transação não encontrada', 404);
@@ -372,10 +381,9 @@ const excluirTransacao = async (usuarioId, transacaoId, excluirFuturas = false, 
     }
 
     const paiId = isMaeRecorrente ? existente.id : existente.paiId;
-    const mae =
-        isMaeRecorrente
-            ? existente
-            : await transactionRepository.buscarPorId(paiId, usuarioId);
+    const mae = isMaeRecorrente
+        ? existente
+        : await transactionRepository.buscarPorId(paiId, usuarioId);
 
     if (!mae) {
         throw new AppError('Transação recorrente não encontrada', 404);

@@ -25,7 +25,10 @@ class BudgetRepository {
     });
   }
 
-  Future<void> salvarLimites({required String mesReferencia, required List<BudgetLimiteInput> limites}) {
+  Future<void> salvarLimites({
+    required String mesReferencia,
+    required List<BudgetLimiteInput> limites,
+  }) {
     return _guard(() async {
       await _api.raw.post<Map<String, dynamic>>(
         '/orcamentos',
@@ -37,7 +40,10 @@ class BudgetRepository {
     });
   }
 
-  Future<void> copiarMes({required String mesOrigem, required String mesDestino}) {
+  Future<void> copiarMes({
+    required String mesOrigem,
+    required String mesDestino,
+  }) {
     return _guard(() async {
       await _api.raw.post<Map<String, dynamic>>(
         '/orcamentos/copiar',

@@ -6,7 +6,11 @@ import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
 
 class TransactionSummaryCards extends StatelessWidget {
-  const TransactionSummaryCards({super.key, required this.resumo, this.loading = false});
+  const TransactionSummaryCards({
+    super.key,
+    required this.resumo,
+    this.loading = false,
+  });
 
   final TransactionResumo? resumo;
   final bool loading;
@@ -39,7 +43,8 @@ class TransactionSummaryCards extends StatelessWidget {
             Expanded(
               child: _MiniStat(
                 label: 'Receitas',
-                meta: '$qtdReceitas lançamento${qtdReceitas == 1 ? '' : 's'} no período',
+                meta:
+                    '$qtdReceitas lançamento${qtdReceitas == 1 ? '' : 's'} no período',
                 value: formatBrl(receitas),
                 color: PulsoColors.successOf(brightness),
                 icon: Icons.arrow_upward,
@@ -49,7 +54,8 @@ class TransactionSummaryCards extends StatelessWidget {
             Expanded(
               child: _MiniStat(
                 label: 'Despesas',
-                meta: '$qtdDespesas lançamento${qtdDespesas == 1 ? '' : 's'} no período',
+                meta:
+                    '$qtdDespesas lançamento${qtdDespesas == 1 ? '' : 's'} no período',
                 value: formatBrl(despesas),
                 color: PulsoColors.dangerOf(brightness),
                 icon: Icons.arrow_downward,
@@ -89,7 +95,8 @@ class _HeroBalance extends StatelessWidget {
               children: [
                 Text(
                   'Saldo do período',
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.white70),
+                  style: Theme.of(context).textTheme.labelLarge
+                      ?.copyWith(color: Colors.white70),
                 ),
                 const SizedBox(height: PulsoTokens.space1),
                 Text(
@@ -97,15 +104,19 @@ class _HeroBalance extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                      ),
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ],
             ),
           ),
-          const PulsoSoftIcon(icon: Icons.account_balance_wallet_outlined, color: Colors.white, size: 48),
+          const PulsoSoftIcon(
+            icon: Icons.account_balance_wallet_outlined,
+            color: Colors.white,
+            size: 48,
+          ),
         ],
       ),
     );
@@ -141,13 +152,18 @@ class _MiniStat extends StatelessWidget {
             ],
           ),
           const SizedBox(height: PulsoTokens.space3),
-          Text(label, style: Theme.of(context).textTheme.labelSmall?.copyWith(color: color)),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelSmall
+                ?.copyWith(color: color),
+          ),
           const SizedBox(height: 2),
           Text(
             value,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(color: color, fontWeight: PulsoTokens.weightBold),
+            style: Theme.of(context).textTheme.titleSmall
+                ?.copyWith(color: color, fontWeight: PulsoTokens.weightBold),
           ),
           Text(meta, style: Theme.of(context).textTheme.bodySmall),
         ],

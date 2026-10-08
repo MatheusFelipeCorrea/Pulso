@@ -1,7 +1,4 @@
-const {
-    mapTransacao,
-    mapCategoria,
-} = require('../../../src/utils/transactionMapper');
+const { mapTransacao, mapCategoria } = require('../../../src/utils/transactionMapper');
 
 describe('transactionMapper', () => {
     it('mapCategoria mapeia categoria corretamente', () => {

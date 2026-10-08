@@ -64,9 +64,15 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
       final sugestao = await context.read<GoalRepository>().sugerirReserva();
       setState(() {
         if (_nome.text.trim().isEmpty) _nome.text = 'Reserva de Emergência';
-        _valor.text = sugestao.valorSugerido.toStringAsFixed(2).replaceAll('.', ',');
+        _valor.text = sugestao.valorSugerido
+            .toStringAsFixed(2)
+            .replaceAll('.', ',');
         tipo = 'LONGO_PRAZO';
-        prazo = DateTime(DateTime.now().year + 1, DateTime.now().month, DateTime.now().day);
+        prazo = DateTime(
+          DateTime.now().year + 1,
+          DateTime.now().month,
+          DateTime.now().day,
+        );
         if (_descricao.text.trim().isEmpty) {
           _descricao.text = 'Fundo para imprevistos e emergências financeiras.';
         }
@@ -88,9 +94,16 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
       final payload = {
         'nome': _nome.text.trim(),
         'valorAlvo': valor,
-        'prazo': DateTime(prazo.year, prazo.month, prazo.day, 12).toUtc().toIso8601String(),
+        'prazo': DateTime(
+          prazo.year,
+          prazo.month,
+          prazo.day,
+          12,
+        ).toUtc().toIso8601String(),
         'tipo': tipo,
-        'descricao': _descricao.text.trim().isEmpty ? null : _descricao.text.trim(),
+        'descricao': _descricao.text.trim().isEmpty
+            ? null
+            : _descricao.text.trim(),
       };
       final repo = context.read<GoalRepository>();
       if (isEdit) {
@@ -120,7 +133,10 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
             subtitle: 'Defina valor alvo, prazo e se é curto ou longo prazo.',
             icon: Icons.gps_fixed,
           ),
-          TextField(controller: _nome, decoration: const InputDecoration(labelText: 'Nome')),
+          TextField(
+            controller: _nome,
+            decoration: const InputDecoration(labelText: 'Nome'),
+          ),
           const SizedBox(height: PulsoTokens.space3),
           TextField(
             controller: _valor,
@@ -138,8 +154,16 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
           const SizedBox(height: PulsoTokens.space2),
           SegmentedButton<String>(
             segments: const [
-              ButtonSegment(value: 'CURTO_PRAZO', label: Text('Curto prazo'), icon: Icon(Icons.schedule, size: 16)),
-              ButtonSegment(value: 'LONGO_PRAZO', label: Text('Longo prazo'), icon: Icon(Icons.calendar_today_outlined, size: 16)),
+              ButtonSegment(
+                value: 'CURTO_PRAZO',
+                label: Text('Curto prazo'),
+                icon: Icon(Icons.schedule, size: 16),
+              ),
+              ButtonSegment(
+                value: 'LONGO_PRAZO',
+                label: Text('Longo prazo'),
+                icon: Icon(Icons.calendar_today_outlined, size: 16),
+              ),
             ],
             selected: {tipo},
             onSelectionChanged: (value) => setState(() => tipo = value.first),

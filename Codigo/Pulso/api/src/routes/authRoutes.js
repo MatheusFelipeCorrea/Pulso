@@ -45,12 +45,7 @@ router.post(
     authController.register
 );
 
-router.post(
-    '/login',
-    authLoginRateLimit,
-    validateMiddleware(loginSchema),
-    authController.login
-);
+router.post('/login', authLoginRateLimit, validateMiddleware(loginSchema), authController.login);
 
 router.post(
     '/oauth/exchange',

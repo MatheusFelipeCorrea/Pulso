@@ -53,7 +53,10 @@ class _TripFormScreenState extends State<TripFormScreen> {
     try {
       catalog = await context.read<CurrencyRepository>().obterCatalogo();
     } on ApiException {
-      catalog = const [CurrencyItem(code: 'BRL', name: 'Real'), CurrencyItem(code: 'USD', name: 'Dólar')];
+      catalog = const [
+        CurrencyItem(code: 'BRL', name: 'Real'),
+        CurrencyItem(code: 'USD', name: 'Dólar'),
+      ];
     } finally {
       if (mounted) setState(() => loading = false);
     }
@@ -81,7 +84,12 @@ class _TripFormScreenState extends State<TripFormScreen> {
         await repo.editar(widget.viagem!.id, {
           'destino': _destino.text.trim(),
           'moeda': moeda,
-          'dataPrevista': DateTime(data.year, data.month, data.day, 12).toUtc().toIso8601String(),
+          'dataPrevista': DateTime(
+            data.year,
+            data.month,
+            data.day,
+            12,
+          ).toUtc().toIso8601String(),
           if (destinoMeta != null) 'destinoMeta': destinoMeta,
         });
       } else {
@@ -104,7 +112,13 @@ class _TripFormScreenState extends State<TripFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final codes = catalog.map((item) => item.code).where((code) => code.isNotEmpty).toSet().toList()..sort();
+    final codes =
+        catalog
+            .map((item) => item.code)
+            .where((code) => code.isNotEmpty)
+            .toSet()
+            .toList()
+          ..sort();
     if (codes.isEmpty) codes.addAll(['BRL', 'USD', 'EUR']);
 
     return Scaffold(
@@ -119,7 +133,10 @@ class _TripFormScreenState extends State<TripFormScreen> {
                   subtitle: 'Informe destino, moeda e data prevista. O app busca a mesma ficha de destino da web.',
                   icon: Icons.flight_takeoff,
                 ),
-                TextField(controller: _destino, decoration: const InputDecoration(labelText: 'Destino')),
+                TextField(
+                  controller: _destino,
+                  decoration: const InputDecoration(labelText: 'Destino'),
+                ),
                 const SizedBox(height: PulsoTokens.space3),
                 DropdownButtonFormField<String>(
                   initialValue: codes.contains(moeda) ? moeda : codes.first,

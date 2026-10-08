@@ -47,7 +47,10 @@ const FIXED_WINDOWS = [
         id: 'low_season_aug_sep',
         label: 'Baixa temporada (ago/set)',
         tendencia: 'baixa',
-        match: [{ month: 8, dayFrom: 10, dayTo: 31 }, { month: 9, dayFrom: 1, dayTo: 30 }],
+        match: [
+            { month: 8, dayFrom: 10, dayTo: 31 },
+            { month: 9, dayFrom: 1, dayTo: 30 },
+        ],
         factors: { flight: 0.92, bus: 0.95, train: 0.95 },
     },
 ];

@@ -54,8 +54,14 @@ class _TagsScreenState extends State<TagsScreen> {
           textCapitalization: TextCapitalization.sentences,
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Criar')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Criar'),
+          ),
         ],
       ),
     );
@@ -91,11 +97,21 @@ class _TagsScreenState extends State<TagsScreen> {
   Widget build(BuildContext context) {
     if (loading) return const Center(child: CircularProgressIndicator());
     if (error != null) {
-      return PulsoEmptyState(title: 'Erro', description: error!, actionLabel: 'Tentar de novo', onAction: _load);
+      return PulsoEmptyState(
+        title: 'Erro',
+        description: error!,
+        actionLabel: 'Tentar de novo',
+        onAction: _load,
+      );
     }
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
+      padding: const EdgeInsets.fromLTRB(
+        PulsoTokens.space4,
+        PulsoTokens.space2,
+        PulsoTokens.space4,
+        96,
+      ),
       children: [
         const PulsoPageHeader(
           title: 'Tags',
@@ -122,17 +138,25 @@ class _TagsScreenState extends State<TagsScreen> {
             (tag) => Padding(
               padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
               child: PulsoSurface(
-                padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3, vertical: PulsoTokens.space1),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: PulsoTokens.space3,
+                  vertical: PulsoTokens.space1,
+                ),
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: CategoryGlyph(
                     icone: tag.icone ?? 'Tag',
-                    color: parseHexColor(tag.cor) ?? Theme.of(context).colorScheme.primary,
+                    color:
+                        parseHexColor(tag.cor) ??
+                        Theme.of(context).colorScheme.primary,
                   ),
                   title: Text(tag.nome),
                   trailing: IconButton(
                     tooltip: 'Excluir tag',
-                    icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error),
+                    icon: Icon(
+                      Icons.delete_outline,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
                     onPressed: () => _excluir(tag),
                   ),
                 ),

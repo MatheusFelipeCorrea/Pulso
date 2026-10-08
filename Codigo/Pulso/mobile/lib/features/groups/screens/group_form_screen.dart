@@ -53,7 +53,9 @@ class _GroupFormScreenState extends State<GroupFormScreen> {
     }
     setState(() => submitting = true);
     try {
-      await context.read<GroupRepository>().entrar(codigoConvite: _codigo.text.trim());
+      await context.read<GroupRepository>().entrar(
+        codigoConvite: _codigo.text.trim(),
+      );
       if (!mounted) return;
       await context.read<GroupsController>().reload();
       if (!mounted) return;
@@ -73,13 +75,25 @@ class _GroupFormScreenState extends State<GroupFormScreen> {
       body: ListView(
         padding: const EdgeInsets.all(PulsoTokens.space4),
         children: [
-          TextField(controller: _nome, decoration: const InputDecoration(labelText: 'Nome do grupo')),
+          TextField(
+            controller: _nome,
+            decoration: const InputDecoration(labelText: 'Nome do grupo'),
+          ),
           const SizedBox(height: PulsoTokens.space3),
-          FilledButton(onPressed: submitting ? null : _criar, child: const Text('Criar grupo')),
+          FilledButton(
+            onPressed: submitting ? null : _criar,
+            child: const Text('Criar grupo'),
+          ),
           const SizedBox(height: PulsoTokens.space6),
-          TextField(controller: _codigo, decoration: const InputDecoration(labelText: 'Código de convite')),
+          TextField(
+            controller: _codigo,
+            decoration: const InputDecoration(labelText: 'Código de convite'),
+          ),
           const SizedBox(height: PulsoTokens.space3),
-          OutlinedButton(onPressed: submitting ? null : _entrar, child: const Text('Entrar com código')),
+          OutlinedButton(
+            onPressed: submitting ? null : _entrar,
+            child: const Text('Entrar com código'),
+          ),
         ],
       ),
     );
