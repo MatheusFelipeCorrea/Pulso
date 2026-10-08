@@ -18,6 +18,10 @@ O nome "Pulso" remete à ideia de manter o pulso firme nas finanças, monitorar 
 - Artur Martins Mol
 - João Paulo Carneiro Aramuni
 
+## Contribuição
+
+Branches de trabalho nascem da **sprint vigente** (`Sprint-4` agora), não da `main`. Fluxo completo: [CONTRIBUTING.md](CONTRIBUTING.md). Conduta: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
 ## Instruções de utilização
 
 API e Web já sobem localmente (`Codigo/Pulso/api` e `Codigo/Pulso/web`). Detalhes em cada README da pasta. Hospedagem pública em breve.
