@@ -70,12 +70,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _validateLocal() {
     setState(() {
-      _nomeError = _nome.text.trim().length < 3 ? 'Nome deve ter no mínimo 3 caracteres' : null;
+      _nomeError = _nome.text.trim().length < 3
+          ? 'Nome deve ter no mínimo 3 caracteres'
+          : null;
       _emailError = isValidEmail(_email.text) ? null : 'Email inválido';
-      _senhaError = senhaForteRegex.hasMatch(_senha.text)
+      _senhaError = senhaForteRegex.hasMatch(_senha.text) ? null : 'Senha deve ter no mínimo 8 caracteres, 1 maiúscula, 1 número e 1 caractere especial.';
+      _confirmarError = _senha.text == _confirmar.text
           ? null
-          : 'Senha deve ter no mínimo 8 caracteres, 1 maiúscula, 1 número e 1 caractere especial.';
-      _confirmarError = _senha.text == _confirmar.text ? null : 'As senhas não conferem.';
+          : 'As senhas não conferem.';
     });
   }
 
@@ -91,19 +93,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() => _submitting = true);
     try {
       await context.read<AuthController>().register(
-            nome: _nome.text,
-            email: _email.text,
-            senha: _senha.text,
-            confirmarSenha: _confirmar.text,
-          );
+        nome: _nome.text,
+        email: _email.text,
+        senha: _senha.text,
+        confirmarSenha: _confirmar.text,
+      );
       if (!mounted) return;
-      context.go('/register/email-sent?email=${Uri.encodeComponent(_email.text.trim().toLowerCase())}');
+      context.go(
+        '/register/email-sent?email=${Uri.encodeComponent(_email.text.trim().toLowerCase())}',
+      );
     } on ApiException catch (error) {
       if (!mounted) return;
       if (error.isConflict) {
         setState(() => _emailError = error.message);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error.message)));
       }
     } finally {
       if (mounted) setState(() => _submitting = false);
@@ -164,7 +169,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               Checkbox(
                 value: _aceitarTermos,
-                onChanged: (value) => setState(() => _aceitarTermos = value ?? false),
+                onChanged: (value) =>
+                    setState(() => _aceitarTermos = value ?? false),
               ),
               Expanded(
                 child: Padding(

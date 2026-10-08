@@ -7,117 +7,123 @@ import { DateRangePicker } from '@/design-system/components/pickers/DateRangePic
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { Skeleton } from '@/design-system/components/feedback/Skeleton/Skeleton.jsx'
 import { SpinnerDots } from '@/design-system/components/feedback/Spinner/SpinnerDots.jsx'
-import { categoriaFilterOptions, recursoFilterOptions, toSelectOptions } from '@/utils/filterOptions.js'
+import {
+    categoriaFilterOptions,
+    recursoFilterOptions,
+    toSelectOptions,
+} from '@/utils/filterOptions.js'
 
 export function TransactionFilters({
-  filtros,
-  filtrosAtivos,
-  opcoes,
-  opcoesLoading,
-  onChange,
-  onFiltrar,
-  onLimpar,
-  filtrosPendentes,
-  loading,
+    filtros,
+    filtrosAtivos,
+    opcoes,
+    opcoesLoading,
+    onChange,
+    onFiltrar,
+    onLimpar,
+    filtrosPendentes,
+    loading,
 }) {
-  const categoriaOptions = useMemo(
-    () => categoriaFilterOptions(opcoes?.categorias ?? []),
-    [opcoes?.categorias]
-  )
-  const tipoOptions = toSelectOptions(opcoes?.tipos)
-  const recursoOptions = recursoFilterOptions(opcoes?.recursos)
-
-  const podeLimpar = !filtrosPendentes && !filtrosTransacaoSaoPadrao(filtrosAtivos)
-
-  const handleFilterChange = (patch) => {
-    onChange?.({ ...filtros, ...patch })
-  }
-
-  const handleBotao = () => {
-    if (filtrosPendentes) {
-      onFiltrar?.()
-    } else if (podeLimpar) {
-      onLimpar?.()
-    }
-  }
-
-  const botaoIcon = loading ? (
-    <SpinnerDots label={podeLimpar && !filtrosPendentes ? 'Limpando filtros...' : 'Aplicando filtros...'} />
-  ) : podeLimpar && !filtrosPendentes ? (
-    <RotateCcw size={16} />
-  ) : undefined
-
-  if (opcoesLoading) {
-    return (
-      <section className="tx-filters-card">
-        <Skeleton className="h-[4.5rem] w-full rounded-lg" />
-        <div className="tx-filters__row">
-          {[1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} className="h-[4.5rem] w-full rounded-lg" />
-          ))}
-          <Skeleton className="h-11 w-[8.75rem] rounded-lg" />
-        </div>
-      </section>
+    const categoriaOptions = useMemo(
+        () => categoriaFilterOptions(opcoes?.categorias ?? []),
+        [opcoes?.categorias]
     )
-  }
+    const tipoOptions = toSelectOptions(opcoes?.tipos)
+    const recursoOptions = recursoFilterOptions(opcoes?.recursos)
 
-  return (
-    <section className="tx-filters-card">
-      <div className="tx-filters__search">
-        <InputSearch
-          label="Buscar"
-          value={filtros.busca}
-          onChange={(v) => handleFilterChange({ busca: v })}
-          placeholder="Buscar por descrição ou tag..."
+    const podeLimpar = !filtrosPendentes && !filtrosTransacaoSaoPadrao(filtrosAtivos)
+
+    const handleFilterChange = (patch) => {
+        onChange?.({ ...filtros, ...patch })
+    }
+
+    const handleBotao = () => {
+        if (filtrosPendentes) {
+            onFiltrar?.()
+        } else if (podeLimpar) {
+            onLimpar?.()
+        }
+    }
+
+    const botaoIcon = loading ? (
+        <SpinnerDots
+            label={podeLimpar && !filtrosPendentes ? 'Limpando filtros...' : 'Aplicando filtros...'}
         />
-      </div>
+    ) : podeLimpar && !filtrosPendentes ? (
+        <RotateCcw size={16} />
+    ) : undefined
 
-      <div className="tx-filters__row">
-        <DateRangePicker
-          label="Período"
-          startDate={filtros.dataInicio}
-          endDate={filtros.dataFim}
-          onChange={({ start, end }) =>
-            handleFilterChange({ dataInicio: start, dataFim: end })
-          }
-          maxDate={new Date()}
-          fullWidth
-        />
+    if (opcoesLoading) {
+        return (
+            <section className="tx-filters-card">
+                <Skeleton className="h-[4.5rem] w-full rounded-lg" />
+                <div className="tx-filters__row">
+                    {[1, 2, 3, 4].map((i) => (
+                        <Skeleton key={i} className="h-[4.5rem] w-full rounded-lg" />
+                    ))}
+                    <Skeleton className="h-11 w-[8.75rem] rounded-lg" />
+                </div>
+            </section>
+        )
+    }
 
-        <Select
-          label="Categoria"
-          value={filtros.categoria || ''}
-          onChange={(v) => handleFilterChange({ categoria: v || null })}
-          options={categoriaOptions}
-        />
+    return (
+        <section className="tx-filters-card">
+            <div className="tx-filters__search">
+                <InputSearch
+                    label="Buscar"
+                    value={filtros.busca}
+                    onChange={(v) => handleFilterChange({ busca: v })}
+                    placeholder="Buscar por descrição ou tag..."
+                />
+            </div>
 
-        <Select
-          label="Tipo"
-          value={filtros.tipo}
-          onChange={(v) => handleFilterChange({ tipo: v })}
-          options={tipoOptions}
-        />
+            <div className="tx-filters__row">
+                <DateRangePicker
+                    label="Período"
+                    startDate={filtros.dataInicio}
+                    endDate={filtros.dataFim}
+                    onChange={({ start, end }) =>
+                        handleFilterChange({ dataInicio: start, dataFim: end })
+                    }
+                    maxDate={new Date()}
+                    fullWidth
+                />
 
-        <Select
-          label="Recurso"
-          value={filtros.recurso}
-          onChange={(v) => handleFilterChange({ recurso: v })}
-          options={recursoOptions}
-        />
+                <Select
+                    label="Categoria"
+                    value={filtros.categoria || ''}
+                    onChange={(v) => handleFilterChange({ categoria: v || null })}
+                    options={categoriaOptions}
+                />
 
-        <div className="tx-filters__action-wrap">
-          <Button
-            variant={podeLimpar && !filtrosPendentes ? 'secondary' : 'primary'}
-            size="md"
-            disabled={loading || (!filtrosPendentes && !podeLimpar)}
-            onClick={handleBotao}
-            leftIcon={botaoIcon}
-            className="tx-filters__action"
-          >
-            {filtrosPendentes ? 'Filtrar' : podeLimpar ? 'Limpar filtros' : 'Filtrar'}
-          </Button>
-        </div>
-      </div>
-    </section>
-  )
+                <Select
+                    label="Tipo"
+                    value={filtros.tipo}
+                    onChange={(v) => handleFilterChange({ tipo: v })}
+                    options={tipoOptions}
+                />
+
+                <Select
+                    label="Recurso"
+                    value={filtros.recurso}
+                    onChange={(v) => handleFilterChange({ recurso: v })}
+                    options={recursoOptions}
+                />
+
+                <div className="tx-filters__action-wrap">
+                    <Button
+                        variant={podeLimpar && !filtrosPendentes ? 'secondary' : 'primary'}
+                        size="md"
+                        disabled={loading || (!filtrosPendentes && !podeLimpar)}
+                        onClick={handleBotao}
+                        leftIcon={botaoIcon}
+                        className="tx-filters__action"
+                    >
+                        {filtrosPendentes ? 'Filtrar' : podeLimpar ? 'Limpar filtros' : 'Filtrar'}
+                    </Button>
+                </div>
+            </div>
+        </section>
+    )
 }

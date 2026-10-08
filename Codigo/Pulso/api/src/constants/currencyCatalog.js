@@ -65,15 +65,78 @@ const BRL_CURRENCY = {
 
 const FALLBACK_CURRENCIES = [
     BRL_CURRENCY,
-    { code: 'USD', name: 'Dólar Americano', symbol: 'US$', pair: 'USD-BRL', quoteVia: 'direct', crossPair: null },
-    { code: 'EUR', name: 'Euro', symbol: '€', pair: 'EUR-BRL', quoteVia: 'direct', crossPair: null },
-    { code: 'GBP', name: 'Libra Esterlina', symbol: '£', pair: 'GBP-BRL', quoteVia: 'direct', crossPair: null },
-    { code: 'ARS', name: 'Peso Argentino', symbol: 'AR$', pair: 'ARS-BRL', quoteVia: 'direct', crossPair: null },
-    { code: 'MXN', name: 'Peso Mexicano', symbol: 'MX$', pair: 'MXN-BRL', quoteVia: 'direct', crossPair: null },
-    { code: 'JPY', name: 'Iene Japonês', symbol: '¥', pair: 'JPY-BRL', quoteVia: 'direct', crossPair: null },
-    { code: 'CAD', name: 'Dólar Canadense', symbol: 'CA$', pair: 'CAD-BRL', quoteVia: 'direct', crossPair: null },
-    { code: 'CHF', name: 'Franco Suíço', symbol: 'CHF', pair: 'CHF-BRL', quoteVia: 'direct', crossPair: null },
-    { code: 'AUD', name: 'Dólar Australiano', symbol: 'A$', pair: 'AUD-BRL', quoteVia: 'direct', crossPair: null },
+    {
+        code: 'USD',
+        name: 'Dólar Americano',
+        symbol: 'US$',
+        pair: 'USD-BRL',
+        quoteVia: 'direct',
+        crossPair: null,
+    },
+    {
+        code: 'EUR',
+        name: 'Euro',
+        symbol: '€',
+        pair: 'EUR-BRL',
+        quoteVia: 'direct',
+        crossPair: null,
+    },
+    {
+        code: 'GBP',
+        name: 'Libra Esterlina',
+        symbol: '£',
+        pair: 'GBP-BRL',
+        quoteVia: 'direct',
+        crossPair: null,
+    },
+    {
+        code: 'ARS',
+        name: 'Peso Argentino',
+        symbol: 'AR$',
+        pair: 'ARS-BRL',
+        quoteVia: 'direct',
+        crossPair: null,
+    },
+    {
+        code: 'MXN',
+        name: 'Peso Mexicano',
+        symbol: 'MX$',
+        pair: 'MXN-BRL',
+        quoteVia: 'direct',
+        crossPair: null,
+    },
+    {
+        code: 'JPY',
+        name: 'Iene Japonês',
+        symbol: '¥',
+        pair: 'JPY-BRL',
+        quoteVia: 'direct',
+        crossPair: null,
+    },
+    {
+        code: 'CAD',
+        name: 'Dólar Canadense',
+        symbol: 'CA$',
+        pair: 'CAD-BRL',
+        quoteVia: 'direct',
+        crossPair: null,
+    },
+    {
+        code: 'CHF',
+        name: 'Franco Suíço',
+        symbol: 'CHF',
+        pair: 'CHF-BRL',
+        quoteVia: 'direct',
+        crossPair: null,
+    },
+    {
+        code: 'AUD',
+        name: 'Dólar Australiano',
+        symbol: 'A$',
+        pair: 'AUD-BRL',
+        quoteVia: 'direct',
+        crossPair: null,
+    },
 ];
 
 const DEFAULT_FAVORITES = ['USD', 'EUR', 'GBP', 'ARS'];
@@ -83,7 +146,10 @@ let catalogLoadedAt = 0;
 let catalogPromise = null;
 let currencyByCode = Object.fromEntries(FALLBACK_CURRENCIES.map((item) => [item.code, item]));
 
-const cleanCurrencyName = (name) => String(name ?? '').replace(/\s*\[[^\]]*\]\s*$/u, '').trim();
+const cleanCurrencyName = (name) =>
+    String(name ?? '')
+        .replace(/\s*\[[^\]]*\]\s*$/u, '')
+        .trim();
 
 const parseUniqXml = (xml) =>
     [...String(xml).matchAll(/<([A-Z0-9]{3,})>([^<]*)<\/\1>/gu)].map((match) => ({
@@ -129,7 +195,12 @@ const loadCatalogFromApi = async () => {
     const moedas = [BRL_CURRENCY];
 
     for (const { code, name } of names) {
-        if (code === 'BRL' || !/^[A-Z]{3}$/u.test(code) || EXCLUDED_CODES.has(code) || CRYPTO_CODES.has(code)) {
+        if (
+            code === 'BRL' ||
+            !/^[A-Z]{3}$/u.test(code) ||
+            EXCLUDED_CODES.has(code) ||
+            CRYPTO_CODES.has(code)
+        ) {
             continue;
         }
 

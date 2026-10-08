@@ -124,7 +124,8 @@ class AppShell extends StatelessWidget {
               current: controller.filters,
               options: controller.options,
             );
-            if (next != null && context.mounted) await controller.applyFilters(next);
+            if (next != null && context.mounted)
+              await controller.applyFilters(next);
           },
           icon: const Icon(Icons.tune),
         ),
@@ -164,7 +165,10 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(width: _sidebarWidth, child: SafeArea(child: _body(context)));
+    return Drawer(
+      width: _sidebarWidth,
+      child: SafeArea(child: _body(context)),
+    );
   }
 
   Widget _body(BuildContext context) {
@@ -178,14 +182,17 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     final query = _busca.text.trim().toLowerCase();
     final searching = query.isNotEmpty;
     final premium = user?.plano == 'PREMIUM';
-    bool matches(String label) => !searching || label.toLowerCase().contains(query);
+    bool matches(String label) =>
+        !searching || label.toLowerCase().contains(query);
 
     final showTransacoes = matches('Transações') || matches('Financeiro');
     final showCalendario = matches('Calendário') || matches('Financeiro');
     final showOrcamento = matches('Orçamento') || matches('Financeiro');
     final showMetas = matches('Metas Financeiras') || matches('Planejamento');
-    final showCompra = matches('Planejamento de Compra') || matches('Planejamento');
-    final showViagens = premium && (matches('Viagens e Moedas') || matches('Planejamento'));
+    final showCompra =
+        matches('Planejamento de Compra') || matches('Planejamento');
+    final showViagens =
+        premium && (matches('Viagens e Moedas') || matches('Planejamento'));
     final showFinanceiro = showTransacoes || showCalendario || showOrcamento;
     final showPlanejamento = showMetas || showViagens || showCompra;
     final showPerfil = matches('Perfil') || matches('Conta');
@@ -204,11 +211,21 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Padding(
-            padding: EdgeInsets.fromLTRB(PulsoTokens.space5, PulsoTokens.space3, PulsoTokens.space4, PulsoTokens.space2),
+            padding: EdgeInsets.fromLTRB(
+              PulsoTokens.space5,
+              PulsoTokens.space3,
+              PulsoTokens.space4,
+              PulsoTokens.space2,
+            ),
             child: PulsoBrand(height: 28, showTagline: true),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(PulsoTokens.space3, 0, PulsoTokens.space3, PulsoTokens.space2),
+            padding: const EdgeInsets.fromLTRB(
+              PulsoTokens.space3,
+              0,
+              PulsoTokens.space3,
+              PulsoTokens.space2,
+            ),
             child: TextField(
               controller: _busca,
               onChanged: (_) => setState(() {}),
@@ -220,22 +237,34 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(PulsoTokens.space3, PulsoTokens.space1, PulsoTokens.space3, PulsoTokens.space3),
+            padding: const EdgeInsets.fromLTRB(
+              PulsoTokens.space3,
+              PulsoTokens.space1,
+              PulsoTokens.space3,
+              PulsoTokens.space3,
+            ),
             child: Container(
               padding: const EdgeInsets.all(PulsoTokens.space3),
               decoration: BoxDecoration(
                 color: scheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(PulsoTokens.radiusLg),
-                border: Border.all(color: scheme.outline.withValues(alpha: 0.6)),
+                border: Border.all(
+                  color: scheme.outline.withValues(alpha: 0.6),
+                ),
               ),
               child: Row(
                 children: [
                   CircleAvatar(
                     backgroundColor: PulsoColors.button,
                     foregroundColor: Colors.white,
-                    backgroundImage: (user?.urlAvatar ?? '').isNotEmpty ? NetworkImage(user!.urlAvatar!) : null,
+                    backgroundImage: (user?.urlAvatar ?? '').isNotEmpty
+                        ? NetworkImage(user!.urlAvatar!)
+                        : null,
                     child: (user?.urlAvatar ?? '').isEmpty
-                        ? Text(initials, style: const TextStyle(fontWeight: FontWeight.w700))
+                        ? Text(
+                            initials,
+                            style: const TextStyle(fontWeight: FontWeight.w700),
+                          )
                         : null,
                   ),
                   const SizedBox(width: PulsoTokens.space3),
@@ -251,7 +280,11 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                         ),
                         if (kind != null) ...[
                           const SizedBox(height: 6),
-                          PulsoBadge.kind(kind: kind, brightness: brightness, compact: true),
+                          PulsoBadge.kind(
+                            kind: kind,
+                            brightness: brightness,
+                            compact: true,
+                          ),
                         ],
                       ],
                     ),
@@ -276,21 +309,27 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                       _NavTile(
                         icon: Icons.swap_horiz,
                         label: 'Transações',
-                        selected: location == '/transactions' || location.startsWith('/transactions/'),
+                        selected:
+                            location == '/transactions' ||
+                            location.startsWith('/transactions/'),
                         onTap: () => _go(context, '/transactions'),
                       ),
                     if (showCalendario)
                       _NavTile(
                         icon: Icons.calendar_month_outlined,
                         label: 'Calendário Financeiro',
-                        selected: location == '/calendar' || location.startsWith('/calendar/'),
+                        selected:
+                            location == '/calendar' ||
+                            location.startsWith('/calendar/'),
                         onTap: () => _go(context, '/calendar'),
                       ),
                     if (showOrcamento)
                       _NavTile(
                         icon: Icons.pie_chart_outline,
                         label: 'Orçamento Mensal',
-                        selected: location == '/budget' || location.startsWith('/budget/'),
+                        selected:
+                            location == '/budget' ||
+                            location.startsWith('/budget/'),
                         onTap: () => _go(context, '/budget'),
                       ),
                   ],
@@ -307,21 +346,27 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                       _NavTile(
                         icon: Icons.gps_fixed,
                         label: 'Metas Financeiras',
-                        selected: location == '/goals' || location.startsWith('/goals/'),
+                        selected:
+                            location == '/goals' ||
+                            location.startsWith('/goals/'),
                         onTap: () => _go(context, '/goals'),
                       ),
                     if (showCompra)
                       _NavTile(
                         icon: Icons.shopping_cart_outlined,
                         label: 'Planejamento de Compra',
-                        selected: location == '/purchase-planning' || location.startsWith('/purchase-planning/'),
+                        selected:
+                            location == '/purchase-planning' ||
+                            location.startsWith('/purchase-planning/'),
                         onTap: () => _go(context, '/purchase-planning'),
                       ),
                     if (showViagens)
                       _NavTile(
                         icon: Icons.flight_takeoff,
                         label: 'Viagens e Moedas',
-                        selected: location == '/trips' || location.startsWith('/trips/'),
+                        selected:
+                            location == '/trips' ||
+                            location.startsWith('/trips/'),
                         onTap: () => _go(context, '/trips'),
                       ),
                   ],
@@ -355,7 +400,14 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
               if (showSair)
                 ListTile(
                   leading: Icon(Icons.logout, color: scheme.error),
-                  title: Text('Sair', style: TextStyle(color: scheme.error, fontWeight: FontWeight.w600, fontSize: PulsoTokens.fontSm)),
+                  title: Text(
+                    'Sair',
+                    style: TextStyle(
+                      color: scheme.error,
+                      fontWeight: FontWeight.w600,
+                      fontSize: PulsoTokens.fontSm,
+                    ),
+                  ),
                   onTap: () async {
                     if (!context.mounted) return;
                     Navigator.pop(context);
@@ -376,7 +428,11 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
   }
 
   String _initials(String nome) {
-    final parts = nome.trim().split(RegExp(r'\s+')).where((part) => part.isNotEmpty).toList();
+    final parts = nome
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((part) => part.isNotEmpty)
+        .toList();
     if (parts.isEmpty) return '?';
     if (parts.length == 1) return parts.first[0].toUpperCase();
     return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
@@ -409,9 +465,9 @@ class _SectionHeader extends StatelessWidget {
         title: Text(
           label,
           style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontSize: open ? PulsoTokens.fontSm : PulsoTokens.fontMd,
-                fontWeight: FontWeight.w700,
-              ),
+            fontSize: open ? PulsoTokens.fontSm : PulsoTokens.fontMd,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         trailing: AnimatedRotation(
           turns: open ? 0.5 : 0,
@@ -442,7 +498,12 @@ class _NavTile extends StatelessWidget {
     final accent = PulsoColors.accent(Theme.of(context).brightness);
     final color = selected ? accent : scheme.onSurfaceVariant;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, 0, PulsoTokens.space2, 0),
+      padding: const EdgeInsets.fromLTRB(
+        PulsoTokens.space4,
+        0,
+        PulsoTokens.space2,
+        0,
+      ),
       child: ListTile(
         dense: true,
         leading: Icon(icon, color: color, size: 20),

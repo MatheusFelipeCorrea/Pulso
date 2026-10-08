@@ -1,10 +1,6 @@
 const prisma = require('../config/database');
 const { startOfDayInTimezone, endOfDayInTimezone } = require('../utils/dateTimezone');
-const {
-    roundMoney,
-    calcProgressoMeta,
-    podeReceberAporte,
-} = require('../utils/metaBalanceUtils');
+const { roundMoney, calcProgressoMeta, podeReceberAporte } = require('../utils/metaBalanceUtils');
 
 const includeAportes = {
     aportes: {

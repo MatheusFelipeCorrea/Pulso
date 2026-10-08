@@ -26,7 +26,9 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
 
   Future<void> _verify() async {
     try {
-      final result = await context.read<AuthController>().verifyEmail(widget.token);
+      final result = await context.read<AuthController>().verifyEmail(
+        widget.token,
+      );
       if (!mounted) return;
       setState(() {
         _loading = false;
@@ -66,10 +68,13 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
 
     return AuthCard(
       icon: Icons.verified_outlined,
-      title: _already ? 'Este email já estava verificado.' : 'Email verificado com sucesso!',
+      title: _already
+          ? 'Este email já estava verificado.'
+          : 'Email verificado com sucesso!',
       subtitle: 'Faça login para continuar.',
       child: FilledButton(
-        onPressed: () => context.go('/login?verified=${_already ? 'already' : 'true'}'),
+        onPressed: () =>
+            context.go('/login?verified=${_already ? 'already' : 'true'}'),
         child: const Text('Ir para o Login'),
       ),
     );

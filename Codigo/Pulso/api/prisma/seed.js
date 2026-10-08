@@ -297,17 +297,25 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
     });
     if (jaRodou) return false;
 
-    const base = (tipo, extra) => ({ usuarioId, tipo, recorrente: false, regraRecorrencia: null, ...extra });
+    const base = (tipo, extra) => ({
+        usuarioId,
+        tipo,
+        recorrente: false,
+        regraRecorrencia: null,
+        ...extra,
+    });
 
     // Receitas (RF-016) � sal�rio dos �ltimos 3 meses + extras no m�s atual
     for (const offsetMes of [-2, -1, 0]) {
-        await criarTx(base('RECEITA', {
-            categoriaId: byName('Sal�rio', 'RECEITA').id,
-            recurso: 'DINHEIRO',
-            valor: 1800,
-            descricao: 'Bolsa est�gio',
-            data: dataNoMes(5, offsetMes),
-        }));
+        await criarTx(
+            base('RECEITA', {
+                categoriaId: byName('Sal�rio', 'RECEITA').id,
+                recurso: 'DINHEIRO',
+                valor: 1800,
+                descricao: 'Bolsa est�gio',
+                data: dataNoMes(5, offsetMes),
+            })
+        );
     }
     await criarTx(
         base('RECEITA', {
@@ -319,48 +327,215 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
         }),
         [tagsPorNome.Trabalho.id]
     );
-    await criarTx(base('RECEITA', {
-        categoriaId: byName('Investimentos', 'RECEITA').id,
-        recurso: 'DINHEIRO',
-        valor: 45.32,
-        descricao: 'Rendimento CDB',
-        data: dataNoMes(2, 0),
-    }));
+    await criarTx(
+        base('RECEITA', {
+            categoriaId: byName('Investimentos', 'RECEITA').id,
+            recurso: 'DINHEIRO',
+            valor: 45.32,
+            descricao: 'Rendimento CDB',
+            data: dataNoMes(2, 0),
+        })
+    );
 
     // Despesas (RF-017/RF-018/RF-026 recurso x categoria) � 3 meses de hist�rico
     const despesasPorMes = {
         '-2': [
-            { categoriaId: byName('Alimenta��o', 'DESPESA').id, recurso: 'VR', valor: 24.9, descricao: 'Almo�o no RU', dia: 3 },
-            { categoriaId: byName('Alimenta��o', 'DESPESA').id, recurso: 'VR', valor: 22.5, descricao: 'Almo�o no RU', dia: 16 },
-            { categoriaId: byName('Alimenta��o', 'DESPESA').id, recurso: 'DINHEIRO', valor: 68, descricao: 'Jantar com amigos', dia: 18 },
-            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'DINHEIRO', valor: 28.8, descricao: 'Passagens da semana', dia: 6 },
-            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'DINHEIRO', valor: 32, descricao: 'Uber pro trampo', dia: 14 },
-            { categoriaId: byName('Compras', 'DESPESA').id, recurso: 'VA', valor: 95.4, descricao: 'Mercado', dia: 9 },
-            { categoriaId: byName('Lazer', 'DESPESA').id, recurso: 'DINHEIRO', valor: 45, descricao: 'Cinema', dia: 21 },
-            { categoriaId: byName('Sa�de', 'DESPESA').id, recurso: 'DINHEIRO', valor: 38, descricao: 'Farm�cia', dia: 25 },
+            {
+                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                recurso: 'VR',
+                valor: 24.9,
+                descricao: 'Almo�o no RU',
+                dia: 3,
+            },
+            {
+                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                recurso: 'VR',
+                valor: 22.5,
+                descricao: 'Almo�o no RU',
+                dia: 16,
+            },
+            {
+                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 68,
+                descricao: 'Jantar com amigos',
+                dia: 18,
+            },
+            {
+                categoriaId: byName('Transporte', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 28.8,
+                descricao: 'Passagens da semana',
+                dia: 6,
+            },
+            {
+                categoriaId: byName('Transporte', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 32,
+                descricao: 'Uber pro trampo',
+                dia: 14,
+            },
+            {
+                categoriaId: byName('Compras', 'DESPESA').id,
+                recurso: 'VA',
+                valor: 95.4,
+                descricao: 'Mercado',
+                dia: 9,
+            },
+            {
+                categoriaId: byName('Lazer', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 45,
+                descricao: 'Cinema',
+                dia: 21,
+            },
+            {
+                categoriaId: byName('Sa�de', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 38,
+                descricao: 'Farm�cia',
+                dia: 25,
+            },
         ],
         '-1': [
-            { categoriaId: byName('Alimenta��o', 'DESPESA').id, recurso: 'VR', valor: 26, descricao: 'Almo�o no RU', dia: 3 },
-            { categoriaId: byName('Alimenta��o', 'DESPESA').id, recurso: 'VR', valor: 23.9, descricao: 'Almo�o no RU', dia: 16 },
-            { categoriaId: byName('Alimenta��o', 'DESPESA').id, recurso: 'DINHEIRO', valor: 74, descricao: 'Jantar com amigos', dia: 18 },
-            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'DINHEIRO', valor: 28.8, descricao: 'Passagens da semana', dia: 6 },
-            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'DINHEIRO', valor: 30, descricao: 'Uber pro trampo', dia: 14 },
-            { categoriaId: byName('Compras', 'DESPESA').id, recurso: 'VA', valor: 102.1, descricao: 'Mercado', dia: 9 },
-            { categoriaId: byName('Educa��o', 'DESPESA').id, recurso: 'DINHEIRO', valor: 120, descricao: 'Mensalidade curso de ingl�s', dia: 20, tags: ['Faculdade'] },
-            { categoriaId: byName('Compras', 'DESPESA').id, recurso: 'DINHEIRO', valor: 189.9, descricao: 'T�nis novo', dia: 22, tags: ['Impulsivo'] },
-            { categoriaId: byName('Lazer', 'DESPESA').id, recurso: 'DINHEIRO', valor: 50, descricao: 'Cinema', dia: 21 },
-            { categoriaId: byName('Sa�de', 'DESPESA').id, recurso: 'DINHEIRO', valor: 41, descricao: 'Farm�cia', dia: 25 },
+            {
+                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                recurso: 'VR',
+                valor: 26,
+                descricao: 'Almo�o no RU',
+                dia: 3,
+            },
+            {
+                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                recurso: 'VR',
+                valor: 23.9,
+                descricao: 'Almo�o no RU',
+                dia: 16,
+            },
+            {
+                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 74,
+                descricao: 'Jantar com amigos',
+                dia: 18,
+            },
+            {
+                categoriaId: byName('Transporte', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 28.8,
+                descricao: 'Passagens da semana',
+                dia: 6,
+            },
+            {
+                categoriaId: byName('Transporte', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 30,
+                descricao: 'Uber pro trampo',
+                dia: 14,
+            },
+            {
+                categoriaId: byName('Compras', 'DESPESA').id,
+                recurso: 'VA',
+                valor: 102.1,
+                descricao: 'Mercado',
+                dia: 9,
+            },
+            {
+                categoriaId: byName('Educa��o', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 120,
+                descricao: 'Mensalidade curso de ingl�s',
+                dia: 20,
+                tags: ['Faculdade'],
+            },
+            {
+                categoriaId: byName('Compras', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 189.9,
+                descricao: 'T�nis novo',
+                dia: 22,
+                tags: ['Impulsivo'],
+            },
+            {
+                categoriaId: byName('Lazer', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 50,
+                descricao: 'Cinema',
+                dia: 21,
+            },
+            {
+                categoriaId: byName('Sa�de', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 41,
+                descricao: 'Farm�cia',
+                dia: 25,
+            },
         ],
         0: [
-            { categoriaId: byName('Alimenta��o', 'DESPESA').id, recurso: 'VR', valor: 25.5, descricao: 'Almo�o no RU', dia: 3 },
-            { categoriaId: byName('Alimenta��o', 'DESPESA').id, recurso: 'VR', valor: 24, descricao: 'Almo�o no RU', dia: 7 },
-            { categoriaId: byName('Alimenta��o', 'DESPESA').id, recurso: 'DINHEIRO', valor: 62, descricao: 'Jantar com amigos', dia: 8 },
-            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'DINHEIRO', valor: 28.8, descricao: 'Passagens da semana', dia: 6 },
-            { categoriaId: byName('Transporte', 'DESPESA').id, recurso: 'DINHEIRO', valor: 18, descricao: 'Uber pro trampo', dia: 4 },
-            { categoriaId: byName('Compras', 'DESPESA').id, recurso: 'VA', valor: 88, descricao: 'Mercado', dia: 2 },
-            { categoriaId: byName('Educa��o', 'DESPESA').id, recurso: 'DINHEIRO', valor: 120, descricao: 'Mensalidade curso de ingl�s', dia: 8, tags: ['Faculdade'] },
-            { categoriaId: byName('Lazer', 'DESPESA').id, recurso: 'DINHEIRO', valor: 40, descricao: 'Cinema', dia: 1 },
-            { categoriaId: byName('Sa�de', 'DESPESA').id, recurso: 'DINHEIRO', valor: 35, descricao: 'Farm�cia', dia: 7 },
+            {
+                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                recurso: 'VR',
+                valor: 25.5,
+                descricao: 'Almo�o no RU',
+                dia: 3,
+            },
+            {
+                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                recurso: 'VR',
+                valor: 24,
+                descricao: 'Almo�o no RU',
+                dia: 7,
+            },
+            {
+                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 62,
+                descricao: 'Jantar com amigos',
+                dia: 8,
+            },
+            {
+                categoriaId: byName('Transporte', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 28.8,
+                descricao: 'Passagens da semana',
+                dia: 6,
+            },
+            {
+                categoriaId: byName('Transporte', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 18,
+                descricao: 'Uber pro trampo',
+                dia: 4,
+            },
+            {
+                categoriaId: byName('Compras', 'DESPESA').id,
+                recurso: 'VA',
+                valor: 88,
+                descricao: 'Mercado',
+                dia: 2,
+            },
+            {
+                categoriaId: byName('Educa��o', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 120,
+                descricao: 'Mensalidade curso de ingl�s',
+                dia: 8,
+                tags: ['Faculdade'],
+            },
+            {
+                categoriaId: byName('Lazer', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 40,
+                descricao: 'Cinema',
+                dia: 1,
+            },
+            {
+                categoriaId: byName('Sa�de', 'DESPESA').id,
+                recurso: 'DINHEIRO',
+                valor: 35,
+                descricao: 'Farm�cia',
+                dia: 7,
+            },
         ],
     };
 
@@ -387,26 +562,30 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
     );
 
     // RF-027 � transfer�ncia entre recursos (Dinheiro ? Poupan�a), fora dos totais de receita/despesa
-    await criarTx(base('TRANSFERENCIA', {
-        categoriaId: null,
-        recurso: 'DINHEIRO',
-        recursoDestino: 'POUPANCA',
-        valor: 300,
-        descricao: 'Guardando pra reserva',
-        data: dataNoMes(6, 0),
-    }));
+    await criarTx(
+        base('TRANSFERENCIA', {
+            categoriaId: null,
+            recurso: 'DINHEIRO',
+            recursoDestino: 'POUPANCA',
+            valor: 300,
+            descricao: 'Guardando pra reserva',
+            data: dataNoMes(6, 0),
+        })
+    );
 
     // RF-021/RF-022 � transa��o recorrente (m�e) j� com "filhas" geradas nos meses seguintes
     const categoriaAssinaturas = byName('Servi�os e Assinaturas', 'DESPESA').id;
-    const mae = await criarTx(base('DESPESA', {
-        categoriaId: categoriaAssinaturas,
-        recurso: 'DINHEIRO',
-        valor: 21.9,
-        descricao: 'Assinatura Spotify',
-        data: dataNoMes(10, -2),
-        recorrente: true,
-        regraRecorrencia: 'FREQ=MONTHLY;INTERVAL=1',
-    }));
+    const mae = await criarTx(
+        base('DESPESA', {
+            categoriaId: categoriaAssinaturas,
+            recurso: 'DINHEIRO',
+            valor: 21.9,
+            descricao: 'Assinatura Spotify',
+            data: dataNoMes(10, -2),
+            recorrente: true,
+            regraRecorrencia: 'FREQ=MONTHLY;INTERVAL=1',
+        })
+    );
     await prisma.transacao.create({
         data: base('DESPESA', {
             categoriaId: categoriaAssinaturas,
@@ -443,28 +622,124 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
     if (markerExistente) return false;
 
     const rng = criarRng(42_026);
-    const base = (tipo, extra) => ({ usuarioId, tipo, recorrente: false, regraRecorrencia: null, ...extra });
+    const base = (tipo, extra) => ({
+        usuarioId,
+        tipo,
+        recorrente: false,
+        regraRecorrencia: null,
+        ...extra,
+    });
     const registros = [];
 
     const cat = (nome, tipo) => byName(nome, tipo).id;
     const mesesComBolsaDemo = new Set([-2, -1, 0]);
 
     const templatesDespesa = [
-        { categoria: 'Alimenta��o', recurso: 'VR', descricoes: ['Almo�o no RU', 'Lanche cantina', 'Marmita RU'], min: 21, max: 29 },
-        { categoria: 'Alimenta��o', recurso: 'DINHEIRO', descricoes: ['Jantar delivery', 'A�a�', 'Padaria', 'Hamburguer'], min: 28, max: 95 },
-        { categoria: 'Transporte', recurso: 'DINHEIRO', descricoes: ['Passagens da semana', 'Metrô + ônibus', 'Ônibus ida/volta'], min: 19.2, max: 38.4 },
-        { categoria: 'Transporte', recurso: 'DINHEIRO', descricoes: ['Uber pro trampo', '99 pra faculdade', 'Estacionamento'], min: 12, max: 45 },
-        { categoria: 'Compras', recurso: 'VA', descricoes: ['Mercado', 'Feira', 'Produtos de limpeza'], min: 45, max: 180 },
-        { categoria: 'Compras', recurso: 'DINHEIRO', descricoes: ['Amazon', 'Shopee', 'Presente'], min: 35, max: 220 },
-        { categoria: 'Lazer', recurso: 'DINHEIRO', descricoes: ['Cinema', 'Bar com amigos', 'Show', 'Streaming avulso'], min: 25, max: 120 },
-        { categoria: 'Sa�de', recurso: 'DINHEIRO', descricoes: ['Farm�cia', 'Consulta', 'Exame'], min: 25, max: 180 },
-        { categoria: 'Educa��o', recurso: 'DINHEIRO', descricoes: ['Material escolar', 'Livro t�cnico', 'Curso online'], min: 35, max: 150 },
-        { categoria: 'Vestu�rio', recurso: 'DINHEIRO', descricoes: ['Camiseta', 'Cal�a jeans', 'T�nis'], min: 49, max: 280 },
-        { categoria: 'Beleza', recurso: 'DINHEIRO', descricoes: ['Barbearia', 'Produtos skincare'], min: 35, max: 90 },
-        { categoria: 'Tecnologia', recurso: 'DINHEIRO', descricoes: ['Cabo USB-C', 'Mouse', 'Capinha'], min: 25, max: 350 },
-        { categoria: 'Pet', recurso: 'DINHEIRO', descricoes: ['Ra��o', 'Veterin�rio'], min: 45, max: 160 },
-        { categoria: 'Presentes', recurso: 'DINHEIRO', descricoes: ['Anivers�rio', 'Dia das m�es'], min: 50, max: 200 },
-        { categoria: 'Fam�lia', recurso: 'DINHEIRO', descricoes: ['Ajuda em casa', 'Visita'], min: 80, max: 250 },
+        {
+            categoria: 'Alimenta��o',
+            recurso: 'VR',
+            descricoes: ['Almo�o no RU', 'Lanche cantina', 'Marmita RU'],
+            min: 21,
+            max: 29,
+        },
+        {
+            categoria: 'Alimenta��o',
+            recurso: 'DINHEIRO',
+            descricoes: ['Jantar delivery', 'A�a�', 'Padaria', 'Hamburguer'],
+            min: 28,
+            max: 95,
+        },
+        {
+            categoria: 'Transporte',
+            recurso: 'DINHEIRO',
+            descricoes: ['Passagens da semana', 'Metrô + ônibus', 'Ônibus ida/volta'],
+            min: 19.2,
+            max: 38.4,
+        },
+        {
+            categoria: 'Transporte',
+            recurso: 'DINHEIRO',
+            descricoes: ['Uber pro trampo', '99 pra faculdade', 'Estacionamento'],
+            min: 12,
+            max: 45,
+        },
+        {
+            categoria: 'Compras',
+            recurso: 'VA',
+            descricoes: ['Mercado', 'Feira', 'Produtos de limpeza'],
+            min: 45,
+            max: 180,
+        },
+        {
+            categoria: 'Compras',
+            recurso: 'DINHEIRO',
+            descricoes: ['Amazon', 'Shopee', 'Presente'],
+            min: 35,
+            max: 220,
+        },
+        {
+            categoria: 'Lazer',
+            recurso: 'DINHEIRO',
+            descricoes: ['Cinema', 'Bar com amigos', 'Show', 'Streaming avulso'],
+            min: 25,
+            max: 120,
+        },
+        {
+            categoria: 'Sa�de',
+            recurso: 'DINHEIRO',
+            descricoes: ['Farm�cia', 'Consulta', 'Exame'],
+            min: 25,
+            max: 180,
+        },
+        {
+            categoria: 'Educa��o',
+            recurso: 'DINHEIRO',
+            descricoes: ['Material escolar', 'Livro t�cnico', 'Curso online'],
+            min: 35,
+            max: 150,
+        },
+        {
+            categoria: 'Vestu�rio',
+            recurso: 'DINHEIRO',
+            descricoes: ['Camiseta', 'Cal�a jeans', 'T�nis'],
+            min: 49,
+            max: 280,
+        },
+        {
+            categoria: 'Beleza',
+            recurso: 'DINHEIRO',
+            descricoes: ['Barbearia', 'Produtos skincare'],
+            min: 35,
+            max: 90,
+        },
+        {
+            categoria: 'Tecnologia',
+            recurso: 'DINHEIRO',
+            descricoes: ['Cabo USB-C', 'Mouse', 'Capinha'],
+            min: 25,
+            max: 350,
+        },
+        {
+            categoria: 'Pet',
+            recurso: 'DINHEIRO',
+            descricoes: ['Ra��o', 'Veterin�rio'],
+            min: 45,
+            max: 160,
+        },
+        {
+            categoria: 'Presentes',
+            recurso: 'DINHEIRO',
+            descricoes: ['Anivers�rio', 'Dia das m�es'],
+            min: 50,
+            max: 200,
+        },
+        {
+            categoria: 'Fam�lia',
+            recurso: 'DINHEIRO',
+            descricoes: ['Ajuda em casa', 'Visita'],
+            min: 80,
+            max: 250,
+        },
     ];
 
     const assinaturas = [
@@ -478,13 +753,15 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
     for (let offsetMes = -(MESES_HISTORICO_TX - 1); offsetMes <= 0; offsetMes++) {
         // Receitas fixas mensais
         if (!mesesComBolsaDemo.has(offsetMes)) {
-            registros.push(base('RECEITA', {
-                categoriaId: cat('Sal�rio', 'RECEITA'),
-                recurso: 'DINHEIRO',
-                valor: 1800,
-                descricao: 'Bolsa est�gio',
-                data: dataNoMes(5, offsetMes),
-            }));
+            registros.push(
+                base('RECEITA', {
+                    categoriaId: cat('Sal�rio', 'RECEITA'),
+                    recurso: 'DINHEIRO',
+                    valor: 1800,
+                    descricao: 'Bolsa est�gio',
+                    data: dataNoMes(5, offsetMes),
+                })
+            );
         }
 
         registros.push(
@@ -506,24 +783,43 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
 
         // Freelance espor�dico (~40% dos meses)
         if (rng() > 0.6) {
-            registros.push(base('RECEITA', {
-                categoriaId: cat('Freelance', 'RECEITA'),
-                recurso: 'DINHEIRO',
-                valor: valorEntre(rng, 180, 650),
-                descricao: escolher(rng, ['Freela design', 'Landing page cliente', 'Identidade visual', 'Social media']),
-                data: dataNoMes(diaValidoNoMes(8 + Math.floor(rng() * 18), offsetMes), offsetMes),
-            }));
+            registros.push(
+                base('RECEITA', {
+                    categoriaId: cat('Freelance', 'RECEITA'),
+                    recurso: 'DINHEIRO',
+                    valor: valorEntre(rng, 180, 650),
+                    descricao: escolher(rng, [
+                        'Freela design',
+                        'Landing page cliente',
+                        'Identidade visual',
+                        'Social media',
+                    ]),
+                    data: dataNoMes(
+                        diaValidoNoMes(8 + Math.floor(rng() * 18), offsetMes),
+                        offsetMes
+                    ),
+                })
+            );
         }
 
         // Rendimentos (~25% dos meses)
         if (rng() > 0.75) {
-            registros.push(base('RECEITA', {
-                categoriaId: cat('Investimentos', 'RECEITA'),
-                recurso: 'DINHEIRO',
-                valor: valorEntre(rng, 12, 85),
-                descricao: escolher(rng, ['Rendimento CDB', 'Dividendos FIIs', 'Juros poupan�a']),
-                data: dataNoMes(diaValidoNoMes(1 + Math.floor(rng() * 5), offsetMes), offsetMes),
-            }));
+            registros.push(
+                base('RECEITA', {
+                    categoriaId: cat('Investimentos', 'RECEITA'),
+                    recurso: 'DINHEIRO',
+                    valor: valorEntre(rng, 12, 85),
+                    descricao: escolher(rng, [
+                        'Rendimento CDB',
+                        'Dividendos FIIs',
+                        'Juros poupan�a',
+                    ]),
+                    data: dataNoMes(
+                        diaValidoNoMes(1 + Math.floor(rng() * 5), offsetMes),
+                        offsetMes
+                    ),
+                })
+            );
         }
 
         // Moradia + transfer�ncia mensal
@@ -540,78 +836,99 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
                 recurso: 'DINHEIRO',
                 recursoDestino: 'POUPANCA',
                 valor: valorEntre(rng, 150, 450),
-                descricao: escolher(rng, ['Guardando pra reserva', 'Aporte meta', 'Reserva emerg�ncia']),
+                descricao: escolher(rng, [
+                    'Guardando pra reserva',
+                    'Aporte meta',
+                    'Reserva emerg�ncia',
+                ]),
                 data: dataNoMes(diaValidoNoMes(7 + Math.floor(rng() * 10), offsetMes), offsetMes),
             })
         );
 
         // Assinaturas
         for (const ass of assinaturas) {
-            registros.push(base('DESPESA', {
-                categoriaId: cat('Servi�os e Assinaturas', 'DESPESA'),
-                recurso: 'DINHEIRO',
-                valor: ass.valor,
-                descricao: ass.descricao,
-                data: dataNoMes(diaValidoNoMes(ass.dia, offsetMes), offsetMes),
-            }));
+            registros.push(
+                base('DESPESA', {
+                    categoriaId: cat('Servi�os e Assinaturas', 'DESPESA'),
+                    recurso: 'DINHEIRO',
+                    valor: ass.valor,
+                    descricao: ass.descricao,
+                    data: dataNoMes(diaValidoNoMes(ass.dia, offsetMes), offsetMes),
+                })
+            );
         }
 
         // Despesas do dia a dia � densidade alta (~60�75 por m�s)
         const qtdDespesas = 60 + Math.floor(rng() * 16);
         for (let i = 0; i < qtdDespesas; i++) {
             const tpl = escolher(rng, templatesDespesa);
-            registros.push(base('DESPESA', {
-                categoriaId: cat(tpl.categoria, 'DESPESA'),
-                recurso: tpl.recurso,
-                valor: valorEntre(rng, tpl.min, tpl.max),
-                descricao: escolher(rng, tpl.descricoes),
-                data: dataNoMes(diaValidoNoMes(1 + Math.floor(rng() * 28), offsetMes), offsetMes),
-            }));
+            registros.push(
+                base('DESPESA', {
+                    categoriaId: cat(tpl.categoria, 'DESPESA'),
+                    recurso: tpl.recurso,
+                    valor: valorEntre(rng, tpl.min, tpl.max),
+                    descricao: escolher(rng, tpl.descricoes),
+                    data: dataNoMes(
+                        diaValidoNoMes(1 + Math.floor(rng() * 28), offsetMes),
+                        offsetMes
+                    ),
+                })
+            );
         }
 
         // Picos sazonais (IPVA, presentes natal, viagem)
         if (offsetMes === -2) {
-            registros.push(base('DESPESA', {
-                categoriaId: cat('Ve�culos', 'DESPESA'),
-                recurso: 'DINHEIRO',
-                valor: 450,
-                descricao: 'IPVA parcela',
-                data: dataNoMes(15, offsetMes),
-            }));
+            registros.push(
+                base('DESPESA', {
+                    categoriaId: cat('Ve�culos', 'DESPESA'),
+                    recurso: 'DINHEIRO',
+                    valor: 450,
+                    descricao: 'IPVA parcela',
+                    data: dataNoMes(15, offsetMes),
+                })
+            );
         }
         if (offsetMes === -1) {
-            registros.push(base('DESPESA', {
-                categoriaId: cat('Viagem', 'DESPESA'),
-                recurso: 'DINHEIRO',
-                valor: 890,
-                descricao: 'Passagem fim de semana prolongado',
-                data: dataNoMes(20, offsetMes),
-            }));
+            registros.push(
+                base('DESPESA', {
+                    categoriaId: cat('Viagem', 'DESPESA'),
+                    recurso: 'DINHEIRO',
+                    valor: 890,
+                    descricao: 'Passagem fim de semana prolongado',
+                    data: dataNoMes(20, offsetMes),
+                })
+            );
         }
         if (offsetMes === 0 && rng() > 0.3) {
-            registros.push(base('DESPESA', {
-                categoriaId: cat('Finan�as', 'DESPESA'),
-                recurso: 'DINHEIRO',
-                valor: valorEntre(rng, 35, 120),
-                descricao: 'Taxa banc�ria / IOF',
-                data: dataNoMes(28, offsetMes),
-            }));
+            registros.push(
+                base('DESPESA', {
+                    categoriaId: cat('Finan�as', 'DESPESA'),
+                    recurso: 'DINHEIRO',
+                    valor: valorEntre(rng, 35, 120),
+                    descricao: 'Taxa banc�ria / IOF',
+                    data: dataNoMes(28, offsetMes),
+                })
+            );
         }
     }
 
     // Marker invis�vel na UI (valor simb�lico) � controle de idempot�ncia
-    registros.push(base('RECEITA', {
-        categoriaId: cat('Outros', 'RECEITA'),
-        recurso: 'DINHEIRO',
-        valor: 0.01,
-        descricao: SEED_TX_MEGA_MARKER,
-        data: dataNoMes(1, -(MESES_HISTORICO_TX - 1)),
-    }));
+    registros.push(
+        base('RECEITA', {
+            categoriaId: cat('Outros', 'RECEITA'),
+            recurso: 'DINHEIRO',
+            valor: 0.01,
+            descricao: SEED_TX_MEGA_MARKER,
+            data: dataNoMes(1, -(MESES_HISTORICO_TX - 1)),
+        })
+    );
 
     await inserirTransacoesEmLotes(registros);
 
     const total = await prisma.transacao.count({ where: { usuarioId } });
-    console.log(`   ? Mega-volume: +${registros.length} transa��es (${MESES_HISTORICO_TX} meses) | total usu�rio: ${total}`);
+    console.log(
+        `   ? Mega-volume: +${registros.length} transa��es (${MESES_HISTORICO_TX} meses) | total usu�rio: ${total}`
+    );
     return true;
 }
 
@@ -722,7 +1039,9 @@ async function seedPlanejamentoCompraCompleto(usuarioId, categorias, metaNoteboo
     const count = await prisma.itemPlanejamentoCompra.count({ where: { usuarioId } });
     if (count > 0) return false;
 
-    const categoriaTecnologia = categorias.find((c) => c.nome === 'Tecnologia' && c.tipo === 'DESPESA');
+    const categoriaTecnologia = categorias.find(
+        (c) => c.nome === 'Tecnologia' && c.tipo === 'DESPESA'
+    );
 
     // RF-129 � item comprado gera automaticamente a transa��o vinculada
     const transacaoNotebook = await prisma.transacao.create({
@@ -757,9 +1076,33 @@ async function seedPlanejamentoCompraCompleto(usuarioId, categorias, metaNoteboo
 
     await prisma.itemPlanejamentoCompra.createMany({
         data: [
-            { usuarioId, nome: 'iPhone 15', valorEstimado: 5500, prioridade: 'ALTA', categoria: 'ELETRONICOS', simularParcelas: true, parcelas: 10 },
-            { usuarioId, nome: 'Sof� novo', valorEstimado: 2200, prioridade: 'MEDIA', categoria: 'CASA_ELETRODOMESTICOS', simularParcelas: true, parcelas: 6 },
-            { usuarioId, nome: 'T�nis de corrida', valorEstimado: 450, prioridade: 'BAIXA', categoria: 'VESTUARIO', simularParcelas: true, parcelas: 3 },
+            {
+                usuarioId,
+                nome: 'iPhone 15',
+                valorEstimado: 5500,
+                prioridade: 'ALTA',
+                categoria: 'ELETRONICOS',
+                simularParcelas: true,
+                parcelas: 10,
+            },
+            {
+                usuarioId,
+                nome: 'Sof� novo',
+                valorEstimado: 2200,
+                prioridade: 'MEDIA',
+                categoria: 'CASA_ELETRODOMESTICOS',
+                simularParcelas: true,
+                parcelas: 6,
+            },
+            {
+                usuarioId,
+                nome: 'T�nis de corrida',
+                valorEstimado: 450,
+                prioridade: 'BAIXA',
+                categoria: 'VESTUARIO',
+                simularParcelas: true,
+                parcelas: 3,
+            },
         ],
     });
 
@@ -783,7 +1126,11 @@ async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
                 create: [
                     { categoria: 'TRANSPORTE', descricao: 'Passagem a�rea', valorEstimado: 850 },
                     { categoria: 'HOSPEDAGEM', descricao: 'Pousada 5 noites', valorEstimado: 1200 },
-                    { categoria: 'PASSEIOS', descricao: 'Gruta do Lago Azul + flutua��o', valorEstimado: 600 },
+                    {
+                        categoria: 'PASSEIOS',
+                        descricao: 'Gruta do Lago Azul + flutua��o',
+                        valorEstimado: 600,
+                    },
                     { categoria: 'ALIMENTACAO', descricao: 'Restaurantes', valorEstimado: 400 },
                 ],
             },
@@ -801,7 +1148,8 @@ async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
                     {
                         titulo: 'Dica de amigo',
                         tipo: 'DICA',
-                        conteudo: 'Vale muito a pena reservar a Gruta do Lago Azul com 2 meses de anteced�ncia!',
+                        conteudo:
+                            'Vale muito a pena reservar a Gruta do Lago Azul com 2 meses de anteced�ncia!',
                     },
                 ],
             },
@@ -816,7 +1164,11 @@ async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
             dataPrevista: dataNoMes(1, 8),
             despesas: {
                 create: [
-                    { categoria: 'TRANSPORTE', descricao: 'Passagem a�rea internacional', valorEstimado: 4200 },
+                    {
+                        categoria: 'TRANSPORTE',
+                        descricao: 'Passagem a�rea internacional',
+                        valorEstimado: 4200,
+                    },
                     { categoria: 'HOSPEDAGEM', descricao: 'Hostel 6 noites', valorEstimado: 1500 },
                     { categoria: 'DOCUMENTACAO', descricao: 'Seguro viagem', valorEstimado: 250 },
                     { categoria: 'PASSEIOS', descricao: 'Museus e passeios', valorEstimado: 500 },
@@ -842,7 +1194,9 @@ async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
         ],
     });
 
-    console.log('   ? 2 viagens pessoais (Bonito vinculada a meta, Paris internacional) + 3 moedas favoritas');
+    console.log(
+        '   ? 2 viagens pessoais (Bonito vinculada a meta, Paris internacional) + 3 moedas favoritas'
+    );
     return true;
 }
 
@@ -853,13 +1207,74 @@ async function seedLembretesCompletos(usuarioId) {
 
     await prisma.lembrete.createMany({
         data: [
-            { usuarioId, titulo: 'Fatura do cart�o', categoria: 'FATURA_CARTAO', valor: 890, dataVencimento: dataNoMes(15, 0), antecedencia: 'TRES_DIAS', pago: false },
-            { usuarioId, titulo: 'Internet', categoria: 'INTERNET', valor: 99.9, dataVencimento: dataNoMes(20, 0), antecedencia: 'UM_DIA', pago: true, repetirMensal: true, diaRecorrencia: 20 },
-            { usuarioId, titulo: 'Assinatura Spotify', categoria: 'STREAMING', valor: 21.9, dataVencimento: dataNoMes(10, 0), antecedencia: 'NO_DIA', pago: true, repetirMensal: true, diaRecorrencia: 10 },
-            { usuarioId, titulo: 'Academia', categoria: 'ACADEMIA', valor: 89.9, dataVencimento: dataNoMes(5, 0), antecedencia: 'UM_DIA', pago: true, repetirMensal: true, diaRecorrencia: 5 },
-            { usuarioId, titulo: 'IPVA', categoria: 'IPVA', valor: 450, dataVencimento: emDias(20), antecedencia: 'CINCO_DIAS', pago: false },
-            { usuarioId, titulo: 'Anivers�rio da m�e', categoria: 'ANIVERSARIO', dataVencimento: emDias(10), antecedencia: 'UMA_SEMANA', pago: false },
-            { usuarioId, titulo: 'Plano de sa�de', categoria: 'PLANO_SAUDE', valor: 210, dataVencimento: emDias(-3), antecedencia: 'TRES_DIAS', pago: false },
+            {
+                usuarioId,
+                titulo: 'Fatura do cart�o',
+                categoria: 'FATURA_CARTAO',
+                valor: 890,
+                dataVencimento: dataNoMes(15, 0),
+                antecedencia: 'TRES_DIAS',
+                pago: false,
+            },
+            {
+                usuarioId,
+                titulo: 'Internet',
+                categoria: 'INTERNET',
+                valor: 99.9,
+                dataVencimento: dataNoMes(20, 0),
+                antecedencia: 'UM_DIA',
+                pago: true,
+                repetirMensal: true,
+                diaRecorrencia: 20,
+            },
+            {
+                usuarioId,
+                titulo: 'Assinatura Spotify',
+                categoria: 'STREAMING',
+                valor: 21.9,
+                dataVencimento: dataNoMes(10, 0),
+                antecedencia: 'NO_DIA',
+                pago: true,
+                repetirMensal: true,
+                diaRecorrencia: 10,
+            },
+            {
+                usuarioId,
+                titulo: 'Academia',
+                categoria: 'ACADEMIA',
+                valor: 89.9,
+                dataVencimento: dataNoMes(5, 0),
+                antecedencia: 'UM_DIA',
+                pago: true,
+                repetirMensal: true,
+                diaRecorrencia: 5,
+            },
+            {
+                usuarioId,
+                titulo: 'IPVA',
+                categoria: 'IPVA',
+                valor: 450,
+                dataVencimento: emDias(20),
+                antecedencia: 'CINCO_DIAS',
+                pago: false,
+            },
+            {
+                usuarioId,
+                titulo: 'Anivers�rio da m�e',
+                categoria: 'ANIVERSARIO',
+                dataVencimento: emDias(10),
+                antecedencia: 'UMA_SEMANA',
+                pago: false,
+            },
+            {
+                usuarioId,
+                titulo: 'Plano de sa�de',
+                categoria: 'PLANO_SAUDE',
+                valor: 210,
+                dataVencimento: emDias(-3),
+                antecedencia: 'TRES_DIAS',
+                pago: false,
+            },
         ],
     });
 
@@ -901,7 +1316,9 @@ async function seedOrcamentoCompleto(usuarioId, byName) {
 
     await prisma.orcamento.createMany({ data: registros, skipDuplicates: true });
 
-    console.log(`   ? Or�amento em ${limites.length} categorias � ${MESES_HISTORICO_TX} meses (${registros.length} registros)`);
+    console.log(
+        `   ? Or�amento em ${limites.length} categorias � ${MESES_HISTORICO_TX} meses (${registros.length} registros)`
+    );
     return true;
 }
 
@@ -962,7 +1379,9 @@ async function seedDividasCompletas(usuarioId) {
         },
     });
 
-    console.log('   ? 4 d�vidas (2 a receber � 1 vencendo, 1 atrasada; 2 a pagar � 1 quitada, 1 parcial)');
+    console.log(
+        '   ? 4 d�vidas (2 a receber � 1 vencendo, 1 atrasada; 2 a pagar � 1 quitada, 1 parcial)'
+    );
     return true;
 }
 
@@ -1077,12 +1496,42 @@ async function seedGruposDemo(usuariosPorEmail) {
                 { usuarioId: pedro.id, papel: 'MEMBRO' },
             ],
             despesas: [
-                { usuarioId: matheus.id, categoria: 'TRANSPORTE', descricao: 'Vai dirigir', valorEstimado: 200 },
-                { usuarioId: matheus.id, categoria: 'HOSPEDAGEM', descricao: '1/3 do airbnb', valorEstimado: 250 },
-                { usuarioId: maria.id, categoria: 'HOSPEDAGEM', descricao: '1/3 do airbnb', valorEstimado: 250 },
-                { usuarioId: maria.id, categoria: 'ALIMENTACAO', descricao: 'Compras e refei��es', valorEstimado: 300 },
-                { usuarioId: pedro.id, categoria: 'HOSPEDAGEM', descricao: '1/3 do airbnb', valorEstimado: 250 },
-                { usuarioId: pedro.id, categoria: 'PASSEIOS', descricao: 'Ingressos', valorEstimado: 400 },
+                {
+                    usuarioId: matheus.id,
+                    categoria: 'TRANSPORTE',
+                    descricao: 'Vai dirigir',
+                    valorEstimado: 200,
+                },
+                {
+                    usuarioId: matheus.id,
+                    categoria: 'HOSPEDAGEM',
+                    descricao: '1/3 do airbnb',
+                    valorEstimado: 250,
+                },
+                {
+                    usuarioId: maria.id,
+                    categoria: 'HOSPEDAGEM',
+                    descricao: '1/3 do airbnb',
+                    valorEstimado: 250,
+                },
+                {
+                    usuarioId: maria.id,
+                    categoria: 'ALIMENTACAO',
+                    descricao: 'Compras e refei��es',
+                    valorEstimado: 300,
+                },
+                {
+                    usuarioId: pedro.id,
+                    categoria: 'HOSPEDAGEM',
+                    descricao: '1/3 do airbnb',
+                    valorEstimado: 250,
+                },
+                {
+                    usuarioId: pedro.id,
+                    categoria: 'PASSEIOS',
+                    descricao: 'Ingressos',
+                    valorEstimado: 400,
+                },
             ],
             meta: {
                 nome: 'Juntar R$ 1.650 pra viagem',
@@ -1140,16 +1589,66 @@ async function seedGruposDemo(usuariosPorEmail) {
                 { usuarioId: patricia.id, papel: 'MEMBRO' },
             ],
             despesas: [
-                { usuarioId: matheus.id, categoria: 'TRANSPORTE', descricao: 'Passagem a�rea', valorEstimado: 890 },
-                { usuarioId: matheus.id, categoria: 'HOSPEDAGEM', descricao: 'Hotel 4 noites', valorEstimado: 1200 },
-                { usuarioId: maria.id, categoria: 'TRANSPORTE', descricao: 'Passagem a�rea', valorEstimado: 920 },
-                { usuarioId: maria.id, categoria: 'ALIMENTACAO', descricao: 'Restaurantes', valorEstimado: 450 },
-                { usuarioId: pedro.id, categoria: 'HOSPEDAGEM', descricao: 'Hotel 4 noites', valorEstimado: 1200 },
-                { usuarioId: pedro.id, categoria: 'PASSEIOS', descricao: 'Pelourinho + praia', valorEstimado: 380 },
-                { usuarioId: paulo.id, categoria: 'TRANSPORTE', descricao: 'Uber aeroporto', valorEstimado: 120 },
-                { usuarioId: paulo.id, categoria: 'COMPRAS', descricao: 'Souvenirs', valorEstimado: 200 },
-                { usuarioId: patricia.id, categoria: 'HOSPEDAGEM', descricao: 'Hotel 4 noites', valorEstimado: 1200 },
-                { usuarioId: patricia.id, categoria: 'ENTRETENIMENTO', descricao: 'Shows', valorEstimado: 350 },
+                {
+                    usuarioId: matheus.id,
+                    categoria: 'TRANSPORTE',
+                    descricao: 'Passagem a�rea',
+                    valorEstimado: 890,
+                },
+                {
+                    usuarioId: matheus.id,
+                    categoria: 'HOSPEDAGEM',
+                    descricao: 'Hotel 4 noites',
+                    valorEstimado: 1200,
+                },
+                {
+                    usuarioId: maria.id,
+                    categoria: 'TRANSPORTE',
+                    descricao: 'Passagem a�rea',
+                    valorEstimado: 920,
+                },
+                {
+                    usuarioId: maria.id,
+                    categoria: 'ALIMENTACAO',
+                    descricao: 'Restaurantes',
+                    valorEstimado: 450,
+                },
+                {
+                    usuarioId: pedro.id,
+                    categoria: 'HOSPEDAGEM',
+                    descricao: 'Hotel 4 noites',
+                    valorEstimado: 1200,
+                },
+                {
+                    usuarioId: pedro.id,
+                    categoria: 'PASSEIOS',
+                    descricao: 'Pelourinho + praia',
+                    valorEstimado: 380,
+                },
+                {
+                    usuarioId: paulo.id,
+                    categoria: 'TRANSPORTE',
+                    descricao: 'Uber aeroporto',
+                    valorEstimado: 120,
+                },
+                {
+                    usuarioId: paulo.id,
+                    categoria: 'COMPRAS',
+                    descricao: 'Souvenirs',
+                    valorEstimado: 200,
+                },
+                {
+                    usuarioId: patricia.id,
+                    categoria: 'HOSPEDAGEM',
+                    descricao: 'Hotel 4 noites',
+                    valorEstimado: 1200,
+                },
+                {
+                    usuarioId: patricia.id,
+                    categoria: 'ENTRETENIMENTO',
+                    descricao: 'Shows',
+                    valorEstimado: 350,
+                },
             ],
             meta: {
                 nome: 'Caixinha da viagem',
@@ -1253,8 +1752,7 @@ async function main() {
         const usuario = await upsertSeedUsuario(perfil, senhaHash);
         usuariosPorEmail[perfil.email] = usuario;
         const categorias = await seedCategorias(usuario.id);
-        const byName = (nome, tipo) =>
-            categorias.find((c) => c.nome === nome && c.tipo === tipo);
+        const byName = (nome, tipo) => categorias.find((c) => c.nome === nome && c.tipo === tipo);
 
         if (perfil.transacoesDemo) {
             const criou = await seedTransacoesBase(usuario.id, byName, perfil.modoUso);

@@ -32,7 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool get _canSubmit =>
-      _identificador.text.trim().isNotEmpty && _senha.text.isNotEmpty && !_submitting;
+      _identificador.text.trim().isNotEmpty &&
+      _senha.text.isNotEmpty &&
+      !_submitting;
 
   Future<void> _submit() async {
     setState(() {
@@ -42,15 +44,14 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     try {
       await context.read<AuthController>().login(
-            identificador: _identificador.text,
-            senha: _senha.text,
-            lembrarMe: _lembrarMe,
-          );
+        identificador: _identificador.text,
+        senha: _senha.text,
+        lembrarMe: _lembrarMe,
+      );
       if (!mounted) return;
       final nome = context.read<AuthController>().user?.nome ?? '';
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Bem-vindo de volta, $nome!')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Bem-vindo de volta, $nome!')));
       context.go('/transactions');
     } on ApiException catch (error) {
       if (!mounted) return;
@@ -59,7 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
       } else if (error.isUnauthorized) {
         setState(() => _credentialsError = error.message);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error.message)));
       }
     } finally {
       if (mounted) setState(() => _submitting = false);
@@ -70,7 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
     final value = _identificador.text.trim();
     if (!value.contains('@')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Informe seu e-mail para reenviar a verificação.')),
+        const SnackBar(
+          content: Text('Informe seu e-mail para reenviar a verificação.'),
+        ),
       );
       return;
     }
@@ -81,12 +85,14 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Email de verificação reenviado!')),
       );
-      context.go('/register/email-sent?email=${Uri.encodeComponent(value.toLowerCase())}');
+      context.go(
+        '/register/email-sent?email=${Uri.encodeComponent(value.toLowerCase())}',
+      );
     } catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AuthController.messageOf(error))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(AuthController.messageOf(error))));
     } finally {
       if (mounted) setState(() => _resending = false);
     }
@@ -134,7 +140,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Checkbox(
                     value: _lembrarMe,
-                    onChanged: (value) => setState(() => _lembrarMe = value ?? false),
+                    onChanged: (value) =>
+                        setState(() => _lembrarMe = value ?? false),
                   ),
                   const Text('Lembrar-me'),
                 ],
@@ -158,7 +165,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             TextButton(
               onPressed: _resending ? null : _resend,
-              child: Text(_resending ? 'Reenviando...' : 'Reenviar email de verificação'),
+              child: Text(
+                _resending ? 'Reenviando...' : 'Reenviar email de verificação',
+              ),
             ),
           ],
           const AuthDivider(label: 'ou continue com'),

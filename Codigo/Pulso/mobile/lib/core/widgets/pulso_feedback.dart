@@ -18,7 +18,9 @@ class PulsoIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = danger ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.onSurfaceVariant;
+    final color = danger
+        ? Theme.of(context).colorScheme.error
+        : Theme.of(context).colorScheme.onSurfaceVariant;
     return IconButton(
       tooltip: tooltip,
       onPressed: onPressed,
@@ -53,7 +55,10 @@ class PulsoEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final accent = PulsoColors.accent(Theme.of(context).brightness);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: PulsoTokens.space10, horizontal: PulsoTokens.space4),
+      padding: const EdgeInsets.symmetric(
+        vertical: PulsoTokens.space10,
+        horizontal: PulsoTokens.space4,
+      ),
       child: Column(
         children: [
           Container(
@@ -66,14 +71,18 @@ class PulsoEmptyState extends StatelessWidget {
             child: Icon(icon, size: 32, color: accent),
           ),
           const SizedBox(height: PulsoTokens.space4),
-          Text(title, textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: PulsoTokens.space2),
           Text(
             description,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           if (actionLabel != null && onAction != null) ...[
             const SizedBox(height: PulsoTokens.space4),
@@ -142,16 +151,15 @@ class PulsoAlert extends StatelessWidget {
                 if (title != null) ...[
                   Text(
                     title!,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(color: color),
+                    style: Theme.of(context).textTheme.titleSmall
+                        ?.copyWith(color: color),
                   ),
                   const SizedBox(height: 2),
                 ],
                 Text(
                   message,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: color,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: color, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
@@ -165,7 +173,10 @@ class PulsoAlert extends StatelessWidget {
 void showPulsoSnack(BuildContext context, String message) {
   ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(message), duration: const Duration(milliseconds: 2800)),
+    SnackBar(
+      content: Text(message),
+      duration: const Duration(milliseconds: 2800),
+    ),
   );
 }
 
@@ -183,7 +194,10 @@ Future<bool?> showPulsoConfirm({
         title: Text(title),
         content: Text(message),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
           if (danger)
             FilledButton(
               style: FilledButton.styleFrom(
@@ -194,7 +208,10 @@ Future<bool?> showPulsoConfirm({
               child: Text(confirmLabel),
             )
           else
-            FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(confirmLabel)),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(confirmLabel),
+            ),
         ],
       );
     },

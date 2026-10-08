@@ -38,7 +38,11 @@ const excluir = async (req, res, next) => {
 
 const vincularMeta = async (req, res, next) => {
     try {
-        const item = await purchasePlanningService.vincularMeta(req.user.id, req.params.id, req.body);
+        const item = await purchasePlanningService.vincularMeta(
+            req.user.id,
+            req.params.id,
+            req.body
+        );
         res.status(200).json(item);
     } catch (error) {
         next(error);
@@ -56,7 +60,11 @@ const desvincularMeta = async (req, res, next) => {
 
 const comprar = async (req, res, next) => {
     try {
-        const item = await purchasePlanningService.marcarComprado(req.user.id, req.params.id, req.body);
+        const item = await purchasePlanningService.marcarComprado(
+            req.user.id,
+            req.params.id,
+            req.body
+        );
         res.status(200).json(item);
     } catch (error) {
         next(error);

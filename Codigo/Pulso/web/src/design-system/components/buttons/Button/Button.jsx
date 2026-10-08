@@ -5,19 +5,19 @@ import { buttonVariants } from './Button.styles.jsx'
 
 /**
  * Button - Componente de botão genérico
- * 
+ *
  * @component
  * @example
  * ```jsx
  * <Button variant="primary" size="md" onClick={handleClick}>
  *   Salvar
  * </Button>
- * 
+ *
  * <Button variant="secondary" leftIcon={<Plus />} loading>
  *   Criar novo
  * </Button>
  * ```
- * 
+ *
  * @param {object} props
  * @param {('primary'|'secondary'|'outline'|'ghost'|'danger'|'success')} [props.variant='primary'] - Variante visual
  * @param {('sm'|'md'|'lg')} [props.size='md'] - Tamanho do botão
@@ -32,94 +32,82 @@ import { buttonVariants } from './Button.styles.jsx'
  * @param {string} [props.type='button'] - Tipo do botão HTML
  */
 export const Button = forwardRef(
-  (
-    {
-      variant = 'primary',
-      size = 'md',
-      fullWidth = false,
-      loading = false,
-      disabled = false,
-      leftIcon,
-      rightIcon,
-      children,
-      className,
-      onClick,
-      type = 'button',
-      ...rest
-    },
-    ref
-  ) => {
-    // ============================================================
-    // ESTADOS
-    // ============================================================
-    const isDisabled = disabled || loading
+    (
+        {
+            variant = 'primary',
+            size = 'md',
+            fullWidth = false,
+            loading = false,
+            disabled = false,
+            leftIcon,
+            rightIcon,
+            children,
+            className,
+            onClick,
+            type = 'button',
+            ...rest
+        },
+        ref
+    ) => {
+        // ============================================================
+        // ESTADOS
+        // ============================================================
+        const isDisabled = disabled || loading
 
-    // ============================================================
-    // HANDLERS
-    // ============================================================
-    const handleClick = (e) => {
-      if (isDisabled) {
-        e.preventDefault()
-        return
-      }
-      onClick?.(e)
+        // ============================================================
+        // HANDLERS
+        // ============================================================
+        const handleClick = (e) => {
+            if (isDisabled) {
+                e.preventDefault()
+                return
+            }
+            onClick?.(e)
+        }
+
+        // ============================================================
+        // TAMANHOS DOS ÍCONES BASEADO NO SIZE DO BOTÃO
+        // ============================================================
+        const iconSize = {
+            sm: 16,
+            md: 20,
+            lg: 20,
+        }[size]
+
+        // ============================================================
+        // RENDER
+        // ============================================================
+        return (
+            <button
+                ref={ref}
+                type={type}
+                disabled={isDisabled}
+                className={cn(buttonVariants({ variant, size, fullWidth }), className)}
+                onClick={handleClick}
+                {...rest}
+            >
+                {/* Spinner de loading (substitui leftIcon) */}
+                {loading && <Loader2 size={iconSize} className="animate-spin" />}
+
+                {/* Ícone esquerdo */}
+                {!loading && leftIcon && (
+                    <span className="inline-flex items-center justify-center">{leftIcon}</span>
+                )}
+
+                {/* Texto do botão */}
+                {children && (
+                    <span className="inline-flex shrink-0 items-center whitespace-nowrap">
+                        {children}
+                    </span>
+                )}
+
+                {/* Ícone direito */}
+                {rightIcon && (
+                    <span className="inline-flex items-center justify-center">{rightIcon}</span>
+                )}
+            </button>
+        )
     }
-
-    // ============================================================
-    // TAMANHOS DOS ÍCONES BASEADO NO SIZE DO BOTÃO
-    // ============================================================
-    const iconSize = {
-      sm: 16,
-      md: 20,
-      lg: 20,
-    }[size]
-
-    // ============================================================
-    // RENDER
-    // ============================================================
-    return (
-      <button
-        ref={ref}
-        type={type}
-        disabled={isDisabled}
-        className={cn(
-          buttonVariants({ variant, size, fullWidth }),
-          className
-        )}
-        onClick={handleClick}
-        {...rest}
-      >
-        {/* Spinner de loading (substitui leftIcon) */}
-        {loading && (
-          <Loader2 
-            size={iconSize} 
-            className="animate-spin" 
-          />
-        )}
-
-        {/* Ícone esquerdo */}
-        {!loading && leftIcon && (
-          <span className="inline-flex items-center justify-center">
-            {leftIcon}
-          </span>
-        )}
-
-        {/* Texto do botão */}
-        {children && (
-          <span className="inline-flex shrink-0 items-center whitespace-nowrap">
-            {children}
-          </span>
-        )}
-
-        {/* Ícone direito */}
-        {rightIcon && (
-          <span className="inline-flex items-center justify-center">
-            {rightIcon}
-          </span>
-        )}
-      </button>
-    )
-  }
 )
 
 Button.displayName = 'Button'

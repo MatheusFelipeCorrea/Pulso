@@ -6,16 +6,17 @@ const awesomeApiProvider = require('../providers/awesomeApiProvider');
 const { mapViagem } = require('../utils/viagemMapper');
 const { isSupportedCurrency } = require('../constants/currencyCatalog');
 const { listTripOrigins } = require('../constants/tripOrigins');
-const { listTripDestinations, countTripDestinations, getCatalogEntry, buildDestinoMetaFromCatalog } = require('../constants/tripDestinationsCatalog');
+const {
+    listTripDestinations,
+    countTripDestinations,
+    getCatalogEntry,
+    buildDestinoMetaFromCatalog,
+} = require('../constants/tripDestinationsCatalog');
 const { resolveDestinationAirport } = require('../constants/tripDestinationAirports');
 const geonamesProvider = require('../providers/geonamesProvider');
 const tripDestinationResolver = require('./tripDestinationResolver');
 const { attachCoverImage } = require('./tripDestinationImageService');
-const {
-    formatDateOnly,
-    parseVencimentoDate,
-    todayInTimezone,
-} = require('../utils/dateTimezone');
+const { formatDateOnly, parseVencimentoDate, todayInTimezone } = require('../utils/dateTimezone');
 
 const CATEGORIAS_DESPESA = [
     'TRANSPORTE',
@@ -410,9 +411,7 @@ const editarObservacao = async (usuarioId, viagemId, observacaoId, dados) => {
 
     if (dados.conteudo !== undefined) {
         payload.conteudo =
-            dados.conteudo === null
-                ? null
-                : String(dados.conteudo).trim().slice(0, 1000) || null;
+            dados.conteudo === null ? null : String(dados.conteudo).trim().slice(0, 1000) || null;
     }
 
     if (dados.linkUrl !== undefined) {
@@ -438,8 +437,7 @@ const editarObservacao = async (usuarioId, viagemId, observacaoId, dados) => {
         payload.checklist !== undefined
             ? payload.checklist
             : normalizarChecklist(existente.checklist);
-    const mergedLinkUrl =
-        payload.linkUrl !== undefined ? payload.linkUrl : existente.linkUrl;
+    const mergedLinkUrl = payload.linkUrl !== undefined ? payload.linkUrl : existente.linkUrl;
     payload.tipo = inferirTipoObservacao(mergedChecklist, mergedLinkUrl);
 
     await viagemRepository.atualizarObservacao(observacaoId, payload);

@@ -11,9 +11,7 @@ const queryMesSchema = z.object({
 
 const salvarOrcamentosSchema = z.object({
     body: z.object({
-        mesReferencia: z
-            .string()
-            .regex(/^\d{4}-\d{2}-01$/, 'Formato inválido. Use YYYY-MM-01'),
+        mesReferencia: z.string().regex(/^\d{4}-\d{2}-01$/, 'Formato inválido. Use YYYY-MM-01'),
         limites: z
             .array(
                 z.object({

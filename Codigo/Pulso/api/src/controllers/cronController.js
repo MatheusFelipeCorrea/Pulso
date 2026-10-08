@@ -9,10 +9,7 @@ const logger = require('../utils/logger');
 // Jobs de dívida/chat ficam comentados — módulos ainda não estão neste repo.
 const tick = async (req, res, next) => {
     try {
-        const [budget, cleanup] = await Promise.all([
-            runBudgetAlertJob(),
-            runTokenCleanup(),
-        ]);
+        const [budget, cleanup] = await Promise.all([runBudgetAlertJob(), runTokenCleanup()]);
         res.status(200).json({
             status: 'ok',
             budget,

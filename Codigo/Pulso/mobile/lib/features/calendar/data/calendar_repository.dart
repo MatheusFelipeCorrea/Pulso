@@ -37,7 +37,9 @@ class CalendarRepository {
 
   Future<GoogleCalendarStatus> googleStatus() {
     return _guard(() async {
-      final response = await _api.raw.get<Map<String, dynamic>>('/calendario/google/status');
+      final response = await _api.raw.get<Map<String, dynamic>>(
+        '/calendario/google/status',
+      );
       return GoogleCalendarStatus.fromJson(response.data ?? {});
     });
   }
@@ -62,27 +64,38 @@ class ReminderRepository {
         '/lembretes',
         queryParameters: {if (mes != null) 'mes': mes},
       );
-      return (response.data ?? const []).whereType<Map<String, dynamic>>().map(PulsoLembrete.fromJson).toList();
+      return (response.data ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(PulsoLembrete.fromJson)
+          .toList();
     });
   }
 
   Future<PulsoLembrete> criar(Map<String, dynamic> payload) {
     return _guard(() async {
-      final response = await _api.raw.post<Map<String, dynamic>>('/lembretes', data: payload);
+      final response = await _api.raw.post<Map<String, dynamic>>(
+        '/lembretes',
+        data: payload,
+      );
       return PulsoLembrete.fromJson(response.data ?? {});
     });
   }
 
   Future<PulsoLembrete> atualizar(String id, Map<String, dynamic> payload) {
     return _guard(() async {
-      final response = await _api.raw.patch<Map<String, dynamic>>('/lembretes/$id', data: payload);
+      final response = await _api.raw.patch<Map<String, dynamic>>(
+        '/lembretes/$id',
+        data: payload,
+      );
       return PulsoLembrete.fromJson(response.data ?? {});
     });
   }
 
   Future<PulsoLembrete> pagar(String id) {
     return _guard(() async {
-      final response = await _api.raw.post<Map<String, dynamic>>('/lembretes/$id/pagar');
+      final response = await _api.raw.post<Map<String, dynamic>>(
+        '/lembretes/$id/pagar',
+      );
       return PulsoLembrete.fromJson(response.data ?? {});
     });
   }

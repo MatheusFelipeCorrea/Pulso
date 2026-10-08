@@ -61,7 +61,10 @@ class CalendarController extends ChangeNotifier {
     detalhe = await _calendar.obterDia(date);
   }
 
-  Future<void> salvarLembrete(Map<String, dynamic> payload, {String? id}) async {
+  Future<void> salvarLembrete(
+    Map<String, dynamic> payload, {
+    String? id,
+  }) async {
     if (id == null) {
       await _reminders.criar(payload);
     } else {

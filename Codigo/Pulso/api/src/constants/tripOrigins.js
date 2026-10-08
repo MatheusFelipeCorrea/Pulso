@@ -94,9 +94,13 @@ const TRIP_ORIGINS = [
 const DEFAULT_ORIGIN_ID = 'GRU';
 
 function resolveTripOrigin(originId) {
-    const normalized = String(originId ?? DEFAULT_ORIGIN_ID).trim().toUpperCase();
-    return TRIP_ORIGINS.find((entry) => entry.id === normalized)
-        ?? TRIP_ORIGINS.find((entry) => entry.id === DEFAULT_ORIGIN_ID);
+    const normalized = String(originId ?? DEFAULT_ORIGIN_ID)
+        .trim()
+        .toUpperCase();
+    return (
+        TRIP_ORIGINS.find((entry) => entry.id === normalized) ??
+        TRIP_ORIGINS.find((entry) => entry.id === DEFAULT_ORIGIN_ID)
+    );
 }
 
 function listTripOrigins() {

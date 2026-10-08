@@ -21,8 +21,13 @@ class CurrencyRepository {
       final data = response.data;
       final list = data is List
           ? data
-          : (data is Map && data['moedas'] is List ? data['moedas'] as List : const []);
-      return list.whereType<Map<String, dynamic>>().map(CurrencyItem.fromJson).toList();
+          : (data is Map && data['moedas'] is List
+                ? data['moedas'] as List
+                : const []);
+      return list
+          .whereType<Map<String, dynamic>>()
+          .map(CurrencyItem.fromJson)
+          .toList();
     });
   }
 
@@ -46,8 +51,13 @@ class CurrencyRepository {
       final data = response.data;
       final list = data is List
           ? data
-          : (data is Map && data['favoritas'] is List ? data['favoritas'] as List : const []);
-      return list.whereType<Map<String, dynamic>>().map(FavoriteCurrency.fromJson).toList();
+          : (data is Map && data['favoritas'] is List
+                ? data['favoritas'] as List
+                : const []);
+      return list
+          .whereType<Map<String, dynamic>>()
+          .map(FavoriteCurrency.fromJson)
+          .toList();
     });
   }
 
@@ -67,19 +77,25 @@ class CurrencyRepository {
     return _guard(() async {
       final response = await _api.raw.get<dynamic>(
         '/moedas/cotacoes',
-        queryParameters: {
-          if (codigos.isNotEmpty) 'codigos': codigos.join(','),
-        },
+        queryParameters: {if (codigos.isNotEmpty) 'codigos': codigos.join(',')},
       );
       final data = response.data;
       final list = data is List
           ? data
-          : (data is Map && data['cotacoes'] is List ? data['cotacoes'] as List : const []);
-      return list.whereType<Map<String, dynamic>>().map(FavoriteCurrency.fromJson).toList();
+          : (data is Map && data['cotacoes'] is List
+                ? data['cotacoes'] as List
+                : const []);
+      return list
+          .whereType<Map<String, dynamic>>()
+          .map(FavoriteCurrency.fromJson)
+          .toList();
     });
   }
 
-  Future<CurrencyHistory> obterHistorico({String codigo = 'USD', int dias = 30}) {
+  Future<CurrencyHistory> obterHistorico({
+    String codigo = 'USD',
+    int dias = 30,
+  }) {
     return _guard(() async {
       final response = await _api.raw.get<Map<String, dynamic>>(
         '/moedas/historico',

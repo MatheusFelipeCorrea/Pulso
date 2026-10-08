@@ -41,7 +41,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     try {
       await context.read<AuthController>().forgotPassword(value);
       if (!mounted) return;
-      context.go('/forgot-password/email-sent?email=${Uri.encodeComponent(value)}');
+      context.go(
+        '/forgot-password/email-sent?email=${Uri.encodeComponent(value)}',
+      );
     } catch (error) {
       if (!mounted) return;
       setState(() => _error = AuthController.messageOf(error));
@@ -85,7 +87,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 Icon(
                   Icons.arrow_back,
                   size: 16,
-                  color: isDark ? PulsoColors.darkSecondary : PulsoColors.lightSecondary,
+                  color: isDark
+                      ? PulsoColors.darkSecondary
+                      : PulsoColors.lightSecondary,
                 ),
                 const SizedBox(width: 6),
                 const Text('Voltar para o Login'),
@@ -94,8 +98,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ),
           const SizedBox(height: 8),
           const AuthInfoAlert(
-            message:
-                'Enviaremos um link para redefinir sua senha. Verifique sua caixa de entrada e spam.',
+            message: 'Enviaremos um link para redefinir sua senha. Verifique sua caixa de entrada e spam.',
           ),
         ],
       ),

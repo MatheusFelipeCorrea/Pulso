@@ -38,7 +38,12 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
     return RefreshIndicator(
       onRefresh: controller.reload,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
+        padding: const EdgeInsets.fromLTRB(
+          PulsoTokens.space4,
+          PulsoTokens.space2,
+          PulsoTokens.space4,
+          96,
+        ),
         children: [
           const PulsoPageHeader(
             title: 'Planejamento de Compra',
@@ -46,16 +51,28 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
             icon: Icons.shopping_cart_outlined,
           ),
           if (controller.loading && painel == null)
-            const Padding(padding: EdgeInsets.all(32), child: Center(child: CircularProgressIndicator()))
+            const Padding(
+              padding: EdgeInsets.all(32),
+              child: Center(child: CircularProgressIndicator()),
+            )
           else if (controller.error != null)
-            PulsoEmptyState(title: 'Não foi possível carregar', description: controller.error!, icon: Icons.error_outline)
+            PulsoEmptyState(
+              title: 'Não foi possível carregar',
+              description: controller.error!,
+              icon: Icons.error_outline,
+            )
           else if (painel != null && resumo != null) ...[
             if (resumo.mediaImpactoRenda > 20)
               PulsoSurface(
                 margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
                 child: Row(
                   children: [
-                    Icon(Icons.warning_amber_rounded, color: PulsoColors.warningOf(Theme.of(context).brightness)),
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      color: PulsoColors.warningOf(
+                        Theme.of(context).brightness,
+                      ),
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
@@ -65,7 +82,10 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
                   ],
                 ),
               ),
-            const PulsoSectionHeader(title: 'Resumo do planejamento', icon: Icons.description_outlined),
+            const PulsoSectionHeader(
+              title: 'Resumo do planejamento',
+              icon: Icons.description_outlined,
+            ),
             PulsoHScroll(
               height: 148,
               itemWidth: 176,
@@ -83,8 +103,8 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
                   color: resumo.mediaImpactoRenda > 30
                       ? PulsoColors.dangerOf(Theme.of(context).brightness)
                       : resumo.mediaImpactoRenda > 20
-                          ? PulsoColors.warningOf(Theme.of(context).brightness)
-                          : PulsoColors.successOf(Theme.of(context).brightness),
+                      ? PulsoColors.warningOf(Theme.of(context).brightness)
+                      : PulsoColors.successOf(Theme.of(context).brightness),
                 ),
                 _MiniStat(
                   label: 'Itens',
@@ -102,11 +122,17 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
             ),
             if (resumo.categorias.isNotEmpty) ...[
               const SizedBox(height: PulsoTokens.space3),
-              const PulsoSectionHeader(title: 'Breakdown por categoria', icon: Icons.pie_chart_outline),
+              const PulsoSectionHeader(
+                title: 'Breakdown por categoria',
+                icon: Icons.pie_chart_outline,
+              ),
               _CategoryBreakdown(categorias: resumo.categorias),
             ],
             const SizedBox(height: PulsoTokens.space4),
-            const PulsoSectionHeader(title: 'Itens desejados', icon: Icons.favorite_outline),
+            const PulsoSectionHeader(
+              title: 'Itens desejados',
+              icon: Icons.favorite_outline,
+            ),
             if (painel.itens.isEmpty)
               const PulsoEmptyState(
                 title: 'Nenhum item na lista',
@@ -119,7 +145,8 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
                   padding: const EdgeInsets.only(bottom: PulsoTokens.space3),
                   child: _ItemCard(
                     item: item,
-                    onEdit: () => context.push('/purchase-planning/form', extra: item),
+                    onEdit: () =>
+                        context.push('/purchase-planning/form', extra: item),
                     onBuy: () => _comprar(item),
                     onDelete: () => _excluir(item),
                   ),
@@ -128,7 +155,10 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
             const SizedBox(height: PulsoTokens.space5),
             const Divider(),
             const SizedBox(height: PulsoTokens.space4),
-            const PulsoSectionHeader(title: 'Comprados recentemente', icon: Icons.history),
+            const PulsoSectionHeader(
+              title: 'Comprados recentemente',
+              icon: Icons.history,
+            ),
             if (painel.comprados.isEmpty)
               PulsoSurface(
                 child: Text(
@@ -144,7 +174,8 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(minWidth: 560),
                     child: DataTable(
-                      headingTextStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      headingTextStyle: Theme.of(context).textTheme.labelSmall
+                          ?.copyWith(
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.4,
                           ),
@@ -163,14 +194,24 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
                                   children: [
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(8),
-                                      child: _ProductThumb(url: item.imagemUrl, categoria: item.categoria, size: 32),
+                                      child: _ProductThumb(
+                                        url: item.imagemUrl,
+                                        categoria: item.categoria,
+                                        size: 32,
+                                      ),
                                     ),
                                     const SizedBox(width: 8),
                                     Text(item.nome),
                                   ],
                                 ),
                               ),
-                              DataCell(Text(item.categoriaLabel ?? purchaseCategorias[item.categoria] ?? item.categoria)),
+                              DataCell(
+                                Text(
+                                  item.categoriaLabel ??
+                                      purchaseCategorias[item.categoria] ??
+                                      item.categoria,
+                                ),
+                              ),
                               DataCell(Text(formatBrl(item.valorEstimado))),
                               DataCell(Text(formatShortDate(item.compradoEm))),
                             ],
@@ -181,14 +222,23 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
                 ),
               ),
             if (resumo.dicas.isNotEmpty) ...[
-              const PulsoSectionHeader(title: 'Dicas inteligentes', icon: Icons.lightbulb_outline),
+              const PulsoSectionHeader(
+                title: 'Dicas inteligentes',
+                icon: Icons.lightbulb_outline,
+              ),
               ...resumo.dicas.map(
                 (dica) => Padding(
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.check_circle_outline, size: 16, color: PulsoColors.successOf(Theme.of(context).brightness)),
+                      Icon(
+                        Icons.check_circle_outline,
+                        size: 16,
+                        color: PulsoColors.successOf(
+                          Theme.of(context).brightness,
+                        ),
+                      ),
                       const SizedBox(width: 8),
                       Expanded(child: Text(dica)),
                     ],
@@ -222,7 +272,11 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
   }
 
   Future<void> _excluir(PurchaseItem item) async {
-    final ok = await showPulsoConfirm(context: context, title: 'Excluir item', message: 'Excluir “${item.nome}” da lista?');
+    final ok = await showPulsoConfirm(
+      context: context,
+      title: 'Excluir item',
+      message: 'Excluir “${item.nome}” da lista?',
+    );
     if (ok != true || !mounted) return;
     try {
       await context.read<PurchaseController>().excluir(item);
@@ -236,7 +290,12 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
 }
 
 class _MiniStat extends StatelessWidget {
-  const _MiniStat({required this.label, required this.value, required this.icon, required this.color});
+  const _MiniStat({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.color,
+  });
   final String label;
   final String value;
   final IconData icon;
@@ -253,7 +312,11 @@ class _MiniStat extends StatelessWidget {
           const SizedBox(height: PulsoTokens.space3),
           Text(label, style: Theme.of(context).textTheme.labelSmall),
           const SizedBox(height: 4),
-          Text(value, style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.titleSmall
+                ?.copyWith(fontWeight: FontWeight.w700),
+          ),
         ],
       ),
     );
@@ -261,7 +324,12 @@ class _MiniStat extends StatelessWidget {
 }
 
 class _ItemCard extends StatelessWidget {
-  const _ItemCard({required this.item, required this.onEdit, required this.onBuy, required this.onDelete});
+  const _ItemCard({
+    required this.item,
+    required this.onEdit,
+    required this.onBuy,
+    required this.onDelete,
+  });
 
   final PurchaseItem item;
   final VoidCallback onEdit;
@@ -293,19 +361,39 @@ class _ItemCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(14),
-                child: _ProductThumb(url: item.imagemUrl, categoria: item.categoria, size: 72),
+                child: _ProductThumb(
+                  url: item.imagemUrl,
+                  categoria: item.categoria,
+                  size: 72,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item.nome, style: Theme.of(context).textTheme.titleSmall),
+                    Text(
+                      item.nome,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                     const SizedBox(height: 4),
-                    if (prioridade != null) PulsoBadge.kind(kind: prioridade, brightness: brightness, compact: true),
+                    if (prioridade != null)
+                      PulsoBadge.kind(
+                        kind: prioridade,
+                        brightness: brightness,
+                        compact: true,
+                      ),
                     const SizedBox(height: 6),
-                    Text(formatBrl(item.valorEstimado), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
-                    Text(item.categoriaLabel ?? purchaseCategorias[item.categoria] ?? item.categoria),
+                    Text(
+                      formatBrl(item.valorEstimado),
+                      style: Theme.of(context).textTheme.titleSmall
+                          ?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    Text(
+                      item.categoriaLabel ??
+                          purchaseCategorias[item.categoria] ??
+                          item.categoria,
+                    ),
                   ],
                 ),
               ),
@@ -313,29 +401,40 @@ class _ItemCard extends StatelessWidget {
           ),
           if (item.mesesParaComprar != null) ...[
             const SizedBox(height: 8),
-            Text('Compra à vista em ~${item.mesesParaComprar} ${item.mesesParaComprar == 1 ? 'mês' : 'meses'}'),
+            Text(
+              'Compra à vista em ~${item.mesesParaComprar} ${item.mesesParaComprar == 1 ? 'mês' : 'meses'}',
+            ),
           ],
           if (item.simulacoes.isNotEmpty) ...[
             const SizedBox(height: 10),
-            Text('Simulação de parcelamento', style: Theme.of(context).textTheme.labelSmall),
-            ...item.simulacoes.take(3).map(
+            Text(
+              'Simulação de parcelamento',
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+            ...item.simulacoes
+                .take(3)
+                .map(
                   (sim) => Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: Row(
                       children: [
-                        Expanded(child: Text('${sim.parcelas}x de ${formatBrl(sim.parcela)} · ${sim.percentual.toStringAsFixed(0)}% da renda')),
+                        Expanded(
+                          child: Text(
+                            '${sim.parcelas}x de ${formatBrl(sim.parcela)} · ${sim.percentual.toStringAsFixed(0)}% da renda',
+                          ),
+                        ),
                         Icon(
                           sim.nivel == 'arriscado'
                               ? Icons.cancel_outlined
                               : sim.nivel == 'atencao'
-                                  ? Icons.warning_amber_rounded
-                                  : Icons.check_circle_outline,
+                              ? Icons.warning_amber_rounded
+                              : Icons.check_circle_outline,
                           size: 16,
                           color: sim.nivel == 'arriscado'
                               ? PulsoColors.dangerOf(brightness)
                               : sim.nivel == 'atencao'
-                                  ? PulsoColors.warningOf(brightness)
-                                  : PulsoColors.successOf(brightness),
+                              ? PulsoColors.warningOf(brightness)
+                              : PulsoColors.successOf(brightness),
                         ),
                       ],
                     ),
@@ -345,22 +444,37 @@ class _ItemCard extends StatelessWidget {
           if (item.meta != null) ...[
             const SizedBox(height: 8),
             Text('Meta vinculada: ${item.meta!.nome}'),
-            LinearProgressIndicator(value: (item.meta!.percentual / 100).clamp(0, 1), color: look.color),
+            LinearProgressIndicator(
+              value: (item.meta!.percentual / 100).clamp(0, 1),
+              color: look.color,
+            ),
           ],
-          if (item.observacoes != null && item.observacoes!.trim().isNotEmpty) ...[
+          if (item.observacoes != null &&
+              item.observacoes!.trim().isNotEmpty) ...[
             const SizedBox(height: 8),
-            Text(item.observacoes!.trim(), style: Theme.of(context).textTheme.bodySmall),
+            Text(
+              item.observacoes!.trim(),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ],
-          if (item.linkProduto != null && item.linkProduto!.trim().isNotEmpty) ...[
+          if (item.linkProduto != null &&
+              item.linkProduto!.trim().isNotEmpty) ...[
             const SizedBox(height: 8),
             Row(
               children: [
-                Icon(Icons.open_in_new, size: 14, color: PulsoColors.infoOf(brightness)),
+                Icon(
+                  Icons.open_in_new,
+                  size: 14,
+                  color: PulsoColors.infoOf(brightness),
+                ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
                     'Ver produto',
-                    style: TextStyle(color: PulsoColors.infoOf(brightness), fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      color: PulsoColors.infoOf(brightness),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
@@ -372,7 +486,10 @@ class _ItemCard extends StatelessWidget {
               children: [
                 Icon(nivelIcon, size: 16, color: nivelColor),
                 const SizedBox(width: 6),
-                Text('Compromete ${item.comprometimentoPercentual!.toStringAsFixed(0)}% da renda', style: TextStyle(color: nivelColor)),
+                Text(
+                  'Compromete ${item.comprometimentoPercentual!.toStringAsFixed(0)}% da renda',
+                  style: TextStyle(color: nivelColor),
+                ),
               ],
             ),
           ],
@@ -380,9 +497,21 @@ class _ItemCard extends StatelessWidget {
           Wrap(
             spacing: 8,
             children: [
-              FilledButton.icon(onPressed: onBuy, icon: const Icon(Icons.check_circle_outline, size: 16), label: const Text('Comprei!')),
-              IconButton.outlined(onPressed: onEdit, tooltip: 'Editar', icon: const Icon(Icons.edit_outlined)),
-              IconButton.outlined(onPressed: onDelete, tooltip: 'Excluir', icon: const Icon(Icons.delete_outline)),
+              FilledButton.icon(
+                onPressed: onBuy,
+                icon: const Icon(Icons.check_circle_outline, size: 16),
+                label: const Text('Comprei!'),
+              ),
+              IconButton.outlined(
+                onPressed: onEdit,
+                tooltip: 'Editar',
+                icon: const Icon(Icons.edit_outlined),
+              ),
+              IconButton.outlined(
+                onPressed: onDelete,
+                tooltip: 'Excluir',
+                icon: const Icon(Icons.delete_outline),
+              ),
             ],
           ),
         ],
@@ -409,7 +538,11 @@ class _ProductThumb extends StatelessWidget {
               url!,
               fit: BoxFit.cover,
               webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
-              errorBuilder: (_, _, _) => CategoryGlyph(icone: look.lucide, color: look.color, size: size),
+              errorBuilder: (_, _, _) => CategoryGlyph(
+                icone: look.lucide,
+                color: look.color,
+                size: size,
+              ),
             )
           : CategoryGlyph(icone: look.lucide, color: look.color, size: size),
     );
@@ -424,10 +557,18 @@ class _CategoryBreakdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final entries = purchaseCategorias.keys
-        .map((key) => (key: key, share: categorias[key], look: purchaseLook(key)))
-        .where((item) => (item.share?.total ?? 0) > 0 || (item.share?.quantidade ?? 0) > 0)
+        .map(
+          (key) => (key: key, share: categorias[key], look: purchaseLook(key)),
+        )
+        .where(
+          (item) =>
+              (item.share?.total ?? 0) > 0 || (item.share?.quantidade ?? 0) > 0,
+        )
         .toList();
-    final sum = entries.fold<double>(0, (acc, item) => acc + (item.share?.total ?? 0));
+    final sum = entries.fold<double>(
+      0,
+      (acc, item) => acc + (item.share?.total ?? 0),
+    );
 
     return PulsoSurface(
       child: Column(
@@ -437,17 +578,33 @@ class _CategoryBreakdown extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 10),
               child: Row(
                 children: [
-                  CategoryGlyph(icone: item.look.lucide, color: item.look.color, size: 32),
+                  CategoryGlyph(
+                    icone: item.look.lucide,
+                    color: item.look.color,
+                    size: 32,
+                  ),
                   const SizedBox(width: 10),
-                  Expanded(child: Text(item.share?.label ?? purchaseCategorias[item.key] ?? item.key)),
+                  Expanded(
+                    child: Text(
+                      item.share?.label ??
+                          purchaseCategorias[item.key] ??
+                          item.key,
+                    ),
+                  ),
                   Text(
-                    sum > 0 ? '${(((item.share?.total ?? 0) / sum) * 100).round()}%' : '0%',
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+                    sum > 0
+                        ? '${(((item.share?.total ?? 0) / sum) * 100).round()}%'
+                        : '0%',
+                    style: Theme.of(context).textTheme.labelLarge
+                        ?.copyWith(fontWeight: FontWeight.w700),
                   ),
                 ],
               ),
             ),
-          Text('Baseado no valor total dos itens desejados', style: Theme.of(context).textTheme.bodySmall),
+          Text(
+            'Baseado no valor total dos itens desejados',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ],
       ),
     );

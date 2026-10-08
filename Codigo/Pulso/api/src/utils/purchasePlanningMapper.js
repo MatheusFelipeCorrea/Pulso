@@ -58,9 +58,7 @@ const mapItem = (item, contexto = {}) => {
     const valor = Number(item.valorEstimado ?? 0);
     const meta = item.meta ?? null;
     const progressoMeta = meta ? calcProgressoMeta(meta) : null;
-    const valorRestante = progressoMeta
-        ? Math.max(0, progressoMeta.valorRestante)
-        : valor;
+    const valorRestante = progressoMeta ? Math.max(0, progressoMeta.valorRestante) : valor;
     const mesesParaComprar = calcMesesParaComprar(valorRestante, sobraMensal);
     const parcelasConfig = item.simularParcelas ? [item.parcelas || 12, 6] : [];
     const simulacoesUnicas = [...new Set(parcelasConfig.filter(Boolean))];

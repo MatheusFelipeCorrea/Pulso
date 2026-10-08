@@ -12,11 +12,7 @@ const {
 
 const router = express.Router();
 
-router.get(
-    '/filtros',
-    authMiddleware,
-    transactionController.obterOpcoesFiltro
-);
+router.get('/filtros', authMiddleware, transactionController.obterOpcoesFiltro);
 
 router.get(
     '/sugestao-categoria',

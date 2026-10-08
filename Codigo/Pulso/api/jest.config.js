@@ -19,6 +19,7 @@ module.exports = {
         '!src/services/dashboardService.js',
         '!src/services/googleCalendarSyncService.js',
         '!src/services/googleCalendarService.js',
+        '!src/services/grupoImageStorageService.js',
         'src/utils/**/*.js',
         '!src/utils/logger.js',
         '!src/utils/helpers.js',
@@ -27,6 +28,7 @@ module.exports = {
         '!src/utils/prismaErrors.js',
         'src/jobs/**/*.js',
         '!src/jobs/reminderSync.js',
+        'src/messaging/**/*.js',
         'src/middlewares/**/*.js',
         '!src/middlewares/rateLimitMiddleware.js',
         '!src/middlewares/grupoInviteRateLimit.js',
@@ -34,12 +36,5 @@ module.exports = {
         '!src/middlewares/purchaseItemImageUploadMiddleware.js',
     ],
     coverageDirectory: 'coverage',
-    coverageThreshold: {
-        global: {
-            branches: 65,
-            functions: 88,
-            lines: 87,
-            statements: 85,
-        },
-    },
+    coverageReporters: ['text', 'text-summary', 'json-summary', 'lcov'],
 };

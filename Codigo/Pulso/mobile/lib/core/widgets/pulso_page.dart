@@ -27,7 +27,11 @@ class PulsoPageHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (icon != null) ...[
-            PulsoSoftIcon(icon: icon!, color: PulsoColors.accent(Theme.of(context).brightness), size: 48),
+            PulsoSoftIcon(
+              icon: icon!,
+              color: PulsoColors.accent(Theme.of(context).brightness),
+              size: 48,
+            ),
             const SizedBox(width: PulsoTokens.space3),
           ],
           Expanded(
@@ -39,14 +43,17 @@ class PulsoPageHeader extends StatelessWidget {
                   const SizedBox(height: PulsoTokens.space1),
                   Text(
                     subtitle!,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
+                    style: Theme.of(context).textTheme.bodyMedium
+                        ?.copyWith(color: scheme.onSurfaceVariant),
                   ),
                 ],
                 if (status != null) ...[
                   const SizedBox(height: PulsoTokens.space2),
                   Text(
                     status!,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(color: PulsoColors.accent(Theme.of(context).brightness)),
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: PulsoColors.accent(Theme.of(context).brightness),
+                    ),
                   ),
                 ],
               ],
@@ -80,10 +87,16 @@ class PulsoSectionHeader extends StatelessWidget {
       child: Row(
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 18, color: PulsoColors.accent(Theme.of(context).brightness)),
+            Icon(
+              icon,
+              size: 18,
+              color: PulsoColors.accent(Theme.of(context).brightness),
+            ),
             const SizedBox(width: 8),
           ],
-          Expanded(child: Text(title, style: Theme.of(context).textTheme.titleMedium)),
+          Expanded(
+            child: Text(title, style: Theme.of(context).textTheme.titleMedium),
+          ),
           if (actionLabel != null && onAction != null)
             TextButton(onPressed: onAction, child: Text(actionLabel!)),
         ],
@@ -116,7 +129,9 @@ class PulsoSurface extends StatelessWidget {
       decoration: BoxDecoration(
         color: scheme.surface,
         borderRadius: BorderRadius.circular(PulsoTokens.radiusXl),
-        border: Border.all(color: scheme.outline.withValues(alpha: isDark ? 0.9 : 1)),
+        border: Border.all(
+          color: scheme.outline.withValues(alpha: isDark ? 0.9 : 1),
+        ),
         boxShadow: PulsoTokens.shadowMd(isDark),
       ),
       child: child,
@@ -183,7 +198,8 @@ class PulsoHScroll extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         itemCount: children.length,
         separatorBuilder: (context, index) => SizedBox(width: gap),
-        itemBuilder: (context, index) => SizedBox(width: itemWidth, child: children[index]),
+        itemBuilder: (context, index) =>
+            SizedBox(width: itemWidth, child: children[index]),
       ),
     );
   }
@@ -208,10 +224,7 @@ class PulsoFormScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: actions,
-      ),
+      appBar: AppBar(title: Text(title), actions: actions),
       floatingActionButton: floatingActionButton,
       body: child,
     );

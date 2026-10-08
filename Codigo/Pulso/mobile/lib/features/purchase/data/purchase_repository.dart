@@ -17,21 +17,29 @@ class PurchasePlanningRepository {
 
   Future<PurchasePainel> obterPainel() {
     return _guard(() async {
-      final response = await _api.raw.get<Map<String, dynamic>>('/planejamento-compra');
+      final response = await _api.raw.get<Map<String, dynamic>>(
+        '/planejamento-compra',
+      );
       return PurchasePainel.fromJson(response.data ?? {});
     });
   }
 
   Future<PurchaseItem> criar(Map<String, dynamic> payload) {
     return _guard(() async {
-      final response = await _api.raw.post<Map<String, dynamic>>('/planejamento-compra', data: payload);
+      final response = await _api.raw.post<Map<String, dynamic>>(
+        '/planejamento-compra',
+        data: payload,
+      );
       return PurchaseItem.fromJson(response.data ?? {});
     });
   }
 
   Future<PurchaseItem> atualizar(String id, Map<String, dynamic> payload) {
     return _guard(() async {
-      final response = await _api.raw.patch<Map<String, dynamic>>('/planejamento-compra/$id', data: payload);
+      final response = await _api.raw.patch<Map<String, dynamic>>(
+        '/planejamento-compra/$id',
+        data: payload,
+      );
       return PurchaseItem.fromJson(response.data ?? {});
     });
   }
@@ -42,7 +50,11 @@ class PurchasePlanningRepository {
     });
   }
 
-  Future<PurchaseItem> vincularMeta(String id, {required String metaId, bool ajustarMetaValor = false}) {
+  Future<PurchaseItem> vincularMeta(
+    String id, {
+    required String metaId,
+    bool ajustarMetaValor = false,
+  }) {
     return _guard(() async {
       final response = await _api.raw.post<Map<String, dynamic>>(
         '/planejamento-compra/$id/vincular-meta',

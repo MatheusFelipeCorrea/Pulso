@@ -15,7 +15,11 @@ class _ScriptedAdapter implements HttpClientAdapter {
   @override
   void close({bool force = false}) {}
   @override
-  Future<ResponseBody> fetch(RequestOptions options, Stream<Uint8List>? requestStream, Future<void>? cancelFuture) {
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) {
     return _handler(options);
   }
 }
@@ -24,7 +28,9 @@ ResponseBody _json(int status, Object body) {
   return ResponseBody.fromString(
     jsonEncode(body),
     status,
-    headers: {Headers.contentTypeHeader: [Headers.jsonContentType]},
+    headers: {
+      Headers.contentTypeHeader: [Headers.jsonContentType],
+    },
   );
 }
 
@@ -32,7 +38,10 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
-    FlutterSecureStorage.setMockInitialValues({'pulso_access': 'access-token', 'pulso_refresh': 'refresh-token'});
+    FlutterSecureStorage.setMockInitialValues({
+      'pulso_access': 'access-token',
+      'pulso_refresh': 'refresh-token',
+    });
   });
 
   test('PurchasePainel parseia resumo, itens desejados e comprados', () {
@@ -55,11 +64,19 @@ void main() {
           'prioridade': 'ALTA',
           'categoria': 'ELETRONICOS',
           'mesesParaComprar': 5,
-          'comprometimentoPrincipal': {'nivel': 'atencao', 'percentual': '22.5'},
+          'comprometimentoPrincipal': {
+            'nivel': 'atencao',
+            'percentual': '22.5',
+          },
         },
       ],
       'comprados': [
-        {'id': 'p0', 'nome': 'Fone', 'valorEstimado': '200.00', 'diasNaLista': 12},
+        {
+          'id': 'p0',
+          'nome': 'Fone',
+          'valorEstimado': '200.00',
+          'diasNaLista': 12,
+        },
       ],
     });
     expect(painel.resumo.sobraMensal, 800);
@@ -75,7 +92,14 @@ void main() {
       calls.add('${options.method} ${options.path}');
       if (options.path == '/planejamento-compra' && options.method == 'GET') {
         return _json(200, {
-          'resumo': {'totalValor': 0, 'totalItens': 0, 'mediaImpactoRenda': 0, 'rendaMensal': 0, 'sobraMensal': 0, 'dicas': []},
+          'resumo': {
+            'totalValor': 0,
+            'totalItens': 0,
+            'mediaImpactoRenda': 0,
+            'rendaMensal': 0,
+            'sobraMensal': 0,
+            'dicas': [],
+          },
           'itens': [],
           'comprados': [],
         });
@@ -90,11 +114,18 @@ void main() {
         });
       }
       if (options.path == '/planejamento-compra/p1/comprar') {
-        return _json(200, {'id': 'p1', 'nome': 'Notebook', 'valorEstimado': 3500, 'status': 'COMPRADO'});
+        return _json(200, {
+          'id': 'p1',
+          'nome': 'Notebook',
+          'valorEstimado': 3500,
+          'status': 'COMPRADO',
+        });
       }
       return _json(404, {'message': options.path});
     });
-    final repo = PurchasePlanningRepository(ApiClient(tokenStorage: TokenStorage(), dio: dio));
+    final repo = PurchasePlanningRepository(
+      ApiClient(tokenStorage: TokenStorage(), dio: dio),
+    );
     final painel = await repo.obterPainel();
     expect(painel.itens, isEmpty);
     final vinculado = await repo.vincularMeta('p1', metaId: 'm1');

@@ -68,13 +68,20 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     DropdownMenuItem(value: 'DESPESA', child: Text('Despesa')),
                     DropdownMenuItem(value: 'RECEITA', child: Text('Receita')),
                   ],
-                  onChanged: (value) => setDialogState(() => tipo = value ?? 'DESPESA'),
+                  onChanged: (value) =>
+                      setDialogState(() => tipo = value ?? 'DESPESA'),
                 ),
               ],
             ),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
-              FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Criar')),
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancelar'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Criar'),
+              ),
             ],
           );
         },
@@ -125,15 +132,26 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       return const Center(child: CircularProgressIndicator());
     }
     if (error != null) {
-      return PulsoEmptyState(title: 'Erro', description: error!, actionLabel: 'Tentar de novo', onAction: _load);
+      return PulsoEmptyState(
+        title: 'Erro',
+        description: error!,
+        actionLabel: 'Tentar de novo',
+        onAction: _load,
+      );
     }
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
+      padding: const EdgeInsets.fromLTRB(
+        PulsoTokens.space4,
+        PulsoTokens.space2,
+        PulsoTokens.space4,
+        96,
+      ),
       children: [
         const PulsoPageHeader(
           title: 'Categorias',
-          subtitle: 'Organize receitas e despesas com as mesmas categorias da web.',
+          subtitle:
+              'Organize receitas e despesas com as mesmas categorias da web.',
           icon: Icons.layers_outlined,
         ),
         Align(
@@ -154,18 +172,26 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             (cat) => Padding(
               padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
               child: PulsoSurface(
-                padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3, vertical: PulsoTokens.space2),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: PulsoTokens.space3,
+                  vertical: PulsoTokens.space2,
+                ),
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   leading: CategoryGlyph(
                     icone: cat.icone,
-                    color: parseHexColor(cat.cor) ?? Theme.of(context).colorScheme.primary,
+                    color:
+                        parseHexColor(cat.cor) ??
+                        Theme.of(context).colorScheme.primary,
                   ),
                   title: Text(cat.nome),
                   subtitle: Text(cat.tipo == 'RECEITA' ? 'Receita' : 'Despesa'),
                   trailing: IconButton(
                     tooltip: 'Excluir categoria',
-                    icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error),
+                    icon: Icon(
+                      Icons.delete_outline,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
                     onPressed: () => _excluir(cat),
                   ),
                 ),
@@ -179,12 +205,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           (cat) => Padding(
             padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
             child: PulsoSurface(
-              padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space3, vertical: PulsoTokens.space2),
+              padding: const EdgeInsets.symmetric(
+                horizontal: PulsoTokens.space3,
+                vertical: PulsoTokens.space2,
+              ),
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: CategoryGlyph(
                   icone: cat.icone,
-                  color: parseHexColor(cat.cor) ?? Theme.of(context).colorScheme.primary,
+                  color:
+                      parseHexColor(cat.cor) ??
+                      Theme.of(context).colorScheme.primary,
                 ),
                 title: Text(cat.nome),
                 subtitle: Text(cat.tipo == 'RECEITA' ? 'Receita' : 'Despesa'),

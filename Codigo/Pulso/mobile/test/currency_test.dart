@@ -14,7 +14,11 @@ class _ScriptedAdapter implements HttpClientAdapter {
   @override
   void close({bool force = false}) {}
   @override
-  Future<ResponseBody> fetch(RequestOptions options, Stream<Uint8List>? requestStream, Future<void>? cancelFuture) {
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) {
     return _handler(options);
   }
 }
@@ -23,7 +27,10 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('CurrencyRepository converte via /moedas/converter', () async {
-    FlutterSecureStorage.setMockInitialValues({'pulso_access': 'access-token', 'pulso_refresh': 'refresh-token'});
+    FlutterSecureStorage.setMockInitialValues({
+      'pulso_access': 'access-token',
+      'pulso_refresh': 'refresh-token',
+    });
     final dio = Dio(BaseOptions(baseUrl: 'http://test/api'));
     dio.httpClientAdapter = _ScriptedAdapter((options) async {
       expect(options.path, '/moedas/converter');
@@ -32,14 +39,14 @@ void main() {
       return ResponseBody.fromString(
         jsonEncode({'valorConvertido': '18.00', 'taxa': '0.18'}),
         200,
-        headers: {Headers.contentTypeHeader: [Headers.jsonContentType]},
+        headers: {
+          Headers.contentTypeHeader: [Headers.jsonContentType],
+        },
       );
     });
-    final result = await CurrencyRepository(ApiClient(tokenStorage: TokenStorage(), dio: dio)).converter(
-      valor: 100,
-      de: 'BRL',
-      para: 'USD',
-    );
+    final result = await CurrencyRepository(
+      ApiClient(tokenStorage: TokenStorage(), dio: dio),
+    ).converter(valor: 100, de: 'BRL', para: 'USD');
     expect(result.valorConvertido, 18);
     expect(result.taxa, 0.18);
   });

@@ -24,8 +24,18 @@ class TransactionPeriod {
   static String label(String periodo) {
     final parts = periodo.split('-');
     const months = [
-      'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
-      'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez',
+      'Jan',
+      'Fev',
+      'Mar',
+      'Abr',
+      'Mai',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Set',
+      'Out',
+      'Nov',
+      'Dez',
     ];
     final month = int.parse(parts[1]);
     return '${months[month - 1]}/${parts[0]}';
@@ -79,7 +89,10 @@ Color? parseHexColor(String? hex) {
   if (hex == null || hex.isEmpty) return null;
   final cleaned = hex.replaceFirst('#', '');
   if (cleaned.length != 6 && cleaned.length != 8) return null;
-  final value = int.tryParse(cleaned.length == 6 ? 'FF$cleaned' : cleaned, radix: 16);
+  final value = int.tryParse(
+    cleaned.length == 6 ? 'FF$cleaned' : cleaned,
+    radix: 16,
+  );
   if (value == null) return null;
   return Color(value);
 }
@@ -108,11 +121,34 @@ double? parseMoney(String raw) {
 }
 
 const _mesesLongos = [
-  'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
-  'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro',
+  'janeiro',
+  'fevereiro',
+  'março',
+  'abril',
+  'maio',
+  'junho',
+  'julho',
+  'agosto',
+  'setembro',
+  'outubro',
+  'novembro',
+  'dezembro',
 ];
 
-const _mesesCurtos = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+const _mesesCurtos = [
+  'jan',
+  'fev',
+  'mar',
+  'abr',
+  'mai',
+  'jun',
+  'jul',
+  'ago',
+  'set',
+  'out',
+  'nov',
+  'dez',
+];
 
 String formatDayTitle(String isoDate) {
   final parts = isoDate.split('-');

@@ -6,29 +6,29 @@ const originalUrl = import.meta.env.VITE_API_URL
 const originalProd = import.meta.env.PROD
 
 describe('utils/apiBaseUrl', () => {
-  afterEach(() => {
-    import.meta.env.VITE_API_URL = originalUrl
-    import.meta.env.PROD = originalProd
-  })
+    afterEach(() => {
+        import.meta.env.VITE_API_URL = originalUrl
+        import.meta.env.PROD = originalProd
+    })
 
-  it('prioriza VITE_API_URL e remove barra final', () => {
-    import.meta.env.VITE_API_URL = 'https://api.example.com/'
-    import.meta.env.PROD = false
+    it('prioriza VITE_API_URL e remove barra final', () => {
+        import.meta.env.VITE_API_URL = 'https://api.example.com/'
+        import.meta.env.PROD = false
 
-    expect(getApiBaseUrl()).toBe('https://api.example.com')
-  })
+        expect(getApiBaseUrl()).toBe('https://api.example.com')
+    })
 
-  it('usa /api em produção quando variável não existe', () => {
-    import.meta.env.VITE_API_URL = ''
-    import.meta.env.PROD = true
+    it('usa /api em produção quando variável não existe', () => {
+        import.meta.env.VITE_API_URL = ''
+        import.meta.env.PROD = true
 
-    expect(getApiBaseUrl()).toBe('/api')
-  })
+        expect(getApiBaseUrl()).toBe('/api')
+    })
 
-  it('usa /api em desenvolvimento quando variável não existe (proxy Vite)', () => {
-    import.meta.env.VITE_API_URL = ''
-    import.meta.env.PROD = false
+    it('usa /api em desenvolvimento quando variável não existe (proxy Vite)', () => {
+        import.meta.env.VITE_API_URL = ''
+        import.meta.env.PROD = false
 
-    expect(getApiBaseUrl()).toBe('/api')
-  })
+        expect(getApiBaseUrl()).toBe('/api')
+    })
 })

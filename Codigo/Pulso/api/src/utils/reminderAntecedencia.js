@@ -35,4 +35,3 @@ module.exports = {
     ANTECEDENCIA_MINUTOS,
     HORA_PADRAO_LEMBRETE,
 };
-

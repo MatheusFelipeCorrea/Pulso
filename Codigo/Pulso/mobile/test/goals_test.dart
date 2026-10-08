@@ -18,16 +18,27 @@ class _ScriptedAdapter implements HttpClientAdapter {
   @override
   void close({bool force = false}) {}
   @override
-  Future<ResponseBody> fetch(RequestOptions options, Stream<Uint8List>? requestStream, Future<void>? cancelFuture) {
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) {
     return _handler(options);
   }
 }
 
-ResponseBody _json(int status, Object body, {Map<String, List<String>> headers = const {}}) {
+ResponseBody _json(
+  int status,
+  Object body, {
+  Map<String, List<String>> headers = const {},
+}) {
   return ResponseBody.fromString(
     jsonEncode(body),
     status,
-    headers: {Headers.contentTypeHeader: [Headers.jsonContentType], ...headers},
+    headers: {
+      Headers.contentTypeHeader: [Headers.jsonContentType],
+      ...headers,
+    },
   );
 }
 
@@ -55,7 +66,10 @@ void main() {
   });
 
   test('GoalRepository lista /metas com os mesmos headers da web', () async {
-    FlutterSecureStorage.setMockInitialValues({'pulso_access': 'access-token', 'pulso_refresh': 'refresh-token'});
+    FlutterSecureStorage.setMockInitialValues({
+      'pulso_access': 'access-token',
+      'pulso_refresh': 'refresh-token',
+    });
     final dio = Dio(BaseOptions(baseUrl: 'http://test/api'));
     dio.httpClientAdapter = _ScriptedAdapter((options) async {
       expect(options.path, '/metas');
@@ -82,7 +96,9 @@ void main() {
         },
       );
     });
-    final page = await GoalRepository(ApiClient(tokenStorage: TokenStorage(), dio: dio)).listar(const GoalFilters());
+    final page = await GoalRepository(
+      ApiClient(tokenStorage: TokenStorage(), dio: dio),
+    ).listar(const GoalFilters());
     expect(page.total, 1);
     expect(page.metas.first.nome, 'Viagem');
   });
@@ -97,9 +113,21 @@ void main() {
 
   test('badges de status e tipo da meta seguem o catálogo da web', () {
     expect(badgeKindFromMetaStatus('ATIVA'), PulsoBadgeKind.metaStatusAtiva);
-    expect(badgeKindFromMetaStatus('CONCLUIDA'), PulsoBadgeKind.metaStatusConcluida);
+    expect(
+      badgeKindFromMetaStatus('CONCLUIDA'),
+      PulsoBadgeKind.metaStatusConcluida,
+    );
     expect(badgeKindFromMetaTipo('CURTO_PRAZO'), PulsoBadgeKind.metaTipoCurto);
-    expect(badgeStyleForKind(PulsoBadgeKind.metaStatusConcluida, Brightness.light).label, 'Concluída');
-    expect(badgeStyleForKind(PulsoBadgeKind.metaTipoLongo, Brightness.light).rounded, isTrue);
+    expect(
+      badgeStyleForKind(
+        PulsoBadgeKind.metaStatusConcluida,
+        Brightness.light,
+      ).label,
+      'Concluída',
+    );
+    expect(
+      badgeStyleForKind(PulsoBadgeKind.metaTipoLongo, Brightness.light).rounded,
+      isTrue,
+    );
   });
 }

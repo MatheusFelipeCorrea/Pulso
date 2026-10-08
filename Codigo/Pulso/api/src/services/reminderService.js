@@ -103,7 +103,7 @@ const criarLembrete = async (usuarioId, body) => {
         const syncData = await aplicarSyncGoogle(usuarioId, lembrete, true);
         const atualizado = await reminderRepository.atualizar(lembrete.id, syncData);
         return mapLembreteComContagem(atualizado);
-    // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
     } catch (error) {
         return mapLembreteComContagem({
             ...lembrete,
@@ -126,7 +126,10 @@ const atualizarLembrete = async (usuarioId, id, body) => {
     if (body.categoria != null) data.categoria = normalizeCategoria(body.categoria);
     if (body.pago !== undefined) data.pago = Boolean(body.pago);
     if (body.repetirMensal !== undefined || body.diaRecorrencia !== undefined) {
-        const baseDate = body.dataVencimento != null ? parseVencimentoDate(body.dataVencimento) : existente.dataVencimento;
+        const baseDate =
+            body.dataVencimento != null
+                ? parseVencimentoDate(body.dataVencimento)
+                : existente.dataVencimento;
         Object.assign(
             data,
             normalizarRecorrencia(

@@ -3,10 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/appError');
 const authRepository = require('../repositories/authRepository');
-const {
-    enqueueVerificationEmail,
-    enqueuePasswordResetEmail,
-} = require('../messaging/emailBridge');
+const { enqueueVerificationEmail, enqueuePasswordResetEmail } = require('../messaging/emailBridge');
 const categoryService = require('./categoryService');
 const logger = require('../utils/logger');
 const env = require('../config/env');
@@ -19,8 +16,7 @@ const {
 const { verifyIdToken } = require('../utils/googleOAuth');
 const { buildOAuthCallbackLocation } = require('../utils/googleReturnTo');
 
-const SENHA_FORTE_REGEX =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+const SENHA_FORTE_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
 const SALT_ROUNDS = 12;
 const TOKEN_VERIFICACAO_TTL_MS = 24 * 60 * 60 * 1000;
@@ -267,7 +263,10 @@ const loginUser = async ({ email, senha, lembrarMe = false }) => {
         throw new AppError('Email ou senha incorretos.', 401);
     }
 
-    const { accessToken, refreshToken, refreshExpiresAt } = await issueAuthTokens(usuario, lembrarMe);
+    const { accessToken, refreshToken, refreshExpiresAt } = await issueAuthTokens(
+        usuario,
+        lembrarMe
+    );
 
     return {
         accessToken,
@@ -455,19 +454,21 @@ const authenticateGoogle = async (profile) => {
         });
     }
 
-    return authRepository.createUser({
-        nome,
-        email,
-        googleId,
-        urlAvatar,
-        provedorAuth: 'GOOGLE',
-        verificado: true,
-        senhaHash: null,
-        ...defaultUserRelations,
-    }).then(async (usuario) => {
-        await categoryService.seedCategoriasPadrao(usuario.id);
-        return usuario;
-    });
+    return authRepository
+        .createUser({
+            nome,
+            email,
+            googleId,
+            urlAvatar,
+            provedorAuth: 'GOOGLE',
+            verificado: true,
+            senhaHash: null,
+            ...defaultUserRelations,
+        })
+        .then(async (usuario) => {
+            await categoryService.seedCategoriasPadrao(usuario.id);
+            return usuario;
+        });
 };
 
 const buildGoogleCallbackRedirect = async (usuario, returnOrigin) => {

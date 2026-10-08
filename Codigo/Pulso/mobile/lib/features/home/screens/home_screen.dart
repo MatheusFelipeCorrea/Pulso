@@ -44,9 +44,16 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: PulsoTokens.space2),
         Text(user?.email ?? '', style: Theme.of(context).textTheme.bodyMedium),
         const SizedBox(height: PulsoTokens.space3),
-        if (kind != null) Align(alignment: Alignment.centerLeft, child: PulsoBadge.kind(kind: kind, brightness: brightness)),
+        if (kind != null)
+          Align(
+            alignment: Alignment.centerLeft,
+            child: PulsoBadge.kind(kind: kind, brightness: brightness),
+          ),
         const SizedBox(height: PulsoTokens.space6),
-        TransactionSummaryCards(resumo: tx.resumo, loading: tx.loading && tx.resumo == null),
+        TransactionSummaryCards(
+          resumo: tx.resumo,
+          loading: tx.loading && tx.resumo == null,
+        ),
         const SizedBox(height: PulsoTokens.space5),
         FilledButton.icon(
           onPressed: () => context.push('/transactions/new'),

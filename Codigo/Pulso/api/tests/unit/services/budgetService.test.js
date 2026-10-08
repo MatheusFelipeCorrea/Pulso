@@ -164,7 +164,10 @@ describe('budgetService', () => {
         budgetRepository.contarPorUsuarioEMes.mockResolvedValueOnce(1);
 
         await expect(
-            budgetService.copiarOrcamento('u1', { mesOrigem: '2026-01-01', mesDestino: '2026-02-01' })
+            budgetService.copiarOrcamento('u1', {
+                mesOrigem: '2026-01-01',
+                mesDestino: '2026-02-01',
+            })
         ).rejects.toMatchObject({ statusCode: 409 });
     });
 
@@ -220,22 +223,24 @@ describe('budgetService', () => {
 
         expect(result.orcamentos).toHaveLength(2);
         expect(budgetRepository.upsert).toHaveBeenCalledWith(
-            expect.objectContaining({ categoriaId: 'c1', limiteValor: 100, rolloverAtivo: false, valorRollover: 0 })
+            expect.objectContaining({
+                categoriaId: 'c1',
+                limiteValor: 100,
+                rolloverAtivo: false,
+                valorRollover: 0,
+            })
         );
-        expect(budgetRepository.deletarForaDaLista).toHaveBeenCalledWith(
-            'u1',
-            expect.any(Date),
-            ['c1', 'c2']
-        );
+        expect(budgetRepository.deletarForaDaLista).toHaveBeenCalledWith('u1', expect.any(Date), [
+            'c1',
+            'c2',
+        ]);
     });
 
     it('infla o limite com a sobra do mês anterior ao criar categoria nova com rollover ativo', async () => {
         prisma.categoria.findMany.mockResolvedValue([{ id: 'c1' }]);
         budgetRepository.buscarPorUsuarioEMes
             .mockResolvedValueOnce([]) // mês atual: categoria ainda não tem orçamento
-            .mockResolvedValueOnce([
-                { categoriaId: 'c1', limiteValor: 500, rolloverAtivo: true },
-            ]); // mês anterior
+            .mockResolvedValueOnce([{ categoriaId: 'c1', limiteValor: 500, rolloverAtivo: true }]); // mês anterior
         budgetRepository.calcularGastosPorCategoria.mockResolvedValue({ c1: 300 });
         budgetRepository.upsert.mockResolvedValueOnce({
             id: 'o1',
@@ -264,9 +269,7 @@ describe('budgetService', () => {
         prisma.categoria.findMany.mockResolvedValue([{ id: 'c1' }]);
         budgetRepository.buscarPorUsuarioEMes
             .mockResolvedValueOnce([])
-            .mockResolvedValueOnce([
-                { categoriaId: 'c1', limiteValor: 500, rolloverAtivo: false },
-            ]);
+            .mockResolvedValueOnce([{ categoriaId: 'c1', limiteValor: 500, rolloverAtivo: false }]);
         budgetRepository.calcularGastosPorCategoria.mockResolvedValue({ c1: 300 });
         budgetRepository.upsert.mockResolvedValueOnce({
             id: 'o1',
@@ -290,9 +293,7 @@ describe('budgetService', () => {
         prisma.categoria.findMany.mockResolvedValue([{ id: 'c1' }]);
         budgetRepository.buscarPorUsuarioEMes
             .mockResolvedValueOnce([])
-            .mockResolvedValueOnce([
-                { categoriaId: 'c1', limiteValor: 500, rolloverAtivo: true },
-            ]);
+            .mockResolvedValueOnce([{ categoriaId: 'c1', limiteValor: 500, rolloverAtivo: true }]);
         budgetRepository.calcularGastosPorCategoria.mockResolvedValue({ c1: 600 });
         budgetRepository.upsert.mockResolvedValueOnce({
             id: 'o1',
@@ -353,9 +354,7 @@ describe('budgetService', () => {
     });
 
     it('copia orçamento quando origem possui limites e destino está vazio', async () => {
-        budgetRepository.contarPorUsuarioEMes
-            .mockResolvedValueOnce(0)
-            .mockResolvedValueOnce(2);
+        budgetRepository.contarPorUsuarioEMes.mockResolvedValueOnce(0).mockResolvedValueOnce(2);
         budgetRepository.copiarParaMes.mockResolvedValue([
             {
                 id: 'o1',
@@ -377,7 +376,10 @@ describe('budgetService', () => {
         budgetRepository.contarPorUsuarioEMes.mockResolvedValueOnce(0).mockResolvedValueOnce(0);
 
         await expect(
-            budgetService.copiarOrcamento('u1', { mesOrigem: '2026-01-01', mesDestino: '2026-02-01' })
+            budgetService.copiarOrcamento('u1', {
+                mesOrigem: '2026-01-01',
+                mesDestino: '2026-02-01',
+            })
         ).rejects.toMatchObject({ statusCode: 404 });
     });
 

@@ -9,10 +9,7 @@ const {
     buildBusInsight,
     buildTrainInsight,
 } = require('../constants/tripDestinationAirports');
-const {
-    getSeasonalAdjustment,
-    applySeasonalPrice,
-} = require('../constants/tripSeasonalPricing');
+const { getSeasonalAdjustment, applySeasonalPrice } = require('../constants/tripSeasonalPricing');
 
 const addDays = (date, days) => {
     const next = new Date(date);

@@ -29,8 +29,7 @@ const encontrarCategoriaConta = (categorias, tipo) => {
         return (
             categorias.find(
                 (cat) =>
-                    cat.tipo === 'RECEITA' &&
-                    RECEITA_FALLBACK_NOMES.includes(normalize(cat.nome))
+                    cat.tipo === 'RECEITA' && RECEITA_FALLBACK_NOMES.includes(normalize(cat.nome))
             ) ?? categorias.find((cat) => cat.tipo === 'RECEITA')
         );
     }
@@ -58,9 +57,7 @@ const RECEITA_FALLBACK_NOMES = ['salario', 'salário', 'renda', 'extra', 'freela
 
 const encontrarCategoriaReceitaBeneficio = (categorias) =>
     categorias.find(
-        (cat) =>
-            cat.tipo === 'RECEITA' &&
-            RECEITA_FALLBACK_NOMES.includes(normalize(cat.nome))
+        (cat) => cat.tipo === 'RECEITA' && RECEITA_FALLBACK_NOMES.includes(normalize(cat.nome))
     ) ??
     categorias.find((cat) => cat.tipo === 'RECEITA' && normalize(cat.nome) !== 'outros') ??
     categorias.find((cat) => cat.tipo === 'RECEITA');

@@ -2,22 +2,14 @@ const { z } = require('zod');
 
 const { CATEGORIAS_LEMBRETE } = require('../constants/reminderCategories');
 
-
-
 const antecedenciaEnum = z.enum(['NO_DIA', 'UM_DIA', 'TRES_DIAS', 'CINCO_DIAS', 'UMA_SEMANA']);
 
 const categoriaLembreteEnum = z.enum(CATEGORIAS_LEMBRETE);
 
-const horaLembreteSchema = z
-    .string()
-    .regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Use o formato HH:MM');
-
-
+const horaLembreteSchema = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Use o formato HH:MM');
 
 const queryMesSchema = z.object({
-
     query: z.object({
-
         mes: z
 
             .string()
@@ -25,29 +17,17 @@ const queryMesSchema = z.object({
             .regex(/^\d{4}-\d{2}$/, 'Use o formato YYYY-MM')
 
             .optional(),
-
     }),
-
 });
-
-
 
 const queryDataSchema = z.object({
-
     query: z.object({
-
         data: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use o formato YYYY-MM-DD'),
-
     }),
-
 });
 
-
-
 const criarLembreteSchema = z.object({
-
     body: z.object({
-
         titulo: z.string().min(1, 'Título é obrigatório').max(120),
 
         valor: z.coerce.number().min(0).optional().nullable(),
@@ -65,23 +45,15 @@ const criarLembreteSchema = z.object({
         repetirMensal: z.boolean().optional(),
 
         diaRecorrencia: z.coerce.number().int().min(1).max(28).optional(),
-
     }),
-
 });
 
-
-
 const atualizarLembreteSchema = z.object({
-
     params: z.object({
-
         id: z.string().min(1),
-
     }),
 
     body: z.object({
-
         titulo: z.string().min(1).max(120).optional(),
 
         valor: z.coerce.number().min(0).optional().nullable(),
@@ -101,33 +73,19 @@ const atualizarLembreteSchema = z.object({
         repetirMensal: z.boolean().optional(),
 
         diaRecorrencia: z.coerce.number().int().min(1).max(28).optional(),
-
     }),
-
 });
-
-
 
 const marcarPagoSchema = z.object({
-
     params: z.object({
-
         id: z.string().min(1),
-
     }),
-
 });
 
-
-
 const removerLembreteSchema = z.object({
-
     params: z.object({
-
         id: z.string().min(1),
-
     }),
-
 });
 
 const googleSyncSchema = z.object({
@@ -145,4 +103,3 @@ module.exports = {
     removerLembreteSchema,
     googleSyncSchema,
 };
-

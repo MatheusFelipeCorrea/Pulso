@@ -1,4 +1,7 @@
-const { resolveFromGeoNamesPlace, formatDestinoLabel } = require('../../../src/services/tripDestinationResolver');
+const {
+    resolveFromGeoNamesPlace,
+    formatDestinoLabel,
+} = require('../../../src/services/tripDestinationResolver');
 const { findNearestAirportHub } = require('../../../src/constants/tripAirportHubs');
 
 describe('tripDestinationResolver', () => {

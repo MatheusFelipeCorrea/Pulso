@@ -78,8 +78,9 @@ const agregarReceitasDespesasMes = async (usuarioId, mesReferencia) => {
 
 const calcularSobraMensal = async (usuarioId) => {
     const mesAtual = mesReferenciaFromQuery(mesAtualString());
-    const meses = Array.from({ length: MESES_MEDIA_SOBRA }, (_, index) =>
-        new Date(mesAtual.getFullYear(), mesAtual.getMonth() - index, 1)
+    const meses = Array.from(
+        { length: MESES_MEDIA_SOBRA },
+        (_, index) => new Date(mesAtual.getFullYear(), mesAtual.getMonth() - index, 1)
     );
 
     const resultados = await Promise.all(
@@ -193,9 +194,13 @@ const resolverMeta = async (usuarioId, dados) => {
 
 const obterImagemUrl = async (nome, dados = {}, itemAtual = null) => {
     const imagemInformada =
-        dados.imagemUrl !== undefined ? dados.imagemUrl?.trim() || null : itemAtual?.imagemUrl ?? null;
+        dados.imagemUrl !== undefined
+            ? dados.imagemUrl?.trim() || null
+            : (itemAtual?.imagemUrl ?? null);
     const linkProduto =
-        dados.linkProduto !== undefined ? dados.linkProduto?.trim() || null : itemAtual?.linkProduto ?? null;
+        dados.linkProduto !== undefined
+            ? dados.linkProduto?.trim() || null
+            : (itemAtual?.linkProduto ?? null);
     const buscarNaInternet = dados.buscarImagemAuto !== false;
 
     if (dados.imagemUrl === null) return null;
@@ -214,7 +219,9 @@ const criarItem = async (usuarioId, dados) => {
     const nome = validarNome(dados.nome);
     const valorEstimado = validarValor(dados.valorEstimado);
     const categoria = dados.categoria ?? inferirCategoria(nome);
-    const metaId = dados.vincularMeta ? await resolverMeta(usuarioId, { ...dados, nome, valorEstimado }) : null;
+    const metaId = dados.vincularMeta
+        ? await resolverMeta(usuarioId, { ...dados, nome, valorEstimado })
+        : null;
     const imagemUrl = await obterImagemUrl(nome, dados);
 
     const item = await purchasePlanningRepository.criar({
@@ -243,7 +250,8 @@ const editarItem = async (usuarioId, id, dados) => {
 
     const payload = {};
     if (dados.nome !== undefined) payload.nome = validarNome(dados.nome);
-    if (dados.valorEstimado !== undefined) payload.valorEstimado = validarValor(dados.valorEstimado);
+    if (dados.valorEstimado !== undefined)
+        payload.valorEstimado = validarValor(dados.valorEstimado);
     if (dados.prioridade !== undefined) payload.prioridade = dados.prioridade;
     if (dados.categoria !== undefined) payload.categoria = dados.categoria;
     if (dados.observacoes !== undefined) payload.observacoes = dados.observacoes?.trim() || null;
@@ -254,11 +262,7 @@ const editarItem = async (usuarioId, id, dados) => {
         dados.nome !== undefined ||
         dados.buscarImagemAuto !== undefined
     ) {
-        payload.imagemUrl = await obterImagemUrl(
-            payload.nome ?? item.nome,
-            dados,
-            item
-        );
+        payload.imagemUrl = await obterImagemUrl(payload.nome ?? item.nome, dados, item);
     }
     if (dados.simularParcelas !== undefined) payload.simularParcelas = dados.simularParcelas;
     if (dados.parcelas !== undefined) {

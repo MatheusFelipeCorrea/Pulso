@@ -18,7 +18,10 @@ class ThemeController extends ChangeNotifier {
   Future<void> setMode(ThemeMode next) async {
     mode = next == ThemeMode.dark ? ThemeMode.dark : ThemeMode.light;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('ds-theme-preference', mode == ThemeMode.dark ? 'dark' : 'light');
+    await prefs.setString(
+      'ds-theme-preference',
+      mode == ThemeMode.dark ? 'dark' : 'light',
+    );
     notifyListeners();
   }
 

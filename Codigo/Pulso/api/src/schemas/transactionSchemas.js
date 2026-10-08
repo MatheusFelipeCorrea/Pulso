@@ -86,7 +86,10 @@ const listarTransacoesQuerySchema = z.object({
         categoria: z.string().optional(),
         categoriaNome: z.string().max(60).optional(),
         tipo: z.enum(['RECEITA', 'DESPESA', 'TRANSFERENCIA', 'TODOS']).optional().default('TODOS'),
-        recurso: z.enum([...RECURSOS_TRANSACAO, 'TODOS']).optional().default('TODOS'),
+        recurso: z
+            .enum([...RECURSOS_TRANSACAO, 'TODOS'])
+            .optional()
+            .default('TODOS'),
         busca: z.string().optional(),
         pagina: z.coerce.number().int().positive().optional().default(1),
         limite: z.coerce.number().int().positive().max(100).optional().default(10),
@@ -103,10 +106,7 @@ const excluirTransacaoSchema = z.object({
             .optional()
             .default('false')
             .transform((v) => v === 'true'),
-        dataCorte: z
-            .string()
-            .datetime({ offset: true })
-            .optional(),
+        dataCorte: z.string().datetime({ offset: true }).optional(),
     }),
 });
 

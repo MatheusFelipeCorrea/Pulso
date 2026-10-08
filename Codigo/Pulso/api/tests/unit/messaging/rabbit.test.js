@@ -44,7 +44,11 @@ describe('rabbit', () => {
         expect(rabbit.isConfigured()).toBe(false);
         expect(rabbit.isBrokerEnabled()).toBe(false);
 
-        const mode = await rabbit.publishOrRun(rabbit.QUEUES.EMAILS, { type: 'verification' }, fallback);
+        const mode = await rabbit.publishOrRun(
+            rabbit.QUEUES.EMAILS,
+            { type: 'verification' },
+            fallback
+        );
 
         expect(mode).toBe('direct');
         expect(fallback).toHaveBeenCalled();
@@ -80,11 +84,10 @@ describe('rabbit', () => {
         expect(mode).toBe('queued');
         expect(fallback).not.toHaveBeenCalled();
         expect(channel.assertQueue).toHaveBeenCalledTimes(3);
-        expect(channel.sendToQueue).toHaveBeenCalledWith(
-            rabbit.QUEUES.EMAILS,
-            expect.any(Buffer),
-            { persistent: true, contentType: 'application/json' }
-        );
+        expect(channel.sendToQueue).toHaveBeenCalledWith(rabbit.QUEUES.EMAILS, expect.any(Buffer), {
+            persistent: true,
+            contentType: 'application/json',
+        });
         await rabbit.close();
     });
 

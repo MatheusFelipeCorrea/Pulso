@@ -6,46 +6,46 @@ import { modalOverlayVariants, modalContentVariants } from './Modal.styles.jsx'
 
 /** Modal — overlay com portal, Esc e click outside */
 export const Modal = ({
-  isOpen,
-  onClose,
-  size = 'md',
-  closeOnOverlay = true,
-  children,
-  className,
-  overlayClassName,
+    isOpen,
+    onClose,
+    size = 'md',
+    closeOnOverlay = true,
+    children,
+    className,
+    overlayClassName,
 }) => {
-  const handleClose = useCallback(() => onClose?.(), [onClose])
+    const handleClose = useCallback(() => onClose?.(), [onClose])
 
-  useKeyboard(isOpen ? { Escape: handleClose } : {})
+    useKeyboard(isOpen ? { Escape: handleClose } : {})
 
-  useEffect(() => {
-    if (!isOpen) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = prev
-    }
-  }, [isOpen])
+    useEffect(() => {
+        if (!isOpen) return
+        const prev = document.body.style.overflow
+        document.body.style.overflow = 'hidden'
+        return () => {
+            document.body.style.overflow = prev
+        }
+    }, [isOpen])
 
-  if (!isOpen) return null
+    if (!isOpen) return null
 
-  return createPortal(
-    <div
-      className={cn(modalOverlayVariants(), overlayClassName)}
-      onClick={closeOnOverlay ? handleClose : undefined}
-      role="presentation"
-    >
-      <div className="flex min-h-full items-center justify-center py-4 sm:py-6">
+    return createPortal(
         <div
-          role="dialog"
-          aria-modal="true"
-          className={cn(modalContentVariants({ size }), className)}
-          onClick={(e) => e.stopPropagation()}
+            className={cn(modalOverlayVariants(), overlayClassName)}
+            onClick={closeOnOverlay ? handleClose : undefined}
+            role="presentation"
         >
-          {children}
-        </div>
-      </div>
-    </div>,
-    document.body
-  )
+            <div className="flex min-h-full items-center justify-center py-4 sm:py-6">
+                <div
+                    role="dialog"
+                    aria-modal="true"
+                    className={cn(modalContentVariants({ size }), className)}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {children}
+                </div>
+            </div>
+        </div>,
+        document.body
+    )
 }

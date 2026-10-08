@@ -75,18 +75,32 @@ class _FiltersSheetState extends State<_FiltersSheet> {
           DropdownButtonFormField<String>(
             initialValue: tipo,
             decoration: const InputDecoration(labelText: 'Tipo'),
-            items: (options?.tipos ?? const [FilterOption(value: 'TODOS', label: 'Todos')])
-                .map((item) => DropdownMenuItem(value: item.value, child: Text(item.label)))
-                .toList(),
+            items:
+                (options?.tipos ??
+                        const [FilterOption(value: 'TODOS', label: 'Todos')])
+                    .map(
+                      (item) => DropdownMenuItem(
+                        value: item.value,
+                        child: Text(item.label),
+                      ),
+                    )
+                    .toList(),
             onChanged: (value) => setState(() => tipo = value ?? 'TODOS'),
           ),
           const SizedBox(height: PulsoTokens.space3),
           DropdownButtonFormField<String>(
             initialValue: recurso,
             decoration: const InputDecoration(labelText: 'Recurso'),
-            items: (options?.recursos ?? const [FilterOption(value: 'TODOS', label: 'Todos')])
-                .map((item) => DropdownMenuItem(value: item.value, child: Text(item.label)))
-                .toList(),
+            items:
+                (options?.recursos ??
+                        const [FilterOption(value: 'TODOS', label: 'Todos')])
+                    .map(
+                      (item) => DropdownMenuItem(
+                        value: item.value,
+                        child: Text(item.label),
+                      ),
+                    )
+                    .toList(),
             onChanged: (value) => setState(() => recurso = value ?? 'TODOS'),
           ),
           const SizedBox(height: PulsoTokens.space3),
@@ -94,9 +108,15 @@ class _FiltersSheetState extends State<_FiltersSheet> {
             initialValue: categoriaId,
             decoration: const InputDecoration(labelText: 'Categoria'),
             items: [
-              const DropdownMenuItem<String?>(value: null, child: Text('Todas')),
+              const DropdownMenuItem<String?>(
+                value: null,
+                child: Text('Todas'),
+              ),
               ...?options?.categorias.map(
-                (cat) => DropdownMenuItem<String?>(value: cat.id, child: Text(cat.nome)),
+                (cat) => DropdownMenuItem<String?>(
+                  value: cat.id,
+                  child: Text(cat.nome),
+                ),
               ),
             ],
             onChanged: (value) => setState(() => categoriaId = value),

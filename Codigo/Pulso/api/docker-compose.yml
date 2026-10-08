@@ -1,15 +1,17 @@
 # RabbitMQ local (TI5) — opcional. Sem isso a API roda jobs direto via cron.
+# A CI sobe este compose (pull + healthcheck + AMQP), não faz docker build:
+# a imagem é a oficial, não um Dockerfile nosso.
 services:
-  rabbitmq:
-    image: rabbitmq:3-management
-    ports:
-      - '5672:5672'
-      - '15672:15672'
-    environment:
-      RABBITMQ_DEFAULT_USER: pulso
-      RABBITMQ_DEFAULT_PASS: pulso
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    rabbitmq:
+        image: rabbitmq:3.13-management
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+        environment:
+            RABBITMQ_DEFAULT_USER: pulso
+            RABBITMQ_DEFAULT_PASS: pulso
+        healthcheck:
+            test: rabbitmq-diagnostics -q ping
+            interval: 10s
+            timeout: 5s
+            retries: 5

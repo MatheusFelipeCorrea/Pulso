@@ -43,7 +43,9 @@ const listarCotacoes = async (codigos = []) => {
     const codes = normalizeCodigos(codigos);
     const requested = codes.length
         ? codes.map((code) => String(code).toUpperCase()).filter(isSupportedCurrency)
-        : (await getSupportedCurrencies()).map((item) => item.code).filter((code) => code !== 'BRL');
+        : (await getSupportedCurrencies())
+              .map((item) => item.code)
+              .filter((code) => code !== 'BRL');
 
     let rates = {};
     try {
@@ -55,9 +57,7 @@ const listarCotacoes = async (codigos = []) => {
 
     const atualizadoEm = new Date().toISOString();
 
-    const cotacoes = requested
-        .map((code) => mapCurrencyRate(code, rates[code]))
-        .filter(Boolean);
+    const cotacoes = requested.map((code) => mapCurrencyRate(code, rates[code])).filter(Boolean);
 
     return { cotacoes, atualizadoEm };
 };
@@ -128,7 +128,11 @@ const obterHistorico = async (codigo, dias = 30) => {
     if (liveRate?.bid) {
         const lastPoint = points[points.length - 1];
         if (lastPoint?.date === today) {
-            points[points.length - 1] = { ...lastPoint, bid: liveRate.bid, ask: liveRate.ask ?? liveRate.bid };
+            points[points.length - 1] = {
+                ...lastPoint,
+                bid: liveRate.bid,
+                ask: liveRate.ask ?? liveRate.bid,
+            };
         } else {
             points.push({
                 date: today,

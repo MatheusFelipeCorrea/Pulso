@@ -11,7 +11,6 @@ DateTime? _dateOrNull(dynamic value) {
   return DateTime.tryParse('$value');
 }
 
-
 const purchasePrioridades = ['ALTA', 'MEDIA', 'BAIXA'];
 const purchaseCategorias = {
   'ELETRONICOS': 'Eletrônicos',
@@ -29,11 +28,20 @@ class PurchaseCategoryLook {
 }
 
 const purchaseCategoryLooks = {
-  'ELETRONICOS': PurchaseCategoryLook(lucide: 'Smartphone', color: Color(0xFF3B82F6)),
-  'CASA_ELETRODOMESTICOS': PurchaseCategoryLook(lucide: 'Home', color: Color(0xFF7C3AED)),
+  'ELETRONICOS': PurchaseCategoryLook(
+    lucide: 'Smartphone',
+    color: Color(0xFF3B82F6),
+  ),
+  'CASA_ELETRODOMESTICOS': PurchaseCategoryLook(
+    lucide: 'Home',
+    color: Color(0xFF7C3AED),
+  ),
   'VESTUARIO': PurchaseCategoryLook(lucide: 'Shirt', color: Color(0xFFEC4899)),
   'VEICULO': PurchaseCategoryLook(lucide: 'Car', color: Color(0xFF06B6D4)),
-  'ACESSORIOS': PurchaseCategoryLook(lucide: 'ShoppingBag', color: Color(0xFFF59E0B)),
+  'ACESSORIOS': PurchaseCategoryLook(
+    lucide: 'ShoppingBag',
+    color: Color(0xFFF59E0B),
+  ),
   'OUTROS': PurchaseCategoryLook(lucide: 'Sparkles', color: Color(0xFF94A3B8)),
 };
 
@@ -138,16 +146,26 @@ class PurchaseItem {
       linkProduto: json['linkProduto'] as String?,
       imagemUrl: json['imagemUrl'] as String?,
       simularParcelas: json['simularParcelas'] != false,
-      parcelas: json['parcelas'] is num ? (json['parcelas'] as num).toInt() : 12,
+      parcelas: json['parcelas'] is num
+          ? (json['parcelas'] as num).toInt()
+          : 12,
       status: json['status'] as String? ?? 'DESEJADO',
-      mesesParaComprar: json['mesesParaComprar'] is num ? (json['mesesParaComprar'] as num).toInt() : null,
-      meta: json['meta'] is Map<String, dynamic> ? PurchaseMetaLink.fromJson(json['meta'] as Map<String, dynamic>) : null,
+      mesesParaComprar: json['mesesParaComprar'] is num
+          ? (json['mesesParaComprar'] as num).toInt()
+          : null,
+      meta: json['meta'] is Map<String, dynamic>
+          ? PurchaseMetaLink.fromJson(json['meta'] as Map<String, dynamic>)
+          : null,
       simulacoes: (json['simulacoes'] as List<dynamic>? ?? const [])
           .whereType<Map<String, dynamic>>()
           .map(PurchaseSimulacao.fromJson)
           .toList(),
-      comprometimentoNivel: comprometimento is Map ? comprometimento['nivel'] as String? : null,
-      comprometimentoPercentual: comprometimento is Map ? _num(comprometimento['percentual']) : null,
+      comprometimentoNivel: comprometimento is Map
+          ? comprometimento['nivel'] as String?
+          : null,
+      comprometimentoPercentual: comprometimento is Map
+          ? _num(comprometimento['percentual'])
+          : null,
     );
   }
 }
@@ -181,14 +199,20 @@ class PurchaseComprado {
       categoria: json['categoria'] as String? ?? 'OUTROS',
       categoriaLabel: json['categoriaLabel'] as String?,
       imagemUrl: json['imagemUrl'] as String?,
-      diasNaLista: json['diasNaLista'] is num ? (json['diasNaLista'] as num).toInt() : null,
+      diasNaLista: json['diasNaLista'] is num
+          ? (json['diasNaLista'] as num).toInt()
+          : null,
       compradoEm: _dateOrNull(json['compradoEm']),
     );
   }
 }
 
 class PurchaseCategoriaShare {
-  const PurchaseCategoriaShare({required this.label, this.quantidade = 0, this.total = 0});
+  const PurchaseCategoriaShare({
+    required this.label,
+    this.quantidade = 0,
+    this.total = 0,
+  });
 
   final String label;
   final int quantidade;
@@ -197,7 +221,9 @@ class PurchaseCategoriaShare {
   factory PurchaseCategoriaShare.fromJson(Map<String, dynamic> json) {
     return PurchaseCategoriaShare(
       label: json['label'] as String? ?? '',
-      quantidade: json['quantidade'] is num ? (json['quantidade'] as num).toInt() : 0,
+      quantidade: json['quantidade'] is num
+          ? (json['quantidade'] as num).toInt()
+          : 0,
       total: _num(json['total']),
     );
   }
@@ -228,13 +254,17 @@ class PurchaseResumo {
     if (rawCats is Map) {
       for (final entry in rawCats.entries) {
         if (entry.value is Map<String, dynamic>) {
-          categorias['${entry.key}'] = PurchaseCategoriaShare.fromJson(entry.value as Map<String, dynamic>);
+          categorias['${entry.key}'] = PurchaseCategoriaShare.fromJson(
+            entry.value as Map<String, dynamic>,
+          );
         }
       }
     }
     return PurchaseResumo(
       totalValor: _num(json['totalValor']),
-      totalItens: json['totalItens'] is num ? (json['totalItens'] as num).toInt() : 0,
+      totalItens: json['totalItens'] is num
+          ? (json['totalItens'] as num).toInt()
+          : 0,
       mediaImpactoRenda: _num(json['mediaImpactoRenda']),
       rendaMensal: _num(json['rendaMensal']),
       sobraMensal: _num(json['sobraMensal']),
@@ -260,8 +290,13 @@ class PurchasePainel {
 
   factory PurchasePainel.fromJson(Map<String, dynamic> json) {
     return PurchasePainel(
-      resumo: PurchaseResumo.fromJson(json['resumo'] as Map<String, dynamic>? ?? const {}),
-      itens: (json['itens'] as List<dynamic>? ?? const []).whereType<Map<String, dynamic>>().map(PurchaseItem.fromJson).toList(),
+      resumo: PurchaseResumo.fromJson(
+        json['resumo'] as Map<String, dynamic>? ?? const {},
+      ),
+      itens: (json['itens'] as List<dynamic>? ?? const [])
+          .whereType<Map<String, dynamic>>()
+          .map(PurchaseItem.fromJson)
+          .toList(),
       comprados: (json['comprados'] as List<dynamic>? ?? const [])
           .whereType<Map<String, dynamic>>()
           .map(PurchaseComprado.fromJson)
