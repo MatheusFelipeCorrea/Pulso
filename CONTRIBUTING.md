@@ -1,113 +1,106 @@
-# Guia de Padronização Git & GitHub
+# Guia de contribuição — Pulso
 
-**Projeto:** XYZ  
-**Grupo:** GX — TI2/2026-2  
-**Repositório:** `plu-cc-2026-2-ti2-4354100-plu-cc-2026-2-ti2-4354100-group-X`
+Repositório da equipe **Pulso** (TI5 / 2026-2, PUC Minas):
 
----
+[`ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso`](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso)
 
-## 1. Introdução
+Ao contribuir, você concorda com o [Código de Conduta](CODE_OF_CONDUCT.md).
 
-Este documento define as regras de contribuição para o repositório do MEDIFLOW. Todas as alterações — sejam de código, documentação ou configuração — devem seguir as convenções aqui descritas.
+Código do produto: `Codigo/Pulso/` (`api`, `web`, `mobile`). Documentação da apostila: `docs/`. Cards do board: `Hyperion/.github/cards/`.
 
----
+## Regra de ouro: branch nasce da sprint
 
-## 2. Golden Rules
+**Toda branch de trabalho é criada a partir da branch da sprint vigente — nunca a partir da `main`.**
 
-As regras abaixo são obrigatórias e se aplicam a todos os membros do grupo, sem exceção:
+A sprint atual é `Sprint-4`. Quando a disciplina avançar, a base passa a ser `Sprint-5`, `Sprint-6`, e assim por diante. Confirme o nome da sprint aberta no GitHub antes de ramificar.
 
-1. **Nunca faça commit diretamente na branch `main`.** Todo commit deve chegar via PR, garantindo revisão de código.
-
-2. **Uma branch por funcionalidade, correção ou tarefa.** Não combine alterações não relacionadas em uma única branch. Isso facilita a revisão e evita conflitos desnecessários.
-
-3. **Todo Pull Request deve ser revisado por pelo menos um outro membro do grupo** antes do merge. Não faça merge do seu próprio PR sem revisão **(a menos que absolutamente necessário)**.
-
-4. **Delete branches de trabalho após o merge.** Mantenha o repositório organizado removendo branches já integradas. As exceções são as **branches permanentes**, descritas na seção 3.
-
-5. **Nunca delete uma branch permanente.**
-
-6. **Nunca faça `git push --force` em branches permanentes.** Force-push reescreve o histórico e pode causar perda de commits para outros membros.
-
-7. **Sempre mantenha as branches sincronizadas.** Periodicamente, faça `git pull` na branch em que está trabalhando para garantir que você está com a versão mais recente.
-
----
-
-## 3. Branches Permanentes (Permanent Branches)
-
-Algumas branches não devem ser deletadas após o merge. Elas existem permanentemente no repositório e são usadas recorrentemente para propósitos específicos.
-
-- Branches temporárias (feature, fix, chore, etc.) nascem da `main` e são deletadas após o merge.
-- Branches permanentes (`main`, `docs`) nunca são deletadas e recebem merges via PR.
-
-### 3.1 Branch `main`
-
-- **Propósito:** Código estável e pronto para produção.
-- **Deve ser deletada?** **Nunca.**
-- **Recebe commits diretos?** **Nunca.** Todo merge na `main` deve vir via Pull Request.
-
-### 3.2 Branch `docs`
-
-- **Propósito:** Centralizar alterações de documentação diversa (README, guias, atas de reunião, arquivos de especificação).
-- **Deve ser deletada?** **Nunca.**
-- **Uso recorrente:** Quando um membro do grupo precisa atualizar um documento, ele pode fazer checkout da `docs`, criar uma branch temporária a partir dela (ex.: `docs/atualiza-readme`), fazer as alterações e abrir um PR de volta para `docs`.
-- **Por que é útil:** Evita que a `main` seja poluída com commits de documentação e mantém um histórico separado e organizado.
-
----
-
-## 4. Nomenclatura de Branches
-
-### 4.1 Formato padrão
-
-```
-<tipo>/<descrição-curta>
+```bash
+git fetch origin
+git checkout Sprint-4
+git pull origin Sprint-4
+git checkout -b feat/minha-tarefa
 ```
 
-### 4.2 Tipos de branch permitidos
+O Pull Request aponta para **`Sprint-4`** (a sprint vigente), não para `main`.
 
-- `feat/` — Nova funcionalidade para o sistema. Exemplo: `feat/cadastro-usuarios`
-- `fix/` — Correção de bug. Exemplo: `fix/validacao-cpf-duplicado`
-- `docs/` — Alterações apenas em documentação. Exemplo: `docs/atualiza-readme`
-- `refactor/` — Melhoria no código sem alterar comportamento. Exemplo: `refactor/limpa-validacoes`
-- `test/` — Adição ou modificação de testes. Exemplo: `test/testes-usuario`
-- `chore/` — Manutenção, dependências, configuração de build. Exemplo: `chore/atualiza-dependencias`
-- `style/` — Formatação, espaçamento, sem alteração de lógica. Exemplo: `style/padroniza-css`
+`main` só recebe o merge da própria sprint (ou correção acordada com a equipe). Commit direto na `main` não é fluxo deste repositório.
 
----
+## Por que não partir da `main`
 
-## 5. Mensagens de Commit
+A `main` pode estar atrás da sprint. Branch criada dela traz código velho, gera conflito e mistura entrega de sprints diferentes. A sprint é a linha estável do time **nesta** iteração.
 
-### 5.1 Formato padrão (Conventional Commits)
+## Branches permanentes
 
-Toda mensagem de commit deve seguir a estrutura abaixo:
+| Branch | Papel | Apagar? | Commit direto? |
+|---|---|---|---|
+| `main` | entrega consolidada da disciplina | nunca | não |
+| `Sprint-N` | trabalho da sprint N | nunca (enquanto for a sprint da disciplina) | não — só via PR |
+
+Branches de tarefa (`feat/…`, `fix/…`, `docs/…`) são temporárias: nascem da sprint, voltam para a sprint por PR e são apagadas depois do merge.
+
+Não faça `git push --force` em `main` nem na sprint.
+
+## Nomenclatura
 
 ```
-<tipo>[escopo opcional]: <descrição>
-
-[corpo opcional]
-
-[rodapé(s) opcional(is)]
+<tipo>/<descricao-curta>
 ```
 
-### 5.2 Tipos de commit permitidos
+Exemplos a partir da sprint:
 
-- `feat` — Nova funcionalidade (correlaciona com MINOR no SemVer).
-- `fix` — Correção de bug (correlaciona com PATCH no SemVer).
-- `docs` — Alterações em documentação.
-- `refactor` — Refatoração de código que não corrige bug nem adiciona funcionalidade.
-- `test` — Adição ou correção de testes.
-- `chore` — Tarefas de manutenção, atualização de dependências, configuração.
-- `style` — Formatação, espaçamento ou pontuação sem alteração de lógica.
+- `feat/orcamento-mensal-mobile`
+- `fix/ci-api-globals`
+- `docs/conduta-e-contribuicao`
+- `refactor/email-bridge`
+- `chore/atualiza-dependencias`
 
----
+Uma branch, uma entrega. Não misture correção de CI com tela nova.
 
-## 6. Templates de Issues e PRs
+## Commits
 
-O repositório já conta com templates de issues em `.github/ISSUE_TEMPLATE/` para **Task**, **Bug Report** e **Feature Request**. Use-os sempre que abrir uma issue — isso ajuda a manter a consistência e a rastreabilidade do trabalho.
+Use [Conventional Commits](https://www.conventionalcommits.org/pt-br/):
 
-Para Pull Requests, o repositório já conta com um template em `.github/PULL_REQUEST_TEMPLATE.md`.
+```
+<tipo>(escopo opcional): descrição curta
+```
 
-Por padrão, use `Closes #` quando o PR resolve completamente a issue vinculada.
+Tipos: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `style`.
 
----
+Não commite `.env`, senhas, tokens nem chave de app.
 
-Este guia deve ser seguido por todos os membros do grupo G4 durante o desenvolvimento do MEDIFLOW. Em caso de dúvidas, consulte a documentação oficial ou discuta com a equipe antes de fazer alterações que fujam do padrão.
+## Pull Request
+
+1. Atualize a sprint (`git pull origin Sprint-4`) e rebase ou merge a sua branch nela antes de abrir o PR, se estiver atrás.
+2. Abra o PR **contra a sprint vigente**.
+3. Descreva o que mudou e como testar. Vincule o card/issue (`Closes #123`) quando o PR resolver de fato.
+4. Outra pessoa do time revisa. Não faça merge do próprio PR sem review, salvo combinado com a equipe.
+5. Depois do merge, apague a branch de trabalho (local e remoto).
+
+## Onde mexer
+
+| Pasta | Quando |
+|---|---|
+| `Codigo/Pulso/api` | backend (Express, Prisma, jobs, RabbitMQ) |
+| `Codigo/Pulso/web` | React |
+| `Codigo/Pulso/mobile` | Flutter |
+| `docs/` | apostila e material da disciplina |
+| `Hyperion/.github/cards/` | cards do Project |
+
+Web e mobile devem entregar a mesma qualidade de UX no que já existe nos dois lados. Não invente endpoint ou módulo que o time ainda não combinou (por exemplo, grupos no backend).
+
+## Cards (Hyperion / GitHub Project)
+
+O markdown em `Hyperion/.github/cards/` alimenta o board. A Action de sync roda no `main`.
+
+- Mexeu **no board** → `npm run cards:reverse` **antes** de commitar.
+- Não empurre YAML antigo de card por cima do que o time já moveu no Project.
+
+O PR de card também nasce da sprint e entra nela; a `main` recebe isso quando a sprint for integrada.
+
+## Checklist rápido
+
+- [ ] Branch criada a partir da sprint vigente (`Sprint-4` agora)
+- [ ] PR aberto para a sprint, não para `main`
+- [ ] Sem segredo no commit
+- [ ] Review de outra pessoa do time
+- [ ] Branch de trabalho apagada depois do merge
