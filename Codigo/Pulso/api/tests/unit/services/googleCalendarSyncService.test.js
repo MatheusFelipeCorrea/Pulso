@@ -189,7 +189,9 @@ describe('googleCalendarSyncService', () => {
         err.code = 404;
         mockCalendarApi.events.delete.mockRejectedValue(err);
 
-        await expect(googleCalendarSync.removerEventoLembrete('u1', 'evt-1')).resolves.toBeUndefined();
+        await expect(
+            googleCalendarSync.removerEventoLembrete('u1', 'evt-1')
+        ).resolves.toBeUndefined();
     });
 
     it('remove calendário pulso quando existe', async () => {

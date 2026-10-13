@@ -52,23 +52,25 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   bool get _canSubmit =>
-      allPasswordRulesPassed(_senha.text) && _senha.text == _confirmar.text && !_submitting;
+      allPasswordRulesPassed(_senha.text) &&
+      _senha.text == _confirmar.text &&
+      !_submitting;
 
   Future<void> _submit() async {
     setState(() => _submitting = true);
     try {
       await context.read<AuthController>().resetPassword(
-            token: widget.token,
-            senha: _senha.text,
-            confirmarSenha: _confirmar.text,
-          );
+        token: widget.token,
+        senha: _senha.text,
+        confirmarSenha: _confirmar.text,
+      );
       if (!mounted) return;
       context.go('/reset-password/success');
     } catch (error) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AuthController.messageOf(error))),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(AuthController.messageOf(error))));
     } finally {
       if (mounted) setState(() => _submitting = false);
     }
@@ -124,7 +126,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           PulsoPasswordField(
             controller: _confirmar,
             hint: 'Confirmar nova senha',
-            errorText: _confirmar.text.isNotEmpty && _confirmar.text != _senha.text
+            errorText:
+                _confirmar.text.isNotEmpty && _confirmar.text != _senha.text
                 ? 'As senhas não conferem.'
                 : null,
             onChanged: (_) => setState(() {}),
@@ -160,7 +163,8 @@ class ResetPasswordSuccessScreen extends StatelessWidget {
           Text(
             'com sucesso!',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: PulsoColors.primary),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: PulsoColors.primary),
           ),
         ],
       ),

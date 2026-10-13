@@ -1,6 +1,6 @@
 /**
  * Design System - Data Display Components
- * 
+ *
  * Componentes para exibição de dados: tooltip, avatar, badge, card, progress, table
  */
 

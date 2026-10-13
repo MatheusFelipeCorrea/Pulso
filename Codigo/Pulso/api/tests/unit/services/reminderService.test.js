@@ -89,7 +89,9 @@ describe('reminderService', () => {
             sincronizarGoogle: true,
         });
 
-        expect(result).toEqual(expect.objectContaining({ id: 'l2', sincronizado: false, googleEventId: null }));
+        expect(result).toEqual(
+            expect.objectContaining({ id: 'l2', sincronizado: false, googleEventId: null })
+        );
         expect(reminderRepository.deletar).not.toHaveBeenCalled();
         expect(reminderRepository.atualizar).not.toHaveBeenCalled();
     });
@@ -231,7 +233,9 @@ describe('reminderService', () => {
             sincronizarGoogle: true,
         });
 
-        expect(result).toEqual(expect.objectContaining({ id: 'l7', sincronizado: false, googleEventId: null }));
+        expect(result).toEqual(
+            expect.objectContaining({ id: 'l7', sincronizado: false, googleEventId: null })
+        );
         expect(reminderRepository.deletar).not.toHaveBeenCalled();
         expect(googleCalendarSync.sincronizarLembrete).not.toHaveBeenCalled();
     });
@@ -289,7 +293,10 @@ describe('reminderService', () => {
         googleCalendarSync.sincronizarLembrete.mockRejectedValue(new Error('sync fail'));
 
         await expect(
-            reminderService.atualizarLembrete('u1', 'l9', { titulo: 'Conta Nova', sincronizarGoogle: true })
+            reminderService.atualizarLembrete('u1', 'l9', {
+                titulo: 'Conta Nova',
+                sincronizarGoogle: true,
+            })
         ).rejects.toThrow('sync fail');
 
         expect(reminderRepository.atualizar).toHaveBeenCalledWith('l9', { sincronizado: false });

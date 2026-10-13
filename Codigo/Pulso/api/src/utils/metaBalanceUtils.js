@@ -18,7 +18,8 @@ const calcProgressoMeta = (meta) => {
     const valorAlvo = roundMoney(meta.valorAlvo);
     const valorAtual = roundMoney(meta.valorAtual);
     const valorRestante = Math.max(0, roundMoney(valorAlvo - valorAtual));
-    const percentual = valorAlvo > 0 ? Math.min(100, roundMoney((valorAtual / valorAlvo) * 100)) : 0;
+    const percentual =
+        valorAlvo > 0 ? Math.min(100, roundMoney((valorAtual / valorAlvo) * 100)) : 0;
 
     return { valorAlvo, valorAtual, valorRestante, percentual };
 };
@@ -31,7 +32,10 @@ const calcValorMensalSugerido = (meta) => {
 
 const MESES_RESERVA_EMERGENCIA_PADRAO = 6;
 
-const calcSugestaoReservaEmergencia = (mediaGastoMensal, meses = MESES_RESERVA_EMERGENCIA_PADRAO) => {
+const calcSugestaoReservaEmergencia = (
+    mediaGastoMensal,
+    meses = MESES_RESERVA_EMERGENCIA_PADRAO
+) => {
     const media = Math.max(0, Number(mediaGastoMensal) || 0);
     const mesesNum = Math.max(1, Number(meses) || MESES_RESERVA_EMERGENCIA_PADRAO);
     return roundMoney(media * mesesNum);
@@ -46,7 +50,8 @@ const metaEstaVencida = (meta) => {
 
 const podeReceberAporte = (meta) => meta.status === 'ATIVA';
 
-const estaConcluida = (meta) => meta.status === 'CONCLUIDA' || calcProgressoMeta(meta).valorRestante <= 0;
+const estaConcluida = (meta) =>
+    meta.status === 'CONCLUIDA' || calcProgressoMeta(meta).valorRestante <= 0;
 
 module.exports = {
     roundMoney,

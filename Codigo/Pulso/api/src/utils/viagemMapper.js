@@ -3,9 +3,7 @@ const { calcProgressoMeta } = require('./metaBalanceUtils');
 const roundMoney = (value) => Math.round(Number(value) * 100) / 100;
 
 const calcTotalDespesas = (despesas = []) =>
-    roundMoney(
-        despesas.reduce((acc, item) => acc + Number(item.valorEstimado ?? 0), 0)
-    );
+    roundMoney(despesas.reduce((acc, item) => acc + Number(item.valorEstimado ?? 0), 0));
 
 const mapMetaResumo = (meta) => {
     if (!meta) return null;

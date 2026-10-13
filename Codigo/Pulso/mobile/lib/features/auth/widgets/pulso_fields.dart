@@ -36,7 +36,12 @@ class PulsoTextField extends StatelessWidget {
         hintText: hint,
         prefixIcon: icon == null
             ? null
-            : Icon(icon, color: isDark ? PulsoColors.darkSecondary : PulsoColors.lightSecondary),
+            : Icon(
+                icon,
+                color: isDark
+                    ? PulsoColors.darkSecondary
+                    : PulsoColors.lightSecondary,
+              ),
         errorText: errorText,
       ),
     );
@@ -75,11 +80,17 @@ class _PulsoPasswordFieldState extends State<PulsoPasswordField> {
         hintText: widget.hint,
         prefixIcon: Icon(
           Icons.lock_outline,
-          color: isDark ? PulsoColors.darkSecondary : PulsoColors.lightSecondary,
+          color: isDark
+              ? PulsoColors.darkSecondary
+              : PulsoColors.lightSecondary,
         ),
         suffixIcon: IconButton(
           onPressed: () => setState(() => _obscure = !_obscure),
-          icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+          icon: Icon(
+            _obscure
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
+          ),
         ),
         errorText: widget.errorText,
       ),

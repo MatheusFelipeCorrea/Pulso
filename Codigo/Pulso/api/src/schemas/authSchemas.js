@@ -1,28 +1,25 @@
 const { z } = require('zod');
 
-const senhaForteRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+const senhaForteRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
-const registerSchema = z
-    .object({
-        body: z
-            .object({
-                nome: z
-                    .string()
-                    .min(3, 'Nome deve ter no mínimo 3 caracteres')
-                    .max(120),
-                email: z.string().email('Email inválido'),
-                senha: z.string().regex(
+const registerSchema = z.object({
+    body: z
+        .object({
+            nome: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres').max(120),
+            email: z.string().email('Email inválido'),
+            senha: z
+                .string()
+                .regex(
                     senhaForteRegex,
                     'Senha deve ter no mínimo 8 caracteres, 1 maiúscula, 1 número e 1 caractere especial.'
                 ),
-                confirmarSenha: z.string(),
-            })
-            .refine((data) => data.senha === data.confirmarSenha, {
-                message: 'As senhas não conferem.',
-                path: ['confirmarSenha'],
-            }),
-    });
+            confirmarSenha: z.string(),
+        })
+        .refine((data) => data.senha === data.confirmarSenha, {
+            message: 'As senhas não conferem.',
+            path: ['confirmarSenha'],
+        }),
+});
 
 const verifyEmailSchema = z.object({
     params: z.object({
@@ -86,10 +83,12 @@ const resetPasswordSchema = z.object({
     }),
     body: z
         .object({
-            senha: z.string().regex(
-                senhaForteRegex,
-                'Senha deve ter no mínimo 8 caracteres, 1 maiúscula, 1 número e 1 caractere especial.'
-            ),
+            senha: z
+                .string()
+                .regex(
+                    senhaForteRegex,
+                    'Senha deve ter no mínimo 8 caracteres, 1 maiúscula, 1 número e 1 caractere especial.'
+                ),
             confirmarSenha: z.string(),
         })
         .refine((data) => data.senha === data.confirmarSenha, {

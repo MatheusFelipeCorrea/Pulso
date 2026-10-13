@@ -68,9 +68,9 @@ describe('calendarService', () => {
     });
 
     it('rejeita data inválida no detalhe do dia', async () => {
-        await expect(calendarService.obterDetalheDia('u1', { data: '10-01-2026' })).rejects.toMatchObject(
-            { statusCode: 400 }
-        );
+        await expect(
+            calendarService.obterDetalheDia('u1', { data: '10-01-2026' })
+        ).rejects.toMatchObject({ statusCode: 400 });
     });
 
     it('retorna detalhe do dia com totais', async () => {
@@ -80,7 +80,13 @@ describe('calendarService', () => {
                 tipo: 'RECEITA',
                 valor: 120,
                 data: new Date('2026-01-10T12:00:00.000Z'),
-                categoria: { id: 'c1', nome: 'Salário', icone: 'Wallet', cor: '#0f0', tipo: 'RECEITA' },
+                categoria: {
+                    id: 'c1',
+                    nome: 'Salário',
+                    icone: 'Wallet',
+                    cor: '#0f0',
+                    tipo: 'RECEITA',
+                },
                 tags: [],
             },
         ]);
@@ -126,7 +132,14 @@ describe('calendarService', () => {
 
     it('não conta transferência como despesa no detalhe do dia (RF-027)', async () => {
         prisma.transacao.findMany.mockResolvedValue([
-            { id: 'tx1', tipo: 'TRANSFERENCIA', valor: 300, data: new Date('2026-01-10T12:00:00.000Z'), categoria: null, tags: [] },
+            {
+                id: 'tx1',
+                tipo: 'TRANSFERENCIA',
+                valor: 300,
+                data: new Date('2026-01-10T12:00:00.000Z'),
+                categoria: null,
+                tags: [],
+            },
         ]);
         reminderRepository.listarPorUsuario.mockResolvedValue([]);
         prisma.configuracaoUsuario.findUnique.mockResolvedValue({});

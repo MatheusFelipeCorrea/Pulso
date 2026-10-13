@@ -4,10 +4,7 @@ import * as transactionService from '@/services/transactionService.js'
 
 /** Opções de filtro e formulário de transações — sempre do backend */
 export function useTransactionFilterOptions({ enabled = true } = {}) {
-  const fetchFn = useCallback(
-    () => transactionService.obterOpcoesFiltro(),
-    []
-  )
+    const fetchFn = useCallback(() => transactionService.obterOpcoesFiltro(), [])
 
-  return useFilterOptions(fetchFn, { enabled })
+    return useFilterOptions(fetchFn, { enabled })
 }

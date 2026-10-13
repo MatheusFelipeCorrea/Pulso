@@ -68,11 +68,15 @@ void main() {
       '/reset-password/xyz',
     );
     expect(
-      locationFromAuthUri(Uri.parse('https://app.pulso.dev/reset-password/xyz')),
+      locationFromAuthUri(
+        Uri.parse('https://app.pulso.dev/reset-password/xyz'),
+      ),
       '/reset-password/xyz',
     );
     expect(
-      locationFromAuthUri(Uri.parse('http://localhost:5173/verify-email/tok.en')),
+      locationFromAuthUri(
+        Uri.parse('http://localhost:5173/verify-email/tok.en'),
+      ),
       '/verify-email/tok.en',
     );
     expect(locationFromAuthUri(Uri.parse('pulso://home')), isNull);
@@ -124,7 +128,8 @@ void main() {
       var meCalls = 0;
       final dio = Dio(BaseOptions(baseUrl: 'http://test/api'));
       dio.httpClientAdapter = _ScriptedAdapter((options) async {
-        if (options.method == 'POST' && options.path.contains('/auth/refresh')) {
+        if (options.method == 'POST' &&
+            options.path.contains('/auth/refresh')) {
           return _json(200, {
             'accessToken': 'access-2',
             'refreshToken': 'refresh-2',

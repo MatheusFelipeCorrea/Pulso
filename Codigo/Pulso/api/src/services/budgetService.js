@@ -61,8 +61,7 @@ const obterStatusOrcamento = async (usuarioId, query) => {
     const restanteTotal = orcamentoTotal - gastoTotal;
     const percentualUsado =
         orcamentoTotal > 0 ? Math.round((gastoTotal / orcamentoTotal) * 1000) / 10 : 0;
-    const orcamentoExcedeRenda =
-        rendaMensalPlanejada > 0 && orcamentoTotal > rendaMensalPlanejada;
+    const orcamentoExcedeRenda = rendaMensalPlanejada > 0 && orcamentoTotal > rendaMensalPlanejada;
 
     const idsComOrcamento = new Set(orcamentos.map((item) => item.categoriaId));
     const categoriasSemOrcamento = categoriasDespesa

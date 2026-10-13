@@ -32,7 +32,9 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
           nome: item.categoriaNome,
           icone: item.categoriaIcone,
           cor: item.categoriaCor,
-          limite: TextEditingController(text: item.limiteValor.toStringAsFixed(2)),
+          limite: TextEditingController(
+            text: item.limiteValor.toStringAsFixed(2),
+          ),
           rollover: item.rolloverAtivo,
         ),
     ];
@@ -52,7 +54,11 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
       final limites = _rows
           .map((row) {
             final valor = parseMoney(row.limite.text) ?? 0;
-            return BudgetLimiteInput(categoriaId: row.categoriaId, limiteValor: valor, rolloverAtivo: row.rollover);
+            return BudgetLimiteInput(
+              categoriaId: row.categoriaId,
+              limiteValor: valor,
+              rolloverAtivo: row.rollover,
+            );
           })
           .where((item) => item.limiteValor > 0)
           .toList();
@@ -69,7 +75,9 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final livres = context.watch<BudgetController>().status?.categoriasSemOrcamento ?? const [];
+    final livres =
+        context.watch<BudgetController>().status?.categoriasSemOrcamento ??
+        const [];
     return PulsoFormScaffold(
       title: 'Editar limites',
       child: ListView(
@@ -84,11 +92,18 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
                     children: [
                       CategoryGlyph(
                         icone: row.icone,
-                        color: parseHexColor(row.cor) ?? PulsoColors.accent(Theme.of(context).brightness),
+                        color:
+                            parseHexColor(row.cor) ??
+                            PulsoColors.accent(Theme.of(context).brightness),
                         size: 36,
                       ),
                       const SizedBox(width: 10),
-                      Expanded(child: Text(row.nome, style: Theme.of(context).textTheme.titleSmall)),
+                      Expanded(
+                        child: Text(
+                          row.nome,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ),
                       IconButton(
                         onPressed: () => setState(() => _rows.remove(row)),
                         icon: const Icon(Icons.close),
@@ -97,7 +112,9 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
                   ),
                   TextField(
                     controller: row.limite,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     decoration: const InputDecoration(labelText: 'Limite'),
                   ),
                   SwitchListTile(
@@ -112,7 +129,9 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
           ),
           if (livres.isNotEmpty)
             DropdownButtonFormField<String>(
-              decoration: const InputDecoration(labelText: 'Adicionar categoria'),
+              decoration: const InputDecoration(
+                labelText: 'Adicionar categoria',
+              ),
               items: livres
                   .map(
                     (item) => DropdownMenuItem(
@@ -121,7 +140,11 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
                         children: [
                           CategoryGlyph(
                             icone: item.icone,
-                            color: parseHexColor(item.cor) ?? PulsoColors.accent(Theme.of(context).brightness),
+                            color:
+                                parseHexColor(item.cor) ??
+                                PulsoColors.accent(
+                                  Theme.of(context).brightness,
+                                ),
                             size: 28,
                           ),
                           const SizedBox(width: 10),
@@ -149,7 +172,10 @@ class _BudgetEditScreenState extends State<BudgetEditScreen> {
               },
             ),
           const SizedBox(height: PulsoTokens.space4),
-          FilledButton(onPressed: _saving ? null : _save, child: Text(_saving ? 'Salvando...' : 'Salvar limites')),
+          FilledButton(
+            onPressed: _saving ? null : _save,
+            child: Text(_saving ? 'Salvando...' : 'Salvar limites'),
+          ),
         ],
       ),
     );

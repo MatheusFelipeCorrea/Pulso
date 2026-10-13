@@ -16,10 +16,13 @@ class PulsoGrupo {
     return PulsoGrupo(
       id: json['id'] as String? ?? '',
       nome: json['nome'] as String? ?? json['titulo'] as String? ?? 'Grupo',
-      codigoConvite: json['codigoConvite'] as String? ?? json['codigo'] as String?,
+      codigoConvite:
+          json['codigoConvite'] as String? ?? json['codigo'] as String?,
       quantidadeMembros: membros is List
           ? membros.length
-          : (json['quantidadeMembros'] is num ? (json['quantidadeMembros'] as num).toInt() : 0),
+          : (json['quantidadeMembros'] is num
+                ? (json['quantidadeMembros'] as num).toInt()
+                : 0),
     );
   }
 }

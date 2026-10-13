@@ -55,7 +55,12 @@ describe('metaService', () => {
 
     it('cria meta com tipo inferido', async () => {
         metaRepository.criar.mockResolvedValue(
-            metaBase({ nome: 'Curso', valorAlvo: 300, prazo: new Date('2026-09-10T12:00:00.000Z'), tipo: 'CURTO_PRAZO' })
+            metaBase({
+                nome: 'Curso',
+                valorAlvo: 300,
+                prazo: new Date('2026-09-10T12:00:00.000Z'),
+                tipo: 'CURTO_PRAZO',
+            })
         );
 
         const result = await metaService.criarMeta('usr-1', {
@@ -263,5 +268,207 @@ describe('metaService', () => {
             statusCode: 404,
             message: 'Aporte não encontrado',
         });
+    });
+
+    it('lista metas paginadas', async () => {
+        metaRepository.listarPorUsuario.mockResolvedValue({
+            metas: [metaBase()],
+            total: 1,
+        });
+        const result = await metaService.listarMetas('usr-1', {});
+        expect(result.total).toBe(1);
+        expect(result.paginas).toBe(1);
+        expect(result.metas[0].nome).toBe('Viagem');
+    });
+
+    it('monta resumo com categorias e atividade recente', async () => {
+        metaRepository.listarTodasComAportes.mockResolvedValue([
+            metaBase({ tipo: 'CURTO_PRAZO', valorAlvo: 100, valorAtual: 40 }),
+            metaBase({
+                id: 'm2',
+                tipo: 'LONGO_PRAZO',
+                status: 'PAUSADA',
+                valorAlvo: 200,
+                valorAtual: 10,
+            }),
+            metaBase({
+                id: 'm3',
+                status: 'CONCLUIDA',
+                valorAlvo: 50,
+                valorAtual: 50,
+                concluidaEm: new Date('2026-06-01T12:00:00.000Z'),
+            }),
+        ]);
+        metaRepository.contarPorStatus.mockResolvedValue({ ATIVA: 1, PAUSADA: 1, CONCLUIDA: 1 });
+        metaRepository.listarAtividadeRecente.mockResolvedValue([
+            {
+                id: 'ap-1',
+                valor: 40,
+                data: new Date('2026-06-09T12:00:00.000Z'),
+                meta: { id: 'meta-1', nome: 'Viagem' },
+            },
+        ]);
+        metaRepository.listarConclusoesRecentes.mockResolvedValue([
+            metaBase({
+                id: 'm3',
+                nome: 'Feita',
+                valorAlvo: 50,
+                concluidaEm: new Date('2026-06-01T12:00:00.000Z'),
+            }),
+        ]);
+
+        const resumo = await metaService.calcularResumo('usr-1');
+        expect(resumo.metasAtivas).toBe(1);
+        expect(resumo.categorias.curtoPrazo.quantidade).toBe(1);
+        expect(resumo.categorias.pausadas.quantidade).toBe(1);
+        expect(resumo.atividadeRecente[0].tipo).toBe('aporte');
+    });
+
+    it('edita meta ativa, pausa e retoma', async () => {
+        metaRepository.buscarPorId.mockResolvedValue(metaBase({ valorAtual: 10 }));
+        metaRepository.atualizar.mockResolvedValue(metaBase({ nome: 'Nova', valorAtual: 10 }));
+        await metaService.editarMeta('usr-1', 'meta-1', {
+            nome: 'Nova',
+            descricao: '  desc  ',
+            prioridade: 1,
+            tipo: 'CURTO_PRAZO',
+            valorAlvo: 3000,
+            prazo: '2026-12-20',
+        });
+        expect(metaRepository.atualizar).toHaveBeenCalled();
+
+        metaRepository.buscarPorId.mockResolvedValue(metaBase({ status: 'ATIVA' }));
+        metaRepository.atualizar.mockResolvedValue(metaBase({ status: 'PAUSADA' }));
+        await metaService.editarMeta('usr-1', 'meta-1', { status: 'PAUSADA' });
+
+        metaRepository.buscarPorId.mockResolvedValue(metaBase({ status: 'PAUSADA' }));
+        metaRepository.atualizar.mockResolvedValue(metaBase({ status: 'ATIVA' }));
+        await metaService.editarMeta('usr-1', 'meta-1', { status: 'ATIVA' });
+    });
+
+    it('bloqueia edições inválidas de meta', async () => {
+        metaRepository.buscarPorId.mockResolvedValue(null);
+        await expect(metaService.editarMeta('usr-1', 'x', { nome: 'a' })).rejects.toMatchObject({
+            statusCode: 404,
+        });
+
+        metaRepository.buscarPorId.mockResolvedValue(metaBase({ status: 'CANCELADA' }));
+        await expect(
+            metaService.editarMeta('usr-1', 'meta-1', { nome: 'a' })
+        ).rejects.toMatchObject({
+            statusCode: 400,
+        });
+
+        metaRepository.buscarPorId.mockResolvedValue(metaBase({ status: 'CONCLUIDA' }));
+        await expect(
+            metaService.editarMeta('usr-1', 'meta-1', { status: 'ATIVA' })
+        ).rejects.toMatchObject({
+            statusCode: 400,
+        });
+
+        metaRepository.buscarPorId.mockResolvedValue(metaBase({ valorAtual: 500 }));
+        await expect(
+            metaService.editarMeta('usr-1', 'meta-1', { valorAlvo: 10 })
+        ).rejects.toMatchObject({
+            statusCode: 400,
+        });
+
+        metaRepository.buscarPorId.mockResolvedValue(metaBase({ status: 'ATIVA' }));
+        await expect(
+            metaService.editarMeta('usr-1', 'meta-1', { status: 'CANCELADA' })
+        ).rejects.toMatchObject({
+            statusCode: 400,
+        });
+        await expect(
+            metaService.editarMeta('usr-1', 'meta-1', { status: 'ATIVA' })
+        ).rejects.toMatchObject({
+            statusCode: 400,
+        });
+        await expect(
+            metaService.editarMeta('usr-1', 'meta-1', { status: 'CONCLUIDA' })
+        ).rejects.toMatchObject({
+            statusCode: 400,
+        });
+
+        metaRepository.buscarPorId.mockResolvedValue(metaBase({ status: 'PAUSADA' }));
+        await expect(
+            metaService.editarMeta('usr-1', 'meta-1', { status: 'PAUSADA' })
+        ).rejects.toMatchObject({
+            statusCode: 400,
+        });
+    });
+
+    it('rejeita prazo/data inválidos e aporte em meta inativa', async () => {
+        await expect(
+            metaService.criarMeta('usr-1', { nome: 'X', valorAlvo: 10, prazo: 'nao-e-data' })
+        ).rejects.toMatchObject({ statusCode: 400 });
+
+        await expect(
+            metaService.registrarAporte('usr-1', 'meta-1', { valor: 10, data: '2099-01-01' })
+        ).rejects.toMatchObject({ statusCode: 400 });
+
+        metaRepository.registrarAporteAtomico.mockResolvedValue({ error: 'NOT_FOUND' });
+        await expect(
+            metaService.registrarAporte('usr-1', 'meta-1', { valor: 10, data: '2026-06-10' })
+        ).rejects.toMatchObject({ statusCode: 404 });
+
+        metaRepository.registrarAporteAtomico.mockResolvedValue({
+            error: 'CANNOT_RECEIVE',
+            meta: { status: 'PAUSADA' },
+        });
+        await expect(
+            metaService.registrarAporte('usr-1', 'meta-1', { valor: 10, data: '2026-06-10' })
+        ).rejects.toMatchObject({ message: 'Meta pausada não recebe aportes' });
+
+        metaRepository.registrarAporteAtomico.mockResolvedValue({
+            error: 'CANNOT_RECEIVE',
+            meta: { status: 'CONCLUIDA' },
+        });
+        await expect(
+            metaService.registrarAporte('usr-1', 'meta-1', { valor: 10, data: '2026-06-10' })
+        ).rejects.toMatchObject({ message: 'Meta concluída não recebe mais aportes' });
+
+        metaRepository.registrarAporteAtomico.mockResolvedValue({
+            error: 'CANNOT_RECEIVE',
+            meta: { status: 'CANCELADA' },
+        });
+        await expect(
+            metaService.registrarAporte('usr-1', 'meta-1', { valor: 10, data: '2026-06-10' })
+        ).rejects.toMatchObject({ message: 'Meta não está ativa' });
+    });
+
+    it('exclui meta existente e ignora falha de notificação ao concluir', async () => {
+        metaRepository.buscarPorId.mockResolvedValue(null);
+        await expect(metaService.excluirMeta('usr-1', 'x')).rejects.toMatchObject({
+            statusCode: 404,
+        });
+
+        metaRepository.buscarPorId.mockResolvedValue(metaBase());
+        metaRepository.excluir.mockResolvedValue(undefined);
+        await metaService.excluirMeta('usr-1', 'meta-1');
+        expect(metaRepository.excluir).toHaveBeenCalledWith('meta-1', 'usr-1');
+
+        const notificationService = require('../../../src/services/notificationService');
+        notificationService.criarNotificacao.mockRejectedValueOnce(new Error('smtp'));
+        metaRepository.registrarAporteAtomico.mockResolvedValue({
+            aporte: {
+                id: 'ap-3',
+                valor: 100,
+                data: new Date('2026-06-10T12:00:00.000Z'),
+                criadoEm: new Date('2026-06-10T12:00:00.000Z'),
+            },
+            metaAtualizada: metaBase({
+                valorAlvo: 100,
+                valorAtual: 100,
+                status: 'CONCLUIDA',
+                concluidaEm: new Date('2026-06-10T12:00:00.000Z'),
+            }),
+            concluiu: true,
+        });
+        const result = await metaService.registrarAporte('usr-1', 'meta-1', {
+            valor: 100,
+            data: new Date('2026-06-10T12:00:00.000Z'),
+        });
+        expect(result.meta.status).toBe('CONCLUIDA');
     });
 });

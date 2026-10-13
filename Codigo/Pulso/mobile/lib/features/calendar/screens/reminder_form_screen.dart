@@ -38,11 +38,14 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
       if (item.valor != null) _valor.text = item.valor!.toStringAsFixed(2);
       _data = item.dataVencimento;
       final hora = item.horaLembrete;
-      _hora = hora.length >= 2 ? '${hora.substring(0, 2).padLeft(2, '0')}:00' : '10:00';
+      _hora = hora.length >= 2
+          ? '${hora.substring(0, 2).padLeft(2, '0')}:00'
+          : '10:00';
       _antecedencia = item.antecedencia;
       _categoria = item.categoria;
       _repetirMensal = item.repetirMensal;
-      _diaRecorrencia = item.diaRecorrencia ?? item.dataVencimento.day.clamp(1, 28);
+      _diaRecorrencia =
+          item.diaRecorrencia ?? item.dataVencimento.day.clamp(1, 28);
     }
   }
 
@@ -62,19 +65,21 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
     setState(() => _saving = true);
     try {
       final valor = parseMoney(_valor.text);
-      await context.read<CalendarController>().salvarLembrete(
-            {
-              'titulo': titulo,
-              'valor': (valor ?? 0) > 0 ? valor : null,
-              'dataVencimento': DateTime(_data.year, _data.month, _data.day, 12).toUtc().toIso8601String(),
-              'horaLembrete': _hora,
-              'antecedencia': _antecedencia,
-              'categoria': _categoria,
-              'repetirMensal': _repetirMensal,
-              if (_repetirMensal) 'diaRecorrencia': _diaRecorrencia,
-            },
-            id: widget.lembrete?.id,
-          );
+      await context.read<CalendarController>().salvarLembrete({
+        'titulo': titulo,
+        'valor': (valor ?? 0) > 0 ? valor : null,
+        'dataVencimento': DateTime(
+          _data.year,
+          _data.month,
+          _data.day,
+          12,
+        ).toUtc().toIso8601String(),
+        'horaLembrete': _hora,
+        'antecedencia': _antecedencia,
+        'categoria': _categoria,
+        'repetirMensal': _repetirMensal,
+        if (_repetirMensal) 'diaRecorrencia': _diaRecorrencia,
+      }, id: widget.lembrete?.id);
       if (!mounted) return;
       Navigator.pop(context);
     } on ApiException catch (error) {
@@ -92,7 +97,10 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
       child: ListView(
         padding: const EdgeInsets.all(PulsoTokens.space4),
         children: [
-          TextField(controller: _titulo, decoration: const InputDecoration(labelText: 'Título')),
+          TextField(
+            controller: _titulo,
+            decoration: const InputDecoration(labelText: 'Título'),
+          ),
           const SizedBox(height: PulsoTokens.space3),
           TextField(
             controller: _valor,
@@ -103,7 +111,9 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: const Text('Data'),
-            subtitle: Text('${_data.day.toString().padLeft(2, '0')}/${_data.month.toString().padLeft(2, '0')}/${_data.year}'),
+            subtitle: Text(
+              '${_data.day.toString().padLeft(2, '0')}/${_data.month.toString().padLeft(2, '0')}/${_data.year}',
+            ),
             trailing: const Icon(Icons.event),
             onTap: () async {
               final next = await showDatePicker(
@@ -120,22 +130,35 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
             decoration: const InputDecoration(labelText: 'Hora do lembrete'),
             items: [
               for (var h = 0; h < 24; h++)
-                DropdownMenuItem(value: '${h.toString().padLeft(2, '0')}:00', child: Text('${h.toString().padLeft(2, '0')}:00')),
+                DropdownMenuItem(
+                  value: '${h.toString().padLeft(2, '0')}:00',
+                  child: Text('${h.toString().padLeft(2, '0')}:00'),
+                ),
             ],
             onChanged: (value) => setState(() => _hora = value ?? '10:00'),
           ),
           const SizedBox(height: PulsoTokens.space3),
           DropdownButtonFormField<String>(
-            initialValue: reminderAntecedenciaOptions.containsKey(_antecedencia) ? _antecedencia : 'UM_DIA',
+            initialValue: reminderAntecedenciaOptions.containsKey(_antecedencia)
+                ? _antecedencia
+                : 'UM_DIA',
             decoration: const InputDecoration(labelText: 'Antecedência'),
             items: reminderAntecedenciaOptions.entries
-                .map((entry) => DropdownMenuItem(value: entry.key, child: Text(entry.value)))
+                .map(
+                  (entry) => DropdownMenuItem(
+                    value: entry.key,
+                    child: Text(entry.value),
+                  ),
+                )
                 .toList(),
-            onChanged: (value) => setState(() => _antecedencia = value ?? 'UM_DIA'),
+            onChanged: (value) =>
+                setState(() => _antecedencia = value ?? 'UM_DIA'),
           ),
           const SizedBox(height: PulsoTokens.space3),
           DropdownButtonFormField<String>(
-            initialValue: reminderCategoriaOptions.containsKey(_categoria) ? _categoria : 'OUTRO',
+            initialValue: reminderCategoriaOptions.containsKey(_categoria)
+                ? _categoria
+                : 'OUTRO',
             decoration: const InputDecoration(labelText: 'Categoria'),
             items: reminderCategoriaOptions.entries.map((entry) {
               final meta = reminderMeta(entry.key);
@@ -165,7 +188,8 @@ class _ReminderFormScreenState extends State<ReminderFormScreen> {
               max: 28,
               divisions: 27,
               label: 'Dia $_diaRecorrencia',
-              onChanged: (value) => setState(() => _diaRecorrencia = value.round()),
+              onChanged: (value) =>
+                  setState(() => _diaRecorrencia = value.round()),
             ),
           const SizedBox(height: PulsoTokens.space4),
           FilledButton(

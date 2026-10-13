@@ -1,8 +1,8 @@
 /**
  * Design System - Components
- * 
+ *
  * Biblioteca de componentes UI genéricos e reutilizáveis
- * 
+ *
  * ❌ REGRAS ABSOLUTAS:
  * - Nunca importar de fora de src/design-system/
  * - Nunca acessar Redux, Context ou store
@@ -20,15 +20,15 @@ export { Button, IconButton } from './buttons/index.js'
 // ============================================================
 // FEEDBACK
 // ============================================================
-export { 
-  Spinner, 
-  SpinnerDots, 
-  SpinnerFullscreen,
-  Toast,
-  ToastContainer,
-  ToastProvider,
-  useToast,
-  Alert
+export {
+    Spinner,
+    SpinnerDots,
+    SpinnerFullscreen,
+    Toast,
+    ToastContainer,
+    ToastProvider,
+    useToast,
+    Alert,
 } from './feedback/index.js'
 
 // ============================================================

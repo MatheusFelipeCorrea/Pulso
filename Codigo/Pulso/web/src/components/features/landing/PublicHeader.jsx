@@ -6,7 +6,7 @@ import { useTheme } from '@/design-system/hooks/useTheme.js'
 import { NAV_LINKS } from './landingData.js'
 
 function scrollToSection(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 /**
@@ -14,79 +14,90 @@ function scrollToSection(id) {
  * @param {'login' | 'register' | null} activeAuth — destaca a ação da tela atual
  */
 export function PublicHeader({ activeAuth = null }) {
-  const { theme, setThemePreference } = useTheme()
-  const location = useLocation()
-  const isLanding = location.pathname === '/'
+    const { theme, setThemePreference } = useTheme()
+    const location = useLocation()
+    const isLanding = location.pathname === '/'
 
-  return (
-    <header className="landing-header">
-      <div className="landing-container landing-header__inner">
-        <PulsoBrand to="/" showTagline={false} className="landing-header__brand" />
+    return (
+        <header className="landing-header">
+            <div className="landing-container landing-header__inner">
+                <PulsoBrand to="/" showTagline={false} className="landing-header__brand" />
 
-        <nav className="landing-header__nav" aria-label="Navegação principal">
-          {NAV_LINKS.map((link) =>
-            isLanding ? (
-              <button
-                key={link.id}
-                type="button"
-                className="landing-header__nav-link"
-                onClick={() => scrollToSection(link.id)}
-              >
-                {link.label}
-              </button>
-            ) : (
-              <Link key={link.id} to={`/#${link.id}`} className="landing-header__nav-link">
-                {link.label}
-              </Link>
-            )
-          )}
-        </nav>
+                <nav className="landing-header__nav" aria-label="Navegação principal">
+                    {NAV_LINKS.map((link) =>
+                        isLanding ? (
+                            <button
+                                key={link.id}
+                                type="button"
+                                className="landing-header__nav-link"
+                                onClick={() => scrollToSection(link.id)}
+                            >
+                                {link.label}
+                            </button>
+                        ) : (
+                            <Link
+                                key={link.id}
+                                to={`/#${link.id}`}
+                                className="landing-header__nav-link"
+                            >
+                                {link.label}
+                            </Link>
+                        )
+                    )}
+                </nav>
 
-        <div className="landing-header__actions">
-          <div className="landing-theme-toggle" role="group" aria-label="Tema da interface">
-            <button
-              type="button"
-              className={`landing-theme-toggle__option${theme === 'light' ? ' landing-theme-toggle__option--active' : ''}`}
-              onClick={() => setThemePreference('light')}
-              aria-label="Modo claro"
-              aria-pressed={theme === 'light'}
-            >
-              <Sun size={16} strokeWidth={2} />
-            </button>
-            <button
-              type="button"
-              className={`landing-theme-toggle__option${theme === 'dark' ? ' landing-theme-toggle__option--active' : ''}`}
-              onClick={() => setThemePreference('dark')}
-              aria-label="Modo escuro"
-              aria-pressed={theme === 'dark'}
-            >
-              <Moon size={16} strokeWidth={2} />
-            </button>
-          </div>
+                <div className="landing-header__actions">
+                    <div
+                        className="landing-theme-toggle"
+                        role="group"
+                        aria-label="Tema da interface"
+                    >
+                        <button
+                            type="button"
+                            className={`landing-theme-toggle__option${theme === 'light' ? ' landing-theme-toggle__option--active' : ''}`}
+                            onClick={() => setThemePreference('light')}
+                            aria-label="Modo claro"
+                            aria-pressed={theme === 'light'}
+                        >
+                            <Sun size={16} strokeWidth={2} />
+                        </button>
+                        <button
+                            type="button"
+                            className={`landing-theme-toggle__option${theme === 'dark' ? ' landing-theme-toggle__option--active' : ''}`}
+                            onClick={() => setThemePreference('dark')}
+                            aria-label="Modo escuro"
+                            aria-pressed={theme === 'dark'}
+                        >
+                            <Moon size={16} strokeWidth={2} />
+                        </button>
+                    </div>
 
-          {activeAuth === 'login' ? (
-            <span className="landing-header__login landing-header__login--active" aria-current="page">
-              Entrar
-            </span>
-          ) : (
-            <Link to="/login" className="landing-header__login">
-              Entrar
-            </Link>
-          )}
+                    {activeAuth === 'login' ? (
+                        <span
+                            className="landing-header__login landing-header__login--active"
+                            aria-current="page"
+                        >
+                            Entrar
+                        </span>
+                    ) : (
+                        <Link to="/login" className="landing-header__login">
+                            Entrar
+                        </Link>
+                    )}
 
-          {activeAuth === 'register' ? (
-            <Button variant="primary" size="md" disabled aria-current="page">
-              Começar Grátis
-            </Button>
-          ) : (
-            <Link to="/register">
-              <Button variant="primary" size="md">
-                Começar Grátis
-              </Button>
-            </Link>
-          )}
-        </div>
-      </div>
-    </header>
-  )
+                    {activeAuth === 'register' ? (
+                        <Button variant="primary" size="md" disabled aria-current="page">
+                            Começar Grátis
+                        </Button>
+                    ) : (
+                        <Link to="/register">
+                            <Button variant="primary" size="md">
+                                Começar Grátis
+                            </Button>
+                        </Link>
+                    )}
+                </div>
+            </div>
+        </header>
+    )
 }

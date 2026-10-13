@@ -30,7 +30,9 @@ class PasswordStrengthHints extends StatelessWidget {
                 height: 6,
                 margin: EdgeInsets.only(right: index == 3 ? 0 : 6),
                 decoration: BoxDecoration(
-                  color: filled ? Color(strength.fillValue) : PulsoColors.lightBorder,
+                  color: filled
+                      ? Color(strength.fillValue)
+                      : PulsoColors.lightBorder,
                   borderRadius: BorderRadius.circular(99),
                 ),
               ),
@@ -40,7 +42,8 @@ class PasswordStrengthHints extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           'Sua senha deve conter:',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+          style: Theme.of(context).textTheme.bodySmall
+              ?.copyWith(fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 8),
         Wrap(
@@ -55,11 +58,16 @@ class PasswordStrengthHints extends StatelessWidget {
                   Icon(
                     ok ? Icons.check_circle : Icons.radio_button_unchecked,
                     size: 16,
-                    color: ok ? PulsoColors.success : PulsoColors.lightSecondary,
+                    color: ok
+                        ? PulsoColors.success
+                        : PulsoColors.lightSecondary,
                   ),
                   const SizedBox(width: 6),
                   Expanded(
-                    child: Text(rule.label, style: const TextStyle(fontSize: 12)),
+                    child: Text(
+                      rule.label,
+                      style: const TextStyle(fontSize: 12),
+                    ),
                   ),
                 ],
               ),

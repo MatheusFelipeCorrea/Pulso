@@ -39,7 +39,10 @@ describe('transactionService', () => {
             total: 15,
         });
 
-        const result = await transactionService.listarTransacoes('u1', { pagina: '2', limite: '10' });
+        const result = await transactionService.listarTransacoes('u1', {
+            pagina: '2',
+            limite: '10',
+        });
 
         expect(result).toEqual({
             transacoes: [{ id: 't1', mapped: true }],
@@ -143,18 +146,22 @@ describe('transactionService', () => {
             { tipo: 'DESPESA', _sum: { valor: 315.09 }, _count: { id: 4 } },
         ]);
         transactionRepository.listarRecursosDistintos.mockResolvedValue(['VR', 'DINHEIRO']);
-        transactionRepository.listarTransacoesRecurso.mockImplementation((_usuarioId, recurso, filtros = {}) => {
-            if (filtros.antesDe) {
+        transactionRepository.listarTransacoesRecurso.mockImplementation(
+            (_usuarioId, recurso, filtros = {}) => {
+                if (filtros.antesDe) {
+                    return Promise.resolve([]);
+                }
+                if (recurso === 'VR') {
+                    return Promise.resolve([{ tipo: 'RECEITA', recurso: 'VR', valor: 871.93 }]);
+                }
+                if (recurso === 'DINHEIRO') {
+                    return Promise.resolve([
+                        { tipo: 'RECEITA', recurso: 'DINHEIRO', valor: 1484.96 },
+                    ]);
+                }
                 return Promise.resolve([]);
             }
-            if (recurso === 'VR') {
-                return Promise.resolve([{ tipo: 'RECEITA', recurso: 'VR', valor: 871.93 }]);
-            }
-            if (recurso === 'DINHEIRO') {
-                return Promise.resolve([{ tipo: 'RECEITA', recurso: 'DINHEIRO', valor: 1484.96 }]);
-            }
-            return Promise.resolve([]);
-        });
+        );
 
         const result = await transactionService.calcularResumo('u1', {
             recurso: 'TODOS',
@@ -191,7 +198,11 @@ describe('transactionService', () => {
     });
 
     it('não falha o create se a notificação lançar', async () => {
-        categoryRepository.buscarPorId.mockResolvedValue({ id: 'c1', tipo: 'RECEITA', nome: 'Salário' });
+        categoryRepository.buscarPorId.mockResolvedValue({
+            id: 'c1',
+            tipo: 'RECEITA',
+            nome: 'Salário',
+        });
         tagRepository.buscarPorIds.mockResolvedValue([]);
         transactionRepository.criar.mockResolvedValue({ id: 'tx1' });
         transactionRepository.buscarPorId.mockResolvedValue({

@@ -12,7 +12,9 @@ jest.mock('../../../src/messaging/emailBridge', () => ({
 
 jest.mock('../../../src/jobs/budgetAlertJob', () => ({ runBudgetAlertJob: jest.fn() }));
 jest.mock('../../../src/jobs/reminderAlertJob', () => ({ runReminderAlertJob: jest.fn() }));
-jest.mock('../../../src/jobs/reminderRecurrenceJob', () => ({ runReminderRecurrenceJob: jest.fn() }));
+jest.mock('../../../src/jobs/reminderRecurrenceJob', () => ({
+    runReminderRecurrenceJob: jest.fn(),
+}));
 
 const messaging = require('../../../src/messaging/rabbit');
 const { startEmailConsumers } = require('../../../src/messaging/emailBridge');
@@ -55,9 +57,7 @@ describe('jobBridge', () => {
         await startMessagingWorkers();
 
         expect(startEmailConsumers).not.toHaveBeenCalled();
-        expect(logger.info).toHaveBeenCalledWith(
-            expect.stringContaining('Vercel')
-        );
+        expect(logger.info).toHaveBeenCalledWith(expect.stringContaining('Vercel'));
     });
 
     it('não sobe worker se o broker estiver configurado mas caído', async () => {
@@ -88,7 +88,9 @@ describe('jobBridge', () => {
 
         await startMessagingWorkers();
 
-        const reminderHandler = messaging.consume.mock.calls.find(([q]) => q === 'pulso.reminders')[1];
+        const reminderHandler = messaging.consume.mock.calls.find(
+            ([q]) => q === 'pulso.reminders'
+        )[1];
         await reminderHandler({ type: 'reminder_recurrence' });
         await reminderHandler({ type: 'reminder_alert' });
         const alertHandler = messaging.consume.mock.calls.find(([q]) => q === 'pulso.alerts')[1];

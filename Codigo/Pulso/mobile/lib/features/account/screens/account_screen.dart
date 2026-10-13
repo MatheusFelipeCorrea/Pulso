@@ -27,7 +27,12 @@ class AccountScreen extends StatelessWidget {
     final kind = badgeKindFromModoUso(user?.modoUso);
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
+      padding: const EdgeInsets.fromLTRB(
+        PulsoTokens.space4,
+        PulsoTokens.space2,
+        PulsoTokens.space4,
+        96,
+      ),
       children: [
         PulsoPageHeader(
           title: title,
@@ -58,15 +63,30 @@ class AccountScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Aparência', style: Theme.of(context).textTheme.titleSmall),
+                Text(
+                  'Aparência',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
                 const SizedBox(height: PulsoTokens.space3),
                 SegmentedButton<ThemeMode>(
                   showSelectedIcon: false,
                   segments: const [
-                    ButtonSegment(value: ThemeMode.light, label: Text('Claro'), icon: Icon(Icons.light_mode, size: 16)),
-                    ButtonSegment(value: ThemeMode.dark, label: Text('Escuro'), icon: Icon(Icons.dark_mode, size: 16)),
+                    ButtonSegment(
+                      value: ThemeMode.light,
+                      label: Text('Claro'),
+                      icon: Icon(Icons.light_mode, size: 16),
+                    ),
+                    ButtonSegment(
+                      value: ThemeMode.dark,
+                      label: Text('Escuro'),
+                      icon: Icon(Icons.dark_mode, size: 16),
+                    ),
                   ],
-                  selected: {theme.mode == ThemeMode.dark ? ThemeMode.dark : ThemeMode.light},
+                  selected: {
+                    theme.mode == ThemeMode.dark
+                        ? ThemeMode.dark
+                        : ThemeMode.light,
+                  },
                   onSelectionChanged: (value) => theme.setMode(value.first),
                 ),
               ],
@@ -94,7 +114,10 @@ class _Field extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label.toUpperCase(), style: Theme.of(context).textTheme.labelSmall),
+        Text(
+          label.toUpperCase(),
+          style: Theme.of(context).textTheme.labelSmall,
+        ),
         const SizedBox(height: 4),
         Text(value, style: Theme.of(context).textTheme.bodyLarge),
       ],

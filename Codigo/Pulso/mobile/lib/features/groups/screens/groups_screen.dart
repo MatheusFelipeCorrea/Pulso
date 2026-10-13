@@ -47,7 +47,12 @@ class _GroupsScreenState extends State<GroupsScreen> {
     return RefreshIndicator(
       onRefresh: controller.reload,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, PulsoTokens.space8),
+        padding: const EdgeInsets.fromLTRB(
+          PulsoTokens.space4,
+          PulsoTokens.space2,
+          PulsoTokens.space4,
+          PulsoTokens.space8,
+        ),
         children: [
           Text(
             'A API de grupos ainda não está ligada neste Sprint. O app já fala /grupos como a web.',

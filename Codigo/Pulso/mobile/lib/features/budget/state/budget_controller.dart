@@ -38,13 +38,19 @@ class BudgetController extends ChangeNotifier {
   }
 
   Future<void> salvar(List<BudgetLimiteInput> limites) async {
-    await _repository.salvarLimites(mesReferencia: mesReferenciaApi, limites: limites);
+    await _repository.salvarLimites(
+      mesReferencia: mesReferenciaApi,
+      limites: limites,
+    );
     await reload();
   }
 
   Future<void> copiarMesAnterior() async {
     final origem = '${TransactionPeriod.shift(mes, -1)}-01';
-    await _repository.copiarMes(mesOrigem: origem, mesDestino: mesReferenciaApi);
+    await _repository.copiarMes(
+      mesOrigem: origem,
+      mesDestino: mesReferenciaApi,
+    );
     await reload();
   }
 }

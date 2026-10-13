@@ -24,7 +24,11 @@ router.use(requirePremium);
 
 router.get('/resumo', viagemController.obterResumo);
 router.get('/origens', viagemController.listarOrigensViagem);
-router.get('/destinos', validateMiddleware(destinosQuerySchema), viagemController.listarDestinosViagem);
+router.get(
+    '/destinos',
+    validateMiddleware(destinosQuerySchema),
+    viagemController.listarDestinosViagem
+);
 router.get('/', viagemController.listar);
 router.get(
     '/:id/media-passagem',

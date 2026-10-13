@@ -8,7 +8,8 @@ const FETCH_TIMEOUT_MS = 5000;
 const MAX_WIKI_TITLES = 4;
 const MAX_COMMONS_QUERIES = 2;
 
-const WIKI_USER_AGENT = 'PulsoApp/1.0 (https://github.com/MatheusFelipeCorrea/Pulso; viagens@pulso.local)';
+const WIKI_USER_AGENT =
+    'PulsoApp/1.0 (https://github.com/MatheusFelipeCorrea/Pulso; viagens@pulso.local)';
 
 const REJECTED_PLACE_TEXT =
     /(clube de futebol|football club|soccer club|esporte clube|time de futebol|álbum |banda |série de |filme |personagem |jogador de )/i;
@@ -44,7 +45,9 @@ function normalizeLabelKey(label) {
 
 function isRejectedThumbnailUrl(url) {
     if (!url) return true;
-    return /(Flag_of|flag_of|Bandeira_de|bandeira_de|Coat_of_arms|coat_of_arms|Escudo_de|Logotipo|\/flags\/)/i.test(url);
+    return /(Flag_of|flag_of|Bandeira_de|bandeira_de|Coat_of_arms|coat_of_arms|Escudo_de|Logotipo|\/flags\/)/i.test(
+        url
+    );
 }
 
 function isPlaceWikiSummary(data) {
@@ -180,7 +183,9 @@ function buildCommonsQueries(destinoMeta, destino) {
     const queries = [];
 
     if (destinoMeta?.label) {
-        const parts = [destinoMeta.label, destinoMeta.region, destinoMeta.countryName].filter(Boolean);
+        const parts = [destinoMeta.label, destinoMeta.region, destinoMeta.countryName].filter(
+            Boolean
+        );
         queries.push(parts.join(' '));
         queries.push(`${destinoMeta.label} ${destinoMeta.countryName || ''}`.trim());
         if (destinoMeta.region) {
@@ -223,7 +228,12 @@ async function searchCommonsPlaceImage(query) {
                     url: (info && (info.thumburl || info.url)) || null,
                 };
             })
-            .filter((item) => item.url && !REJECT_COMMONS_FILE.test(item.title) && !isRejectedThumbnailUrl(item.url));
+            .filter(
+                (item) =>
+                    item.url &&
+                    !REJECT_COMMONS_FILE.test(item.title) &&
+                    !isRejectedThumbnailUrl(item.url)
+            );
 
         const preferred = candidates.find((item) => PREFER_COMMONS_FILE.test(item.title));
         if (preferred && preferred.url) return preferred.url;

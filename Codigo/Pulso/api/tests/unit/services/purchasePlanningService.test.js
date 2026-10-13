@@ -66,9 +66,7 @@ describe('purchasePlanningService', () => {
     });
 
     it('conclui meta vinculada ao marcar item como comprado (RN-093)', async () => {
-        purchasePlanningRepository.buscarPorId.mockResolvedValue(
-            itemBase({ metaId: 'meta-1' })
-        );
+        purchasePlanningRepository.buscarPorId.mockResolvedValue(itemBase({ metaId: 'meta-1' }));
         categoryRepository.listarPorUsuario.mockResolvedValue([
             { id: 'cat-compras', nome: 'Compras', tipo: 'DESPESA' },
         ]);

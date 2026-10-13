@@ -17,10 +17,16 @@ class GroupRepository {
 
   List<PulsoGrupo> _parseList(dynamic data) {
     if (data is List) {
-      return data.whereType<Map<String, dynamic>>().map(PulsoGrupo.fromJson).toList();
+      return data
+          .whereType<Map<String, dynamic>>()
+          .map(PulsoGrupo.fromJson)
+          .toList();
     }
     if (data is Map<String, dynamic> && data['grupos'] is List) {
-      return (data['grupos'] as List).whereType<Map<String, dynamic>>().map(PulsoGrupo.fromJson).toList();
+      return (data['grupos'] as List)
+          .whereType<Map<String, dynamic>>()
+          .map(PulsoGrupo.fromJson)
+          .toList();
     }
     return const [];
   }
@@ -34,7 +40,10 @@ class GroupRepository {
 
   Future<PulsoGrupo> criar({required String nome}) {
     return _guard(() async {
-      final response = await _api.raw.post<Map<String, dynamic>>('/grupos', data: {'nome': nome});
+      final response = await _api.raw.post<Map<String, dynamic>>(
+        '/grupos',
+        data: {'nome': nome},
+      );
       return PulsoGrupo.fromJson(response.data ?? {});
     });
   }

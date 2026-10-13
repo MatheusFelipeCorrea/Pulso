@@ -56,8 +56,14 @@ class _GoalsScreenState extends State<GoalsScreen> {
             decoration: const InputDecoration(labelText: 'Valor (R\$)'),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
-            FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Salvar')),
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancelar'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Salvar'),
+            ),
           ],
         );
       },
@@ -66,7 +72,11 @@ class _GoalsScreenState extends State<GoalsScreen> {
     valorCtrl.dispose();
     if (ok != true || valor == null || !mounted) return;
     try {
-      await context.read<GoalRepository>().registrarAporte(meta.id, valor: valor, data: DateTime.now());
+      await context.read<GoalRepository>().registrarAporte(
+        meta.id,
+        valor: valor,
+        data: DateTime.now(),
+      );
       if (!mounted) return;
       showPulsoSnack(context, 'Aporte registrado');
       await context.read<GoalsController>().reload();
@@ -101,11 +111,17 @@ class _GoalsScreenState extends State<GoalsScreen> {
     return RefreshIndicator(
       onRefresh: controller.reload,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
+        padding: const EdgeInsets.fromLTRB(
+          PulsoTokens.space4,
+          PulsoTokens.space2,
+          PulsoTokens.space4,
+          96,
+        ),
         children: [
           const PulsoPageHeader(
             title: 'Metas financeiras',
-            subtitle: 'Defina objetivos e acompanhe o progresso dos seus aportes.',
+            subtitle:
+                'Defina objetivos e acompanhe o progresso dos seus aportes.',
             icon: Icons.gps_fixed,
           ),
           if (resumo != null) ...[
@@ -148,7 +164,8 @@ class _GoalsScreenState extends State<GoalsScreen> {
               type: PulsoAlertType.info,
               icon: Icons.info_outline,
               title: 'Sugestão de economia',
-              message: 'Para atingir todas as suas metas no prazo, você precisa guardar ${formatBrl(resumo.sugestaoMensal)}/mês.',
+              message:
+                  'Para atingir todas as suas metas no prazo, você precisa guardar ${formatBrl(resumo.sugestaoMensal)}/mês.',
             ),
             const SizedBox(height: PulsoTokens.space3),
             PulsoSurface(
@@ -158,16 +175,39 @@ class _GoalsScreenState extends State<GoalsScreen> {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.bar_chart, size: 16, color: PulsoColors.accent(Theme.of(context).brightness)),
+                      Icon(
+                        Icons.bar_chart,
+                        size: 16,
+                        color: PulsoColors.accent(Theme.of(context).brightness),
+                      ),
                       const SizedBox(width: 8),
-                      Text('Categorias das metas', style: Theme.of(context).textTheme.titleSmall),
+                      Text(
+                        'Categorias das metas',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
                     ],
                   ),
                   const SizedBox(height: PulsoTokens.space3),
-                  _CategoryLegend(color: PulsoColors.primary, label: 'Curto prazo', slice: resumo.curtoPrazo),
-                  _CategoryLegend(color: PulsoColors.info, label: 'Longo prazo', slice: resumo.longoPrazo),
-                  _CategoryLegend(color: PulsoColors.success, label: 'Concluídas', slice: resumo.concluidas),
-                  _CategoryLegend(color: PulsoColors.warning, label: 'Pausadas', slice: resumo.pausadas),
+                  _CategoryLegend(
+                    color: PulsoColors.primary,
+                    label: 'Curto prazo',
+                    slice: resumo.curtoPrazo,
+                  ),
+                  _CategoryLegend(
+                    color: PulsoColors.info,
+                    label: 'Longo prazo',
+                    slice: resumo.longoPrazo,
+                  ),
+                  _CategoryLegend(
+                    color: PulsoColors.success,
+                    label: 'Concluídas',
+                    slice: resumo.concluidas,
+                  ),
+                  _CategoryLegend(
+                    color: PulsoColors.warning,
+                    label: 'Pausadas',
+                    slice: resumo.pausadas,
+                  ),
                 ],
               ),
             ),
@@ -189,25 +229,45 @@ class _GoalsScreenState extends State<GoalsScreen> {
             children: [
               ChoiceChip(
                 avatar: const Icon(Icons.list, size: 16),
-                label: Text('Todas${resumo == null ? '' : ' (${resumo.curtoPrazo.quantidade + resumo.longoPrazo.quantidade + resumo.concluidas.quantidade + resumo.pausadas.quantidade})'}'),
+                label: Text(
+                  'Todas${resumo == null ? '' : ' (${resumo.curtoPrazo.quantidade + resumo.longoPrazo.quantidade + resumo.concluidas.quantidade + resumo.pausadas.quantidade})'}',
+                ),
                 selected: controller.filters.status == null,
                 onSelected: (_) => controller.applyTab(null),
               ),
               ChoiceChip(
-                avatar: Icon(Icons.play_arrow_outlined, size: 16, color: PulsoColors.accent(Theme.of(context).brightness)),
-                label: Text('Ativas${resumo == null ? '' : ' (${resumo.metasAtivas})'}'),
+                avatar: Icon(
+                  Icons.play_arrow_outlined,
+                  size: 16,
+                  color: PulsoColors.accent(Theme.of(context).brightness),
+                ),
+                label: Text(
+                  'Ativas${resumo == null ? '' : ' (${resumo.metasAtivas})'}',
+                ),
                 selected: controller.filters.status == 'ATIVA',
                 onSelected: (_) => controller.applyTab('ATIVA'),
               ),
               ChoiceChip(
-                avatar: Icon(Icons.pause_outlined, size: 16, color: PulsoColors.warningOf(Theme.of(context).brightness)),
-                label: Text('Pausadas${resumo == null ? '' : ' (${resumo.pausadas.quantidade})'}'),
+                avatar: Icon(
+                  Icons.pause_outlined,
+                  size: 16,
+                  color: PulsoColors.warningOf(Theme.of(context).brightness),
+                ),
+                label: Text(
+                  'Pausadas${resumo == null ? '' : ' (${resumo.pausadas.quantidade})'}',
+                ),
                 selected: controller.filters.status == 'PAUSADA',
                 onSelected: (_) => controller.applyTab('PAUSADA'),
               ),
               ChoiceChip(
-                avatar: Icon(Icons.check_circle_outline, size: 16, color: PulsoColors.successOf(Theme.of(context).brightness)),
-                label: Text('Concluídas${resumo == null ? '' : ' (${resumo.concluidas.quantidade})'}'),
+                avatar: Icon(
+                  Icons.check_circle_outline,
+                  size: 16,
+                  color: PulsoColors.successOf(Theme.of(context).brightness),
+                ),
+                label: Text(
+                  'Concluídas${resumo == null ? '' : ' (${resumo.concluidas.quantidade})'}',
+                ),
                 selected: controller.filters.status == 'CONCLUIDA',
                 onSelected: (_) => controller.applyTab('CONCLUIDA'),
               ),
@@ -220,7 +280,10 @@ class _GoalsScreenState extends State<GoalsScreen> {
               child: Center(child: CircularProgressIndicator()),
             )
           else if (controller.error != null)
-            PulsoEmptyState(title: 'Não foi possível carregar', description: controller.error!)
+            PulsoEmptyState(
+              title: 'Não foi possível carregar',
+              description: controller.error!,
+            )
           else if (controller.metas.isEmpty)
             PulsoEmptyState(
               title: 'Nenhuma meta ainda',
@@ -301,8 +364,17 @@ class _CategoryLegend extends StatelessWidget {
             decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           ),
           const SizedBox(width: 8),
-          Expanded(child: Text('$label (${slice.quantidade})', style: Theme.of(context).textTheme.bodySmall)),
-          Text(formatBrl(slice.total), style: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)),
+          Expanded(
+            child: Text(
+              '$label (${slice.quantidade})',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ),
+          Text(
+            formatBrl(slice.total),
+            style: Theme.of(context).textTheme.labelSmall
+                ?.copyWith(fontWeight: FontWeight.w700),
+          ),
         ],
       ),
     );

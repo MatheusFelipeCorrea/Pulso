@@ -17,7 +17,9 @@ class GoalRepository {
 
   Future<GoalResumo> obterResumo() {
     return _guard(() async {
-      final response = await _api.raw.get<Map<String, dynamic>>('/metas/resumo');
+      final response = await _api.raw.get<Map<String, dynamic>>(
+        '/metas/resumo',
+      );
       return GoalResumo.fromJson(response.data ?? {});
     });
   }
@@ -35,9 +37,12 @@ class GoalRepository {
       final headers = response.headers;
       return GoalListPage(
         metas: items,
-        total: int.tryParse(headers.value('x-total-count') ?? '') ?? items.length,
+        total:
+            int.tryParse(headers.value('x-total-count') ?? '') ?? items.length,
         paginas: int.tryParse(headers.value('x-total-pages') ?? '') ?? 1,
-        pagina: int.tryParse(headers.value('x-current-page') ?? '') ?? filtros.pagina,
+        pagina:
+            int.tryParse(headers.value('x-current-page') ?? '') ??
+            filtros.pagina,
       );
     });
   }
@@ -46,9 +51,7 @@ class GoalRepository {
     return _guard(() async {
       final response = await _api.raw.get<Map<String, dynamic>>(
         '/metas/sugestao-reserva-emergencia',
-        queryParameters: {
-          'meses': ?meses,
-        },
+        queryParameters: {'meses': ?meses},
       );
       return ReservaEmergenciaSugestao.fromJson(response.data ?? {});
     });
@@ -56,19 +59,29 @@ class GoalRepository {
 
   Future<PulsoMeta> criar(Map<String, dynamic> payload) {
     return _guard(() async {
-      final response = await _api.raw.post<Map<String, dynamic>>('/metas', data: payload);
+      final response = await _api.raw.post<Map<String, dynamic>>(
+        '/metas',
+        data: payload,
+      );
       return PulsoMeta.fromJson(response.data ?? {});
     });
   }
 
   Future<PulsoMeta> atualizar(String id, Map<String, dynamic> payload) {
     return _guard(() async {
-      final response = await _api.raw.patch<Map<String, dynamic>>('/metas/$id', data: payload);
+      final response = await _api.raw.patch<Map<String, dynamic>>(
+        '/metas/$id',
+        data: payload,
+      );
       return PulsoMeta.fromJson(response.data ?? {});
     });
   }
 
-  Future<PulsoMeta> registrarAporte(String id, {required double valor, required DateTime data}) {
+  Future<PulsoMeta> registrarAporte(
+    String id, {
+    required double valor,
+    required DateTime data,
+  }) {
     return _guard(() async {
       final response = await _api.raw.post<Map<String, dynamic>>(
         '/metas/$id/aportes',

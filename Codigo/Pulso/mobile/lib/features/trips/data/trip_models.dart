@@ -123,7 +123,10 @@ class TripDestinationHint {
     final catalogId = raw['catalogId'] as String? ?? raw['id'] as String?;
     final iata = raw['iata'] as String?;
     final countryCode = raw['countryCode'] as String?;
-    if (catalogId == null || catalogId.isEmpty || iata == null || countryCode == null) {
+    if (catalogId == null ||
+        catalogId.isEmpty ||
+        iata == null ||
+        countryCode == null) {
       return null;
     }
     return {
@@ -133,7 +136,8 @@ class TripDestinationHint {
       'label': raw['label'] ?? label,
       'countryCode': countryCode,
       'countryName': raw['countryName'] ?? '',
-      'moedaSugerida': (raw['moedaSugerida'] as String? ?? moedaSugerida).toUpperCase(),
+      'moedaSugerida': (raw['moedaSugerida'] as String? ?? moedaSugerida)
+          .toUpperCase(),
       'domestic': raw['domestic'] == true,
       if (raw['geonameId'] != null) 'geonameId': raw['geonameId'],
       if (raw['region'] != null) 'region': raw['region'],

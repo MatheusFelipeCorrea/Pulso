@@ -8,7 +8,9 @@ class TransactionsController extends ChangeNotifier {
 
   final TransactionRepository _repository;
 
-  TransactionFilters filters = TransactionFilters(periodo: TransactionPeriod.current());
+  TransactionFilters filters = TransactionFilters(
+    periodo: TransactionPeriod.current(),
+  );
   TransactionFilterOptions? options;
   TransactionResumo? resumo;
   final List<PulsoTransacao> transacoes = [];
@@ -36,9 +38,7 @@ class TransactionsController extends ChangeNotifier {
   }
 
   Future<void> clearExtraFilters() {
-    return applyFilters(
-      TransactionFilters(periodo: filters.periodo),
-    );
+    return applyFilters(TransactionFilters(periodo: filters.periodo));
   }
 
   Future<void> applyFilters(TransactionFilters next) async {
@@ -47,7 +47,11 @@ class TransactionsController extends ChangeNotifier {
   }
 
   Future<void> shiftPeriod(int delta) {
-    return applyFilters(filters.copyWith(periodo: TransactionPeriod.shift(filters.periodo, delta)));
+    return applyFilters(
+      filters.copyWith(
+        periodo: TransactionPeriod.shift(filters.periodo, delta),
+      ),
+    );
   }
 
   Future<void> loadMore() async {
@@ -69,7 +73,10 @@ class TransactionsController extends ChangeNotifier {
 
   Future<void> reload() => _fetch();
 
-  Future<void> excluir(PulsoTransacao tx, {required bool excluirFuturas}) async {
+  Future<void> excluir(
+    PulsoTransacao tx, {
+    required bool excluirFuturas,
+  }) async {
     await _repository.excluir(
       tx.id,
       excluirFuturas: excluirFuturas,

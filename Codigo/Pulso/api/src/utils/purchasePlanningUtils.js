@@ -37,16 +37,32 @@ const calcMesesParaComprar = (valorRestante, sobraMensal) => {
 
 const inferirCategoria = (nome) => {
     const texto = String(nome ?? '').toLowerCase();
-    if (/(\bcarro\b|moto(cicleta)?|bicicleta|\bbike\b|patinete|scooter|capacete|\bpneu\b)/.test(texto)) {
+    if (
+        /(\bcarro\b|moto(cicleta)?|bicicleta|\bbike\b|patinete|scooter|capacete|\bpneu\b)/.test(
+            texto
+        )
+    ) {
         return 'VEICULO';
     }
-    if (/(roupa|camisa|camiseta|blusa|cal[çc]a|vestido|t[êe]nis|sapato|sapatilha|jaqueta|casaco|bolsa|mochila)/.test(texto)) {
+    if (
+        /(roupa|camisa|camiseta|blusa|cal[çc]a|vestido|t[êe]nis|sapato|sapatilha|jaqueta|casaco|bolsa|mochila)/.test(
+            texto
+        )
+    ) {
         return 'VESTUARIO';
     }
-    if (/(geladeira|fog[ãa]o|micro-?ondas|lavadora|m[áa]quina de lavar|aspirador|ar[- ]condicionado|ventilador|sof[áa]|colch[ãa]o|guarda-?roupa|estante|panela|liquidificador|cafeteira)/.test(texto)) {
+    if (
+        /(geladeira|fog[ãa]o|micro-?ondas|lavadora|m[áa]quina de lavar|aspirador|ar[- ]condicionado|ventilador|sof[áa]|colch[ãa]o|guarda-?roupa|estante|panela|liquidificador|cafeteira)/.test(
+            texto
+        )
+    ) {
         return 'CASA_ELETRODOMESTICOS';
     }
-    if (/(notebook|laptop|macbook|pc gamer|computador|tablet|monitor|iphone|celular|smartphone|\btv\b|console|playstation|xbox|c[âa]mera|drone)/.test(texto)) {
+    if (
+        /(notebook|laptop|macbook|pc gamer|computador|tablet|monitor|iphone|celular|smartphone|\btv\b|console|playstation|xbox|c[âa]mera|drone)/.test(
+            texto
+        )
+    ) {
         return 'ELETRONICOS';
     }
     if (/(fone|headphone|mouse|teclado|\bcapa\b|carregador|acess)/.test(texto)) {
@@ -65,54 +81,54 @@ const CATEGORIA_LABELS = {
 };
 
 const DICAS = [
-  {
-    id: 'prioridade',
-    texto: 'Priorize itens de alta necessidade antes dos desejos.',
-  },
-  {
-    id: 'parcelas',
-    texto: 'Parcelas acima de 30% da renda podem comprometer seu orçamento.',
-  },
-  {
-    id: 'meta',
-    texto: 'Vincule uma meta para acompanhar o progresso da compra.',
-  },
-  {
-    id: 'avista',
-    texto: 'Comprar à vista costuma sair mais barato que parcelar com juros.',
-  },
-  {
-    id: 'espera',
-    texto: 'Espere alguns dias antes de decidir uma compra por impulso.',
-  },
-  {
-    id: 'comparar',
-    texto: 'Compare preços em diferentes lojas antes de finalizar a compra.',
-  },
-  {
-    id: 'guardar',
-    texto: 'Guarde parte do valor todo mês até atingir o total da compra.',
-  },
-  {
-    id: 'necessidade',
-    texto: 'Avalie se o item é realmente necessário ou apenas um desejo passageiro.',
-  },
-  {
-    id: 'promocao',
-    texto: 'Itens de baixa prioridade podem esperar por uma promoção.',
-  },
-  {
-    id: 'revisar',
-    texto: 'Revise sua lista de desejos periodicamente e remova o que não faz mais sentido.',
-  },
-  {
-    id: 'parcelamento-longo',
-    texto: 'Parcelamentos longos aumentam o risco de comprometer meses futuros.',
-  },
-  {
-    id: 'prazo',
-    texto: 'Defina um prazo realista para evitar compras precipitadas.',
-  },
+    {
+        id: 'prioridade',
+        texto: 'Priorize itens de alta necessidade antes dos desejos.',
+    },
+    {
+        id: 'parcelas',
+        texto: 'Parcelas acima de 30% da renda podem comprometer seu orçamento.',
+    },
+    {
+        id: 'meta',
+        texto: 'Vincule uma meta para acompanhar o progresso da compra.',
+    },
+    {
+        id: 'avista',
+        texto: 'Comprar à vista costuma sair mais barato que parcelar com juros.',
+    },
+    {
+        id: 'espera',
+        texto: 'Espere alguns dias antes de decidir uma compra por impulso.',
+    },
+    {
+        id: 'comparar',
+        texto: 'Compare preços em diferentes lojas antes de finalizar a compra.',
+    },
+    {
+        id: 'guardar',
+        texto: 'Guarde parte do valor todo mês até atingir o total da compra.',
+    },
+    {
+        id: 'necessidade',
+        texto: 'Avalie se o item é realmente necessário ou apenas um desejo passageiro.',
+    },
+    {
+        id: 'promocao',
+        texto: 'Itens de baixa prioridade podem esperar por uma promoção.',
+    },
+    {
+        id: 'revisar',
+        texto: 'Revise sua lista de desejos periodicamente e remova o que não faz mais sentido.',
+    },
+    {
+        id: 'parcelamento-longo',
+        texto: 'Parcelamentos longos aumentam o risco de comprometer meses futuros.',
+    },
+    {
+        id: 'prazo',
+        texto: 'Defina um prazo realista para evitar compras precipitadas.',
+    },
 ];
 
 const diaDoAno = (dataReferencia) => {

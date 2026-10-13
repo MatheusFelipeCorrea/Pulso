@@ -8,7 +8,11 @@ import 'package:pulso/features/currency/data/currency_repository.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
 
 class TripRateChart extends StatefulWidget {
-  const TripRateChart({super.key, required this.repository, this.codigo = 'USD'});
+  const TripRateChart({
+    super.key,
+    required this.repository,
+    this.codigo = 'USD',
+  });
 
   final CurrencyRepository repository;
   final String codigo;
@@ -43,7 +47,10 @@ class _TripRateChartState extends State<TripRateChart> {
       hoverIndex = null;
     });
     try {
-      history = await widget.repository.obterHistorico(codigo: widget.codigo, dias: dias);
+      history = await widget.repository.obterHistorico(
+        codigo: widget.codigo,
+        dias: dias,
+      );
     } catch (err) {
       error = 'Histórico indisponível para ${widget.codigo}.';
       history = null;
@@ -71,7 +78,12 @@ class _TripRateChartState extends State<TripRateChart> {
             children: [
               CurrencyFlag(code: widget.codigo, size: 22),
               const SizedBox(width: 8),
-              Expanded(child: Text('Histórico de cotação', style: Theme.of(context).textTheme.titleSmall)),
+              Expanded(
+                child: Text(
+                  'Histórico de cotação',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: PulsoTokens.space3),
@@ -94,31 +106,45 @@ class _TripRateChartState extends State<TripRateChart> {
               child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
             )
           else if (error != null || history == null || pontos.length < 2)
-            Text(error ?? 'Sem pontos suficientes para o gráfico.', style: Theme.of(context).textTheme.bodySmall)
+            Text(
+              error ?? 'Sem pontos suficientes para o gráfico.',
+              style: Theme.of(context).textTheme.bodySmall,
+            )
           else ...[
             SizedBox(
               height: 180,
               width: double.infinity,
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final size = Size(constraints.maxWidth, constraints.maxHeight);
-                  final selected = hoverIndex != null && hoverIndex! >= 0 && hoverIndex! < pontos.length
+                  final size = Size(
+                    constraints.maxWidth,
+                    constraints.maxHeight,
+                  );
+                  final selected =
+                      hoverIndex != null &&
+                          hoverIndex! >= 0 &&
+                          hoverIndex! < pontos.length
                       ? pontos[hoverIndex!]
                       : null;
                   return MouseRegion(
-                    onHover: (event) => _pick(event.localPosition, size, pontos.length),
+                    onHover: (event) =>
+                        _pick(event.localPosition, size, pontos.length),
                     onExit: (_) => setState(() => hoverIndex = null),
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
-                      onTapDown: (details) => _pick(details.localPosition, size, pontos.length),
-                      onPanUpdate: (details) => _pick(details.localPosition, size, pontos.length),
+                      onTapDown: (details) =>
+                          _pick(details.localPosition, size, pontos.length),
+                      onPanUpdate: (details) =>
+                          _pick(details.localPosition, size, pontos.length),
                       child: Stack(
                         children: [
                           CustomPaint(
                             size: size,
                             painter: _SparkPainter(
                               values: pontos.map((p) => p.bid).toList(),
-                              color: PulsoColors.accent(Theme.of(context).brightness),
+                              color: PulsoColors.accent(
+                                Theme.of(context).brightness,
+                              ),
                               selectedIndex: hoverIndex,
                             ),
                           ),
@@ -143,11 +169,18 @@ class _TripRateChartState extends State<TripRateChart> {
               itemWidth: 140,
               children: [
                 _Stat(label: 'Atual', value: formatBrl(history.atual)),
-                _Stat(label: 'Mín. (${dias}d)', value: formatBrl(history.minima)),
-                _Stat(label: 'Máx. (${dias}d)', value: formatBrl(history.maxima)),
+                _Stat(
+                  label: 'Mín. (${dias}d)',
+                  value: formatBrl(history.minima),
+                ),
+                _Stat(
+                  label: 'Máx. (${dias}d)',
+                  value: formatBrl(history.maxima),
+                ),
                 _Stat(
                   label: 'Variação (${dias}d)',
-                  value: '${history.variacao >= 0 ? '+' : ''}${history.variacao.toStringAsFixed(2)}%',
+                  value:
+                      '${history.variacao >= 0 ? '+' : ''}${history.variacao.toStringAsFixed(2)}%',
                   color: history.variacao >= 0
                       ? PulsoColors.successOf(Theme.of(context).brightness)
                       : PulsoColors.dangerOf(Theme.of(context).brightness),
@@ -195,7 +228,11 @@ class _ChartTooltip extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('$dd/$mm', style: Theme.of(context).textTheme.labelSmall),
-              Text(formatBrl(value), style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+              Text(
+                formatBrl(value),
+                style: Theme.of(context).textTheme.titleSmall
+                    ?.copyWith(fontWeight: FontWeight.w700),
+              ),
             ],
           ),
         ),
@@ -222,10 +259,8 @@ class _Stat extends StatelessWidget {
           value,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: color,
-              ),
+          style: Theme.of(context).textTheme.bodyMedium
+              ?.copyWith(fontWeight: FontWeight.w700, color: color),
         ),
       ],
     );
@@ -233,7 +268,11 @@ class _Stat extends StatelessWidget {
 }
 
 class _SparkPainter extends CustomPainter {
-  _SparkPainter({required this.values, required this.color, this.selectedIndex});
+  _SparkPainter({
+    required this.values,
+    required this.color,
+    this.selectedIndex,
+  });
 
   final List<double> values;
   final Color color;
@@ -247,7 +286,8 @@ class _SparkPainter extends CustomPainter {
     final span = (max - min).abs() < 0.0001 ? 1.0 : max - min;
     Offset pointAt(int i) {
       final x = size.width * (i / (values.length - 1));
-      final y = size.height - ((values[i] - min) / span) * (size.height - 8) - 4;
+      final y =
+          size.height - ((values[i] - min) / span) * (size.height - 8) - 4;
       return Offset(x, y);
     }
 
@@ -272,7 +312,9 @@ class _SparkPainter extends CustomPainter {
     final last = pointAt(values.length - 1);
     canvas.drawCircle(last, 3, Paint()..color = color);
 
-    if (selectedIndex != null && selectedIndex! >= 0 && selectedIndex! < values.length) {
+    if (selectedIndex != null &&
+        selectedIndex! >= 0 &&
+        selectedIndex! < values.length) {
       final selected = pointAt(selectedIndex!);
       final dash = Paint()
         ..color = color.withValues(alpha: 0.7)
@@ -281,7 +323,11 @@ class _SparkPainter extends CustomPainter {
       const dashLen = 4.0;
       var y = 0.0;
       while (y < size.height) {
-        canvas.drawLine(Offset(selected.dx, y), Offset(selected.dx, (y + dashLen).clamp(0, size.height)), dash);
+        canvas.drawLine(
+          Offset(selected.dx, y),
+          Offset(selected.dx, (y + dashLen).clamp(0, size.height)),
+          dash,
+        );
         y += dashLen * 2;
       }
       canvas.drawCircle(selected, 6, Paint()..color = Colors.white);
@@ -291,5 +337,7 @@ class _SparkPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _SparkPainter oldDelegate) =>
-      oldDelegate.values != values || oldDelegate.color != color || oldDelegate.selectedIndex != selectedIndex;
+      oldDelegate.values != values ||
+      oldDelegate.color != color ||
+      oldDelegate.selectedIndex != selectedIndex;
 }

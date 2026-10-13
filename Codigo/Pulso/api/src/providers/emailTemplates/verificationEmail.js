@@ -124,13 +124,17 @@ const buildVerificationEmailHtml = ({ verificationUrl, appUrl, logoSrc, recipien
                     <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#7C3AED;word-break:break-all;">
                       <a href="${verificationUrl}" style="color:#7C3AED;text-decoration:underline;">${verificationUrl}</a>
                     </p>
-                    ${appUrl ? `
+                    ${
+                        appUrl
+                            ? `
                     <p style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#A1A1AA;">
                       Se você tem o app Pulso instalado:
                     </p>
                     <p style="margin:8px 0 0;font-size:12px;line-height:1.5;color:#7C3AED;word-break:break-all;">
                       <a href="${appUrl}" style="color:#7C3AED;text-decoration:underline;">Abrir no aplicativo</a>
-                    </p>` : ''}
+                    </p>`
+                            : ''
+                    }
 
                   </td>
                 </tr>

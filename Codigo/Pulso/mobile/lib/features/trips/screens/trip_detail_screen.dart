@@ -65,7 +65,11 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                         value: entry.key,
                         child: Row(
                           children: [
-                            Icon(entry.value.icon, size: 18, color: entry.value.color),
+                            Icon(
+                              entry.value.icon,
+                              size: 18,
+                              color: entry.value.color,
+                            ),
                             const SizedBox(width: 8),
                             Text(entry.value.label),
                           ],
@@ -76,18 +80,29 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                 onChanged: (value) => categoria = value ?? categoria,
               ),
               const SizedBox(height: PulsoTokens.space3),
-              TextField(controller: desc, decoration: const InputDecoration(labelText: 'Descrição')),
+              TextField(
+                controller: desc,
+                decoration: const InputDecoration(labelText: 'Descrição'),
+              ),
               const SizedBox(height: PulsoTokens.space3),
               TextField(
                 controller: valor,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 decoration: const InputDecoration(labelText: 'Valor (R\$)'),
               ),
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
-            FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Salvar')),
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancelar'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Salvar'),
+            ),
           ],
         );
       },
@@ -99,11 +114,11 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
     if (ok != true || amount == null || !mounted) return;
     try {
       viagem = await context.read<TripRepository>().criarDespesa(
-            widget.viagemId,
-            categoria: categoria,
-            valorEstimado: amount,
-            descricao: descricao.isEmpty ? null : descricao,
-          );
+        widget.viagemId,
+        categoria: categoria,
+        valorEstimado: amount,
+        descricao: descricao.isEmpty ? null : descricao,
+      );
       setState(() {});
     } on ApiException catch (error) {
       if (!mounted) return;
@@ -121,7 +136,10 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(controller: titulo, decoration: const InputDecoration(labelText: 'Título')),
+            TextField(
+              controller: titulo,
+              decoration: const InputDecoration(labelText: 'Título'),
+            ),
             const SizedBox(height: PulsoTokens.space3),
             TextField(
               controller: conteudo,
@@ -131,8 +149,14 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancelar')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Salvar')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Salvar'),
+          ),
         ],
       ),
     );
@@ -143,10 +167,10 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
     if (ok != true || title.isEmpty || !mounted) return;
     try {
       viagem = await context.read<TripRepository>().criarObservacao(
-            widget.viagemId,
-            titulo: title,
-            conteudo: body,
-          );
+        widget.viagemId,
+        titulo: title,
+        conteudo: body,
+      );
       setState(() {});
     } on ApiException catch (error) {
       if (!mounted) return;
@@ -158,11 +182,15 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
     final ok = await showPulsoConfirm(
       context: context,
       title: 'Excluir pretensão',
-      message: 'Excluir “${item.descricao?.isNotEmpty == true ? item.descricao : tripExpenseMeta(item.categoria).label}”?',
+      message:
+          'Excluir “${item.descricao?.isNotEmpty == true ? item.descricao : tripExpenseMeta(item.categoria).label}”?',
     );
     if (ok != true || !mounted) return;
     try {
-      await context.read<TripRepository>().excluirDespesa(widget.viagemId, item.id);
+      await context.read<TripRepository>().excluirDespesa(
+        widget.viagemId,
+        item.id,
+      );
       await _load();
     } on ApiException catch (error) {
       if (!mounted) return;
@@ -194,167 +222,242 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
       body: loading
           ? const Center(child: CircularProgressIndicator())
           : current == null
-              ? const PulsoEmptyState(title: 'Viagem não encontrada', description: 'Ela pode ter sido excluída.')
-              : CustomScrollView(
-                  slivers: [
-                    SliverAppBar(
-                      expandedHeight: 220,
-                      pinned: true,
-                      actions: [
-                        IconButton(
-                          tooltip: 'Editar',
-                          onPressed: () => context.push('/trips/${current.id}/edit', extra: current),
-                          icon: const Icon(Icons.edit_outlined),
-                        ),
-                        IconButton(
-                          tooltip: 'Excluir',
-                          onPressed: _deleteTrip,
-                          icon: const Icon(Icons.delete_outline),
-                        ),
-                      ],
-                      flexibleSpace: FlexibleSpaceBar(
-                        title: Text(current.destino, maxLines: 1, overflow: TextOverflow.ellipsis),
-                        background: _Cover(url: current.coverImageUrl, destino: current.destino),
+          ? const PulsoEmptyState(
+              title: 'Viagem não encontrada',
+              description: 'Ela pode ter sido excluída.',
+            )
+          : CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  expandedHeight: 220,
+                  pinned: true,
+                  actions: [
+                    IconButton(
+                      tooltip: 'Editar',
+                      onPressed: () => context.push(
+                        '/trips/${current.id}/edit',
+                        extra: current,
                       ),
+                      icon: const Icon(Icons.edit_outlined),
                     ),
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space4, PulsoTokens.space4, 96),
-                      sliver: SliverList.list(
+                    IconButton(
+                      tooltip: 'Excluir',
+                      onPressed: _deleteTrip,
+                      icon: const Icon(Icons.delete_outline),
+                    ),
+                  ],
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Text(
+                      current.destino,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    background: _Cover(
+                      url: current.coverImageUrl,
+                      destino: current.destino,
+                    ),
+                  ),
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(
+                    PulsoTokens.space4,
+                    PulsoTokens.space4,
+                    PulsoTokens.space4,
+                    96,
+                  ),
+                  sliver: SliverList.list(
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              _Chip(icon: Icons.calendar_today_outlined, label: formatDayHeader(current.dataPrevista)),
-                              const SizedBox(width: PulsoTokens.space2),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.surface,
-                                  borderRadius: BorderRadius.circular(PulsoTokens.radiusFull),
-                                  border: Border.all(color: Theme.of(context).colorScheme.outline),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    CurrencyFlag(code: current.moeda, size: 16),
-                                    const SizedBox(width: 6),
-                                    Text(current.moeda, style: Theme.of(context).textTheme.labelSmall),
-                                  ],
-                                ),
-                              ),
-                            ],
+                          _Chip(
+                            icon: Icons.calendar_today_outlined,
+                            label: formatDayHeader(current.dataPrevista),
                           ),
-                          const SizedBox(height: PulsoTokens.space3),
-                          PulsoSurface(
+                          const SizedBox(width: PulsoTokens.space2),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.surface,
+                              borderRadius: BorderRadius.circular(
+                                PulsoTokens.radiusFull,
+                              ),
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
+                            ),
                             child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                const PulsoSoftIcon(icon: Icons.savings_outlined, color: PulsoColors.primary),
-                                const SizedBox(width: PulsoTokens.space3),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Total estimado', style: Theme.of(context).textTheme.labelSmall),
-                                      Text(formatBrl(current.totalBrl), style: Theme.of(context).textTheme.headlineSmall),
-                                    ],
-                                  ),
+                                CurrencyFlag(code: current.moeda, size: 16),
+                                const SizedBox(width: 6),
+                                Text(
+                                  current.moeda,
+                                  style: Theme.of(context).textTheme.labelSmall,
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(height: PulsoTokens.space5),
-                          PulsoSectionHeader(
-                            title: 'Pretensões de gastos',
-                            icon: Icons.receipt_long_outlined,
-                            actionLabel: 'Adicionar',
-                            onAction: _addExpense,
-                          ),
-                          if (current.despesas.isEmpty)
-                            PulsoSurface(
-                              child: Text(
-                                'Nenhuma pretensão cadastrada ainda.',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            )
-                          else
-                            ...current.despesas.map(
-                              (item) => Padding(
-                                padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
-                                child: PulsoSurface(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: PulsoTokens.space3,
-                                    vertical: PulsoTokens.space3,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      PulsoSoftIcon(
-                                        icon: tripExpenseMeta(item.categoria).icon,
-                                        color: tripExpenseMeta(item.categoria).color,
-                                        size: 36,
-                                      ),
-                                      const SizedBox(width: PulsoTokens.space3),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              item.descricao?.isNotEmpty == true
-                                                  ? item.descricao!
-                                                  : tripExpenseMeta(item.categoria).label,
-                                              style: Theme.of(context).textTheme.titleSmall,
-                                            ),
-                                            Text(
-                                              tripExpenseMeta(item.categoria).label,
-                                              style: Theme.of(context).textTheme.bodySmall,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Text(formatBrl(item.valorEstimado), style: Theme.of(context).textTheme.titleSmall),
-                                      IconButton(
-                                        tooltip: 'Excluir pretensão',
-                                        onPressed: () => _deleteExpense(item),
-                                        icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          const SizedBox(height: PulsoTokens.space5),
-                          PulsoSectionHeader(
-                            title: 'Observações',
-                            icon: Icons.notes_outlined,
-                            actionLabel: 'Adicionar',
-                            onAction: _addNote,
-                          ),
-                          if (current.observacoes.isEmpty)
-                            PulsoSurface(
-                              child: Text(
-                                'Nenhuma observação ainda. Use para links, checklists e notas da viagem.',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            )
-                          else
-                            ...current.observacoes.map(
-                              (note) => Padding(
-                                padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
-                                child: PulsoSurface(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(note.titulo, style: Theme.of(context).textTheme.titleSmall),
-                                      const SizedBox(height: 4),
-                                      Text(note.conteudo, style: Theme.of(context).textTheme.bodyMedium),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
                         ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: PulsoTokens.space3),
+                      PulsoSurface(
+                        child: Row(
+                          children: [
+                            const PulsoSoftIcon(
+                              icon: Icons.savings_outlined,
+                              color: PulsoColors.primary,
+                            ),
+                            const SizedBox(width: PulsoTokens.space3),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Total estimado',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall,
+                                  ),
+                                  Text(
+                                    formatBrl(current.totalBrl),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: PulsoTokens.space5),
+                      PulsoSectionHeader(
+                        title: 'Pretensões de gastos',
+                        icon: Icons.receipt_long_outlined,
+                        actionLabel: 'Adicionar',
+                        onAction: _addExpense,
+                      ),
+                      if (current.despesas.isEmpty)
+                        PulsoSurface(
+                          child: Text(
+                            'Nenhuma pretensão cadastrada ainda.',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        )
+                      else
+                        ...current.despesas.map(
+                          (item) => Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: PulsoTokens.space2,
+                            ),
+                            child: PulsoSurface(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: PulsoTokens.space3,
+                                vertical: PulsoTokens.space3,
+                              ),
+                              child: Row(
+                                children: [
+                                  PulsoSoftIcon(
+                                    icon: tripExpenseMeta(item.categoria).icon,
+                                    color: tripExpenseMeta(item.categoria)
+                                        .color,
+                                    size: 36,
+                                  ),
+                                  const SizedBox(width: PulsoTokens.space3),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item.descricao?.isNotEmpty == true
+                                              ? item.descricao!
+                                              : tripExpenseMeta(item.categoria)
+                                                    .label,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
+                                        ),
+                                        Text(
+                                          tripExpenseMeta(item.categoria).label,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    formatBrl(item.valorEstimado),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall,
+                                  ),
+                                  IconButton(
+                                    tooltip: 'Excluir pretensão',
+                                    onPressed: () => _deleteExpense(item),
+                                    icon: Icon(
+                                      Icons.delete_outline,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .error,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      const SizedBox(height: PulsoTokens.space5),
+                      PulsoSectionHeader(
+                        title: 'Observações',
+                        icon: Icons.notes_outlined,
+                        actionLabel: 'Adicionar',
+                        onAction: _addNote,
+                      ),
+                      if (current.observacoes.isEmpty)
+                        PulsoSurface(
+                          child: Text(
+                            'Nenhuma observação ainda. Use para links, checklists e notas da viagem.',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        )
+                      else
+                        ...current.observacoes.map(
+                          (note) => Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: PulsoTokens.space2,
+                            ),
+                            child: PulsoSurface(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    note.titulo,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    note.conteudo,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
+              ],
+            ),
       floatingActionButton: current == null
           ? null
           : FloatingActionButton.extended(
@@ -403,12 +506,18 @@ class _Cover extends StatelessWidget {
   Widget build(BuildContext context) {
     final fallback = DecoratedBox(
       decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: [PulsoColors.primary, PulsoColors.primaryDark]),
+        gradient: LinearGradient(
+          colors: [PulsoColors.primary, PulsoColors.primaryDark],
+        ),
       ),
       child: Center(
         child: Text(
           destino.isEmpty ? '✈' : destino.characters.first.toUpperCase(),
-          style: const TextStyle(color: Colors.white, fontSize: 56, fontWeight: FontWeight.w700),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 56,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
     );

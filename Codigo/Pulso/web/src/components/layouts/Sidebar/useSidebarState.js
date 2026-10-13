@@ -8,134 +8,136 @@ const STORAGE_KEY = 'sidebar_collapsed'
 const PREMIUM_PATHS = new Set(['/trips', '/groups', '/insights', '/chatbot'])
 
 function filterNavByPlano(navItems, plano) {
-  if (plano === 'PREMIUM') return navItems
-  return navItems
-    .map((item) => {
-      if (item.path && PREMIUM_PATHS.has(item.path)) return null
-      if (!item.children) return item
-      const children = item.children.filter((c) => !PREMIUM_PATHS.has(c.path))
-      if (!children.length && !item.path) return null
-      return { ...item, children }
-    })
-    .filter(Boolean)
+    if (plano === 'PREMIUM') return navItems
+    return navItems
+        .map((item) => {
+            if (item.path && PREMIUM_PATHS.has(item.path)) return null
+            if (!item.children) return item
+            const children = item.children.filter((c) => !PREMIUM_PATHS.has(c.path))
+            if (!children.length && !item.path) return null
+            return { ...item, children }
+        })
+        .filter(Boolean)
 }
 
 export function flattenNavItems(items = SIDEBAR_NAV) {
-  const flat = []
+    const flat = []
 
-  for (const item of items) {
-    if (item.path) {
-      flat.push({ ...item, parentLabel: null })
+    for (const item of items) {
+        if (item.path) {
+            flat.push({ ...item, parentLabel: null })
+        }
+        if (item.children) {
+            for (const child of item.children) {
+                flat.push({ ...child, parentLabel: item.label })
+            }
+        }
     }
-    if (item.children) {
-      for (const child of item.children) {
-        flat.push({ ...child, parentLabel: item.label })
-      }
-    }
-  }
 
-  return flat
+    return flat
 }
 
 export function useSidebarState() {
-  const location = useLocation()
-  const user = useAppSelector((state) => state.auth.user)
-  const navForUser = useMemo(
-    () => filterNavByPlano(SIDEBAR_NAV, user?.plano ?? 'FREE'),
-    [user?.plano]
-  )
-  const [isCollapsed, setIsCollapsed] = useState(() => {
-    try {
-      return localStorage.getItem(STORAGE_KEY) === 'true'
-    } catch {
-      return false
-    }
-  })
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [openGroups, setOpenGroups] = useState({})
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, String(isCollapsed))
-    } catch {
-      /* ignore */
-    }
-  }, [isCollapsed])
-
-  // Abre o grupo do item ativo ao navegar
-  useEffect(() => {
-    const path = location.pathname
-    for (const item of navForUser) {
-      if (item.children?.some((child) => child.path === path)) {
-        setOpenGroups((prev) => ({ ...prev, [item.id]: true }))
-      }
-    }
-    setMobileOpen(false)
-  }, [location.pathname, navForUser])
-
-  const toggleCollapse = useCallback(() => {
-    setIsCollapsed((prev) => !prev)
-  }, [])
-
-  const toggleGroup = useCallback((groupId) => {
-    setOpenGroups((prev) => {
-      const isOpen = prev[groupId]
-      return isOpen ? {} : { [groupId]: true }
+    const location = useLocation()
+    const user = useAppSelector((state) => state.auth.user)
+    const navForUser = useMemo(
+        () => filterNavByPlano(SIDEBAR_NAV, user?.plano ?? 'FREE'),
+        [user?.plano]
+    )
+    const [isCollapsed, setIsCollapsed] = useState(() => {
+        try {
+            return localStorage.getItem(STORAGE_KEY) === 'true'
+        } catch {
+            return false
+        }
     })
-  }, [])
+    const [mobileOpen, setMobileOpen] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [openGroups, setOpenGroups] = useState({})
 
-  const filteredNav = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase()
-    if (!query) return navForUser
+    useEffect(() => {
+        try {
+            localStorage.setItem(STORAGE_KEY, String(isCollapsed))
+        } catch {
+            /* ignore */
+        }
+    }, [isCollapsed])
 
-    return navForUser.map((item) => {
-      if (item.path) {
-        return item.label.toLowerCase().includes(query) ? item : null
-      }
+    // Abre o grupo do item ativo ao navegar
+    useEffect(() => {
+        const path = location.pathname
+        for (const item of navForUser) {
+            if (item.children?.some((child) => child.path === path)) {
+                setOpenGroups((prev) => ({ ...prev, [item.id]: true }))
+            }
+        }
+        setMobileOpen(false)
+    }, [location.pathname, navForUser])
 
-      const matchingChildren = item.children?.filter(
-        (child) =>
-          child.label.toLowerCase().includes(query) ||
-          item.label.toLowerCase().includes(query)
-      )
+    const toggleCollapse = useCallback(() => {
+        setIsCollapsed((prev) => !prev)
+    }, [])
 
-      if (matchingChildren?.length) {
-        return { ...item, children: matchingChildren }
-      }
+    const toggleGroup = useCallback((groupId) => {
+        setOpenGroups((prev) => {
+            const isOpen = prev[groupId]
+            return isOpen ? {} : { [groupId]: true }
+        })
+    }, [])
 
-      return item.label.toLowerCase().includes(query) ? item : null
-    }).filter(Boolean)
-  }, [searchQuery, navForUser])
+    const filteredNav = useMemo(() => {
+        const query = searchQuery.trim().toLowerCase()
+        if (!query) return navForUser
 
-  const filteredFooter = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase()
-    if (!query) return SIDEBAR_NAV_FOOTER
+        return navForUser
+            .map((item) => {
+                if (item.path) {
+                    return item.label.toLowerCase().includes(query) ? item : null
+                }
 
-    return SIDEBAR_NAV_FOOTER.filter((item) => item.label.toLowerCase().includes(query))
-  }, [searchQuery])
+                const matchingChildren = item.children?.filter(
+                    (child) =>
+                        child.label.toLowerCase().includes(query) ||
+                        item.label.toLowerCase().includes(query)
+                )
 
-  const allFlatItems = useMemo(() => {
-    const main = flattenNavItems(filteredNav)
-    const footer = filteredFooter
-      .filter((item) => item.path)
-      .map((item) => ({ ...item, parentLabel: 'Conta' }))
-    return [...main, ...footer]
-  }, [filteredNav, filteredFooter])
+                if (matchingChildren?.length) {
+                    return { ...item, children: matchingChildren }
+                }
 
-  return {
-    isCollapsed,
-    mobileOpen,
-    searchQuery,
-    openGroups,
-    filteredNav,
-    filteredFooter,
-    allFlatItems,
-    setSearchQuery,
-    toggleCollapse,
-    toggleGroup,
-    setMobileOpen,
-    openMobile: () => setMobileOpen(true),
-    closeMobile: () => setMobileOpen(false),
-  }
+                return item.label.toLowerCase().includes(query) ? item : null
+            })
+            .filter(Boolean)
+    }, [searchQuery, navForUser])
+
+    const filteredFooter = useMemo(() => {
+        const query = searchQuery.trim().toLowerCase()
+        if (!query) return SIDEBAR_NAV_FOOTER
+
+        return SIDEBAR_NAV_FOOTER.filter((item) => item.label.toLowerCase().includes(query))
+    }, [searchQuery])
+
+    const allFlatItems = useMemo(() => {
+        const main = flattenNavItems(filteredNav)
+        const footer = filteredFooter
+            .filter((item) => item.path)
+            .map((item) => ({ ...item, parentLabel: 'Conta' }))
+        return [...main, ...footer]
+    }, [filteredNav, filteredFooter])
+
+    return {
+        isCollapsed,
+        mobileOpen,
+        searchQuery,
+        openGroups,
+        filteredNav,
+        filteredFooter,
+        allFlatItems,
+        setSearchQuery,
+        toggleCollapse,
+        toggleGroup,
+        setMobileOpen,
+        openMobile: () => setMobileOpen(true),
+        closeMobile: () => setMobileOpen(false),
+    }
 }

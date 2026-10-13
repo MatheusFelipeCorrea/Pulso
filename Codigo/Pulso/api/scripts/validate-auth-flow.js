@@ -174,7 +174,10 @@ async function main() {
             if (validate.status === 200) {
                 pass('Validar token de reset');
             } else {
-                fail('Validar token de reset', validate.data?.message || `status ${validate.status}`);
+                fail(
+                    'Validar token de reset',
+                    validate.data?.message || `status ${validate.status}`
+                );
             }
 
             const newPassword = 'NovaPulso@456';
@@ -193,7 +196,10 @@ async function main() {
                     pass('Login após reset de senha');
                     testRefreshToken = loginAfterReset.data.refreshToken;
                 } else if (loginAfterReset.data?.message?.includes('Muitas tentativas')) {
-                    pass('Login após reset de senha', 'rate limit — reset OK, login bloqueado temporariamente');
+                    pass(
+                        'Login após reset de senha',
+                        'rate limit — reset OK, login bloqueado temporariamente'
+                    );
                 } else {
                     fail('Login após reset de senha', loginAfterReset.data?.message);
                 }
@@ -219,7 +225,10 @@ async function main() {
             if (refreshAfterLogout.status === 401) {
                 pass('Refresh revogado após logout');
             } else {
-                fail('Refresh revogado após logout', `esperado 401, recebeu ${refreshAfterLogout.status}`);
+                fail(
+                    'Refresh revogado após logout',
+                    `esperado 401, recebeu ${refreshAfterLogout.status}`
+                );
             }
         } else {
             fail('Logout', logout.data?.message || `status ${logout.status}`);

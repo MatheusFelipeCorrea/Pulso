@@ -104,7 +104,10 @@ class _PurchaseItemFormScreenState extends State<PurchaseItemFormScreen> {
       child: ListView(
         padding: const EdgeInsets.all(PulsoTokens.space4),
         children: [
-          TextField(controller: _nome, decoration: const InputDecoration(labelText: 'Nome')),
+          TextField(
+            controller: _nome,
+            decoration: const InputDecoration(labelText: 'Nome'),
+          ),
           const SizedBox(height: PulsoTokens.space3),
           TextField(
             controller: _valor,
@@ -120,11 +123,14 @@ class _PurchaseItemFormScreenState extends State<PurchaseItemFormScreen> {
               DropdownMenuItem(value: 'MEDIA', child: Text('Média')),
               DropdownMenuItem(value: 'BAIXA', child: Text('Baixa')),
             ],
-            onChanged: (value) => setState(() => _prioridade = value ?? 'MEDIA'),
+            onChanged: (value) =>
+                setState(() => _prioridade = value ?? 'MEDIA'),
           ),
           const SizedBox(height: PulsoTokens.space3),
           DropdownButtonFormField<String>(
-            initialValue: purchaseCategorias.containsKey(_categoria) ? _categoria : 'OUTROS',
+            initialValue: purchaseCategorias.containsKey(_categoria)
+                ? _categoria
+                : 'OUTROS',
             decoration: const InputDecoration(labelText: 'Categoria'),
             items: purchaseCategorias.entries.map((entry) {
               final look = purchaseLook(entry.key);
@@ -132,24 +138,35 @@ class _PurchaseItemFormScreenState extends State<PurchaseItemFormScreen> {
                 value: entry.key,
                 child: Row(
                   children: [
-                    Icon(iconFromLucide(look.lucide), size: 18, color: look.color),
+                    Icon(
+                      iconFromLucide(look.lucide),
+                      size: 18,
+                      color: look.color,
+                    ),
                     const SizedBox(width: 10),
                     Text(entry.value),
                   ],
                 ),
               );
             }).toList(),
-            onChanged: (value) => setState(() => _categoria = value ?? 'OUTROS'),
+            onChanged: (value) =>
+                setState(() => _categoria = value ?? 'OUTROS'),
           ),
           const SizedBox(height: PulsoTokens.space3),
           TextField(
             controller: _link,
-            decoration: const InputDecoration(labelText: 'Link do produto', prefixIcon: Icon(Icons.link)),
+            decoration: const InputDecoration(
+              labelText: 'Link do produto',
+              prefixIcon: Icon(Icons.link),
+            ),
           ),
           const SizedBox(height: PulsoTokens.space3),
           TextField(
             controller: _imagem,
-            decoration: const InputDecoration(labelText: 'URL da imagem', prefixIcon: Icon(Icons.image_outlined)),
+            decoration: const InputDecoration(
+              labelText: 'URL da imagem',
+              prefixIcon: Icon(Icons.image_outlined),
+            ),
             onChanged: (_) => setState(() {}),
           ),
           if (_imagem.text.trim().isNotEmpty) ...[
@@ -164,7 +181,11 @@ class _PurchaseItemFormScreenState extends State<PurchaseItemFormScreen> {
                 webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
                 errorBuilder: (_, _, _) {
                   final look = purchaseLook(_categoria);
-                  return CategoryGlyph(icone: look.lucide, color: look.color, size: 72);
+                  return CategoryGlyph(
+                    icone: look.lucide,
+                    color: look.color,
+                    size: 72,
+                  );
                 },
               ),
             ),
@@ -184,9 +205,16 @@ class _PurchaseItemFormScreenState extends State<PurchaseItemFormScreen> {
               label: '$_parcelas x',
               onChanged: (value) => setState(() => _parcelas = value.round()),
             ),
-          TextField(controller: _obs, maxLines: 3, decoration: const InputDecoration(labelText: 'Observações')),
+          TextField(
+            controller: _obs,
+            maxLines: 3,
+            decoration: const InputDecoration(labelText: 'Observações'),
+          ),
           const SizedBox(height: PulsoTokens.space4),
-          FilledButton(onPressed: _saving ? null : _save, child: Text(_saving ? 'Salvando...' : 'Salvar')),
+          FilledButton(
+            onPressed: _saving ? null : _save,
+            child: Text(_saving ? 'Salvando...' : 'Salvar'),
+          ),
         ],
       ),
     );

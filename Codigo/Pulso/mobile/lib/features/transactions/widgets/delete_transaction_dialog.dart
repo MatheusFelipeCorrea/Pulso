@@ -23,7 +23,10 @@ Future<({bool excluirFuturas})?> showDeleteTransactionDialog({
             'O histórico anterior será mantido.',
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
             OutlinedButton(
               onPressed: () => Navigator.pop(context, (excluirFuturas: false)),
               child: const Text('Excluir só esta'),

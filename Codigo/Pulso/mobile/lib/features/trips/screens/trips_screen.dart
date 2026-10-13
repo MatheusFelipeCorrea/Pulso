@@ -63,11 +63,17 @@ class _TripsScreenState extends State<TripsScreen> {
     return RefreshIndicator(
       onRefresh: controller.reload,
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
+        padding: const EdgeInsets.fromLTRB(
+          PulsoTokens.space4,
+          PulsoTokens.space2,
+          PulsoTokens.space4,
+          96,
+        ),
         children: [
           const PulsoPageHeader(
             title: 'Viagens e moedas',
-            subtitle: 'Acompanhe cotações, converta moedas e planeje suas viagens.',
+            subtitle:
+                'Acompanhe cotações, converta moedas e planeje suas viagens.',
             icon: Icons.flight_takeoff,
           ),
           TripCurrencyPanel(repository: context.read<CurrencyRepository>()),
@@ -84,7 +90,11 @@ class _TripsScreenState extends State<TripsScreen> {
               child: Center(child: CircularProgressIndicator()),
             )
           else if (controller.error != null)
-            PulsoEmptyState(title: 'Não foi possível carregar', description: controller.error!, icon: Icons.cloud_off)
+            PulsoEmptyState(
+              title: 'Não foi possível carregar',
+              description: controller.error!,
+              icon: Icons.cloud_off,
+            )
           else if (controller.viagens.isEmpty)
             PulsoEmptyState(
               title: 'Nenhuma viagem',
@@ -97,8 +107,10 @@ class _TripsScreenState extends State<TripsScreen> {
             ...controller.viagens.map(
               (viagem) => TripCoverCard(
                 viagem: viagem,
-                onOpen: () => context.push('/trips/${viagem.id}', extra: viagem),
-                onEdit: () => context.push('/trips/${viagem.id}/edit', extra: viagem),
+                onOpen: () =>
+                    context.push('/trips/${viagem.id}', extra: viagem),
+                onEdit: () =>
+                    context.push('/trips/${viagem.id}/edit', extra: viagem),
                 onDelete: () => _delete(viagem),
               ),
             ),

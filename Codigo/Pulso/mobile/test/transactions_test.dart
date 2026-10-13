@@ -33,7 +33,11 @@ class _ScriptedAdapter implements HttpClientAdapter {
   }
 }
 
-ResponseBody _json(int status, Object body, {Map<String, List<String>> headers = const {}}) {
+ResponseBody _json(
+  int status,
+  Object body, {
+  Map<String, List<String>> headers = const {},
+}) {
   return ResponseBody.fromString(
     jsonEncode(body),
     status,
@@ -83,7 +87,10 @@ void main() {
     );
     expect(validarTransferencia('DINHEIRO', 'DINHEIRO'), isNotNull);
     expect(validarTransferencia('DINHEIRO', 'POUPANCA'), isNull);
-    expect(buildRecurrenceRule(frequencia: 'MENSAL', ateQuando: 'SEM_FIM'), 'FREQ=MONTHLY;INTERVAL=1');
+    expect(
+      buildRecurrenceRule(frequencia: 'MENSAL', ateQuando: 'SEM_FIM'),
+      'FREQ=MONTHLY;INTERVAL=1',
+    );
   });
 
   test('ícones de categoria seguem os nomes Lucide da Web', () {
@@ -97,12 +104,42 @@ void main() {
   test('badge de modo de uso espelha o catálogo da Web', () {
     expect(badgeFromModoUso('ESTAGIARIO').label, 'Estagiário');
     expect(badgeFromModoUso('CLT').label, 'CLT');
-    expect(PulsoUser.fromJson({
-      'id': '1',
-      'nome': 'Ana',
-      'email': 'ana@pulso.dev',
-      'modoUso': 'PJ',
-    }).modoUso, 'PJ');
+    expect(
+      PulsoUser.fromJson({
+        'id': '1',
+        'nome': 'Ana',
+        'email': 'ana@pulso.dev',
+        'modoUso': 'PJ',
+      }).modoUso,
+      'PJ',
+    );
+  });
+
+  test('PulsoTransacao.fromJson aceita payload incompleto do calendário', () {
+    final parcial = PulsoTransacao.fromJson({'id': 't2'});
+    expect(parcial.id, 't2');
+    expect(parcial.tipo, 'DESPESA');
+    expect(parcial.recurso, 'PESSOAL');
+    expect(parcial.valor, 0);
+    expect(parcial.recorrente, isFalse);
+
+    final completa = PulsoTransacao.fromJson({
+      'id': 99,
+      'tipo': 'RECEITA',
+      'recurso': 'VA',
+      'valor': 12,
+      'data': '2026-10-06T12:00:00.000Z',
+      'recorrente': true,
+      'descricao': 'Pix',
+      'categoria': {'id': 'c1', 'nome': 'Salário', 'tipo': 'RECEITA'},
+      'tags': [
+        {'id': 'tg1', 'nome': 'fixo'},
+      ],
+    });
+    expect(completa.id, '99');
+    expect(completa.categoria?.nome, 'Salário');
+    expect(completa.tags.single.nome, 'fixo');
+    expect(completa.isRecorrenteSerie, isTrue);
   });
 
   test('filtros autenticados omitem tipo/recurso TODOS', () {
@@ -130,66 +167,79 @@ void main() {
       storage = TokenStorage();
     });
 
-    test('lista, resumo e exclusão recorrente usam a mesma API da Web', () async {
-      final dio = Dio(BaseOptions(baseUrl: 'http://test/api'));
-      String? authHeader;
-      String? deletePath;
-      Map<String, dynamic>? deleteQuery;
+    test(
+      'lista, resumo e exclusão recorrente usam a mesma API da Web',
+      () async {
+        final dio = Dio(BaseOptions(baseUrl: 'http://test/api'));
+        String? authHeader;
+        String? deletePath;
+        Map<String, dynamic>? deleteQuery;
 
-      dio.httpClientAdapter = _ScriptedAdapter((options) async {
-        authHeader = options.headers['Authorization'] as String?;
-        if (options.path.contains('/transacoes/resumo')) {
-          return _json(200, {
-            'receitas': {'total': '100.00', 'quantidade': 1},
-            'despesas': {'total': '40.00', 'quantidade': 1},
-            'saldo': '60.00',
-          });
-        }
-        if (options.method == 'GET' && options.path.endsWith('/transacoes')) {
-          return _json(
-            200,
-            [
-              {
-                'id': 'tx-1',
-                'tipo': 'DESPESA',
-                'recurso': 'DINHEIRO',
-                'valor': '40.00',
-                'data': '2026-09-10T12:00:00.000Z',
-                'recorrente': false,
-                'descricao': 'Almoço',
-                'categoria': {'id': 'cat-1', 'nome': 'Alimentação', 'tipo': 'DESPESA'},
-                'tags': [],
+        dio.httpClientAdapter = _ScriptedAdapter((options) async {
+          authHeader = options.headers['Authorization'] as String?;
+          if (options.path.contains('/transacoes/resumo')) {
+            return _json(200, {
+              'receitas': {'total': '100.00', 'quantidade': 1},
+              'despesas': {'total': '40.00', 'quantidade': 1},
+              'saldo': '60.00',
+            });
+          }
+          if (options.method == 'GET' && options.path.endsWith('/transacoes')) {
+            return _json(
+              200,
+              [
+                {
+                  'id': 'tx-1',
+                  'tipo': 'DESPESA',
+                  'recurso': 'DINHEIRO',
+                  'valor': '40.00',
+                  'data': '2026-09-10T12:00:00.000Z',
+                  'recorrente': false,
+                  'descricao': 'Almoço',
+                  'categoria': {
+                    'id': 'cat-1',
+                    'nome': 'Alimentação',
+                    'tipo': 'DESPESA',
+                  },
+                  'tags': [],
+                },
+              ],
+              headers: {
+                'x-total-count': ['1'],
+                'x-total-pages': ['1'],
+                'x-current-page': ['1'],
               },
-            ],
-            headers: {
-              'x-total-count': ['1'],
-              'x-total-pages': ['1'],
-              'x-current-page': ['1'],
-            },
-          );
-        }
-        if (options.method == 'DELETE') {
-          deletePath = options.path;
-          deleteQuery = options.queryParameters;
-          return ResponseBody.fromString('', 204);
-        }
-        return _json(404, {'message': options.path});
-      });
+            );
+          }
+          if (options.method == 'DELETE') {
+            deletePath = options.path;
+            deleteQuery = options.queryParameters;
+            return ResponseBody.fromString('', 204);
+          }
+          return _json(404, {'message': options.path});
+        });
 
-      final repo = TransactionRepository(ApiClient(tokenStorage: storage, dio: dio));
-      final filtros = TransactionFilters(periodo: '2026-09');
-      final page = await repo.listar(filtros, pagina: 1);
-      final resumo = await repo.obterResumo(filtros);
-      await repo.excluir('tx-1', excluirFuturas: true, dataCorte: DateTime.utc(2026, 9, 10, 12));
+        final repo = TransactionRepository(
+          ApiClient(tokenStorage: storage, dio: dio),
+        );
+        final filtros = TransactionFilters(periodo: '2026-09');
+        final page = await repo.listar(filtros, pagina: 1);
+        final resumo = await repo.obterResumo(filtros);
+        await repo.excluir(
+          'tx-1',
+          excluirFuturas: true,
+          dataCorte: DateTime.utc(2026, 9, 10, 12),
+        );
 
-      expect(authHeader, 'Bearer access-token');
-      expect(page.transacoes, hasLength(1));
-      expect(page.transacoes.first.descricao, 'Almoço');
-      expect(page.total, 1);
-      expect(resumo.saldo, 60);
-      expect(deletePath, '/transacoes/tx-1');
-      expect(deleteQuery?['excluirFuturas'], 'true');
-      expect(deleteQuery?['dataCorte'], isNotNull);
-    });
+        expect(authHeader, 'Bearer access-token');
+        expect(page.transacoes, hasLength(1));
+        expect(page.transacoes.first.descricao, 'Almoço');
+        expect(page.total, 1);
+        expect(resumo.saldo, 60);
+        expect(deletePath, '/transacoes/tx-1');
+        expect(deleteQuery?['excluirFuturas'], 'true');
+        expect(deleteQuery?['dataCorte'], isNotNull);
+      },
+    );
   });
 }
