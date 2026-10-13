@@ -1,10 +1,11 @@
 const { DEFAULT_ORIGIN, resolveTripOrigin } = require('./tripOrigins');
 const { buildDestinationAirports, normalizeText } = require('./tripDestinationsCatalog');
-const { getBusRouteEstimate, getTrainRouteEstimate, toDisplayedBusPrice } = require('./tripTransportRoutes');
 const {
-    getSeasonalAdjustment,
-    applySeasonalPrice,
-} = require('./tripSeasonalPricing');
+    getBusRouteEstimate,
+    getTrainRouteEstimate,
+    toDisplayedBusPrice,
+} = require('./tripTransportRoutes');
+const { getSeasonalAdjustment, applySeasonalPrice } = require('./tripSeasonalPricing');
 
 /** @deprecated use tripOrigins.DEFAULT_ORIGIN */
 const DEFAULT_ORIGIN_LEGACY = DEFAULT_ORIGIN;
@@ -96,7 +97,10 @@ function resolveDestinationAirport(destino, destinoMeta) {
     const normalized = normalizeText(destino);
     if (!normalized) return null;
 
-    const parts = normalized.split(/[,;/|]+/).map((part) => part.trim()).filter(Boolean);
+    const parts = normalized
+        .split(/[,;/|]+/)
+        .map((part) => part.trim())
+        .filter(Boolean);
     const tokens = [...new Set([normalized, ...parts])];
 
     let bestMatch = null;

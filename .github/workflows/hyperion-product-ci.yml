@@ -1,48 +1,266 @@
 name: Hyperion — Product CI
 
-# Placeholder until React / Node / Flutter are scaffolded. Refresh with /pipeline after init.
-
 on:
   push:
-    branches: [main]
+    branches: [main, "Sprint-*"]
   pull_request:
-    branches: [main]
+    branches: [main, "Sprint-*"]
+
+concurrency:
+  group: hyperion-product-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
-  lint-test-build:
+  node:
+    name: ${{ matrix.name }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: api
+            dir: Codigo/Pulso/api
+            test_script: test
+          - name: web
+            dir: Codigo/Pulso/web
+            test_script: test:run
     steps:
       - uses: actions/checkout@v5
 
-      - name: Detect package manager
-        id: detect
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: ${{ matrix.dir }}/package-lock.json
+
+      - name: Install
+        working-directory: ${{ matrix.dir }}
+        run: npm ci
+
+      - name: Lint
+        working-directory: ${{ matrix.dir }}
+        run: npm run lint --if-present
+
+      - name: Format check
+        working-directory: ${{ matrix.dir }}
+        run: npm run format:check --if-present
+
+      - name: Testes
+        working-directory: ${{ matrix.dir }}
+        run: npm run ${{ matrix.test_script }} --if-present
+
+      - name: Cobertura
+        working-directory: ${{ matrix.dir }}
         run: |
-          if [ -f "Codigo/Pulso/api/package-lock.json" ] || [ -f "Codigo/Pulso/web/package-lock.json" ]; then
-            echo "manager=npm" >> $GITHUB_OUTPUT
-          elif [ -f "Codigo/Pulso/api/package.json" ] || [ -f "Codigo/Pulso/web/package.json" ]; then
-            echo "manager=npm" >> $GITHUB_OUTPUT
-          elif [ -f "Codigo/Pulso/mobile/pubspec.yaml" ]; then
-            echo "manager=flutter" >> $GITHUB_OUTPUT
-          else
-            echo "manager=unknown" >> $GITHUB_OUTPUT
+          set -e
+          npm run test:coverage --if-present
+          node "${GITHUB_WORKSPACE}/.github/scripts/print-coverage.js" coverage/coverage-summary.json "${{ matrix.name }}"
+
+      - name: Build
+        working-directory: ${{ matrix.dir }}
+        run: npm run build --if-present
+
+      - name: Audit fix + updates compatíveis (reverte se quebrar)
+        id: safe
+        working-directory: ${{ matrix.dir }}
+        run: |
+          set -euo pipefail
+          cp package.json /tmp/package.json.bak
+          cp package-lock.json /tmp/package-lock.json.bak
+
+          revert_deps() {
+            echo "::warning::${{ matrix.name }}: $1 — revertendo package.json/lock"
+            cp /tmp/package.json.bak package.json
+            cp /tmp/package-lock.json.bak package-lock.json
+            npm ci
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          }
+
+          npm audit fix || true
+          if ! npm update; then
+            revert_deps "npm update falhou"
+            exit 0
           fi
 
+          if ! npm run lint --if-present; then
+            revert_deps "update quebrou o lint"
+            exit 0
+          fi
+          if ! npm run format:check --if-present; then
+            revert_deps "update quebrou o format"
+            exit 0
+          fi
+          if ! npm run ${{ matrix.test_script }} --if-present; then
+            revert_deps "update quebrou os testes"
+            exit 0
+          fi
+          if ! npm run build --if-present; then
+            revert_deps "update quebrou o build"
+            exit 0
+          fi
+
+          npm audit --audit-level=high || echo "::warning::${{ matrix.name }}: ainda há advisory high após audit fix (sem --force)"
+
+          if git diff --quiet -- .; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload lockfile atualizado
+        if: steps.safe.outputs.changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: safe-deps-${{ matrix.name }}
+          path: |
+            ${{ matrix.dir }}/package.json
+            ${{ matrix.dir }}/package-lock.json
+
+  mobile:
+    name: mobile
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Codigo/Pulso/mobile
+    steps:
+      - uses: actions/checkout@v5
+
       - name: Setup Node
-        if: steps.detect.outputs.manager == 'npm'
         uses: actions/setup-node@v5
         with:
           node-version: "22"
 
-      - name: Placeholder until apps are scaffolded
-        if: steps.detect.outputs.manager == 'unknown'
-        run: echo "PULSO apps not scaffolded yet — skip product CI"
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
 
-      - name: Install / test / build (Node apps)
-        if: steps.detect.outputs.manager == 'npm'
+      - name: Pub get
+        run: flutter pub get
+
+      - name: Format check
+        run: dart format --output=none --set-exit-if-changed lib test
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Testes
+        run: flutter test
+
+      - name: Cobertura
         run: |
           set -e
-          for app in Codigo/Pulso/api Codigo/Pulso/web; do
-            if [ -f "$app/package.json" ]; then
-              (cd "$app" && npm install && npm run lint --if-present && npm test --if-present && npm run build --if-present)
-            fi
-          done
+          flutter test --coverage
+          node "${GITHUB_WORKSPACE}/.github/scripts/print-coverage.js" coverage/lcov.info mobile --ignore=screens,widgets,main.dart,app.dart,state,app_router.dart,repository.dart,google_auth,theme_controller,web_oauth
+
+  rabbitmq:
+    name: rabbitmq
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Codigo/Pulso/api
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Validate compose
+        run: docker compose config
+
+      - name: Pull image
+        run: docker compose pull
+
+      - name: Start broker
+        run: docker compose up -d --wait --wait-timeout 60
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: Codigo/Pulso/api/package-lock.json
+
+      - name: AMQP smoke
+        env:
+          RABBITMQ_URL: amqp://pulso:pulso@localhost:5672
+        run: |
+          set -e
+          npm ci --ignore-scripts
+          npm run rabbit:check
+
+      - name: Stop broker
+        if: always()
+        run: docker compose down -v
+
+  commit-safe-deps:
+    name: commit safe deps
+    needs: [node]
+    if: |
+      always() &&
+      needs.node.result == 'success' &&
+      github.ref != 'refs/heads/main' &&
+      (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) &&
+      (github.event_name != 'pull_request' || github.event.pull_request.head.ref != 'main')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download lockfiles
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: safe-deps-*
+          merge-multiple: false
+          path: /tmp/safe-deps
+
+      - name: Apply and push
+        run: |
+          set -euo pipefail
+          if [ ! -d /tmp/safe-deps ]; then
+            echo "Nenhum lockfile atualizado"
+            exit 0
+          fi
+
+          find /tmp/safe-deps -type f || true
+          copied=0
+
+          api_lock=$(find /tmp/safe-deps -path '*api/package-lock.json' -print -quit)
+          api_json=$(find /tmp/safe-deps -path '*api/package.json' -print -quit)
+          if [ -n "$api_lock" ] && [ -n "$api_json" ]; then
+            cp "$api_json" Codigo/Pulso/api/package.json
+            cp "$api_lock" Codigo/Pulso/api/package-lock.json
+            copied=1
+          fi
+
+          web_lock=$(find /tmp/safe-deps -path '*web/package-lock.json' -print -quit)
+          web_json=$(find /tmp/safe-deps -path '*web/package.json' -print -quit)
+          if [ -n "$web_lock" ] && [ -n "$web_json" ]; then
+            cp "$web_json" Codigo/Pulso/web/package.json
+            cp "$web_lock" Codigo/Pulso/web/package-lock.json
+            copied=1
+          fi
+
+          if [ "$copied" -eq 0 ]; then
+            echo "Artifact sem lockfile esperado"
+            exit 0
+          fi
+
+          git add Codigo/Pulso/api/package.json Codigo/Pulso/api/package-lock.json \
+                  Codigo/Pulso/web/package.json Codigo/Pulso/web/package-lock.json
+          if git diff --cached --quiet; then
+            echo "Nada para commitar"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(deps): npm audit fix e updates sem breaking change"
+          git push

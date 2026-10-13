@@ -7,33 +7,33 @@ import { useCallback, useEffect, useState } from 'react'
  * @param {{ enabled?: boolean }} [options]
  */
 export function useFilterOptions(fetchFn, { enabled = true } = {}) {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(enabled)
-  const [error, setError] = useState(null)
+    const [data, setData] = useState(null)
+    const [loading, setLoading] = useState(enabled)
+    const [error, setError] = useState(null)
 
-  const reload = useCallback(async () => {
-    if (!fetchFn) return null
+    const reload = useCallback(async () => {
+        if (!fetchFn) return null
 
-    setLoading(true)
-    setError(null)
+        setLoading(true)
+        setError(null)
 
-    try {
-      const result = await fetchFn()
-      setData(result)
-      return result
-    } catch (err) {
-      setError(err)
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }, [fetchFn])
+        try {
+            const result = await fetchFn()
+            setData(result)
+            return result
+        } catch (err) {
+            setError(err)
+            throw err
+        } finally {
+            setLoading(false)
+        }
+    }, [fetchFn])
 
-  useEffect(() => {
-    if (!enabled) return undefined
-    reload().catch(() => {})
-    return undefined
-  }, [enabled, reload])
+    useEffect(() => {
+        if (!enabled) return undefined
+        reload().catch(() => {})
+        return undefined
+    }, [enabled, reload])
 
-  return { data, loading, error, reload, setData }
+    return { data, loading, error, reload, setData }
 }

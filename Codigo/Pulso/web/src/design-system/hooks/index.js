@@ -1,6 +1,6 @@
 /**
  * Design System Hooks
- * 
+ *
  * Hooks genéricos e reutilizáveis para funcionalidades comuns.
  */
 

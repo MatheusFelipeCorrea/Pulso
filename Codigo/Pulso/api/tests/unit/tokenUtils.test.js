@@ -49,6 +49,8 @@ describe('tokenUtils', () => {
         const before = Date.now();
         const expiry = getRefreshTokenExpiry(true);
 
-        expect(expiry.getTime()).toBeGreaterThanOrEqual(before + REFRESH_TOKEN_REMEMBER_TTL_MS - 1000);
+        expect(expiry.getTime()).toBeGreaterThanOrEqual(
+            before + REFRESH_TOKEN_REMEMBER_TTL_MS - 1000
+        );
     });
 });

@@ -25,7 +25,9 @@ class AuthCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? PulsoColors.darkCard : PulsoColors.lightCard,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isDark ? PulsoColors.darkBorder : PulsoColors.lightBorder),
+        border: Border.all(
+          color: isDark ? PulsoColors.darkBorder : PulsoColors.lightBorder,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: isDark ? 0.35 : 0.06),
@@ -42,9 +44,15 @@ class AuthCard extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: iconOutlined ? PulsoColors.primary.withValues(alpha: 0.08) : PulsoColors.primary,
+                color: iconOutlined
+                    ? PulsoColors.primary.withValues(alpha: 0.08)
+                    : PulsoColors.primary,
                 shape: BoxShape.circle,
-                border: iconOutlined ? Border.all(color: PulsoColors.primary.withValues(alpha: 0.35)) : null,
+                border: iconOutlined
+                    ? Border.all(
+                        color: PulsoColors.primary.withValues(alpha: 0.35),
+                      )
+                    : null,
               ),
               child: Icon(
                 icon,
@@ -57,19 +65,19 @@ class AuthCard extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 22,
-                ),
+            style: Theme.of(context).textTheme.titleLarge
+                ?.copyWith(fontWeight: FontWeight.w700, fontSize: 22),
           ),
           const SizedBox(height: 8),
           Text(
             subtitle,
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: isDark ? PulsoColors.darkSecondary : PulsoColors.lightSecondary,
-                  fontSize: 14,
-                ),
+              color: isDark
+                  ? PulsoColors.darkSecondary
+                  : PulsoColors.lightSecondary,
+              fontSize: 14,
+            ),
           ),
           const SizedBox(height: 24),
           child,

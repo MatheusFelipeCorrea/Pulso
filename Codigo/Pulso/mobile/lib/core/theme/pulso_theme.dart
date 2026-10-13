@@ -20,17 +20,26 @@ class PulsoTheme {
         if (states.contains(WidgetState.disabled)) {
           return PulsoColors.button.withValues(alpha: 0.5);
         }
-        if (states.contains(WidgetState.pressed)) return PulsoColors.buttonActive;
-        if (states.contains(WidgetState.hovered)) return PulsoColors.buttonHover;
+        if (states.contains(WidgetState.pressed))
+          return PulsoColors.buttonActive;
+        if (states.contains(WidgetState.hovered))
+          return PulsoColors.buttonHover;
         return PulsoColors.button;
       }),
       foregroundColor: const WidgetStatePropertyAll(Colors.white),
-      minimumSize: const WidgetStatePropertyAll(Size.fromHeight(PulsoTokens.buttonLg)),
+      minimumSize: const WidgetStatePropertyAll(
+        Size.fromHeight(PulsoTokens.buttonLg),
+      ),
       padding: const WidgetStatePropertyAll(
-        EdgeInsets.symmetric(horizontal: PulsoTokens.space4, vertical: PulsoTokens.space3),
+        EdgeInsets.symmetric(
+          horizontal: PulsoTokens.space4,
+          vertical: PulsoTokens.space3,
+        ),
       ),
       shape: WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(PulsoTokens.radiusMd)),
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(PulsoTokens.radiusMd),
+        ),
       ),
       textStyle: WidgetStatePropertyAll(
         GoogleFonts.inter(
@@ -46,31 +55,42 @@ class PulsoTheme {
   static ButtonStyle _outlineStyle(ColorScheme scheme) {
     return ButtonStyle(
       foregroundColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.hovered) || states.contains(WidgetState.pressed)) {
+        if (states.contains(WidgetState.hovered) ||
+            states.contains(WidgetState.pressed)) {
           return Colors.white;
         }
         return PulsoColors.button;
       }),
       backgroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.pressed)) return PulsoColors.button;
-        if (states.contains(WidgetState.hovered)) return PulsoColors.buttonHover;
+        if (states.contains(WidgetState.hovered))
+          return PulsoColors.buttonHover;
         return Colors.transparent;
       }),
       side: WidgetStateProperty.resolveWith((states) {
-        final color = states.contains(WidgetState.hovered) || states.contains(WidgetState.pressed)
+        final color =
+            states.contains(WidgetState.hovered) ||
+                states.contains(WidgetState.pressed)
             ? PulsoColors.buttonHover
             : PulsoColors.button;
         return BorderSide(color: color);
       }),
-      minimumSize: const WidgetStatePropertyAll(Size.fromHeight(PulsoTokens.buttonMd)),
+      minimumSize: const WidgetStatePropertyAll(
+        Size.fromHeight(PulsoTokens.buttonMd),
+      ),
       padding: const WidgetStatePropertyAll(
         EdgeInsets.symmetric(horizontal: PulsoTokens.space5),
       ),
       shape: WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(PulsoTokens.radiusMd)),
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(PulsoTokens.radiusMd),
+        ),
       ),
       textStyle: WidgetStatePropertyAll(
-        GoogleFonts.inter(fontSize: PulsoTokens.fontMd, fontWeight: PulsoTokens.weightMedium),
+        GoogleFonts.inter(
+          fontSize: PulsoTokens.fontMd,
+          fontWeight: PulsoTokens.weightMedium,
+        ),
       ),
     );
   }
@@ -91,10 +111,16 @@ class PulsoTheme {
       onError: Colors.white,
       surface: isDark ? PulsoColors.darkCard : PulsoColors.lightCard,
       onSurface: isDark ? PulsoColors.darkText : PulsoColors.lightText,
-      onSurfaceVariant: isDark ? PulsoColors.darkSecondary : PulsoColors.lightSecondary,
+      onSurfaceVariant: isDark
+          ? PulsoColors.darkSecondary
+          : PulsoColors.lightSecondary,
       outline: isDark ? PulsoColors.darkBorder : PulsoColors.lightBorder,
-      outlineVariant: isDark ? PulsoColors.darkInputBorder : PulsoColors.lightBorder,
-      surfaceContainerHighest: isDark ? PulsoColors.darkSurface : PulsoColors.lightSurface,
+      outlineVariant: isDark
+          ? PulsoColors.darkInputBorder
+          : PulsoColors.lightBorder,
+      surfaceContainerHighest: isDark
+          ? PulsoColors.darkSurface
+          : PulsoColors.lightSurface,
       inverseSurface: isDark ? PulsoColors.lightCard : PulsoColors.darkCard,
       onInverseSurface: isDark ? PulsoColors.lightText : PulsoColors.darkText,
       inversePrimary: PulsoColors.primary,
@@ -160,13 +186,19 @@ class PulsoTheme {
       useMaterial3: true,
       colorScheme: scheme,
       textTheme: baseText,
-      scaffoldBackgroundColor: isDark ? PulsoColors.darkBackground : PulsoColors.lightBackground,
-      canvasColor: isDark ? PulsoColors.darkBackground : PulsoColors.lightBackground,
+      scaffoldBackgroundColor: isDark
+          ? PulsoColors.darkBackground
+          : PulsoColors.lightBackground,
+      canvasColor: isDark
+          ? PulsoColors.darkBackground
+          : PulsoColors.lightBackground,
       dividerColor: scheme.outline,
       appBarTheme: AppBarTheme(
         elevation: 0,
         scrolledUnderElevation: 0,
-        backgroundColor: isDark ? PulsoColors.darkBackground : PulsoColors.lightBackground,
+        backgroundColor: isDark
+            ? PulsoColors.darkBackground
+            : PulsoColors.lightBackground,
         foregroundColor: scheme.onSurface,
         titleTextStyle: GoogleFonts.inter(
           fontSize: PulsoTokens.fontLg,
@@ -181,15 +213,21 @@ class PulsoTheme {
           horizontal: PulsoTokens.space4,
           vertical: 14,
         ),
-        border: _border(isDark ? PulsoColors.darkInputBorder : PulsoColors.lightInputBorder),
-        enabledBorder: _border(isDark ? PulsoColors.darkInputBorder : PulsoColors.lightInputBorder),
+        border: _border(
+          isDark ? PulsoColors.darkInputBorder : PulsoColors.lightInputBorder,
+        ),
+        enabledBorder: _border(
+          isDark ? PulsoColors.darkInputBorder : PulsoColors.lightInputBorder,
+        ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(PulsoTokens.radiusMd),
           borderSide: const BorderSide(color: PulsoColors.button, width: 1.5),
         ),
         errorBorder: _border(scheme.error),
         hintStyle: GoogleFonts.inter(
-          color: isDark ? PulsoColors.darkPlaceholder : PulsoColors.lightPlaceholder,
+          color: isDark
+              ? PulsoColors.darkPlaceholder
+              : PulsoColors.lightPlaceholder,
           fontSize: PulsoTokens.fontMd,
         ),
         labelStyle: GoogleFonts.inter(
@@ -199,7 +237,9 @@ class PulsoTheme {
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(style: _filledStyle()),
-      outlinedButtonTheme: OutlinedButtonThemeData(style: _outlineStyle(scheme)),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: _outlineStyle(scheme),
+      ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: PulsoColors.button,
@@ -234,7 +274,10 @@ class PulsoTheme {
           side: BorderSide(color: scheme.outline.withValues(alpha: 0.4)),
         ),
         selectedColor: PulsoColors.button.withValues(alpha: 0.12),
-        labelStyle: GoogleFonts.inter(fontSize: PulsoTokens.fontXs, fontWeight: PulsoTokens.weightSemibold),
+        labelStyle: GoogleFonts.inter(
+          fontSize: PulsoTokens.fontXs,
+          fontWeight: PulsoTokens.weightSemibold,
+        ),
         padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space2),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
@@ -245,7 +288,8 @@ class PulsoTheme {
             return scheme.primary;
           }),
           backgroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) return PulsoColors.button;
+            if (states.contains(WidgetState.selected))
+              return PulsoColors.button;
             return Colors.transparent;
           }),
         ),
@@ -259,7 +303,9 @@ class PulsoTheme {
           final selected = states.contains(WidgetState.selected);
           return GoogleFonts.inter(
             fontSize: 12,
-            fontWeight: selected ? PulsoTokens.weightSemibold : PulsoTokens.weightMedium,
+            fontWeight: selected
+                ? PulsoTokens.weightSemibold
+                : PulsoTokens.weightMedium,
             color: selected ? PulsoColors.button : scheme.onSurfaceVariant,
           );
         }),
@@ -282,22 +328,35 @@ class PulsoTheme {
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: scheme.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PulsoTokens.radiusLg)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(PulsoTokens.radiusLg),
+        ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: scheme.surface,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(PulsoTokens.radiusXl)),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(PulsoTokens.radiusXl),
+          ),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: isDark ? PulsoColors.darkInputBg : PulsoColors.lightText,
-        contentTextStyle: GoogleFonts.inter(color: Colors.white, fontSize: PulsoTokens.fontSm),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PulsoTokens.radiusMd)),
+        backgroundColor: isDark
+            ? PulsoColors.darkInputBg
+            : PulsoColors.lightText,
+        contentTextStyle: GoogleFonts.inter(
+          color: Colors.white,
+          fontSize: PulsoTokens.fontSm,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(PulsoTokens.radiusMd),
+        ),
       ),
       checkboxTheme: CheckboxThemeData(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(PulsoTokens.radiusSm)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(PulsoTokens.radiusSm),
+        ),
         fillColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) return PulsoColors.button;
           return Colors.transparent;

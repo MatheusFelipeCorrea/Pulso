@@ -1,6 +1,9 @@
 const prisma = require('../../../src/config/database');
 const transactionRepository = require('../../../src/repositories/transactionRepository');
-const { runRecurringTransactions, isOccurrenceToday } = require('../../../src/jobs/recurringTransactions');
+const {
+    runRecurringTransactions,
+    isOccurrenceToday,
+} = require('../../../src/jobs/recurringTransactions');
 
 jest.mock('../../../src/config/database', () => ({
     $transaction: jest.fn(),
@@ -195,7 +198,11 @@ describe('recurringTransactions job', () => {
     it('ignora regra desconhecida ou ausente', async () => {
         transactionRepository.listarRecorrentesMae.mockResolvedValue([
             { id: 'm1', data: new Date('2026-01-10T12:00:00.000Z'), regraRecorrencia: null },
-            { id: 'm2', data: new Date('2026-01-10T12:00:00.000Z'), regraRecorrencia: 'FREQ=HOURLY' },
+            {
+                id: 'm2',
+                data: new Date('2026-01-10T12:00:00.000Z'),
+                regraRecorrencia: 'FREQ=HOURLY',
+            },
         ]);
 
         await runRecurringTransactions();

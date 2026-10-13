@@ -1,8 +1,8 @@
 name: Hyperion — Sync Cards
 
-# Nested kit: cards and scripts live under Hyperion/.
-# Forward sync writes the shared GitHub Project. Only main may do that;
-# feature branches must not overwrite the board with stale YAML.
+# Nested kit: cards live under Hyperion/.
+# auto = decide forward vs reverse vs field merge; never run both blind.
+# Only main writes the shared board. Feature branches must not overwrite it.
 
 on:
   workflow_dispatch:
@@ -12,27 +12,36 @@ on:
         required: false
         default: "false"
       sync_direction:
-        description: "Sync direction: forward or reverse"
+        description: "auto (reconcile), forward, or reverse"
         required: false
-        default: "forward"
+        default: "auto"
+  schedule:
+    # Board column drags often skip the issues webhook; poll every 2h.
+    - cron: "20 */2 * * *"
+  issues:
+    types: [opened, edited, closed, reopened]
+  projects_v2_item:
+    types: [created, edited, converted]
   push:
     branches: [main]
     paths:
       - "Hyperion/.github/cards/**/*.md"
       - "Hyperion/.github/cards/config/projects-map.json"
+      - "Hyperion/.github/plans/cards/**"
       - "Hyperion/scripts/cards-sync/**"
 
 concurrency:
-  group: hyperion-sync-cards-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: hyperion-sync-cards-board
+  cancel-in-progress: false
 
 permissions:
-  contents: read
+  contents: write
   issues: write
   repository-projects: write
 
 jobs:
   sync:
+    if: ${{ (github.event_name != 'push' || !contains(github.event.head_commit.message || '', '[cards-sync]')) && (github.event_name != 'issues' || github.actor != 'github-actions[bot]') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -40,11 +49,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          persist-credentials: true
+          token: ${{ secrets.PROJECT_SYNC_TOKEN || github.token }}
 
       - name: Setup Node
         uses: actions/setup-node@v5
         with:
           node-version: "24"
+
+      - name: Warn if org Project token is missing
+        if: ${{ secrets.PROJECT_SYNC_TOKEN == '' }}
+        run: echo "::warning::PROJECT_SYNC_TOKEN is not set. Issue edits still work; org Project column updates often fail with GITHUB_TOKEN."
 
       - name: Sync cards
         env:
@@ -53,5 +69,20 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           CREATE_MISSING_LABELS: "true"
           DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
-          SYNC_DIRECTION: ${{ github.event.inputs.sync_direction || 'forward' }}
+          SYNC_DIRECTION: ${{ github.event.inputs.sync_direction || 'auto' }}
         run: node scripts/cards-sync/sync.mjs
+
+      - name: Commit reconciled markdown
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        working-directory: .
+        run: |
+          set -euo pipefail
+          git add Hyperion/.github/cards Hyperion/.github/plans/cards || true
+          if git diff --cached --quiet; then
+            echo "No card files to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(cards): reconcile board and markdown [cards-sync]"
+          git push

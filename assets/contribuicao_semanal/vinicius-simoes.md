@@ -54,3 +54,20 @@
 **Horas:** 16h
 
 **Total Sprint 3:** 32h
+
+# Sprint 4 (01/10 a 14/10)
+
+### Semana 1 (01/10 - 07/10)
+
+- Planejamento de compra na API e no web (`PULSO-FEAT-052`–`057`): painel, cálculos de sobra/tempo/parcelas, vínculo com meta, “Comprei!” e imagens do item — PR [#352](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/352) · issues [#65](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/65)–[#70](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/70).
+- Flutter: camada de dados e telas de planejamento de compra (`PULSO-FEAT-113` / TASK-177 e TASK-178) — PR [#355](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/355).
+
+**Horas:** 20h
+
+### Semana 2 (08/10 - 14/10)
+
+- _A preencher pelo integrante._
+
+**Horas:** _a preencher_
+
+**Total Sprint 4:** _a fechar em 14/10_

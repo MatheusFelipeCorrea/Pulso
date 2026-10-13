@@ -40,7 +40,11 @@ class GoalsController extends ChangeNotifier {
   }
 
   Future<void> applyTab(String? status) async {
-    filters = filters.copyWith(clearStatus: status == null, status: status, pagina: 1);
+    filters = filters.copyWith(
+      clearStatus: status == null,
+      status: status,
+      pagina: 1,
+    );
     await reload();
   }
 

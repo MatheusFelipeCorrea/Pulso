@@ -26,7 +26,7 @@ const errorMiddleware = (err, req, res, _next) => {
         });
     }
 
-// Erro inesperado (bug)
+    // Erro inesperado (bug)
     logger.error(`500 - ${err.message}`);
     logger.error(err.stack);
 

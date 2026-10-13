@@ -26,12 +26,14 @@ const corsOrigins = (env.CORS_ORIGIN || '')
     .map((o) => o.trim())
     .filter(Boolean);
 
-app.use(cors({
-    origin: corsOrigins.length <= 1 ? corsOrigins[0] : corsOrigins,
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Pulso-Client'],
-    exposedHeaders: ['X-Total-Count', 'X-Total-Pages', 'X-Current-Page'],
-}));
+app.use(
+    cors({
+        origin: corsOrigins.length <= 1 ? corsOrigins[0] : corsOrigins,
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization', 'X-Pulso-Client'],
+        exposedHeaders: ['X-Total-Count', 'X-Total-Pages', 'X-Current-Page'],
+    })
+);
 app.use(cookieParser());
 app.use(express.json());
 app.use(passport.initialize());

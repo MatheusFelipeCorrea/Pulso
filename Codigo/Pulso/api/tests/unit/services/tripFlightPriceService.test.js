@@ -96,7 +96,9 @@ describe('tripFlightPriceService', () => {
         expect(fromSp.origemId).toBe('GRU');
         expect(fromRio.origemId).toBe('GIG');
         expect(fromRio.valorMedioBrl).toBeGreaterThan(fromSp.valorMedioBrl);
-        expect(fromRio.onibus.valorConvencionalBrl).toBeGreaterThan(fromSp.onibus.valorConvencionalBrl);
+        expect(fromRio.onibus.valorConvencionalBrl).toBeGreaterThan(
+            fromSp.onibus.valorConvencionalBrl
+        );
     });
 
     it('retorna indisponível para destino desconhecido', async () => {

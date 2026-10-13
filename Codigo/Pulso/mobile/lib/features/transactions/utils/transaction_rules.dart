@@ -2,15 +2,18 @@ const grupoAlimentacao = 'ALIMENTACAO';
 const grupoCompras = 'COMPRAS';
 
 String normalizeName(String value) {
-  return value
-      .toLowerCase()
-      .trim()
-      .replaceAll(RegExp(r'[\u0300-\u036f]'), '');
+  return value.toLowerCase().trim().replaceAll(RegExp(r'[\u0300-\u036f]'), '');
 }
 
 String? inferirGrupoBeneficioPorNome(String? nome) {
   final normalized = normalizeName(
-    (nome ?? '').replaceAll(RegExp(r'[áàâã]'), 'a').replaceAll(RegExp(r'[éê]'), 'e').replaceAll('í', 'i').replaceAll(RegExp(r'[óôõ]'), 'o').replaceAll('ú', 'u').replaceAll('ç', 'c'),
+    (nome ?? '')
+        .replaceAll(RegExp(r'[áàâã]'), 'a')
+        .replaceAll(RegExp(r'[éê]'), 'e')
+        .replaceAll('í', 'i')
+        .replaceAll(RegExp(r'[óôõ]'), 'o')
+        .replaceAll('ú', 'u')
+        .replaceAll('ç', 'c'),
   );
   const defaults = {
     'alimentacao': grupoAlimentacao,
@@ -25,7 +28,8 @@ String? inferirGrupoBeneficioPorNome(String? nome) {
 }
 
 String? resolverGrupoBeneficio({String? grupoBeneficio, String? nome}) {
-  if (grupoBeneficio != null && grupoBeneficio.isNotEmpty) return grupoBeneficio;
+  if (grupoBeneficio != null && grupoBeneficio.isNotEmpty)
+    return grupoBeneficio;
   return inferirGrupoBeneficioPorNome(nome);
 }
 
@@ -40,8 +44,13 @@ String? validarRecursoCategoria({
     return null;
   }
 
-  final grupo = resolverGrupoBeneficio(grupoBeneficio: grupoBeneficio, nome: categoriaNome);
-  final nome = (categoriaNome ?? '').trim().isEmpty ? 'esta categoria' : categoriaNome!.trim();
+  final grupo = resolverGrupoBeneficio(
+    grupoBeneficio: grupoBeneficio,
+    nome: categoriaNome,
+  );
+  final nome = (categoriaNome ?? '').trim().isEmpty
+      ? 'esta categoria'
+      : categoriaNome!.trim();
 
   if (recurso == 'VA') {
     final ok = grupo == grupoAlimentacao || grupo == grupoCompras;

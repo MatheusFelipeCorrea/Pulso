@@ -9,11 +9,7 @@ DateTime goalDate(dynamic value) {
 }
 
 class GoalAporte {
-  const GoalAporte({
-    required this.id,
-    required this.valor,
-    required this.data,
-  });
+  const GoalAporte({required this.id, required this.valor, required this.data});
 
   final String id;
   final double valor;
@@ -206,6 +202,8 @@ class ReservaEmergenciaSugestao {
   final double valorSugerido;
 
   factory ReservaEmergenciaSugestao.fromJson(Map<String, dynamic> json) {
-    return ReservaEmergenciaSugestao(valorSugerido: goalNum(json['valorSugerido']));
+    return ReservaEmergenciaSugestao(
+      valorSugerido: goalNum(json['valorSugerido']),
+    );
   }
 }

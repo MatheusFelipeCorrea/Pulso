@@ -20,7 +20,9 @@ class LegalDocumentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.watch<ThemeController>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final secondary = isDark ? PulsoColors.darkSecondary : PulsoColors.lightSecondary;
+    final secondary = isDark
+        ? PulsoColors.darkSecondary
+        : PulsoColors.lightSecondary;
     final border = isDark ? PulsoColors.darkBorder : PulsoColors.lightBorder;
     final card = isDark ? PulsoColors.darkCard : PulsoColors.lightCard;
 
@@ -37,7 +39,11 @@ class LegalDocumentScreen extends StatelessWidget {
                   IconButton(
                     tooltip: isDark ? 'Tema claro' : 'Tema escuro',
                     onPressed: theme.toggle,
-                    icon: Icon(isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
+                    icon: Icon(
+                      isDark
+                          ? Icons.light_mode_outlined
+                          : Icons.dark_mode_outlined,
+                    ),
                   ),
                 ],
               ),
@@ -78,9 +84,14 @@ class LegalDocumentScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 4,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: PulsoColors.primary.withValues(alpha: isDark ? 0.18 : 0.1),
+                                  color: PulsoColors.primary.withValues(
+                                    alpha: isDark ? 0.18 : 0.1,
+                                  ),
                                   borderRadius: BorderRadius.circular(999),
                                 ),
                                 child: Text(
@@ -95,32 +106,40 @@ class LegalDocumentScreen extends StatelessWidget {
                               const SizedBox(height: 16),
                               Text(
                                 meta.title,
-                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                                style: Theme.of(context).textTheme.headlineSmall
+                                    ?.copyWith(fontWeight: FontWeight.w700),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 'Última atualização: ${meta.updatedAt}',
-                                style: TextStyle(color: secondary, fontSize: 13),
+                                style: TextStyle(
+                                  color: secondary,
+                                  fontSize: 13,
+                                ),
                               ),
                               const SizedBox(height: 12),
                               Text(
                                 meta.intro,
-                                style: TextStyle(color: secondary, height: 1.55),
+                                style: TextStyle(
+                                  color: secondary,
+                                  height: 1.55,
+                                ),
                               ),
                               const SizedBox(height: 28),
                               for (final section in sections) ...[
                                 Text(
                                   section.title,
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.w700),
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
                                   section.content,
-                                  style: TextStyle(color: secondary, height: 1.65, fontSize: 15),
+                                  style: TextStyle(
+                                    color: secondary,
+                                    height: 1.65,
+                                    fontSize: 15,
+                                  ),
                                 ),
                                 const SizedBox(height: 22),
                               ],
@@ -128,7 +147,11 @@ class LegalDocumentScreen extends StatelessWidget {
                               const SizedBox(height: 12),
                               Text(
                                 'Dúvidas? Entre em contato pelo suporte disponível no aplicativo.',
-                                style: TextStyle(color: secondary, fontSize: 13, height: 1.5),
+                                style: TextStyle(
+                                  color: secondary,
+                                  fontSize: 13,
+                                  height: 1.5,
+                                ),
                               ),
                               const SizedBox(height: 16),
                               Wrap(
@@ -136,7 +159,8 @@ class LegalDocumentScreen extends StatelessWidget {
                                 runSpacing: 8,
                                 children: [
                                   TextButton(
-                                    onPressed: () => context.go(meta.relatedPath),
+                                    onPressed: () =>
+                                        context.go(meta.relatedPath),
                                     child: Text(meta.relatedLabel),
                                   ),
                                   TextButton(

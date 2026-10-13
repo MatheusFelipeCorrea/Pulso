@@ -23,21 +23,11 @@ router.get(
     metaController.sugerirReservaEmergencia
 );
 
-router.get(
-    '/',
-    authMiddleware,
-    validateMiddleware(listarMetasQuerySchema),
-    metaController.listar
-);
+router.get('/', authMiddleware, validateMiddleware(listarMetasQuerySchema), metaController.listar);
 
 router.post('/', authMiddleware, validateMiddleware(criarMetaSchema), metaController.criar);
 
-router.patch(
-    '/:id',
-    authMiddleware,
-    validateMiddleware(editarMetaSchema),
-    metaController.editar
-);
+router.patch('/:id', authMiddleware, validateMiddleware(editarMetaSchema), metaController.editar);
 
 router.post(
     '/:id/aportes',

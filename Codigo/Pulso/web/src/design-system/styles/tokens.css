@@ -9,253 +9,255 @@
  */
 
 :root {
-  /* ============================================================
+    /* ============================================================
      CORES PRINCIPAIS
      ============================================================ */
-  --ds-color-primary: #7C3AED;
-  --ds-color-primary-light: #A78BFA;
-  --ds-color-primary-dark: #5B21B6;
-  --ds-color-primary-range: color-mix(in srgb, var(--ds-color-primary-light) 35%, transparent);
+    --ds-color-primary: #7c3aed;
+    --ds-color-primary-light: #a78bfa;
+    --ds-color-primary-dark: #5b21b6;
+    --ds-color-primary-range: color-mix(in srgb, var(--ds-color-primary-light) 35%, transparent);
 
-  /* Botões roxos: principal no repouso, tom claro no hover */
-  --ds-color-button-primary: var(--ds-color-primary);
-  --ds-color-button-primary-hover: var(--ds-color-primary-light);
-  --ds-color-button-primary-active: #6D28D9;
-  --ds-color-button-primary-border: var(--ds-color-primary);
+    /* Botões roxos: principal no repouso, tom claro no hover */
+    --ds-color-button-primary: var(--ds-color-primary);
+    --ds-color-button-primary-hover: var(--ds-color-primary-light);
+    --ds-color-button-primary-active: #6d28d9;
+    --ds-color-button-primary-border: var(--ds-color-primary);
 
-  /* ============================================================
+    /* ============================================================
      BACKGROUND E SUPERFÍCIE
      ============================================================ */
-  --ds-color-background: #FAFAFA;
-  --ds-color-bg: var(--ds-color-background);
-  --ds-color-surface: #F4F4F5;
-  --ds-color-surface-elevated: #E4E4E7;
-  --ds-color-card-bg: #FFFFFF;
+    --ds-color-background: #fafafa;
+    --ds-color-bg: var(--ds-color-background);
+    --ds-color-surface: #f4f4f5;
+    --ds-color-surface-elevated: #e4e4e7;
+    --ds-color-card-bg: #ffffff;
 
-  /* ============================================================
+    /* ============================================================
      TEXTO
      ============================================================ */
-  --ds-color-text: #18181B;
-  --ds-color-text-primary: var(--ds-color-text);
-  --ds-color-text-secondary: #71717A;
-  --ds-color-text-muted: var(--ds-color-text-secondary);
+    --ds-color-text: #18181b;
+    --ds-color-text-primary: var(--ds-color-text);
+    --ds-color-text-secondary: #71717a;
+    --ds-color-text-muted: var(--ds-color-text-secondary);
 
-  /* ============================================================
+    /* ============================================================
      BORDAS
      ============================================================ */
-  --ds-color-border: #E4E4E7;
+    --ds-color-border: #e4e4e7;
 
-  /* ============================================================
+    /* ============================================================
      INPUTS E FORMULÁRIOS
      ============================================================ */
-  --ds-color-input-bg: #FFFFFF;
-  --ds-color-input-border: #E4E4E7;
-  --ds-color-input-focus: #7C3AED;
-  --ds-color-placeholder: #A1A1AA;
-  --ds-color-input-disabled: #F4F4F5;
-  --ds-color-hover: #F4F4F5;
-  --ds-color-surface-hover: var(--ds-color-hover);
-  --ds-color-textarea-bg: #FFFFFF;
-  --ds-color-textarea-border: #E4E4E7;
-  --ds-color-select-bg: #FFFFFF;
-  --ds-color-select-border: #E4E4E7;
+    --ds-color-input-bg: #ffffff;
+    --ds-color-input-border: #e4e4e7;
+    --ds-color-input-focus: #7c3aed;
+    --ds-color-placeholder: #a1a1aa;
+    --ds-color-input-disabled: #f4f4f5;
+    --ds-color-hover: #f4f4f5;
+    --ds-color-surface-hover: var(--ds-color-hover);
+    --ds-color-textarea-bg: #ffffff;
+    --ds-color-textarea-border: #e4e4e7;
+    --ds-color-select-bg: #ffffff;
+    --ds-color-select-border: #e4e4e7;
 
-  /* ============================================================
+    /* ============================================================
      SEMÂNTICAS
      ============================================================ */
-  --ds-color-success: #10B981;
-  --ds-color-danger: #EF4444;
-  --ds-color-warning: #F59E0B;
-  --ds-color-info: #3B82F6;
-  --ds-color-cyan: #06B6D4;
-  --ds-color-orange: #EA580C;
+    --ds-color-success: #10b981;
+    --ds-color-danger: #ef4444;
+    --ds-color-warning: #f59e0b;
+    --ds-color-info: #3b82f6;
+    --ds-color-cyan: #06b6d4;
+    --ds-color-orange: #ea580c;
 
-  /* ============================================================
+    /* ============================================================
      OVERLAY / MODAL / TOOLTIP
      ============================================================ */
-  --ds-color-overlay: rgba(0, 0, 0, 0.4);
-  --ds-color-modal-bg: #FFFFFF;
-  --ds-color-tooltip-bg: #18181B;
-  --ds-color-tooltip-text: #FAFAFA;
+    --ds-color-overlay: rgba(0, 0, 0, 0.4);
+    --ds-color-modal-bg: #ffffff;
+    --ds-color-tooltip-bg: #18181b;
+    --ds-color-tooltip-text: #fafafa;
 
-  /* ============================================================
+    /* ============================================================
      COMPONENTES ESPECÍFICOS
      ============================================================ */
-  --ds-color-skeleton-base: #E4E4E7;
-  --ds-color-skeleton-shimmer: #F4F4F5;
-  --ds-color-dropdown-bg: #FFFFFF;
-  --ds-color-dropdown-hover: #F4F4F5;
+    --ds-color-skeleton-base: #e4e4e7;
+    --ds-color-skeleton-shimmer: #f4f4f5;
+    --ds-color-dropdown-bg: #ffffff;
+    --ds-color-dropdown-hover: #f4f4f5;
 
-  /* Toggle / Checkbox / Radio */
-  --ds-color-toggle-track-off: #E5E7EB;
-  --ds-color-toggle-border: #F3F4F6;
-  --ds-color-toggle-thumb-off: #FAFAFA;
-  --ds-color-toggle-thumb-on: #FAFAFA;
-  --ds-color-toggle-thumb-hover: #71717A;
-  --ds-color-control-border: #71717A;
-  --ds-color-picker-cell-hover: #F3E8FF;
-  --ds-color-empty-icon: var(--ds-color-primary);
-  --ds-color-progress-track: #ECECF2;
-  --ds-color-table-row-selected: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
-  --ds-color-error-surface: color-mix(in srgb, var(--ds-color-danger) 10%, transparent);
-  --ds-color-error-inline-bg: color-mix(in srgb, var(--ds-color-danger) 5%, transparent);
-  --ds-color-error-inline-border: color-mix(in srgb, var(--ds-color-danger) 30%, transparent);
+    /* Toggle / Checkbox / Radio */
+    --ds-color-toggle-track-off: #e5e7eb;
+    --ds-color-toggle-border: #f3f4f6;
+    --ds-color-toggle-thumb-off: #fafafa;
+    --ds-color-toggle-thumb-on: #fafafa;
+    --ds-color-toggle-thumb-hover: #71717a;
+    --ds-color-control-border: #71717a;
+    --ds-color-picker-cell-hover: #f3e8ff;
+    --ds-color-empty-icon: var(--ds-color-primary);
+    --ds-color-progress-track: #ececf2;
+    --ds-color-table-row-selected: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+    --ds-color-error-surface: color-mix(in srgb, var(--ds-color-danger) 10%, transparent);
+    --ds-color-error-inline-bg: color-mix(in srgb, var(--ds-color-danger) 5%, transparent);
+    --ds-color-error-inline-border: color-mix(in srgb, var(--ds-color-danger) 30%, transparent);
 
-  /* ============================================================
+    /* ============================================================
      ESPAÇAMENTOS
      ============================================================ */
-  --ds-space-1: 4px;
-  --ds-space-2: 8px;
-  --ds-space-3: 12px;
-  --ds-space-4: 16px;
-  --ds-space-5: 20px;
-  --ds-space-6: 24px;
-  --ds-space-8: 32px;
-  --ds-space-10: 40px;
-  --ds-space-12: 48px;
-  --ds-space-16: 64px;
+    --ds-space-1: 4px;
+    --ds-space-2: 8px;
+    --ds-space-3: 12px;
+    --ds-space-4: 16px;
+    --ds-space-5: 20px;
+    --ds-space-6: 24px;
+    --ds-space-8: 32px;
+    --ds-space-10: 40px;
+    --ds-space-12: 48px;
+    --ds-space-16: 64px;
 
-  /* ============================================================
+    /* ============================================================
      BORDER RADIUS
      ============================================================ */
-  --ds-radius-sm: 4px;
-  --ds-radius-md: 8px;
-  --ds-radius-lg: 12px;
-  --ds-radius-xl: 16px;
-  --ds-radius-full: 999px;
+    --ds-radius-sm: 4px;
+    --ds-radius-md: 8px;
+    --ds-radius-lg: 12px;
+    --ds-radius-xl: 16px;
+    --ds-radius-full: 999px;
 
-  /* ============================================================
+    /* ============================================================
      TIPOGRAFIA
      ============================================================ */
-  --ds-font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --ds-font-mono: 'Fira Code', 'Cascadia Code', 'Monaco', 'Courier New', monospace;
+    --ds-font-sans:
+        'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+        Arial, sans-serif;
+    --ds-font-mono: 'Fira Code', 'Cascadia Code', 'Monaco', 'Courier New', monospace;
 
-  --ds-font-size-xs: 12px;
-  --ds-font-size-sm: 14px;
-  --ds-font-size-md: 16px;
-  --ds-font-size-base: var(--ds-font-size-md);
-  --ds-font-size-lg: 18px;
-  --ds-font-size-xl: 24px;
-  --ds-font-size-2xl: 32px;
+    --ds-font-size-xs: 12px;
+    --ds-font-size-sm: 14px;
+    --ds-font-size-md: 16px;
+    --ds-font-size-base: var(--ds-font-size-md);
+    --ds-font-size-lg: 18px;
+    --ds-font-size-xl: 24px;
+    --ds-font-size-2xl: 32px;
 
-  --ds-line-height-tight: 1.25;
-  --ds-line-height-normal: 1.5;
-  --ds-line-height-relaxed: 1.75;
+    --ds-line-height-tight: 1.25;
+    --ds-line-height-normal: 1.5;
+    --ds-line-height-relaxed: 1.75;
 
-  --ds-font-weight-normal: 400;
-  --ds-font-weight-medium: 500;
-  --ds-font-weight-semibold: 600;
-  --ds-font-weight-bold: 700;
+    --ds-font-weight-normal: 400;
+    --ds-font-weight-medium: 500;
+    --ds-font-weight-semibold: 600;
+    --ds-font-weight-bold: 700;
 
-  /* ============================================================
+    /* ============================================================
      SOMBRAS
      ============================================================ */
-  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --ds-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --ds-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
-  --ds-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.2);
+    --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --ds-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --ds-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+    --ds-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.2);
 
-  /* ============================================================
+    /* ============================================================
      TRANSIÇÕES
      ============================================================ */
-  --ds-transition-fast: 150ms ease;
-  --ds-transition-normal: 200ms ease;
-  --ds-transition-slow: 300ms ease;
+    --ds-transition-fast: 150ms ease;
+    --ds-transition-normal: 200ms ease;
+    --ds-transition-slow: 300ms ease;
 
-  /* ============================================================
+    /* ============================================================
      Z-INDEX
      ============================================================ */
-  --ds-z-dropdown: 100;
-  --ds-z-sticky: 20;
-  --ds-z-modal: 200;
-  --ds-z-toast: 300;
-  --ds-z-tooltip: 400;
-  --ds-z-overlay: 9999;
+    --ds-z-dropdown: 100;
+    --ds-z-sticky: 20;
+    --ds-z-modal: 200;
+    --ds-z-toast: 300;
+    --ds-z-tooltip: 400;
+    --ds-z-overlay: 9999;
 }
 
 /* ============================================================
    MODO ESCURO (.dark no <html>)
    ============================================================ */
 .dark {
-  /* CORES PRINCIPAIS */
-  --ds-color-primary: #A78BFA;
-  --ds-color-primary-light: #C4B5FD;
-  --ds-color-primary-dark: #7C3AED;
-  --ds-color-primary-range: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+    /* CORES PRINCIPAIS */
+    --ds-color-primary: #a78bfa;
+    --ds-color-primary-light: #c4b5fd;
+    --ds-color-primary-dark: #7c3aed;
+    --ds-color-primary-range: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
 
-  /* Botões: roxo principal fixo (não usar o primary claro do tema escuro) */
-  --ds-color-button-primary: #7C3AED;
-  --ds-color-button-primary-hover: #A78BFA;
-  --ds-color-button-primary-active: #6D28D9;
-  --ds-color-button-primary-border: #7C3AED;
+    /* Botões: roxo principal fixo (não usar o primary claro do tema escuro) */
+    --ds-color-button-primary: #7c3aed;
+    --ds-color-button-primary-hover: #a78bfa;
+    --ds-color-button-primary-active: #6d28d9;
+    --ds-color-button-primary-border: #7c3aed;
 
-  /* BACKGROUND E SUPERFÍCIE */
-  --ds-color-background: #09090B;
-  --ds-color-bg: var(--ds-color-background);
-  --ds-color-surface: #18181B;
-  --ds-color-surface-elevated: #27272A;
-  --ds-color-card-bg: #18181B;
+    /* BACKGROUND E SUPERFÍCIE */
+    --ds-color-background: #09090b;
+    --ds-color-bg: var(--ds-color-background);
+    --ds-color-surface: #18181b;
+    --ds-color-surface-elevated: #27272a;
+    --ds-color-card-bg: #18181b;
 
-  /* TEXTO */
-  --ds-color-text: #FAFAFA;
-  --ds-color-text-primary: var(--ds-color-text);
-  --ds-color-text-secondary: #A1A1AA;
-  --ds-color-text-muted: var(--ds-color-text-secondary);
+    /* TEXTO */
+    --ds-color-text: #fafafa;
+    --ds-color-text-primary: var(--ds-color-text);
+    --ds-color-text-secondary: #a1a1aa;
+    --ds-color-text-muted: var(--ds-color-text-secondary);
 
-  /* BORDAS */
-  --ds-color-border: #27272A;
+    /* BORDAS */
+    --ds-color-border: #27272a;
 
-  /* INPUTS E FORMULÁRIOS */
-  --ds-color-input-bg: #27272A;
-  --ds-color-input-border: #3F3F46;
-  --ds-color-input-focus: #7C3AED;
-  --ds-color-placeholder: #71717A;
-  --ds-color-input-disabled: #18181B;
-  --ds-color-hover: #27272A;
-  --ds-color-surface-hover: var(--ds-color-hover);
-  --ds-color-textarea-bg: #18181B;
-  --ds-color-textarea-border: #27272A;
-  --ds-color-select-bg: #27272A;
-  --ds-color-select-border: #27272A;
+    /* INPUTS E FORMULÁRIOS */
+    --ds-color-input-bg: #27272a;
+    --ds-color-input-border: #3f3f46;
+    --ds-color-input-focus: #7c3aed;
+    --ds-color-placeholder: #71717a;
+    --ds-color-input-disabled: #18181b;
+    --ds-color-hover: #27272a;
+    --ds-color-surface-hover: var(--ds-color-hover);
+    --ds-color-textarea-bg: #18181b;
+    --ds-color-textarea-border: #27272a;
+    --ds-color-select-bg: #27272a;
+    --ds-color-select-border: #27272a;
 
-  /* SEMÂNTICAS */
-  --ds-color-success: #34D399;
-  --ds-color-danger: #F87171;
-  --ds-color-warning: #FBBF24;
-  --ds-color-info: #60A5FA;
-  --ds-color-cyan: #22D3EE;
-  --ds-color-orange: #FB923C;
+    /* SEMÂNTICAS */
+    --ds-color-success: #34d399;
+    --ds-color-danger: #f87171;
+    --ds-color-warning: #fbbf24;
+    --ds-color-info: #60a5fa;
+    --ds-color-cyan: #22d3ee;
+    --ds-color-orange: #fb923c;
 
-  /* OVERLAY / MODAL / TOOLTIP */
-  --ds-color-overlay: rgba(0, 0, 0, 0.6);
-  --ds-color-modal-bg: #18181B;
-  --ds-color-tooltip-bg: #FAFAFA;
-  --ds-color-tooltip-text: #09090B;
+    /* OVERLAY / MODAL / TOOLTIP */
+    --ds-color-overlay: rgba(0, 0, 0, 0.6);
+    --ds-color-modal-bg: #18181b;
+    --ds-color-tooltip-bg: #fafafa;
+    --ds-color-tooltip-text: #09090b;
 
-  /* COMPONENTES ESPECÍFICOS */
-  --ds-color-skeleton-base: #27272A;
-  --ds-color-skeleton-shimmer: #3F3F46;
-  --ds-color-dropdown-bg: #18181B;
-  --ds-color-dropdown-hover: #27272A;
+    /* COMPONENTES ESPECÍFICOS */
+    --ds-color-skeleton-base: #27272a;
+    --ds-color-skeleton-shimmer: #3f3f46;
+    --ds-color-dropdown-bg: #18181b;
+    --ds-color-dropdown-hover: #27272a;
 
-  /* Toggle / Checkbox / Radio */
-  --ds-color-toggle-track-off: #27272A;
-  --ds-color-toggle-border: #3F3F46;
-  --ds-color-toggle-thumb-off: #71717A;
-  --ds-color-toggle-thumb-on: #FAFAFA;
-  --ds-color-toggle-thumb-hover: #71717A;
-  --ds-color-control-border: #71717A;
-  --ds-color-picker-cell-hover: #27272A;
-  --ds-color-empty-icon: #71717A;
-  --ds-color-progress-track: #27272A;
-  --ds-color-table-row-selected: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
-  --ds-color-error-surface: color-mix(in srgb, var(--ds-color-danger) 10%, transparent);
-  --ds-color-error-inline-bg: color-mix(in srgb, var(--ds-color-danger) 5%, transparent);
-  --ds-color-error-inline-border: color-mix(in srgb, var(--ds-color-danger) 30%, transparent);
+    /* Toggle / Checkbox / Radio */
+    --ds-color-toggle-track-off: #27272a;
+    --ds-color-toggle-border: #3f3f46;
+    --ds-color-toggle-thumb-off: #71717a;
+    --ds-color-toggle-thumb-on: #fafafa;
+    --ds-color-toggle-thumb-hover: #71717a;
+    --ds-color-control-border: #71717a;
+    --ds-color-picker-cell-hover: #27272a;
+    --ds-color-empty-icon: #71717a;
+    --ds-color-progress-track: #27272a;
+    --ds-color-table-row-selected: color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+    --ds-color-error-surface: color-mix(in srgb, var(--ds-color-danger) 10%, transparent);
+    --ds-color-error-inline-bg: color-mix(in srgb, var(--ds-color-danger) 5%, transparent);
+    --ds-color-error-inline-border: color-mix(in srgb, var(--ds-color-danger) 30%, transparent);
 
-  /* SOMBRAS - remover no dark mode */
-  --ds-shadow-sm: none;
-  --ds-shadow-md: none;
-  --ds-shadow-lg: none;
-  --ds-shadow-xl: none;
+    /* SOMBRAS - remover no dark mode */
+    --ds-shadow-sm: none;
+    --ds-shadow-md: none;
+    --ds-shadow-lg: none;
+    --ds-shadow-xl: none;
 }

@@ -5,10 +5,7 @@ import 'package:pulso/core/storage/token_storage.dart';
 import 'package:pulso/features/auth/data/user_model.dart';
 
 class AuthRepository {
-  AuthRepository({
-    required this._api,
-    required this._storage,
-  });
+  AuthRepository({required this._api, required this._storage});
 
   final ApiClient _api;
   final TokenStorage _storage;
@@ -162,7 +159,9 @@ class AuthRepository {
     );
   }
 
-  Future<AuthSession> _sessionFrom(Future<Response<Map<String, dynamic>>> request) async {
+  Future<AuthSession> _sessionFrom(
+    Future<Response<Map<String, dynamic>>> request,
+  ) async {
     try {
       final response = await request;
       final data = response.data ?? {};
@@ -170,7 +169,9 @@ class AuthRepository {
       final refreshToken = data['refreshToken'] as String?;
       final userJson = data['user'] as Map<String, dynamic>?;
       if (accessToken == null || refreshToken == null || userJson == null) {
-        throw ApiException('A API não devolveu a sessão nativa. Verifique o header X-Pulso-Client.');
+        throw ApiException(
+          'A API não devolveu a sessão nativa. Verifique o header X-Pulso-Client.',
+        );
       }
       await _storage.save(accessToken: accessToken, refreshToken: refreshToken);
       return AuthSession(

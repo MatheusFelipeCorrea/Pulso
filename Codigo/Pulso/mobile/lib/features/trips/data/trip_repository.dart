@@ -17,10 +17,16 @@ class TripRepository {
 
   List<PulsoViagem> _parseList(dynamic data) {
     if (data is List) {
-      return data.whereType<Map<String, dynamic>>().map(PulsoViagem.fromJson).toList();
+      return data
+          .whereType<Map<String, dynamic>>()
+          .map(PulsoViagem.fromJson)
+          .toList();
     }
     if (data is Map<String, dynamic> && data['viagens'] is List) {
-      return (data['viagens'] as List).whereType<Map<String, dynamic>>().map(PulsoViagem.fromJson).toList();
+      return (data['viagens'] as List)
+          .whereType<Map<String, dynamic>>()
+          .map(PulsoViagem.fromJson)
+          .toList();
     }
     return const [];
   }
@@ -48,8 +54,13 @@ class TripRepository {
       final data = response.data;
       final list = data is List
           ? data
-          : (data is Map && data['destinos'] is List ? data['destinos'] as List : const []);
-      return list.whereType<Map<String, dynamic>>().map(TripDestinationHint.fromJson).toList();
+          : (data is Map && data['destinos'] is List
+                ? data['destinos'] as List
+                : const []);
+      return list
+          .whereType<Map<String, dynamic>>()
+          .map(TripDestinationHint.fromJson)
+          .toList();
     });
   }
 
@@ -66,9 +77,12 @@ class TripRepository {
         data: {
           'destino': destino,
           'moeda': moeda,
-          'dataPrevista': DateTime(dataPrevista.year, dataPrevista.month, dataPrevista.day, 12)
-              .toUtc()
-              .toIso8601String(),
+          'dataPrevista': DateTime(
+            dataPrevista.year,
+            dataPrevista.month,
+            dataPrevista.day,
+            12,
+          ).toUtc().toIso8601String(),
           'metaId': ?metaId,
           if (destinoMeta != null) 'destinoMeta': destinoMeta,
         },
@@ -79,7 +93,10 @@ class TripRepository {
 
   Future<PulsoViagem> editar(String id, Map<String, dynamic> payload) {
     return _guard(() async {
-      final response = await _api.raw.patch<Map<String, dynamic>>('/viagens/$id', data: payload);
+      final response = await _api.raw.patch<Map<String, dynamic>>(
+        '/viagens/$id',
+        data: payload,
+      );
       return PulsoViagem.fromJson(response.data ?? {});
     });
   }
@@ -115,7 +132,11 @@ class TripRepository {
     });
   }
 
-  Future<PulsoViagem> criarObservacao(String viagemId, {required String titulo, required String conteudo}) {
+  Future<PulsoViagem> criarObservacao(
+    String viagemId, {
+    required String titulo,
+    required String conteudo,
+  }) {
     return _guard(() async {
       final response = await _api.raw.post<Map<String, dynamic>>(
         '/viagens/$viagemId/observacoes',

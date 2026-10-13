@@ -13,7 +13,8 @@ class ApiClient {
     Dio? dio,
     String? baseUrl,
   }) {
-    _dio = dio ??
+    _dio =
+        dio ??
         Dio(
           BaseOptions(
             baseUrl: '${baseUrl ?? AppConfig.apiBaseUrl}/api',
@@ -26,10 +27,7 @@ class ApiClient {
           ),
         );
     _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: _onRequest,
-        onError: _onError,
-      ),
+      InterceptorsWrapper(onRequest: _onRequest, onError: _onError),
     );
   }
 
@@ -61,7 +59,9 @@ class ApiClient {
   ) async {
     final status = error.response?.statusCode;
     final request = error.requestOptions;
-    if (status != 401 || request.extra['retried'] == true || request.extra['skipAuth'] == true) {
+    if (status != 401 ||
+        request.extra['retried'] == true ||
+        request.extra['skipAuth'] == true) {
       return handler.next(error);
     }
 
@@ -95,7 +95,10 @@ class ApiClient {
     try {
       final refresh = await _tokenStorage.readRefresh();
       if (refresh == null || refresh.isEmpty) {
-        throw ApiException('Sessão expirada. Faça login novamente.', statusCode: 401);
+        throw ApiException(
+          'Sessão expirada. Faça login novamente.',
+          statusCode: 401,
+        );
       }
       final response = await _dio.post<Map<String, dynamic>>(
         '/auth/refresh',
@@ -106,9 +109,15 @@ class ApiClient {
       final accessToken = data['accessToken'] as String?;
       final refreshToken = data['refreshToken'] as String?;
       if (accessToken == null || refreshToken == null) {
-        throw ApiException('Sessão expirada. Faça login novamente.', statusCode: 401);
+        throw ApiException(
+          'Sessão expirada. Faça login novamente.',
+          statusCode: 401,
+        );
       }
-      await _tokenStorage.save(accessToken: accessToken, refreshToken: refreshToken);
+      await _tokenStorage.save(
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      );
       if (!lock.isCompleted) lock.complete();
     } catch (error) {
       if (!lock.isCompleted) lock.completeError(error);

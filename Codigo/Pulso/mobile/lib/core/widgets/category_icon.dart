@@ -125,6 +125,76 @@ IconData iconFromLucide(String? name) {
       return Icons.bar_chart;
     case 'Info':
       return Icons.info_outline;
+    case 'Wallet':
+      return Icons.account_balance_wallet_outlined;
+    case 'PieChart':
+      return Icons.pie_chart_outline;
+    case 'CalendarDays':
+      return Icons.calendar_month_outlined;
+    case 'ShoppingCart':
+      return Icons.shopping_cart_outlined;
+    case 'Bell':
+      return Icons.notifications_outlined;
+    case 'AlertTriangle':
+      return Icons.warning_amber_rounded;
+    case 'Droplets':
+      return Icons.water_drop_outlined;
+    case 'Flame':
+      return Icons.local_fire_department_outlined;
+    case 'Globe':
+      return Icons.public;
+    case 'Phone':
+      return Icons.phone_outlined;
+    case 'Tv':
+      return Icons.tv_outlined;
+    case 'Shield':
+      return Icons.shield_outlined;
+    case 'Zap':
+      return Icons.bolt_outlined;
+    case 'Pill':
+      return Icons.medication_outlined;
+    case 'Award':
+      return Icons.emoji_events_outlined;
+    case 'BookOpen':
+      return Icons.menu_book_outlined;
+    case 'Cloud':
+      return Icons.cloud_outlined;
+    case 'Cake':
+      return Icons.cake_outlined;
+    case 'Box':
+      return Icons.inventory_2_outlined;
+    case 'Repeat':
+      return Icons.repeat;
+    case 'Wrench':
+      return Icons.build_outlined;
+    case 'FileCheck':
+      return Icons.task_outlined;
+    case 'Receipt':
+      return Icons.receipt_long_outlined;
+    case 'Percent':
+      return Icons.percent;
+    case 'Stethoscope':
+      return Icons.monitor_heart_outlined;
+    case 'Monitor':
+      return Icons.desktop_windows_outlined;
+    case 'Bot':
+      return Icons.smart_toy_outlined;
+    case 'List':
+      return Icons.list_alt_outlined;
+    case 'Inbox':
+      return Icons.inbox_outlined;
+    case 'Copy':
+      return Icons.copy_outlined;
+    case 'Link2':
+      return Icons.link;
+    case 'ExternalLink':
+      return Icons.open_in_new;
+    case 'CheckCircle2':
+      return Icons.check_circle_outline;
+    case 'ImagePlus':
+      return Icons.add_photo_alternate_outlined;
+    case 'Camera':
+      return Icons.photo_camera_outlined;
     default:
       return Icons.label_outline;
   }

@@ -62,3 +62,27 @@
 **Horas:** 20h
 
 **Total Sprint 3:** 42h
+
+# Sprint 4 (01/10 a 14/10)
+
+### Semana 1 (01/10 - 07/10)
+
+- Desbloqueio do lint da API e do web na pipeline — PR [#347](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/347); reverse sync de status e sprint do Project para os cards.
+- Calendário e lembretes no web (`PULSO-FEAT-034`) — PR [#348](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/348) · issue [#47](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/47).
+- Religamento de lembretes, calendário, orçamento e planejamento de compra (rotas API, jobs, filas RabbitMQ, páginas, CSS e sidebar) — PR [#353](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/353).
+- Flutter: telas de calendário financeiro e lembretes (`PULSO-FEAT-111` / TASK-174) — PR [#356](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/356); ajuste visual de calendário, orçamento e compras para ficar igual à web.
+- Abertura e conferência dos PRs do time na Sprint-4 ([#348](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/348)–[#358](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/358)) e cards FEAT-111–113.
+
+**Horas:** 22h
+
+### Semana 2 (08/10 - 14/10)
+
+- Código de conduta, guia de contribuição e fluxo de branch a partir da sprint — PRs [#359](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/359) e [#360](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/360).
+- Product CI: Flutter na pipeline, audit fix sem breaking change, cobertura mínima de 89% de linhas por app (API, web e mobile), checagem de formatação e smoke test do RabbitMQ — PRs [#362](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/362) e [#363](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/363).
+- Sync de cards automático entre markdown e board (merge por campo, snapshot, duplicatas) — PR [#363](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/363).
+- Reversão dos templates de issue enviados por upload — PR [#361](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/361).
+- Protótipos de calendário, orçamento e planejamento de compra (claro e escuro) publicados em `docs/prototipos/`.
+
+**Horas:** 20h
+
+**Total Sprint 4:** _a fechar em 14/10_

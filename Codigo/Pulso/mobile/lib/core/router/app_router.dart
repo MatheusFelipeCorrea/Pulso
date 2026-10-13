@@ -12,14 +12,22 @@ import 'package:pulso/features/auth/screens/reset_password_screen.dart';
 import 'package:pulso/features/auth/screens/verify_email_screen.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/auth/widgets/auth_page.dart';
+import 'package:pulso/features/budget/screens/budget_edit_screen.dart';
+import 'package:pulso/features/budget/screens/budget_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/widgets/app_shell.dart';
+import 'package:pulso/features/calendar/data/calendar_models.dart';
+import 'package:pulso/features/calendar/screens/calendar_screen.dart';
+import 'package:pulso/features/calendar/screens/reminder_form_screen.dart';
 import 'package:pulso/features/goals/data/goal_models.dart';
 import 'package:pulso/features/goals/screens/goal_form_screen.dart';
 import 'package:pulso/features/goals/screens/goals_screen.dart';
 import 'package:pulso/features/groups/screens/group_form_screen.dart';
 import 'package:pulso/features/groups/screens/groups_screen.dart';
 import 'package:pulso/features/home/screens/home_screen.dart';
+import 'package:pulso/features/purchase/data/purchase_models.dart';
+import 'package:pulso/features/purchase/screens/purchase_item_form_screen.dart';
+import 'package:pulso/features/purchase/screens/purchase_planning_screen.dart';
 import 'package:pulso/features/transactions/data/transaction_models.dart';
 import 'package:pulso/features/transactions/data/transaction_repository.dart';
 import 'package:pulso/features/transactions/screens/categories_screen.dart';
@@ -33,11 +41,14 @@ import 'package:pulso/features/trips/screens/trips_screen.dart';
 
 GoRouter createRouter(AuthController auth) {
   return GoRouter(
-    initialLocation: auth.status == AuthStatus.authenticated ? '/transactions' : '/login',
+    initialLocation: auth.status == AuthStatus.authenticated
+        ? '/transactions'
+        : '/login',
     refreshListenable: auth,
     redirect: (context, state) {
       final loggedIn = auth.status == AuthStatus.authenticated;
-      final loggingIn = state.matchedLocation == '/login' ||
+      final loggingIn =
+          state.matchedLocation == '/login' ||
           state.matchedLocation == '/register' ||
           state.matchedLocation == '/auth/callback' ||
           state.matchedLocation == '/termos' ||
@@ -48,17 +59,24 @@ GoRouter createRouter(AuthController auth) {
           state.matchedLocation.startsWith('/verify-email');
 
       if (!loggedIn && state.matchedLocation == '/home') return '/login';
-      if (loggedIn && (state.matchedLocation == '/login' || state.matchedLocation == '/register')) {
-        return '/transactions';
-      }
-      if (loggedIn && (state.matchedLocation == '/home' || state.matchedLocation == '/dashboard')) {
-        return '/transactions';
-      }
-      if (loggedIn && (state.matchedLocation == '/groups' || state.matchedLocation.startsWith('/groups/'))) {
+      if (loggedIn &&
+          (state.matchedLocation == '/login' ||
+              state.matchedLocation == '/register')) {
         return '/transactions';
       }
       if (loggedIn &&
-          (state.matchedLocation == '/trips' || state.matchedLocation.startsWith('/trips/')) &&
+          (state.matchedLocation == '/home' ||
+              state.matchedLocation == '/dashboard')) {
+        return '/transactions';
+      }
+      if (loggedIn &&
+          (state.matchedLocation == '/groups' ||
+              state.matchedLocation.startsWith('/groups/'))) {
+        return '/transactions';
+      }
+      if (loggedIn &&
+          (state.matchedLocation == '/trips' ||
+              state.matchedLocation.startsWith('/trips/')) &&
           auth.user?.plano != 'PREMIUM') {
         return '/transactions';
       }
@@ -75,9 +93,8 @@ GoRouter createRouter(AuthController auth) {
       ),
       GoRoute(
         path: '/auth/callback',
-        builder: (context, state) => AuthPage(
-          child: AuthCallbackScreen(uri: state.uri),
-        ),
+        builder: (context, state) =>
+            AuthPage(child: AuthCallbackScreen(uri: state.uri)),
       ),
       GoRoute(
         path: '/register',
@@ -114,7 +131,8 @@ GoRouter createRouter(AuthController auth) {
       ),
       GoRoute(
         path: '/forgot-password',
-        builder: (context, state) => const AuthPage(child: ForgotPasswordScreen()),
+        builder: (context, state) =>
+            const AuthPage(child: ForgotPasswordScreen()),
       ),
       GoRoute(
         path: '/forgot-password/email-sent',
@@ -127,12 +145,15 @@ GoRouter createRouter(AuthController auth) {
       ),
       GoRoute(
         path: '/reset-password/success',
-        builder: (context, state) => const AuthPage(child: ResetPasswordSuccessScreen()),
+        builder: (context, state) =>
+            const AuthPage(child: ResetPasswordSuccessScreen()),
       ),
       GoRoute(
         path: '/reset-password/:token',
         builder: (context, state) => AuthPage(
-          child: ResetPasswordScreen(token: state.pathParameters['token'] ?? ''),
+          child: ResetPasswordScreen(
+            token: state.pathParameters['token'] ?? '',
+          ),
         ),
       ),
       GoRoute(
@@ -145,7 +166,17 @@ GoRouter createRouter(AuthController auth) {
         path: '/transactions/:id',
         builder: (context, state) => TransactionFormScreen(
           repository: context.read<TransactionRepository>(),
-          transacao: state.extra is PulsoTransacao ? state.extra as PulsoTransacao : null,
+          transacao: state.extra is PulsoTransacao
+              ? state.extra as PulsoTransacao
+              : null,
+        ),
+      ),
+      GoRoute(
+        path: '/calendar/reminder',
+        builder: (context, state) => ReminderFormScreen(
+          lembrete: state.extra is PulsoLembrete
+              ? state.extra as PulsoLembrete
+              : null,
         ),
       ),
       GoRoute(
@@ -155,20 +186,36 @@ GoRouter createRouter(AuthController auth) {
         ),
       ),
       GoRoute(
+        path: '/budget/edit',
+        builder: (context, state) => const BudgetEditScreen(),
+      ),
+      GoRoute(
         path: '/trips/new',
         builder: (context, state) => const TripFormScreen(),
       ),
       GoRoute(
         path: '/trips/:id/edit',
         builder: (context, state) => TripFormScreen(
-          viagem: state.extra is PulsoViagem ? state.extra as PulsoViagem : null,
+          viagem: state.extra is PulsoViagem
+              ? state.extra as PulsoViagem
+              : null,
         ),
       ),
       GoRoute(
         path: '/trips/:id',
         builder: (context, state) => TripDetailScreen(
           viagemId: state.pathParameters['id'] ?? '',
-          viagem: state.extra is PulsoViagem ? state.extra as PulsoViagem : null,
+          viagem: state.extra is PulsoViagem
+              ? state.extra as PulsoViagem
+              : null,
+        ),
+      ),
+      GoRoute(
+        path: '/purchase-planning/form',
+        builder: (context, state) => PurchaseItemFormScreen(
+          item: state.extra is PurchaseItem
+              ? state.extra as PurchaseItem
+              : null,
         ),
       ),
       GoRoute(
@@ -187,6 +234,10 @@ GoRouter createRouter(AuthController auth) {
             builder: (context, state) => const TransactionsScreen(),
           ),
           GoRoute(
+            path: '/calendar',
+            builder: (context, state) => const CalendarScreen(),
+          ),
+          GoRoute(
             path: '/categories',
             builder: (context, state) => CategoriesScreen(
               repository: context.read<TransactionRepository>(),
@@ -194,9 +245,8 @@ GoRouter createRouter(AuthController auth) {
           ),
           GoRoute(
             path: '/tags',
-            builder: (context, state) => TagsScreen(
-              repository: context.read<TransactionRepository>(),
-            ),
+            builder: (context, state) =>
+                TagsScreen(repository: context.read<TransactionRepository>()),
           ),
           GoRoute(
             path: '/profile',
@@ -218,8 +268,16 @@ GoRouter createRouter(AuthController auth) {
             builder: (context, state) => const GoalsScreen(),
           ),
           GoRoute(
+            path: '/budget',
+            builder: (context, state) => const BudgetScreen(),
+          ),
+          GoRoute(
             path: '/trips',
             builder: (context, state) => const TripsScreen(),
+          ),
+          GoRoute(
+            path: '/purchase-planning',
+            builder: (context, state) => const PurchasePlanningScreen(),
           ),
           GoRoute(
             path: '/groups',
@@ -232,12 +290,22 @@ GoRouter createRouter(AuthController auth) {
 }
 
 bool _isKnownAuthedLocation(String loc) {
-  if (loc == '/dashboard' || loc == '/transactions' || loc == '/categories' || loc == '/tags') return true;
+  if (loc == '/dashboard' ||
+      loc == '/transactions' ||
+      loc == '/categories' ||
+      loc == '/tags')
+    return true;
+  if (loc == '/calendar' || loc == '/calendar/reminder') return true;
   if (loc == '/profile' || loc == '/settings') return true;
   if (loc == '/goals' || loc == '/goals/form') return true;
-  if (loc == '/trips' || loc == '/trips/new' || loc.startsWith('/trips/')) return true;
+  if (loc == '/budget' || loc == '/budget/edit') return true;
+  if (loc == '/trips' || loc == '/trips/new' || loc.startsWith('/trips/'))
+    return true;
+  if (loc == '/purchase-planning' || loc == '/purchase-planning/form')
+    return true;
   if (loc == '/groups' || loc == '/groups/new') return true;
-  if (loc == '/transactions/new' || loc.startsWith('/transactions/')) return true;
+  if (loc == '/transactions/new' || loc.startsWith('/transactions/'))
+    return true;
   if (loc == '/termos' || loc == '/privacidade') return true;
   return false;
 }
@@ -266,7 +334,8 @@ String? locationFromAuthUri(Uri uri) {
     final segments = uri.pathSegments;
     final index = segments.indexWhere((item) => item.toLowerCase() == marker);
     if (index >= 0 && index + 1 < segments.length) return segments[index + 1];
-    if (host == marker && uri.pathSegments.isNotEmpty) return uri.pathSegments.first;
+    if (host == marker && uri.pathSegments.isNotEmpty)
+      return uri.pathSegments.first;
     return null;
   }
 

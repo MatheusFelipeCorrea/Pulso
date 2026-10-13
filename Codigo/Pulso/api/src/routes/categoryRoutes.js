@@ -12,7 +12,12 @@ const router = express.Router();
 
 router.get('/', authMiddleware, categoryController.listarCategorias);
 router.get('/icones', authMiddleware, categoryController.listarIcones);
-router.post('/', authMiddleware, validateMiddleware(criarCategoriaSchema), categoryController.criarCategoria);
+router.post(
+    '/',
+    authMiddleware,
+    validateMiddleware(criarCategoriaSchema),
+    categoryController.criarCategoria
+);
 router.patch(
     '/:id',
     authMiddleware,

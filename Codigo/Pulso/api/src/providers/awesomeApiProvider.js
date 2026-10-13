@@ -154,7 +154,10 @@ const fetchPairsFromFrankfurter = async (requests) => {
                     };
                 }
             } catch (error) {
-                console.warn(`[awesomeApiProvider] Frankfurter falhou para ${code}:`, error.message);
+                console.warn(
+                    `[awesomeApiProvider] Frankfurter falhou para ${code}:`,
+                    error.message
+                );
             }
         })
     );
@@ -330,7 +333,9 @@ const resolvePairsForCodes = async (codes = []) => {
 };
 
 const getRatesForCodes = async (codes = []) => {
-    const normalized = [...new Set(codes.map((code) => String(code ?? '').toUpperCase()).filter(Boolean))];
+    const normalized = [
+        ...new Set(codes.map((code) => String(code ?? '').toUpperCase()).filter(Boolean)),
+    ];
     if (!normalized.length) return {};
 
     const { pairs, requests } = await resolvePairsForCodes(normalized);

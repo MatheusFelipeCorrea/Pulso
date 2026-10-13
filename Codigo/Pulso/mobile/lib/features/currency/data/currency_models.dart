@@ -13,7 +13,8 @@ class CurrencyItem {
 
   factory CurrencyItem.fromJson(Map<String, dynamic> json) {
     return CurrencyItem(
-      code: (json['code'] as String? ?? json['codigo'] as String? ?? '').toUpperCase(),
+      code: (json['code'] as String? ?? json['codigo'] as String? ?? '')
+          .toUpperCase(),
       name: json['name'] as String? ?? json['nome'] as String? ?? '',
       symbol: json['symbol'] as String? ?? json['simbolo'] as String?,
       flag: json['flag'] as String?,
@@ -22,10 +23,7 @@ class CurrencyItem {
 }
 
 class CurrencyQuote {
-  const CurrencyQuote({
-    required this.code,
-    required this.rate,
-  });
+  const CurrencyQuote({required this.code, required this.rate});
 
   final String code;
   final double rate;
@@ -33,17 +31,15 @@ class CurrencyQuote {
   factory CurrencyQuote.fromJson(Map<String, dynamic> json) {
     final rate = json['rate'] ?? json['taxa'] ?? json['valor'];
     return CurrencyQuote(
-      code: (json['code'] as String? ?? json['codigo'] as String? ?? '').toUpperCase(),
+      code: (json['code'] as String? ?? json['codigo'] as String? ?? '')
+          .toUpperCase(),
       rate: rate is num ? rate.toDouble() : double.tryParse('$rate') ?? 0,
     );
   }
 }
 
 class CurrencyConversion {
-  const CurrencyConversion({
-    required this.valorConvertido,
-    required this.taxa,
-  });
+  const CurrencyConversion({required this.valorConvertido, required this.taxa});
 
   final double valorConvertido;
   final double taxa;
@@ -73,14 +69,18 @@ class FavoriteCurrency {
     final moeda = json['moeda'];
     if (moeda is Map<String, dynamic>) {
       return FavoriteCurrency(
-        code: (moeda['code'] as String? ?? json['codigo'] as String? ?? '').toUpperCase(),
+        code: (moeda['code'] as String? ?? json['codigo'] as String? ?? '')
+            .toUpperCase(),
         name: moeda['name'] as String?,
-        rate: _nullableNum(json['rate'] ?? json['taxa'] ?? json['bid'] ?? moeda['bid']),
+        rate: _nullableNum(
+          json['rate'] ?? json['taxa'] ?? json['bid'] ?? moeda['bid'],
+        ),
         pctChange: _nullableNum(json['pctChange'] ?? moeda['pctChange']),
       );
     }
     return FavoriteCurrency(
-      code: (json['codigo'] as String? ?? json['code'] as String? ?? '').toUpperCase(),
+      code: (json['codigo'] as String? ?? json['code'] as String? ?? '')
+          .toUpperCase(),
       name: json['name'] as String? ?? json['nome'] as String?,
       rate: _nullableNum(json['rate'] ?? json['taxa'] ?? json['bid']),
       pctChange: _nullableNum(json['pctChange']),

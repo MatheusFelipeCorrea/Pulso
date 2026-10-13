@@ -17,7 +17,11 @@ class _ScriptedAdapter implements HttpClientAdapter {
   @override
   void close({bool force = false}) {}
   @override
-  Future<ResponseBody> fetch(RequestOptions options, Stream<Uint8List>? requestStream, Future<void>? cancelFuture) {
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) {
     return _handler(options);
   }
 }
@@ -26,7 +30,9 @@ ResponseBody _json(int status, Object body) {
   return ResponseBody.fromString(
     jsonEncode(body),
     status,
-    headers: {Headers.contentTypeHeader: [Headers.jsonContentType]},
+    headers: {
+      Headers.contentTypeHeader: [Headers.jsonContentType],
+    },
   );
 }
 
@@ -34,7 +40,10 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
-    FlutterSecureStorage.setMockInitialValues({'pulso_access': 'access-token', 'pulso_refresh': 'refresh-token'});
+    FlutterSecureStorage.setMockInitialValues({
+      'pulso_access': 'access-token',
+      'pulso_refresh': 'refresh-token',
+    });
   });
 
   test('TripRepository lista /viagens', () async {
@@ -53,7 +62,9 @@ void main() {
         },
       ]);
     });
-    final list = await TripRepository(ApiClient(tokenStorage: TokenStorage(), dio: dio)).listar();
+    final list = await TripRepository(
+      ApiClient(tokenStorage: TokenStorage(), dio: dio),
+    ).listar();
     expect(list, hasLength(1));
     expect(list.first.destino, 'Lisboa');
     expect(list.first.moeda, 'EUR');
@@ -69,14 +80,19 @@ void main() {
         ],
       });
     });
-    final list = await GroupRepository(ApiClient(tokenStorage: TokenStorage(), dio: dio)).listar();
+    final list = await GroupRepository(
+      ApiClient(tokenStorage: TokenStorage(), dio: dio),
+    ).listar();
     expect(list.single.nome, 'Família');
     expect(list.single.quantidadeMembros, 3);
   });
 
   test('pretensões de viagem usam as mesmas categorias e cores da web', () {
     expect(tripExpenseMeta('TRANSPORTE').label, 'Passagens');
-    expect(tripExpenseMeta('EMERGENCIAS').icon, Icons.health_and_safety_outlined);
+    expect(
+      tripExpenseMeta('EMERGENCIAS').icon,
+      Icons.health_and_safety_outlined,
+    );
     expect(tripExpenseCatalog, hasLength(10));
   });
 }

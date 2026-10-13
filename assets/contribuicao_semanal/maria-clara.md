@@ -56,3 +56,20 @@
 **Horas:** 16h
 
 **Total Sprint 3:** 32h
+
+# Sprint 4 (01/10 a 14/10)
+
+### Semana 1 (01/10 - 07/10)
+
+- Página de orçamento mensal no web (`PULSO-FEAT-049`–`051`): `BudgetPage`, cards de resumo, lista por categoria, edição de limites, alertas no dashboard e `budget.css` — PR [#351](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/351) · issues [#62](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/62)–[#64](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/64).
+- Flutter: telas de orçamento mensal (resumo, barras por categoria, editar limites, copiar mês anterior) (`PULSO-FEAT-112` / TASK-176) — PR [#358](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/358).
+
+**Horas:** 16h
+
+### Semana 2 (08/10 - 14/10)
+
+- _A preencher pela integrante._
+
+**Horas:** _a preencher_
+
+**Total Sprint 4:** _a fechar em 14/10_

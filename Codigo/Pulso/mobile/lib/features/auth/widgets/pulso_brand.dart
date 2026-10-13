@@ -11,11 +11,7 @@ class PulsoAssets {
 }
 
 class PulsoBrand extends StatelessWidget {
-  const PulsoBrand({
-    super.key,
-    this.showTagline = false,
-    this.height = 32,
-  });
+  const PulsoBrand({super.key, this.showTagline = false, this.height = 32});
 
   final bool showTagline;
   final double height;
@@ -41,10 +37,8 @@ class PulsoBrand extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             'Seu monitoramento financeiro',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  fontSize: 11,
-                  height: 1.2,
-                ),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(fontSize: 11, height: 1.2),
           ),
         ],
       ],

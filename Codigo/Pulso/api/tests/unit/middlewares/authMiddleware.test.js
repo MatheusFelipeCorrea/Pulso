@@ -12,7 +12,10 @@ describe('authMiddleware', () => {
         await authMiddleware({ headers: {} }, {}, next);
 
         expect(next).toHaveBeenCalledWith(
-            expect.objectContaining({ statusCode: 401, message: 'Token não fornecido ou inválido.' })
+            expect.objectContaining({
+                statusCode: 401,
+                message: 'Token não fornecido ou inválido.',
+            })
         );
     });
 

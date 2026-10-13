@@ -46,10 +46,16 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
   }
 
   Future<void> _confirmDelete(PulsoTransacao tx) async {
-    final choice = await showDeleteTransactionDialog(context: context, transacao: tx);
+    final choice = await showDeleteTransactionDialog(
+      context: context,
+      transacao: tx,
+    );
     if (choice == null || !mounted) return;
     try {
-      await context.read<TransactionsController>().excluir(tx, excluirFuturas: choice.excluirFuturas);
+      await context.read<TransactionsController>().excluir(
+        tx,
+        excluirFuturas: choice.excluirFuturas,
+      );
       if (!mounted) return;
       showPulsoSnack(
         context,
@@ -78,7 +84,12 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
       onRefresh: controller.reload,
       child: ListView(
         controller: _scroll,
-        padding: const EdgeInsets.fromLTRB(PulsoTokens.space4, PulsoTokens.space2, PulsoTokens.space4, 96),
+        padding: const EdgeInsets.fromLTRB(
+          PulsoTokens.space4,
+          PulsoTokens.space2,
+          PulsoTokens.space4,
+          96,
+        ),
         children: [
           PulsoPageHeader(
             title: 'Transações',
@@ -86,7 +97,10 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
             icon: Icons.swap_horiz,
           ),
           PulsoSurface(
-            padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space2, vertical: PulsoTokens.space1),
+            padding: const EdgeInsets.symmetric(
+              horizontal: PulsoTokens.space2,
+              vertical: PulsoTokens.space1,
+            ),
             child: Row(
               children: [
                 IconButton(
@@ -134,25 +148,45 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 if (controller.filters.tipo != 'TODOS')
-                  InputChip(label: Text(_tipoLabel(controller.filters.tipo)), onDeleted: () => controller.applyFilters(controller.filters.copyWith(tipo: 'TODOS'))),
+                  InputChip(
+                    label: Text(_tipoLabel(controller.filters.tipo)),
+                    onDeleted: () => controller.applyFilters(
+                      controller.filters.copyWith(tipo: 'TODOS'),
+                    ),
+                  ),
                 if (controller.filters.recurso != 'TODOS')
-                  InputChip(label: Text(recursoLabel(controller.filters.recurso)), onDeleted: () => controller.applyFilters(controller.filters.copyWith(recurso: 'TODOS'))),
+                  InputChip(
+                    label: Text(recursoLabel(controller.filters.recurso)),
+                    onDeleted: () => controller.applyFilters(
+                      controller.filters.copyWith(recurso: 'TODOS'),
+                    ),
+                  ),
                 if (controller.filters.categoriaId != null)
                   InputChip(
                     label: const Text('Categoria'),
-                    onDeleted: () => controller.applyFilters(controller.filters.copyWith(clearCategoria: true)),
+                    onDeleted: () => controller.applyFilters(
+                      controller.filters.copyWith(clearCategoria: true),
+                    ),
                   ),
                 if (controller.filters.busca.trim().isNotEmpty)
                   InputChip(
                     label: Text('“${controller.filters.busca.trim()}”'),
-                    onDeleted: () => controller.applyFilters(controller.filters.copyWith(busca: '')),
+                    onDeleted: () => controller.applyFilters(
+                      controller.filters.copyWith(busca: ''),
+                    ),
                   ),
-                TextButton(onPressed: controller.clearExtraFilters, child: const Text('Limpar')),
+                TextButton(
+                  onPressed: controller.clearExtraFilters,
+                  child: const Text('Limpar'),
+                ),
               ],
             ),
           ],
           const SizedBox(height: PulsoTokens.space3),
-          TransactionSummaryCards(resumo: controller.resumo, loading: controller.loading && controller.resumo == null),
+          TransactionSummaryCards(
+            resumo: controller.resumo,
+            loading: controller.loading && controller.resumo == null,
+          ),
           const SizedBox(height: PulsoTokens.space4),
           if (controller.loading && controller.transacoes.isEmpty)
             Padding(
@@ -174,7 +208,8 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
           else if (controller.transacoes.isEmpty)
             PulsoEmptyState(
               title: 'Nenhuma transação encontrada',
-              description: 'Comece registrando uma receita ou despesa neste período.',
+              description:
+                  'Comece registrando uma receita ou despesa neste período.',
               icon: Icons.receipt_long_outlined,
               actionLabel: 'Nova transação',
               onAction: () => _openForm(),
@@ -209,12 +244,17 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
     for (final entry in groups.entries) {
       widgets.add(
         Padding(
-          padding: const EdgeInsets.fromLTRB(4, PulsoTokens.space5, 4, PulsoTokens.space2),
+          padding: const EdgeInsets.fromLTRB(
+            4,
+            PulsoTokens.space5,
+            4,
+            PulsoTokens.space2,
+          ),
           child: Text(
             entry.key,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
       );

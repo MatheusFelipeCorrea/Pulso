@@ -77,7 +77,11 @@ class _TripCurrencyPanelState extends State<TripCurrencyPanel> {
     if (valor == null || valor < 0) return;
     setState(() => converting = true);
     try {
-      final result = await widget.repository.converter(valor: valor, de: de, para: para);
+      final result = await widget.repository.converter(
+        valor: valor,
+        de: de,
+        para: para,
+      );
       if (mounted) setState(() => conversion = result);
     } on ApiException catch (err) {
       if (!mounted) return;
@@ -138,9 +142,19 @@ class _TripCurrencyPanelState extends State<TripCurrencyPanel> {
       );
     }
     if (error != null) {
-      return PulsoEmptyState(title: 'Cotações indisponíveis', description: error!, icon: Icons.currency_exchange);
+      return PulsoEmptyState(
+        title: 'Cotações indisponíveis',
+        description: error!,
+        icon: Icons.currency_exchange,
+      );
     }
-    final codes = catalog.map((item) => item.code).where((code) => code.isNotEmpty).toSet().toList()..sort();
+    final codes =
+        catalog
+            .map((item) => item.code)
+            .where((code) => code.isNotEmpty)
+            .toSet()
+            .toList()
+          ..sort();
     if (codes.isEmpty) codes.addAll(['BRL', 'USD', 'EUR']);
 
     return Column(
@@ -162,7 +176,9 @@ class _TripCurrencyPanelState extends State<TripCurrencyPanel> {
                   Expanded(
                     child: TextField(
                       controller: _valor,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                       decoration: const InputDecoration(hintText: '0,00'),
                     ),
                   ),
@@ -182,7 +198,9 @@ class _TripCurrencyPanelState extends State<TripCurrencyPanel> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: PulsoTokens.space2),
+                padding: const EdgeInsets.symmetric(
+                  vertical: PulsoTokens.space2,
+                ),
                 child: Center(
                   child: IconButton.filledTonal(
                     tooltip: 'Inverter moedas',
@@ -191,23 +209,31 @@ class _TripCurrencyPanelState extends State<TripCurrencyPanel> {
                   ),
                 ),
               ),
-              Text('Você recebe', style: Theme.of(context).textTheme.labelSmall),
+              Text(
+                'Você recebe',
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
               const SizedBox(height: PulsoTokens.space1),
               Row(
                 children: [
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: PulsoTokens.space4, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: PulsoTokens.space4,
+                        vertical: 14,
+                      ),
                       decoration: BoxDecoration(
                         color: PulsoColors.button.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(PulsoTokens.radiusMd),
+                        borderRadius: BorderRadius.circular(
+                          PulsoTokens.radiusMd,
+                        ),
                       ),
                       child: Text(
                         converting
                             ? '…'
                             : conversion == null
-                                ? '—'
-                                : '${conversion!.valorConvertido.toStringAsFixed(2)} $para',
+                            ? '—'
+                            : '${conversion!.valorConvertido.toStringAsFixed(2)} $para',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
@@ -231,7 +257,11 @@ class _TripCurrencyPanelState extends State<TripCurrencyPanel> {
                 const SizedBox(height: PulsoTokens.space3),
                 Row(
                   children: [
-                    Icon(Icons.info_outline, size: 14, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    Icon(
+                      Icons.info_outline,
+                      size: 14,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Row(
@@ -274,7 +304,8 @@ class _TripCurrencyPanelState extends State<TripCurrencyPanel> {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: favorites.length,
-              separatorBuilder: (context, index) => const SizedBox(width: PulsoTokens.space3),
+              separatorBuilder: (context, index) =>
+                  const SizedBox(width: PulsoTokens.space3),
               itemBuilder: (context, index) {
                 final item = favorites[index];
                 final up = (item.pctChange ?? 0) >= 0;
@@ -289,13 +320,20 @@ class _TripCurrencyPanelState extends State<TripCurrencyPanel> {
                           children: [
                             CurrencyFlag(code: item.code, size: 26),
                             const SizedBox(width: 8),
-                            Text(item.code, style: Theme.of(context).textTheme.titleSmall),
+                            Text(
+                              item.code,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
                             const Spacer(),
                             IconButton(
                               tooltip: 'Remover favorita',
                               visualDensity: VisualDensity.compact,
                               onPressed: () => _removeFavorite(item.code),
-                              icon: const Icon(Icons.star, color: PulsoColors.warning, size: 18),
+                              icon: const Icon(
+                                Icons.star,
+                                color: PulsoColors.warning,
+                                size: 18,
+                              ),
                             ),
                           ],
                         ),
@@ -312,10 +350,15 @@ class _TripCurrencyPanelState extends State<TripCurrencyPanel> {
                         ),
                         Text(
                           '${up ? '+' : ''}${(item.pctChange ?? 0).toStringAsFixed(2)}%',
-                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
                                 color: up
-                                    ? PulsoColors.successOf(Theme.of(context).brightness)
-                                    : PulsoColors.dangerOf(Theme.of(context).brightness),
+                                    ? PulsoColors.successOf(
+                                        Theme.of(context).brightness,
+                                      )
+                                    : PulsoColors.dangerOf(
+                                        Theme.of(context).brightness,
+                                      ),
                               ),
                         ),
                       ],

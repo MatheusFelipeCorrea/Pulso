@@ -4,11 +4,7 @@ import 'package:pulso/core/theme/pulso_colors.dart';
 import 'package:pulso/features/auth/widgets/auth_card.dart';
 
 class EmailSentScreen extends StatelessWidget {
-  const EmailSentScreen({
-    super.key,
-    required this.email,
-    required this.kind,
-  });
+  const EmailSentScreen({super.key, required this.email, required this.kind});
 
   final String email;
   final EmailSentKind kind;
@@ -54,14 +50,21 @@ class EmailSentScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: PulsoColors.primary.withValues(alpha: 0.07),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: PulsoColors.primary.withValues(alpha: 0.14)),
+              border: Border.all(
+                color: PulsoColors.primary.withValues(alpha: 0.14),
+              ),
             ),
             child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Não recebeu o email?', style: TextStyle(fontWeight: FontWeight.w700)),
+                Text(
+                  'Não recebeu o email?',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
                 SizedBox(height: 4),
-                Text('Verifique sua caixa de entrada, spam ou lixo eletrônico.'),
+                Text(
+                  'Verifique sua caixa de entrada, spam ou lixo eletrônico.',
+                ),
               ],
             ),
           ),

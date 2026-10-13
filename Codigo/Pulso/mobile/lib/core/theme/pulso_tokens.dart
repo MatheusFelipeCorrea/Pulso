@@ -19,11 +19,11 @@ abstract final class PulsoTokens {
   static const radiusXl = 16.0;
   static const radiusFull = 999.0;
 
-  static const fontXs = 12.0;
-  static const fontSm = 14.0;
+  static const fontXs = 13.0;
+  static const fontSm = 15.0;
   static const fontMd = 16.0;
-  static const fontLg = 18.0;
-  static const fontXl = 24.0;
+  static const fontLg = 20.0;
+  static const fontXl = 26.0;
   static const font2xl = 32.0;
 
   static const lineTight = 1.25;
@@ -48,13 +48,37 @@ abstract final class PulsoTokens {
 
   static List<BoxShadow> shadowSm(bool isDark) => isDark
       ? const []
-      : const [BoxShadow(color: Color(0x0D000000), blurRadius: 2, offset: Offset(0, 1))];
+      : const [
+          BoxShadow(
+            color: Color(0x0D000000),
+            blurRadius: 2,
+            offset: Offset(0, 1),
+          ),
+        ];
 
   static List<BoxShadow> shadowMd(bool isDark) => isDark
       ? const []
-      : const [BoxShadow(color: Color(0x1A000000), blurRadius: 6, offset: Offset(0, 4))];
+      : const [
+          BoxShadow(
+            color: Color(0x1A000000),
+            blurRadius: 6,
+            offset: Offset(0, 4),
+          ),
+        ];
 
   static List<BoxShadow> shadowLg(bool isDark) => isDark
-      ? const [BoxShadow(color: Color(0x66000000), blurRadius: 24, offset: Offset(0, 12))]
-      : const [BoxShadow(color: Color(0x337C3AED), blurRadius: 24, offset: Offset(0, 10))];
+      ? const [
+          BoxShadow(
+            color: Color(0x66000000),
+            blurRadius: 24,
+            offset: Offset(0, 12),
+          ),
+        ]
+      : const [
+          BoxShadow(
+            color: Color(0x337C3AED),
+            blurRadius: 24,
+            offset: Offset(0, 10),
+          ),
+        ];
 }

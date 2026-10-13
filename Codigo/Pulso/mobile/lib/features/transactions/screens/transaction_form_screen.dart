@@ -96,7 +96,10 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
     if (texto.length < 3) return;
     _sugestao = Timer(const Duration(milliseconds: 400), () async {
       try {
-        final id = await widget.repository.sugerirCategoria(tipo: tipo, descricao: texto);
+        final id = await widget.repository.sugerirCategoria(
+          tipo: tipo,
+          descricao: texto,
+        );
         if (!mounted || id == null) return;
         setState(() {
           categoriaId = id;
@@ -107,7 +110,9 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
   }
 
   List<PulsoCategoria> get _categoriasFiltradas {
-    return (options?.categorias ?? []).where((cat) => cat.tipo == tipo).toList();
+    return (options?.categorias ?? [])
+        .where((cat) => cat.tipo == tipo)
+        .toList();
   }
 
   PulsoCategoria? get _categoriaSelecionada {
@@ -130,8 +135,11 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
   void _addTag(String raw) {
     final nome = raw.trim();
     if (nome.isEmpty) return;
-    if (tags.any((item) => item.nome.toLowerCase() == nome.toLowerCase())) return;
-    final existente = (options?.tags ?? []).where((tag) => tag.nome.toLowerCase() == nome.toLowerCase());
+    if (tags.any((item) => item.nome.toLowerCase() == nome.toLowerCase()))
+      return;
+    final existente = (options?.tags ?? []).where(
+      (tag) => tag.nome.toLowerCase() == nome.toLowerCase(),
+    );
     setState(() {
       tags.add((nome: nome, id: existente.isEmpty ? null : existente.first.id));
     });
@@ -163,7 +171,8 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
   Future<void> _salvar() async {
     final valor = parseMoney(_valor.text);
     final fieldErrors = <String>[];
-    if (valor == null || valor <= 0) fieldErrors.add('Informe um valor maior que zero.');
+    if (valor == null || valor <= 0)
+      fieldErrors.add('Informe um valor maior que zero.');
     if (recurso == null) fieldErrors.add('Selecione o recurso de origem.');
     if (isTransferencia) {
       final transferencia = validarTransferencia(recurso, recursoDestino);
@@ -190,14 +199,22 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
     });
     try {
       final resolvedTags = await widget.repository.resolverTagIds(
-        ids: [for (final tag in tags) if (tag.id != null) tag.id!],
-        nomesNovos: [for (final tag in tags) if (tag.id == null) tag.nome],
+        ids: [
+          for (final tag in tags)
+            if (tag.id != null) tag.id!,
+        ],
+        nomesNovos: [
+          for (final tag in tags)
+            if (tag.id == null) tag.nome,
+        ],
       );
       final payload = <String, dynamic>{
         'tipo': tipo,
         'recurso': recurso,
         'valor': valor,
-        'descricao': _descricao.text.trim().isEmpty ? null : _descricao.text.trim(),
+        'descricao': _descricao.text.trim().isEmpty
+            ? null
+            : _descricao.text.trim(),
         'data': isoDate(data),
         'tags': resolvedTags,
         if (!isTransferencia) 'categoriaId': categoriaId,
@@ -221,8 +238,8 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
         isEdit
             ? 'Transação atualizada com sucesso!'
             : (recorrente
-                ? 'Transação recorrente criada! Ela será gerada automaticamente.'
-                : 'Transação criada com sucesso!'),
+                  ? 'Transação recorrente criada! Ela será gerada automaticamente.'
+                  : 'Transação criada com sucesso!'),
       );
       context.pop(true);
     } on ApiException catch (err) {
@@ -235,7 +252,10 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
   Future<void> _excluir() async {
     final tx = widget.transacao;
     if (tx == null) return;
-    final choice = await showDeleteTransactionDialog(context: context, transacao: tx);
+    final choice = await showDeleteTransactionDialog(
+      context: context,
+      transacao: tx,
+    );
     if (choice == null) return;
     setState(() => submitting = true);
     try {
@@ -259,25 +279,31 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 2),
         child: selected
-          ? FilledButton(
-          style: FilledButton.styleFrom(
-            minimumSize: const Size(0, PulsoTokens.buttonMd),
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-          ),
-              onPressed: () {},
-              child: FittedBox(fit: BoxFit.scaleDown, child: Text(label, textAlign: TextAlign.center)),
-            )
-          : OutlinedButton(
-              onPressed: () {
-                setState(() {
-                  tipo = value;
-                  categoriaId = null;
-                  recursoDestino = null;
-                  sugerida = false;
-                });
-              },
-              child: FittedBox(fit: BoxFit.scaleDown, child: Text(label, textAlign: TextAlign.center)),
-            ),
+            ? FilledButton(
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size(0, PulsoTokens.buttonMd),
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                ),
+                onPressed: () {},
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(label, textAlign: TextAlign.center),
+                ),
+              )
+            : OutlinedButton(
+                onPressed: () {
+                  setState(() {
+                    tipo = value;
+                    categoriaId = null;
+                    recursoDestino = null;
+                    sugerida = false;
+                  });
+                },
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(label, textAlign: TextAlign.center),
+                ),
+              ),
       ),
     );
   }
@@ -285,11 +311,18 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(isEdit ? 'Editar transação' : 'Nova transação')),
+      appBar: AppBar(
+        title: Text(isEdit ? 'Editar transação' : 'Nova transação'),
+      ),
       body: loading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
-              padding: const EdgeInsets.fromLTRB(PulsoTokens.space5, PulsoTokens.space3, PulsoTokens.space5, PulsoTokens.space8),
+              padding: const EdgeInsets.fromLTRB(
+                PulsoTokens.space5,
+                PulsoTokens.space3,
+                PulsoTokens.space5,
+                PulsoTokens.space8,
+              ),
               children: [
                 Row(
                   children: [
@@ -303,8 +336,13 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                 const SizedBox(height: PulsoTokens.space4),
                 TextField(
                   controller: _valor,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(labelText: 'Valor', prefixText: 'R\$ '),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  decoration: const InputDecoration(
+                    labelText: 'Valor',
+                    prefixText: 'R\$ ',
+                  ),
                 ),
                 const SizedBox(height: PulsoTokens.space3),
                 InkWell(
@@ -324,9 +362,15 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                     initialValue: categoriaId,
                     decoration: const InputDecoration(labelText: 'Categoria'),
                     items: [
-                      const DropdownMenuItem<String?>(value: null, child: Text('Selecione')),
+                      const DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('Selecione'),
+                      ),
                       ..._categoriasFiltradas.map(
-                        (cat) => DropdownMenuItem<String?>(value: cat.id, child: Text(cat.nome)),
+                        (cat) => DropdownMenuItem<String?>(
+                          value: cat.id,
+                          child: Text(cat.nome),
+                        ),
                       ),
                     ],
                     onChanged: (value) => setState(() {
@@ -343,14 +387,25 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                   DropdownButtonFormField<String?>(
                     key: ValueKey('destino-$recursoDestino'),
                     initialValue: recursoDestino,
-                    decoration: const InputDecoration(labelText: 'Recurso de destino'),
+                    decoration: const InputDecoration(
+                      labelText: 'Recurso de destino',
+                    ),
                     items: [
-                      const DropdownMenuItem<String?>(value: null, child: Text('Selecione')),
+                      const DropdownMenuItem<String?>(
+                        value: null,
+                        child: Text('Selecione'),
+                      ),
                       ..._recursos
                           .where((item) => item.value != recurso)
-                          .map((item) => DropdownMenuItem<String?>(value: item.value, child: Text(item.label))),
+                          .map(
+                            (item) => DropdownMenuItem<String?>(
+                              value: item.value,
+                              child: Text(item.label),
+                            ),
+                          ),
                     ],
-                    onChanged: (value) => setState(() => recursoDestino = value),
+                    onChanged: (value) =>
+                        setState(() => recursoDestino = value),
                   ),
                 const SizedBox(height: PulsoTokens.space3),
                 TextField(
@@ -364,12 +419,22 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                 DropdownButtonFormField<String?>(
                   key: ValueKey('origem-$recurso'),
                   initialValue: recurso,
-                  decoration: const InputDecoration(labelText: 'Recurso de origem'),
+                  decoration: const InputDecoration(
+                    labelText: 'Recurso de origem',
+                  ),
                   items: [
-                    const DropdownMenuItem<String?>(value: null, child: Text('Selecione')),
+                    const DropdownMenuItem<String?>(
+                      value: null,
+                      child: Text('Selecione'),
+                    ),
                     ..._recursos
                         .where((item) => item.value != recursoDestino)
-                        .map((item) => DropdownMenuItem<String?>(value: item.value, child: Text(item.label))),
+                        .map(
+                          (item) => DropdownMenuItem<String?>(
+                            value: item.value,
+                            child: Text(item.label),
+                          ),
+                        ),
                   ],
                   onChanged: (value) => setState(() => recurso = value),
                 ),
@@ -389,7 +454,10 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                     runSpacing: PulsoTokens.space2,
                     children: [
                       for (final tag in tags)
-                        InputChip(label: Text(tag.nome), onDeleted: () => _removeTag(tag.nome)),
+                        InputChip(
+                          label: Text(tag.nome),
+                          onDeleted: () => _removeTag(tag.nome),
+                        ),
                     ],
                   ),
                 ],
@@ -403,37 +471,70 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                         contentPadding: EdgeInsets.zero,
                         title: const Text('Ativar recorrência'),
                         value: recorrente,
-                        onChanged: (value) => setState(() => recorrente = value),
+                        onChanged: (value) =>
+                            setState(() => recorrente = value),
                       ),
                       if (recorrente) ...[
                         DropdownButtonFormField<String>(
                           initialValue: frequencia,
-                          decoration: const InputDecoration(labelText: 'Frequência'),
-                          items: (options?.frequencias ?? const [
-                            FilterOption(value: 'MENSAL', label: 'Mensal'),
-                          ])
-                              .map((item) => DropdownMenuItem(value: item.value, child: Text(item.label)))
-                              .toList(),
-                          onChanged: (value) => setState(() => frequencia = value ?? 'MENSAL'),
+                          decoration: const InputDecoration(
+                            labelText: 'Frequência',
+                          ),
+                          items:
+                              (options?.frequencias ??
+                                      const [
+                                        FilterOption(
+                                          value: 'MENSAL',
+                                          label: 'Mensal',
+                                        ),
+                                      ])
+                                  .map(
+                                    (item) => DropdownMenuItem(
+                                      value: item.value,
+                                      child: Text(item.label),
+                                    ),
+                                  )
+                                  .toList(),
+                          onChanged: (value) =>
+                              setState(() => frequencia = value ?? 'MENSAL'),
                         ),
                         const SizedBox(height: PulsoTokens.space3),
                         DropdownButtonFormField<String>(
                           initialValue: ateQuando,
-                          decoration: const InputDecoration(labelText: 'Até quando'),
-                          items: (options?.ateQuando ?? const [
-                            FilterOption(value: 'SEM_FIM', label: 'Sem fim'),
-                          ])
-                              .map((item) => DropdownMenuItem(value: item.value, child: Text(item.label)))
-                              .toList(),
-                          onChanged: (value) => setState(() => ateQuando = value ?? 'SEM_FIM'),
+                          decoration: const InputDecoration(
+                            labelText: 'Até quando',
+                          ),
+                          items:
+                              (options?.ateQuando ??
+                                      const [
+                                        FilterOption(
+                                          value: 'SEM_FIM',
+                                          label: 'Sem fim',
+                                        ),
+                                      ])
+                                  .map(
+                                    (item) => DropdownMenuItem(
+                                      value: item.value,
+                                      child: Text(item.label),
+                                    ),
+                                  )
+                                  .toList(),
+                          onChanged: (value) =>
+                              setState(() => ateQuando = value ?? 'SEM_FIM'),
                         ),
                         if (ateQuando == 'DATA') ...[
                           const SizedBox(height: PulsoTokens.space3),
                           InkWell(
                             onTap: () => _pickDate(fim: true),
                             child: InputDecorator(
-                              decoration: const InputDecoration(labelText: 'Data final'),
-                              child: Text(dataFim == null ? 'Selecione' : formatDayHeader(dataFim!)),
+                              decoration: const InputDecoration(
+                                labelText: 'Data final',
+                              ),
+                              child: Text(
+                                dataFim == null
+                                    ? 'Selecione'
+                                    : formatDayHeader(dataFim!),
+                              ),
                             ),
                           ),
                         ],
@@ -442,13 +543,25 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                   ),
                 if (error != null) ...[
                   const SizedBox(height: PulsoTokens.space3),
-                  Text(error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                  Text(
+                    error!,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
                 ],
                 const SizedBox(height: PulsoTokens.space5),
                 FilledButton(
                   onPressed: submitting ? null : _salvar,
                   child: submitting
-                      ? const SizedBox(height: 22, width: 22, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                      ? const SizedBox(
+                          height: 22,
+                          width: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
                       : const Text('Salvar'),
                 ),
                 if (isEdit) ...[
@@ -456,7 +569,9 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Theme.of(context).colorScheme.error,
-                      side: BorderSide(color: Theme.of(context).colorScheme.error),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
                     ),
                     onPressed: submitting ? null : _excluir,
                     child: const Text('Excluir'),

@@ -25,7 +25,10 @@ class AuthSubmitButton extends StatelessWidget {
           ? const SizedBox(
               width: 22,
               height: 22,
-              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
             )
           : Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -34,9 +37,7 @@ class AuthSubmitButton extends StatelessWidget {
                   Icon(icon, size: 18),
                   const SizedBox(width: 8),
                 ],
-                Flexible(
-                  child: Text(label, textAlign: TextAlign.center),
-                ),
+                Flexible(child: Text(label, textAlign: TextAlign.center)),
               ],
             ),
     );
@@ -88,7 +89,9 @@ class AuthInfoAlert extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 height: 1.5,
-                color: isDark ? PulsoColors.darkSecondary : PulsoColors.lightSecondary,
+                color: isDark
+                    ? PulsoColors.darkSecondary
+                    : PulsoColors.lightSecondary,
               ),
             ),
           ),
@@ -117,8 +120,10 @@ class AuthDivider extends StatelessWidget {
             child: Text(
               label,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: isDark ? PulsoColors.darkSecondary : PulsoColors.lightSecondary,
-                  ),
+                color: isDark
+                    ? PulsoColors.darkSecondary
+                    : PulsoColors.lightSecondary,
+              ),
             ),
           ),
           Expanded(child: Divider(color: line)),
@@ -149,7 +154,9 @@ class GoogleSignInButton extends StatelessWidget {
         onPressed: loading ? null : onPressed,
         style: OutlinedButton.styleFrom(
           backgroundColor: isDark ? PulsoColors.darkCard : Colors.white,
-          side: BorderSide(color: isDark ? PulsoColors.darkBorder : PulsoColors.lightBorder),
+          side: BorderSide(
+            color: isDark ? PulsoColors.darkBorder : PulsoColors.lightBorder,
+          ),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: loading
@@ -161,18 +168,16 @@ class GoogleSignInButton extends StatelessWidget {
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SvgPicture.asset(
-                    PulsoAssets.googleG,
-                    width: 20,
-                    height: 20,
-                  ),
+                  SvgPicture.asset(PulsoAssets.googleG, width: 20, height: 20),
                   const SizedBox(width: 10),
                   Text(
                     label,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: isDark ? PulsoColors.darkText : PulsoColors.lightText,
+                      color: isDark
+                          ? PulsoColors.darkText
+                          : PulsoColors.lightText,
                     ),
                   ),
                 ],

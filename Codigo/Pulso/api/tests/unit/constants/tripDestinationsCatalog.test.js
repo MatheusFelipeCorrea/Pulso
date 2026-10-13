@@ -1,4 +1,10 @@
-const { listTripDestinations, searchTripDestinations, countTripDestinations, getCatalogEntry, buildDestinoMetaFromCatalog } = require('../../../src/constants/tripDestinationsCatalog');
+const {
+    listTripDestinations,
+    searchTripDestinations,
+    countTripDestinations,
+    getCatalogEntry,
+    buildDestinoMetaFromCatalog,
+} = require('../../../src/constants/tripDestinationsCatalog');
 
 describe('tripDestinationsCatalog', () => {
     it('lista centenas de destinos estruturados', () => {

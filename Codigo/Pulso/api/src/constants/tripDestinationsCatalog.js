@@ -52,7 +52,9 @@ function buildBrazilCatalogEntry(raw) {
         moedaSugerida: 'BRL',
         domestic: true,
         fallbackBrl,
-        keywords: [...new Set([raw.label, raw.region, 'Brasil', ...(raw.keywords ?? [])])].filter(Boolean),
+        keywords: [...new Set([raw.label, raw.region, 'Brasil', ...(raw.keywords ?? [])])].filter(
+            Boolean
+        ),
         tier: raw.tier ?? 'city',
     };
 
@@ -76,7 +78,9 @@ function buildInternationalCatalogEntry(raw) {
         moedaSugerida: country.moedaSugerida,
         domestic: false,
         fallbackBrl,
-        keywords: [...new Set([raw.label, country.countryName, ...(raw.keywords ?? [])])].filter(Boolean),
+        keywords: [...new Set([raw.label, country.countryName, ...(raw.keywords ?? [])])].filter(
+            Boolean
+        ),
         tier: raw.tier ?? 'city',
     };
 
@@ -147,8 +151,10 @@ function searchTripDestinations(query, { limit = 20 } = {}) {
 
     const tokens = normalized.split(/\s+/).filter(Boolean);
 
-    return TRIP_DESTINATIONS_CATALOG
-        .map((entry) => ({ entry, score: scoreDestination(entry, tokens) }))
+    return TRIP_DESTINATIONS_CATALOG.map((entry) => ({
+        entry,
+        score: scoreDestination(entry, tokens),
+    }))
         .filter(({ score }) => score > 0)
         .sort((a, b) => b.score - a.score || a.entry.label.localeCompare(b.entry.label, 'pt-BR'))
         .slice(0, limit)
@@ -180,7 +186,9 @@ function buildDestinoMetaFromCatalog(catalogId) {
 
 function buildAirportEntryFromCatalog(entry) {
     return {
-        keywords: [...new Set([entry.label, ...(entry.keywords ?? [])])].map((value) => normalizeText(value)),
+        keywords: [...new Set([entry.label, ...(entry.keywords ?? [])])].map((value) =>
+            normalizeText(value)
+        ),
         iata: entry.iata,
         label: entry.label,
         fallbackBrl: entry.fallbackBrl,
@@ -196,7 +204,10 @@ function buildDestinationAirports() {
 function getAirportEntryForMeta(destinoMeta) {
     if (!destinoMeta) return null;
 
-    if (destinoMeta.geonameId || (destinoMeta.iata && destinoMeta.label && !getCatalogEntry(destinoMeta.catalogId))) {
+    if (
+        destinoMeta.geonameId ||
+        (destinoMeta.iata && destinoMeta.label && !getCatalogEntry(destinoMeta.catalogId))
+    ) {
         const domestic = Boolean(destinoMeta.domestic);
         return {
             keywords: [normalizeText(destinoMeta.label)],

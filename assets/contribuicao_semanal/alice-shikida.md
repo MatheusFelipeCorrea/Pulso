@@ -58,3 +58,20 @@
 **Horas:** 16h
 
 **Total Sprint 3:** 30h
+
+# Sprint 4 (01/10 a 14/10)
+
+### Semana 1 (01/10 - 07/10)
+
+- API de lembretes, calendário e Google Agenda (`PULSO-FEAT-030`–`033` e `035`): CRUD de lembretes, visão mês/dia, OAuth e sincronização com o Google Agenda, jobs de alerta e recorrência — PR [#349](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/349) · issues [#43](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/43)–[#46](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/46), [#48](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/issues/48).
+- Flutter: camada de dados de calendário e lembretes (`PULSO-FEAT-111` / TASK-173) — PR [#354](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/354).
+
+**Horas:** 18h
+
+### Semana 2 (08/10 - 14/10)
+
+- _A preencher pela integrante._
+
+**Horas:** _a preencher_
+
+**Total Sprint 4:** _a fechar em 14/10_

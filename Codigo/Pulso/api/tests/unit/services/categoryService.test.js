@@ -219,7 +219,8 @@ describe('categoryService', () => {
 
         await expect(categoryService.removerCategoria('usr-1', 'cat-1')).rejects.toMatchObject({
             statusCode: 400,
-            message: 'Esta categoria está em uso em transações ou orçamentos e não pode ser excluída',
+            message:
+                'Esta categoria está em uso em transações ou orçamentos e não pode ser excluída',
         });
 
         expect(categoryRepository.deletar).not.toHaveBeenCalled();

@@ -11,28 +11,29 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 /* ============================================================
    HTML E BODY
    ============================================================ */
 html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 body {
-  font-family: 'Inter', var(--ds-font-sans);
-  font-size: var(--ds-font-size-md);
-  line-height: var(--ds-line-height-normal);
-  color: var(--ds-color-text);
-  background-color: var(--ds-color-background);
-  transition: background-color var(--ds-transition-normal),
-              color var(--ds-transition-normal);
+    font-family: 'Inter', var(--ds-font-sans);
+    font-size: var(--ds-font-size-md);
+    line-height: var(--ds-line-height-normal);
+    color: var(--ds-color-text);
+    background-color: var(--ds-color-background);
+    transition:
+        background-color var(--ds-transition-normal),
+        color var(--ds-transition-normal);
 }
 
 /* ============================================================
@@ -40,71 +41,71 @@ body {
    ============================================================ */
 /* Firefox */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: var(--ds-color-border) transparent;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ds-color-border) transparent;
 }
 
 /* Chrome, Edge, Safari */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+    width: 8px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--ds-color-border);
-  border-radius: var(--ds-radius-full);
-  border: 2px solid transparent;
-  background-clip: padding-box;
+    background-color: var(--ds-color-border);
+    border-radius: var(--ds-radius-full);
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--ds-color-text-secondary);
+    background-color: var(--ds-color-text-secondary);
 }
 
 /* ============================================================
    FOCUS OUTLINE
    ============================================================ */
 *:focus {
-  outline: none;
+    outline: none;
 }
 
 *:focus-visible {
-  outline: 2px solid var(--ds-color-primary);
-  outline-offset: 2px;
-  border-radius: var(--ds-radius-sm);
+    outline: 2px solid var(--ds-color-primary);
+    outline-offset: 2px;
+    border-radius: var(--ds-radius-sm);
 }
 
 /* ============================================================
    SELEÇÃO DE TEXTO
    ============================================================ */
 ::selection {
-  background-color: var(--ds-color-primary);
-  color: white;
-  text-shadow: none;
+    background-color: var(--ds-color-primary);
+    color: white;
+    text-shadow: none;
 }
 
 ::-moz-selection {
-  background-color: var(--ds-color-primary);
-  color: white;
-  text-shadow: none;
+    background-color: var(--ds-color-primary);
+    color: white;
+    text-shadow: none;
 }
 
 /* ============================================================
    LINKS
    ============================================================ */
 a {
-  color: var(--ds-color-primary);
-  text-decoration: none;
-  transition: color var(--ds-transition-fast);
+    color: var(--ds-color-primary);
+    text-decoration: none;
+    transition: color var(--ds-transition-fast);
 }
 
 a:hover {
-  color: var(--ds-color-primary-dark);
-  text-decoration: underline;
+    color: var(--ds-color-primary-dark);
+    text-decoration: underline;
 }
 
 /* ============================================================
@@ -114,42 +115,42 @@ button,
 input,
 textarea,
 select {
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
 }
 
 button {
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
 }
 
 button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 input,
 textarea,
 select {
-  background-color: transparent;
-  border: none;
-  outline: none;
+    background-color: transparent;
+    border: none;
+    outline: none;
 }
 
 /* Remove spinners de inputs numéricos */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
-input[type="number"] {
-  -moz-appearance: textfield;
-  appearance: textfield;
+input[type='number'] {
+    -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 /* ============================================================
@@ -160,9 +161,9 @@ picture,
 video,
 canvas,
 svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
+    display: block;
+    max-width: 100%;
+    height: auto;
 }
 
 /* ============================================================
@@ -170,51 +171,68 @@ svg {
    ============================================================ */
 ul,
 ol {
-  list-style: none;
+    list-style: none;
 }
 
 /* ============================================================
    TABELAS
    ============================================================ */
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
 }
 
 /* ============================================================
    HEADINGS
    ============================================================ */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: var(--ds-font-weight-semibold);
-  line-height: var(--ds-line-height-tight);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: var(--ds-font-weight-semibold);
+    line-height: var(--ds-line-height-tight);
 }
 
-h1 { font-size: var(--ds-font-size-2xl); }
-h2 { font-size: var(--ds-font-size-xl); }
-h3 { font-size: var(--ds-font-size-lg); }
-h4 { font-size: var(--ds-font-size-md); }
-h5 { font-size: var(--ds-font-size-sm); }
-h6 { font-size: var(--ds-font-size-xs); }
+h1 {
+    font-size: var(--ds-font-size-2xl);
+}
+h2 {
+    font-size: var(--ds-font-size-xl);
+}
+h3 {
+    font-size: var(--ds-font-size-lg);
+}
+h4 {
+    font-size: var(--ds-font-size-md);
+}
+h5 {
+    font-size: var(--ds-font-size-sm);
+}
+h6 {
+    font-size: var(--ds-font-size-xs);
+}
 
 /* ============================================================
    PARÁGRAFOS E TEXTO
    ============================================================ */
 p {
-  margin-bottom: var(--ds-space-4);
+    margin-bottom: var(--ds-space-4);
 }
 
 p:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 small {
-  font-size: var(--ds-font-size-sm);
+    font-size: var(--ds-font-size-sm);
 }
 
 strong,
 b {
-  font-weight: var(--ds-font-weight-bold);
+    font-weight: var(--ds-font-weight-bold);
 }
 
 /* ============================================================
@@ -222,66 +240,66 @@ b {
    ============================================================ */
 code,
 pre {
-  font-family: var(--ds-font-mono);
-  font-size: 0.9em;
+    font-family: var(--ds-font-mono);
+    font-size: 0.9em;
 }
 
 code {
-  padding: 2px 6px;
-  background-color: var(--ds-color-surface);
-  border-radius: var(--ds-radius-sm);
-  color: var(--ds-color-text);
+    padding: 2px 6px;
+    background-color: var(--ds-color-surface);
+    border-radius: var(--ds-radius-sm);
+    color: var(--ds-color-text);
 }
 
 pre {
-  padding: var(--ds-space-4);
-  background-color: var(--ds-color-surface);
-  border-radius: var(--ds-radius-md);
-  overflow-x: auto;
+    padding: var(--ds-space-4);
+    background-color: var(--ds-color-surface);
+    border-radius: var(--ds-radius-md);
+    overflow-x: auto;
 }
 
 pre code {
-  padding: 0;
-  background-color: transparent;
+    padding: 0;
+    background-color: transparent;
 }
 
 /* ============================================================
    HR (DIVISOR)
    ============================================================ */
 hr {
-  border: none;
-  border-top: 1px solid var(--ds-color-border);
-  margin: var(--ds-space-6) 0;
+    border: none;
+    border-top: 1px solid var(--ds-color-border);
+    margin: var(--ds-space-6) 0;
 }
 
 /* ============================================================
    FIELDSET E LEGEND
    ============================================================ */
 fieldset {
-  border: 1px solid var(--ds-color-border);
-  border-radius: var(--ds-radius-md);
-  padding: var(--ds-space-4);
-  margin-bottom: var(--ds-space-4);
+    border: 1px solid var(--ds-color-border);
+    border-radius: var(--ds-radius-md);
+    padding: var(--ds-space-4);
+    margin-bottom: var(--ds-space-4);
 }
 
 legend {
-  font-weight: var(--ds-font-weight-semibold);
-  padding: 0 var(--ds-space-2);
+    font-weight: var(--ds-font-weight-semibold);
+    padding: 0 var(--ds-space-2);
 }
 
 /* ============================================================
    ACESSIBILIDADE - SR-ONLY
    ============================================================ */
 .sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }
 
 /* ============================================================
@@ -301,151 +319,151 @@ button.btn-success,
 .btn-ghost,
 .btn-danger,
 .btn-success {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  box-sizing: border-box;
-  width: auto;
-  max-width: none;
-  flex-shrink: 0;
-  white-space: nowrap;
-  overflow: visible;
-  font-weight: 500;
-  border-radius: var(--ds-radius-md);
-  line-height: 1.25;
-  cursor: pointer;
-  transition:
-    background-color var(--ds-transition-fast),
-    color var(--ds-transition-fast),
-    border-color var(--ds-transition-fast);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-sizing: border-box;
+    width: auto;
+    max-width: none;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: visible;
+    font-weight: 500;
+    border-radius: var(--ds-radius-md);
+    line-height: 1.25;
+    cursor: pointer;
+    transition:
+        background-color var(--ds-transition-fast),
+        color var(--ds-transition-fast),
+        border-color var(--ds-transition-fast);
 }
 
 .btn-sm {
-  min-height: 2rem;
-  padding: 0 1rem;
-  font-size: 0.875rem;
+    min-height: 2rem;
+    padding: 0 1rem;
+    font-size: 0.875rem;
 }
 
 .btn-md {
-  min-height: 2.5rem;
-  padding: 0 1.25rem;
-  font-size: 1rem;
+    min-height: 2.5rem;
+    padding: 0 1.25rem;
+    font-size: 1rem;
 }
 
 .btn-lg {
-  min-height: 3rem;
-  padding: 0 1.5rem;
-  font-size: 1.125rem;
+    min-height: 3rem;
+    padding: 0 1.5rem;
+    font-size: 1.125rem;
 }
 
 .btn-full {
-  width: 100%;
+    width: 100%;
 }
 
 /* PRIMARY */
 .btn-primary {
-  background-color: var(--ds-color-button-primary);
-  color: white;
+    background-color: var(--ds-color-button-primary);
+    color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: var(--ds-color-button-primary-hover);
-  color: white;
+    background-color: var(--ds-color-button-primary-hover);
+    color: white;
 }
 
 .btn-primary:active:not(:disabled) {
-  background-color: var(--ds-color-button-primary-active);
+    background-color: var(--ds-color-button-primary-active);
 }
 
 .btn-primary:focus-visible {
-  outline: 2px solid var(--ds-color-button-primary);
-  outline-offset: 2px;
+    outline: 2px solid var(--ds-color-button-primary);
+    outline-offset: 2px;
 }
 
 /* SECONDARY / OUTLINE */
 .btn-secondary,
 .btn-outline {
-  background-color: transparent;
-  color: var(--ds-color-button-primary);
-  border: 1px solid var(--ds-color-button-primary-border);
+    background-color: transparent;
+    color: var(--ds-color-button-primary);
+    border: 1px solid var(--ds-color-button-primary-border);
 }
 
 .btn-secondary:hover:not(:disabled),
 .btn-outline:hover:not(:disabled) {
-  background-color: var(--ds-color-button-primary-hover);
-  border-color: var(--ds-color-button-primary-hover);
-  color: white;
+    background-color: var(--ds-color-button-primary-hover);
+    border-color: var(--ds-color-button-primary-hover);
+    color: white;
 }
 
 .btn-secondary:active:not(:disabled),
 .btn-outline:active:not(:disabled) {
-  background-color: var(--ds-color-button-primary);
-  border-color: var(--ds-color-button-primary);
-  color: white;
+    background-color: var(--ds-color-button-primary);
+    border-color: var(--ds-color-button-primary);
+    color: white;
 }
 
 .btn-secondary:focus-visible,
 .btn-outline:focus-visible {
-  outline: 2px solid var(--ds-color-button-primary);
-  outline-offset: 2px;
+    outline: 2px solid var(--ds-color-button-primary);
+    outline-offset: 2px;
 }
 
 /* GHOST */
 .btn-ghost {
-  background-color: transparent;
-  color: var(--ds-color-button-primary);
+    background-color: transparent;
+    color: var(--ds-color-button-primary);
 }
 
 .btn-ghost:hover:not(:disabled) {
-  background-color: var(--ds-color-hover);
+    background-color: var(--ds-color-hover);
 }
 
 .btn-ghost:active:not(:disabled) {
-  background-color: var(--ds-color-input-disabled);
+    background-color: var(--ds-color-input-disabled);
 }
 
 .btn-ghost:focus-visible {
-  outline: 2px solid var(--ds-color-primary);
-  outline-offset: 2px;
+    outline: 2px solid var(--ds-color-primary);
+    outline-offset: 2px;
 }
 
 /* DANGER */
 .btn-danger {
-  background-color: var(--ds-color-danger);
-  color: white;
+    background-color: var(--ds-color-danger);
+    color: white;
 }
 
 .btn-danger:hover:not(:disabled) {
-  background-color: #DC2626;
+    background-color: #dc2626;
 }
 
 .btn-danger:active:not(:disabled) {
-  background-color: #B91C1C;
+    background-color: #b91c1c;
 }
 
 .btn-danger:focus-visible {
-  outline: 2px solid var(--ds-color-danger);
-  outline-offset: 2px;
+    outline: 2px solid var(--ds-color-danger);
+    outline-offset: 2px;
 }
 
 /* SUCCESS */
 .btn-success {
-  background-color: var(--ds-color-success);
-  color: white;
+    background-color: var(--ds-color-success);
+    color: white;
 }
 
 .btn-success:hover:not(:disabled) {
-  background-color: #059669;
+    background-color: #059669;
 }
 
 .btn-success:active:not(:disabled) {
-  background-color: #047857;
+    background-color: #047857;
 }
 
 .btn-success:focus-visible {
-  outline: 2px solid var(--ds-color-success);
-  outline-offset: 2px;
+    outline: 2px solid var(--ds-color-success);
+    outline-offset: 2px;
 }
 
 /* ICON BUTTON VARIANTS */
@@ -461,78 +479,80 @@ button.iconbtn-success,
 .iconbtn-ghost,
 .iconbtn-danger,
 .iconbtn-success {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  flex-shrink: 0;
-  padding: 0;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: background-color var(--ds-transition-fast), color var(--ds-transition-fast);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    padding: 0;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition:
+        background-color var(--ds-transition-fast),
+        color var(--ds-transition-fast);
 }
 
 .iconbtn-sm {
-  width: 2rem;
-  height: 2rem;
+    width: 2rem;
+    height: 2rem;
 }
 
 .iconbtn-md {
-  width: 2.5rem;
-  height: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
 }
 
 .iconbtn-lg {
-  width: 3rem;
-  height: 3rem;
+    width: 3rem;
+    height: 3rem;
 }
 
 .iconbtn-primary {
-  background-color: var(--ds-color-button-primary);
-  color: white;
+    background-color: var(--ds-color-button-primary);
+    color: white;
 }
 
 .iconbtn-primary:hover:not(:disabled) {
-  background-color: var(--ds-color-button-primary-hover);
+    background-color: var(--ds-color-button-primary-hover);
 }
 
 .iconbtn-secondary,
 .iconbtn-outline {
-  background-color: transparent;
-  color: var(--ds-color-button-primary);
-  border: 1px solid var(--ds-color-button-primary-border);
+    background-color: transparent;
+    color: var(--ds-color-button-primary);
+    border: 1px solid var(--ds-color-button-primary-border);
 }
 
 .iconbtn-secondary:hover:not(:disabled),
 .iconbtn-outline:hover:not(:disabled) {
-  background-color: var(--ds-color-button-primary-hover);
-  border-color: var(--ds-color-button-primary-hover);
-  color: white;
+    background-color: var(--ds-color-button-primary-hover);
+    border-color: var(--ds-color-button-primary-hover);
+    color: white;
 }
 
 .iconbtn-ghost {
-  background-color: transparent;
-  color: var(--ds-color-button-primary);
+    background-color: transparent;
+    color: var(--ds-color-button-primary);
 }
 
 .iconbtn-ghost:hover:not(:disabled) {
-  background-color: var(--ds-color-hover);
+    background-color: var(--ds-color-hover);
 }
 
 .iconbtn-danger {
-  background-color: var(--ds-color-danger);
-  color: white;
+    background-color: var(--ds-color-danger);
+    color: white;
 }
 
 .iconbtn-danger:hover:not(:disabled) {
-  background-color: #DC2626;
+    background-color: #dc2626;
 }
 
 .iconbtn-success {
-  background-color: var(--ds-color-success);
-  color: white;
+    background-color: var(--ds-color-success);
+    color: white;
 }
 
 .iconbtn-success:hover:not(:disabled) {
-  background-color: #059669;
+    background-color: #059669;
 }
