@@ -2,7 +2,7 @@
   "default": {
     "projectOwner": "ICEI-PUC-Minas-PMGES-TI",
     "projectNumber": 726,
-    "autoCreateProject": true,
+    "autoCreateProject": false,
     "autoDiscoverProject": true,
     "locale": "pt-BR",
     "backend": "github",
