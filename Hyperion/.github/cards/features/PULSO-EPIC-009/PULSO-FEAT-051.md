@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-051
 title: "QA — testes de orçamento mensal"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Medium
 sprint: null

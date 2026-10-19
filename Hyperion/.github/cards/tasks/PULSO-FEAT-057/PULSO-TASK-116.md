@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-116
 title: "QA — testes de planejamento de compra"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
 sprint: null

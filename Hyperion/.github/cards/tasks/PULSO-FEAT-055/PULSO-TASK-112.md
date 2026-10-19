@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-112
 title: "Backend — imagem do item (resolve e upload)"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
 sprint: null

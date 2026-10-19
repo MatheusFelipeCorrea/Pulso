@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-094
 title: "Backend — budgetRepository e gastos do mês"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

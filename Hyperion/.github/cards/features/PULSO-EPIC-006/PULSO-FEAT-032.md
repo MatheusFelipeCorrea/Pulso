@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-032
 title: "Calendário financeiro — visão mês e dia"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
 sprint: null

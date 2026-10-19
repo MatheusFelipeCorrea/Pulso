@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-050
 title: "Frontend — edição de limites e estilos"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
 sprint: null

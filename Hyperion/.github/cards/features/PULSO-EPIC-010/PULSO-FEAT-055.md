@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-055
 title: "Imagens do item de compra"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Medium
 sprint: null

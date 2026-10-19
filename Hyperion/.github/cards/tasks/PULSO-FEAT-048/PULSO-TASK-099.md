@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-099
 title: "Backend — alertas de orçamento e dedup"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: null

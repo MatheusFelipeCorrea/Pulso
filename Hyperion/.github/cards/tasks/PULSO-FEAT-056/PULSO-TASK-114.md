@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-114
 title: "Frontend — cards, sidebar e alertas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

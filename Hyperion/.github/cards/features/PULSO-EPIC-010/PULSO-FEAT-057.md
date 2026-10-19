@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-057
 title: "QA — testes de planejamento de compra"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Medium
 sprint: null

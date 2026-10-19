@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-107
 title: "Backend — purchasePlanningUtils"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

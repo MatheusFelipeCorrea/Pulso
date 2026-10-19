@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-EPIC-010
 title: "Planejamento de Compra"
-status: Backlog
+status: "In Revision"
 type: Epic
 priority: Highest
 sprint: "Sprint 4"

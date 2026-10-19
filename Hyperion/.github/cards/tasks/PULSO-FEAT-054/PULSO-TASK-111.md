@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-111
 title: "Backend — marcar comprado e transação"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

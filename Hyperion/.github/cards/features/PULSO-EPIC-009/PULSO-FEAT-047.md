@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-047
 title: "Rollover e status por categoria"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-031
 title: "Google Calendar — OAuth e sincronização"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null

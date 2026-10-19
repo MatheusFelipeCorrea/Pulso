@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-048
 title: "Alertas 80%/100% e jobs"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
 sprint: null

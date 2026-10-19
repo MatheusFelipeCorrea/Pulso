@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-EPIC-009
 title: "Orçamento Mensal"
-status: Backlog
+status: "In Revision"
 type: Epic
 priority: Highest
 sprint: "Sprint 4"

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-049
 title: "Frontend — BudgetPage e resumo"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null

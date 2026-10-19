@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-100
 title: "Backend — budgetAlertJob, cron e userSync"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
 sprint: null

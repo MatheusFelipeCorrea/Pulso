@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-105
 title: "Banco de dados — ItemPlanejamentoCompra"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

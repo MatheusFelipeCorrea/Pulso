@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-093
 title: "Banco de dados — model Orcamento"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

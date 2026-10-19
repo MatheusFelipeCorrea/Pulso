@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-115
 title: "Frontend — modais, imagem e CSS"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: null

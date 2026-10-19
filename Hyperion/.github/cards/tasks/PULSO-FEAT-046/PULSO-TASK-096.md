@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-096
 title: "Backend — budgetService core e rotas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

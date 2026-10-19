@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-103
 title: "Frontend — BudgetEditModal, CSS e utils"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: null
