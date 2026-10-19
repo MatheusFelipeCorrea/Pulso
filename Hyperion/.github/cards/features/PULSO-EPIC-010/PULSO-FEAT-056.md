@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-056
 title: "Frontend — página e componentes"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null

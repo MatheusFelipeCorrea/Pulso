@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-063
 title: "Backend — reminderService CRUD e marcar pago"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

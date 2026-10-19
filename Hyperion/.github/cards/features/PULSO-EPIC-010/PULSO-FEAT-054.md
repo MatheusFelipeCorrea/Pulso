@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-054
 title: "Vincular meta e marcar comprado"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null

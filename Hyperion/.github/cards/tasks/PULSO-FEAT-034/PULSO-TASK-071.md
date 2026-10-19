@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-071
 title: "Frontend — calendar.css e reminderUtils"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
 sprint: null

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-046
 title: "Backend — API de orçamentos"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null

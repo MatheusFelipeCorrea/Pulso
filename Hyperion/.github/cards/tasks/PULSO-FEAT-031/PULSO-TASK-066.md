@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-066
 title: "Backend — googleCalendarSyncService"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: null

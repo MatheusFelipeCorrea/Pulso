@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-061
 title: "Banco de dados — Lembrete e config Google"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

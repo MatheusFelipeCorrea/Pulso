@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-030
 title: "Backend — API de lembretes"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null

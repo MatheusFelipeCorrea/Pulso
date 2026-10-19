@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-110
 title: "Backend — vincular e desvincular meta"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: null

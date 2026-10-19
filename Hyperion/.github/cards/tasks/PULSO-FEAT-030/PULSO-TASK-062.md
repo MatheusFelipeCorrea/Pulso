@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-062
 title: "Backend — reminderRepository, mapper e categorias"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

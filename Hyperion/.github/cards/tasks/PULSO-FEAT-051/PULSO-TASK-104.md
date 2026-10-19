@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-104
 title: "QA — testes unitários de orçamento"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
 sprint: null

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-067
 title: "Backend — calendarService e rotas calendário"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
 sprint: null

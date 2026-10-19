@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-065
 title: "Backend — googleCalendarService OAuth"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

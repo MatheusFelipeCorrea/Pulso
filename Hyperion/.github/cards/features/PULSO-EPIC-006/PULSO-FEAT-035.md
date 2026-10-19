@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-035
 title: "QA — testes de lembretes"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Medium
 sprint: null

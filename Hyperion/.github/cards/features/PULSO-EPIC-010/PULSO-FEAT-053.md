@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-053
 title: "Cálculos — sobra, tempo e parcelas"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null

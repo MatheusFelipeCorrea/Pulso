@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-101
 title: "Frontend — BudgetPage e client HTTP"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

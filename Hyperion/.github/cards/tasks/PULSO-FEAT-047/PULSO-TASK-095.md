@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-095
 title: "Backend — budgetMapper e status de categoria"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: null

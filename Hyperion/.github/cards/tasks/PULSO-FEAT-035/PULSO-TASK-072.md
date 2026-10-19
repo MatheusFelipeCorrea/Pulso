@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-072
 title: "QA — testes unitários de lembretes"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
 sprint: null
