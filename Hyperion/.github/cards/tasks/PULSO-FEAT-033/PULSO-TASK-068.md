@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-068
 title: "Backend — jobs alerta e recorrência"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: null

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-070
 title: "Frontend — ReminderFormModal e Google Agenda"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

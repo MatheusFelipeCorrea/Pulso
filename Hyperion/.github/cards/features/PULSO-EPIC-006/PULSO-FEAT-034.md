@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-034
 title: "Frontend — calendário e lembretes"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null

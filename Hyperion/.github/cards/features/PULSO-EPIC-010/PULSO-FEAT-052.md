@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-052
 title: "Backend — API e painel de planejamento"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
 sprint: null

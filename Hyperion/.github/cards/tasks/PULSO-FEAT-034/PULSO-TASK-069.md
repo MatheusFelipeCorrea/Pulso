@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-069
 title: "Frontend — CalendarPage e grade mensal"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

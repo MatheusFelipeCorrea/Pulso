@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-106
 title: "Backend — repository e mapper"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

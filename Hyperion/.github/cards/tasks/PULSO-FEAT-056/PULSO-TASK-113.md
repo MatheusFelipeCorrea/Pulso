@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-113
 title: "Frontend — PurchasePlanningPage e client"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

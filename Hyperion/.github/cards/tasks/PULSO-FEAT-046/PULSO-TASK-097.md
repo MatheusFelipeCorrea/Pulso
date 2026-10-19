@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-097
 title: "Backend — copiar orçamento entre meses"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
 sprint: null

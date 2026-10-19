@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-064
 title: "Backend — reminderRoutes, controller e schemas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-FEAT-033
 title: "Jobs — alertas e recorrência"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
 sprint: null

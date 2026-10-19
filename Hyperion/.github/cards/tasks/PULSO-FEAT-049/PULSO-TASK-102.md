@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-102
 title: "Frontend — cards de resumo e listas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

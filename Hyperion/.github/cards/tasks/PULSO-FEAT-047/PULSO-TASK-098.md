@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-098
 title: "Backend — budgetRolloverUtils (RN-170)"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null

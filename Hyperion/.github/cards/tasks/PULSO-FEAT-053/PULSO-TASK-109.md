@@ -1,7 +1,7 @@
 ---
 card_id: PULSO-TASK-109
 title: "Backend — sobra mensal e contexto financeiro"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
 sprint: null
