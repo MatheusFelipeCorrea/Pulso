@@ -179,7 +179,9 @@ describe('expenseSplitService', () => {
         });
 
         it('aceita divisão personalizada quando a soma bate com o total', async () => {
-            expenseSplitRepository.criar.mockResolvedValueOnce(divisaoBase({ tipo: 'PERSONALIZADA' }));
+            expenseSplitRepository.criar.mockResolvedValueOnce(
+                divisaoBase({ tipo: 'PERSONALIZADA' })
+            );
 
             await expenseSplitService.criarDivisao('u1', {
                 titulo: 'Teste',
@@ -210,7 +212,10 @@ describe('expenseSplitService', () => {
                     organizador({ pagouAConta: true, status: 'PAGO' }),
                 ],
             });
-            const divisaoQuitadaPeloRepo = divisaoBase({ status: 'QUITADA', quitadaEm: new Date() });
+            const divisaoQuitadaPeloRepo = divisaoBase({
+                status: 'QUITADA',
+                quitadaEm: new Date(),
+            });
 
             expenseSplitRepository.buscarPorId
                 .mockResolvedValueOnce(divisaoPendente)
@@ -242,15 +247,15 @@ describe('expenseSplitService', () => {
             expenseSplitRepository.listarLembretesAtivosDeParticipantes.mockResolvedValueOnce([
                 {
                     id: 'lembrete-1',
-                    divisaoParticipantes: [
-                        { id: 'p1', pagouAConta: false, status: 'PAGO' },
-                    ],
+                    divisaoParticipantes: [{ id: 'p1', pagouAConta: false, status: 'PAGO' }],
                 },
             ]);
 
             await expenseSplitService.marcarParticipantePago('u1', 'd1', 'p1');
 
-            expect(expenseSplitRepository.listarLembretesAtivosDeParticipantes).toHaveBeenCalledWith(['p1']);
+            expect(
+                expenseSplitRepository.listarLembretesAtivosDeParticipantes
+            ).toHaveBeenCalledWith(['p1']);
             expect(reminderService.marcarComoPago).toHaveBeenCalledWith('u1', 'lembrete-1');
         });
 
@@ -335,7 +340,9 @@ describe('expenseSplitService', () => {
 
     describe('excluirDivisao / editarDivisao', () => {
         it('bloqueia excluir divisão quitada', async () => {
-            expenseSplitRepository.buscarPorId.mockResolvedValueOnce(divisaoBase({ status: 'QUITADA' }));
+            expenseSplitRepository.buscarPorId.mockResolvedValueOnce(
+                divisaoBase({ status: 'QUITADA' })
+            );
 
             await expect(expenseSplitService.excluirDivisao('u1', 'd1')).rejects.toMatchObject({
                 statusCode: 400,
@@ -357,7 +364,9 @@ describe('expenseSplitService', () => {
         });
 
         it('bloqueia editar divisão quitada', async () => {
-            expenseSplitRepository.buscarPorId.mockResolvedValueOnce(divisaoBase({ status: 'QUITADA' }));
+            expenseSplitRepository.buscarPorId.mockResolvedValueOnce(
+                divisaoBase({ status: 'QUITADA' })
+            );
 
             await expect(
                 expenseSplitService.editarDivisao('u1', 'd1', { titulo: 'Novo título' })
@@ -379,7 +388,9 @@ describe('expenseSplitService', () => {
                 .mockResolvedValueOnce(divisaoBase({ titulo: 'Novo título' }));
             expenseSplitRepository.atualizar.mockResolvedValueOnce({});
 
-            const resultado = await expenseSplitService.editarDivisao('u1', 'd1', { titulo: 'Novo título' });
+            const resultado = await expenseSplitService.editarDivisao('u1', 'd1', {
+                titulo: 'Novo título',
+            });
 
             expect(expenseSplitRepository.atualizar).toHaveBeenCalledWith(
                 'd1',
@@ -424,8 +435,19 @@ describe('expenseSplitService', () => {
                 divisaoBase({
                     id: 'd2',
                     participantes: [
-                        participante({ id: 'p3', nome: 'Pedro', valor: 30, pagouAConta: true, status: 'PAGO' }),
-                        organizador({ id: 'p4', valor: 30, pagouAConta: false, status: 'PENDENTE' }),
+                        participante({
+                            id: 'p3',
+                            nome: 'Pedro',
+                            valor: 30,
+                            pagouAConta: true,
+                            status: 'PAGO',
+                        }),
+                        organizador({
+                            id: 'p4',
+                            valor: 30,
+                            pagouAConta: false,
+                            status: 'PENDENTE',
+                        }),
                     ],
                 }),
             ]);
@@ -462,16 +484,24 @@ describe('expenseSplitService', () => {
             expenseSplitRepository.buscarPorId.mockResolvedValueOnce(divisao);
             reminderService.criarLembrete.mockResolvedValueOnce({ id: 'lembrete-1' });
 
-            const resultado = await expenseSplitService.criarLembreteCobranca('u1', 'd1', ['p1', 'p2'], {});
+            const resultado = await expenseSplitService.criarLembreteCobranca(
+                'u1',
+                'd1',
+                ['p1', 'p2'],
+                {}
+            );
 
             expect(reminderService.criarLembrete).toHaveBeenCalledWith(
                 'u1',
-                expect.objectContaining({ valor: 80, titulo: expect.stringContaining('Maria e Pedro') })
+                expect.objectContaining({
+                    valor: 80,
+                    titulo: expect.stringContaining('Maria e Pedro'),
+                })
             );
-            expect(expenseSplitRepository.vincularLembreteAParticipantes).toHaveBeenCalledWith('lembrete-1', [
-                'p1',
-                'p2',
-            ]);
+            expect(expenseSplitRepository.vincularLembreteAParticipantes).toHaveBeenCalledWith(
+                'lembrete-1',
+                ['p1', 'p2']
+            );
             expect(resultado).toEqual({ id: 'lembrete-1' });
         });
 

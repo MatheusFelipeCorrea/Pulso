@@ -73,7 +73,8 @@ const mapMetaGrupo = (meta) => {
 
     const valorAlvo = Number(meta.valorAlvo ?? 0);
     const valorAtual = Number(meta.valorAtual ?? 0);
-    const percentual = valorAlvo > 0 ? Math.min(100, Math.round((valorAtual / valorAlvo) * 100)) : 0;
+    const percentual =
+        valorAlvo > 0 ? Math.min(100, Math.round((valorAtual / valorAlvo) * 100)) : 0;
     const porMembro = new Map();
 
     for (const aporte of meta.aportes ?? []) {
@@ -135,7 +136,8 @@ const mapMetasGrupoAgregado = (metas) => {
         }
     }
 
-    const percentual = valorAlvo > 0 ? Math.min(100, Math.round((valorAtual / valorAlvo) * 100)) : 0;
+    const percentual =
+        valorAlvo > 0 ? Math.min(100, Math.round((valorAtual / valorAlvo) * 100)) : 0;
 
     return {
         id: metas[0].id,

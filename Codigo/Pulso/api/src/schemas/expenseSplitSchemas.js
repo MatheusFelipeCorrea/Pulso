@@ -20,7 +20,9 @@ const criarDivisaoSchema = z.object({
             icone: z.string().max(40).optional().nullable(),
             cor: z.string().max(20).optional().nullable(),
             observacao: z.string().max(250).optional().nullable(),
-            participantes: z.array(participanteInputSchema).min(1, 'Informe ao menos 1 participante além de você'),
+            participantes: z
+                .array(participanteInputSchema)
+                .min(1, 'Informe ao menos 1 participante além de você'),
             pagoPor: z.string().min(1, 'Informe quem pagou a conta'),
             valorOrganizador: z.coerce.number().positive().optional(),
         })
@@ -37,7 +39,8 @@ const criarDivisaoSchema = z.object({
                     if (participante.valor === undefined) {
                         ctx.addIssue({
                             code: z.ZodIssueCode.custom,
-                            message: 'Informe o valor de cada participante na divisão personalizada',
+                            message:
+                                'Informe o valor de cada participante na divisão personalizada',
                             path: ['participantes', index, 'valor'],
                         });
                     }

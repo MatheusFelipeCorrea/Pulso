@@ -4,13 +4,15 @@ import { SpinnerDots } from '@/design-system/components/feedback/Spinner/Spinner
 import { formatarCodigoGrupoInput } from '@/utils/groupInvite.js'
 
 export default function GroupJoinRedirect() {
-  const { codigo } = useParams()
-  const navigate = useNavigate()
+    const { codigo } = useParams()
+    const navigate = useNavigate()
 
-  useEffect(() => {
-    const seed = formatarCodigoGrupoInput(codigo || '')
-    navigate(seed ? `/groups?convite=${encodeURIComponent(seed)}` : '/groups', { replace: true })
-  }, [codigo, navigate])
+    useEffect(() => {
+        const seed = formatarCodigoGrupoInput(codigo || '')
+        navigate(seed ? `/groups?convite=${encodeURIComponent(seed)}` : '/groups', {
+            replace: true,
+        })
+    }, [codigo, navigate])
 
-  return <SpinnerDots center label="Abrindo convite..." />
+    return <SpinnerDots center label="Abrindo convite..." />
 }

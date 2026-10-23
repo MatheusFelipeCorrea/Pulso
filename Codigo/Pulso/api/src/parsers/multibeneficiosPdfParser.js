@@ -1,4 +1,8 @@
-const { parseBrazilianNumber, normalizeDescricao, inferTipoFromDescricaoBeneficio } = require('./importParseUtils');
+const {
+    parseBrazilianNumber,
+    normalizeDescricao,
+    inferTipoFromDescricaoBeneficio,
+} = require('./importParseUtils');
 const { parseVencimentoDate } = require('../utils/dateTimezone');
 
 const pad2 = (value) => String(value).padStart(2, '0');

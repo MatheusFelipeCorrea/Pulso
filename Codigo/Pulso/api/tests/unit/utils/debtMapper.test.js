@@ -1,13 +1,8 @@
 const { mapDivida } = require('../../../src/utils/debtMapper');
 
-
-
 describe('debtMapper', () => {
-
     it('mapDivida mapeia e formata campos corretamente', () => {
-
         const divida = {
-
             id: 'div-1',
 
             direcao: 'A_RECEBER',
@@ -31,13 +26,9 @@ describe('debtMapper', () => {
             atualizadoEm: new Date('2026-01-02T12:00:00.000Z'),
 
             pagamentos: [],
-
         };
 
-
-
         expect(mapDivida(divida)).toEqual({
-
             id: 'div-1',
 
             direcao: 'A_RECEBER',
@@ -67,17 +58,11 @@ describe('debtMapper', () => {
             pagamentos: [],
 
             quantidadePagamentos: 0,
-
         });
-
     });
 
-
-
     it('mapDivida mantém campos opcionais como null quando ausentes', () => {
-
         const divida = {
-
             id: 'div-2',
 
             direcao: 'A_PAGAR',
@@ -99,14 +84,9 @@ describe('debtMapper', () => {
             criadoEm: new Date('2026-03-01T12:00:00.000Z'),
 
             atualizadoEm: new Date('2026-03-02T12:00:00.000Z'),
-
         };
 
-
-
         const result = mapDivida(divida);
-
-
 
         expect(result.prazoDevolucao).toBeNull();
 
@@ -117,15 +97,10 @@ describe('debtMapper', () => {
         expect(result.dataQuitacao).toBeNull();
 
         expect(result.valorRestante).toBe('10.00');
-
     });
 
-
-
     it('mapDivida normaliza nome da pessoa com capitalização', () => {
-
         const result = mapDivida({
-
             id: 'div-3',
 
             direcao: 'ME_DEVEM',
@@ -147,21 +122,13 @@ describe('debtMapper', () => {
             criadoEm: new Date('2026-06-12T12:00:00.000Z'),
 
             atualizadoEm: new Date('2026-06-12T12:00:00.000Z'),
-
         });
 
-
-
         expect(result.nomePessoa).toBe('Carol');
-
     });
 
-
-
     it('mapDivida calcula saldo com pagamentos parciais', () => {
-
         const result = mapDivida({
-
             id: 'div-4',
 
             direcao: 'ME_DEVEM',
@@ -185,9 +152,7 @@ describe('debtMapper', () => {
             atualizadoEm: new Date('2026-06-12T12:00:00.000Z'),
 
             pagamentos: [
-
                 {
-
                     id: 'p1',
 
                     valor: 30,
@@ -197,22 +162,14 @@ describe('debtMapper', () => {
                     observacao: null,
 
                     criadoEm: new Date('2026-06-13T12:00:00.000Z'),
-
                 },
-
             ],
-
         });
-
-
 
         expect(result.valorPago).toBe('30.00');
 
         expect(result.valorRestante).toBe('70.00');
 
         expect(result.quantidadePagamentos).toBe(1);
-
     });
-
 });
-
