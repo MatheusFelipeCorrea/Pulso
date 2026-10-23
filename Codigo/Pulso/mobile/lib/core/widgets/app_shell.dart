@@ -102,6 +102,13 @@ class AppShell extends StatelessWidget {
         label: const Text('Nova'),
       );
     }
+    if (location == '/debts') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/debts/new'),
+        icon: const Icon(Icons.add),
+        label: const Text('Dívida'),
+      );
+    }
     if (location == '/purchase-planning') {
       return FloatingActionButton.extended(
         onPressed: () => context.push('/purchase-planning/form'),
@@ -188,12 +195,14 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     final showTransacoes = matches('Transações') || matches('Financeiro');
     final showCalendario = matches('Calendário') || matches('Financeiro');
     final showOrcamento = matches('Orçamento') || matches('Financeiro');
+    final showDividas = matches('Dívidas') || matches('Financeiro');
     final showMetas = matches('Metas Financeiras') || matches('Planejamento');
     final showCompra =
         matches('Planejamento de Compra') || matches('Planejamento');
     final showViagens =
         premium && (matches('Viagens e Moedas') || matches('Planejamento'));
-    final showFinanceiro = showTransacoes || showCalendario || showOrcamento;
+    final showFinanceiro =
+        showTransacoes || showCalendario || showOrcamento || showDividas;
     final showPlanejamento = showMetas || showViagens || showCompra;
     final showPerfil = matches('Perfil') || matches('Conta');
     final showSettings = matches('Configurações') || matches('Conta');
@@ -331,6 +340,15 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                             location == '/budget' ||
                             location.startsWith('/budget/'),
                         onTap: () => _go(context, '/budget'),
+                      ),
+                    if (showDividas)
+                      _NavTile(
+                        icon: Icons.handshake_outlined,
+                        label: 'Dívidas',
+                        selected:
+                            location == '/debts' ||
+                            location.startsWith('/debts/'),
+                        onTap: () => _go(context, '/debts'),
                       ),
                   ],
                 ],
