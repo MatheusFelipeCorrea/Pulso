@@ -102,6 +102,13 @@ class AppShell extends StatelessWidget {
         label: const Text('Nova'),
       );
     }
+    if (location == '/groups') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/groups/new'),
+        icon: const Icon(Icons.add),
+        label: const Text('Grupo'),
+      );
+    }
     if (location == '/purchase-planning') {
       return FloatingActionButton.extended(
         onPressed: () => context.push('/purchase-planning/form'),
@@ -189,12 +196,14 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     final showCalendario = matches('Calendário') || matches('Financeiro');
     final showOrcamento = matches('Orçamento') || matches('Financeiro');
     final showMetas = matches('Metas Financeiras') || matches('Planejamento');
+    final showGrupos = matches('Grupos') || matches('Planejamento');
     final showCompra =
         matches('Planejamento de Compra') || matches('Planejamento');
     final showViagens =
         premium && (matches('Viagens e Moedas') || matches('Planejamento'));
     final showFinanceiro = showTransacoes || showCalendario || showOrcamento;
-    final showPlanejamento = showMetas || showViagens || showCompra;
+    final showPlanejamento =
+        showMetas || showViagens || showCompra || showGrupos;
     final showPerfil = matches('Perfil') || matches('Conta');
     final showSettings = matches('Configurações') || matches('Conta');
     final showSair = matches('Sair') || matches('Conta');
@@ -342,6 +351,15 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                     onTap: () => _toggle('planejamento'),
                   ),
                   if (planejamentoOpen) ...[
+                    if (showGrupos)
+                      _NavTile(
+                        icon: Icons.groups_outlined,
+                        label: 'Grupos',
+                        selected:
+                            location == '/groups' ||
+                            location.startsWith('/groups/'),
+                        onTap: () => _go(context, '/groups'),
+                      ),
                     if (showMetas)
                       _NavTile(
                         icon: Icons.gps_fixed,
