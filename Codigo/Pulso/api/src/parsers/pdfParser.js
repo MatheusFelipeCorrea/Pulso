@@ -2,7 +2,10 @@ const AppError = require('../utils/appError');
 const env = require('../config/env');
 const { extractPdfText } = require('./extractPdfText');
 const { normalizeDescricao, inferTipoFromDescricaoBeneficio } = require('./importParseUtils');
-const { parseMultibeneficiosText, extractSaldoExtratoFromText } = require('./multibeneficiosPdfParser');
+const {
+    parseMultibeneficiosText,
+    extractSaldoExtratoFromText,
+} = require('./multibeneficiosPdfParser');
 const { parseContaText, extractSaldoExtratoFromContaText } = require('./contaPdfParser');
 
 const parsePdfLocal = (text) => {
@@ -37,7 +40,9 @@ const parsePdfWithGeminiText = async (text) => {
             contents: [
                 {
                     parts: [
-                        { text: `${buildPrompt()}\n\nTexto extraído do PDF:\n${text.slice(0, 120000)}` },
+                        {
+                            text: `${buildPrompt()}\n\nTexto extraído do PDF:\n${text.slice(0, 120000)}`,
+                        },
                     ],
                 },
             ],
@@ -172,8 +177,7 @@ const parsePdfWithGemini = async (buffer) => {
     }
 
     const payload = await response.json();
-    const text =
-        payload?.candidates?.[0]?.content?.parts?.map((part) => part.text).join('') ?? '';
+    const text = payload?.candidates?.[0]?.content?.parts?.map((part) => part.text).join('') ?? '';
     const parsed = extractJson(text);
     const transacoes = Array.isArray(parsed.transacoes) ? parsed.transacoes : [];
 
@@ -212,7 +216,11 @@ const parsePdf = async (buffer) => {
             try {
                 const gemini = await parsePdfWithGemini(buffer);
                 if (gemini?.linhas?.length) {
-                    return { ...gemini, saldoExtrato: local.saldoExtrato, parser: 'pdf-gemini+saldo-local' };
+                    return {
+                        ...gemini,
+                        saldoExtrato: local.saldoExtrato,
+                        parser: 'pdf-gemini+saldo-local',
+                    };
                 }
             } catch {
                 const geminiText = await parsePdfWithGeminiText(text);

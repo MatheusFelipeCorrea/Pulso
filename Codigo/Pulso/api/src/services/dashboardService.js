@@ -27,7 +27,9 @@ const round2 = (n) => Math.round(Number(n) * 100) / 100;
 const buildVariacaoPercentual = (atual, anterior) => {
     if (atual === anterior) return { tipo: 'igual', valor: 0 };
     if (anterior === 0) {
-        return atual === 0 ? { tipo: 'sem_base', valor: 0 } : { tipo: 'valor_novo', valor: round2(atual) };
+        return atual === 0
+            ? { tipo: 'sem_base', valor: 0 }
+            : { tipo: 'valor_novo', valor: round2(atual) };
     }
     return {
         tipo: 'percentual',
@@ -115,8 +117,7 @@ const obterSaldosRecursos = async (usuarioId, mesReferencia) => {
     const saldos = calcularSaldosPorRecurso(transacoes);
 
     const diasUteis = diasUteisRestantesNoMes(mesReferencia);
-    const sugestaoVr =
-        saldos.VR > 0 ? round2(saldos.VR / diasUteis) : null;
+    const sugestaoVr = saldos.VR > 0 ? round2(saldos.VR / diasUteis) : null;
 
     return RECURSOS_DASHBOARD.map((tipo) => ({
         tipo,
@@ -204,16 +205,22 @@ const obterDashboard = async (usuarioId, query = {}) => {
         metasRaw,
         statusOrcamento,
     ] = await Promise.all([
-        transactionService.calcularResumo(usuarioId, { periodo: mesReferenciaToQuery(mesReferencia) }),
+        transactionService.calcularResumo(usuarioId, {
+            periodo: mesReferenciaToQuery(mesReferencia),
+        }),
         transactionService.calcularResumo(usuarioId, {
             periodo: mesReferenciaToQuery(mesAnteriorRef),
         }),
         obterSerieReceitasDespesas(usuarioId, inicio, fim),
         obterGastosPorCategoria(usuarioId, inicio, fim),
-        transactionRepository.listarPorUsuario(usuarioId, { periodo: mesReferenciaToQuery(mesReferencia) }, {
-            pagina: 1,
-            limite: 25,
-        }),
+        transactionRepository.listarPorUsuario(
+            usuarioId,
+            { periodo: mesReferenciaToQuery(mesReferencia) },
+            {
+                pagina: 1,
+                limite: 25,
+            }
+        ),
         prisma.transacao.findMany({
             where: { usuarioId },
             select: { tipo: true, recurso: true, recursoDestino: true, valor: true },
@@ -225,8 +232,7 @@ const obterDashboard = async (usuarioId, query = {}) => {
     const saldosMap = calcularSaldosPorRecurso(transacoesSaldo);
     const saldoTotal = round2(saldoTotalDisponivel(saldosMap));
     const saldoTotalAnterior = round2(
-        saldoTotalDisponivel(saldosMap) -
-            (Number(resumoMes.saldo) - Number(resumoAnterior.saldo))
+        saldoTotalDisponivel(saldosMap) - (Number(resumoMes.saldo) - Number(resumoAnterior.saldo))
     );
 
     const recursos = await obterSaldosRecursos(usuarioId, mesReferencia);

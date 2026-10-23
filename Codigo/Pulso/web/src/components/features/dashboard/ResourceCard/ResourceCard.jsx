@@ -16,72 +16,76 @@ import { getResourceConfig } from './resourceConfig.js'
  * @param {string} [props.className]
  */
 export const ResourceCard = ({
-  type,
-  value,
-  subtitle = 'Disponível',
-  subtitleDot = 'available',
-  onClick,
-  loading = false,
-  className,
+    type,
+    value,
+    subtitle = 'Disponível',
+    subtitleDot = 'available',
+    onClick,
+    loading = false,
+    className,
 }) => {
-  const config = getResourceConfig(type)
-  const Icon = config.icon
-  const interactive = typeof onClick === 'function'
-  const filled = config.filled === true
+    const config = getResourceConfig(type)
+    const Icon = config.icon
+    const interactive = typeof onClick === 'function'
+    const filled = config.filled === true
 
-  const cardProps = interactive
-    ? {
-        role: 'button',
-        tabIndex: 0,
-        onClick,
-        onKeyDown: (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            onClick(e)
+    const cardProps = interactive
+        ? {
+              role: 'button',
+              tabIndex: 0,
+              onClick,
+              onKeyDown: (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      onClick(e)
+                  }
+              },
           }
-        },
-      }
-    : {}
+        : {}
 
-  return (
-    <article
-      {...cardProps}
-      className={cn(
-        'pulso-resource-card',
-        interactive && 'pulso-resource-card--interactive',
-        filled && 'pulso-resource-card--filled',
-        className
-      )}
-      style={{ '--pulso-resource-color': `var(${config.colorVar})` }}
-      data-type={type}
-    >
-      <div className="pulso-resource-card__icon-wrap" aria-hidden="true">
-        <Icon size={24} strokeWidth={2} />
-      </div>
-
-      <p className="pulso-resource-card__label">{config.label}</p>
-
-      {loading ? (
-        <Skeleton variant="title" width="60%" className="mt-2" />
-      ) : (
-        <p className="pulso-resource-card__value" title={formatCurrency(value)}>
-          {formatCurrency(value)}
-        </p>
-      )}
-
-      {subtitle && !loading && (
-        <div className="pulso-resource-card__subtitle">
-          <span className="pulso-resource-card__dot" data-dot={subtitleDot} aria-hidden="true" />
-          <span
+    return (
+        <article
+            {...cardProps}
             className={cn(
-              'pulso-resource-card__subtitle-text',
-              subtitleDot === 'growth' && 'pulso-resource-card__subtitle-text--growth'
+                'pulso-resource-card',
+                interactive && 'pulso-resource-card--interactive',
+                filled && 'pulso-resource-card--filled',
+                className
             )}
-          >
-            {subtitle}
-          </span>
-        </div>
-      )}
-    </article>
-  )
+            style={{ '--pulso-resource-color': `var(${config.colorVar})` }}
+            data-type={type}
+        >
+            <div className="pulso-resource-card__icon-wrap" aria-hidden="true">
+                <Icon size={24} strokeWidth={2} />
+            </div>
+
+            <p className="pulso-resource-card__label">{config.label}</p>
+
+            {loading ? (
+                <Skeleton variant="title" width="60%" className="mt-2" />
+            ) : (
+                <p className="pulso-resource-card__value" title={formatCurrency(value)}>
+                    {formatCurrency(value)}
+                </p>
+            )}
+
+            {subtitle && !loading && (
+                <div className="pulso-resource-card__subtitle">
+                    <span
+                        className="pulso-resource-card__dot"
+                        data-dot={subtitleDot}
+                        aria-hidden="true"
+                    />
+                    <span
+                        className={cn(
+                            'pulso-resource-card__subtitle-text',
+                            subtitleDot === 'growth' && 'pulso-resource-card__subtitle-text--growth'
+                        )}
+                    >
+                        {subtitle}
+                    </span>
+                </div>
+            )}
+        </article>
+    )
 }

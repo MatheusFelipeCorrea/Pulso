@@ -2,7 +2,10 @@
 const fs = require('fs').promises;
 // eslint-disable-next-line no-unused-vars
 const path = require('path');
-const { validateImageFile, storeGrupoImage } = require('../../../src/services/grupoImageStorageService');
+const {
+    validateImageFile,
+    storeGrupoImage,
+} = require('../../../src/services/grupoImageStorageService');
 const AppError = require('../../../src/utils/appError');
 
 jest.mock('fs', () => ({
@@ -27,7 +30,11 @@ describe('grupoImageStorageService', () => {
 
     it('rejeita arquivo acima de 2 MB', () => {
         expect(() =>
-            validateImageFile({ mimetype: 'image/png', size: 3 * 1024 * 1024, buffer: Buffer.from('x') })
+            validateImageFile({
+                mimetype: 'image/png',
+                size: 3 * 1024 * 1024,
+                buffer: Buffer.from('x'),
+            })
         ).toThrow('2 MB');
     });
 

@@ -17,7 +17,9 @@ describe('debtAlertService', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         dateTimezone.todayInTimezone.mockReturnValue('2026-01-10');
-        dateTimezone.formatDateOnly.mockImplementation((d) => new Date(d).toISOString().slice(0, 10));
+        dateTimezone.formatDateOnly.mockImplementation((d) =>
+            new Date(d).toISOString().slice(0, 10)
+        );
     });
 
     it('notifica dívidas que vencem em 7, 2 ou 0 dias com saldo restante', async () => {
@@ -67,7 +69,9 @@ describe('debtAlertService', () => {
         expect(notificationService.criarNotificacao).toHaveBeenCalledTimes(3);
         expect(result).toEqual({ criadas: 3, verificadas: 4 });
 
-        const mensagens = notificationService.criarNotificacao.mock.calls.map((call) => call[1].mensagem);
+        const mensagens = notificationService.criarNotificacao.mock.calls.map(
+            (call) => call[1].mensagem
+        );
         expect(mensagens.some((msg) => msg.includes('Saldo restante:'))).toBe(true);
         expect(mensagens.some((msg) => msg.includes('50,00'))).toBe(true);
     });

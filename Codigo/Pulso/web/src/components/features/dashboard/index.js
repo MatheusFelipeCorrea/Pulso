@@ -4,10 +4,10 @@ export { resourceConfig, RESOURCE_TYPES, getResourceConfig } from './ResourceCar
 export { NotificationPanel } from './NotificationPanel/NotificationPanel.jsx'
 export { NotificationItem } from './NotificationPanel/NotificationItem.jsx'
 export {
-  notificationConfig,
-  NOTIFICATION_TYPES,
-  NOTIFICATION_DEFAULT_TITLES,
-  getNotificationConfig,
+    notificationConfig,
+    NOTIFICATION_TYPES,
+    NOTIFICATION_DEFAULT_TITLES,
+    getNotificationConfig,
 } from './NotificationPanel/notificationConfig.js'
 export { DashboardBudgetAlerts } from './DashboardBudgetAlerts.jsx'
 export { ImportStatementModal } from './ImportStatementModal.jsx'

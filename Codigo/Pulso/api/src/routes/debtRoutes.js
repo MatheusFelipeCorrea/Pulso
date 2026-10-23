@@ -24,12 +24,7 @@ router.get(
 
 router.post('/', authMiddleware, validateMiddleware(criarDividaSchema), debtController.criar);
 
-router.patch(
-    '/:id',
-    authMiddleware,
-    validateMiddleware(editarDividaSchema),
-    debtController.editar
-);
+router.patch('/:id', authMiddleware, validateMiddleware(editarDividaSchema), debtController.editar);
 
 router.post(
     '/:id/pagamentos',

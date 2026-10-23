@@ -142,7 +142,15 @@ describe('debtService', () => {
 
     it('lista dívidas com paginação e mapeamento', async () => {
         debtRepository.listarPorUsuario.mockResolvedValue({
-            dividas: [dividaBase({ id: 'd-1', nomePessoa: 'Lia', valor: 50, prazoDevolucao: null, observacao: null })],
+            dividas: [
+                dividaBase({
+                    id: 'd-1',
+                    nomePessoa: 'Lia',
+                    valor: 50,
+                    prazoDevolucao: null,
+                    observacao: null,
+                }),
+            ],
             total: 1,
         });
 

@@ -5,7 +5,12 @@ const viagemRepository = require('../repositories/viagemRepository');
 const { attachCoverImage } = require('./tripDestinationImageService');
 const tripFlightPriceService = require('./tripFlightPriceService');
 const grupoNotificationService = require('./grupoNotificationService');
-const { mapGrupoResumo, mapGrupoDetalhe, mapGrupoPreview, mapMensagemGrupo } = require('../utils/grupoMapper');
+const {
+    mapGrupoResumo,
+    mapGrupoDetalhe,
+    mapGrupoPreview,
+    mapMensagemGrupo,
+} = require('../utils/grupoMapper');
 const { emitGrupoMensagem } = require('../socket/groupChat');
 
 const CODIGO_REGEX = /^PULSO-[A-Z0-9]{4}$/;
@@ -183,10 +188,7 @@ const sairDoGrupo = async (usuarioId, grupoId) => {
 
     const admins = grupo.membros.filter((m) => m.papel === 'ADMIN');
     if (membro.papel === 'ADMIN' && admins.length === 1 && grupo.membros.length > 1) {
-        throw new AppError(
-            'Transfira a administração antes de sair ou exclua o grupo',
-            400
-        );
+        throw new AppError('Transfira a administração antes de sair ou exclua o grupo', 400);
     }
 
     const nome = grupoNotificationService.nomeUsuarioNoGrupo(grupo, usuarioId);
@@ -292,7 +294,9 @@ const criarViagemGrupo = async (usuarioId, grupoId, dados) => {
         moeda = viagem.moeda;
         dataPrevista = viagem.dataPrevista;
         destinoMeta =
-            viagem.destinoMeta && typeof viagem.destinoMeta === 'object' ? viagem.destinoMeta : null;
+            viagem.destinoMeta && typeof viagem.destinoMeta === 'object'
+                ? viagem.destinoMeta
+                : null;
     } else {
         destino = validarTexto(dados.destino, 'Destino', { max: 120 });
         moeda = String(dados.moeda ?? 'BRL')
@@ -503,10 +507,14 @@ const registrarAporteGrupo = async (usuarioId, grupoId, metaGrupoId, dados) => {
         throw new AppError('Data do aporte é obrigatória', 400);
     }
 
-    const { concluida, metaNome, metaId } = await grupoRepository.criarAporte(metaGrupoId, usuarioId, {
-        valor,
-        data: new Date(dados.data),
-    });
+    const { concluida, metaNome, metaId } = await grupoRepository.criarAporte(
+        metaGrupoId,
+        usuarioId,
+        {
+            valor,
+            data: new Date(dados.data),
+        }
+    );
 
     const grupo = await buscarGrupoDoUsuario(grupoId, usuarioId);
 
@@ -634,7 +642,7 @@ const enviarMensagemGrupo = async (usuarioId, grupoId, dados) => {
 
     try {
         emitGrupoMensagem(grupoId, mensagem);
-    // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
     } catch (err) {
         // Socket opcional — REST já persistiu
     }

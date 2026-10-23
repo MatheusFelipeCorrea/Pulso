@@ -29,7 +29,10 @@ const buscarDivisaoOuFalhar = async (divisaoId, usuarioId) => {
  */
 const construirParticipantes = ({ tipo, valorTotal, participantes, pagoPor, valorOrganizador }) => {
     if (!Array.isArray(participantes) || participantes.length === 0) {
-        throw new AppError('Uma divisão precisa de pelo menos 1 outro participante além de você', 400);
+        throw new AppError(
+            'Uma divisão precisa de pelo menos 1 outro participante além de você',
+            400
+        );
     }
 
     const outros = participantes.map((item) => ({
@@ -62,7 +65,10 @@ const construirParticipantes = ({ tipo, valorTotal, participantes, pagoPor, valo
         }
         valores = [...valoresInformados, Number(valorOrganizador)];
         if (!validarSomaPersonalizada(valorTotal, valores)) {
-            throw new AppError('A soma dos valores personalizados deve ser igual ao valor total', 400);
+            throw new AppError(
+                'A soma dos valores personalizados deve ser igual ao valor total',
+                400
+            );
         }
     } else {
         valores = splitEqual(valorTotal, todos.length);
@@ -153,7 +159,9 @@ const calcularResumo = async (usuarioId) => {
         if (!organizador) continue;
 
         if (organizador.pagouAConta) {
-            const pendentes = participantes.filter((p) => !p.ehOrganizador && p.status === 'PENDENTE');
+            const pendentes = participantes.filter(
+                (p) => !p.ehOrganizador && p.status === 'PENDENTE'
+            );
             meDevem += pendentes.reduce((acc, p) => acc + Number(p.valor), 0);
         } else if (organizador.status === 'PENDENTE') {
             euDevo += Number(organizador.valor);
@@ -235,9 +243,13 @@ const editarDivisao = async (usuarioId, divisaoId, dados) => {
     if (dados.observacao !== undefined) payload.observacao = dados.observacao?.trim() || null;
 
     if (substituiParticipantes) {
-        const valorTotal = dados.valorTotal !== undefined ? roundMoney(dados.valorTotal) : Number(divisao.valorTotal);
+        const valorTotal =
+            dados.valorTotal !== undefined
+                ? roundMoney(dados.valorTotal)
+                : Number(divisao.valorTotal);
         payload.valorTotal = valorTotal;
-        if (dados.tipo !== undefined) payload.tipo = dados.tipo === 'PERSONALIZADA' ? 'PERSONALIZADA' : 'IGUAL';
+        if (dados.tipo !== undefined)
+            payload.tipo = dados.tipo === 'PERSONALIZADA' ? 'PERSONALIZADA' : 'IGUAL';
 
         const linhas = construirParticipantes({
             tipo: payload.tipo ?? divisao.tipo,
@@ -272,7 +284,9 @@ const buscarParticipanteOuFalhar = (divisao, participanteId) => {
  * lembrete continua servindo para cobrar quem ainda deve.
  */
 const cancelarLembretesQuitados = async (usuarioId, participanteId) => {
-    const lembretes = await expenseSplitRepository.listarLembretesAtivosDeParticipantes([participanteId]);
+    const lembretes = await expenseSplitRepository.listarLembretesAtivosDeParticipantes([
+        participanteId,
+    ]);
 
     for (const lembrete of lembretes) {
         const todosQuitados = lembrete.divisaoParticipantes.every(
@@ -368,7 +382,8 @@ const criarLembreteCobranca = async (usuarioId, divisaoId, participanteIds, dado
         );
     }
 
-    const lembretesExistentes = await expenseSplitRepository.listarLembretesAtivosDeParticipantes(participanteIds);
+    const lembretesExistentes =
+        await expenseSplitRepository.listarLembretesAtivosDeParticipantes(participanteIds);
     if (lembretesExistentes.length > 0) {
         const idsComLembrete = new Set(
             lembretesExistentes.flatMap((l) => l.divisaoParticipantes.map((p) => p.id))

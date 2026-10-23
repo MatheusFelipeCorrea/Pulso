@@ -66,7 +66,9 @@ describe('multibeneficiosPdfParser', () => {
         expect(inferTipoFromDescricaoBeneficio('DISPONIBILIZACAO DE VALOR', 'Saldo liberado')).toBe(
             'RECEITA'
         );
-        expect(inferTipoFromDescricaoBeneficio('CHINA IN BOX', 'Compra no Refeição')).toBe('DESPESA');
+        expect(inferTipoFromDescricaoBeneficio('CHINA IN BOX', 'Compra no Refeição')).toBe(
+            'DESPESA'
+        );
     });
 
     it('extrai saldo do cabeçalho mesmo sem transações parseadas', () => {
@@ -75,7 +77,10 @@ describe('multibeneficiosPdfParser', () => {
     });
 
     it('parseia extrato Pluxee em inglês (saldo em linha separada e valores com sinal)', () => {
-        const result = parseMultibeneficiosText(PLUXEE_SAMPLE_TEXT, new Date('2026-08-05T12:00:00'));
+        const result = parseMultibeneficiosText(
+            PLUXEE_SAMPLE_TEXT,
+            new Date('2026-08-05T12:00:00')
+        );
 
         expect(result?.linhas).toHaveLength(2);
         expect(result.saldoExtrato).toBe('712.23');
