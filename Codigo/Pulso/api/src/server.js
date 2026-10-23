@@ -4,21 +4,22 @@ const env = require('./config/env');
 const logger = require('./utils/logger');
 const prisma = require('./config/database');
 const cron = require('node-cron');
-// TEMP Sprint-2: deps ainda ausentes no repo — desligados para a API subir (Auth).
-// const { initSocket } = require('./socket/groupChat');
+const { initSocket } = require('./socket/groupChat');
 const { runTokenCleanup } = require('./jobs/tokenCleanupJob');
 const { runRecurringTransactions } = require('./jobs/recurringTransactions');
 const {
     startMessagingWorkers,
     enqueueBudgetAlert,
+    enqueueDebtAlert,
     enqueueReminderAlert,
     enqueueReminderRecurrence,
 } = require('./messaging/jobBridge');
 const { runUnverifiedAccountCleanup } = require('./jobs/unverifiedAccountCleanupJob');
-// const { runDebtCleanupJob } = require('./jobs/debtCleanupJob');
+const { runDebtCleanupJob } = require('./jobs/debtCleanupJob');
+const { runExpenseSplitCleanupJob } = require('./jobs/expenseSplitCleanupJob');
+// TEMP: jobs ainda ausentes neste repo.
 // const { runNotificationCleanup } = require('./jobs/notificationCleanupJob');
 // const { runChatCleanupJob } = require('./jobs/chatCleanupJob');
-// const { runExpenseSplitCleanupJob } = require('./jobs/expenseSplitCleanupJob');
 
 const startTokenCleanupScheduler = () => {
     if (env.NODE_ENV === 'test') {
@@ -125,12 +126,69 @@ const startReminderRecurrenceScheduler = () => {
     logger.info('🔁 Agendador de recorrência de lembretes ativo (diário 00:05 BRT)');
 };
 
-// TEMP: módulos de dívidas, notificações, chat e divisão ainda não estão neste repo.
-// const startDebtCleanupScheduler = () => { ... };
-// const startDebtAlertScheduler = () => { ... };
+const startDebtCleanupScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule(
+        '0 2 * * *',
+        async () => {
+            try {
+                await runDebtCleanupJob();
+            } catch (error) {
+                logger.error(`Falha no job de limpeza de dívidas: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🧹 Agendador de limpeza de dívidas ativo (diário 02:00 BRT)');
+};
+
+const startDebtAlertScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule(
+        '0 8 * * *',
+        async () => {
+            try {
+                await enqueueDebtAlert();
+            } catch (error) {
+                logger.error(`Falha no job de alertas de dívidas: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🔔 Agendador de alertas de dívidas ativo (diário 08:00 BRT)');
+};
+
+const startExpenseSplitCleanupScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    cron.schedule(
+        '30 2 * * *',
+        async () => {
+            try {
+                await runExpenseSplitCleanupJob();
+            } catch (error) {
+                logger.error(`Falha no job de limpeza de divisões de despesas: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🧹 Agendador de limpeza de divisões de despesas ativo (diário 02:30 BRT)');
+};
+
+// TEMP: jobs de notificação e limpeza de chat ainda não estão neste repo.
 // const startNotificationCleanupScheduler = () => { ... };
 // const startChatCleanupScheduler = () => { ... };
-// const startExpenseSplitCleanupScheduler = () => { ... };
 
 const start = async () => {
     try {
@@ -147,20 +205,18 @@ const start = async () => {
             startBudgetAlertScheduler();
             startReminderAlertScheduler();
             startReminderRecurrenceScheduler();
-            // startDebtCleanupScheduler();
-            // startDebtAlertScheduler();
+            startDebtCleanupScheduler();
+            startDebtAlertScheduler();
+            startExpenseSplitCleanupScheduler();
             // startNotificationCleanupScheduler();
             // startChatCleanupScheduler();
-            // startExpenseSplitCleanupScheduler();
-            logger.info('⏭️  Cron extra desativado (TEMP Sprint-2 — módulos ausentes)');
         } else {
             logger.info('⏭️  Cron local desativado (ambiente Vercel)');
         }
 
         const server = http.createServer(app);
         if (!process.env.VERCEL) {
-            // initSocket(server);
-            logger.info('⏭️  Socket.IO desativado (TEMP Sprint-2 — módulo ausente)');
+            initSocket(server);
         } else {
             logger.info('⏭️  Socket.IO desativado (ambiente Vercel serverless)');
         }
