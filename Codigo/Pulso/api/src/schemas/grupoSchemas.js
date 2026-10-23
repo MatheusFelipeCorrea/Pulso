@@ -82,28 +82,28 @@ const criarViagemGrupoSchema = z.object({
             dataPrevista: z.string().optional(),
         })
         .superRefine((data, ctx) => {
-            if (data.viagemId) return
+            if (data.viagemId) return;
 
             if (!data.destino?.trim()) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
                     message: 'Destino é obrigatório',
                     path: ['destino'],
-                })
+                });
             }
             if (!data.moeda?.trim()) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
                     message: 'Moeda inválida',
                     path: ['moeda'],
-                })
+                });
             }
             if (!data.dataPrevista) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
                     message: 'Data prevista é obrigatória',
                     path: ['dataPrevista'],
-                })
+                });
             }
         }),
 });

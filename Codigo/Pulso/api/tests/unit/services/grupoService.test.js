@@ -16,7 +16,12 @@ const grupoBase = (overrides = {}) => ({
     modoDivisao: 'PRETENSAO',
     criador: { id: 'usr-1', nome: 'Matheus', urlAvatar: null },
     membros: [
-        { usuarioId: 'usr-1', papel: 'ADMIN', entrouEm: new Date(), usuario: { id: 'usr-1', nome: 'Matheus', urlAvatar: null } },
+        {
+            usuarioId: 'usr-1',
+            papel: 'ADMIN',
+            entrouEm: new Date(),
+            usuario: { id: 'usr-1', nome: 'Matheus', urlAvatar: null },
+        },
     ],
     viagens: [],
     metas: [],

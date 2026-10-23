@@ -9,36 +9,35 @@ let socket = null
  * Se falhar, o chat REST segue normal.
  */
 export function getGroupChatSocket() {
-  if (typeof window === 'undefined') return null
-  if (socket?.connected) return socket
+    if (typeof window === 'undefined') return null
+    if (socket?.connected) return socket
 
-  const apiBase = getApiBaseUrl()
-  // Mesma origem em dev (/api) → socket relativo; API remota → origem da URL
-  const origin =
-    apiBase.startsWith('http') ? new URL(apiBase).origin : window.location.origin
+    const apiBase = getApiBaseUrl()
+    // Mesma origem em dev (/api) → socket relativo; API remota → origem da URL
+    const origin = apiBase.startsWith('http') ? new URL(apiBase).origin : window.location.origin
 
-  socket = io(origin, {
-    path: '/api/socket.io',
-    withCredentials: true,
-    transports: ['websocket', 'polling'],
-    autoConnect: true,
-  })
+    socket = io(origin, {
+        path: '/api/socket.io',
+        withCredentials: true,
+        transports: ['websocket', 'polling'],
+        autoConnect: true,
+    })
 
-  return socket
+    return socket
 }
 
 export function joinGrupoRoom(grupoId) {
-  const s = getGroupChatSocket()
-  if (!s || !grupoId) return
-  const join = () => s.emit('grupo:join', grupoId)
-  if (s.connected) join()
-  else s.once('connect', join)
+    const s = getGroupChatSocket()
+    if (!s || !grupoId) return
+    const join = () => s.emit('grupo:join', grupoId)
+    if (s.connected) join()
+    else s.once('connect', join)
 }
 
 export function onGrupoMensagem(handler) {
-  const s = getGroupChatSocket()
-  if (!s) return () => {}
-  const listener = (payload) => handler(payload)
-  s.on('grupo:mensagem', listener)
-  return () => s.off('grupo:mensagem', listener)
+    const s = getGroupChatSocket()
+    if (!s) return () => {}
+    const listener = (payload) => handler(payload)
+    s.on('grupo:mensagem', listener)
+    return () => s.off('grupo:mensagem', listener)
 }

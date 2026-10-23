@@ -31,9 +31,19 @@ const router = express.Router();
 router.use(authMiddleware);
 router.use(requirePremium);
 
-router.get('/preview', grupoInviteCodeRateLimit, validateMiddleware(previewGrupoQuerySchema), grupoController.preview);
+router.get(
+    '/preview',
+    grupoInviteCodeRateLimit,
+    validateMiddleware(previewGrupoQuerySchema),
+    grupoController.preview
+);
 
-router.post('/entrar', grupoInviteCodeRateLimit, validateMiddleware(entrarGrupoSchema), grupoController.entrar);
+router.post(
+    '/entrar',
+    grupoInviteCodeRateLimit,
+    validateMiddleware(entrarGrupoSchema),
+    grupoController.entrar
+);
 
 router.get('/', grupoController.listar);
 
@@ -78,11 +88,7 @@ router.patch(
     grupoController.alterarPapelMembro
 );
 
-router.post(
-    '/:id/viagem',
-    validateMiddleware(criarViagemGrupoSchema),
-    grupoController.criarViagem
-);
+router.post('/:id/viagem', validateMiddleware(criarViagemGrupoSchema), grupoController.criarViagem);
 
 router.patch(
     '/:id/viagem',
@@ -120,11 +126,7 @@ router.delete(
     grupoController.excluirDespesaViagem
 );
 
-router.post(
-    '/:id/metas',
-    validateMiddleware(criarMetasGrupoSchema),
-    grupoController.criarMetas
-);
+router.post('/:id/metas', validateMiddleware(criarMetasGrupoSchema), grupoController.criarMetas);
 
 router.post(
     '/:id/metas/:metaId/aportes',

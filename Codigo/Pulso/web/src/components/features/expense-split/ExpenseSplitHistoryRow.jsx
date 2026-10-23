@@ -10,53 +10,55 @@ import { resolveBadgeIcon } from '@/components/badges/iconRegistry.jsx'
 import { getPagador } from '@/utils/expenseSplitUtils.js'
 
 function formatDate(iso) {
-  if (!iso) return '—'
-  return format(parseISO(iso), 'dd/MM/yyyy', { locale: ptBR })
+    if (!iso) return '—'
+    return format(parseISO(iso), 'dd/MM/yyyy', { locale: ptBR })
 }
 
 export function ExpenseSplitHistoryRow({ divisao, onView }) {
-  const pagador = getPagador(divisao)
-  const avatares = (divisao.participantes ?? []).map((p) => ({ id: p.id, name: p.nome }))
+    const pagador = getPagador(divisao)
+    const avatares = (divisao.participantes ?? []).map((p) => ({ id: p.id, name: p.nome }))
 
-  return (
-    <li className="expense-split-history__row">
-      <span
-        className="expense-split-history__icon"
-        style={{
-          color: divisao.cor ?? undefined,
-          background: divisao.cor
-            ? `color-mix(in srgb, ${divisao.cor} 14%, transparent)`
-            : undefined,
-        }}
-        aria-hidden
-      >
-        {resolveBadgeIcon(divisao.icone ?? 'Receipt', { size: 16 })}
-      </span>
+    return (
+        <li className="expense-split-history__row">
+            <span
+                className="expense-split-history__icon"
+                style={{
+                    color: divisao.cor ?? undefined,
+                    background: divisao.cor
+                        ? `color-mix(in srgb, ${divisao.cor} 14%, transparent)`
+                        : undefined,
+                }}
+                aria-hidden
+            >
+                {resolveBadgeIcon(divisao.icone ?? 'Receipt', { size: 16 })}
+            </span>
 
-      <div className="expense-split-history__info">
-        <strong>{divisao.titulo}</strong>
-        <span className="expense-split-history__meta">
-          <CircleDollarSign size={13} aria-hidden /> {formatCurrency(divisao.valorTotal)}
-          <Calendar size={13} aria-hidden /> {formatDate(divisao.data)}
-        </span>
-        {pagador ? <span className="expense-split-history__payer">{pagador.nome} pagou</span> : null}
-      </div>
+            <div className="expense-split-history__info">
+                <strong>{divisao.titulo}</strong>
+                <span className="expense-split-history__meta">
+                    <CircleDollarSign size={13} aria-hidden /> {formatCurrency(divisao.valorTotal)}
+                    <Calendar size={13} aria-hidden /> {formatDate(divisao.data)}
+                </span>
+                {pagador ? (
+                    <span className="expense-split-history__payer">{pagador.nome} pagou</span>
+                ) : null}
+            </div>
 
-      <AvatarGroup avatars={avatares} max={4} size="sm" />
+            <AvatarGroup avatars={avatares} max={4} size="sm" />
 
-      <Badge variant="success" size="sm">
-        Todos pagaram
-      </Badge>
+            <Badge variant="success" size="sm">
+                Todos pagaram
+            </Badge>
 
-      <Tooltip content="Ver detalhes">
-        <IconButton
-          variant="ghost"
-          size="sm"
-          ariaLabel={`Ver detalhes de ${divisao.titulo}`}
-          icon={<Eye size={15} />}
-          onClick={() => onView?.(divisao)}
-        />
-      </Tooltip>
-    </li>
-  )
+            <Tooltip content="Ver detalhes">
+                <IconButton
+                    variant="ghost"
+                    size="sm"
+                    ariaLabel={`Ver detalhes de ${divisao.titulo}`}
+                    icon={<Eye size={15} />}
+                    onClick={() => onView?.(divisao)}
+                />
+            </Tooltip>
+        </li>
+    )
 }

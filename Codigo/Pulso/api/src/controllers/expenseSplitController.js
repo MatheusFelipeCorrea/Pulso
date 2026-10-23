@@ -43,7 +43,11 @@ const criar = async (req, res, next) => {
 
 const editar = async (req, res, next) => {
     try {
-        const divisao = await expenseSplitService.editarDivisao(req.user.id, req.params.id, req.body);
+        const divisao = await expenseSplitService.editarDivisao(
+            req.user.id,
+            req.params.id,
+            req.body
+        );
         res.status(200).json(divisao);
     } catch (error) {
         next(error);

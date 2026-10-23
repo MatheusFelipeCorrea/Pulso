@@ -87,7 +87,9 @@ const inferTipoFromDescricaoBeneficio = (descricao, contexto = '') => {
 };
 
 const normalizeDescricao = (value) => {
-    const text = String(value ?? '').trim().replace(/\s+/g, ' ');
+    const text = String(value ?? '')
+        .trim()
+        .replace(/\s+/g, ' ');
     return text.slice(0, 255) || 'Importação';
 };
 
@@ -128,7 +130,17 @@ const splitCsvLine = (line, delimiter) => {
 const HEADER_ALIASES = {
     data: ['data', 'date', 'dt', 'data lancamento', 'data lançamento', 'data movimento'],
     valor: ['valor', 'amount', 'vlr', 'value', 'quantia', 'montante'],
-    descricao: ['descricao', 'descrição', 'description', 'historico', 'histórico', 'memo', 'lancamento', 'lançamento', 'detalhe'],
+    descricao: [
+        'descricao',
+        'descrição',
+        'description',
+        'historico',
+        'histórico',
+        'memo',
+        'lancamento',
+        'lançamento',
+        'detalhe',
+    ],
 };
 
 const normalizeHeader = (header) =>
@@ -140,7 +152,9 @@ const normalizeHeader = (header) =>
 
 const resolveColumnIndex = (headers, field, mapping = {}) => {
     if (mapping[field]) {
-        const idx = headers.findIndex((h) => normalizeHeader(h) === normalizeHeader(mapping[field]));
+        const idx = headers.findIndex(
+            (h) => normalizeHeader(h) === normalizeHeader(mapping[field])
+        );
         if (idx >= 0) return idx;
     }
     for (const alias of HEADER_ALIASES[field]) {

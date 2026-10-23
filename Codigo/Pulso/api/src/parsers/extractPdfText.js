@@ -15,7 +15,10 @@ const resolveStandardFontDataUrl = () => {
         return standardFontDataUrl;
     }
 
-    const fontsDir = path.join(path.dirname(require.resolve('pdfjs-dist/package.json')), 'standard_fonts');
+    const fontsDir = path.join(
+        path.dirname(require.resolve('pdfjs-dist/package.json')),
+        'standard_fonts'
+    );
     standardFontDataUrl = `${fontsDir.replace(/\\/g, '/')}/`;
     return standardFontDataUrl;
 };
