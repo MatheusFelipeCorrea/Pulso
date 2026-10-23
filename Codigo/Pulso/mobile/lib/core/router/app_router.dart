@@ -19,6 +19,7 @@ import 'package:pulso/core/widgets/app_shell.dart';
 import 'package:pulso/features/calendar/data/calendar_models.dart';
 import 'package:pulso/features/calendar/screens/calendar_screen.dart';
 import 'package:pulso/features/calendar/screens/reminder_form_screen.dart';
+import 'package:pulso/features/dashboard/screens/dashboard_screen.dart';
 import 'package:pulso/features/goals/data/goal_models.dart';
 import 'package:pulso/features/goals/screens/goal_form_screen.dart';
 import 'package:pulso/features/goals/screens/goals_screen.dart';
@@ -26,7 +27,6 @@ import 'package:pulso/features/groups/data/group_models.dart';
 import 'package:pulso/features/groups/screens/group_detail_screen.dart';
 import 'package:pulso/features/groups/screens/group_form_screen.dart';
 import 'package:pulso/features/groups/screens/groups_screen.dart';
-import 'package:pulso/features/home/screens/home_screen.dart';
 import 'package:pulso/features/purchase/data/purchase_models.dart';
 import 'package:pulso/features/purchase/screens/purchase_item_form_screen.dart';
 import 'package:pulso/features/purchase/screens/purchase_planning_screen.dart';
@@ -66,9 +66,7 @@ GoRouter createRouter(AuthController auth) {
               state.matchedLocation == '/register')) {
         return '/transactions';
       }
-      if (loggedIn &&
-          (state.matchedLocation == '/home' ||
-              state.matchedLocation == '/dashboard')) {
+      if (loggedIn && state.matchedLocation == '/home') {
         return '/transactions';
       }
       if (loggedIn &&
@@ -231,7 +229,7 @@ GoRouter createRouter(AuthController auth) {
         routes: [
           GoRoute(
             path: '/dashboard',
-            builder: (context, state) => const HomeScreen(),
+            builder: (context, state) => const DashboardScreen(),
           ),
           GoRoute(
             path: '/transactions',
