@@ -186,6 +186,7 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
         !searching || label.toLowerCase().contains(query);
 
     final showTransacoes = matches('Transações') || matches('Financeiro');
+    final showDashboard = matches('Dashboard') || matches('Financeiro');
     final showCalendario = matches('Calendário') || matches('Financeiro');
     final showOrcamento = matches('Orçamento') || matches('Financeiro');
     final showMetas = matches('Metas Financeiras') || matches('Planejamento');
@@ -193,7 +194,8 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
         matches('Planejamento de Compra') || matches('Planejamento');
     final showViagens =
         premium && (matches('Viagens e Moedas') || matches('Planejamento'));
-    final showFinanceiro = showTransacoes || showCalendario || showOrcamento;
+    final showFinanceiro =
+        showTransacoes || showCalendario || showOrcamento || showDashboard;
     final showPlanejamento = showMetas || showViagens || showCompra;
     final showPerfil = matches('Perfil') || matches('Conta');
     final showSettings = matches('Configurações') || matches('Conta');
@@ -305,6 +307,13 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                     onTap: () => _toggle('financeiro'),
                   ),
                   if (financeiroOpen) ...[
+                    if (showDashboard)
+                      _NavTile(
+                        icon: Icons.space_dashboard_outlined,
+                        label: 'Dashboard',
+                        selected: location == '/dashboard',
+                        onTap: () => _go(context, '/dashboard'),
+                      ),
                     if (showTransacoes)
                       _NavTile(
                         icon: Icons.swap_horiz,
