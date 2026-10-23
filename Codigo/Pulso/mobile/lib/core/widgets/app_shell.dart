@@ -102,6 +102,13 @@ class AppShell extends StatelessWidget {
         label: const Text('Nova'),
       );
     }
+    if (location == '/expense-split') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/expense-split/new'),
+        icon: const Icon(Icons.add),
+        label: const Text('Dividir'),
+      );
+    }
     if (location == '/debts') {
       return FloatingActionButton.extended(
         onPressed: () => context.push('/debts/new'),
@@ -204,6 +211,7 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     final showCalendario = matches('Calendário') || matches('Financeiro');
     final showOrcamento = matches('Orçamento') || matches('Financeiro');
     final showDividas = matches('Dívidas') || matches('Financeiro');
+    final showDivisao = matches('Divisão') || matches('Financeiro');
     final showMetas = matches('Metas Financeiras') || matches('Planejamento');
     final showGrupos = matches('Grupos') || matches('Planejamento');
     final showCompra =
@@ -215,7 +223,8 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
         showCalendario ||
         showOrcamento ||
         showDashboard ||
-        showDividas;
+        showDividas ||
+        showDivisao;
     final showPlanejamento =
         showMetas || showViagens || showCompra || showGrupos;
     final showPerfil = matches('Perfil') || matches('Conta');
@@ -370,6 +379,15 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                             location == '/debts' ||
                             location.startsWith('/debts/'),
                         onTap: () => _go(context, '/debts'),
+                      ),
+                    if (showDivisao)
+                      _NavTile(
+                        icon: Icons.groups_2_outlined,
+                        label: 'Divisão de despesas',
+                        selected:
+                            location == '/expense-split' ||
+                            location.startsWith('/expense-split/'),
+                        onTap: () => _go(context, '/expense-split'),
                       ),
                   ],
                 ],

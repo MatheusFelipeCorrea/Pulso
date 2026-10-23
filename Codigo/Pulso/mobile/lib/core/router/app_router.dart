@@ -22,6 +22,8 @@ import 'package:pulso/features/calendar/screens/reminder_form_screen.dart';
 import 'package:pulso/features/dashboard/screens/dashboard_screen.dart';
 import 'package:pulso/features/debts/screens/debt_form_screen.dart';
 import 'package:pulso/features/debts/screens/debts_screen.dart';
+import 'package:pulso/features/expense_split/screens/expense_split_form_screen.dart';
+import 'package:pulso/features/expense_split/screens/expense_split_screen.dart';
 import 'package:pulso/features/goals/data/goal_models.dart';
 import 'package:pulso/features/goals/screens/goal_form_screen.dart';
 import 'package:pulso/features/goals/screens/goals_screen.dart';
@@ -220,6 +222,10 @@ GoRouter createRouter(AuthController auth) {
         builder: (context, state) => const GroupFormScreen(),
       ),
       GoRoute(
+        path: '/expense-split/new',
+        builder: (context, state) => const ExpenseSplitFormScreen(),
+      ),
+      GoRoute(
         path: '/debts/new',
         builder: (context, state) => const DebtFormScreen(),
       ),
@@ -292,6 +298,10 @@ GoRouter createRouter(AuthController auth) {
             builder: (context, state) => const GroupsScreen(),
           ),
           GoRoute(
+            path: '/expense-split',
+            builder: (context, state) => const ExpenseSplitScreen(),
+          ),
+          GoRoute(
             path: '/debts',
             builder: (context, state) => const DebtsScreen(),
           ),
@@ -319,6 +329,7 @@ bool _isKnownAuthedLocation(String loc) {
     return true;
   }
   if (loc == '/debts' || loc == '/debts/new') return true;
+  if (loc == '/expense-split' || loc == '/expense-split/new') return true;
   if (loc == '/transactions/new' || loc.startsWith('/transactions/'))
     return true;
   if (loc == '/termos' || loc == '/privacidade') return true;
