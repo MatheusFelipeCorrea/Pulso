@@ -102,6 +102,13 @@ class AppShell extends StatelessWidget {
         label: const Text('Nova'),
       );
     }
+    if (location == '/expense-split') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/expense-split/new'),
+        icon: const Icon(Icons.add),
+        label: const Text('Dividir'),
+      );
+    }
     if (location == '/purchase-planning') {
       return FloatingActionButton.extended(
         onPressed: () => context.push('/purchase-planning/form'),
@@ -188,12 +195,14 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     final showTransacoes = matches('Transações') || matches('Financeiro');
     final showCalendario = matches('Calendário') || matches('Financeiro');
     final showOrcamento = matches('Orçamento') || matches('Financeiro');
+    final showDivisao = matches('Divisão') || matches('Financeiro');
     final showMetas = matches('Metas Financeiras') || matches('Planejamento');
     final showCompra =
         matches('Planejamento de Compra') || matches('Planejamento');
     final showViagens =
         premium && (matches('Viagens e Moedas') || matches('Planejamento'));
-    final showFinanceiro = showTransacoes || showCalendario || showOrcamento;
+    final showFinanceiro =
+        showTransacoes || showCalendario || showOrcamento || showDivisao;
     final showPlanejamento = showMetas || showViagens || showCompra;
     final showPerfil = matches('Perfil') || matches('Conta');
     final showSettings = matches('Configurações') || matches('Conta');
@@ -331,6 +340,15 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                             location == '/budget' ||
                             location.startsWith('/budget/'),
                         onTap: () => _go(context, '/budget'),
+                      ),
+                    if (showDivisao)
+                      _NavTile(
+                        icon: Icons.groups_2_outlined,
+                        label: 'Divisão de despesas',
+                        selected:
+                            location == '/expense-split' ||
+                            location.startsWith('/expense-split/'),
+                        onTap: () => _go(context, '/expense-split'),
                       ),
                   ],
                 ],
