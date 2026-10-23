@@ -15,15 +15,18 @@ jest.mock('../../../src/jobs/reminderAlertJob', () => ({ runReminderAlertJob: je
 jest.mock('../../../src/jobs/reminderRecurrenceJob', () => ({
     runReminderRecurrenceJob: jest.fn(),
 }));
+jest.mock('../../../src/jobs/debtAlertJob', () => ({ runDebtAlertJob: jest.fn() }));
 
 const messaging = require('../../../src/messaging/rabbit');
 const { startEmailConsumers } = require('../../../src/messaging/emailBridge');
 const { runBudgetAlertJob } = require('../../../src/jobs/budgetAlertJob');
 const { runReminderAlertJob } = require('../../../src/jobs/reminderAlertJob');
 const { runReminderRecurrenceJob } = require('../../../src/jobs/reminderRecurrenceJob');
+const { runDebtAlertJob } = require('../../../src/jobs/debtAlertJob');
 const {
     startMessagingWorkers,
     enqueueBudgetAlert,
+    enqueueDebtAlert,
     enqueueReminderAlert,
     enqueueReminderRecurrence,
 } = require('../../../src/messaging/jobBridge');
@@ -95,16 +98,19 @@ describe('jobBridge', () => {
         await reminderHandler({ type: 'reminder_alert' });
         const alertHandler = messaging.consume.mock.calls.find(([q]) => q === 'pulso.alerts')[1];
         await alertHandler({ type: 'budget_alert' });
+        await alertHandler({ type: 'debt_alert' });
 
         expect(runReminderRecurrenceJob).toHaveBeenCalledTimes(1);
         expect(runReminderAlertJob).toHaveBeenCalledTimes(1);
         expect(runBudgetAlertJob).toHaveBeenCalledTimes(1);
+        expect(runDebtAlertJob).toHaveBeenCalledTimes(1);
     });
 
     it('enfileira alertas de orçamento e lembretes nas filas certas', async () => {
         messaging.publishOrRun.mockResolvedValue('queued');
 
         await enqueueBudgetAlert();
+        await enqueueDebtAlert();
         await enqueueReminderAlert();
         await enqueueReminderRecurrence();
 
@@ -112,6 +118,11 @@ describe('jobBridge', () => {
             'pulso.alerts',
             { type: 'budget_alert' },
             runBudgetAlertJob
+        );
+        expect(messaging.publishOrRun).toHaveBeenCalledWith(
+            'pulso.alerts',
+            { type: 'debt_alert' },
+            runDebtAlertJob
         );
         expect(messaging.publishOrRun).toHaveBeenCalledWith(
             'pulso.reminders',

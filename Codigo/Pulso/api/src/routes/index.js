@@ -11,14 +11,14 @@ const budgetRoutes = require('./budgetRoutes');
 const reminderRoutes = require('./reminderRoutes');
 const calendarRoutes = require('./calendarRoutes');
 const purchasePlanningRoutes = require('./purchasePlanningRoutes');
+const debtRoutes = require('./debtRoutes');
+const expenseSplitRoutes = require('./expenseSplitRoutes');
+const grupoRoutes = require('./grupoRoutes');
+const dashboardRoutes = require('./dashboardRoutes');
+const importRoutes = require('./importRoutes');
 // TEMP: demais módulos ainda não estão neste repo.
 // const notificationRoutes = require('./notificationRoutes');
-// const debtRoutes = require('./debtRoutes');
-// const expenseSplitRoutes = require('./expenseSplitRoutes');
-// const grupoRoutes = require('./grupoRoutes');
 // const syncRoutes = require('./syncRoutes');
-// const dashboardRoutes = require('./dashboardRoutes');
-// const importRoutes = require('./importRoutes');
 
 const router = express.Router();
 
@@ -34,12 +34,12 @@ router.use('/orcamentos', budgetRoutes);
 router.use('/lembretes', reminderRoutes);
 router.use('/calendario', calendarRoutes);
 router.use('/planejamento-compra', purchasePlanningRoutes);
+router.use('/dividas', debtRoutes);
+router.use('/divisoes', expenseSplitRoutes);
+router.use('/grupos', grupoRoutes);
+router.use('/dashboard', dashboardRoutes);
+router.use('/importacoes', importRoutes);
 // router.use('/notificacoes', notificationRoutes);
-// router.use('/dividas', debtRoutes);
-// router.use('/divisoes', expenseSplitRoutes);
-// router.use('/grupos', grupoRoutes);
 // router.use('/sync', syncRoutes);
-// router.use('/dashboard', dashboardRoutes);
-// router.use('/importacoes', importRoutes);
 
 module.exports = router;
