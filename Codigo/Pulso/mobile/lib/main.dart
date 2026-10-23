@@ -9,6 +9,8 @@ import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/budget/data/budget_repository.dart';
 import 'package:pulso/features/calendar/data/calendar_repository.dart';
 import 'package:pulso/features/currency/data/currency_repository.dart';
+import 'package:pulso/features/dashboard/data/dashboard_repository.dart';
+import 'package:pulso/features/debts/data/debt_repository.dart';
 import 'package:pulso/features/expense_split/data/split_repository.dart';
 import 'package:pulso/features/goals/data/goal_repository.dart';
 import 'package:pulso/features/groups/data/group_repository.dart';
@@ -50,6 +52,8 @@ Future<void> main() async {
       purchase: PurchasePlanningRepository(api),
       currencies: CurrencyRepository(api),
       groups: GroupRepository(api),
+      dashboard: DashboardRepository(api),
+      debts: DebtRepository(api),
       splits: ExpenseSplitRepository(api),
     ),
   );

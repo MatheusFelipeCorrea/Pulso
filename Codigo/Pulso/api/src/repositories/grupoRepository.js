@@ -275,7 +275,13 @@ const buscarViagemDoGrupo = async (grupoId) =>
         select: { id: true },
     });
 
-const criarDespesaViagem = async ({ viagemGrupoId, adicionadoPorId, categoria, descricao, valorEstimado }) =>
+const criarDespesaViagem = async ({
+    viagemGrupoId,
+    adicionadoPorId,
+    categoria,
+    descricao,
+    valorEstimado,
+}) =>
     prisma.despesaViagemGrupo.create({
         data: {
             viagemGrupoId,
@@ -341,8 +347,7 @@ const listarMensagens = async (grupoId, { pagina = 1, limite = 20 } = {}) => {
     };
 };
 
-const contarMensagens = async (grupoId) =>
-    prisma.mensagemChatGrupo.count({ where: { grupoId } });
+const contarMensagens = async (grupoId) => prisma.mensagemChatGrupo.count({ where: { grupoId } });
 
 const excluirMensagensAntigas = async (diasLimite = 180) => {
     const limite = new Date();

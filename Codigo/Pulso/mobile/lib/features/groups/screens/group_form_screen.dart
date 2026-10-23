@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
+import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/groups/data/group_repository.dart';
 import 'package:pulso/features/groups/state/groups_controller.dart';
 
@@ -16,12 +17,14 @@ class GroupFormScreen extends StatefulWidget {
 
 class _GroupFormScreenState extends State<GroupFormScreen> {
   final _nome = TextEditingController();
+  final _descricao = TextEditingController();
   final _codigo = TextEditingController();
   bool submitting = false;
 
   @override
   void dispose() {
     _nome.dispose();
+    _descricao.dispose();
     _codigo.dispose();
     super.dispose();
   }
@@ -33,7 +36,10 @@ class _GroupFormScreenState extends State<GroupFormScreen> {
     }
     setState(() => submitting = true);
     try {
-      await context.read<GroupRepository>().criar(nome: _nome.text.trim());
+      await context.read<GroupRepository>().criar(
+        nome: _nome.text.trim(),
+        descricao: _descricao.text.trim(),
+      );
       if (!mounted) return;
       await context.read<GroupsController>().reload();
       if (!mounted) return;
@@ -75,9 +81,20 @@ class _GroupFormScreenState extends State<GroupFormScreen> {
       body: ListView(
         padding: const EdgeInsets.all(PulsoTokens.space4),
         children: [
+          const PulsoPageHeader(
+            title: 'Novo grupo',
+            subtitle: 'Crie um grupo ou entre com o código de convite.',
+            icon: Icons.group_add_outlined,
+          ),
           TextField(
             controller: _nome,
             decoration: const InputDecoration(labelText: 'Nome do grupo'),
+          ),
+          const SizedBox(height: PulsoTokens.space3),
+          TextField(
+            controller: _descricao,
+            decoration: const InputDecoration(labelText: 'Descrição'),
+            maxLines: 3,
           ),
           const SizedBox(height: PulsoTokens.space3),
           FilledButton(

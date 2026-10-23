@@ -11,6 +11,10 @@ import 'package:pulso/features/budget/state/budget_controller.dart';
 import 'package:pulso/features/calendar/data/calendar_repository.dart';
 import 'package:pulso/features/calendar/state/calendar_controller.dart';
 import 'package:pulso/features/currency/data/currency_repository.dart';
+import 'package:pulso/features/dashboard/data/dashboard_repository.dart';
+import 'package:pulso/features/dashboard/state/dashboard_controller.dart';
+import 'package:pulso/features/debts/data/debt_repository.dart';
+import 'package:pulso/features/debts/state/debts_controller.dart';
 import 'package:pulso/features/expense_split/data/split_repository.dart';
 import 'package:pulso/features/expense_split/state/split_controller.dart';
 import 'package:pulso/features/goals/data/goal_repository.dart';
@@ -39,6 +43,8 @@ class PulsoApp extends StatelessWidget {
     required this.purchase,
     required this.currencies,
     required this.groups,
+    required this.dashboard,
+    required this.debts,
     required this.splits,
   });
 
@@ -54,6 +60,8 @@ class PulsoApp extends StatelessWidget {
   final PurchasePlanningRepository purchase;
   final CurrencyRepository currencies;
   final GroupRepository groups;
+  final DashboardRepository dashboard;
+  final DebtRepository debts;
   final ExpenseSplitRepository splits;
 
   @override
@@ -71,6 +79,8 @@ class PulsoApp extends StatelessWidget {
         Provider<PurchasePlanningRepository>.value(value: purchase),
         Provider<CurrencyRepository>.value(value: currencies),
         Provider<GroupRepository>.value(value: groups),
+        Provider<DashboardRepository>.value(value: dashboard),
+        Provider<DebtRepository>.value(value: debts),
         Provider<ExpenseSplitRepository>.value(value: splits),
         ChangeNotifierProvider(
           create: (_) => TransactionsController(transactions),
@@ -83,6 +93,8 @@ class PulsoApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TripsController(trips)),
         ChangeNotifierProvider(create: (_) => PurchaseController(purchase)),
         ChangeNotifierProvider(create: (_) => GroupsController(groups)),
+        ChangeNotifierProvider(create: (_) => DashboardController(dashboard)),
+        ChangeNotifierProvider(create: (_) => DebtsController(debts)),
         ChangeNotifierProvider(create: (_) => ExpenseSplitController(splits)),
       ],
       child: AnimatedBuilder(

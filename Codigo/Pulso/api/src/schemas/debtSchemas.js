@@ -7,12 +7,7 @@ const personNameField = z
     .max(120, 'Nome da pessoa deve ter no máximo 120 caracteres')
     .transform(formatPersonName);
 
-const personNameFieldOptional = z
-    .string()
-    .min(1)
-    .max(120)
-    .transform(formatPersonName)
-    .optional();
+const personNameFieldOptional = z.string().min(1).max(120).transform(formatPersonName).optional();
 
 const dateInput = z.union([
     z.string().datetime({ message: 'Data inválida' }),
@@ -26,7 +21,11 @@ const criarDividaSchema = z.object({
         valor: z.coerce.number().positive('Valor deve ser maior que zero'),
         dataEmprestimo: dateInput,
         prazoDevolucao: dateInput.optional().nullable(),
-        observacao: z.string().max(250, 'Observação deve ter no máximo 250 caracteres').optional().nullable(),
+        observacao: z
+            .string()
+            .max(250, 'Observação deve ter no máximo 250 caracteres')
+            .optional()
+            .nullable(),
     }),
 });
 

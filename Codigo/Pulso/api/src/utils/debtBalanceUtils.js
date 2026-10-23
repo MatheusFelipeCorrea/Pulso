@@ -2,9 +2,7 @@ const roundMoney = (value) => Math.round(Number(value) * 100) / 100;
 
 const calcSaldoFromPagamentos = (divida, pagamentos = []) => {
     const valorTotal = roundMoney(divida.valor);
-    const valorPago = roundMoney(
-        pagamentos.reduce((acc, item) => acc + Number(item.valor), 0)
-    );
+    const valorPago = roundMoney(pagamentos.reduce((acc, item) => acc + Number(item.valor), 0));
     const valorRestante = Math.max(0, roundMoney(valorTotal - valorPago));
 
     return {

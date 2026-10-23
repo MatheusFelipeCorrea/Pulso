@@ -27,8 +27,10 @@ const TIPO_TRANSACAO_RE =
 const SKIP_RE =
     /^(?:extrato de conta|per[ií]odo|hora|tipo|valor|origem|forma de pagamento|documento emitido|d[uú]vidas|com saldo|saldo ao final do dia|\d+\s+de\s+\d+|todos os dias|\d+\s+de\s+\d+\s*$|\d+\s+of\s+\d+|$)/i;
 
-const RECEITA_CONTA_RE = /pix recebido|rendimento|transfer[eê]ncia recebida|dep[oó]sito|cr[eé]dito/i;
-const DESPESA_CONTA_RE = /pix enviado|compra realizada|pagamento realizado|pagamento|compra|d[eé]bito|saque/i;
+const RECEITA_CONTA_RE =
+    /pix recebido|rendimento|transfer[eê]ncia recebida|dep[oó]sito|cr[eé]dito/i;
+const DESPESA_CONTA_RE =
+    /pix enviado|compra realizada|pagamento realizado|pagamento|compra|d[eé]bito|saque/i;
 
 const normalizeMonthKey = (month) =>
     month

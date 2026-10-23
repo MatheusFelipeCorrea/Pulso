@@ -3,7 +3,13 @@ const debtRepository = require('../repositories/debtRepository');
 const { mapDivida } = require('../utils/debtMapper');
 const { mapPagamento } = require('../utils/debtPaymentMapper');
 const { formatPersonName } = require('../utils/personName');
-const { calcSaldoDivida, estaTotalmentePaga, isDividaQuitada, roundMoney, calcSaldoFromPagamentos } = require('../utils/debtBalanceUtils');
+const {
+    calcSaldoDivida,
+    estaTotalmentePaga,
+    isDividaQuitada,
+    roundMoney,
+    calcSaldoFromPagamentos,
+} = require('../utils/debtBalanceUtils');
 const {
     formatDateOnly,
     parseVencimentoDate,

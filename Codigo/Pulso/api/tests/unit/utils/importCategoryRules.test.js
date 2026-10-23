@@ -18,21 +18,21 @@ describe('importCategoryRules', () => {
     ];
 
     it('mapeia SUPERMERCADO para Compras', () => {
-        expect(
-            encontrarCategoriaPorRegra('PGTO SUPERMERCADO EXTRA', categorias, 'DESPESA')
-        ).toBe('compras');
+        expect(encontrarCategoriaPorRegra('PGTO SUPERMERCADO EXTRA', categorias, 'DESPESA')).toBe(
+            'compras'
+        );
     });
 
     it('mapeia supermercado sem word boundary quebrado', () => {
-        expect(
-            encontrarCategoriaPorRegra('COMPRA SUPERMERCADO DIA', categorias, 'DESPESA')
-        ).toBe('compras');
+        expect(encontrarCategoriaPorRegra('COMPRA SUPERMERCADO DIA', categorias, 'DESPESA')).toBe(
+            'compras'
+        );
     });
 
     it('mapeia sorveteria para Alimentação', () => {
-        expect(encontrarCategoriaPorRegra('PGTO SORVETERIA BANDEIRANTES', categorias, 'DESPESA')).toBe(
-            'alimentacao'
-        );
+        expect(
+            encontrarCategoriaPorRegra('PGTO SORVETERIA BANDEIRANTES', categorias, 'DESPESA')
+        ).toBe('alimentacao');
     });
 
     it('mapeia panificadora para Alimentação', () => {
@@ -45,7 +45,9 @@ describe('importCategoryRules', () => {
         expect(encontrarCategoriaPorRegra('CONFEITARIA DOCE SABOR', categorias, 'DESPESA')).toBe(
             'alimentacao'
         );
-        expect(encontrarCategoriaPorRegra('PADARIA CENTRAL', categorias, 'DESPESA')).toBe('alimentacao');
+        expect(encontrarCategoriaPorRegra('PADARIA CENTRAL', categorias, 'DESPESA')).toBe(
+            'alimentacao'
+        );
     });
 
     it('mapeia ifood para Alimentação', () => {
@@ -70,7 +72,9 @@ describe('importCategoryRules', () => {
     });
 
     it('mapeia barbearia para Beleza, não Alimentação', () => {
-        expect(encontrarCategoriaPorRegra('BARBEARIA DO JOAO', categorias, 'DESPESA')).toBe('beleza');
+        expect(encontrarCategoriaPorRegra('BARBEARIA DO JOAO', categorias, 'DESPESA')).toBe(
+            'beleza'
+        );
     });
 
     it('mapeia pix recebido para Salário', () => {
@@ -84,7 +88,9 @@ describe('importCategoryRules', () => {
     });
 
     it('retorna null quando não há match', () => {
-        expect(encontrarCategoriaPorRegra('XYZ DESCONHECIDO 999', categorias, 'DESPESA')).toBeNull();
+        expect(
+            encontrarCategoriaPorRegra('XYZ DESCONHECIDO 999', categorias, 'DESPESA')
+        ).toBeNull();
     });
 
     it('possui grupos extensos de keywords', () => {

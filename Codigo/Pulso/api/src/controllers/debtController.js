@@ -43,7 +43,11 @@ const editar = async (req, res, next) => {
 
 const registrarPagamento = async (req, res, next) => {
     try {
-        const resultado = await debtService.registrarPagamento(req.user.id, req.params.id, req.body);
+        const resultado = await debtService.registrarPagamento(
+            req.user.id,
+            req.params.id,
+            req.body
+        );
         res.status(201).json(resultado);
     } catch (error) {
         next(error);
