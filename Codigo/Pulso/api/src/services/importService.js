@@ -15,7 +15,11 @@ const {
     AJUSTE_SALDO_IMPORTACAO_DESCRICAO,
 } = require('../utils/importBeneficioUtils');
 const { calcularSaldosPorRecurso } = require('../utils/resourceBalanceUtils');
-const { parseVencimentoDate, toDateOnlyInTimezone, todayInTimezone } = require('../utils/dateTimezone');
+const {
+    parseVencimentoDate,
+    toDateOnlyInTimezone,
+    todayInTimezone,
+} = require('../utils/dateTimezone');
 const prisma = require('../config/database');
 
 const RECURSO_BY_ORIGEM = {
@@ -29,14 +33,18 @@ const round2 = (value) => Math.round(Number(value) * 100) / 100;
 
 const buildDedupeSet = async (usuarioId) => {
     const existentes = await transactionRepository.listarParaDedupeImportacao(usuarioId);
-    return new Set(
-        existentes.map((tx) => buildImportHash(tx.data, tx.valor, tx.descricao))
-    );
+    return new Set(existentes.map((tx) => buildImportHash(tx.data, tx.valor, tx.descricao)));
 };
 
 const sugerirCategorias = async (usuarioId, linhas, categorias, origem) => {
-    const historicoReceita = await transactionRepository.listarDescricoesPorTipo(usuarioId, 'RECEITA');
-    const historicoDespesa = await transactionRepository.listarDescricoesPorTipo(usuarioId, 'DESPESA');
+    const historicoReceita = await transactionRepository.listarDescricoesPorTipo(
+        usuarioId,
+        'RECEITA'
+    );
+    const historicoDespesa = await transactionRepository.listarDescricoesPorTipo(
+        usuarioId,
+        'DESPESA'
+    );
     const origemComSaldoExtrato = isOrigemComSaldoExtrato(origem);
 
     return linhas.map((linha) => {
@@ -89,10 +97,13 @@ const dataMaisRecenteImportacao = (linhas = []) => {
         return parseVencimentoDate(todayInTimezone());
     }
 
-    return linhas.reduce((max, linha) => {
-        const data = parseVencimentoDate(toDateOnlyInTimezone(linha.data));
-        return data > max ? data : max;
-    }, parseVencimentoDate(toDateOnlyInTimezone(linhas[0].data)));
+    return linhas.reduce(
+        (max, linha) => {
+            const data = parseVencimentoDate(toDateOnlyInTimezone(linha.data));
+            return data > max ? data : max;
+        },
+        parseVencimentoDate(toDateOnlyInTimezone(linhas[0].data))
+    );
 };
 
 const analisarArquivo = async (usuarioId, { buffer, filename, origem, mapeamento = {} }) => {

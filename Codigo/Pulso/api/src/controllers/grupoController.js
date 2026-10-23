@@ -118,7 +118,11 @@ const obterMediaPassagemViagem = async (req, res, next) => {
 
 const criarDespesaViagem = async (req, res, next) => {
     try {
-        const grupo = await grupoService.criarDespesaViagemGrupo(req.user.id, req.params.id, req.body);
+        const grupo = await grupoService.criarDespesaViagemGrupo(
+            req.user.id,
+            req.params.id,
+            req.body
+        );
         res.status(201).json(grupo);
     } catch (error) {
         next(error);
@@ -154,7 +158,11 @@ const excluirDespesaViagem = async (req, res, next) => {
 
 const criarMetas = async (req, res, next) => {
     try {
-        const grupo = await grupoService.criarMetasGrupo(req.user.id, req.params.id, req.body.metas);
+        const grupo = await grupoService.criarMetasGrupo(
+            req.user.id,
+            req.params.id,
+            req.body.metas
+        );
         res.status(201).json(grupo);
     } catch (error) {
         next(error);
@@ -186,7 +194,11 @@ const enviarMensagem = async (req, res, next) => {
 
 const listarMensagens = async (req, res, next) => {
     try {
-        const resultado = await grupoService.listarMensagensGrupo(req.user.id, req.params.id, req.query);
+        const resultado = await grupoService.listarMensagensGrupo(
+            req.user.id,
+            req.params.id,
+            req.query
+        );
         res.status(200).json(resultado);
     } catch (error) {
         next(error);

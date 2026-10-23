@@ -30,4 +30,9 @@ class GroupsController extends ChangeNotifier {
     await _repository.excluir(id);
     await reload();
   }
+
+  Future<void> sair(String id) async {
+    await _repository.sair(id);
+    await reload();
+  }
 }

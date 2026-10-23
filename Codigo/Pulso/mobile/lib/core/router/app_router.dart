@@ -23,6 +23,8 @@ import 'package:pulso/features/dashboard/screens/dashboard_screen.dart';
 import 'package:pulso/features/goals/data/goal_models.dart';
 import 'package:pulso/features/goals/screens/goal_form_screen.dart';
 import 'package:pulso/features/goals/screens/goals_screen.dart';
+import 'package:pulso/features/groups/data/group_models.dart';
+import 'package:pulso/features/groups/screens/group_detail_screen.dart';
 import 'package:pulso/features/groups/screens/group_form_screen.dart';
 import 'package:pulso/features/groups/screens/groups_screen.dart';
 import 'package:pulso/features/purchase/data/purchase_models.dart';
@@ -65,11 +67,6 @@ GoRouter createRouter(AuthController auth) {
         return '/transactions';
       }
       if (loggedIn && state.matchedLocation == '/home') {
-        return '/transactions';
-      }
-      if (loggedIn &&
-          (state.matchedLocation == '/groups' ||
-              state.matchedLocation.startsWith('/groups/'))) {
         return '/transactions';
       }
       if (loggedIn &&
@@ -220,6 +217,13 @@ GoRouter createRouter(AuthController auth) {
         path: '/groups/new',
         builder: (context, state) => const GroupFormScreen(),
       ),
+      GoRoute(
+        path: '/groups/:id',
+        builder: (context, state) => GroupDetailScreen(
+          grupoId: state.pathParameters['id'] ?? '',
+          inicial: state.extra is PulsoGrupo ? state.extra as PulsoGrupo : null,
+        ),
+      ),
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
         routes: [
@@ -301,7 +305,9 @@ bool _isKnownAuthedLocation(String loc) {
     return true;
   if (loc == '/purchase-planning' || loc == '/purchase-planning/form')
     return true;
-  if (loc == '/groups' || loc == '/groups/new') return true;
+  if (loc == '/groups' || loc == '/groups/new' || loc.startsWith('/groups/')) {
+    return true;
+  }
   if (loc == '/transactions/new' || loc.startsWith('/transactions/'))
     return true;
   if (loc == '/termos' || loc == '/privacidade') return true;

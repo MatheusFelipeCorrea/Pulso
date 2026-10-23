@@ -59,12 +59,7 @@ const verificarDividasENotificar = async () => {
         const diasRestantes = diasAteVencimento(divida.prazoDevolucao);
         if (!DIAS_ALERTA.includes(diasRestantes)) continue;
 
-        const notif = await criarNotificacaoDivida(
-            divida,
-            diasRestantes,
-            hoje,
-            valorRestante
-        );
+        const notif = await criarNotificacaoDivida(divida, diasRestantes, hoje, valorRestante);
         if (notif) criadas += 1;
     }
 

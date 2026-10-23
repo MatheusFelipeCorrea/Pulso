@@ -18,14 +18,14 @@ class GroupRepository {
   List<PulsoGrupo> _parseList(dynamic data) {
     if (data is List) {
       return data
-          .whereType<Map<String, dynamic>>()
-          .map(PulsoGrupo.fromJson)
+          .whereType<Map>()
+          .map((item) => PulsoGrupo.fromJson(Map<String, dynamic>.from(item)))
           .toList();
     }
-    if (data is Map<String, dynamic> && data['grupos'] is List) {
+    if (data is Map && data['grupos'] is List) {
       return (data['grupos'] as List)
-          .whereType<Map<String, dynamic>>()
-          .map(PulsoGrupo.fromJson)
+          .whereType<Map>()
+          .map((item) => PulsoGrupo.fromJson(Map<String, dynamic>.from(item)))
           .toList();
     }
     return const [];
@@ -38,11 +38,22 @@ class GroupRepository {
     });
   }
 
-  Future<PulsoGrupo> criar({required String nome}) {
+  Future<PulsoGrupo> obter(String id) {
+    return _guard(() async {
+      final response = await _api.raw.get<Map<String, dynamic>>('/grupos/$id');
+      return PulsoGrupo.fromJson(response.data ?? {});
+    });
+  }
+
+  Future<PulsoGrupo> criar({required String nome, String? descricao}) {
     return _guard(() async {
       final response = await _api.raw.post<Map<String, dynamic>>(
         '/grupos',
-        data: {'nome': nome},
+        data: {
+          'nome': nome,
+          if (descricao != null && descricao.trim().isNotEmpty)
+            'descricao': descricao.trim(),
+        },
       );
       return PulsoGrupo.fromJson(response.data ?? {});
     });
