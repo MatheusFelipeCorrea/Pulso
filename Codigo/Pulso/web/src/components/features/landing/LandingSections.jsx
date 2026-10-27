@@ -1,14 +1,7 @@
 import { Link } from 'react-router-dom'
-import {
-    APP_DOWNLOADS,
-    HIGHLIGHTS,
-    FEATURES,
-    AUDIENCE,
-    BENEFITS,
-    TESTIMONIALS,
-} from './landingData.js'
+import { HIGHLIGHTS, FEATURES, AUDIENCE, BENEFITS, PRICING, TESTIMONIALS } from './landingData.js'
 import { LandingPhoneHomeShowcase } from './LandingPhoneHomeMockup.jsx'
-import { Briefcase, Check, Download, GraduationCap, Laptop, Star, UserRound } from 'lucide-react'
+import { Briefcase, Check, GraduationCap, Laptop, Smartphone, Star, UserRound } from 'lucide-react'
 
 const AUDIENCE_ICONS = {
     graduation: GraduationCap,
@@ -43,7 +36,10 @@ export function LandingFeatures() {
             <div className="landing-container">
                 <div className="landing-section__header">
                     <h2>Tudo que você precisa num só lugar</h2>
-                    <p>Ferramentas completas para organizar, planejar e evoluir suas finanças.</p>
+                    <p>
+                        Do dashboard às dívidas no Free — grupos e viagens no Premium, sempre em
+                        reais.
+                    </p>
                 </div>
                 <div className="landing-features__grid">
                     {FEATURES.map(({ icon: Icon, title, description, tone, badge }) => (
@@ -124,32 +120,21 @@ export function LandingMobile() {
                 <div className="landing-mobile__content">
                     <h2>Leve o Pulso com você</h2>
                     <p>
-                        Baixe o app direto aqui na homepage — sem Google Play nem App Store. Acesse
-                        saldo, metas e insights de qualquer lugar.
+                        O app Flutter está em desenvolvimento. Em breve você baixa direto por aqui —
+                        Android e iOS — sem depender de loja.
                     </p>
-                    <div className="landing-mobile__downloads">
-                        {APP_DOWNLOADS.map(({ id, label, hint, href, filename }) => (
-                            <a
-                                key={id}
-                                href={href}
-                                download={filename}
-                                className={`landing-download-btn landing-download-btn--${id}`}
-                            >
-                                <span className="landing-download-btn__icon" aria-hidden>
-                                    <Download size={20} />
-                                </span>
-                                <span className="landing-download-btn__text">
-                                    <small>Baixar para</small>
-                                    <strong>{label}</strong>
-                                    <em>{hint}</em>
-                                </span>
-                            </a>
-                        ))}
+                    <div className="landing-mobile__soon" role="status">
+                        <span className="landing-mobile__soon-icon" aria-hidden>
+                            <Smartphone size={22} />
+                        </span>
+                        <div>
+                            <strong>App mobile em breve</strong>
+                            <p>
+                                Assim que o Flutter estiver pronto, liberamos o download nesta
+                                página.
+                            </p>
+                        </div>
                     </div>
-                    <p className="landing-mobile__note">
-                        No iOS, pode ser necessário autorizar o app em Ajustes → Geral → VPN e
-                        Gerenciamento de Dispositivo.
-                    </p>
                 </div>
                 <LandingPhoneHomeShowcase />
             </div>
@@ -157,9 +142,56 @@ export function LandingMobile() {
     )
 }
 
+export function LandingPricing() {
+    return (
+        <section id="precos" className="landing-section">
+            <div className="landing-container">
+                <div className="landing-section__header">
+                    <h2>Planos simples, em reais</h2>
+                    <p>
+                        Comece no Free. Premium libera grupos e viagens por R$ 50/mês.
+                    </p>
+                </div>
+                <div className="landing-pricing__grid">
+                    {PRICING.map((plan) => (
+                        <article
+                            key={plan.id}
+                            className={`landing-pricing-card${plan.highlighted ? ' landing-pricing-card--highlighted' : ''}`}
+                        >
+                            {plan.highlighted ? (
+                                <span className="landing-pricing-card__badge">Recomendado</span>
+                            ) : null}
+                            <h3>{plan.name}</h3>
+                            <div className="landing-pricing-card__price">
+                                <strong>{plan.price}</strong>
+                                <span>{plan.period}</span>
+                            </div>
+                            <p className="landing-pricing-card__desc">{plan.description}</p>
+                            <ul>
+                                {plan.features.map((feature) => (
+                                    <li key={feature}>
+                                        <Check size={16} aria-hidden />
+                                        <span>{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <Link
+                                to={plan.to}
+                                className={`landing-pricing-card__cta${plan.highlighted ? ' landing-pricing-card__cta--primary' : ''}`}
+                            >
+                                {plan.cta}
+                            </Link>
+                        </article>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )
+}
+
 export function LandingTestimonials() {
     return (
-        <section className="landing-section">
+        <section className="landing-section landing-section--muted">
             <div className="landing-container">
                 <div className="landing-section__header">
                     <h2>O que nossos usuários dizem</h2>
@@ -193,7 +225,7 @@ export function LandingTestimonials() {
 
 export function LandingCta() {
     return (
-        <section id="precos" className="landing-section landing-section--cta">
+        <section className="landing-section landing-section--cta">
             <div className="landing-container">
                 <div className="landing-cta">
                     <h2>Comece agora a ter pulso firme nas suas finanças.</h2>

@@ -14,7 +14,7 @@ export function LandingHero() {
         <section className="landing-hero">
             <div className="landing-container landing-hero__grid">
                 <div className="landing-hero__content">
-                    <span className="landing-badge">100% gratuito · Sem cartão de crédito</span>
+                    <span className="landing-badge">Comece grátis · Valores em reais</span>
 
                     <h1 className="landing-hero__title">
                         O pulso da sua{' '}
@@ -22,8 +22,8 @@ export function LandingHero() {
                     </h1>
 
                     <p className="landing-hero__subtitle">
-                        Controle gastos, planeje viagens, acompanhe benefícios e receba insights de
-                        IA — tudo pensado para quem está começando a organizar a vida financeira.
+                        Organize o mês em reais: saldo, benefícios (VA e VR), orçamento, metas e
+                        dívidas — com grupos e viagens no Premium.
                     </p>
 
                     <div className="landing-hero__actions">
@@ -65,7 +65,7 @@ export function LandingHero() {
                                 ))}
                             </div>
                             <p className="landing-hero__social-text">
-                                +5.000 usuários já confiam no Pulso
+                                Feito por alunos da PUC Minas · TI5
                             </p>
                         </div>
                     </div>

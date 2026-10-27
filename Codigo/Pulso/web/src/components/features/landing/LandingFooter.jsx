@@ -1,35 +1,40 @@
 import { Link } from 'react-router-dom'
-import { Globe, Share2, Users } from 'lucide-react'
+import { Code2 } from 'lucide-react'
 import { PulsoBrand } from '@/components/features/auth/PulsoBrand'
-import { FOOTER_LINKS } from './landingData.js'
+import { FOOTER_LINKS, REPO_URL } from './landingData.js'
 
-const SOCIAL = [
-    { icon: Share2, href: 'https://github.com', label: 'GitHub' },
-    { icon: Users, href: 'https://instagram.com', label: 'Instagram' },
-    { icon: Globe, href: 'https://linkedin.com', label: 'LinkedIn' },
-]
+function FooterLink({ link }) {
+    if (link.external && link.href) {
+        return (
+            <a href={link.href} target="_blank" rel="noopener noreferrer">
+                {link.label}
+            </a>
+        )
+    }
+    if (link.to) {
+        return <Link to={link.to}>{link.label}</Link>
+    }
+    return <a href={link.href}>{link.label}</a>
+}
 
 export function LandingFooter() {
     return (
-        <footer id="roadmap" className="landing-footer">
+        <footer className="landing-footer">
             <div className="landing-container landing-footer__grid">
                 <div className="landing-footer__brand">
                     <PulsoBrand to="/" showTagline />
                     <p className="landing-footer__tagline">
-                        Seu monitoramento financeiro, em um só lugar.
+                        Seu monitoramento financeiro, em um só lugar — em reais.
                     </p>
                     <div className="landing-footer__social">
-                        {SOCIAL.map(({ icon: Icon, href, label }) => (
-                            <a
-                                key={label}
-                                href={href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label={label}
-                            >
-                                <Icon size={18} />
-                            </a>
-                        ))}
+                        <a
+                            href={REPO_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="GitHub do Pulso"
+                        >
+                            <Code2 size={18} />
+                        </a>
                     </div>
                 </div>
 
@@ -38,7 +43,7 @@ export function LandingFooter() {
                     <ul>
                         {FOOTER_LINKS.navegacao.map((link) => (
                             <li key={link.label}>
-                                <a href={link.href}>{link.label}</a>
+                                <FooterLink link={link} />
                             </li>
                         ))}
                     </ul>
@@ -49,7 +54,7 @@ export function LandingFooter() {
                     <ul>
                         {FOOTER_LINKS.recursos.map((link) => (
                             <li key={link.label}>
-                                <Link to={link.to}>{link.label}</Link>
+                                <FooterLink link={link} />
                             </li>
                         ))}
                     </ul>
@@ -60,9 +65,7 @@ export function LandingFooter() {
                     <ul>
                         {FOOTER_LINKS.comunidade.map((link) => (
                             <li key={link.label}>
-                                <a href={link.href} target="_blank" rel="noopener noreferrer">
-                                    {link.label}
-                                </a>
+                                <FooterLink link={link} />
                             </li>
                         ))}
                     </ul>
@@ -70,7 +73,7 @@ export function LandingFooter() {
             </div>
 
             <div className="landing-container landing-footer__bottom">
-                <p>Feito com 💜 por Matheus Felipe</p>
+                <p>Projeto TI5 · ICEI PUC Minas</p>
                 <p>© {new Date().getFullYear()} Pulso. Todos os direitos reservados.</p>
             </div>
         </footer>

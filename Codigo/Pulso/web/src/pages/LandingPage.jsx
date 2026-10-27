@@ -10,6 +10,7 @@ import {
     LandingAudience,
     LandingBenefits,
     LandingMobile,
+    LandingPricing,
     LandingTestimonials,
     LandingCta,
 } from '@/components/features/landing/LandingSections.jsx'
@@ -42,6 +43,7 @@ export default function LandingPage() {
                 <LandingAudience />
                 <LandingBenefits />
                 <LandingMobile />
+                <LandingPricing />
                 <LandingTestimonials />
                 <LandingCta />
             </main>
