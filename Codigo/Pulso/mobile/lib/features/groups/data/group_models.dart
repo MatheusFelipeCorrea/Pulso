@@ -49,6 +49,7 @@ class PulsoGrupoViagem {
 
 class PulsoGrupoMeta {
   const PulsoGrupoMeta({
+    this.id,
     required this.nome,
     this.valorAlvo = '0.00',
     this.valorAtual = '0.00',
@@ -56,6 +57,7 @@ class PulsoGrupoMeta {
     this.status = 'ATIVA',
   });
 
+  final String? id;
   final String nome;
   final String valorAlvo;
   final String valorAtual;
@@ -65,11 +67,69 @@ class PulsoGrupoMeta {
   factory PulsoGrupoMeta.fromJson(Map<String, dynamic> json) {
     final raw = json['percentual'];
     return PulsoGrupoMeta(
+      id: json['id'] as String?,
       nome: json['nome'] as String? ?? 'Meta do grupo',
       valorAlvo: json['valorAlvo']?.toString() ?? '0.00',
       valorAtual: json['valorAtual']?.toString() ?? '0.00',
       percentual: raw is num ? raw.round() : int.tryParse('$raw') ?? 0,
       status: json['status'] as String? ?? 'ATIVA',
+    );
+  }
+}
+
+class PulsoGrupoMensagem {
+  const PulsoGrupoMensagem({
+    required this.id,
+    required this.texto,
+    this.autorNome,
+    this.autorId,
+    this.criadoEm,
+    this.souEu = false,
+  });
+
+  final String id;
+  final String texto;
+  final String? autorNome;
+  final String? autorId;
+  final DateTime? criadoEm;
+  final bool souEu;
+
+  factory PulsoGrupoMensagem.fromJson(Map<String, dynamic> json) {
+    final autor = json['autor'];
+    return PulsoGrupoMensagem(
+      id: json['id'] as String? ?? '',
+      texto: json['texto'] as String? ?? json['conteudo'] as String? ?? '',
+      autorNome: autor is Map
+          ? autor['nome'] as String?
+          : json['autorNome'] as String?,
+      autorId: autor is Map
+          ? autor['id'] as String?
+          : json['autorId'] as String?,
+      criadoEm: DateTime.tryParse(
+        json['criadoEm'] as String? ?? json['createdAt'] as String? ?? '',
+      ),
+      souEu: json['souEu'] == true,
+    );
+  }
+}
+
+class PulsoGrupoPreview {
+  const PulsoGrupoPreview({
+    required this.nome,
+    this.quantidadeMembros = 0,
+    this.urlImagem,
+  });
+
+  final String nome;
+  final int quantidadeMembros;
+  final String? urlImagem;
+
+  factory PulsoGrupoPreview.fromJson(Map<String, dynamic> json) {
+    final qtd = json['quantidadeMembros'];
+    return PulsoGrupoPreview(
+      nome: json['nome'] as String? ?? 'Grupo',
+      quantidadeMembros: qtd is num ? qtd.toInt() : int.tryParse('$qtd') ?? 0,
+      urlImagem: json['urlImagem'] as String? ?? json['imagemExibicao'] as String?,
     );
   }
 }
