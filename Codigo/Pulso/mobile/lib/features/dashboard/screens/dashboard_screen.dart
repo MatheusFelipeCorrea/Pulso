@@ -7,6 +7,7 @@ import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/dashboard/state/dashboard_controller.dart';
 import 'package:pulso/features/dashboard/utils/dashboard_labels.dart';
+import 'package:pulso/features/dashboard/widgets/dashboard_charts.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -128,6 +129,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: PulsoTokens.space3),
+            DashboardIncomeExpenseBars(
+              receitas: dados.receitas,
+              despesas: dados.despesas,
+            ),
             const SizedBox(height: PulsoTokens.space5),
             const PulsoSectionHeader(
               title: 'Recursos',
@@ -192,38 +198,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               title: 'Gastos por categoria',
               icon: Icons.donut_large_outlined,
             ),
-            if (dados.categorias.isEmpty)
-              Text(
-                'Sem despesas categorizadas neste mês.',
-                style: Theme.of(context).textTheme.bodySmall,
-              )
-            else
-              ...dados.categorias
-                  .take(6)
-                  .map(
-                    (categoria) => Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: PulsoTokens.space3,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.label_outline, size: 16),
-                              const SizedBox(width: 6),
-                              Expanded(child: Text(categoria.nome)),
-                              Text(formatBrl(categoria.total)),
-                            ],
-                          ),
-                          const SizedBox(height: 6),
-                          LinearProgressIndicator(
-                            value: (categoria.percentual.clamp(0, 100)) / 100,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+            DashboardCategoryDonut(categorias: dados.categorias),
             const SizedBox(height: PulsoTokens.space4),
             PulsoSurface(
               child: Column(
