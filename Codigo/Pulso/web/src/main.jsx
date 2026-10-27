@@ -27,8 +27,7 @@ import './styles/dashboard.css'
 import './styles/groups.css'
 import './styles/debts.css'
 import './styles/expense-split.css'
-// TEMP: CSS de módulos ainda ausentes
-// import './styles/pulso-components.css'
+import './styles/pulso-components.css'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>

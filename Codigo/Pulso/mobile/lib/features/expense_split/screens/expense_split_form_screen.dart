@@ -55,7 +55,8 @@ class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
         'valorTotal': valor,
         'tipo': 'IGUAL',
         'data': data,
-        'icone': 'receipt',
+        'icone': 'Receipt',
+        'cor': '#7C3AED',
         'participantes': nomes.map((nome) => {'nome': nome}).toList(),
         'pagoPor': _euPaguei ? 'VOCE' : nomes.first,
       });

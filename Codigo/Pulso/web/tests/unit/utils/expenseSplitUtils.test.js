@@ -4,6 +4,10 @@ import {
     validarSomaPersonalizada,
     getParticipantesVisiveis,
     getPagador,
+    resolveExpenseSplitVisual,
+    expenseSplitIconStyle,
+    EXPENSE_SPLIT_DEFAULT_COLOR,
+    EXPENSE_SPLIT_DEFAULT_ICON,
 } from '@/utils/expenseSplitUtils.js'
 
 describe('expenseSplitUtils', () => {
@@ -55,6 +59,32 @@ describe('expenseSplitUtils', () => {
                 ],
             }
             expect(getPagador(divisao)).toEqual({ id: 'p2', nome: 'Você', pagouAConta: true })
+        })
+    })
+
+    describe('resolveExpenseSplitVisual', () => {
+        it('usa fallback de ícone e cor quando a divisão não tem categoria', () => {
+            expect(resolveExpenseSplitVisual({})).toEqual({
+                icone: EXPENSE_SPLIT_DEFAULT_ICON,
+                cor: EXPENSE_SPLIT_DEFAULT_COLOR,
+            })
+        })
+
+        it('preserva ícone e cor salvos na divisão', () => {
+            expect(resolveExpenseSplitVisual({ icone: 'UtensilsCrossed', cor: '#EF4444' })).toEqual(
+                {
+                    icone: 'UtensilsCrossed',
+                    cor: '#EF4444',
+                }
+            )
+        })
+    })
+
+    describe('expenseSplitIconStyle', () => {
+        it('sempre devolve cor e fundo, mesmo sem hex salvo', () => {
+            const style = expenseSplitIconStyle(null)
+            expect(style.color).toBe(EXPENSE_SPLIT_DEFAULT_COLOR)
+            expect(style.background).toContain(EXPENSE_SPLIT_DEFAULT_COLOR)
         })
     })
 })

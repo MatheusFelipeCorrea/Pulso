@@ -24,6 +24,7 @@ import { DatePicker } from '@/design-system/components/pickers/DatePicker/DatePi
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { resolveBadgeIcon } from '@/components/badges/iconRegistry.jsx'
 import { formatPersonName } from '@/utils/personName.js'
+import { resolveExpenseSplitVisual, expenseSplitIconStyle } from '@/utils/expenseSplitUtils.js'
 import * as calendarService from '@/services/calendarService.js'
 
 function GoogleCalendarAppIcon() {
@@ -121,6 +122,8 @@ export function ExpenseSplitReminderModal({
 
     if (!divisao) return null
 
+    const visual = resolveExpenseSplitVisual(divisao)
+
     const toggleSelecionado = (id) => {
         setSelecionados((prev) => {
             const next = new Set(prev)
@@ -180,15 +183,10 @@ export function ExpenseSplitReminderModal({
                     <div className="expense-split-reminder__card">
                         <span
                             className="expense-split-reminder__card-icon"
-                            style={{
-                                color: divisao.cor ?? undefined,
-                                background: divisao.cor
-                                    ? `color-mix(in srgb, ${divisao.cor} 14%, transparent)`
-                                    : undefined,
-                            }}
+                            style={expenseSplitIconStyle(visual.cor)}
                             aria-hidden
                         >
-                            {resolveBadgeIcon(divisao.icone ?? 'Receipt', { size: 20 })}
+                            {resolveBadgeIcon(visual.icone, { size: 20 })}
                         </span>
                         <div>
                             <strong>

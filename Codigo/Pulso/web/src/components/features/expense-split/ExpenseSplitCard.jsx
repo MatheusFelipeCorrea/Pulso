@@ -7,7 +7,12 @@ import { Tooltip } from '@/design-system/components/data-display/Tooltip/Tooltip
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { resolveBadgeIcon } from '@/components/badges/iconRegistry.jsx'
-import { getParticipantesVisiveis, getPagador } from '@/utils/expenseSplitUtils.js'
+import {
+    getParticipantesVisiveis,
+    getPagador,
+    resolveExpenseSplitVisual,
+    expenseSplitIconStyle,
+} from '@/utils/expenseSplitUtils.js'
 
 function formatDate(iso) {
     if (!iso) return '—'
@@ -24,21 +29,17 @@ export function ExpenseSplitCard({
 }) {
     const participantes = getParticipantesVisiveis(divisao)
     const pagador = getPagador(divisao)
+    const visual = resolveExpenseSplitVisual(divisao)
 
     return (
         <li className="expense-split-card">
             <div className="expense-split-card__header">
                 <span
                     className="expense-split-card__icon"
-                    style={{
-                        color: divisao.cor ?? undefined,
-                        background: divisao.cor
-                            ? `color-mix(in srgb, ${divisao.cor} 14%, transparent)`
-                            : undefined,
-                    }}
+                    style={expenseSplitIconStyle(visual.cor)}
                     aria-hidden
                 >
-                    {resolveBadgeIcon(divisao.icone ?? 'Receipt', { size: 18 })}
+                    {resolveBadgeIcon(visual.icone, { size: 18 })}
                 </span>
                 <h3 className="expense-split-card__title">{divisao.titulo}</h3>
             </div>

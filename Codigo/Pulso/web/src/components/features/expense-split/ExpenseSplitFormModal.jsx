@@ -25,7 +25,12 @@ import { Badge } from '@/design-system/components/data-display/Badge/Badge.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { categoriaToSelectOption } from '@/utils/filterOptions.js'
 import { listarCategorias } from '@/services/categoryService.js'
-import { splitEqual, getPagador } from '@/utils/expenseSplitUtils.js'
+import {
+    splitEqual,
+    getPagador,
+    EXPENSE_SPLIT_DEFAULT_ICON,
+    EXPENSE_SPLIT_DEFAULT_COLOR,
+} from '@/utils/expenseSplitUtils.js'
 
 const emptyForm = () => ({
     titulo: '',
@@ -169,8 +174,8 @@ export function ExpenseSplitFormModal({
             valorTotal: form.valorTotal,
             tipo: form.tipo,
             data: form.data.toISOString().slice(0, 10),
-            icone: categoria?.icone ?? null,
-            cor: categoria?.cor ?? null,
+            icone: categoria?.icone ?? EXPENSE_SPLIT_DEFAULT_ICON,
+            cor: categoria?.cor ?? EXPENSE_SPLIT_DEFAULT_COLOR,
             participantes: form.participantesOutros.map((nome) => ({
                 nome,
                 ...(form.tipo === 'PERSONALIZADA'
