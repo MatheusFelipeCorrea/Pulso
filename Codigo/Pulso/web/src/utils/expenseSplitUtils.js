@@ -27,3 +27,29 @@ export function getParticipantesVisiveis(divisao) {
 export function getPagador(divisao) {
     return divisao?.pagador ?? (divisao?.participantes ?? []).find((p) => p.pagouAConta) ?? null
 }
+
+/** Cor/ícone padrão quando a divisão foi criada sem categoria. */
+export const EXPENSE_SPLIT_DEFAULT_ICON = 'Receipt'
+export const EXPENSE_SPLIT_DEFAULT_COLOR = '#7C3AED'
+
+export function resolveExpenseSplitVisual(divisao = {}) {
+    return {
+        icone: divisao.icone || EXPENSE_SPLIT_DEFAULT_ICON,
+        cor: divisao.cor || EXPENSE_SPLIT_DEFAULT_COLOR,
+    }
+}
+
+/** Estilo do chip de ícone (card, histórico e modal). */
+export function expenseSplitIconStyle(cor, { surface = 'soft' } = {}) {
+    const color = cor || EXPENSE_SPLIT_DEFAULT_COLOR
+    if (surface === 'modal') {
+        return {
+            color,
+            background: `color-mix(in srgb, ${color} 18%, var(--ds-color-modal-bg))`,
+        }
+    }
+    return {
+        color,
+        background: `color-mix(in srgb, ${color} 14%, transparent)`,
+    }
+}

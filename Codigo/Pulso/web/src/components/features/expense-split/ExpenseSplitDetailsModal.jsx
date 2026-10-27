@@ -5,7 +5,11 @@ import { Modal } from '@/design-system/components/overlays/Modal/Modal.jsx'
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { resolveBadgeIcon } from '@/components/badges/iconRegistry.jsx'
-import { getPagador } from '@/utils/expenseSplitUtils.js'
+import {
+    getPagador,
+    resolveExpenseSplitVisual,
+    expenseSplitIconStyle,
+} from '@/utils/expenseSplitUtils.js'
 import { cn } from '@/design-system/utils/cn.js'
 
 const TIPO_LABELS = {
@@ -31,6 +35,7 @@ export function ExpenseSplitDetailsModal({ open, onClose, divisao }) {
     const pagos = participantes.filter((p) => p.status === 'PAGO').length
     const statusLabel = divisao.status === 'QUITADA' ? 'Quitada' : 'Em aberto'
     const tipoLabel = TIPO_LABELS[divisao.tipo] ?? 'Divisão'
+    const visual = resolveExpenseSplitVisual(divisao)
 
     return (
         <Modal isOpen={open} onClose={onClose} size="lg" className="pp-history-modal">
@@ -39,14 +44,9 @@ export function ExpenseSplitDetailsModal({ open, onClose, divisao }) {
                     <div className="pp-history__identity">
                         <div
                             className="pp-history__media"
-                            style={{
-                                color: divisao.cor ?? undefined,
-                                background: divisao.cor
-                                    ? `color-mix(in srgb, ${divisao.cor} 18%, #1a1d2e)`
-                                    : undefined,
-                            }}
+                            style={expenseSplitIconStyle(visual.cor, { surface: 'modal' })}
                         >
-                            {resolveBadgeIcon(divisao.icone ?? 'Receipt', { size: 28 })}
+                            {resolveBadgeIcon(visual.icone, { size: 28 })}
                         </div>
                         <div>
                             <p className="pp-history__eyebrow">Histórico da divisão</p>

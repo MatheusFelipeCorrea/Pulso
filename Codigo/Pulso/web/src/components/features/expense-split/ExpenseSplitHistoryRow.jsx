@@ -7,7 +7,11 @@ import { Tooltip } from '@/design-system/components/data-display/Tooltip/Tooltip
 import { IconButton } from '@/design-system/components/buttons/IconButton/IconButton.jsx'
 import { formatCurrency } from '@/design-system/utils/formatCurrency.js'
 import { resolveBadgeIcon } from '@/components/badges/iconRegistry.jsx'
-import { getPagador } from '@/utils/expenseSplitUtils.js'
+import {
+    getPagador,
+    resolveExpenseSplitVisual,
+    expenseSplitIconStyle,
+} from '@/utils/expenseSplitUtils.js'
 
 function formatDate(iso) {
     if (!iso) return '—'
@@ -17,20 +21,16 @@ function formatDate(iso) {
 export function ExpenseSplitHistoryRow({ divisao, onView }) {
     const pagador = getPagador(divisao)
     const avatares = (divisao.participantes ?? []).map((p) => ({ id: p.id, name: p.nome }))
+    const visual = resolveExpenseSplitVisual(divisao)
 
     return (
         <li className="expense-split-history__row">
             <span
                 className="expense-split-history__icon"
-                style={{
-                    color: divisao.cor ?? undefined,
-                    background: divisao.cor
-                        ? `color-mix(in srgb, ${divisao.cor} 14%, transparent)`
-                        : undefined,
-                }}
+                style={expenseSplitIconStyle(visual.cor)}
                 aria-hidden
             >
-                {resolveBadgeIcon(divisao.icone ?? 'Receipt', { size: 16 })}
+                {resolveBadgeIcon(visual.icone, { size: 16 })}
             </span>
 
             <div className="expense-split-history__info">

@@ -156,6 +156,8 @@
     width: 32px;
     height: 32px;
     border-radius: 8px;
+    color: var(--ds-color-primary);
+    background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
 }
 
 .expense-split-card__title {
@@ -309,6 +311,8 @@
     width: 28px;
     height: 28px;
     border-radius: 8px;
+    color: var(--ds-color-primary);
+    background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
 }
 
 .expense-split-history__info {
@@ -667,6 +671,8 @@
     width: 40px;
     height: 40px;
     border-radius: 999px;
+    color: var(--ds-color-primary);
+    background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
 }
 
 .expense-split-reminder__card-date {
