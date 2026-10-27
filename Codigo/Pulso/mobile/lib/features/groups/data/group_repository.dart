@@ -78,6 +78,8 @@ class GroupRepository {
     String id, {
     String? nome,
     String? descricao,
+    String? urlImagem,
+    bool limparUrlImagem = false,
   }) {
     return _guard(() async {
       final response = await _api.raw.patch<Map<String, dynamic>>(
@@ -85,7 +87,21 @@ class GroupRepository {
         data: {
           if (nome != null) 'nome': nome.trim(),
           if (descricao != null) 'descricao': descricao.trim(),
+          if (limparUrlImagem) 'urlImagem': null,
+          if (!limparUrlImagem && urlImagem != null) 'urlImagem': urlImagem.trim(),
         },
+      );
+      return PulsoGrupo.fromJson(response.data ?? {});
+    });
+  }
+
+  Future<PulsoGrupo> enviarImagem(String id, MultipartFile arquivo) {
+    return _guard(() async {
+      final form = FormData.fromMap({'imagem': arquivo});
+      final response = await _api.raw.post<Map<String, dynamic>>(
+        '/grupos/$id/imagem',
+        data: form,
+        options: Options(contentType: 'multipart/form-data'),
       );
       return PulsoGrupo.fromJson(response.data ?? {});
     });

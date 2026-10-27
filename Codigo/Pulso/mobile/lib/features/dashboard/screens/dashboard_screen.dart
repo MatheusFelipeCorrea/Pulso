@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/theme/pulso_colors.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
@@ -43,10 +44,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           96,
         ),
         children: [
-          const PulsoPageHeader(
+          PulsoPageHeader(
             title: 'Dashboard',
             subtitle: 'O pulso do mês: saldo, categorias, alertas e metas.',
             icon: Icons.space_dashboard_outlined,
+            trailing: IconButton(
+              tooltip: 'Importar extrato',
+              onPressed: () => context.push('/dashboard/import'),
+              icon: const Icon(Icons.upload_file_outlined),
+            ),
           ),
           Row(
             children: [

@@ -20,6 +20,7 @@ import 'package:pulso/features/calendar/data/calendar_models.dart';
 import 'package:pulso/features/calendar/screens/calendar_screen.dart';
 import 'package:pulso/features/calendar/screens/reminder_form_screen.dart';
 import 'package:pulso/features/dashboard/screens/dashboard_screen.dart';
+import 'package:pulso/features/dashboard/screens/import_statement_screen.dart';
 import 'package:pulso/features/debts/data/debt_models.dart';
 import 'package:pulso/features/debts/screens/debt_form_screen.dart';
 import 'package:pulso/features/debts/screens/debts_screen.dart';
@@ -238,6 +239,10 @@ GoRouter createRouter(AuthController auth) {
               ? state.extra as PulsoDivida
               : null,
         ),
+      ),
+      GoRoute(
+        path: '/dashboard/import',
+        builder: (context, state) => const ImportStatementScreen(),
       ),
       GoRoute(
         path: '/groups/:id',

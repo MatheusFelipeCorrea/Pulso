@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +9,7 @@ import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/pulso_badge.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/core/widgets/pulso_page.dart';
+import 'package:pulso/features/groups/data/group_chat_socket.dart';
 import 'package:pulso/features/groups/data/group_models.dart';
 import 'package:pulso/features/groups/data/group_repository.dart';
 import 'package:pulso/features/groups/utils/group_labels.dart';
@@ -29,6 +32,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
   bool _loading = true;
   bool _sending = false;
   String? _error;
+  void Function()? _offSocket;
 
   GroupRepository get _repo => context.read<GroupRepository>();
 
@@ -36,13 +40,36 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
   void initState() {
     super.initState();
     _grupo = widget.inicial;
-    WidgetsBinding.instance.addPostFrameCallback((_) => _load());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _load();
+      await _bindSocket();
+    });
   }
 
   @override
   void dispose() {
+    _offSocket?.call();
     _chatCtrl.dispose();
     super.dispose();
+  }
+
+  Future<void> _bindSocket() async {
+    final chat = context.read<GroupChatSocket>();
+    await chat.joinGrupo(widget.grupoId);
+    _offSocket = await chat.onMensagem((payload) {
+      if (payload['grupoId'] != null &&
+          payload['grupoId'].toString() != widget.grupoId) {
+        return;
+      }
+      final raw = payload['mensagem'];
+      if (raw is! Map) return;
+      final msg = PulsoGrupoMensagem.fromJson(Map<String, dynamic>.from(raw));
+      if (!mounted) return;
+      if (_mensagens.any((item) => item.id == msg.id && msg.id.isNotEmpty)) {
+        return;
+      }
+      setState(() => _mensagens = [..._mensagens, msg]);
+    });
   }
 
   Future<void> _load() async {
@@ -63,6 +90,85 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
       setState(() => _error = error.message);
     } finally {
       if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _alterarImagem() async {
+    final grupo = _grupo;
+    if (grupo == null || !grupo.isAdmin) return;
+    final urlCtrl = TextEditingController(text: grupo.urlImagem ?? '');
+    final escolha = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Foto do grupo'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: urlCtrl,
+              decoration: const InputDecoration(
+                labelText: 'URL da imagem (opcional)',
+              ),
+            ),
+            const SizedBox(height: PulsoTokens.space3),
+            const Text('Ou envie um arquivo da galeria.'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'cancel'),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'restore'),
+            child: const Text('Usar da viagem'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'url'),
+            child: const Text('Salvar URL'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, 'file'),
+            child: const Text('Arquivo'),
+          ),
+        ],
+      ),
+    );
+    final url = urlCtrl.text.trim();
+    urlCtrl.dispose();
+    if (escolha == null || escolha == 'cancel' || !mounted) return;
+    try {
+      late final PulsoGrupo atualizado;
+      if (escolha == 'file') {
+        final picked = await FilePicker.pickFiles(
+          type: FileType.image,
+          withData: true,
+        );
+        final file = picked?.files.single;
+        final bytes = file?.bytes;
+        if (bytes == null) return;
+        atualizado = await _repo.enviarImagem(
+          grupo.id,
+          MultipartFile.fromBytes(
+            bytes,
+            filename: file!.name.isEmpty ? 'grupo.jpg' : file.name,
+          ),
+        );
+      } else if (escolha == 'restore') {
+        atualizado = await _repo.editar(grupo.id, limparUrlImagem: true);
+      } else {
+        atualizado = await _repo.editar(
+          grupo.id,
+          urlImagem: url.isEmpty ? null : url,
+          limparUrlImagem: url.isEmpty,
+        );
+      }
+      if (!mounted) return;
+      setState(() => _grupo = atualizado);
+      showPulsoSnack(context, 'Foto do grupo atualizada');
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      showPulsoSnack(context, error.message);
     }
   }
 
@@ -282,12 +388,18 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     return PulsoFormScaffold(
       title: grupo?.nome ?? 'Grupo',
       actions: [
-        if (grupo?.isAdmin == true)
+        if (grupo?.isAdmin == true) ...[
+          IconButton(
+            tooltip: 'Foto',
+            onPressed: _alterarImagem,
+            icon: const Icon(Icons.image_outlined),
+          ),
           IconButton(
             tooltip: 'Editar',
             onPressed: _editarGrupo,
             icon: const Icon(Icons.edit_outlined),
           ),
+        ],
       ],
       child: RefreshIndicator(
         onRefresh: _load,
@@ -321,6 +433,20 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     final viagem = grupo.viagem;
 
     return [
+      if ((grupo.capa ?? '').isNotEmpty)
+        Padding(
+          padding: const EdgeInsets.only(bottom: PulsoTokens.space3),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.network(
+              grupo.capa!,
+              height: 140,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (_, _, _) => const SizedBox.shrink(),
+            ),
+          ),
+        ),
       PulsoPageHeader(
         title: grupo.nome,
         subtitle: (grupo.descricao ?? '').trim().isEmpty
