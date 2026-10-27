@@ -24,8 +24,13 @@ class GroupDetailScreen extends StatefulWidget {
 
 class _GroupDetailScreenState extends State<GroupDetailScreen> {
   PulsoGrupo? _grupo;
+  List<PulsoGrupoMensagem> _mensagens = const [];
+  final _chatCtrl = TextEditingController();
   bool _loading = true;
+  bool _sending = false;
   String? _error;
+
+  GroupRepository get _repo => context.read<GroupRepository>();
 
   @override
   void initState() {
@@ -34,15 +39,25 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _load());
   }
 
+  @override
+  void dispose() {
+    _chatCtrl.dispose();
+    super.dispose();
+  }
+
   Future<void> _load() async {
     setState(() {
       _loading = _grupo == null;
       _error = null;
     });
     try {
-      final grupo = await context.read<GroupRepository>().obter(widget.grupoId);
+      final grupo = await _repo.obter(widget.grupoId);
+      final msgs = await _repo.listarMensagens(widget.grupoId);
       if (!mounted) return;
-      setState(() => _grupo = grupo);
+      setState(() {
+        _grupo = grupo;
+        _mensagens = msgs;
+      });
     } on ApiException catch (error) {
       if (!mounted) return;
       setState(() => _error = error.message);
@@ -51,11 +66,229 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     }
   }
 
+  Future<void> _editarGrupo() async {
+    final grupo = _grupo;
+    if (grupo == null || !grupo.isAdmin) return;
+    final nome = TextEditingController(text: grupo.nome);
+    final desc = TextEditingController(text: grupo.descricao ?? '');
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Editar grupo'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nome,
+              decoration: const InputDecoration(labelText: 'Nome'),
+            ),
+            const SizedBox(height: PulsoTokens.space3),
+            TextField(
+              controller: desc,
+              maxLines: 3,
+              decoration: const InputDecoration(labelText: 'Descrição'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Salvar'),
+          ),
+        ],
+      ),
+    );
+    final nomeTxt = nome.text.trim();
+    final descTxt = desc.text.trim();
+    nome.dispose();
+    desc.dispose();
+    if (ok != true || nomeTxt.isEmpty || !mounted) return;
+    try {
+      final atualizado = await _repo.editar(
+        grupo.id,
+        nome: nomeTxt,
+        descricao: descTxt,
+      );
+      if (!mounted) return;
+      setState(() => _grupo = atualizado);
+      showPulsoSnack(context, 'Grupo atualizado');
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      showPulsoSnack(context, error.message);
+    }
+  }
+
+  Future<void> _renovarCodigo() async {
+    final grupo = _grupo;
+    if (grupo == null || !grupo.isAdmin) return;
+    try {
+      final atualizado = await _repo.renovarCodigo(grupo.id);
+      if (!mounted) return;
+      setState(() => _grupo = atualizado);
+      showPulsoSnack(context, 'Código renovado');
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      showPulsoSnack(context, error.message);
+    }
+  }
+
+  Future<void> _removerMembro(PulsoGrupoMembro membro) async {
+    final grupo = _grupo;
+    if (grupo == null || !grupo.isAdmin || membro.souEu) return;
+    final ok = await showPulsoConfirm(
+      context: context,
+      title: 'Remover membro',
+      message: 'Remover ${membro.nome} do grupo?',
+    );
+    if (ok != true || !mounted) return;
+    try {
+      await _repo.removerMembro(grupo.id, membro.id);
+      if (!mounted) return;
+      showPulsoSnack(context, 'Membro removido');
+      await _load();
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      showPulsoSnack(context, error.message);
+    }
+  }
+
+  Future<void> _aporte() async {
+    final grupo = _grupo;
+    final meta = grupo?.meta;
+    if (grupo == null || meta?.id == null) {
+      showPulsoSnack(context, 'Este grupo ainda não tem meta com aporte');
+      return;
+    }
+    final ctrl = TextEditingController();
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Registrar aporte'),
+        content: TextField(
+          controller: ctrl,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          decoration: const InputDecoration(labelText: 'Valor (R\$)'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Salvar'),
+          ),
+        ],
+      ),
+    );
+    final valor = parseMoney(ctrl.text);
+    ctrl.dispose();
+    if (ok != true || valor == null || valor <= 0 || !mounted) return;
+    try {
+      final atualizado = await _repo.registrarAporte(
+        grupo.id,
+        meta!.id!,
+        valor: valor,
+      );
+      if (!mounted) return;
+      setState(() => _grupo = atualizado);
+      showPulsoSnack(context, 'Aporte registrado');
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      showPulsoSnack(context, error.message);
+    }
+  }
+
+  Future<void> _criarMeta() async {
+    final grupo = _grupo;
+    if (grupo == null || !grupo.isAdmin) return;
+    final nome = TextEditingController();
+    final alvo = TextEditingController();
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Nova meta do grupo'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nome,
+              decoration: const InputDecoration(labelText: 'Nome'),
+            ),
+            const SizedBox(height: PulsoTokens.space3),
+            TextField(
+              controller: alvo,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(labelText: 'Valor alvo (R\$)'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Criar'),
+          ),
+        ],
+      ),
+    );
+    final nomeTxt = nome.text.trim();
+    final valor = parseMoney(alvo.text);
+    nome.dispose();
+    alvo.dispose();
+    if (ok != true || nomeTxt.isEmpty || valor == null || !mounted) return;
+    try {
+      final atualizado = await _repo.criarMetas(grupo.id, [
+        {'nome': nomeTxt, 'valorAlvo': valor},
+      ]);
+      if (!mounted) return;
+      setState(() => _grupo = atualizado);
+      showPulsoSnack(context, 'Meta criada');
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      showPulsoSnack(context, error.message);
+    }
+  }
+
+  Future<void> _enviarMensagem() async {
+    final texto = _chatCtrl.text.trim();
+    if (texto.isEmpty || _sending) return;
+    setState(() => _sending = true);
+    try {
+      final msg = await _repo.enviarMensagem(widget.grupoId, texto: texto);
+      if (!mounted) return;
+      setState(() {
+        _mensagens = [..._mensagens, msg];
+        _chatCtrl.clear();
+      });
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      showPulsoSnack(context, error.message);
+    } finally {
+      if (mounted) setState(() => _sending = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final grupo = _grupo;
     return PulsoFormScaffold(
       title: grupo?.nome ?? 'Grupo',
+      actions: [
+        if (grupo?.isAdmin == true)
+          IconButton(
+            tooltip: 'Editar',
+            onPressed: _editarGrupo,
+            icon: const Icon(Icons.edit_outlined),
+          ),
+      ],
       child: RefreshIndicator(
         onRefresh: _load,
         child: ListView(
@@ -91,7 +324,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
       PulsoPageHeader(
         title: grupo.nome,
         subtitle: (grupo.descricao ?? '').trim().isEmpty
-            ? 'Membros, metas e a viagem compartilhada deste grupo.'
+            ? 'Membros, metas, chat e a viagem compartilhada.'
             : grupo.descricao,
         icon: Icons.groups_outlined,
         trailing: PulsoBadge.custom(
@@ -135,6 +368,12 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                 },
                 icon: const Icon(Icons.copy_outlined),
               ),
+              if (grupo.isAdmin)
+                IconButton(
+                  tooltip: 'Renovar',
+                  onPressed: _renovarCodigo,
+                  icon: const Icon(Icons.refresh),
+                ),
             ],
           ),
         ),
@@ -160,13 +399,24 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                 : null,
           ),
           title: Text(nome),
-          trailing: PulsoBadge.custom(
-            label: papelMembro.label,
-            icon: papelMembro.icon,
-            color: papelMembro.admin
-                ? PulsoColors.accent(brightness)
-                : PulsoColors.infoOf(brightness),
-            compact: true,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              PulsoBadge.custom(
+                label: papelMembro.label,
+                icon: papelMembro.icon,
+                color: papelMembro.admin
+                    ? PulsoColors.accent(brightness)
+                    : PulsoColors.infoOf(brightness),
+                compact: true,
+              ),
+              if (grupo.isAdmin && !membro.souEu)
+                IconButton(
+                  tooltip: 'Remover',
+                  onPressed: () => _removerMembro(membro),
+                  icon: const Icon(Icons.person_remove_outlined),
+                ),
+            ],
           ),
         );
       }),
@@ -200,9 +450,14 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
           ),
         ),
       ],
-      if (meta != null) ...[
-        const SizedBox(height: PulsoTokens.space4),
-        const PulsoSectionHeader(title: 'Meta do grupo', icon: Icons.gps_fixed),
+      const SizedBox(height: PulsoTokens.space4),
+      PulsoSectionHeader(
+        title: 'Meta do grupo',
+        icon: Icons.gps_fixed,
+        actionLabel: meta == null && grupo.isAdmin ? 'Criar' : null,
+        onAction: meta == null && grupo.isAdmin ? _criarMeta : null,
+      ),
+      if (meta != null)
         PulsoSurface(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,10 +472,96 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                 '${meta.percentual}% · ${formatBrl(double.tryParse(meta.valorAtual) ?? 0)} de ${formatBrl(double.tryParse(meta.valorAlvo) ?? 0)}',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
+              if (meta.id != null) ...[
+                const SizedBox(height: PulsoTokens.space3),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: FilledButton.tonalIcon(
+                    onPressed: _aporte,
+                    icon: const Icon(Icons.add),
+                    label: const Text('Aporte'),
+                  ),
+                ),
+              ],
             ],
           ),
+        )
+      else
+        PulsoSurface(
+          child: Text(
+            grupo.isAdmin
+                ? 'Ainda sem meta. Crie uma para acompanhar o progresso juntos.'
+                : 'Este grupo ainda não tem meta compartilhada.',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
         ),
-      ],
+      const SizedBox(height: PulsoTokens.space4),
+      const PulsoSectionHeader(title: 'Chat', icon: Icons.chat_bubble_outline),
+      PulsoSurface(
+        child: Column(
+          children: [
+            if (_mensagens.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: PulsoTokens.space3),
+                child: Text(
+                  'Nenhuma mensagem ainda. Diga oi para a galera.',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              )
+            else
+              ..._mensagens.take(30).map(
+                (msg) => Align(
+                  alignment: msg.souEu
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: PulsoTokens.space2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: msg.souEu
+                          ? PulsoColors.accent(brightness).withValues(alpha: 0.15)
+                          : Theme.of(context).colorScheme.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (!msg.souEu && (msg.autorNome ?? '').isNotEmpty)
+                          Text(
+                            msg.autorNome!,
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
+                        Text(msg.texto),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            const SizedBox(height: PulsoTokens.space2),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _chatCtrl,
+                    decoration: const InputDecoration(
+                      hintText: 'Escreva uma mensagem',
+                      isDense: true,
+                    ),
+                    onSubmitted: (_) => _enviarMensagem(),
+                  ),
+                ),
+                IconButton(
+                  onPressed: _sending ? null : _enviarMensagem,
+                  icon: const Icon(Icons.send),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     ];
   }
 }
