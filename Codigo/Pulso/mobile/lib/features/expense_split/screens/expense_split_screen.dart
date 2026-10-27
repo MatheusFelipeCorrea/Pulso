@@ -45,6 +45,32 @@ class _ExpenseSplitScreenState extends State<ExpenseSplitScreen> {
     }
   }
 
+  Future<void> _despagar(PulsoDivisao divisao, SplitParticipante pessoa) async {
+    try {
+      await context.read<ExpenseSplitRepository>().desmarcarPago(
+        divisao.id,
+        pessoa.id,
+      );
+      if (!mounted) return;
+      showPulsoSnack(context, '${pessoa.nome} marcado como pendente');
+      await context.read<ExpenseSplitController>().reload();
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      showPulsoSnack(context, error.message);
+    }
+  }
+
+  Future<void> _lembrete(PulsoDivisao divisao) async {
+    try {
+      await context.read<ExpenseSplitRepository>().criarLembrete(divisao.id);
+      if (!mounted) return;
+      showPulsoSnack(context, 'Lembrete de cobrança criado no calendário');
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      showPulsoSnack(context, error.message);
+    }
+  }
+
   Future<void> _excluir(PulsoDivisao divisao) async {
     final ok = await showPulsoConfirm(
       context: context,
@@ -148,6 +174,9 @@ class _ExpenseSplitScreenState extends State<ExpenseSplitScreen> {
                 (item) => _SplitCard(
                   divisao: item,
                   onPay: _pagar,
+                  onUnpay: _despagar,
+                  onRemind: () => _lembrete(item),
+                  onEdit: () => context.push('/expense-split/new', extra: item),
                   onDelete: () => _excluir(item),
                 ),
               ),
@@ -163,6 +192,11 @@ class _ExpenseSplitScreenState extends State<ExpenseSplitScreen> {
                 (item) => _SplitCard(
                   divisao: item,
                   onPay: item.quitada ? null : _pagar,
+                  onUnpay: item.quitada ? null : _despagar,
+                  onRemind: item.quitada ? null : () => _lembrete(item),
+                  onEdit: item.quitada
+                      ? null
+                      : () => context.push('/expense-split/new', extra: item),
                   onDelete: () => _excluir(item),
                 ),
               ),
@@ -204,11 +238,21 @@ class _Mini extends StatelessWidget {
 }
 
 class _SplitCard extends StatelessWidget {
-  const _SplitCard({required this.divisao, required this.onDelete, this.onPay});
+  const _SplitCard({
+    required this.divisao,
+    required this.onDelete,
+    this.onPay,
+    this.onUnpay,
+    this.onRemind,
+    this.onEdit,
+  });
 
   final PulsoDivisao divisao;
   final VoidCallback onDelete;
   final void Function(PulsoDivisao divisao, SplitParticipante pessoa)? onPay;
+  final void Function(PulsoDivisao divisao, SplitParticipante pessoa)? onUnpay;
+  final VoidCallback? onRemind;
+  final VoidCallback? onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -246,6 +290,18 @@ class _SplitCard extends StatelessWidget {
                   ],
                 ),
               ),
+              if (onEdit != null)
+                IconButton(
+                  tooltip: 'Editar',
+                  onPressed: onEdit,
+                  icon: const Icon(Icons.edit_outlined),
+                ),
+              if (onRemind != null)
+                IconButton(
+                  tooltip: 'Lembrete',
+                  onPressed: onRemind,
+                  icon: const Icon(Icons.notifications_active_outlined),
+                ),
               IconButton(
                 tooltip: 'Excluir',
                 onPressed: onDelete,
@@ -291,7 +347,25 @@ class _SplitCard extends StatelessWidget {
               dense: true,
               title: Text(pessoa.nome),
               subtitle: Text(formatBrl(pessoa.valor)),
-              trailing: pessoa.pago || onPay == null
+              trailing: pessoa.pago
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        PulsoBadge.custom(
+                          label: pessoaStatus.label,
+                          icon: pessoaStatus.icon,
+                          color: cor,
+                          compact: true,
+                        ),
+                        if (onUnpay != null)
+                          IconButton(
+                            tooltip: 'Desmarcar',
+                            onPressed: () => onUnpay!(divisao, pessoa),
+                            icon: const Icon(Icons.undo),
+                          ),
+                      ],
+                    )
+                  : onPay == null
                   ? PulsoBadge.custom(
                       label: pessoaStatus.label,
                       icon: pessoaStatus.icon,
