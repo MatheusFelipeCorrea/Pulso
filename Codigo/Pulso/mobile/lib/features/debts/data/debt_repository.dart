@@ -20,11 +20,26 @@ class DebtRepository {
     return int.tryParse(raw ?? '') ?? fallback;
   }
 
-  Future<DebtPage> listar({int pagina = 1, int limite = 50}) {
+  Future<DebtPage> listar({
+    int pagina = 1,
+    int limite = 50,
+    String? direcao,
+    bool? quitada,
+    String? status,
+    String? busca,
+  }) {
     return _guard(() async {
+      final query = <String, dynamic>{
+        'pagina': pagina,
+        'limite': limite,
+        if (direcao != null && direcao != 'TODOS') 'direcao': direcao,
+        if (quitada != null) 'quitada': quitada,
+        if (status != null && status.isNotEmpty) 'status': status,
+        if (busca != null && busca.trim().isNotEmpty) 'busca': busca.trim(),
+      };
       final response = await _api.raw.get<dynamic>(
         '/dividas',
-        queryParameters: {'pagina': pagina, 'limite': limite},
+        queryParameters: query,
       );
       final data = response.data;
       final dividas = data is List
@@ -64,6 +79,16 @@ class DebtRepository {
     });
   }
 
+  Future<PulsoDivida> atualizar(String id, Map<String, dynamic> payload) {
+    return _guard(() async {
+      final response = await _api.raw.patch<Map<String, dynamic>>(
+        '/dividas/$id',
+        data: payload,
+      );
+      return PulsoDivida.fromJson(response.data ?? {});
+    });
+  }
+
   Future<PulsoDivida> registrarPagamento(String id, {required double valor}) {
     return _guard(() async {
       final response = await _api.raw.post<Map<String, dynamic>>(
@@ -72,6 +97,15 @@ class DebtRepository {
           'valor': valor,
           'dataPagamento': DateTime.now().toUtc().toIso8601String(),
         },
+      );
+      return PulsoDivida.fromJson(response.data ?? {});
+    });
+  }
+
+  Future<PulsoDivida> excluirPagamento(String id, String pagamentoId) {
+    return _guard(() async {
+      final response = await _api.raw.delete<Map<String, dynamic>>(
+        '/dividas/$id/pagamentos/$pagamentoId',
       );
       return PulsoDivida.fromJson(response.data ?? {});
     });

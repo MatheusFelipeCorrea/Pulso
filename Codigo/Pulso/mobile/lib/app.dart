@@ -12,6 +12,7 @@ import 'package:pulso/features/calendar/data/calendar_repository.dart';
 import 'package:pulso/features/calendar/state/calendar_controller.dart';
 import 'package:pulso/features/currency/data/currency_repository.dart';
 import 'package:pulso/features/dashboard/data/dashboard_repository.dart';
+import 'package:pulso/features/dashboard/data/import_repository.dart';
 import 'package:pulso/features/dashboard/state/dashboard_controller.dart';
 import 'package:pulso/features/debts/data/debt_repository.dart';
 import 'package:pulso/features/debts/state/debts_controller.dart';
@@ -19,6 +20,7 @@ import 'package:pulso/features/expense_split/data/split_repository.dart';
 import 'package:pulso/features/expense_split/state/split_controller.dart';
 import 'package:pulso/features/goals/data/goal_repository.dart';
 import 'package:pulso/features/goals/state/goals_controller.dart';
+import 'package:pulso/features/groups/data/group_chat_socket.dart';
 import 'package:pulso/features/groups/data/group_repository.dart';
 import 'package:pulso/features/groups/state/groups_controller.dart';
 import 'package:pulso/features/purchase/data/purchase_repository.dart';
@@ -43,7 +45,9 @@ class PulsoApp extends StatelessWidget {
     required this.purchase,
     required this.currencies,
     required this.groups,
+    required this.groupChat,
     required this.dashboard,
+    required this.imports,
     required this.debts,
     required this.splits,
   });
@@ -60,7 +64,9 @@ class PulsoApp extends StatelessWidget {
   final PurchasePlanningRepository purchase;
   final CurrencyRepository currencies;
   final GroupRepository groups;
+  final GroupChatSocket groupChat;
   final DashboardRepository dashboard;
+  final ImportRepository imports;
   final DebtRepository debts;
   final ExpenseSplitRepository splits;
 
@@ -79,7 +85,9 @@ class PulsoApp extends StatelessWidget {
         Provider<PurchasePlanningRepository>.value(value: purchase),
         Provider<CurrencyRepository>.value(value: currencies),
         Provider<GroupRepository>.value(value: groups),
+        Provider<GroupChatSocket>.value(value: groupChat),
         Provider<DashboardRepository>.value(value: dashboard),
+        Provider<ImportRepository>.value(value: imports),
         Provider<DebtRepository>.value(value: debts),
         Provider<ExpenseSplitRepository>.value(value: splits),
         ChangeNotifierProvider(

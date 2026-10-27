@@ -39,11 +39,18 @@ const initSocket = (httpServer) => {
         .split(',')
         .map((o) => o.trim())
         .filter(Boolean);
+    const isLocalDevOrigin = (origin) =>
+        Boolean(origin && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin));
 
     io = new Server(httpServer, {
         path: '/api/socket.io',
         cors: {
-            origin: corsOrigins.length <= 1 ? corsOrigins[0] : corsOrigins,
+            origin: (origin, callback) => {
+                if (!origin || corsOrigins.includes(origin) || isLocalDevOrigin(origin)) {
+                    return callback(null, true);
+                }
+                return callback(new Error(`CORS socket bloqueado: ${origin}`));
+            },
             credentials: true,
         },
     });

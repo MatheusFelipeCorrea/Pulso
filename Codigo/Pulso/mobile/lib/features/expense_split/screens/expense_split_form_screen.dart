@@ -5,24 +5,51 @@ import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/core/widgets/pulso_page.dart';
+import 'package:pulso/features/expense_split/data/split_models.dart';
 import 'package:pulso/features/expense_split/data/split_repository.dart';
 import 'package:pulso/features/expense_split/state/split_controller.dart';
 import 'package:pulso/features/expense_split/utils/split_labels.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
 
 class ExpenseSplitFormScreen extends StatefulWidget {
-  const ExpenseSplitFormScreen({super.key});
+  const ExpenseSplitFormScreen({super.key, this.divisao});
+
+  final PulsoDivisao? divisao;
 
   @override
   State<ExpenseSplitFormScreen> createState() => _ExpenseSplitFormScreenState();
 }
 
 class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
-  final _titulo = TextEditingController();
-  final _valor = TextEditingController();
-  final _nomes = TextEditingController();
+  late final TextEditingController _titulo;
+  late final TextEditingController _valor;
+  late final TextEditingController _nomes;
+  late String _tipo;
   bool _euPaguei = true;
   bool _submitting = false;
+
+  bool get _editando => widget.divisao != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final d = widget.divisao;
+    _titulo = TextEditingController(text: d?.titulo ?? '');
+    _valor = TextEditingController(
+      text: d == null
+          ? ''
+          : d.valorTotal.toStringAsFixed(2).replaceAll('.', ','),
+    );
+    final outros = (d?.participantes ?? const <SplitParticipante>[])
+        .where((p) => !p.ehOrganizador)
+        .map((p) => p.nome)
+        .join(', ');
+    _nomes = TextEditingController(text: outros);
+    _tipo = d?.tipo ?? 'IGUAL';
+    _euPaguei = d == null
+        ? true
+        : d.participantes.any((p) => p.ehOrganizador && p.pagouAConta);
+  }
 
   @override
   void dispose() {
@@ -49,17 +76,30 @@ class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
     final hoje = DateTime.now();
     final data =
         '${hoje.year.toString().padLeft(4, '0')}-${hoje.month.toString().padLeft(2, '0')}-${hoje.day.toString().padLeft(2, '0')}';
+    final participantes = nomes.map((nome) {
+      if (_tipo == 'PERSONALIZADA') {
+        final fatia = valor / (nomes.length + 1);
+        return {'nome': nome, 'valor': double.parse(fatia.toStringAsFixed(2))};
+      }
+      return {'nome': nome};
+    }).toList();
+    final payload = <String, dynamic>{
+      'titulo': _titulo.text.trim(),
+      'valorTotal': valor,
+      'tipo': _tipo,
+      'data': data,
+      'icone': 'Receipt',
+      'cor': '#7C3AED',
+      'participantes': participantes,
+      'pagoPor': _euPaguei ? 'VOCE' : nomes.first,
+    };
     try {
-      await context.read<ExpenseSplitRepository>().criar({
-        'titulo': _titulo.text.trim(),
-        'valorTotal': valor,
-        'tipo': 'IGUAL',
-        'data': data,
-        'icone': 'Receipt',
-        'cor': '#7C3AED',
-        'participantes': nomes.map((nome) => {'nome': nome}).toList(),
-        'pagoPor': _euPaguei ? 'VOCE' : nomes.first,
-      });
+      final repo = context.read<ExpenseSplitRepository>();
+      if (_editando) {
+        await repo.atualizar(widget.divisao!.id, payload);
+      } else {
+        await repo.criar(payload);
+      }
       if (!mounted) return;
       await context.read<ExpenseSplitController>().reload();
       if (!mounted) return;
@@ -75,13 +115,13 @@ class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
   @override
   Widget build(BuildContext context) {
     return PulsoFormScaffold(
-      title: 'Nova divisão',
+      title: _editando ? 'Editar divisão' : 'Nova divisão',
       child: ListView(
         padding: const EdgeInsets.all(PulsoTokens.space4),
         children: [
-          const PulsoPageHeader(
-            title: 'Dividir uma conta',
-            subtitle: 'A divisão igual inclui você e quem você listar.',
+          PulsoPageHeader(
+            title: _editando ? 'Atualizar divisão' : 'Dividir uma conta',
+            subtitle: 'Use divisão igual ou personalizada — inclui você e quem listar.',
             icon: Icons.groups_2_outlined,
           ),
           TextField(
@@ -93,6 +133,18 @@ class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
             controller: _valor,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: const InputDecoration(labelText: 'Valor total (R\$)'),
+          ),
+          const SizedBox(height: PulsoTokens.space3),
+          SegmentedButton<String>(
+            segments: const [
+              ButtonSegment(value: 'IGUAL', label: Text('Igual')),
+              ButtonSegment(
+                value: 'PERSONALIZADA',
+                label: Text('Personalizada'),
+              ),
+            ],
+            selected: {_tipo},
+            onSelectionChanged: (value) => setState(() => _tipo = value.first),
           ),
           const SizedBox(height: PulsoTokens.space3),
           TextField(
@@ -112,7 +164,7 @@ class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
           const SizedBox(height: PulsoTokens.space4),
           FilledButton(
             onPressed: _submitting ? null : _salvar,
-            child: const Text('Criar divisão'),
+            child: Text(_editando ? 'Salvar alterações' : 'Criar divisão'),
           ),
         ],
       ),

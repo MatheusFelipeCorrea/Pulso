@@ -22,8 +22,9 @@ class ExpenseSplitRepository {
           .map((item) => PulsoDivisao.fromJson(Map<String, dynamic>.from(item)))
           .toList();
     }
-    if (data is Map && data['divisoes'] is List)
+    if (data is Map && data['divisoes'] is List) {
       return _lista(data['divisoes']);
+    }
     return const [];
   }
 
@@ -69,12 +70,40 @@ class ExpenseSplitRepository {
     });
   }
 
+  Future<PulsoDivisao> atualizar(String id, Map<String, dynamic> payload) {
+    return _guard(() async {
+      final response = await _api.raw.patch<Map<String, dynamic>>(
+        '/divisoes/$id',
+        data: payload,
+      );
+      return PulsoDivisao.fromJson(response.data ?? {});
+    });
+  }
+
   Future<PulsoDivisao> marcarPago(String id, String participanteId) {
     return _guard(() async {
       final response = await _api.raw.patch<Map<String, dynamic>>(
         '/divisoes/$id/participantes/$participanteId/pagar',
       );
       return PulsoDivisao.fromJson(response.data ?? {});
+    });
+  }
+
+  Future<PulsoDivisao> desmarcarPago(String id, String participanteId) {
+    return _guard(() async {
+      final response = await _api.raw.patch<Map<String, dynamic>>(
+        '/divisoes/$id/participantes/$participanteId/despagar',
+      );
+      return PulsoDivisao.fromJson(response.data ?? {});
+    });
+  }
+
+  Future<void> criarLembrete(String id, {Map<String, dynamic>? payload}) {
+    return _guard(() async {
+      await _api.raw.post<void>(
+        '/divisoes/$id/lembrete',
+        data: payload ?? const {},
+      );
     });
   }
 

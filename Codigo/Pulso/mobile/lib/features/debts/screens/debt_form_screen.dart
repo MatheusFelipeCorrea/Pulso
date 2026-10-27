@@ -5,23 +5,42 @@ import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/core/widgets/pulso_page.dart';
+import 'package:pulso/features/debts/data/debt_models.dart';
 import 'package:pulso/features/debts/data/debt_repository.dart';
 import 'package:pulso/features/debts/state/debts_controller.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
 
 class DebtFormScreen extends StatefulWidget {
-  const DebtFormScreen({super.key});
+  const DebtFormScreen({super.key, this.divida});
+
+  final PulsoDivida? divida;
 
   @override
   State<DebtFormScreen> createState() => _DebtFormScreenState();
 }
 
 class _DebtFormScreenState extends State<DebtFormScreen> {
-  final _nome = TextEditingController();
-  final _valor = TextEditingController();
-  final _obs = TextEditingController();
-  String _direcao = 'ME_DEVEM';
+  late final TextEditingController _nome;
+  late final TextEditingController _valor;
+  late final TextEditingController _obs;
+  late String _direcao;
+  DateTime? _prazo;
   bool _submitting = false;
+
+  bool get _editando => widget.divida != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final d = widget.divida;
+    _nome = TextEditingController(text: d?.nomePessoa ?? '');
+    _valor = TextEditingController(
+      text: d == null ? '' : d.valor.toStringAsFixed(2).replaceAll('.', ','),
+    );
+    _obs = TextEditingController(text: d?.observacao ?? '');
+    _direcao = d?.direcao ?? 'ME_DEVEM';
+    _prazo = d?.prazoDevolucao;
+  }
 
   @override
   void dispose() {
@@ -31,6 +50,17 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
     super.dispose();
   }
 
+  Future<void> _escolherPrazo() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _prazo ?? DateTime.now().add(const Duration(days: 30)),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+    if (picked == null) return;
+    setState(() => _prazo = picked);
+  }
+
   Future<void> _salvar() async {
     final valor = parseMoney(_valor.text);
     if (_nome.text.trim().isEmpty || valor == null || valor <= 0) {
@@ -38,14 +68,23 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
       return;
     }
     setState(() => _submitting = true);
+    final payload = <String, dynamic>{
+      'direcao': _direcao,
+      'nomePessoa': _nome.text.trim(),
+      'valor': valor,
+      'observacao': _obs.text.trim().isEmpty ? null : _obs.text.trim(),
+      if (_prazo != null) 'prazoDevolucao': _prazo!.toUtc().toIso8601String(),
+    };
     try {
-      await context.read<DebtRepository>().criar({
-        'direcao': _direcao,
-        'nomePessoa': _nome.text.trim(),
-        'valor': valor,
-        'dataEmprestimo': DateTime.now().toUtc().toIso8601String(),
-        'observacao': _obs.text.trim().isEmpty ? null : _obs.text.trim(),
-      });
+      final repo = context.read<DebtRepository>();
+      if (_editando) {
+        await repo.atualizar(widget.divida!.id, payload);
+      } else {
+        await repo.criar({
+          ...payload,
+          'dataEmprestimo': DateTime.now().toUtc().toIso8601String(),
+        });
+      }
       if (!mounted) return;
       await context.read<DebtsController>().reload();
       if (!mounted) return;
@@ -61,13 +100,13 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
   @override
   Widget build(BuildContext context) {
     return PulsoFormScaffold(
-      title: 'Nova dívida',
+      title: _editando ? 'Editar dívida' : 'Nova dívida',
       child: ListView(
         padding: const EdgeInsets.all(PulsoTokens.space4),
         children: [
-          const PulsoPageHeader(
-            title: 'Registrar empréstimo',
-            subtitle: 'Escolha a direção e quem está envolvido.',
+          PulsoPageHeader(
+            title: _editando ? 'Atualizar empréstimo' : 'Registrar empréstimo',
+            subtitle: 'Escolha a direção, prazo e quem está envolvido.',
             icon: Icons.handshake_outlined,
           ),
           SegmentedButton<String>(
@@ -99,6 +138,19 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
             decoration: const InputDecoration(labelText: 'Valor (R\$)'),
           ),
           const SizedBox(height: PulsoTokens.space3),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: const Text('Prazo de devolução'),
+            subtitle: Text(
+              _prazo == null
+                  ? 'Opcional'
+                  : '${_prazo!.day.toString().padLeft(2, '0')}/${_prazo!.month.toString().padLeft(2, '0')}/${_prazo!.year}',
+            ),
+            trailing: IconButton(
+              onPressed: _escolherPrazo,
+              icon: const Icon(Icons.calendar_today_outlined),
+            ),
+          ),
           TextField(
             controller: _obs,
             maxLines: 3,
@@ -107,7 +159,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
           const SizedBox(height: PulsoTokens.space5),
           FilledButton(
             onPressed: _submitting ? null : _salvar,
-            child: const Text('Salvar'),
+            child: Text(_editando ? 'Salvar alterações' : 'Salvar'),
           ),
         ],
       ),
