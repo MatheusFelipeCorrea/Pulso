@@ -148,9 +148,7 @@ export function LandingPricing() {
             <div className="landing-container">
                 <div className="landing-section__header">
                     <h2>Planos simples, em reais</h2>
-                    <p>
-                        Comece no Free. Premium libera grupos e viagens por R$ 50/mês.
-                    </p>
+                    <p>Comece no Free. Premium libera grupos e viagens por R$ 50/mês.</p>
                 </div>
                 <div className="landing-pricing__grid">
                     {PRICING.map((plan) => (

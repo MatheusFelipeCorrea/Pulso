@@ -129,7 +129,8 @@ class PulsoGrupoPreview {
     return PulsoGrupoPreview(
       nome: json['nome'] as String? ?? 'Grupo',
       quantidadeMembros: qtd is num ? qtd.toInt() : int.tryParse('$qtd') ?? 0,
-      urlImagem: json['urlImagem'] as String? ?? json['imagemExibicao'] as String?,
+      urlImagem:
+          json['urlImagem'] as String? ?? json['imagemExibicao'] as String?,
     );
   }
 }

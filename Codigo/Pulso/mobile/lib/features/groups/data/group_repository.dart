@@ -88,7 +88,8 @@ class GroupRepository {
           if (nome != null) 'nome': nome.trim(),
           if (descricao != null) 'descricao': descricao.trim(),
           if (limparUrlImagem) 'urlImagem': null,
-          if (!limparUrlImagem && urlImagem != null) 'urlImagem': urlImagem.trim(),
+          if (!limparUrlImagem && urlImagem != null)
+            'urlImagem': urlImagem.trim(),
         },
       );
       return PulsoGrupo.fromJson(response.data ?? {});

@@ -21,7 +21,9 @@ class DashboardIncomeExpenseBars extends StatelessWidget {
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     final maxValue = math.max(receitas, despesas);
-    final incomeRatio = maxValue <= 0 ? 0.0 : (receitas / maxValue).clamp(0.0, 1.0);
+    final incomeRatio = maxValue <= 0
+        ? 0.0
+        : (receitas / maxValue).clamp(0.0, 1.0);
     final expenseRatio = maxValue <= 0
         ? 0.0
         : (despesas / maxValue).clamp(0.0, 1.0);
@@ -221,7 +223,13 @@ class _DonutPainter extends CustomPainter {
     for (final slice in slices) {
       final sweep = (slice.value / total) * math.pi * 2;
       paint.color = slice.color;
-      canvas.drawArc(rect.deflate(paint.strokeWidth / 2), start, sweep, false, paint);
+      canvas.drawArc(
+        rect.deflate(paint.strokeWidth / 2),
+        start,
+        sweep,
+        false,
+        paint,
+      );
       start += sweep;
     }
   }

@@ -328,7 +328,9 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
             const SizedBox(height: PulsoTokens.space3),
             TextField(
               controller: alvo,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: const InputDecoration(labelText: 'Valor alvo (R\$)'),
             ),
           ],
@@ -628,44 +630,53 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
           children: [
             if (_mensagens.isEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: PulsoTokens.space3),
+                padding: const EdgeInsets.symmetric(
+                  vertical: PulsoTokens.space3,
+                ),
                 child: Text(
                   'Nenhuma mensagem ainda. Diga oi para a galera.',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               )
             else
-              ..._mensagens.take(30).map(
-                (msg) => Align(
-                  alignment: msg.souEu
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: PulsoTokens.space2),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: msg.souEu
-                          ? PulsoColors.accent(brightness).withValues(alpha: 0.15)
-                          : Theme.of(context).colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (!msg.souEu && (msg.autorNome ?? '').isNotEmpty)
-                          Text(
-                            msg.autorNome!,
-                            style: Theme.of(context).textTheme.labelSmall,
-                          ),
-                        Text(msg.texto),
-                      ],
+              ..._mensagens
+                  .take(30)
+                  .map(
+                    (msg) => Align(
+                      alignment: msg.souEu
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          bottom: PulsoTokens.space2,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: msg.souEu
+                              ? PulsoColors.accent(brightness)
+                                    .withValues(alpha: 0.15)
+                              : Theme.of(context)
+                                    .colorScheme
+                                    .surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (!msg.souEu && (msg.autorNome ?? '').isNotEmpty)
+                              Text(
+                                msg.autorNome!,
+                                style: Theme.of(context).textTheme.labelSmall,
+                              ),
+                            Text(msg.texto),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
             const SizedBox(height: PulsoTokens.space2),
             Row(
               children: [

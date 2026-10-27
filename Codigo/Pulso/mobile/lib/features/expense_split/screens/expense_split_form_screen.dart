@@ -121,8 +121,7 @@ class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
         children: [
           PulsoPageHeader(
             title: _editando ? 'Atualizar divisão' : 'Dividir uma conta',
-            subtitle:
-                'Use divisão igual ou personalizada — inclui você e quem listar.',
+            subtitle: 'Use divisão igual ou personalizada — inclui você e quem listar.',
             icon: Icons.groups_2_outlined,
           ),
           TextField(

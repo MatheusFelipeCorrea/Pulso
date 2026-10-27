@@ -92,7 +92,10 @@ class _ImportStatementScreenState extends State<ImportStatementScreen> {
     final bytes = file?.bytes;
     if (bytes == null) {
       if (!mounted) return;
-      showPulsoSnack(context, 'Selecione o PDF novamente após mapear as colunas');
+      showPulsoSnack(
+        context,
+        'Selecione o PDF novamente após mapear as colunas',
+      );
       return;
     }
     setState(() => _loading = true);
@@ -221,12 +224,7 @@ class _ImportStatementScreenState extends State<ImportStatementScreen> {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: PulsoTokens.space3),
-            for (final coluna in const [
-              'data',
-              'valor',
-              'descricao',
-              'tipo',
-            ])
+            for (final coluna in const ['data', 'valor', 'descricao', 'tipo'])
               DropdownButtonFormField<String>(
                 initialValue: _mapeamento[coluna],
                 decoration: InputDecoration(labelText: 'Coluna $coluna'),
@@ -260,7 +258,9 @@ class _ImportStatementScreenState extends State<ImportStatementScreen> {
                     '${_analise!.totalDetectadas} detectadas · ${_analise!.duplicatas} duplicatas',
                   ),
                   if (_analise!.saldoExtrato != null)
-                    Text('Saldo do extrato ${formatBrl(_analise!.saldoExtrato!)}'),
+                    Text(
+                      'Saldo do extrato ${formatBrl(_analise!.saldoExtrato!)}',
+                    ),
                   if ((_analise!.arquivo ?? '').isNotEmpty)
                     Text(_analise!.arquivo!),
                 ],
@@ -273,10 +273,14 @@ class _ImportStatementScreenState extends State<ImportStatementScreen> {
                   (linha) => ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text('${linha['descricao'] ?? 'Lançamento'}'),
-                    subtitle: Text('${linha['data'] ?? ''} · ${linha['tipo'] ?? ''}'),
+                    subtitle: Text(
+                      '${linha['data'] ?? ''} · ${linha['tipo'] ?? ''}',
+                    ),
                     trailing: Text(
                       formatBrl(
-                        double.tryParse('${linha['valor']}'.replaceAll(',', '.')) ??
+                        double.tryParse(
+                              '${linha['valor']}'.replaceAll(',', '.'),
+                            ) ??
                             0,
                       ),
                     ),
