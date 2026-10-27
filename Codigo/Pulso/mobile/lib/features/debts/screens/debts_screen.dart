@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_colors.dart';
@@ -102,6 +103,94 @@ class _DebtsScreenState extends State<DebtsScreen> {
     }
   }
 
+  Future<void> _detalhe(PulsoDivida divida) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: PulsoTokens.space4,
+            right: PulsoTokens.space4,
+            bottom: MediaQuery.paddingOf(context).bottom + PulsoTokens.space4,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                divida.nomePessoa,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text('Total ${formatBrl(divida.valor)}'),
+              Text('Pago ${formatBrl(divida.valorPago)}'),
+              Text('Restante ${formatBrl(divida.valorRestante)}'),
+              if (divida.prazoDevolucao != null)
+                Text(
+                  'Prazo ${divida.prazoDevolucao!.day.toString().padLeft(2, '0')}/${divida.prazoDevolucao!.month.toString().padLeft(2, '0')}/${divida.prazoDevolucao!.year}',
+                ),
+              if ((divida.observacao ?? '').trim().isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(divida.observacao!),
+              ],
+              const SizedBox(height: 12),
+              Text(
+                'Pagamentos',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              if (divida.pagamentos.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Text('Nenhum pagamento registrado.'),
+                )
+              else
+                ...divida.pagamentos.map(
+                  (p) => ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(formatBrl(p.valor)),
+                    subtitle: Text(
+                      p.data == null
+                          ? '—'
+                          : '${p.data!.day.toString().padLeft(2, '0')}/${p.data!.month.toString().padLeft(2, '0')}/${p.data!.year}',
+                    ),
+                    trailing: IconButton(
+                      tooltip: 'Excluir pagamento',
+                      onPressed: () async {
+                        try {
+                          await context.read<DebtRepository>().excluirPagamento(
+                            divida.id,
+                            p.id,
+                          );
+                          if (!context.mounted) return;
+                          Navigator.pop(context);
+                          showPulsoSnack(context, 'Pagamento removido');
+                          await context.read<DebtsController>().reload();
+                        } on ApiException catch (error) {
+                          if (!context.mounted) return;
+                          showPulsoSnack(context, error.message);
+                        }
+                      },
+                      icon: const Icon(Icons.delete_outline),
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 8),
+              FilledButton.tonal(
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.push('/debts/new', extra: divida);
+                },
+                child: const Text('Editar dívida'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = context.watch<DebtsController>();
@@ -186,6 +275,8 @@ class _DebtsScreenState extends State<DebtsScreen> {
             ...visiveis.map(
               (divida) => _DebtCard(
                 divida: divida,
+                onOpen: () => _detalhe(divida),
+                onEdit: () => context.push('/debts/new', extra: divida),
                 onPay: divida.quitada ? null : () => _pagar(divida),
                 onSettle: divida.quitada ? null : () => _acao(divida, 'quitar'),
                 onReopen: divida.quitada
@@ -236,6 +327,8 @@ class _DebtCard extends StatelessWidget {
   const _DebtCard({
     required this.divida,
     required this.onDelete,
+    required this.onOpen,
+    required this.onEdit,
     this.onPay,
     this.onSettle,
     this.onReopen,
@@ -243,6 +336,8 @@ class _DebtCard extends StatelessWidget {
 
   final PulsoDivida divida;
   final VoidCallback onDelete;
+  final VoidCallback onOpen;
+  final VoidCallback onEdit;
   final VoidCallback? onPay;
   final VoidCallback? onSettle;
   final VoidCallback? onReopen;
@@ -268,6 +363,7 @@ class _DebtCard extends StatelessWidget {
 
     return PulsoSurface(
       margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
+      onTap: onOpen,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -322,6 +418,11 @@ class _DebtCard extends StatelessWidget {
               if (onReopen != null)
                 TextButton(onPressed: onReopen, child: const Text('Reabrir')),
               const Spacer(),
+              IconButton(
+                tooltip: 'Editar',
+                onPressed: onEdit,
+                icon: const Icon(Icons.edit_outlined),
+              ),
               IconButton(
                 tooltip: 'Excluir',
                 onPressed: onDelete,
