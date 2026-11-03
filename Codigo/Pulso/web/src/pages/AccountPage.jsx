@@ -167,14 +167,21 @@ export default function AccountPage({ mode = 'profile' }) {
                             </p>
                         </div>
 
-                        <div className="account-page__theme-grid" role="group" aria-label="Tema da interface">
+                        <div
+                            className="account-page__theme-grid"
+                            role="group"
+                            aria-label="Tema da interface"
+                        >
                             <button
                                 type="button"
                                 className={`account-page__theme-card${theme === 'light' ? ' account-page__theme-card--active' : ''}`}
                                 onClick={() => setThemePreference('light')}
                                 aria-pressed={theme === 'light'}
                             >
-                                <span className="account-page__theme-preview account-page__theme-preview--light" aria-hidden>
+                                <span
+                                    className="account-page__theme-preview account-page__theme-preview--light"
+                                    aria-hidden
+                                >
                                     <span />
                                     <span />
                                     <span />
@@ -182,7 +189,9 @@ export default function AccountPage({ mode = 'profile' }) {
                                 <span className="account-page__theme-meta">
                                     <Sun size={16} strokeWidth={2} aria-hidden />
                                     Claro
-                                    {theme === 'light' ? <Check size={14} className="account-page__theme-check" /> : null}
+                                    {theme === 'light' ? (
+                                        <Check size={14} className="account-page__theme-check" />
+                                    ) : null}
                                 </span>
                             </button>
 
@@ -192,7 +201,10 @@ export default function AccountPage({ mode = 'profile' }) {
                                 onClick={() => setThemePreference('dark')}
                                 aria-pressed={theme === 'dark'}
                             >
-                                <span className="account-page__theme-preview account-page__theme-preview--dark" aria-hidden>
+                                <span
+                                    className="account-page__theme-preview account-page__theme-preview--dark"
+                                    aria-hidden
+                                >
                                     <span />
                                     <span />
                                     <span />
@@ -200,7 +212,9 @@ export default function AccountPage({ mode = 'profile' }) {
                                 <span className="account-page__theme-meta">
                                     <Moon size={16} strokeWidth={2} aria-hidden />
                                     Escuro
-                                    {theme === 'dark' ? <Check size={14} className="account-page__theme-check" /> : null}
+                                    {theme === 'dark' ? (
+                                        <Check size={14} className="account-page__theme-check" />
+                                    ) : null}
                                 </span>
                             </button>
                         </div>
@@ -209,7 +223,9 @@ export default function AccountPage({ mode = 'profile' }) {
                     <section className="account-page__card account-page__card--list">
                         <div className="account-page__section-head account-page__section-head--pad">
                             <h3 className="account-page__section-title">Documentos</h3>
-                            <p className="account-page__section-copy">Termos e privacidade do Pulso.</p>
+                            <p className="account-page__section-copy">
+                                Termos e privacidade do Pulso.
+                            </p>
                         </div>
                         <div className="account-page__list">
                             <Link className="account-page__list-item" to="/termos">
@@ -218,7 +234,9 @@ export default function AccountPage({ mode = 'profile' }) {
                                 </span>
                                 <span className="account-page__list-copy">
                                     <span className="account-page__list-title">Termos de uso</span>
-                                    <span className="account-page__list-hint">Regras de uso da plataforma</span>
+                                    <span className="account-page__list-hint">
+                                        Regras de uso da plataforma
+                                    </span>
                                 </span>
                                 <ChevronRight size={16} aria-hidden />
                             </Link>
@@ -227,8 +245,12 @@ export default function AccountPage({ mode = 'profile' }) {
                                     <Shield size={16} />
                                 </span>
                                 <span className="account-page__list-copy">
-                                    <span className="account-page__list-title">Política de privacidade</span>
-                                    <span className="account-page__list-hint">Como tratamos seus dados</span>
+                                    <span className="account-page__list-title">
+                                        Política de privacidade
+                                    </span>
+                                    <span className="account-page__list-hint">
+                                        Como tratamos seus dados
+                                    </span>
                                 </span>
                                 <ChevronRight size={16} aria-hidden />
                             </Link>

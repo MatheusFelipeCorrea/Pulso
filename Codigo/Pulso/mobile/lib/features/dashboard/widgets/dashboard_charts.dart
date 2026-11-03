@@ -92,9 +92,8 @@ class DashboardResourceCard extends StatelessWidget {
               formatBrl(recurso.saldo),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 8),
             Row(
@@ -113,9 +112,8 @@ class DashboardResourceCard extends StatelessWidget {
                     subtitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: scheme.onSurfaceVariant,
-                    ),
+                    style: Theme.of(context).textTheme.labelSmall
+                        ?.copyWith(color: scheme.onSurfaceVariant),
                   ),
                 ),
               ],
@@ -160,9 +158,8 @@ class DashboardIncomeExpenseBars extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             'Comparativo do mês selecionado',
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: scheme.onSurfaceVariant),
           ),
           const SizedBox(height: PulsoTokens.space4),
           SizedBox(
@@ -235,16 +232,14 @@ class _Bar extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           label,
-          style: Theme.of(
-            context,
-          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+          style: Theme.of(context).textTheme.labelMedium
+              ?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 2),
         Text(
           valueLabel,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
+          style: Theme.of(context).textTheme.labelSmall
+              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
       ],
     );
@@ -290,17 +285,15 @@ class DashboardCategoryDonut extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             'Distribuição das despesas do mês',
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: scheme.onSurfaceVariant),
           ),
           const SizedBox(height: PulsoTokens.space4),
           if (slices.isEmpty)
             Text(
               'Sem despesas categorizadas neste mês.',
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: scheme.onSurfaceVariant),
             )
           else
             Row(
@@ -321,12 +314,14 @@ class DashboardCategoryDonut extends StatelessWidget {
                     child: Center(
                       child: Text(
                         formatBrl(
-                          slices.fold<double>(0, (sum, item) => sum + item.total),
+                          slices.fold<double>(
+                            0,
+                            (sum, item) => sum + item.total,
+                          ),
                         ),
                         textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: Theme.of(context).textTheme.labelSmall
+                            ?.copyWith(fontWeight: FontWeight.w700),
                       ),
                     ),
                   ),

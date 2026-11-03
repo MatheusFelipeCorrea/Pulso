@@ -161,12 +161,11 @@
 
 .account-page__card--plan-premium {
     border-color: color-mix(in srgb, var(--ds-color-primary) 35%, transparent);
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--ds-color-primary) 10%, transparent),
-            var(--ds-color-card-bg, var(--ds-color-surface)) 42%
-        );
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--ds-color-primary) 10%, transparent),
+        var(--ds-color-card-bg, var(--ds-color-surface)) 42%
+    );
 }
 
 .account-page__section-head {
@@ -448,12 +447,11 @@
 
 .account-page__card--danger {
     border-color: color-mix(in srgb, var(--ds-color-danger, #ef4444) 28%, transparent);
-    background:
-        linear-gradient(
-            180deg,
-            color-mix(in srgb, var(--ds-color-danger, #ef4444) 8%, transparent),
-            var(--ds-color-card-bg, var(--ds-color-surface)) 48%
-        );
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--ds-color-danger, #ef4444) 8%, transparent),
+        var(--ds-color-card-bg, var(--ds-color-surface)) 48%
+    );
 }
 
 .account-page__danger-actions {
