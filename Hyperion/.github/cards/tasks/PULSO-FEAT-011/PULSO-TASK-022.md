@@ -48,6 +48,11 @@ Adicionar FAB (floating action button) no dashboard que abre o chatbot em modo q
 
 **Dependência externa:** `PULSO-EPIC-016` (RF-015 bloqueado até o chat existir)
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — owner (bloqueado no chatbot)
+
+
 ## 📋 Resumo
 
 ### ✅ Concluído

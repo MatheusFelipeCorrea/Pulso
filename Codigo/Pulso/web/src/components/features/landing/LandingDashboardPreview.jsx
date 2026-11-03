@@ -1,17 +1,17 @@
 import {
     Bell,
-    Brain,
     CalendarDays,
     ChevronDown,
     HandCoins,
     LayoutGrid,
     PieChart,
     Search,
+    Split,
     Target,
     TrendingUp,
     User,
+    Users,
     Wallet,
-    Wrench,
 } from 'lucide-react'
 import { PulsoLogoMark } from '@/components/features/auth/PulsoBrand'
 
@@ -21,19 +21,21 @@ const NAV = [
         icon: HandCoins,
         label: 'Financeiro',
         open: true,
-        children: ['Transações'],
+        children: ['Transações', 'Orçamento', 'Calendário', 'Dívidas'],
     },
     {
         icon: Target,
-        label: 'Planejamento & Metas',
-        children: ['Metas Financeiras', 'Viagens e Moedas'],
+        label: 'Planejamento',
+        children: ['Metas', 'Viagens e Moedas', 'Planejamento de compra'],
     },
     {
-        icon: Brain,
-        label: 'Inteligência',
-        children: ['Insights e Chatbot'],
+        icon: Split,
+        label: 'Divisão de despesas',
     },
-    { icon: Wrench, label: 'Ferramentas', children: ['Agenda e Lembretes'] },
+    {
+        icon: Users,
+        label: 'Grupos',
+    },
     { icon: User, label: 'Conta', children: ['Perfil'] },
 ]
 

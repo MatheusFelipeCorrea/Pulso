@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-038
 title: "Header, footer, mobile e estilos"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-007
@@ -41,6 +41,11 @@ Implementar header/footer compartilhados, seção mobile, termos/privacidade e f
 - PULSO-TASK-078
 - PULSO-TASK-079
 - PULSO-TASK-080
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

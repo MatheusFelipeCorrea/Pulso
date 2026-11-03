@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-140
 title: "QA — testes de dívidas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-069
@@ -44,6 +44,12 @@ Implementar suites unitárias API e Web.
 | `unit/utils/debtFilters.test.js` | tabs/filtros |
 | `unit/services/debtService.test.js` | HTTP client |
 | `unit/components/debtDetailsModal.test.js` | modal detalhes |
+
+## 👤 Responsáveis
+
+- Sofia Vasconcelos (`sofiavasconcelosms`)
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

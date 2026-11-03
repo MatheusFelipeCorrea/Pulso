@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-078
 title: "Frontend — seção mobile e phone mockup"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-038
@@ -38,6 +38,11 @@ Implementar seção "Leve o Pulso com você" com botões de download e mockup de
 **Nota iOS:** texto sobre VPN e Gerenciamento de Dispositivo
 
 Assets em `public/downloads/` (NOVO — CRIAR placeholders se necessário)
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

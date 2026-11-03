@@ -68,8 +68,25 @@
 
 ### Semana 2 (08/10 - 14/10)
 
-- _A preencher pela integrante._
+- Sem registro adicional no arquivo nesta semana.
+
+**Horas:** 0h
+
+**Total Sprint 4:** 16h
+
+# Sprint 5 (15/10 a 04/11)
+
+### Semana 1–2 (15/10 - 28/10)
+
+- Acompanhamento da entrega visual web/mobile (dashboard, grupos, dívidas, divisão) e da landing freemium.
+- _Preencher horas de revisão / Figma / reuniões da integrante._
 
 **Horas:** _a preencher_
 
-**Total Sprint 4:** _a fechar em 14/10_
+### Semana 3 (29/10 - 04/11) — parcial
+
+- Protótipos de alta fidelidade da Sprint 5 (conta/configurações + apagar conta, dashboard, grupos/chat, dívidas, divisão, importação, landing Free/Premium) a publicar em `docs/prototipos/` — aguardando upload do time.
+
+**Horas:** _a preencher_
+
+**Total Sprint 5:** _a fechar em 04/11_

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-118
 title: "Backend — expenseSplitRepository e mapper"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-058
@@ -32,6 +32,11 @@ Implementar repository e mapper.
 | `utils/expenseSplitMapper.js` | `mapDivisao`, `mapParticipante` |
 
 Include participantes; `pagador` derivado de `pagouAConta`.
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — API
+
 
 ## 📋 Resumo
 

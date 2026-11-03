@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-EPIC-011
 title: "Divisão de Despesas"
-status: Backlog
+status: "In Revision"
 type: Epic
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null
@@ -59,12 +59,23 @@ categories:
 - PULSO-FEAT-062
 - PULSO-FEAT-063
 
+## 👤 Responsáveis
+
+- Vinícius Simões (`ViniSimoesV`) — API e web
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Flutter / parity
+
+
+## 🔗 Pull Requests
+
+- [#374](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/374) — divisão API + web
+- [#380](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/380) — divisão Flutter
+- [#384](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/384) — edição/lembrete no mobile
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo RF-106–111 e RN-081–086 mapeado
-- Hierarquia Epic → 6 Features → 12 Tasks definida
+- API + web + Flutter (rateio, pagar, resumo, lembrete de cobrança)
+- Hierarquia Epic → Features → Tasks em In Revision (Sprint 5)
 
 ### ⏳ Pendente
-- Implementar módulo completo backend + frontend
 - Vincular toggle RF-091 (Grupos) a este módulo — evolução futura

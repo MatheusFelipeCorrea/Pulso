@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-090
 title: "Frontend — GroupDetailPage e cards"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-044
@@ -42,6 +42,12 @@ Implementar detalhe do grupo com viagem, metas, membros e chat.
 `EditGroupModal`, `ManageGroupMembersModal`, `CreateGroupGoalsModal`, `GroupContributionModal`, `TripFormModal`, `TripExpenseFormModal`, `ChangeGroupImageModal`
 
 **Utils:** `groupDetailUtils.js` → `calcularSaldosViagem`, `mesclarMensagensChat`
+
+## 👤 Responsáveis
+
+- Maria Clara (`mariaoliveira27`) — web
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Flutter visual
+
 
 ## 📋 Resumo
 

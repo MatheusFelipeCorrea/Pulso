@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-045
 title: "QA — testes de grupos"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-008
@@ -27,6 +27,13 @@ Implementar suites API, Web e Playwright cobrindo fluxos críticos.
 ## 🔗 Sub-issues
 
 - PULSO-TASK-092
+
+## 👤 Responsáveis
+
+- Alice Shikida (`aliceshikida`)
+- Maria Clara (`mariaoliveira27`)
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

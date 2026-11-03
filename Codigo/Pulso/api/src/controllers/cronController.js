@@ -4,9 +4,12 @@ const { runUnverifiedAccountCleanup } = require('../jobs/unverifiedAccountCleanu
 const { runBudgetAlertJob } = require('../jobs/budgetAlertJob');
 const { runReminderAlertJob } = require('../jobs/reminderAlertJob');
 const { runReminderRecurrenceJob } = require('../jobs/reminderRecurrenceJob');
+const { runDebtAlertJob } = require('../jobs/debtAlertJob');
+const { runDebtCleanupJob } = require('../jobs/debtCleanupJob');
+const { runExpenseSplitCleanupJob } = require('../jobs/expenseSplitCleanupJob');
 const logger = require('../utils/logger');
 
-// Jobs de dívida/chat ficam comentados — módulos ainda não estão neste repo.
+// Jobs de notificação e chat ficam comentados — módulos ainda não estão neste repo.
 const tick = async (req, res, next) => {
     try {
         const [budget, cleanup] = await Promise.all([runBudgetAlertJob(), runTokenCleanup()]);
@@ -23,12 +26,15 @@ const tick = async (req, res, next) => {
 
 const daily = async (req, res, next) => {
     try {
-        const [budget, cleanup, reminders] = await Promise.all([
+        const [budget, cleanup, reminders, debts] = await Promise.all([
             runBudgetAlertJob(),
             runTokenCleanup(),
             runReminderAlertJob(),
+            runDebtAlertJob(),
         ]);
         const recurringReminders = await runReminderRecurrenceJob();
+        const debtCleanup = await runDebtCleanupJob();
+        const expenseSplitCleanup = await runExpenseSplitCleanupJob();
         await runRecurringTransactions();
         const contas = await runUnverifiedAccountCleanup();
         res.status(200).json({
@@ -36,6 +42,9 @@ const daily = async (req, res, next) => {
             budget,
             cleanup,
             reminders,
+            debts,
+            debtCleanup,
+            expenseSplitCleanup,
             recurringReminders,
             recurring: true,
             contasNaoVerificadas: contas,

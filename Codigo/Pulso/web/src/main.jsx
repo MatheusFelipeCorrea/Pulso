@@ -23,12 +23,12 @@ import './styles/trips.css'
 import './styles/budget.css'
 import './styles/calendar.css'
 import './styles/purchase-planning.css'
-// TEMP: CSS de módulos ainda ausentes
-// import './styles/pulso-components.css'
-// import './styles/debts.css'
-// import './styles/groups.css'
-// import './styles/expense-split.css'
-// import './styles/dashboard.css'
+import './styles/dashboard.css'
+import './styles/groups.css'
+import './styles/debts.css'
+import './styles/expense-split.css'
+import './styles/account.css'
+import './styles/pulso-components.css'
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>

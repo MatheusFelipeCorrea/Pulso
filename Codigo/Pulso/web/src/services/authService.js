@@ -55,6 +55,13 @@ export const getMe = async () => {
     return response.data.user
 }
 
+export const deleteAccount = async () => {
+    const response = await api.delete('/auth/me', {
+        data: { confirmacao: 'APAGAR' },
+    })
+    return response.data
+}
+
 export const verifyEmail = async (token) => {
     const response = await api.get(`/auth/verify-email/${encodeURIComponent(token)}`)
     return response.data

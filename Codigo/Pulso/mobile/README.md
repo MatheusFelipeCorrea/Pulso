@@ -64,9 +64,16 @@ Os e-mails da API continuam com o CTA em `FRONTEND_URL` (fluxo Web se o app não
 
 Em produção, acrescente o host público no `AndroidManifest.xml` (`intent-filter` https) e o Associated Domain no iOS (`applinks:seu-dominio`) apontando para o mesmo `FRONTEND_URL`.
 
-## Telas (mesmo copy da Web)
+## Telas (parity com a Web — Sprint 5)
 
-- Login, cadastro, termos de uso, política de privacidade
-- E-mail enviado, verificar e-mail
-- Recuperar senha, reset, senha alterada
-- Home autenticada (placeholder — sem marketing)
+Sem landing/marketing: a sessão começa no **login**.
+
+- Auth: login, cadastro, termos, privacidade, e-mail enviado, verificar, recuperar/reset senha
+- Conta: perfil, configurações (tema, senha) e **apagar conta** (`APAGAR` → `DELETE /auth/me`)
+- Dashboard (hero, recursos, gráficos, saúde, metas, últimas tx) + importação de extrato
+- Transações, categorias, tags
+- Metas, viagens e moedas
+- Calendário / lembretes (Google Calendar Premium)
+- Orçamento mensal e planejamento de compra
+- Grupos (CRUD, convite, imagem, **chat Socket.IO**)
+- Dívidas pessoais e divisão de despesas

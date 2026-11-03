@@ -153,6 +153,8 @@ Erros: `AppError` → `errorMiddleware` → `{ status: 'error', message }`
 | POST | `/refresh` | 🔓 |
 | POST | `/logout` | 🔓 |
 | GET | `/me` | 🔒 |
+| PATCH | `/me/plano` | 🔒 Troca Free/Premium (sem billing — seed/admin/demo) |
+| DELETE | `/me` | 🔒 Apagar conta — body `{ "confirmacao": "APAGAR" }` (cascade dos dados do usuário) |
 | POST | `/forgot-password` | 🔓 |
 | GET | `/reset-password/:token` | 🔓 |
 | POST | `/reset-password/:token` | 🔓 |
@@ -160,6 +162,8 @@ Erros: `AppError` → `errorMiddleware` → `{ status: 'error', message }`
 | POST | `/resend-verification` | 🔓 |
 | GET | `/google` | 🔓 |
 | GET | `/google/callback` | 🔓 |
+| POST | `/google/mobile` | 🔓 ID token nativo (Flutter) |
+| POST | `/oauth/exchange` | 🔓 Troca do código `exchange` pós-redirect Google |
 
 ### Transações — `/api/transacoes`
 

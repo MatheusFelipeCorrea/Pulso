@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-069
 title: "QA — testes de dívidas"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-012
@@ -27,6 +27,12 @@ Implementar suites unitárias API e Web do módulo.
 ## 🔗 Sub-issues
 
 - PULSO-TASK-140
+
+## 👤 Responsáveis
+
+- Sofia Vasconcelos (`sofiavasconcelosms`)
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

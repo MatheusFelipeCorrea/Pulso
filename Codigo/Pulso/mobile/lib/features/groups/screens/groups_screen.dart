@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
+import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/groups/data/group_models.dart';
 import 'package:pulso/features/groups/state/groups_controller.dart';
+import 'package:pulso/features/groups/widgets/group_card.dart';
 
 class GroupsScreen extends StatefulWidget {
   const GroupsScreen({super.key});
@@ -28,7 +31,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
     final ok = await showPulsoConfirm(
       context: context,
       title: 'Excluir grupo',
-      message: 'Excluir “${grupo.nome}”?',
+      message: 'Excluir “${grupo.nome}”? Os membros perdem o acesso.',
     );
     if (ok != true || !mounted) return;
     try {
@@ -41,6 +44,34 @@ class _GroupsScreenState extends State<GroupsScreen> {
     }
   }
 
+  Future<void> _leave(PulsoGrupo grupo) async {
+    final ok = await showPulsoConfirm(
+      context: context,
+      title: 'Sair do grupo',
+      message: 'Sair de “${grupo.nome}”?',
+    );
+    if (ok != true || !mounted) return;
+    try {
+      await context.read<GroupsController>().sair(grupo.id);
+      if (!mounted) return;
+      showPulsoSnack(context, 'Você saiu do grupo');
+    } on ApiException catch (error) {
+      if (!mounted) return;
+      showPulsoSnack(context, error.message);
+    }
+  }
+
+  Future<void> _invite(PulsoGrupo grupo) async {
+    final codigo = grupo.codigoConvite ?? '';
+    if (codigo.isEmpty) {
+      showPulsoSnack(context, 'Este grupo não tem código de convite');
+      return;
+    }
+    await Clipboard.setData(ClipboardData(text: codigo));
+    if (!mounted) return;
+    showPulsoSnack(context, 'Código $codigo copiado');
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = context.watch<GroupsController>();
@@ -51,14 +82,14 @@ class _GroupsScreenState extends State<GroupsScreen> {
           PulsoTokens.space4,
           PulsoTokens.space2,
           PulsoTokens.space4,
-          PulsoTokens.space8,
+          96,
         ),
         children: [
-          Text(
-            'A API de grupos ainda não está ligada neste Sprint. O app já fala /grupos como a web.',
-            style: Theme.of(context).textTheme.bodySmall,
+          const PulsoPageHeader(
+            title: 'Grupos',
+            subtitle: 'Gerencie e participe dos seus grupos financeiros.',
+            icon: Icons.groups_outlined,
           ),
-          const SizedBox(height: PulsoTokens.space3),
           if (controller.loading && controller.grupos.isEmpty)
             const Padding(
               padding: EdgeInsets.only(top: PulsoTokens.space8),
@@ -68,8 +99,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
             PulsoEmptyState(
               title: 'Grupos indisponíveis',
               description: controller.error!,
-              actionLabel: 'Novo grupo',
-              onAction: () => context.push('/groups/new'),
+              actionLabel: 'Tentar de novo',
+              onAction: controller.reload,
             )
           else if (controller.grupos.isEmpty)
             PulsoEmptyState(
@@ -78,20 +109,21 @@ class _GroupsScreenState extends State<GroupsScreen> {
               actionLabel: 'Novo grupo',
               onAction: () => context.push('/groups/new'),
             )
-          else
+          else ...[
+            const PulsoSectionHeader(
+              title: 'Meus grupos',
+              icon: Icons.folder_shared_outlined,
+            ),
             ...controller.grupos.map(
-              (grupo) => Card(
-                margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
-                child: ListTile(
-                  title: Text(grupo.nome),
-                  subtitle: Text('${grupo.quantidadeMembros} membros'),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete_outline),
-                    onPressed: () => _delete(grupo),
-                  ),
-                ),
+              (grupo) => GroupCard(
+                grupo: grupo,
+                onOpen: () => context.push('/groups/${grupo.id}', extra: grupo),
+                onInvite: () => _invite(grupo),
+                onLeave: grupo.isAdmin ? null : () => _leave(grupo),
+                onDelete: grupo.isAdmin ? () => _delete(grupo) : null,
               ),
             ),
+          ],
         ],
       ),
     );

@@ -1,42 +1,47 @@
 import {
-    Brain,
+    ArrowLeftRight,
     CalendarDays,
+    HandCoins,
+    Landmark,
     LayoutGrid,
-    MessageCircle,
+    PieChart,
     Plane,
-    Sparkles,
+    ShoppingCart,
+    Split,
     Target,
     Users,
+    Wallet,
 } from 'lucide-react'
+
+export const REPO_URL = 'https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso'
 
 export const NAV_LINKS = [
     { id: 'funcionalidades', label: 'Funcionalidades' },
     { id: 'para-quem', label: 'Para quem' },
     { id: 'diferenciais', label: 'Diferenciais' },
     { id: 'precos', label: 'Preços' },
-    { id: 'roadmap', label: 'Roadmap' },
 ]
 
 export const HIGHLIGHTS = [
     {
-        icon: Brain,
-        title: 'IA Inteligente',
-        description: 'Insights personalizados',
+        icon: Wallet,
+        title: 'Em reais (BRL)',
+        description: 'Valores, saldos e metas no Real',
     },
     {
-        icon: Sparkles,
-        title: '100% Gratuito',
-        description: 'Sem pegadinhas',
+        icon: HandCoins,
+        title: 'VA, VR e dinheiro',
+        description: 'Benefícios separados do saldo real',
     },
     {
         icon: Target,
-        title: 'Seus dados seguros',
-        description: 'Privacidade em primeiro lugar',
+        title: 'Grátis para começar',
+        description: 'Core financeiro no plano Free',
     },
     {
         icon: Users,
         title: 'Feito para você',
-        description: 'Estagiários, CLT, PJ, pessoa física e mais',
+        description: 'Estagiários, CLT, PJ e pessoa física',
     },
 ]
 
@@ -44,49 +49,64 @@ export const FEATURES = [
     {
         icon: LayoutGrid,
         title: 'Dashboard',
-        description: 'Visão em tempo real das suas finanças, receitas, despesas e saldo.',
+        description: 'Saldo do mês, categorias, alertas de orçamento e saúde financeira em reais.',
         tone: 'purple',
-        badge: 'Em breve',
+    },
+    {
+        icon: ArrowLeftRight,
+        title: 'Transações',
+        description: 'Receitas, despesas e transferências entre dinheiro, VA e VR.',
+        tone: 'green',
+    },
+    {
+        icon: PieChart,
+        title: 'Orçamento mensal',
+        description: 'Limites por categoria e alertas quando o mês começa a apertar.',
+        tone: 'blue',
+    },
+    {
+        icon: CalendarDays,
+        title: 'Calendário financeiro',
+        description: 'Vencimentos, lembretes e compromissos do mês.',
+        tone: 'indigo',
+    },
+    {
+        icon: Landmark,
+        title: 'Dívidas pessoais',
+        description: 'O que você deve e o que ainda tem a receber, com status e prazos.',
+        tone: 'violet',
     },
     {
         icon: Target,
         title: 'Metas',
-        description: 'Defina objetivos e acompanhe o progresso mês a mês.',
-        tone: 'green',
+        description: 'Objetivos em reais e progresso mês a mês.',
+        tone: 'teal',
     },
     {
-        icon: Plane,
-        title: 'Viagens',
-        description: 'Planeje viagens com câmbio, orçamento e metas dedicadas.',
-        tone: 'blue',
-    },
-    {
-        icon: Sparkles,
-        title: 'IA Insights',
-        description: 'Alertas automáticos sobre seus gastos — como o maior gasto do mês.',
-        tone: 'violet',
-        badge: 'Beta',
-    },
-    {
-        icon: MessageCircle,
-        title: 'Chatbot',
-        description: 'Tire dúvidas sobre suas finanças em linguagem natural.',
+        icon: Split,
+        title: 'Divisão de despesas',
+        description: 'Divida uma conta, marque quem pagou e acompanhe o saldo.',
         tone: 'pink',
-        badge: 'Em breve',
+    },
+    {
+        icon: ShoppingCart,
+        title: 'Planejamento de compra',
+        description: 'Liste o que quer comprar e veja o impacto no orçamento.',
+        tone: 'orange',
     },
     {
         icon: Users,
         title: 'Grupos',
-        description: 'Metas compartilhadas com amigos, família ou colegas.',
+        description: 'Metas compartilhadas, convites e chat com a galera.',
         tone: 'teal',
-        badge: 'Em breve',
+        badge: 'Premium',
     },
     {
-        icon: CalendarDays,
-        title: 'Calendário',
-        description: 'Vencimentos, lembretes e compromissos financeiros.',
+        icon: Plane,
+        title: 'Viagens e moedas',
+        description: 'Planeje a viagem com orçamento e câmbio.',
         tone: 'indigo',
-        badge: 'Em breve',
+        badge: 'Premium',
     },
 ]
 
@@ -126,14 +146,48 @@ export const AUDIENCE = [
 ]
 
 export const BENEFITS = [
-    'Separa dinheiro real de benefícios (VA, VR)',
-    'IA que entende o contexto de estagiário e CLT',
-    'Planejamento de viagens com moedas e metas',
-    'Insights para manter o hábito financeiro',
-    'Dark mode lindo (você está vendo!)',
-    'Integração com Google Calendar',
-    'Alertas e insights automáticos',
-    '100% gratuito, sem cartão de crédito',
+    'Separa dinheiro real de benefícios (VA e VR)',
+    'Dashboard, orçamento e calendário no plano Free',
+    'Dívidas e divisão de despesas no dia a dia',
+    'Grupos e viagens no plano Premium',
+    'Valores sempre em reais (BRL)',
+    'Dark mode e integração com Google Calendar',
+    'Comece grátis — sem cartão de crédito',
+]
+
+export const PRICING = [
+    {
+        id: 'free',
+        name: 'Free',
+        price: 'R$ 0',
+        period: 'para sempre',
+        description: 'O core financeiro para organizar o mês.',
+        highlighted: false,
+        features: [
+            'Dashboard e transações',
+            'Orçamento e calendário',
+            'Metas, dívidas e divisão de despesas',
+            'Planejamento de compra',
+        ],
+        cta: 'Criar conta grátis',
+        to: '/register',
+    },
+    {
+        id: 'premium',
+        name: 'Premium',
+        price: 'R$ 50',
+        period: '/mês',
+        description: 'Grupos e viagens para quem precisa de mais.',
+        highlighted: true,
+        features: [
+            'Tudo do plano Free',
+            'Grupos com convite e chat',
+            'Viagens e moedas',
+            'Cobrança mensal em reais',
+        ],
+        cta: 'Começar no Free',
+        to: '/register',
+    },
 ]
 
 export const TESTIMONIALS = [
@@ -165,34 +219,12 @@ export const FOOTER_LINKS = {
         { label: 'Funcionalidades', href: '#funcionalidades' },
         { label: 'Para quem', href: '#para-quem' },
         { label: 'Preços', href: '#precos' },
-        { label: 'Roadmap', href: '#roadmap' },
     ],
     recursos: [
-        { label: 'Documentação', to: '/design-system' },
+        { label: 'Repositório', href: REPO_URL, external: true },
+        { label: 'Documentação', href: `${REPO_URL}#readme`, external: true },
         { label: 'Termos de uso', to: '/termos' },
         { label: 'Privacidade', to: '/privacidade' },
     ],
-    comunidade: [
-        { label: 'GitHub', href: 'https://github.com', external: true },
-        { label: 'Instagram', href: 'https://instagram.com', external: true },
-        { label: 'LinkedIn', href: 'https://linkedin.com', external: true },
-    ],
+    comunidade: [{ label: 'GitHub', href: REPO_URL, external: true }],
 }
-
-/** Links de download direto do app — arquivos em public/downloads/ */
-export const APP_DOWNLOADS = [
-    {
-        id: 'android',
-        label: 'Android',
-        hint: 'Arquivo .apk',
-        href: '/downloads/pulso-android.apk',
-        filename: 'pulso-android.apk',
-    },
-    {
-        id: 'ios',
-        label: 'iOS',
-        hint: 'Arquivo .ipa',
-        href: '/downloads/pulso-ios.ipa',
-        filename: 'pulso-ios.ipa',
-    },
-]

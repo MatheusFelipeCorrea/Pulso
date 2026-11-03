@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-061
 title: "Lembrete de cobrança e limpeza"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-011
@@ -42,6 +42,11 @@ Criar lembrete de cobrança para 1+ pendentes e limpar histórico antigo.
 
 - PULSO-TASK-123
 - PULSO-TASK-124
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — lembrete/limpeza
+
 
 ## 📋 Resumo
 

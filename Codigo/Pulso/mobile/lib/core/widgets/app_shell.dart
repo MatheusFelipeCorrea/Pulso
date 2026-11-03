@@ -102,6 +102,27 @@ class AppShell extends StatelessWidget {
         label: const Text('Nova'),
       );
     }
+    if (location == '/expense-split') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/expense-split/new'),
+        icon: const Icon(Icons.add),
+        label: const Text('Dividir'),
+      );
+    }
+    if (location == '/debts') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/debts/new'),
+        icon: const Icon(Icons.add),
+        label: const Text('Dívida'),
+      );
+    }
+    if (location == '/groups') {
+      return FloatingActionButton.extended(
+        onPressed: () => context.push('/groups/new'),
+        icon: const Icon(Icons.add),
+        label: const Text('Grupo'),
+      );
+    }
     if (location == '/purchase-planning') {
       return FloatingActionButton.extended(
         onPressed: () => context.push('/purchase-planning/form'),
@@ -186,15 +207,26 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
         !searching || label.toLowerCase().contains(query);
 
     final showTransacoes = matches('Transações') || matches('Financeiro');
+    final showDashboard = matches('Dashboard') || matches('Financeiro');
     final showCalendario = matches('Calendário') || matches('Financeiro');
     final showOrcamento = matches('Orçamento') || matches('Financeiro');
+    final showDividas = matches('Dívidas') || matches('Financeiro');
+    final showDivisao = matches('Divisão') || matches('Financeiro');
     final showMetas = matches('Metas Financeiras') || matches('Planejamento');
+    final showGrupos = matches('Grupos') || matches('Planejamento');
     final showCompra =
         matches('Planejamento de Compra') || matches('Planejamento');
     final showViagens =
         premium && (matches('Viagens e Moedas') || matches('Planejamento'));
-    final showFinanceiro = showTransacoes || showCalendario || showOrcamento;
-    final showPlanejamento = showMetas || showViagens || showCompra;
+    final showFinanceiro =
+        showTransacoes ||
+        showCalendario ||
+        showOrcamento ||
+        showDashboard ||
+        showDividas ||
+        showDivisao;
+    final showPlanejamento =
+        showMetas || showViagens || showCompra || showGrupos;
     final showPerfil = matches('Perfil') || matches('Conta');
     final showSettings = matches('Configurações') || matches('Conta');
     final showSair = matches('Sair') || matches('Conta');
@@ -305,6 +337,13 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                     onTap: () => _toggle('financeiro'),
                   ),
                   if (financeiroOpen) ...[
+                    if (showDashboard)
+                      _NavTile(
+                        icon: Icons.space_dashboard_outlined,
+                        label: 'Dashboard',
+                        selected: location == '/dashboard',
+                        onTap: () => _go(context, '/dashboard'),
+                      ),
                     if (showTransacoes)
                       _NavTile(
                         icon: Icons.swap_horiz,
@@ -332,6 +371,24 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                             location.startsWith('/budget/'),
                         onTap: () => _go(context, '/budget'),
                       ),
+                    if (showDividas)
+                      _NavTile(
+                        icon: Icons.handshake_outlined,
+                        label: 'Dívidas',
+                        selected:
+                            location == '/debts' ||
+                            location.startsWith('/debts/'),
+                        onTap: () => _go(context, '/debts'),
+                      ),
+                    if (showDivisao)
+                      _NavTile(
+                        icon: Icons.groups_2_outlined,
+                        label: 'Divisão de despesas',
+                        selected:
+                            location == '/expense-split' ||
+                            location.startsWith('/expense-split/'),
+                        onTap: () => _go(context, '/expense-split'),
+                      ),
                   ],
                 ],
                 if (showPlanejamento) ...[
@@ -342,6 +399,15 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                     onTap: () => _toggle('planejamento'),
                   ),
                   if (planejamentoOpen) ...[
+                    if (showGrupos)
+                      _NavTile(
+                        icon: Icons.groups_outlined,
+                        label: 'Grupos',
+                        selected:
+                            location == '/groups' ||
+                            location.startsWith('/groups/'),
+                        onTap: () => _go(context, '/groups'),
+                      ),
                     if (showMetas)
                       _NavTile(
                         icon: Icons.gps_fixed,

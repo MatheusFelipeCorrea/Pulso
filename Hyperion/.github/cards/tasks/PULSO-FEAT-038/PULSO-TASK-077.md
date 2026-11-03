@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-077
 title: "Frontend — PublicHeader e LandingFooter"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-038
@@ -40,6 +40,11 @@ Implementar header com navegação, tema e CTAs; footer com links e social.
 **Footer:** `#roadmap` id para nav
 
 Reutilizar `PulsoBrand` do design system
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

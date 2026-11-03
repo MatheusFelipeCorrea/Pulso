@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-091
 title: "Frontend — groups.css e utilitários"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-044
@@ -37,6 +37,12 @@ Implementar folha de estilos e utilitários compartilhados do módulo grupos.
 | `GroupThumbnail.jsx` / `GroupSocialIcons.jsx` | Componentes visuais |
 
 Importar CSS nas páginas de grupos.
+
+## 👤 Responsáveis
+
+- Maria Clara (`mariaoliveira27`) — web
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Flutter visual
+
 
 ## 📋 Resumo
 

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-123
 title: "Backend — lembrete de cobrança (RF-111)"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-061
@@ -34,6 +34,11 @@ Implementar `POST /:id/lembrete` e cancelamento automático.
 5. Vencimento default: +2 dias; valor = soma das partes
 
 **cancelarLembretesQuitados:** marca lembrete como pago quando todos cobertos quitam
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — lembrete/limpeza
+
 
 ## 📋 Resumo
 

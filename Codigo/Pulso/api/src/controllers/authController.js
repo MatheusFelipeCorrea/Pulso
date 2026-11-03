@@ -166,6 +166,16 @@ const setPlano = async (req, res, next) => {
     }
 };
 
+const deleteAccount = async (req, res, next) => {
+    try {
+        const result = await authService.deleteAccount(req.user.id, req.body?.confirmacao);
+        clearAuthCookies(res);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
+};
+
 const forgotPassword = async (req, res, next) => {
     try {
         const result = await authService.requestPasswordReset(req.body.email);
@@ -206,6 +216,7 @@ module.exports = {
     logout,
     me,
     setPlano,
+    deleteAccount,
     forgotPassword,
     validateResetToken,
     resetPassword,

@@ -558,6 +558,33 @@ describe('authService', () => {
         });
     });
 
+    describe('deleteAccount', () => {
+        it('exige confirmação APAGAR', async () => {
+            await expect(authService.deleteAccount('usr-1', 'nao')).rejects.toMatchObject({
+                statusCode: 400,
+            });
+            expect(authRepositoryMock.deleteUser).not.toHaveBeenCalled();
+        });
+
+        it('retorna 404 se usuário não existe', async () => {
+            authRepositoryMock.findById.mockResolvedValue(null);
+
+            await expect(authService.deleteAccount('usr-x', 'APAGAR')).rejects.toMatchObject({
+                statusCode: 404,
+            });
+        });
+
+        it('apaga a conta com confirmação válida', async () => {
+            authRepositoryMock.findById.mockResolvedValue(usuarioBase);
+            authRepositoryMock.deleteUser.mockResolvedValue(usuarioBase);
+
+            const result = await authService.deleteAccount('usr-1', 'APAGAR');
+
+            expect(authRepositoryMock.deleteUser).toHaveBeenCalledWith('usr-1');
+            expect(result.message).toMatch(/Conta apagada/i);
+        });
+    });
+
     describe('loginWithGoogleIdToken', () => {
         it('rejeita ID token inválido', async () => {
             verifyIdToken.mockRejectedValue(new Error('bad token'));

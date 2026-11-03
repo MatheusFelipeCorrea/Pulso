@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-EPIC-007
 title: "Homepage Pública"
-status: Backlog
+status: "In Revision"
 type: Epic
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null
@@ -57,12 +57,20 @@ categories:
 - PULSO-FEAT-038
 - PULSO-FEAT-039
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — landing freemium web
+
+
+## 🔗 Pull Requests
+
+- [#382](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/382) — homepage freemium em reais (Free R$ 0 / Premium R$ 50/mês)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo RF-080–083 mapeado
-- Hierarquia Epic → 4 Features → 8 Tasks definida
+- Landing pública com seções, CTAs e planos freemium demonstráveis (sem gateway)
+- Hierarquia Epic → Features → Tasks em In Revision (Sprint 5)
 
 ### ⏳ Pendente
-- Implementar landing completa frontend
-- Alinhar badges de módulos conforme roadmap evoluir
+- Ajustes finos de copy/badges conforme roadmap (insights/chatbot)

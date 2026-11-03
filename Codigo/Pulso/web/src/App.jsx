@@ -23,6 +23,12 @@ import AccountPage from './pages/AccountPage.jsx'
 import CalendarPage from './pages/CalendarPage'
 import BudgetPage from './pages/BudgetPage'
 import PurchasePlanningPage from './pages/PurchasePlanningPage'
+import DashboardPage from './pages/DashboardPage'
+import DebtsPage from './pages/DebtsPage'
+import GroupsPage from './pages/GroupsPage'
+import GroupDetailPage from './pages/GroupDetailPage'
+import GroupJoinRedirect from './pages/GroupJoinRedirect'
+import ExpenseSplitPage from './pages/ExpenseSplitPage'
 import { PremiumRoute } from './components/routing/PremiumRoute.jsx'
 // TEMP: demais páginas ainda não estão neste repo.
 
@@ -72,33 +78,19 @@ function App() {
 
                     <Route element={<ProtectedRoute />}>
                         <Route element={<MainLayout />}>
-                            <Route
-                                path="dashboard"
-                                element={<Navigate to="/transactions" replace />}
-                            />
+                            <Route path="dashboard" element={<DashboardPage />} />
                             <Route path="transactions" element={<TransactionsPage />} />
                             <Route path="goals" element={<GoalsPage />} />
                             <Route path="budget" element={<BudgetPage />} />
                             <Route path="calendar" element={<CalendarPage />} />
                             <Route path="purchase-planning" element={<PurchasePlanningPage />} />
-                            <Route
-                                path="profile"
-                                element={
-                                    <AccountPage
-                                        title="Perfil"
-                                        subtitle="Dados da conta autenticada. Edição cadastral entra em um recorte futuro."
-                                    />
-                                }
-                            />
-                            <Route
-                                path="settings"
-                                element={
-                                    <AccountPage
-                                        title="Configurações"
-                                        subtitle="Preferências de tema ficam no menu do avatar. Demais ajustes entram depois."
-                                    />
-                                }
-                            />
+                            <Route path="debts" element={<DebtsPage />} />
+                            <Route path="groups/join/:codigo" element={<GroupJoinRedirect />} />
+                            <Route path="groups" element={<GroupsPage />} />
+                            <Route path="groups/:id" element={<GroupDetailPage />} />
+                            <Route path="expense-split" element={<ExpenseSplitPage />} />
+                            <Route path="profile" element={<AccountPage mode="profile" />} />
+                            <Route path="settings" element={<AccountPage mode="settings" />} />
                             <Route element={<PremiumRoute />}>
                                 <Route path="trips" element={<TripsPage />} />
                                 <Route path="trips/:id" element={<TripDetailPage />} />

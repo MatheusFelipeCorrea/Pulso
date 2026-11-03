@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-037
 title: "Seções de marketing e módulos"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-007
@@ -41,6 +41,11 @@ Implementar seções visuais com dados centralizados em `landingData.js` e previ
 - PULSO-TASK-074
 - PULSO-TASK-075
 - PULSO-TASK-076
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

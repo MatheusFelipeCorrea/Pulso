@@ -5,6 +5,12 @@
 
 export const SIDEBAR_NAV = [
     {
+        id: 'dashboard',
+        label: 'Dashboard',
+        path: '/dashboard',
+        icon: 'LayoutGrid',
+    },
+    {
         id: 'financeiro',
         label: 'Financeiro',
         icon: 'HandCoins',
@@ -22,6 +28,7 @@ export const SIDEBAR_NAV = [
                 path: '/calendar',
                 icon: 'CalendarDays',
             },
+            { id: 'dividas', label: 'Dívidas', path: '/debts', icon: 'Landmark' },
         ],
     },
     {
@@ -31,15 +38,14 @@ export const SIDEBAR_NAV = [
         children: [
             { id: 'metas', label: 'Metas Financeiras', path: '/goals', icon: 'Target' },
             { id: 'viagens', label: 'Viagens e Moedas', path: '/trips', icon: 'Plane' },
+            { id: 'grupos', label: 'Grupos', path: '/groups', icon: 'Users' },
             {
                 id: 'compra',
                 label: 'Planejamento de Compra',
                 path: '/purchase-planning',
                 icon: 'ShoppingCart',
             },
-            // TEMP: rotas abaixo ainda não existem neste repo
-            // { id: 'grupos', label: 'Grupos', path: '/groups', icon: 'Users' },
-            // { id: 'divisao', label: 'Divisão de Despesas', path: '/expense-split', icon: 'Split' },
+            { id: 'divisao', label: 'Divisão de Despesas', path: '/expense-split', icon: 'Split' },
         ],
     },
 ]

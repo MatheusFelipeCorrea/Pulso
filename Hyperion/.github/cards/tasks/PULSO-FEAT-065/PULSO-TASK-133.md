@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-133
 title: "Backend — pagamentos e sincronizarQuitacao"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-065
@@ -33,6 +33,11 @@ Implementar registrar/excluir pagamento com sync de status.
 | `sincronizarQuitacao` | restante 0 → quitar; quitada sem pago efetivo → reabrir |
 
 Rotas: POST `/:id/pagamentos`, DELETE `/:id/pagamentos/:pagamentoId`
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — pagamentos
+
 
 ## 📋 Resumo
 

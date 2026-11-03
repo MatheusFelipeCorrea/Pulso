@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-041
 title: "Viagem compartilhada e divisão RF-091"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-008
@@ -42,6 +42,11 @@ Pretensões permanecem ao membro sair (RN-115–117)
 ## 🔗 Sub-issues
 
 - PULSO-TASK-086
+
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`) — viagem compartilhada
+
 
 ## 📋 Resumo
 

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-092
 title: "QA — testes unitários e E2E de grupos"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-045
@@ -46,6 +46,13 @@ Implementar suites API, Web e Playwright.
 | Arquivo | Escopo |
 |---------|--------|
 | `groups.spec.js` | Login demo + modal criar grupo |
+
+## 👤 Responsáveis
+
+- Alice Shikida (`aliceshikida`)
+- Maria Clara (`mariaoliveira27`)
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

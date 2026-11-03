@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-EPIC-008
 title: "Grupos"
-status: Backlog
+status: "In Revision"
 type: Epic
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null
@@ -65,12 +65,26 @@ categories:
 - PULSO-FEAT-044
 - PULSO-FEAT-045
 
+## 👤 Responsáveis
+
+- Alice Shikida (`aliceshikida`) — API
+- Maria Clara (`mariaoliveira27`) — web + protótipos
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Flutter / religamento / chat realtime
+- Vinícius Simões (`ViniSimoesV`) — client Flutter (dados)
+
+
+## 🔗 Pull Requests
+
+- [#371](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/371) — API grupos
+- [#372](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/372) — web grupos
+- [#377](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/377) — Flutter grupos (visual)
+- [#384](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/384) — chat Socket.IO + imagem no mobile
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo RF-084–098 e RN-111–120 mapeado
-- Hierarquia Epic → 6 Features → 12 Tasks definida
+- API + web + Flutter (CRUD, convite, viagem/metas, chat Socket.IO, Premium)
+- Hierarquia Epic → Features → Tasks em In Revision (Sprint 5)
 
 ### ⏳ Pendente
-- Implementar módulo completo backend + frontend
 - Integração toggle RF-091 ↔ `/expense-split` — evolução futura

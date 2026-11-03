@@ -70,8 +70,25 @@
 
 ### Semana 2 (08/10 - 14/10)
 
-- _A preencher pela integrante._
+- Sem registro adicional no arquivo nesta semana.
+
+**Horas:** 0h
+
+**Total Sprint 4:** 18h
+
+# Sprint 5 (15/10 a 04/11)
+
+### Semana 1–2 (15/10 - 28/10)
+
+- Entrega de código da Sprint 5 consolidada nos PRs [#370](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/370)–[#385](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/385) (dashboard, grupos, dívidas, divisão, Flutter parity, landing freemium).
+- _Preencher revisão de aceite / cards / reuniões da integrante._
 
 **Horas:** _a preencher_
 
-**Total Sprint 4:** _a fechar em 14/10_
+### Semana 3 (29/10 - 04/11) — parcial
+
+- _A preencher pela integrante (revisão de perfil/apagar conta, dashboard e RFs atualizados)._
+
+**Horas:** _a preencher_
+
+**Total Sprint 5:** _a fechar em 04/11_

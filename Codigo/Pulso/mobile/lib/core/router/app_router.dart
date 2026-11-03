@@ -19,12 +19,21 @@ import 'package:pulso/core/widgets/app_shell.dart';
 import 'package:pulso/features/calendar/data/calendar_models.dart';
 import 'package:pulso/features/calendar/screens/calendar_screen.dart';
 import 'package:pulso/features/calendar/screens/reminder_form_screen.dart';
+import 'package:pulso/features/dashboard/screens/dashboard_screen.dart';
+import 'package:pulso/features/dashboard/screens/import_statement_screen.dart';
+import 'package:pulso/features/debts/data/debt_models.dart';
+import 'package:pulso/features/debts/screens/debt_form_screen.dart';
+import 'package:pulso/features/debts/screens/debts_screen.dart';
+import 'package:pulso/features/expense_split/data/split_models.dart';
+import 'package:pulso/features/expense_split/screens/expense_split_form_screen.dart';
+import 'package:pulso/features/expense_split/screens/expense_split_screen.dart';
 import 'package:pulso/features/goals/data/goal_models.dart';
 import 'package:pulso/features/goals/screens/goal_form_screen.dart';
 import 'package:pulso/features/goals/screens/goals_screen.dart';
+import 'package:pulso/features/groups/data/group_models.dart';
+import 'package:pulso/features/groups/screens/group_detail_screen.dart';
 import 'package:pulso/features/groups/screens/group_form_screen.dart';
 import 'package:pulso/features/groups/screens/groups_screen.dart';
-import 'package:pulso/features/home/screens/home_screen.dart';
 import 'package:pulso/features/purchase/data/purchase_models.dart';
 import 'package:pulso/features/purchase/screens/purchase_item_form_screen.dart';
 import 'package:pulso/features/purchase/screens/purchase_planning_screen.dart';
@@ -64,14 +73,7 @@ GoRouter createRouter(AuthController auth) {
               state.matchedLocation == '/register')) {
         return '/transactions';
       }
-      if (loggedIn &&
-          (state.matchedLocation == '/home' ||
-              state.matchedLocation == '/dashboard')) {
-        return '/transactions';
-      }
-      if (loggedIn &&
-          (state.matchedLocation == '/groups' ||
-              state.matchedLocation.startsWith('/groups/'))) {
+      if (loggedIn && state.matchedLocation == '/home') {
         return '/transactions';
       }
       if (loggedIn &&
@@ -222,12 +224,39 @@ GoRouter createRouter(AuthController auth) {
         path: '/groups/new',
         builder: (context, state) => const GroupFormScreen(),
       ),
+      GoRoute(
+        path: '/expense-split/new',
+        builder: (context, state) => ExpenseSplitFormScreen(
+          divisao: state.extra is PulsoDivisao
+              ? state.extra as PulsoDivisao
+              : null,
+        ),
+      ),
+      GoRoute(
+        path: '/debts/new',
+        builder: (context, state) => DebtFormScreen(
+          divida: state.extra is PulsoDivida
+              ? state.extra as PulsoDivida
+              : null,
+        ),
+      ),
+      GoRoute(
+        path: '/dashboard/import',
+        builder: (context, state) => const ImportStatementScreen(),
+      ),
+      GoRoute(
+        path: '/groups/:id',
+        builder: (context, state) => GroupDetailScreen(
+          grupoId: state.pathParameters['id'] ?? '',
+          inicial: state.extra is PulsoGrupo ? state.extra as PulsoGrupo : null,
+        ),
+      ),
       ShellRoute(
         builder: (context, state, child) => AppShell(child: child),
         routes: [
           GoRoute(
             path: '/dashboard',
-            builder: (context, state) => const HomeScreen(),
+            builder: (context, state) => const DashboardScreen(),
           ),
           GoRoute(
             path: '/transactions',
@@ -250,18 +279,13 @@ GoRouter createRouter(AuthController auth) {
           ),
           GoRoute(
             path: '/profile',
-            builder: (context, state) => const AccountScreen(
-              title: 'Perfil',
-              subtitle: 'Dados da conta autenticada. Edição cadastral entra em um recorte futuro.',
-            ),
+            builder: (context, state) =>
+                const AccountScreen(mode: AccountMode.profile),
           ),
           GoRoute(
             path: '/settings',
-            builder: (context, state) => const AccountScreen(
-              title: 'Configurações',
-              subtitle: 'Preferências de tema e dados da conta. Demais ajustes entram depois.',
-              showTheme: true,
-            ),
+            builder: (context, state) =>
+                const AccountScreen(mode: AccountMode.settings),
           ),
           GoRoute(
             path: '/goals',
@@ -283,6 +307,14 @@ GoRouter createRouter(AuthController auth) {
             path: '/groups',
             builder: (context, state) => const GroupsScreen(),
           ),
+          GoRoute(
+            path: '/expense-split',
+            builder: (context, state) => const ExpenseSplitScreen(),
+          ),
+          GoRoute(
+            path: '/debts',
+            builder: (context, state) => const DebtsScreen(),
+          ),
         ],
       ),
     ],
@@ -303,7 +335,11 @@ bool _isKnownAuthedLocation(String loc) {
     return true;
   if (loc == '/purchase-planning' || loc == '/purchase-planning/form')
     return true;
-  if (loc == '/groups' || loc == '/groups/new') return true;
+  if (loc == '/groups' || loc == '/groups/new' || loc.startsWith('/groups/')) {
+    return true;
+  }
+  if (loc == '/debts' || loc == '/debts/new') return true;
+  if (loc == '/expense-split' || loc == '/expense-split/new') return true;
   if (loc == '/transactions/new' || loc.startsWith('/transactions/'))
     return true;
   if (loc == '/termos' || loc == '/privacidade') return true;

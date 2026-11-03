@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-039
 title: "QA — testes da homepage"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-007
@@ -26,6 +26,11 @@ Implementar suites Web cobrindo fluxos críticos documentados no epic.
 ## 🔗 Sub-issues
 
 - PULSO-TASK-080
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

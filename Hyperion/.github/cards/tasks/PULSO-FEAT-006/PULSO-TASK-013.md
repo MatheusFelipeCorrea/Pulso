@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-013
 title: "Backend — dashboardService.obterDashboard"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-006
@@ -62,6 +62,11 @@ Criar em: `Codigo/api/src/services/dashboardService.js`
 - Sugestão diária VR = saldo VR / dias úteis restantes no mês
 - Alertas orçamento: categorias com `percentualUsado >= 80`
 - Score saúde: 0–100 baseado em fluxo, orçamento estourado e progresso de metas
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — backend
+
 
 ## 📋 Resumo
 

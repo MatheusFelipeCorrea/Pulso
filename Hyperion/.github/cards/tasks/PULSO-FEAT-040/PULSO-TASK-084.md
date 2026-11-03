@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-084
 title: "Backend — membros, sair e papéis"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-040
@@ -33,6 +33,11 @@ Implementar sair do grupo, remover membro e alterar papel ADMIN/MEMBRO.
 | `alterarPapelMembro` | Promoção/rebaixamento admin |
 
 Notificar demais membros via `grupoNotificationService`
+
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`) — API core
+
 
 ## 📋 Resumo
 
