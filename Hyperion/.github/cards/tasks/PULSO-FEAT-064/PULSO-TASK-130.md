@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-130
 title: "Backend — debtRepository e mappers"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-064
@@ -31,6 +31,11 @@ Implementar repository e mappers de dívida/pagamento.
 | `repositories/debtRepository.js` | CRUD, listar, pagamentos, alertas, cleanup, contarPorAba |
 | `utils/debtMapper.js` | `mapDivida` — valorPago/Restante + pagamentos |
 | `utils/debtPaymentMapper.js` | `mapPagamento` |
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — API
+
 
 ## 📋 Resumo
 

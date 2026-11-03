@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-138
 title: "Frontend — DebtsPage e client"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-068
@@ -33,6 +33,12 @@ Implementar página e serviço HTTP.
 | `services/debtService.js` | resumo, listar, CRUD, pagamentos, quitar, reabrir |
 | `utils/debtFilters.js` | `DEBT_TABS`, `buildApiFiltros` |
 | Rota | `App.jsx` → `/debts`; sidebar + `appRoutes.js` |
+
+## 👤 Responsáveis
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — web + mobile
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — parity visual
+
 
 ## 📋 Resumo
 

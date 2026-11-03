@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-079
 title: "Frontend — landing.css responsivo"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-038
@@ -39,6 +39,11 @@ Implementar folha de estilos completa para todas as seções da homepage.
 **Tokens:** CSS variables do design system (Vital Purple)
 
 Importar em `LandingPage.jsx` ou entry global
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

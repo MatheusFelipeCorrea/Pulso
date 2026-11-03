@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-124
 title: "Backend — exclusão e cleanup 180 dias"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-061
@@ -32,6 +32,11 @@ Implementar exclusão segura e job de retenção.
 | Cron / server | Registrar job diário |
 
 Constante: `DIAS_RETENCAO_QUITADAS = 180`
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — lembrete/limpeza
+
 
 ## 📋 Resumo
 

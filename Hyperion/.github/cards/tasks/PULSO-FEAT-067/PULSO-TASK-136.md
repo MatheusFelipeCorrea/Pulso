@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-136
 title: "Backend — debtAlertService e job"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-067
@@ -33,6 +33,11 @@ Implementar verificação diária e criação de `DIVIDA_COBRANCA`.
 | Cron | Registrar no daily |
 
 Dedup por metadados (`dividaId`, `dataAlerta`, `diasRestantes`); skip saldo zero.
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — alertas
+
 
 ## 📋 Resumo
 

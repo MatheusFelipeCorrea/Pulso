@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-085
 title: "Backend — upload imagem do grupo"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-040
@@ -35,6 +35,11 @@ Implementar storage de imagem e middleware de upload para admin.
 **Migration:** `20260617150000_grupo_imagem`
 
 Fallback: capa viagem vinculada quando sem foto custom
+
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`) — API core
+
 
 ## 📋 Resumo
 

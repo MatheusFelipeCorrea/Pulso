@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-016
 title: "Frontend — saldos e ResourceCard"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-007
@@ -54,6 +54,11 @@ Renderizar saldo total com badge de variação e carousel horizontal de recursos
 ### Backend util relacionado (NOVO — CRIAR)
 
 `Codigo/api/src/utils/resourceBalanceUtils.js` — `RECURSOS_DASHBOARD`, `calcularSaldosPorRecurso`
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — web
+
 
 ## 📋 Resumo
 

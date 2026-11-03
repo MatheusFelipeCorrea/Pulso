@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-006
 title: "Backend — agregação GET /dashboard"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-002
@@ -46,6 +46,11 @@ categories:
 
 - PULSO-TASK-013
 - PULSO-TASK-014
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — backend
+
 
 ## 📋 Resumo
 

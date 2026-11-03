@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-134
 title: "Backend — quitar, reabrir e excluir"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-065
@@ -31,6 +31,11 @@ Implementar endpoints de quitar/reabrir e regras de exclusão.
 | `excluirDivida` | Bloqueia quitada (mensagem 180 dias) |
 
 Rotas: PATCH `/:id/quitar`, PATCH `/:id/reabrir`, DELETE `/:id`
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — pagamentos
+
 
 ## 📋 Resumo
 

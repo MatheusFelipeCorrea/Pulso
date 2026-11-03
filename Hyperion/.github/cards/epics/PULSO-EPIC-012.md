@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-EPIC-012
 title: "Dívidas Pessoais"
-status: Backlog
+status: "In Revision"
 type: Epic
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null
@@ -60,11 +60,23 @@ categories:
 - PULSO-FEAT-068
 - PULSO-FEAT-069
 
+## 👤 Responsáveis
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — API, web e Flutter
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — parity / religamento
+
+
+## 🔗 Pull Requests
+
+- [#373](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/373) — dívidas API + web
+- [#379](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/379) — dívidas Flutter
+- [#384](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/384) — edição/prazo/histórico no mobile
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo RF-117–123 e RN-075–080 mapeado
-- Hierarquia Epic → 6 Features → 12 Tasks definida
+- API + web + Flutter (CRUD, pagamentos, resumo, alertas, histórico)
+- Hierarquia Epic → Features → Tasks em In Revision (Sprint 5)
 
 ### ⏳ Pendente
-- Implementar módulo completo backend + frontend
+- Revisão de aceite (In Revision)

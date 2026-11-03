@@ -97,6 +97,17 @@ const resetPasswordSchema = z.object({
         }),
 });
 
+const deleteAccountSchema = z.object({
+    body: z.object({
+        confirmacao: z
+            .string({ required_error: 'Confirmação é obrigatória.' })
+            .trim()
+            .refine((value) => value === 'APAGAR', {
+                message: 'Digite APAGAR para confirmar a exclusão da conta.',
+            }),
+    }),
+});
+
 module.exports = {
     registerSchema,
     verifyEmailSchema,
@@ -109,4 +120,5 @@ module.exports = {
     forgotPasswordSchema,
     resetPasswordTokenSchema,
     resetPasswordSchema,
+    deleteAccountSchema,
 };

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-067
 title: "Alertas de vencimento e limpeza"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-012
@@ -37,6 +37,11 @@ Job de alertas (7 / 2 / 0 dias) com dedup e cleanup de 180 dias.
 
 - PULSO-TASK-136
 - PULSO-TASK-137
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — alertas
+
 
 ## 📋 Resumo
 

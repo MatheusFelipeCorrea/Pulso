@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-059
 title: "Rateio igual e personalizado"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-011
@@ -35,6 +35,11 @@ Implementar `splitEqual` e validação de soma personalizada em centavos.
 ## 🔗 Sub-issues
 
 - PULSO-TASK-119
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — rateio
+
 
 ## 📋 Resumo
 

@@ -1,6 +1,6 @@
 # 💜 Pulso
 
-**Pulso** é um sistema de gestão financeira pessoal desenvolvido para estagiários, estudantes e jovens em início de carreira que estão aprendendo a lidar com dinheiro. O sistema diferencia recursos reais (salário) de benefícios com restrição de uso (VA, VR), oferece insights inteligentes via IA (Google Gemini), planejamento de viagens com câmbio integrado, e funcionalidade de grupos para planejamento compartilhado. Tudo isso com uma interface moderna em modo claro e escuro, 100% gratuito.
+**Pulso** é um sistema de gestão financeira pessoal desenvolvido para estagiários, estudantes e jovens em início de carreira que estão aprendendo a lidar com dinheiro. O sistema diferencia recursos reais (salário) de benefícios com restrição de uso (VA, VR), oferece insights inteligentes via IA (Google Gemini), planejamento de viagens com câmbio integrado, e funcionalidade de grupos para planejamento compartilhado. Interface moderna em modo claro e escuro, com modelo **freemium** na landing (Free R$ 0 · Premium R$ 50/mês — gate de módulos Premium na API, sem gateway de pagamento no escopo TI5).
 
 O nome "Pulso" remete à ideia de manter o pulso firme nas finanças, monitorar a saúde financeira como um batimento cardíaco e criar o hábito diário de controle — cada registro é uma batida, cada dia é um passo rumo à estabilidade.
 
@@ -20,7 +20,7 @@ O nome "Pulso" remete à ideia de manter o pulso firme nas finanças, monitorar 
 
 ## Contribuição
 
-Branches de trabalho nascem da **sprint vigente** (`Sprint-4` agora), não da `main`. Fluxo completo: [CONTRIBUTING.md](CONTRIBUTING.md). Conduta: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Branches de trabalho nascem da **sprint vigente** (`Sprint-5` agora), não da `main`. Fluxo completo: [CONTRIBUTING.md](CONTRIBUTING.md). Conduta: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Instruções de utilização
 

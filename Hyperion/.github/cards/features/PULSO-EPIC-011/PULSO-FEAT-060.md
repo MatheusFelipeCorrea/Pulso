@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-060
 title: "Pagamentos, quitação e saldo"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-011
@@ -42,6 +42,11 @@ Bloqueios: não despagar quem `pagouAConta`; não pagar duas vezes
 
 - PULSO-TASK-121
 - PULSO-TASK-122
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — pagamentos
+
 
 ## 📋 Resumo
 

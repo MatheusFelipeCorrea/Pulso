@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-132
 title: "Backend — debtService CRUD e rotas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-064
@@ -34,6 +34,11 @@ Implementar service core, schemas, controller e rotas.
 | `routes/debtRoutes.js` | Montar em `/dividas` |
 
 Bloquear edição/exclusão de quitadas; valor editado ≥ valorPago.
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — API
+
 
 ## 📋 Resumo
 

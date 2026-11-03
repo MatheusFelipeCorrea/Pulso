@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-129
 title: "Banco de dados — Divida e PagamentoDivida"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-064
@@ -33,6 +33,11 @@ Criar models Prisma, enum e migrations.
 **Enum:** `DirecaoDivida` (ME_DEVEM, EU_DEVO)
 
 **Migrations:** `20260612120000_dividas`, `20260614120000_pagamentos_divida`
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — API
+
 
 ## 📋 Resumo
 

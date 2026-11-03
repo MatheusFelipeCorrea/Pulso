@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-080
 title: "Frontend — páginas legais e QA"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-039
@@ -42,6 +42,11 @@ Implementar páginas legais estáticas e suites de teste da homepage.
 | `unit/pages/landingPage.test.jsx` | Render seções, CTAs `/register` |
 | `unit/pages/landingPage.redirect.test.jsx` | Redirect se autenticado |
 | `unit/components/publicHeader.test.jsx` | Nav links, theme toggle |
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

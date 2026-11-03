@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-007
 title: "Página dashboard, saldos e recursos"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-002
@@ -46,6 +46,11 @@ Como **usuário autenticado**, quero ver meu saldo total e saldos separados por 
 
 - PULSO-TASK-015
 - PULSO-TASK-016
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — web
+
 
 ## 📋 Resumo
 

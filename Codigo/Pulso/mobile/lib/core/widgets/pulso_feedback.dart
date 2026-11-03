@@ -185,6 +185,7 @@ Future<bool?> showPulsoConfirm({
   required String title,
   required String message,
   String confirmLabel = 'Excluir',
+  String cancelLabel = 'Cancelar',
   bool danger = true,
 }) {
   return showDialog<bool>(
@@ -196,7 +197,7 @@ Future<bool?> showPulsoConfirm({
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            child: Text(cancelLabel),
           ),
           if (danger)
             FilledButton(
@@ -216,4 +217,70 @@ Future<bool?> showPulsoConfirm({
       );
     },
   );
+}
+
+/// Confirmação crítica: só habilita o botão se o texto digitado bater.
+Future<bool?> showPulsoCriticalConfirm({
+  required BuildContext context,
+  required String title,
+  required String message,
+  required String confirmationText,
+  String confirmLabel = 'Apagar conta',
+  String cancelLabel = 'Manter conta',
+}) {
+  final controller = TextEditingController();
+  return showDialog<bool>(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return StatefulBuilder(
+        builder: (context, setLocal) {
+          final canConfirm = controller.text.trim() == confirmationText;
+          return AlertDialog(
+            title: Text(title),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(message),
+                const SizedBox(height: 16),
+                Text(
+                  'Digite "$confirmationText" para confirmar',
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: controller,
+                  autofocus: true,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  onChanged: (_) => setLocal(() {}),
+                  decoration: const InputDecoration(
+                    hintText: 'Digite aqui',
+                    isDense: true,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text(cancelLabel),
+              ),
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: canConfirm
+                    ? () => Navigator.pop(context, true)
+                    : null,
+                child: Text(confirmLabel),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  ).whenComplete(controller.dispose);
 }

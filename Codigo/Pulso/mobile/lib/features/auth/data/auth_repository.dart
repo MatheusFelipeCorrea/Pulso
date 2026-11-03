@@ -75,6 +75,18 @@ class AuthRepository {
     }
   }
 
+  Future<void> deleteAccount({required String confirmacao}) async {
+    try {
+      await _api.raw.delete<Map<String, dynamic>>(
+        '/auth/me',
+        data: {'confirmacao': confirmacao},
+      );
+      await _storage.clear();
+    } on DioException catch (error) {
+      throw ApiClient.toApiException(error);
+    }
+  }
+
   Future<Map<String, dynamic>> forgotPassword(String email) async {
     try {
       final response = await _api.raw.post<Map<String, dynamic>>(

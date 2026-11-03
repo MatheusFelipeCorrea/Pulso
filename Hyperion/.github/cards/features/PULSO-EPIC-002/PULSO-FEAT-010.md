@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-010
 title: "Importação de extratos via dashboard"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-002
@@ -53,6 +53,11 @@ Suportar importação de extratos bancários (OFX, CSV, XLSX, PDF via Gemini), b
 
 - PULSO-TASK-020
 - PULSO-TASK-021
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — importação
+
 
 ## 📋 Resumo
 

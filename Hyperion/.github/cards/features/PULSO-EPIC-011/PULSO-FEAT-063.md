@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-063
 title: "QA — testes de divisão de despesas"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-011
@@ -27,6 +27,12 @@ Implementar suites unitárias API e Web do módulo.
 ## 🔗 Sub-issues
 
 - PULSO-TASK-128
+
+## 👤 Responsáveis
+
+- Vinícius Simões (`ViniSimoesV`)
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

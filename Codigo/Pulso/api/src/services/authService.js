@@ -562,6 +562,25 @@ const setUserPlano = async () => {
     );
 };
 
+const ACCOUNT_DELETE_CONFIRMATION = 'APAGAR';
+
+const deleteAccount = async (userId, confirmacao) => {
+    if (String(confirmacao || '').trim() !== ACCOUNT_DELETE_CONFIRMATION) {
+        throw new AppError('Digite APAGAR para confirmar a exclusão da conta.', 400);
+    }
+
+    const usuario = await authRepository.findById(userId);
+    if (!usuario) {
+        throw new AppError('Usuário não encontrado.', 404);
+    }
+
+    await authRepository.deleteUser(userId);
+
+    return {
+        message: 'Conta apagada com sucesso. Seus dados foram removidos.',
+    };
+};
+
 module.exports = {
     registerUser,
     verifyEmail,
@@ -574,6 +593,8 @@ module.exports = {
     getAuthenticatedUser,
     formatUserResponse,
     setUserPlano,
+    deleteAccount,
+    ACCOUNT_DELETE_CONFIRMATION,
     requestPasswordReset,
     validateResetToken,
     resetPassword,

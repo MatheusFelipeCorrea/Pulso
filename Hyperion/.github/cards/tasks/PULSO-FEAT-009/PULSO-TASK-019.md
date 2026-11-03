@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-019
 title: "Saúde financeira — algoritmo e widget"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-009
@@ -49,6 +49,11 @@ Pontuação base 45 + bônus/penalidades documentados na feature PULSO-FEAT-009.
 | Arquivo | Função |
 |---------|--------|
 | `DashboardFinancialHealth.jsx` | Score circular/barra + checklist |
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — web
+
 
 ## 📋 Resumo
 

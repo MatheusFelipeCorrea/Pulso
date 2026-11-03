@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-043
 title: "Chat e notificações de grupo"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-008
@@ -40,6 +40,12 @@ Implementar chat do grupo e serviço de notificações de atividade.
 ## 🔗 Sub-issues
 
 - PULSO-TASK-088
+
+## 👤 Responsáveis
+
+- Alice Shikida (`aliceshikida`) — API chat
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Socket.IO no Flutter
+
 
 ## 📋 Resumo
 

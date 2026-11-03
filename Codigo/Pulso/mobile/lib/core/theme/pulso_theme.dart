@@ -27,8 +27,9 @@ class PulsoTheme {
         return PulsoColors.button;
       }),
       foregroundColor: const WidgetStatePropertyAll(Colors.white),
+      // Avoid Size.fromHeight (width=∞) — breaks FilledButton inside Rows.
       minimumSize: const WidgetStatePropertyAll(
-        Size.fromHeight(PulsoTokens.buttonLg),
+        Size(64, PulsoTokens.buttonLg),
       ),
       padding: const WidgetStatePropertyAll(
         EdgeInsets.symmetric(
@@ -76,7 +77,7 @@ class PulsoTheme {
         return BorderSide(color: color);
       }),
       minimumSize: const WidgetStatePropertyAll(
-        Size.fromHeight(PulsoTokens.buttonMd),
+        Size(64, PulsoTokens.buttonMd),
       ),
       padding: const WidgetStatePropertyAll(
         EdgeInsets.symmetric(horizontal: PulsoTokens.space5),

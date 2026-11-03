@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-021
 title: "Frontend — modal ImportStatementModal"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-010
@@ -57,6 +57,11 @@ Implementar wizard modal: escolher tipo → upload → (mapping CSV) → preview
 | `utils/importStatementTypes.js` | Tipos, validação extensão, labels |
 
 **Hook:** `useTransactionFilterOptions` para lista de categorias no preview
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — importação
+
 
 ## 📋 Resumo
 

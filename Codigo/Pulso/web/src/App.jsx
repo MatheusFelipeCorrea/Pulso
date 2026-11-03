@@ -89,24 +89,8 @@ function App() {
                             <Route path="groups" element={<GroupsPage />} />
                             <Route path="groups/:id" element={<GroupDetailPage />} />
                             <Route path="expense-split" element={<ExpenseSplitPage />} />
-                            <Route
-                                path="profile"
-                                element={
-                                    <AccountPage
-                                        title="Perfil"
-                                        subtitle="Dados da conta autenticada. Edição cadastral entra em um recorte futuro."
-                                    />
-                                }
-                            />
-                            <Route
-                                path="settings"
-                                element={
-                                    <AccountPage
-                                        title="Configurações"
-                                        subtitle="Preferências de tema ficam no menu do avatar. Demais ajustes entram depois."
-                                    />
-                                }
-                            />
+                            <Route path="profile" element={<AccountPage mode="profile" />} />
+                            <Route path="settings" element={<AccountPage mode="settings" />} />
                             <Route element={<PremiumRoute />}>
                                 <Route path="trips" element={<TripsPage />} />
                                 <Route path="trips/:id" element={<TripDetailPage />} />

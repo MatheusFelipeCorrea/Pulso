@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-083
 title: "Backend — grupoService core e convites"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-040
@@ -35,6 +35,11 @@ Implementar service principal e middleware de rate limit para convites.
 | `schemas/grupoSchemas.js` | Zod validation |
 
 **Código:** regex `PULSO-[A-Z0-9]{4}`; geração sem ambíguos (RN-111)
+
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`) — API core
+
 
 ## 📋 Resumo
 

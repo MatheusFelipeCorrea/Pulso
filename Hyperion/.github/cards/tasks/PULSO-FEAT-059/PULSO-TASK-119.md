@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-119
 title: "Backend — expenseSplitUtils (centavos)"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-059
@@ -32,6 +32,11 @@ Implementar utilitários puros de split.
 | `validarSomaPersonalizada(total, valores)` | soma centavos === total centavos |
 
 Usar `roundMoney` de `debtBalanceUtils` na conversão.
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — rateio
+
 
 ## 📋 Resumo
 

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-122
 title: "Backend — saldo consolidado (resumo)"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-060
@@ -34,6 +34,11 @@ Para cada divisão ATIVA:
 | status PENDENTE | Soma valor do organizador → `euDevo` |
 
 Retorno: `{ meDevem, euDevo, saldo: meDevem − euDevo, possuiDivisoes }`
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — pagamentos
+
 
 ## 📋 Resumo
 

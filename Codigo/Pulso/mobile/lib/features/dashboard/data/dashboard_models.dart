@@ -120,17 +120,23 @@ class DashboardMeta {
     required this.nome,
     required this.progresso,
     this.status = 'ATIVA',
+    this.valorAtual = 0,
+    this.valorAlvo = 0,
   });
 
   final String nome;
   final double progresso;
   final String status;
+  final double valorAtual;
+  final double valorAlvo;
 
   factory DashboardMeta.fromJson(Map<String, dynamic> json) {
     return DashboardMeta(
       nome: json['nome'] as String? ?? 'Meta',
       progresso: dashboardMoney(json['progresso'] ?? json['percentual']),
       status: json['status'] as String? ?? 'ATIVA',
+      valorAtual: dashboardMoney(json['valorAtual']),
+      valorAlvo: dashboardMoney(json['valorAlvo']),
     );
   }
 }

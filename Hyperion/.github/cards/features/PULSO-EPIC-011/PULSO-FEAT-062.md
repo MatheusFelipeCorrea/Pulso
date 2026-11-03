@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-062
 title: "Frontend — página e componentes"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-011
@@ -39,6 +39,12 @@ Implementar página, cards, histórico e fluxos de criar/pagar/lembrar/excluir.
 - PULSO-TASK-125
 - PULSO-TASK-126
 - PULSO-TASK-127
+
+## 👤 Responsáveis
+
+- Vinícius Simões (`ViniSimoesV`) — web
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Flutter
+
 
 ## 📋 Resumo
 

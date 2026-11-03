@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-121
 title: "Backend — marcar/desmarcar pago e quitação"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-060
@@ -33,6 +33,11 @@ Implementar pagar/despagar e `sincronizarStatusDivisao`.
 | `sincronizarStatusDivisao` | Todos PAGO → QUITADA; senão reabre ATIVA |
 
 Rotas PATCH `.../pagar` e `.../despagar`.
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — pagamentos
+
 
 ## 📋 Resumo
 

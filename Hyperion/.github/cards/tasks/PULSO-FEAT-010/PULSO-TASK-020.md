@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-020
 title: "Backend — importação de extratos"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-010
@@ -73,6 +73,11 @@ Implementar parse multi-formato, sugestão de categorias, dedupe e gravação em
 - Dedupe: hash estável data+valor+descrição normalizada (RF-137)
 - Categorização: regras + histórico + categoria ajuste saldo para benefícios
 - Preview obrigatório antes de confirmar (RF-136)
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — importação
+
 
 ## 📋 Resumo
 

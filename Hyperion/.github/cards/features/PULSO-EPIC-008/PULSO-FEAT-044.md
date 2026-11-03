@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-044
 title: "Frontend — grupos lista e detalhe"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-008
@@ -48,6 +48,12 @@ Implementar páginas de lista e detalhe com todos os modais e cards integrados.
 - PULSO-TASK-089
 - PULSO-TASK-090
 - PULSO-TASK-091
+
+## 👤 Responsáveis
+
+- Maria Clara (`mariaoliveira27`) — web
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Flutter visual
+
 
 ## 📋 Resumo
 

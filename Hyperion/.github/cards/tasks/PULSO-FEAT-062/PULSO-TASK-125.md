@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-125
 title: "Frontend — ExpenseSplitPage e client"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-062
@@ -34,6 +34,12 @@ Implementar página e serviço HTTP.
 | Rota | `App.jsx` → `/expense-split`; sidebar + `appRoutes.js` |
 
 Paginação do histórico; empty states quando sem divisões.
+
+## 👤 Responsáveis
+
+- Vinícius Simões (`ViniSimoesV`) — web
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Flutter
+
 
 ## 📋 Resumo
 

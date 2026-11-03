@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-120
 title: "Backend — service CRUD e rotas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-058
@@ -36,6 +36,11 @@ Implementar service core, schemas, controller e rotas.
 **construirParticipantes:** inclui “Você”; aplica IGUAL/PERSONALIZADA; resolve `pagoPor`
 
 Editar participantes bloqueado se já houver pagamento manual.
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — API
+
 
 ## 📋 Resumo
 

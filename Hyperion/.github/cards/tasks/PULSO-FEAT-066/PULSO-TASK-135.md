@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-135
 title: "Backend — resumo consolidado e contadores"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-066
@@ -31,6 +31,11 @@ Implementar `GET /dividas/resumo` e contadores de abas.
 - Sync quitação antes de agregar
 
 `contarPorAba` no repository para badges das tabs do frontend.
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — resumo
+
 
 ## 📋 Resumo
 
