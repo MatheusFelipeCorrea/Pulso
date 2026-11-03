@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-117
 title: "Banco de dados — Divisao e participantes"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-058
@@ -35,6 +35,11 @@ Criar models Prisma, enums e migrations.
 **M2M:** `Lembrete.divisaoParticipantes` ↔ tabela `_DivisaoParticipanteToLembrete`
 
 **Migrations:** `20260714163000_add_expense_split_module`, `20260715130000_lembrete_divisao_m2m`
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — API
+
 
 ## 📋 Resumo
 

@@ -20,7 +20,7 @@ Versão 2.1 (TI5). Fontes `.puml` e imagens renderizadas. A apostila anexa os PN
 
 - **Web:** React + Vite (`Codigo/Pulso/web`)
 - **Backend:** Node.js + Express (`Codigo/Pulso/api`) — API única `/api`
-- **Mobile:** Flutter (`Codigo/Pulso/mobile`) — mesma REST (auth, transações, metas, viagens/moedas; grupos só no client). Socket.IO ainda não.
+- **Mobile:** Flutter (`Codigo/Pulso/mobile`) — mesma REST da web (auth, transações, metas, viagens/moedas, calendário, orçamento, compras, dashboard, grupos, dívidas, divisão, import, conta) + **Socket.IO** no chat de grupos. Landing só na web.
 
 Render (a partir desta pasta):
 

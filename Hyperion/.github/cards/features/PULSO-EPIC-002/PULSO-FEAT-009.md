@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-009
 title: "Widgets resumo e saúde financeira"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-002
@@ -45,6 +45,11 @@ Compor widgets que consomem dados já agregados em `GET /dashboard`: últimas 25
 
 - PULSO-TASK-018
 - PULSO-TASK-019
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — web
+
 
 ## 📋 Resumo
 

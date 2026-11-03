@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-075
 title: "Frontend — LandingHero e DashboardPreview"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-037
@@ -37,6 +37,11 @@ Implementar seção hero e preview ilustrativo da interface autenticada.
 - Secundário: scroll → `#funcionalidades`
 
 **Visual:** preview estático (não consome API)
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

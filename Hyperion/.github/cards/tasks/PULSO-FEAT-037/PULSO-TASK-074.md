@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-074
 title: "Frontend — landingData.js"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-037
@@ -39,6 +39,11 @@ Centralizar dados estáticos da landing para fácil manutenção de copy e badge
 | `APP_DOWNLOADS` | APK/IPA paths em `public/downloads/` |
 
 **Badges:** Dashboard e Chatbot "Em breve"; IA Insights "Beta"
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

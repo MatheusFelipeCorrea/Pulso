@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-137
 title: "Backend — debtCleanupJob 180 dias"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-067
@@ -28,6 +28,11 @@ Implementar job de retenção e wire no cron.
 - `debtRepository.excluirQuitadasAntigas(180)`
 - Registrar em `cronController` / `server.js`
 - Logar quantidade removida
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — alertas
+
 
 ## 📋 Resumo
 

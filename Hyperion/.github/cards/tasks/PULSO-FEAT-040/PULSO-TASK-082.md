@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-082
 title: "Backend — grupoRepository e grupoMapper"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-040
@@ -32,6 +32,11 @@ Implementar repository com includes de membros, viagem, metas, mensagens; mapper
 | `utils/grupoMapper.js` | `mapGrupoResumo`, `mapGrupoDetalhe`, `mapGrupoPreview`, `imagemExibicao` |
 
 **imagemExibicao:** urlImagem → capa viagem → gradiente fallback
+
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`) — API core
+
 
 ## 📋 Resumo
 

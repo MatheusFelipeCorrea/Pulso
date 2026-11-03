@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-086
 title: "Backend — viagem grupo, pretensões e RF-091"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-041
@@ -38,6 +38,11 @@ Implementar CRUD viagem do grupo, pretensões e `atualizarModoDivisao`.
 **Constraint:** `@@unique([grupoId])` em ViagemGrupo
 
 Pretensões vinculadas a `adicionadoPorId`; permanecem ao sair (RN-115–117)
+
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`) — viagem compartilhada
+
 
 ## 📋 Resumo
 

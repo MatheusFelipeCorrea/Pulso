@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-064
 title: "Backend — API core de dívidas"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-012
@@ -41,6 +41,11 @@ Validações: data empréstimo ≤ hoje; prazo > data empréstimo; observação 
 - PULSO-TASK-129
 - PULSO-TASK-130
 - PULSO-TASK-132
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — API
+
 
 ## 📋 Resumo
 

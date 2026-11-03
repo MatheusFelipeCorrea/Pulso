@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-089
 title: "Frontend — GroupsPage e modais lista"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-044
@@ -40,6 +40,12 @@ Implementar página `/groups` e modais de lista.
 | `services/grupoService.js` | Client HTTP |
 
 **Rota:** `App.jsx` → `/groups`, `/groups/join/:codigo`
+
+## 👤 Responsáveis
+
+- Maria Clara (`mariaoliveira27`) — web
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Flutter visual
+
 
 ## 📋 Resumo
 

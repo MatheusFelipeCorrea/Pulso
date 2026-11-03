@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-040
 title: "Backend — API core de grupos"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-008
@@ -47,6 +47,11 @@ Expor endpoints `/api/grupos` para ciclo de vida do grupo e gestão de membros.
 - PULSO-TASK-083
 - PULSO-TASK-084
 - PULSO-TASK-085
+
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`) — API core
+
 
 ## 📋 Resumo
 

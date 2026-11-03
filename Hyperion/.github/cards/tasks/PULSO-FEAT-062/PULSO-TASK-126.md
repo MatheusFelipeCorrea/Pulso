@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-126
 title: "Frontend — cards, resumo e histórico"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-062
@@ -33,6 +33,12 @@ Implementar cards de resumo, ativas e linhas de histórico.
 | `ExpenseSplitCard.jsx` | Divisão ativa; ações rápidas |
 | `ExpenseSplitHistoryRow.jsx` | Item quitado |
 | `utils/expenseSplitUtils.js` | `getParticipantesVisiveis` e helpers UI |
+
+## 👤 Responsáveis
+
+- Vinícius Simões (`ViniSimoesV`) — web
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Flutter
+
 
 ## 📋 Resumo
 

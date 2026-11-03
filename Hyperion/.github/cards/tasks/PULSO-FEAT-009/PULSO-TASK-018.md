@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-018
 title: "Frontend — transações, alertas e metas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-009
@@ -48,6 +48,11 @@ Exibir últimas transações do mês, banner de alertas de orçamento e cards de
 | `DashboardActiveGoals.jsx` | Grid de metas ativas |
 
 **Dados:** props vindos de `DashboardPage` (`data.ultimasTransacoes`, `data.alertasOrcamento`, `data.metasAtivas`)
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — web
+
 
 ## 📋 Resumo
 

@@ -87,6 +87,13 @@ class AuthController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteAccount({required String confirmacao}) async {
+    await _repository.deleteAccount(confirmacao: confirmacao);
+    user = null;
+    status = AuthStatus.unauthenticated;
+    notifyListeners();
+  }
+
   Future<void> forgotPassword(String email) =>
       _repository.forgotPassword(email);
 

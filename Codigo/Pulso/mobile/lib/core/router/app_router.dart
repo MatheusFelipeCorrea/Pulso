@@ -279,18 +279,13 @@ GoRouter createRouter(AuthController auth) {
           ),
           GoRoute(
             path: '/profile',
-            builder: (context, state) => const AccountScreen(
-              title: 'Perfil',
-              subtitle: 'Dados da conta autenticada. Edição cadastral entra em um recorte futuro.',
-            ),
+            builder: (context, state) =>
+                const AccountScreen(mode: AccountMode.profile),
           ),
           GoRoute(
             path: '/settings',
-            builder: (context, state) => const AccountScreen(
-              title: 'Configurações',
-              subtitle: 'Preferências de tema e dados da conta. Demais ajustes entram depois.',
-              showTheme: true,
-            ),
+            builder: (context, state) =>
+                const AccountScreen(mode: AccountMode.settings),
           ),
           GoRoute(
             path: '/goals',

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-073
 title: "Frontend — LandingPage e rotas públicas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-036
@@ -37,6 +37,11 @@ Implementar página raiz e registrar rotas públicas no `App.jsx`.
 **Hash scroll:** `useEffect` em `#funcionalidades`, `#para-quem`, etc.
 
 **Sem backend:** módulo 100% estático/SPA
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

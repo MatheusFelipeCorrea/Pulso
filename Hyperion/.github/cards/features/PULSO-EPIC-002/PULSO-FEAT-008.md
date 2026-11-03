@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-008
 title: "Gráficos receitas/despesas e categorias"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-002
@@ -44,6 +44,11 @@ Gráfico de área (Recharts) com série diária do mês e donut de categorias. S
 ## 🔗 Sub-issues
 
 - PULSO-TASK-017
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — web
+
 
 ## 📋 Resumo
 

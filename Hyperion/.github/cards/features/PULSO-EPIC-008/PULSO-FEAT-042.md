@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-042
 title: "Metas compartilhadas e aportes"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-008
@@ -38,6 +38,11 @@ Implementar criação de metas em lote e registro de aportes por membro.
 ## 🔗 Sub-issues
 
 - PULSO-TASK-087
+
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`) — metas do grupo
+
 
 ## 📋 Resumo
 

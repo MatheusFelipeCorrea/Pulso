@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-058
 title: "Backend — API core de divisões"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-011
@@ -42,6 +42,11 @@ Participantes por nome livre; organizador “Você” sempre incluso (RN-084)
 - PULSO-TASK-117
 - PULSO-TASK-118
 - PULSO-TASK-120
+
+## 👤 Responsável
+
+- Vinícius Simões (`ViniSimoesV`) — API
+
 
 ## 📋 Resumo
 

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-087
 title: "Backend — metas grupo e aportes"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-042
@@ -36,6 +36,11 @@ Implementar criação de metas em lote e registro de aportes por membro.
 **RN-119:** auto-conclusão + `notificarMetaGrupoAtingida`
 
 **RN-118:** aporte sempre com `usuarioId` do membro
+
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`) — metas do grupo
+
 
 ## 📋 Resumo
 

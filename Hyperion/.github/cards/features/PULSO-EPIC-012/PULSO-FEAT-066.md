@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-066
 title: "Saldo consolidado e contadores"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-012
@@ -34,6 +34,11 @@ Implementar `GET /dividas/resumo` com totais e contadores por aba.
 ## 🔗 Sub-issues
 
 - PULSO-TASK-135
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — resumo
+
 
 ## 📋 Resumo
 

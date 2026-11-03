@@ -15,6 +15,7 @@ const {
     authVerifyEmailRateLimit,
     authResendVerificationRateLimit,
     authGoogleMobileRateLimit,
+    authDeleteAccountRateLimit,
 } = require('../middlewares/authRateLimit');
 const authService = require('../services/authService');
 const {
@@ -34,6 +35,7 @@ const {
     forgotPasswordSchema,
     resetPasswordTokenSchema,
     resetPasswordSchema,
+    deleteAccountSchema,
 } = require('../schemas/authSchemas');
 
 const router = express.Router();
@@ -71,6 +73,14 @@ router.post(
 router.get('/me', authMiddleware, authController.me);
 
 router.patch('/me/plano', authMiddleware, authController.setPlano);
+
+router.delete(
+    '/me',
+    authMiddleware,
+    authDeleteAccountRateLimit,
+    validateMiddleware(deleteAccountSchema),
+    authController.deleteAccount
+);
 
 router.post(
     '/forgot-password',

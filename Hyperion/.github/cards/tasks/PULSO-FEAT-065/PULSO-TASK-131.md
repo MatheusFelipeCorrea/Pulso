@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-131
 title: "Backend — debtBalanceUtils"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-065
@@ -33,6 +33,11 @@ Implementar utilitários de saldo compartilhados (também usados por divisão de
 | `calcSaldoDivida` | Se quitada efetiva → restante 0 |
 | `estaTotalmentePaga` | restante ≤ 0 |
 | `isDividaQuitada` | restante ≤ 0 OU (flag quitada sem pagamentos) |
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — pagamentos
+
 
 ## 📋 Resumo
 

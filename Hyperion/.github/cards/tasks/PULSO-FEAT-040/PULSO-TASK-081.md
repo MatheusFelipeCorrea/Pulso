@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-081
 title: "Banco de dados — Grupo e MembroGrupo"
-status: "In Progress"
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-040
@@ -34,6 +34,11 @@ Criar models Prisma e migrations para núcleo de grupos.
 **Enums:** `PapelGrupo` (ADMIN, MEMBRO), `ModoDivisaoGrupo` (PRETENSAO, DIVISAO_IGUAL)
 
 **Migration:** `20260617140000_grupos`, `20260714134549_add_modo_divisao_grupo`
+
+## 👤 Responsável
+
+- Alice Shikida (`aliceshikida`) — API core
+
 
 ## 📋 Resumo
 

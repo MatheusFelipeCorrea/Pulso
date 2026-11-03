@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-128
 title: "QA — testes de divisão de despesas"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Medium
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-063
@@ -40,6 +40,12 @@ Implementar suites unitárias API e Web.
 | Arquivo | Escopo |
 |---------|--------|
 | `unit/utils/expenseSplitUtils.test.js` | helpers UI |
+
+## 👤 Responsáveis
+
+- Vinícius Simões (`ViniSimoesV`)
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-076
 title: "Frontend — LandingSections"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-037
@@ -37,6 +37,11 @@ Implementar componentes de seção exportados de `LandingSections.jsx`.
 | `LandingCta` | `#precos` | CTA final cadastro |
 
 Consome dados de `landingData.js`; ícones `lucide-react`
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

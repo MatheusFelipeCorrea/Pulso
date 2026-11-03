@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-015
 title: "Frontend — DashboardPage e routing"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-007
@@ -49,6 +49,11 @@ Como **usuário**, quero acessar `/dashboard` após login e ver meu resumo finan
 | `Codigo/web/src/config/defaultAuthenticatedRoute.js` | Export `/dashboard` |
 | `Codigo/web/src/config/sidebarNavigation.js` | Item menu dashboard |
 | `Codigo/web/src/App.jsx` | Route `path="dashboard"` |
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — web
+
 
 ## 📋 Resumo
 

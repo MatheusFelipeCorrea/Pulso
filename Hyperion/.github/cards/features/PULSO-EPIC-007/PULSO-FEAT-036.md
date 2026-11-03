@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-036
 title: "Shell e roteamento público"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-007
@@ -36,6 +36,11 @@ Implementar `LandingPage` como rota pública em `App.jsx` com comportamento de g
 ## 🔗 Sub-issues
 
 - PULSO-TASK-073
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`)
+
 
 ## 📋 Resumo
 

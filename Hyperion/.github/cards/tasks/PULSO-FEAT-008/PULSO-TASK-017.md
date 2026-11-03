@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-017
 title: "Frontend — gráficos Recharts e seletor de mês"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-008
@@ -50,6 +50,11 @@ Implementar gráfico de área receitas/despesas e donut de categorias, sincroniz
 **Helper exportado:** `currentDashboardPeriodo()` → `YYYY-MM` atual
 
 **Dependência:** `recharts`, `date-fns`, `@/design-system/components/pickers/MonthPicker`
+
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — web
+
 
 ## 📋 Resumo
 

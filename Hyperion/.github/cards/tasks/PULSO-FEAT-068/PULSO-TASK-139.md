@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-139
 title: "Frontend — cards, modais, badges e CSS"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-068
@@ -38,6 +38,12 @@ Implementar UI de lista, badges e modais.
 | `utils/debtStatusUtils.js` | Badge vencida / parcial / quitada |
 | `utils/debtBalanceUtils.js` | Saldo no client |
 | `styles/debts.css` | Layout responsivo |
+
+## 👤 Responsáveis
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — web + mobile
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — parity visual
+
 
 ## 📋 Resumo
 

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-065
 title: "Pagamentos parciais, quitar e reabrir"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-012
@@ -40,6 +40,11 @@ Registrar/excluir pagamentos, quitar saldo restante e reabrir dívida.
 - PULSO-TASK-131
 - PULSO-TASK-133
 - PULSO-TASK-134
+
+## 👤 Responsável
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — pagamentos
+
 
 ## 📋 Resumo
 

@@ -44,6 +44,11 @@ Como **usuário**, quero um atalho no dashboard para abrir o chatbot e registrar
 
 - PULSO-TASK-022
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — owner (bloqueado no chatbot)
+
+
 ## 📋 Resumo
 
 ### ✅ Concluído

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-EPIC-002
 title: "Dashboard Principal"
-status: Backlog
+status: "In Revision"
 type: Epic
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: null
@@ -62,16 +62,24 @@ categories:
 - PULSO-FEAT-010
 - PULSO-FEAT-011
 
+## 👤 Responsável
+
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — API, web e Flutter
+
+
+## 🔗 Pull Requests
+
+- [#370](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/370) — dashboard API + web
+- [#378](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/378) — dashboard Flutter
+- [#384](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/384) — parity (gráficos + import no mobile)
+
 ## 📋 Resumo
 
 ### ✅ Concluído
-- Escopo mapeado nos RFs RF-007–015 e RF-134–137 / RF-139
-- Contrato agregado `GET /dashboard` especificado com payloads por seção
-- Hierarquia Epic → 6 Features → 12 Tasks definida
+- `GET /dashboard` + widgets web (saldos, gráficos, alertas, metas, saúde, importação)
+- Flutter dashboard alinhado à web (hero, recursos, barras, donut, import)
+- Hierarquia Epic → Features → Tasks em In Revision (Sprint 5)
 
 ### ⏳ Pendente
-- Implementar endpoint agregado e todos os widgets frontend
-- Fluxo completo de importação via modal
-- RF-015 quick-add (depende módulo Chatbot)
-- RF-138 aprendizado de categorização na importação (fora do escopo mínimo deste epic)
-- Testes unitários dedicados para `dashboardService`
+- RF-015 quick-add chatbot (`PULSO-FEAT-011`) — bloqueado no épico Chatbot
+- RF-138 aprendizado persistente na importação

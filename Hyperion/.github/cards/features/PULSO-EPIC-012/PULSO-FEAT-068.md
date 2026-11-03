@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-FEAT-068
 title: "Frontend — página e componentes"
-status: Backlog
+status: "In Revision"
 type: Feature
 priority: Highest
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-EPIC-012
@@ -39,6 +39,12 @@ Implementar página de dívidas com fluxo completo de CRUD e pagamentos.
 
 - PULSO-TASK-138
 - PULSO-TASK-139
+
+## 👤 Responsáveis
+
+- Sofia Vasconcelos (`sofiavasconcelosms`) — web + mobile
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — parity visual
+
 
 ## 📋 Resumo
 

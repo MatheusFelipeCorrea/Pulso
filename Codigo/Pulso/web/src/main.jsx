@@ -27,6 +27,7 @@ import './styles/dashboard.css'
 import './styles/groups.css'
 import './styles/debts.css'
 import './styles/expense-split.css'
+import './styles/account.css'
 import './styles/pulso-components.css'
 
 createRoot(document.getElementById('root')).render(

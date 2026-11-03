@@ -85,4 +85,34 @@
 
 **Horas:** 20h
 
-**Total Sprint 4:** _a fechar em 14/10_
+**Total Sprint 4:** 42h
+
+# Sprint 5 (15/10 a 04/11)
+
+### Semana 1 (15/10 - 21/10)
+
+- Abertura da branch `Sprint-5` e alinhamento do escopo: dashboard, grupos, dívidas, divisão de despesas e parity Flutter × web.
+- Planejamento da ordem de PRs (API/web primeiro, mobile visual depois, parity final).
+
+**Horas:** 8h
+
+### Semana 2 (22/10 - 28/10)
+
+- Dashboard principal (API + web) — PR [#370](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/370).
+- Módulos de grupos (API [#371](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/371), web [#372](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/372)), dívidas [#373](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/373) e divisão de despesas [#374](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/374); religamento [#375](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/375) e cobertura/format [#376](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/376).
+- Flutter com visual da web: grupos [#377](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/377), dashboard [#378](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/378), dívidas [#379](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/379), divisão [#380](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/380).
+- Landing freemium em reais (Free R$ 0 / Premium R$ 50/mês) — PR [#382](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/382); fix de cores [#381](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/381).
+- Parity Flutter Sprint-5 (chat Socket.IO, imagem de grupo, import de extrato, gráficos) — PR [#384](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/384); `npm audit fix` — PR [#385](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/385).
+
+**Horas:** 28h
+
+### Semana 3 (29/10 - 04/11) — parcial até 03/11
+
+- UX de conta: perfil + configurações alinhados web × Flutter; exclusão de conta com modal crítico (digitar `APAGAR`) e `DELETE /api/auth/me`.
+- Redesign do dashboard Flutter (hero, cards de recurso, barras, donut, saúde, metas, transações) no padrão da web; correção de layout (botões com `minimumSize` infinito).
+- Novo `npm audit fix` local nos locks de api/web (sem `--force`); atualização da apostila/relatórios da Sprint 5.
+- Aguardando publicação dos protótipos Sprint 5 em `docs/prototipos/` para amarrar na mesma branch de commit.
+
+**Horas:** 18h
+
+**Total Sprint 5:** _a fechar em 04/11_ (54h até 03/11)

@@ -1,10 +1,10 @@
 ---
 card_id: PULSO-TASK-127
 title: "Frontend — modais e CSS"
-status: Backlog
+status: "In Revision"
 type: Task
 priority: High
-sprint: null
+sprint: "Sprint 5"
 story_points: null
 reporter: "Matheus Felipe Correa"
 parent: PULSO-FEAT-062
@@ -35,6 +35,12 @@ Implementar modais do módulo e folha de estilos.
 | `ExpenseSplitReminderModal.jsx` | Selecionar pendentes → RF-111 |
 | `DeleteExpenseSplitModal.jsx` | Confirmar exclusão |
 | `styles/expense-split.css` | Layout, cards, histórico, mobile |
+
+## 👤 Responsáveis
+
+- Vinícius Simões (`ViniSimoesV`) — web
+- Matheus Felipe Correa (`MatheusFelipeCorrea`) — Flutter
+
 
 ## 📋 Resumo
 
