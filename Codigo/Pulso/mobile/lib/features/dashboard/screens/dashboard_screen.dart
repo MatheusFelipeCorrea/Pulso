@@ -102,9 +102,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     const SizedBox(height: 6),
                     Text(
                       _periodSubtitle(controller.mes),
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
+                      style: Theme.of(context).textTheme.bodyMedium
+                          ?.copyWith(color: scheme.onSurfaceVariant),
                     ),
                   ],
                 ),
@@ -188,9 +187,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       padding: const EdgeInsets.all(PulsoTokens.space4),
                       child: Text(
                         'Nenhuma transação recente neste mês.',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: scheme.onSurfaceVariant,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(color: scheme.onSurfaceVariant),
                       ),
                     )
                   : Builder(
@@ -203,9 +201,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               if (i < recent.length - 1)
                                 Divider(
                                   height: 1,
-                                  color: scheme.outline.withValues(
-                                    alpha: 0.45,
-                                  ),
+                                  color: scheme.outline.withValues(alpha: 0.45),
                                 ),
                             ],
                           ],
@@ -224,9 +220,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               PulsoSurface(
                 child: Text(
                   'Nenhuma meta ativa. Crie uma em Metas Financeiras.',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: scheme.onSurfaceVariant),
                 ),
               )
             else
@@ -283,9 +278,8 @@ class _MonthPicker extends StatelessWidget {
             child: Text(
               label,
               textAlign: TextAlign.center,
-              style: Theme.of(
-                context,
-              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+              style: Theme.of(context).textTheme.titleSmall
+                  ?.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
           IconButton(
@@ -300,11 +294,7 @@ class _MonthPicker extends StatelessWidget {
 }
 
 class _SectionTitle extends StatelessWidget {
-  const _SectionTitle({
-    required this.title,
-    this.actionLabel,
-    this.onAction,
-  });
+  const _SectionTitle({required this.title, this.actionLabel, this.onAction});
 
   final String title;
   final String? actionLabel;
@@ -503,10 +493,8 @@ class _BudgetAlertCard extends StatelessWidget {
                 const Spacer(),
                 Text(
                   dashboardAlertaLabel(alerta.percentualUsado),
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: color,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: Theme.of(context).textTheme.labelMedium
+                      ?.copyWith(color: color, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 8),
                 ClipRRect(
@@ -664,9 +652,8 @@ class _TransactionTile extends StatelessWidget {
         title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: Theme.of(
-          context,
-        ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+        style: Theme.of(context).textTheme.titleSmall
+            ?.copyWith(fontWeight: FontWeight.w600),
       ),
       subtitle: Text(
         [
@@ -679,10 +666,8 @@ class _TransactionTile extends StatelessWidget {
       ),
       trailing: Text(
         amount,
-        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-          color: color,
-          fontWeight: FontWeight.w700,
-        ),
+        style: Theme.of(context).textTheme.titleSmall
+            ?.copyWith(color: color, fontWeight: FontWeight.w700),
       ),
       onTap: () => context.go('/transactions'),
     );
@@ -727,10 +712,8 @@ class _GoalCard extends StatelessWidget {
                 ),
                 Text(
                   '${meta.progresso.round()}%',
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: accent,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: Theme.of(context).textTheme.labelLarge
+                      ?.copyWith(color: accent, fontWeight: FontWeight.w700),
                 ),
               ],
             ),
@@ -748,9 +731,8 @@ class _GoalCard extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 '${formatBrl(meta.valorAtual)} de ${formatBrl(meta.valorAlvo)}',
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: scheme.onSurfaceVariant,
-                ),
+                style: Theme.of(context).textTheme.labelSmall
+                    ?.copyWith(color: scheme.onSurfaceVariant),
               ),
             ],
           ],

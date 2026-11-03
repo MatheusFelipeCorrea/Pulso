@@ -90,9 +90,8 @@ class AccountScreen extends StatelessWidget {
                     _isSettings
                         ? 'Aparência, documentos e sessão neste dispositivo.'
                         : 'Seus dados e o plano ativo no Pulso.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: scheme.onSurfaceVariant,
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium
+                        ?.copyWith(color: scheme.onSurfaceVariant),
                   ),
                 ],
               ),
@@ -135,19 +134,16 @@ class AccountScreen extends StatelessWidget {
                         '$email · ${isPremium ? 'Premium' : 'Free'}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: scheme.onSurfaceVariant,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(color: scheme.onSurfaceVariant),
                       ),
                     ],
                   ),
                 ),
                 Text(
                   'Ver perfil',
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: accent,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: Theme.of(context).textTheme.labelLarge
+                      ?.copyWith(color: accent, fontWeight: FontWeight.w700),
                 ),
                 Icon(Icons.chevron_right, color: accent, size: 18),
               ],
@@ -158,13 +154,15 @@ class AccountScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Aparência', style: Theme.of(context).textTheme.titleSmall),
+                Text(
+                  'Aparência',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
                 const SizedBox(height: 6),
                 Text(
                   'Escolha o tema da interface.',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: scheme.onSurfaceVariant),
                 ),
                 const SizedBox(height: PulsoTokens.space3),
                 Row(
@@ -216,9 +214,8 @@ class AccountScreen extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         'Termos e privacidade do Pulso.',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: scheme.onSurfaceVariant,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(color: scheme.onSurfaceVariant),
                       ),
                     ],
                   ),
@@ -229,7 +226,10 @@ class AccountScreen extends StatelessWidget {
                   subtitle: 'Regras de uso da plataforma',
                   onTap: () => context.push('/termos'),
                 ),
-                Divider(height: 1, color: scheme.outline.withValues(alpha: 0.5)),
+                Divider(
+                  height: 1,
+                  color: scheme.outline.withValues(alpha: 0.5),
+                ),
                 _LinkTile(
                   icon: Icons.privacy_tip_outlined,
                   title: 'Política de privacidade',
@@ -251,9 +251,8 @@ class AccountScreen extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   'Sair encerra só este dispositivo. Apagar remove a conta e os dados financeiros de forma permanente.',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: scheme.onSurfaceVariant),
                 ),
                 const SizedBox(height: PulsoTokens.space3),
                 OutlinedButton.icon(
@@ -396,12 +395,9 @@ class AccountScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  isPremium
-                      ? 'Grupos e viagens liberados nesta conta.'
-                      : 'Core financeiro liberado. Premium adiciona grupos e viagens por R\$ 50/mês.',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: scheme.onSurfaceVariant,
-                  ),
+                  isPremium ? 'Grupos e viagens liberados nesta conta.' : 'Core financeiro liberado. Premium adiciona grupos e viagens por R\$ 50/mês.',
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: scheme.onSurfaceVariant),
                 ),
                 const SizedBox(height: PulsoTokens.space4),
                 ...features.map(
@@ -448,8 +444,7 @@ class AccountScreen extends StatelessWidget {
     final ok = await showPulsoCriticalConfirm(
       context: context,
       title: 'Apagar sua conta?',
-      message:
-          'Isso remove permanentemente seus dados financeiros, grupos criados e preferências. Não dá para desfazer.',
+      message: 'Isso remove permanentemente seus dados financeiros, grupos criados e preferências. Não dá para desfazer.',
       confirmationText: 'APAGAR',
       confirmLabel: 'Apagar conta',
       cancelLabel: 'Manter conta',
@@ -510,7 +505,8 @@ class _ThemeChoiceCard extends StatelessWidget {
             border: Border.all(
               color: selected
                   ? accent.withValues(alpha: 0.55)
-                  : Theme.of(context).colorScheme.outline.withValues(alpha: 0.7),
+                  : Theme.of(context).colorScheme.outline
+                        .withValues(alpha: 0.7),
             ),
             color: selected
                 ? accent.withValues(alpha: 0.1)
@@ -634,9 +630,8 @@ class _InfoRow extends StatelessWidget {
             child: Text(
               value,
               textAlign: TextAlign.right,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
         ],
