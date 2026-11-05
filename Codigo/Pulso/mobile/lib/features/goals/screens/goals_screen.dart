@@ -107,199 +107,247 @@ class _GoalsScreenState extends State<GoalsScreen> {
   Widget build(BuildContext context) {
     final controller = context.watch<GoalsController>();
     final resumo = controller.resumo;
+    final metas = controller.metas;
 
     return RefreshIndicator(
       onRefresh: controller.reload,
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          PulsoTokens.space4,
-          PulsoTokens.space2,
-          PulsoTokens.space4,
-          96,
-        ),
-        children: [
-          const PulsoPageHeader(
-            title: 'Metas financeiras',
-            subtitle:
-                'Defina objetivos e acompanhe o progresso dos seus aportes.',
-            icon: Icons.gps_fixed,
-          ),
-          if (resumo != null) ...[
-            PulsoSurface(
-              padding: const EdgeInsets.all(PulsoTokens.space4),
-              child: Column(
-                children: [
-                  _GoalStat(
-                    icon: Icons.gps_fixed,
-                    color: PulsoColors.accent(Theme.of(context).brightness),
-                    label: 'Total em metas',
-                    value: formatBrl(resumo.totalEmMetas),
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(
+              PulsoTokens.space4,
+              PulsoTokens.space2,
+              PulsoTokens.space4,
+              PulsoTokens.space3,
+            ),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                const PulsoPageHeader(
+                  title: 'Metas financeiras',
+                  subtitle: 'Defina objetivos e acompanhe o progresso dos seus aportes.',
+                  icon: Icons.gps_fixed,
+                ),
+                if (resumo != null) ...[
+                  PulsoSurface(
+                    padding: const EdgeInsets.all(PulsoTokens.space4),
+                    child: Column(
+                      children: [
+                        _GoalStat(
+                          icon: Icons.gps_fixed,
+                          color: PulsoColors.accent(
+                            Theme.of(context).brightness,
+                          ),
+                          label: 'Total em metas',
+                          value: formatBrl(resumo.totalEmMetas),
+                        ),
+                        const SizedBox(height: PulsoTokens.space3),
+                        _GoalStat(
+                          icon: Icons.attach_money,
+                          color: PulsoColors.successOf(
+                            Theme.of(context).brightness,
+                          ),
+                          label: 'Total acumulado',
+                          value: formatBrl(resumo.totalAcumulado),
+                        ),
+                        const SizedBox(height: PulsoTokens.space3),
+                        _GoalStat(
+                          icon: Icons.trending_up,
+                          color: PulsoColors.infoOf(
+                            Theme.of(context).brightness,
+                          ),
+                          label: 'Progresso médio',
+                          value: '${resumo.progressoMedio.toStringAsFixed(1)}%',
+                        ),
+                        const SizedBox(height: PulsoTokens.space3),
+                        _GoalStat(
+                          icon: Icons.pie_chart_outline,
+                          color: PulsoColors.cyanOf(
+                            Theme.of(context).brightness,
+                          ),
+                          label: 'Metas ativas',
+                          value: '${resumo.metasAtivas}',
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: PulsoTokens.space3),
-                  _GoalStat(
-                    icon: Icons.attach_money,
-                    color: PulsoColors.successOf(Theme.of(context).brightness),
-                    label: 'Total acumulado',
-                    value: formatBrl(resumo.totalAcumulado),
+                  PulsoAlert(
+                    type: PulsoAlertType.info,
+                    icon: Icons.info_outline,
+                    title: 'Sugestão de economia',
+                    message:
+                        'Para atingir todas as suas metas no prazo, você precisa guardar ${formatBrl(resumo.sugestaoMensal)}/mês.',
                   ),
                   const SizedBox(height: PulsoTokens.space3),
-                  _GoalStat(
-                    icon: Icons.trending_up,
-                    color: PulsoColors.infoOf(Theme.of(context).brightness),
-                    label: 'Progresso médio',
-                    value: '${resumo.progressoMedio.toStringAsFixed(1)}%',
+                  PulsoSurface(
+                    padding: const EdgeInsets.all(PulsoTokens.space4),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.bar_chart,
+                              size: 16,
+                              color: PulsoColors.accent(
+                                Theme.of(context).brightness,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Categorias das metas',
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: PulsoTokens.space3),
+                        _CategoryLegend(
+                          color: PulsoColors.primary,
+                          label: 'Curto prazo',
+                          slice: resumo.curtoPrazo,
+                        ),
+                        _CategoryLegend(
+                          color: PulsoColors.info,
+                          label: 'Longo prazo',
+                          slice: resumo.longoPrazo,
+                        ),
+                        _CategoryLegend(
+                          color: PulsoColors.success,
+                          label: 'Concluídas',
+                          slice: resumo.concluidas,
+                        ),
+                        _CategoryLegend(
+                          color: PulsoColors.warning,
+                          label: 'Pausadas',
+                          slice: resumo.pausadas,
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: PulsoTokens.space3),
-                  _GoalStat(
-                    icon: Icons.pie_chart_outline,
-                    color: PulsoColors.cyanOf(Theme.of(context).brightness),
-                    label: 'Metas ativas',
-                    value: '${resumo.metasAtivas}',
-                  ),
+                  const SizedBox(height: PulsoTokens.space4),
                 ],
-              ),
-            ),
-            const SizedBox(height: PulsoTokens.space3),
-            PulsoAlert(
-              type: PulsoAlertType.info,
-              icon: Icons.info_outline,
-              title: 'Sugestão de economia',
-              message:
-                  'Para atingir todas as suas metas no prazo, você precisa guardar ${formatBrl(resumo.sugestaoMensal)}/mês.',
-            ),
-            const SizedBox(height: PulsoTokens.space3),
-            PulsoSurface(
-              padding: const EdgeInsets.all(PulsoTokens.space4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.bar_chart,
+                TextField(
+                  controller: _busca,
+                  decoration: const InputDecoration(
+                    labelText: 'Buscar',
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                  textInputAction: TextInputAction.search,
+                  onSubmitted: controller.search,
+                ),
+                const SizedBox(height: PulsoTokens.space3),
+                Wrap(
+                  spacing: PulsoTokens.space2,
+                  runSpacing: PulsoTokens.space2,
+                  children: [
+                    ChoiceChip(
+                      avatar: const Icon(Icons.list, size: 16),
+                      label: Text(
+                        'Todas${resumo == null ? '' : ' (${resumo.curtoPrazo.quantidade + resumo.longoPrazo.quantidade + resumo.concluidas.quantidade + resumo.pausadas.quantidade})'}',
+                      ),
+                      selected: controller.filters.status == null,
+                      onSelected: (_) => controller.applyTab(null),
+                    ),
+                    ChoiceChip(
+                      avatar: Icon(
+                        Icons.play_arrow_outlined,
                         size: 16,
                         color: PulsoColors.accent(Theme.of(context).brightness),
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Categorias das metas',
-                        style: Theme.of(context).textTheme.titleSmall,
+                      label: Text(
+                        'Ativas${resumo == null ? '' : ' (${resumo.metasAtivas})'}',
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: PulsoTokens.space3),
-                  _CategoryLegend(
-                    color: PulsoColors.primary,
-                    label: 'Curto prazo',
-                    slice: resumo.curtoPrazo,
-                  ),
-                  _CategoryLegend(
-                    color: PulsoColors.info,
-                    label: 'Longo prazo',
-                    slice: resumo.longoPrazo,
-                  ),
-                  _CategoryLegend(
-                    color: PulsoColors.success,
-                    label: 'Concluídas',
-                    slice: resumo.concluidas,
-                  ),
-                  _CategoryLegend(
-                    color: PulsoColors.warning,
-                    label: 'Pausadas',
-                    slice: resumo.pausadas,
-                  ),
-                ],
-              ),
+                      selected: controller.filters.status == 'ATIVA',
+                      onSelected: (_) => controller.applyTab('ATIVA'),
+                    ),
+                    ChoiceChip(
+                      avatar: Icon(
+                        Icons.pause_outlined,
+                        size: 16,
+                        color: PulsoColors.warningOf(
+                          Theme.of(context).brightness,
+                        ),
+                      ),
+                      label: Text(
+                        'Pausadas${resumo == null ? '' : ' (${resumo.pausadas.quantidade})'}',
+                      ),
+                      selected: controller.filters.status == 'PAUSADA',
+                      onSelected: (_) => controller.applyTab('PAUSADA'),
+                    ),
+                    ChoiceChip(
+                      avatar: Icon(
+                        Icons.check_circle_outline,
+                        size: 16,
+                        color: PulsoColors.successOf(
+                          Theme.of(context).brightness,
+                        ),
+                      ),
+                      label: Text(
+                        'Concluídas${resumo == null ? '' : ' (${resumo.concluidas.quantidade})'}',
+                      ),
+                      selected: controller.filters.status == 'CONCLUIDA',
+                      onSelected: (_) => controller.applyTab('CONCLUIDA'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: PulsoTokens.space2),
+              ]),
             ),
-            const SizedBox(height: PulsoTokens.space4),
-          ],
-          TextField(
-            controller: _busca,
-            decoration: const InputDecoration(
-              labelText: 'Buscar',
-              prefixIcon: Icon(Icons.search),
-            ),
-            textInputAction: TextInputAction.search,
-            onSubmitted: controller.search,
           ),
-          const SizedBox(height: PulsoTokens.space3),
-          Wrap(
-            spacing: PulsoTokens.space2,
-            runSpacing: PulsoTokens.space2,
-            children: [
-              ChoiceChip(
-                avatar: const Icon(Icons.list, size: 16),
-                label: Text(
-                  'Todas${resumo == null ? '' : ' (${resumo.curtoPrazo.quantidade + resumo.longoPrazo.quantidade + resumo.concluidas.quantidade + resumo.pausadas.quantidade})'}',
-                ),
-                selected: controller.filters.status == null,
-                onSelected: (_) => controller.applyTab(null),
-              ),
-              ChoiceChip(
-                avatar: Icon(
-                  Icons.play_arrow_outlined,
-                  size: 16,
-                  color: PulsoColors.accent(Theme.of(context).brightness),
-                ),
-                label: Text(
-                  'Ativas${resumo == null ? '' : ' (${resumo.metasAtivas})'}',
-                ),
-                selected: controller.filters.status == 'ATIVA',
-                onSelected: (_) => controller.applyTab('ATIVA'),
-              ),
-              ChoiceChip(
-                avatar: Icon(
-                  Icons.pause_outlined,
-                  size: 16,
-                  color: PulsoColors.warningOf(Theme.of(context).brightness),
-                ),
-                label: Text(
-                  'Pausadas${resumo == null ? '' : ' (${resumo.pausadas.quantidade})'}',
-                ),
-                selected: controller.filters.status == 'PAUSADA',
-                onSelected: (_) => controller.applyTab('PAUSADA'),
-              ),
-              ChoiceChip(
-                avatar: Icon(
-                  Icons.check_circle_outline,
-                  size: 16,
-                  color: PulsoColors.successOf(Theme.of(context).brightness),
-                ),
-                label: Text(
-                  'Concluídas${resumo == null ? '' : ' (${resumo.concluidas.quantidade})'}',
-                ),
-                selected: controller.filters.status == 'CONCLUIDA',
-                onSelected: (_) => controller.applyTab('CONCLUIDA'),
-              ),
-            ],
-          ),
-          const SizedBox(height: PulsoTokens.space4),
-          if (controller.loading && controller.metas.isEmpty)
-            const Padding(
-              padding: EdgeInsets.only(top: PulsoTokens.space8),
+          if (controller.loading && metas.isEmpty)
+            const SliverFillRemaining(
+              hasScrollBody: false,
               child: Center(child: CircularProgressIndicator()),
             )
           else if (controller.error != null)
-            PulsoEmptyState(
-              title: 'Não foi possível carregar',
-              description: controller.error!,
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: PulsoTokens.space4,
+                ),
+                child: PulsoEmptyState(
+                  title: 'Não foi possível carregar',
+                  description: controller.error!,
+                ),
+              ),
             )
-          else if (controller.metas.isEmpty)
-            PulsoEmptyState(
-              title: 'Nenhuma meta ainda',
-              description: 'Crie uma meta para acompanhar o valor guardado, como na web.',
-              icon: Icons.flag_outlined,
-              actionLabel: 'Nova meta',
-              onAction: () => _openForm(),
+          else if (metas.isEmpty)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: PulsoTokens.space4,
+                ),
+                child: PulsoEmptyState(
+                  title: 'Nenhuma meta ainda',
+                  description: 'Crie uma meta para acompanhar o valor guardado, como na web.',
+                  icon: Icons.flag_outlined,
+                  actionLabel: 'Nova meta',
+                  onAction: () => _openForm(),
+                ),
+              ),
             )
           else
-            ...controller.metas.map(
-              (meta) => GoalTile(
-                meta: meta,
-                onOpen: () => _openForm(meta: meta),
-                onContribute: () => _aporte(meta),
-                onDelete: () => _delete(meta),
-                onTogglePause: () => controller.togglePause(meta),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                PulsoTokens.space4,
+                0,
+                PulsoTokens.space4,
+                96,
+              ),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final meta = metas[index];
+                  return GoalTile(
+                    meta: meta,
+                    onOpen: () => _openForm(meta: meta),
+                    onContribute: () => _aporte(meta),
+                    onDelete: () => _delete(meta),
+                    onTogglePause: () => controller.togglePause(meta),
+                  );
+                }, childCount: metas.length),
               ),
             ),
         ],

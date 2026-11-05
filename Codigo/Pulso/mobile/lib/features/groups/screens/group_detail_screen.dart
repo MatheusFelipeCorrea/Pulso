@@ -629,54 +629,13 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
         child: Column(
           children: [
             if (_mensagens.isEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: PulsoTokens.space3,
-                ),
-                child: Text(
-                  'Nenhuma mensagem ainda. Diga oi para a galera.',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+              const PulsoEmptyState(
+                title: 'Nenhuma mensagem ainda',
+                description: 'Diga oi para a galera.',
+                icon: Icons.chat_bubble_outline,
               )
             else
-              ..._mensagens
-                  .take(30)
-                  .map(
-                    (msg) => Align(
-                      alignment: msg.souEu
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                          bottom: PulsoTokens.space2,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: msg.souEu
-                              ? PulsoColors.accent(brightness)
-                                    .withValues(alpha: 0.15)
-                              : Theme.of(context)
-                                    .colorScheme
-                                    .surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (!msg.souEu && (msg.autorNome ?? '').isNotEmpty)
-                              Text(
-                                msg.autorNome!,
-                                style: Theme.of(context).textTheme.labelSmall,
-                              ),
-                            Text(msg.texto),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+              ..._mensagens.take(30).map((msg) => _GroupChatBubble(msg: msg)),
             const SizedBox(height: PulsoTokens.space2),
             Row(
               children: [
@@ -700,5 +659,90 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
         ),
       ),
     ];
+  }
+}
+
+class _GroupChatBubble extends StatelessWidget {
+  const _GroupChatBubble({required this.msg});
+
+  final PulsoGrupoMensagem msg;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final accent = PulsoColors.accent(theme.brightness);
+    final mine = msg.souEu;
+    final autor = mine
+        ? 'Você'
+        : (formatGrupoMembroDisplayNome(msg.autorNome).isEmpty
+              ? 'Membro'
+              : formatGrupoMembroDisplayNome(msg.autorNome));
+    final hora = msg.criadoEm == null
+        ? null
+        : _formatHora(msg.criadoEm!.toLocal());
+    final maxWidth = MediaQuery.sizeOf(context).width * 0.72;
+
+    return Align(
+      alignment: mine ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        margin: const EdgeInsets.only(bottom: PulsoTokens.space2),
+        padding: const EdgeInsets.symmetric(
+          horizontal: PulsoTokens.space3,
+          vertical: PulsoTokens.space2,
+        ),
+        decoration: BoxDecoration(
+          color: mine
+              ? accent.withValues(alpha: 0.18)
+              : scheme.surfaceContainerHighest,
+          border: mine
+              ? Border.all(color: accent.withValues(alpha: 0.35))
+              : null,
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(PulsoTokens.radiusXl),
+            topRight: const Radius.circular(PulsoTokens.radiusXl),
+            bottomLeft: Radius.circular(
+              mine ? PulsoTokens.radiusXl : PulsoTokens.radiusSm,
+            ),
+            bottomRight: Radius.circular(
+              mine ? PulsoTokens.radiusSm : PulsoTokens.radiusXl,
+            ),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: mine
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
+          children: [
+            Text(
+              autor,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: mine ? accent : scheme.onSurfaceVariant,
+                fontWeight: PulsoTokens.weightSemibold,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(msg.texto, style: theme.textTheme.bodyMedium),
+            if (hora != null) ...[
+              const SizedBox(height: 2),
+              Text(
+                hora,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                  fontSize: 11,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  static String _formatHora(DateTime d) {
+    final h = d.hour.toString().padLeft(2, '0');
+    final m = d.minute.toString().padLeft(2, '0');
+    return '$h:$m';
   }
 }

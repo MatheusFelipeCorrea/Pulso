@@ -163,11 +163,16 @@ class _ExpenseSplitScreenState extends State<ExpenseSplitScreen> {
               onAction: () => context.push('/expense-split/new'),
             )
           else ...[
-            const PulsoSectionHeader(title: 'Em aberto', icon: Icons.timelapse),
+            PulsoSectionHeader(
+              title: 'Em aberto (${controller.ativas.length})',
+              icon: Icons.timelapse,
+            ),
             if (controller.ativas.isEmpty)
-              Text(
-                'Nenhuma divisão ativa.',
-                style: Theme.of(context).textTheme.bodySmall,
+              const PulsoSurface(
+                child: _InlineEmpty(
+                  icon: Icons.check_circle_outline,
+                  text: 'Nenhuma divisão em aberto.',
+                ),
               )
             else
               ...controller.ativas.map(
@@ -181,11 +186,16 @@ class _ExpenseSplitScreenState extends State<ExpenseSplitScreen> {
                 ),
               ),
             const SizedBox(height: PulsoTokens.space4),
-            const PulsoSectionHeader(title: 'Histórico', icon: Icons.history),
+            PulsoSectionHeader(
+              title: 'Histórico (${controller.historico.length})',
+              icon: Icons.history,
+            ),
             if (controller.historico.isEmpty)
-              Text(
-                'O histórico ainda está vazio.',
-                style: Theme.of(context).textTheme.bodySmall,
+              const PulsoSurface(
+                child: _InlineEmpty(
+                  icon: Icons.history,
+                  text: 'O histórico ainda está vazio.',
+                ),
               )
             else
               ...controller.historico.map(
@@ -227,12 +237,49 @@ class _Mini extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color, size: 18),
-          const SizedBox(height: 6),
-          Text(label, style: Theme.of(context).textTheme.labelSmall),
-          Text(value, style: Theme.of(context).textTheme.titleSmall),
+          PulsoSoftIcon(icon: icon, color: color, size: 30),
+          const SizedBox(height: PulsoTokens.space2),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.titleSmall
+                ?.copyWith(color: color, fontWeight: PulsoTokens.weightBold),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class _InlineEmpty extends StatelessWidget {
+  const _InlineEmpty({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: scheme.onSurfaceVariant),
+        const SizedBox(width: PulsoTokens.space2),
+        Expanded(
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.bodyMedium
+                ?.copyWith(color: scheme.onSurfaceVariant),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -285,31 +332,35 @@ class _SplitCard extends StatelessWidget {
                     ),
                     Text(
                       formatBrl(divisao.valorTotal),
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: PulsoColors.accent(brightness),
+                        fontWeight: PulsoTokens.weightSemibold,
+                      ),
                     ),
                   ],
                 ),
               ),
               if (onEdit != null)
-                IconButton(
+                PulsoIconButton(
+                  icon: Icons.edit_outlined,
                   tooltip: 'Editar',
                   onPressed: onEdit,
-                  icon: const Icon(Icons.edit_outlined),
                 ),
               if (onRemind != null)
-                IconButton(
+                PulsoIconButton(
+                  icon: Icons.notifications_active_outlined,
                   tooltip: 'Lembrete',
                   onPressed: onRemind,
-                  icon: const Icon(Icons.notifications_active_outlined),
                 ),
-              IconButton(
+              PulsoIconButton(
+                icon: Icons.delete_outline,
                 tooltip: 'Excluir',
                 onPressed: onDelete,
-                icon: const Icon(Icons.delete_outline),
+                danger: true,
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: PulsoTokens.space2),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -336,7 +387,28 @@ class _SplitCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: PulsoTokens.space3),
+          if (divisao.participantes.isNotEmpty) ...[
+            const SizedBox(height: PulsoTokens.space3),
+            LinearProgressIndicator(
+              value:
+                  (divisao.participantes.length - divisao.pendentes) /
+                  divisao.participantes.length,
+              minHeight: 6,
+              borderRadius: BorderRadius.circular(99),
+              color: PulsoColors.successOf(brightness),
+              backgroundColor: Theme.of(context)
+                  .colorScheme
+                  .surfaceContainerHighest,
+            ),
+            const SizedBox(height: PulsoTokens.space1),
+            Text(
+              '${divisao.participantes.length - divisao.pendentes} de ${divisao.participantes.length} pagaram',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+          const SizedBox(height: PulsoTokens.space2),
           ...divisao.participantes.map((pessoa) {
             final pessoaStatus = participanteStatusVisual(pessoa.status);
             final cor = pessoa.pago
