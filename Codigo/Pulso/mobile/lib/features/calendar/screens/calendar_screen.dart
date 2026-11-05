@@ -49,18 +49,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
             title: 'Calendário Financeiro',
             subtitle: 'Vencimentos, transações e lembretes no mesmo mês.',
             icon: Icons.calendar_month_outlined,
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
+          ),
+          PulsoSurface(
+            margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
+            padding: const EdgeInsets.symmetric(
+              horizontal: PulsoTokens.space2,
+              vertical: PulsoTokens.space1,
+            ),
+            child: Row(
               children: [
                 IconButton(
+                  tooltip: 'Mês anterior',
                   onPressed: () => controller.shiftMonth(-1),
                   icon: const Icon(Icons.chevron_left),
                 ),
-                Text(
-                  TransactionPeriod.label(controller.mes),
-                  style: Theme.of(context).textTheme.titleSmall,
+                Expanded(
+                  child: Text(
+                    TransactionPeriod.label(controller.mes),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
                 IconButton(
+                  tooltip: 'Próximo mês',
                   onPressed: () => controller.shiftMonth(1),
                   icon: const Icon(Icons.chevron_right),
                 ),
@@ -156,8 +167,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
               )
             else
               ...visao.proximosVencimentos.map(
-                (item) => Padding(
-                  padding: const EdgeInsets.only(bottom: PulsoTokens.space2),
+                (item) => PulsoSurface(
+                  margin: const EdgeInsets.only(bottom: PulsoTokens.space2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: PulsoTokens.space3,
+                    vertical: PulsoTokens.space1,
+                  ),
                   child: _LembreteTile(
                     lembrete: item,
                     onTap: () => _openLembrete(item),
@@ -472,35 +487,41 @@ class _DayPanel extends StatelessWidget {
             padding: const EdgeInsets.all(PulsoTokens.space3),
             decoration: BoxDecoration(
               color: scheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(PulsoTokens.radiusLg),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(
-                  'Receitas: ${formatBrl(detalhe.receitas)}',
-                  style: TextStyle(color: PulsoColors.successOf(brightness)),
+                Expanded(
+                  child: _DayStat(
+                    label: 'Receitas',
+                    value: formatBrl(detalhe.receitas),
+                    color: PulsoColors.successOf(brightness),
+                  ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'Despesas: ${formatBrl(detalhe.despesas)}',
-                  style: TextStyle(color: PulsoColors.dangerOf(brightness)),
+                Expanded(
+                  child: _DayStat(
+                    label: 'Despesas',
+                    value: formatBrl(detalhe.despesas),
+                    color: PulsoColors.dangerOf(brightness),
+                  ),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  'Saldo: ${formatBrl(detalhe.saldo)}',
-                  style: Theme.of(context).textTheme.titleSmall,
+                Expanded(
+                  child: _DayStat(
+                    label: 'Saldo',
+                    value: formatBrl(detalhe.saldo),
+                    color: detalhe.saldo < 0
+                        ? PulsoColors.dangerOf(brightness)
+                        : scheme.onSurface,
+                  ),
                 ),
               ],
             ),
           ),
           const SizedBox(height: PulsoTokens.space4),
-          Text(
-            'TRANSAÇÕES DO DIA',
-            style: Theme.of(context).textTheme.labelSmall
-                ?.copyWith(letterSpacing: 0.6, fontWeight: FontWeight.w700),
+          const PulsoSectionHeader(
+            title: 'Transações do dia',
+            icon: Icons.receipt_long_outlined,
           ),
-          const SizedBox(height: 10),
           if (detalhe.transacoes.isEmpty)
             _EmptyHint(
               icon: Icons.inbox_outlined,
@@ -547,12 +568,10 @@ class _DayPanel extends StatelessWidget {
               );
             }),
           const SizedBox(height: PulsoTokens.space3),
-          Text(
-            'LEMBRETES / VENCIMENTOS',
-            style: Theme.of(context).textTheme.labelSmall
-                ?.copyWith(letterSpacing: 0.6, fontWeight: FontWeight.w700),
+          const PulsoSectionHeader(
+            title: 'Lembretes e vencimentos',
+            icon: Icons.notifications_active_outlined,
           ),
-          const SizedBox(height: 10),
           if (detalhe.lembretes.isEmpty)
             const _EmptyHint(
               icon: Icons.notifications_none_outlined,
@@ -569,6 +588,44 @@ class _DayPanel extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+class _DayStat extends StatelessWidget {
+  const _DayStat({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  final String label;
+  final String value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.titleSmall?.copyWith(
+            color: color,
+            fontWeight: PulsoTokens.weightBold,
+          ),
+        ),
+      ],
     );
   }
 }

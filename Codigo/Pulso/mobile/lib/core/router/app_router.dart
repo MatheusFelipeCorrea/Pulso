@@ -323,9 +323,11 @@ GoRouter createRouter(AuthController auth) {
 
 bool _isKnownAuthedLocation(String loc) {
   if (loc == '/dashboard' ||
+      loc == '/dashboard/import' ||
       loc == '/transactions' ||
       loc == '/categories' ||
-      loc == '/tags')
+      loc == '/tags' ||
+      loc == '/account')
     return true;
   if (loc == '/calendar' || loc == '/calendar/reminder') return true;
   if (loc == '/profile' || loc == '/settings') return true;

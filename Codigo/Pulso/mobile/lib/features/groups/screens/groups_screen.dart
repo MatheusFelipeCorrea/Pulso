@@ -104,14 +104,15 @@ class _GroupsScreenState extends State<GroupsScreen> {
             )
           else if (controller.grupos.isEmpty)
             PulsoEmptyState(
-              title: 'Nenhum grupo',
+              title: 'Nenhum grupo ainda',
               description: 'Crie um grupo ou entre com um código de convite.',
+              icon: Icons.groups_outlined,
               actionLabel: 'Novo grupo',
               onAction: () => context.push('/groups/new'),
             )
           else ...[
-            const PulsoSectionHeader(
-              title: 'Meus grupos',
+            PulsoSectionHeader(
+              title: 'Meus grupos (${controller.grupos.length})',
               icon: Icons.folder_shared_outlined,
             ),
             ...controller.grupos.map(

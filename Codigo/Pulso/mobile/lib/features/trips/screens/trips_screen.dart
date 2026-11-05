@@ -53,10 +53,28 @@ class _TripsScreenState extends State<TripsScreen> {
     final controller = context.watch<TripsController>();
 
     if (!premium) {
-      return const PulsoEmptyState(
-        title: 'Viagens são Premium',
-        description: 'O planejamento de viagens e cotações avançadas fica no plano Premium, como na web.',
-        icon: Icons.workspace_premium_outlined,
+      return ListView(
+        padding: const EdgeInsets.fromLTRB(
+          PulsoTokens.space4,
+          PulsoTokens.space2,
+          PulsoTokens.space4,
+          96,
+        ),
+        children: const [
+          PulsoPageHeader(
+            title: 'Viagens e moedas',
+            subtitle:
+                'Acompanhe cotações, converta moedas e planeje suas viagens.',
+            icon: Icons.flight_takeoff,
+          ),
+          PulsoSurface(
+            child: PulsoEmptyState(
+              title: 'Viagens são Premium',
+              description: 'O planejamento de viagens e cotações avançadas fica no plano Premium, como na web.',
+              icon: Icons.workspace_premium_outlined,
+            ),
+          ),
+        ],
       );
     }
 
@@ -79,7 +97,9 @@ class _TripsScreenState extends State<TripsScreen> {
           TripCurrencyPanel(repository: context.read<CurrencyRepository>()),
           const SizedBox(height: PulsoTokens.space5),
           PulsoSectionHeader(
-            title: 'Minhas viagens',
+            title: controller.viagens.isEmpty
+                ? 'Minhas viagens'
+                : 'Minhas viagens (${controller.viagens.length})',
             icon: Icons.luggage_outlined,
             actionLabel: 'Nova',
             onAction: () => context.push('/trips/new'),

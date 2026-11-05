@@ -219,12 +219,14 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
   Widget build(BuildContext context) {
     final current = viagem;
     return Scaffold(
+      appBar: !loading && current == null ? AppBar() : null,
       body: loading
           ? const Center(child: CircularProgressIndicator())
           : current == null
           ? const PulsoEmptyState(
               title: 'Viagem não encontrada',
               description: 'Ela pode ter sido excluída.',
+              icon: Icons.flight_takeoff,
             )
           : CustomScrollView(
               slivers: [
@@ -319,13 +321,33 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                                     'Total estimado',
                                     style: Theme.of(context)
                                         .textTheme
-                                        .labelSmall,
+                                        .labelSmall
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ),
                                   ),
                                   Text(
                                     formatBrl(current.totalBrl),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .headlineSmall,
+                                        .headlineSmall
+                                        ?.copyWith(
+                                          color: PulsoColors.accent(
+                                            Theme.of(context).brightness,
+                                          ),
+                                          fontWeight: PulsoTokens.weightBold,
+                                        ),
+                                  ),
+                                  Text(
+                                    '${current.despesas.length} ${current.despesas.length == 1 ? 'pretensão' : 'pretensões'} cadastrada${current.despesas.length == 1 ? '' : 's'}',
+                                    style: Theme.of(context).textTheme.bodySmall
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant,
+                                        ),
                                   ),
                                 ],
                               ),
@@ -341,10 +363,11 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                         onAction: _addExpense,
                       ),
                       if (current.despesas.isEmpty)
-                        PulsoSurface(
-                          child: Text(
-                            'Nenhuma pretensão cadastrada ainda.',
-                            style: Theme.of(context).textTheme.bodySmall,
+                        const PulsoSurface(
+                          child: PulsoEmptyState(
+                            title: 'Nenhuma pretensão',
+                            description: 'Cadastre passagens, hospedagem e outros gastos previstos.',
+                            icon: Icons.receipt_long_outlined,
                           ),
                         )
                       else
@@ -394,17 +417,16 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                                     formatBrl(item.valorEstimado),
                                     style: Theme.of(context)
                                         .textTheme
-                                        .titleSmall,
+                                        .titleSmall
+                                        ?.copyWith(
+                                          fontWeight: PulsoTokens.weightBold,
+                                        ),
                                   ),
-                                  IconButton(
+                                  PulsoIconButton(
+                                    icon: Icons.delete_outline,
                                     tooltip: 'Excluir pretensão',
                                     onPressed: () => _deleteExpense(item),
-                                    icon: Icon(
-                                      Icons.delete_outline,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .error,
-                                    ),
+                                    danger: true,
                                   ),
                                 ],
                               ),
@@ -419,10 +441,12 @@ class _TripDetailScreenState extends State<TripDetailScreen> {
                         onAction: _addNote,
                       ),
                       if (current.observacoes.isEmpty)
-                        PulsoSurface(
-                          child: Text(
-                            'Nenhuma observação ainda. Use para links, checklists e notas da viagem.',
-                            style: Theme.of(context).textTheme.bodySmall,
+                        const PulsoSurface(
+                          child: PulsoEmptyState(
+                            title: 'Nenhuma observação',
+                            description:
+                                'Use para links, checklists e notas da viagem.',
+                            icon: Icons.notes_outlined,
                           ),
                         )
                       else

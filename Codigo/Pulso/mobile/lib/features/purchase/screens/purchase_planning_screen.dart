@@ -63,23 +63,14 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
             )
           else if (painel != null && resumo != null) ...[
             if (resumo.mediaImpactoRenda > 20)
-              PulsoSurface(
-                margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.warning_amber_rounded,
-                      color: PulsoColors.warningOf(
-                        Theme.of(context).brightness,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'Suas parcelas atuais comprometem ${resumo.mediaImpactoRenda.toStringAsFixed(0)}% da sua renda. Cuidado ao assumir novas parcelas.',
-                      ),
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.only(bottom: PulsoTokens.space3),
+                child: PulsoAlert(
+                  type: PulsoAlertType.warning,
+                  icon: Icons.warning_amber_rounded,
+                  title: 'Atenção às parcelas',
+                  message:
+                      'Suas parcelas atuais comprometem ${resumo.mediaImpactoRenda.toStringAsFixed(0)}% da sua renda. Cuidado ao assumir novas parcelas.',
                 ),
               ),
             const PulsoSectionHeader(
@@ -152,18 +143,18 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
                   ),
                 ),
               ),
-            const SizedBox(height: PulsoTokens.space5),
-            const Divider(),
             const SizedBox(height: PulsoTokens.space4),
             const PulsoSectionHeader(
               title: 'Comprados recentemente',
               icon: Icons.history,
             ),
             if (painel.comprados.isEmpty)
-              PulsoSurface(
-                child: Text(
-                  'Nenhuma compra registrada ainda. Marque um item como “Comprei!” para vê-lo aqui.',
-                  style: Theme.of(context).textTheme.bodyMedium,
+              const PulsoSurface(
+                child: PulsoEmptyState(
+                  title: 'Nenhuma compra registrada',
+                  description:
+                      'Marque um item como “Comprei!” para vê-lo aqui.',
+                  icon: Icons.history,
                 ),
               )
             else
@@ -222,27 +213,37 @@ class _PurchasePlanningScreenState extends State<PurchasePlanningScreen> {
                 ),
               ),
             if (resumo.dicas.isNotEmpty) ...[
+              const SizedBox(height: PulsoTokens.space4),
               const PulsoSectionHeader(
                 title: 'Dicas inteligentes',
                 icon: Icons.lightbulb_outline,
               ),
-              ...resumo.dicas.map(
-                (dica) => Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.check_circle_outline,
-                        size: 16,
-                        color: PulsoColors.successOf(
-                          Theme.of(context).brightness,
+              PulsoSurface(
+                child: Column(
+                  children: [
+                    for (final dica in resumo.dicas)
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: dica == resumo.dicas.last
+                              ? 0
+                              : PulsoTokens.space3,
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline,
+                              size: 16,
+                              color: PulsoColors.successOf(
+                                Theme.of(context).brightness,
+                              ),
+                            ),
+                            const SizedBox(width: PulsoTokens.space2),
+                            Expanded(child: Text(dica)),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(child: Text(dica)),
-                    ],
-                  ),
+                  ],
                 ),
               ),
             ],
@@ -310,12 +311,19 @@ class _MiniStat extends StatelessWidget {
         children: [
           PulsoSoftIcon(icon: icon, color: color, size: 32),
           const SizedBox(height: PulsoTokens.space3),
-          Text(label, style: Theme.of(context).textTheme.labelSmall),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
           const SizedBox(height: 4),
           Text(
             value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.titleSmall
-                ?.copyWith(fontWeight: FontWeight.w700),
+                ?.copyWith(color: color, fontWeight: PulsoTokens.weightBold),
           ),
         ],
       ),
@@ -393,6 +401,9 @@ class _ItemCard extends StatelessWidget {
                       item.categoriaLabel ??
                           purchaseCategorias[item.categoria] ??
                           item.categoria,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),
@@ -400,16 +411,24 @@ class _ItemCard extends StatelessWidget {
             ],
           ),
           if (item.mesesParaComprar != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              'Compra à vista em ~${item.mesesParaComprar} ${item.mesesParaComprar == 1 ? 'mês' : 'meses'}',
+            const SizedBox(height: PulsoTokens.space3),
+            PulsoBadge.custom(
+              label:
+                  'À vista em ~${item.mesesParaComprar} ${item.mesesParaComprar == 1 ? 'mês' : 'meses'}',
+              icon: Icons.schedule,
+              color: PulsoColors.infoOf(brightness),
+              compact: true,
             ),
           ],
           if (item.simulacoes.isNotEmpty) ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: PulsoTokens.space3),
             Text(
-              'Simulação de parcelamento',
-              style: Theme.of(context).textTheme.labelSmall,
+              'SIMULAÇÃO DE PARCELAMENTO',
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontWeight: PulsoTokens.weightBold,
+                letterSpacing: 0.6,
+              ),
             ),
             ...item.simulacoes
                 .take(3)
@@ -446,6 +465,8 @@ class _ItemCard extends StatelessWidget {
             Text('Meta vinculada: ${item.meta!.nome}'),
             LinearProgressIndicator(
               value: (item.meta!.percentual / 100).clamp(0, 1),
+              minHeight: 6,
+              borderRadius: BorderRadius.circular(99),
               color: look.color,
             ),
           ],
@@ -482,20 +503,21 @@ class _ItemCard extends StatelessWidget {
           ],
           if (item.comprometimentoPercentual != null) ...[
             const SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(nivelIcon, size: 16, color: nivelColor),
-                const SizedBox(width: 6),
-                Text(
-                  'Compromete ${item.comprometimentoPercentual!.toStringAsFixed(0)}% da renda',
-                  style: TextStyle(color: nivelColor),
-                ),
-              ],
+            Align(
+              alignment: Alignment.centerLeft,
+              child: PulsoBadge.custom(
+                label:
+                    'Compromete ${item.comprometimentoPercentual!.toStringAsFixed(0)}% da renda',
+                icon: nivelIcon,
+                color: nivelColor,
+                compact: true,
+              ),
             ),
           ],
-          const SizedBox(height: 10),
+          const SizedBox(height: PulsoTokens.space3),
           Wrap(
-            spacing: 8,
+            spacing: PulsoTokens.space2,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               FilledButton.icon(
                 onPressed: onBuy,
