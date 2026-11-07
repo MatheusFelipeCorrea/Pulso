@@ -236,7 +236,6 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
         showTransacoes ||
         showCalendario ||
         showOrcamento ||
-        showDashboard ||
         showDividas ||
         showDivisao;
     final showPlanejamento =
@@ -343,6 +342,13 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
+                if (showDashboard)
+                  _NavTile(
+                    icon: Icons.space_dashboard_outlined,
+                    label: 'Dashboard',
+                    selected: location == '/dashboard',
+                    onTap: () => _go(context, '/dashboard'),
+                  ),
                 if (showFinanceiro) ...[
                   _SectionHeader(
                     icon: Icons.payments_outlined,
@@ -351,13 +357,6 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                     onTap: () => _toggle('financeiro'),
                   ),
                   if (financeiroOpen) ...[
-                    if (showDashboard)
-                      _NavTile(
-                        icon: Icons.space_dashboard_outlined,
-                        label: 'Dashboard',
-                        selected: location == '/dashboard',
-                        onTap: () => _go(context, '/dashboard'),
-                      ),
                     if (showTransacoes)
                       _NavTile(
                         icon: Icons.swap_horiz,
