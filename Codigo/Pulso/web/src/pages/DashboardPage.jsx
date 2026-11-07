@@ -15,6 +15,7 @@ import { DashboardFinancialHealth } from '@/components/features/dashboard/Dashbo
 import { DashboardActiveGoals } from '@/components/features/dashboard/DashboardActiveGoals.jsx'
 import { DashboardBudgetAlerts } from '@/components/features/dashboard/DashboardBudgetAlerts.jsx'
 import { ImportStatementModal } from '@/components/features/dashboard/ImportStatementModal.jsx'
+import { DashboardChatbotFab } from '@/components/features/dashboard/DashboardChatbotFab.jsx'
 import { useAppSelector } from '@/store/hooks'
 import { getUserDisplayName } from '@/utils/userDisplayName.js'
 import * as dashboardService from '@/services/dashboardService.js'
@@ -124,6 +125,8 @@ export default function DashboardPage() {
                 onClose={() => setImportOpen(false)}
                 onImported={() => carregar()}
             />
+
+            <DashboardChatbotFab />
         </div>
     )
 }
