@@ -34,6 +34,8 @@ module.exports = {
         '!src/middlewares/grupoInviteRateLimit.js',
         '!src/middlewares/grupoImageUploadMiddleware.js',
         '!src/middlewares/purchaseItemImageUploadMiddleware.js',
+        '!src/middlewares/chatbotRateLimit.js',
+        'src/providers/chatbotGeminiProvider.js',
     ],
     coverageDirectory: 'coverage',
     coverageReporters: ['text', 'text-summary', 'json-summary', 'lcov'],

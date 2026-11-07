@@ -16,6 +16,7 @@ const expenseSplitRoutes = require('./expenseSplitRoutes');
 const grupoRoutes = require('./grupoRoutes');
 const dashboardRoutes = require('./dashboardRoutes');
 const importRoutes = require('./importRoutes');
+const chatbotRoutes = require('./chatbotRoutes');
 // TEMP: demais módulos ainda não estão neste repo.
 // const notificationRoutes = require('./notificationRoutes');
 // const syncRoutes = require('./syncRoutes');
@@ -39,6 +40,7 @@ router.use('/divisoes', expenseSplitRoutes);
 router.use('/grupos', grupoRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/importacoes', importRoutes);
+router.use('/chatbot', chatbotRoutes);
 // router.use('/notificacoes', notificationRoutes);
 // router.use('/sync', syncRoutes);
 
