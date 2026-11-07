@@ -133,6 +133,13 @@ class AppShell extends StatelessWidget {
         label: const Text('Novo'),
       );
     }
+    if (location == '/dashboard' || location.startsWith('/dashboard/')) {
+      return FloatingActionButton(
+        onPressed: () => context.push('/chatbot?modo=quick_add'),
+        tooltip: 'Pulso Assistente',
+        child: const Icon(Icons.smart_toy_outlined),
+      );
+    }
     return null;
   }
 
@@ -221,11 +228,14 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
         matches('Planejamento de Compra') || matches('Planejamento');
     final showViagens =
         premium && (matches('Viagens e Moedas') || matches('Planejamento'));
+    final showChatbot =
+        matches('Pulso Assistente') ||
+        matches('Assistente') ||
+        matches('Chatbot');
     final showFinanceiro =
         showTransacoes ||
         showCalendario ||
         showOrcamento ||
-        showDashboard ||
         showDividas ||
         showDivisao;
     final showPlanejamento =
@@ -332,6 +342,13 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
+                if (showDashboard)
+                  _NavTile(
+                    icon: Icons.space_dashboard_outlined,
+                    label: 'Dashboard',
+                    selected: location == '/dashboard',
+                    onTap: () => _go(context, '/dashboard'),
+                  ),
                 if (showFinanceiro) ...[
                   _SectionHeader(
                     icon: Icons.payments_outlined,
@@ -340,13 +357,6 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                     onTap: () => _toggle('financeiro'),
                   ),
                   if (financeiroOpen) ...[
-                    if (showDashboard)
-                      _NavTile(
-                        icon: Icons.space_dashboard_outlined,
-                        label: 'Dashboard',
-                        selected: location == '/dashboard',
-                        onTap: () => _go(context, '/dashboard'),
-                      ),
                     if (showTransacoes)
                       _NavTile(
                         icon: Icons.swap_horiz,
@@ -394,6 +404,13 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                       ),
                   ],
                 ],
+                if (showChatbot)
+                  _NavTile(
+                    icon: Icons.smart_toy_outlined,
+                    label: 'Pulso Assistente',
+                    selected: location == '/chatbot',
+                    onTap: () => _go(context, '/chatbot'),
+                  ),
                 if (showPlanejamento) ...[
                   _SectionHeader(
                     icon: Icons.gps_fixed,

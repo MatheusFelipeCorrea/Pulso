@@ -54,6 +54,18 @@ module.exports = {
     GOOGLE_TOKENS_ENCRYPTION_KEY: process.env.GOOGLE_TOKENS_ENCRYPTION_KEY,
     GEMINI_API_KEY_PDF: process.env.GEMINI_API_KEY_PDF,
     GEMINI_PDF_MODEL: process.env.GEMINI_PDF_MODEL || 'gemini-3.1-flash-lite',
+    /**
+     * Chatbot (PULSO-EPIC-016): nome canônico no código.
+     * Reutiliza a chave/modelo de PDF quando as vars específicas não existem:
+     *   GEMINI_API_KEY_CHATBOT = GEMINI_API_KEY_PDF
+     *   GEMINI_CHATBOT_MODEL   = GEMINI_PDF_MODEL
+     */
+    GEMINI_API_KEY_CHATBOT:
+        process.env.GEMINI_API_KEY_CHATBOT || process.env.GEMINI_API_KEY_PDF,
+    GEMINI_CHATBOT_MODEL:
+        process.env.GEMINI_CHATBOT_MODEL ||
+        process.env.GEMINI_PDF_MODEL ||
+        'gemini-3.1-flash-lite',
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_PORT: process.env.SMTP_PORT,
     SMTP_USER: process.env.SMTP_USER,

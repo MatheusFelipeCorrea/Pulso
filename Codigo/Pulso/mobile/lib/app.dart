@@ -10,6 +10,7 @@ import 'package:pulso/features/budget/data/budget_repository.dart';
 import 'package:pulso/features/budget/state/budget_controller.dart';
 import 'package:pulso/features/calendar/data/calendar_repository.dart';
 import 'package:pulso/features/calendar/state/calendar_controller.dart';
+import 'package:pulso/features/chatbot/data/chatbot_repository.dart';
 import 'package:pulso/features/currency/data/currency_repository.dart';
 import 'package:pulso/features/dashboard/data/dashboard_repository.dart';
 import 'package:pulso/features/dashboard/data/import_repository.dart';
@@ -50,6 +51,7 @@ class PulsoApp extends StatelessWidget {
     required this.imports,
     required this.debts,
     required this.splits,
+    required this.chatbot,
   });
 
   final AuthController auth;
@@ -69,6 +71,7 @@ class PulsoApp extends StatelessWidget {
   final ImportRepository imports;
   final DebtRepository debts;
   final ExpenseSplitRepository splits;
+  final ChatbotRepository chatbot;
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +93,7 @@ class PulsoApp extends StatelessWidget {
         Provider<ImportRepository>.value(value: imports),
         Provider<DebtRepository>.value(value: debts),
         Provider<ExpenseSplitRepository>.value(value: splits),
+        Provider<ChatbotRepository>.value(value: chatbot),
         ChangeNotifierProvider(
           create: (_) => TransactionsController(transactions),
         ),
