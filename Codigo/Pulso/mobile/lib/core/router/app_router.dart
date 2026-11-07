@@ -19,6 +19,7 @@ import 'package:pulso/core/widgets/app_shell.dart';
 import 'package:pulso/features/calendar/data/calendar_models.dart';
 import 'package:pulso/features/calendar/screens/calendar_screen.dart';
 import 'package:pulso/features/calendar/screens/reminder_form_screen.dart';
+import 'package:pulso/features/chatbot/screens/chatbot_screen.dart';
 import 'package:pulso/features/dashboard/screens/dashboard_screen.dart';
 import 'package:pulso/features/dashboard/screens/import_statement_screen.dart';
 import 'package:pulso/features/debts/data/debt_models.dart';
@@ -315,6 +316,14 @@ GoRouter createRouter(AuthController auth) {
             path: '/debts',
             builder: (context, state) => const DebtsScreen(),
           ),
+          GoRoute(
+            path: '/chatbot',
+            builder: (context, state) => ChatbotScreen(
+              modo: state.uri.queryParameters['modo'] == 'quick_add'
+                  ? 'quick_add'
+                  : 'chat',
+            ),
+          ),
         ],
       ),
     ],
@@ -342,6 +351,7 @@ bool _isKnownAuthedLocation(String loc) {
   }
   if (loc == '/debts' || loc == '/debts/new') return true;
   if (loc == '/expense-split' || loc == '/expense-split/new') return true;
+  if (loc == '/chatbot') return true;
   if (loc == '/transactions/new' || loc.startsWith('/transactions/'))
     return true;
   if (loc == '/termos' || loc == '/privacidade') return true;

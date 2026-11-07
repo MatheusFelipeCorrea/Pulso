@@ -8,6 +8,7 @@ import 'package:pulso/features/auth/data/auth_repository.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/budget/data/budget_repository.dart';
 import 'package:pulso/features/calendar/data/calendar_repository.dart';
+import 'package:pulso/features/chatbot/data/chatbot_repository.dart';
 import 'package:pulso/features/currency/data/currency_repository.dart';
 import 'package:pulso/features/dashboard/data/dashboard_repository.dart';
 import 'package:pulso/features/dashboard/data/import_repository.dart';
@@ -59,6 +60,7 @@ Future<void> main() async {
       imports: ImportRepository(api),
       debts: DebtRepository(api),
       splits: ExpenseSplitRepository(api),
+      chatbot: ChatbotRepository(api),
     ),
   );
 }
