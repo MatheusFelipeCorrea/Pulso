@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     AlertTriangle,
+    ArrowLeftRight,
     BookOpen,
     Check,
     Info,
@@ -14,7 +15,12 @@ import {
 } from 'lucide-react'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { EmptyState } from '@/design-system/components/feedback/EmptyState/EmptyState.jsx'
+import { MonthPicker } from '@/design-system/components/pickers/MonthPicker/MonthPicker.jsx'
 import { useToast } from '@/design-system/components/feedback/Toast/useToast.js'
+import {
+    monthPickerParaPeriodo,
+    periodoParaMonthPicker,
+} from '@/utils/transactionRecurrence.js'
 import * as insightsService from '@/services/insightsService.js'
 
 function mesAtual() {
@@ -201,15 +207,15 @@ export default function InsightsPage() {
                     </p>
                 </div>
                 <div className="insights-page__actions">
-                    <label className="insights-page__mes">
-                        <span className="sr-only">Mês</span>
-                        <input
-                            type="month"
-                            value={mes}
-                            onChange={(e) => setMes(e.target.value)}
-                            max={mesAtual()}
-                        />
-                    </label>
+                    <MonthPicker
+                        className="insights-page__month-picker"
+                        value={periodoParaMonthPicker(mes)}
+                        onChange={(value) => setMes(monthPickerParaPeriodo(value))}
+                        monthDisplay="long"
+                        disableFuture
+                        placeholder="Selecione o mês"
+                        label="Mês"
+                    />
                     <Button
                         leftIcon={<RefreshCw size={16} />}
                         onClick={regenerar}
@@ -234,20 +240,27 @@ export default function InsightsPage() {
 
             {!loading && !data && (
                 <EmptyState
+                    className="insights-page__empty"
                     title="Insights indisponíveis"
                     description="Tente novamente em instantes ou verifique a configuração do Gemini."
+                    action={{
+                        label: 'Tentar de novo',
+                        onClick: () => carregar(),
+                        leftIcon: <RefreshCw size={16} />,
+                    }}
                 />
             )}
 
             {!loading && data && semDados && (
                 <EmptyState
+                    className="insights-page__empty"
                     title="Poucos dados neste mês"
                     description="Registre receitas e despesas para liberar análises personalizadas."
-                    action={
-                        <Button onClick={() => navigate('/transactions')}>
-                            Ir para Transações
-                        </Button>
-                    }
+                    action={{
+                        label: 'Ir para Transações',
+                        onClick: () => navigate('/transactions'),
+                        leftIcon: <ArrowLeftRight size={16} />,
+                    }}
                 />
             )}
 

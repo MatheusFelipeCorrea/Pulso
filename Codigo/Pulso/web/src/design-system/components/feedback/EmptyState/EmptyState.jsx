@@ -1,3 +1,4 @@
+import { isValidElement } from 'react'
 import { Inbox, ArrowRight } from 'lucide-react'
 import { cn } from '../../../utils/cn.js'
 import { Button } from '../../buttons/Button/Button.jsx'
@@ -49,6 +50,10 @@ export const EmptyState = ({
 
     const renderAction = (act, defaultVariant = 'primary') => {
         if (!act) return null
+        // Aceita o contrato canônico { label, onClick } e também um ReactNode
+        // (ex.: <Button />) para não renderizar botão vazio/roxo sem texto.
+        if (isValidElement(act)) return act
+        if (typeof act !== 'object' || !act.label) return null
         return (
             <Button
                 variant={act.variant ?? defaultVariant}
