@@ -12,6 +12,7 @@ import {
     TrendingDown,
     TrendingUp,
     Minus,
+    Wallet,
 } from 'lucide-react'
 import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { EmptyState } from '@/design-system/components/feedback/EmptyState/EmptyState.jsx'
@@ -140,6 +141,7 @@ export default function InsightsPage() {
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(true)
     const [regenerating, setRegenerating] = useState(false)
+    const now = useMemo(() => new Date(), [])
 
     const carregar = useCallback(
         async (signal) => {
@@ -190,10 +192,15 @@ export default function InsightsPage() {
         return r === 0 && d === 0
     }, [data])
 
+    const saldo = useMemo(() => {
+        if (!data?.fluxo) return 0
+        return Number(data.fluxo.receitas || 0) - Number(data.fluxo.despesas || 0)
+    }, [data])
+
     return (
         <div className="insights-page">
             <header className="insights-page__header">
-                <div>
+                <div className="insights-page__intro">
                     <div className="insights-page__title-row">
                         <h1>Insights Inteligentes</h1>
                         <span className="insights-page__badge">
@@ -212,9 +219,9 @@ export default function InsightsPage() {
                         value={periodoParaMonthPicker(mes)}
                         onChange={(value) => setMes(monthPickerParaPeriodo(value))}
                         monthDisplay="long"
-                        disableFuture
+                        minYear={now.getFullYear() - 2}
+                        maxYear={now.getFullYear()}
                         placeholder="Selecione o mês"
-                        label="Mês"
                     />
                     <Button
                         leftIcon={<RefreshCw size={16} />}
@@ -226,10 +233,19 @@ export default function InsightsPage() {
                 </div>
             </header>
 
-            {cota && (
-                <p className="insights-page__cota">
-                    Regenerações neste mês: {cota.usadas}/{cota.limite}
-                </p>
+            {(cota || data?.geradoPor) && (
+                <div className="insights-page__meta">
+                    {cota && (
+                        <span>
+                            Regenerações neste mês: {cota.usadas}/{cota.limite}
+                        </span>
+                    )}
+                    {data?.geradoPor && (
+                        <span className="insights-chip">
+                            {data.geradoPor === 'gemini' ? 'IA' : 'Regras'}
+                        </span>
+                    )}
+                </div>
             )}
 
             {loading && (
@@ -265,18 +281,16 @@ export default function InsightsPage() {
             )}
 
             {!loading && data && !semDados && (
-                <div className="insights-grid">
-                    <section className="insights-card insights-card--resumo">
-                        <div className="insights-card__head">
-                            <h2>Resumo de {formatMesLabel(data.mesReferencia)}</h2>
-                            {data.geradoPor && (
-                                <span className="insights-chip">
-                                    {data.geradoPor === 'gemini' ? 'IA' : 'Regras'}
-                                </span>
-                            )}
+                <div className="insights-layout">
+                    <section className="insights-hero">
+                        <div className="insights-hero__copy">
+                            <div className="insights-hero__eyebrow">
+                                <Wallet size={16} aria-hidden />
+                                Resumo de {formatMesLabel(data.mesReferencia)}
+                            </div>
+                            <p className="insights-hero__text">{data.resumoMensal}</p>
                         </div>
-                        <p className="insights-resumo">{data.resumoMensal}</p>
-                        <div className="insights-resumo__fluxo">
+                        <div className="insights-hero__kpis">
                             <div>
                                 <span>Receitas</span>
                                 <strong>{formatBRL(data.fluxo?.receitas)}</strong>
@@ -285,20 +299,15 @@ export default function InsightsPage() {
                                 <span>Despesas</span>
                                 <strong>{formatBRL(data.fluxo?.despesas)}</strong>
                             </div>
-                            <div>
+                            <div className={saldo >= 0 ? 'is-pos' : 'is-neg'}>
                                 <span>Saldo</span>
-                                <strong>
-                                    {formatBRL(
-                                        Number(data.fluxo?.receitas || 0) -
-                                            Number(data.fluxo?.despesas || 0)
-                                    )}
-                                </strong>
+                                <strong>{formatBRL(saldo)}</strong>
                             </div>
                         </div>
                     </section>
 
-                    <section className="insights-card">
-                        <h2>Variação por Categoria</h2>
+                    <section className="insights-panel insights-panel--variacao">
+                        <h2>Variação por categoria</h2>
                         <div className="insights-var">
                             {(data.variacaoCategorias || []).length === 0 && (
                                 <p className="insights-muted">Sem comparação MoM ainda.</p>
@@ -309,8 +318,8 @@ export default function InsightsPage() {
                         </div>
                     </section>
 
-                    <section className="insights-card insights-card--score">
-                        <h2>Score de Saúde Financeira</h2>
+                    <section className="insights-panel insights-panel--score">
+                        <h2>Score de saúde financeira</h2>
                         <div className="insights-score">
                             <ScoreGauge
                                 score={data.score?.valor}
@@ -318,8 +327,15 @@ export default function InsightsPage() {
                             />
                             <ul className="insights-score__list">
                                 {(data.score?.checklist || []).map((item) => (
-                                    <li key={item.id} className={item.ok ? 'is-ok' : 'is-warn'}>
-                                        <Check size={14} aria-hidden />
+                                    <li
+                                        key={item.id}
+                                        className={item.ok ? 'is-ok' : 'is-warn'}
+                                    >
+                                        {item.ok ? (
+                                            <Check size={14} aria-hidden />
+                                        ) : (
+                                            <AlertTriangle size={14} aria-hidden />
+                                        )}
                                         {item.texto}
                                     </li>
                                 ))}
@@ -327,8 +343,8 @@ export default function InsightsPage() {
                         </div>
                     </section>
 
-                    <section className="insights-card insights-card--full">
-                        <div className="insights-card__head">
+                    <section className="insights-panel insights-panel--proj">
+                        <div className="insights-panel__head">
                             <h2>Projeção para os próximos meses</h2>
                             {data.diasAteNegativo != null && (
                                 <span className="insights-chip insights-chip--warn">
@@ -363,7 +379,7 @@ export default function InsightsPage() {
                         </div>
                     </section>
 
-                    <section className="insights-card">
+                    <section className="insights-panel insights-panel--sugs">
                         <h2>
                             <Lightbulb size={18} aria-hidden /> Sugestões personalizadas
                         </h2>
@@ -374,9 +390,12 @@ export default function InsightsPage() {
                                     ideias frescas.
                                 </p>
                             )}
-                            {(data.sugestoes || []).map((s) => (
+                            {(data.sugestoes || []).map((s, index) => (
                                 <div key={s.id} className="insights-sug">
-                                    <div>
+                                    <span className="insights-sug__index" aria-hidden>
+                                        {index + 1}
+                                    </span>
+                                    <div className="insights-sug__body">
                                         <div className="insights-sug__title">
                                             <strong>{s.titulo}</strong>
                                             <span className="insights-chip">IA</span>
@@ -400,7 +419,7 @@ export default function InsightsPage() {
                         </div>
                     </section>
 
-                    <section className="insights-card">
+                    <section className="insights-panel insights-panel--alerts">
                         <h2>Alertas</h2>
                         <div className="insights-alerts">
                             {(data.alertas || []).length === 0 && (
@@ -413,7 +432,7 @@ export default function InsightsPage() {
                     </section>
 
                     {(data.educacao || []).length > 0 && (
-                        <section className="insights-card insights-card--full">
+                        <section className="insights-panel insights-panel--edu">
                             <h2>
                                 <BookOpen size={18} aria-hidden /> Para aprender mais
                             </h2>
