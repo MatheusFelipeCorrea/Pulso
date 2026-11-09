@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_client.dart';
+import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_colors.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
@@ -182,16 +183,6 @@ class _InsightsScreenState extends State<InsightsScreen> {
               onPickMes: _pickMes,
               onRegenerar: _regenerar,
             ),
-            if (data != null) ...[
-              const SizedBox(height: 8),
-              Text(
-                'Regenerações neste mês: ${data.cotaRegeneracao.usadas}/${data.cotaRegeneracao.limite}',
-                style: TextStyle(
-                  color: scheme.onSurfaceVariant,
-                  fontSize: 12.5,
-                ),
-              ),
-            ],
             const SizedBox(height: PulsoTokens.space4),
             if (_loading)
               const Padding(
@@ -217,10 +208,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                 title: 'Resumo de ${_labelMes(data.mesReferencia)}',
                 trailing: data.geradoPor == 'gemini'
                     ? _Chip(label: 'Gemini', color: accent)
-                    : _Chip(
-                        label: 'Regras',
-                        color: scheme.onSurfaceVariant,
-                      ),
+                    : null,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
