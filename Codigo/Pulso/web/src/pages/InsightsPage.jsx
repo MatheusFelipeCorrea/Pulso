@@ -205,7 +205,6 @@ export default function InsightsPage() {
         }
     }
 
-    const cota = data?.cotaRegeneracao
     const semDados = useMemo(() => {
         if (!data) return false
         const r = Number(data.fluxo?.receitas || 0)
@@ -260,21 +259,6 @@ export default function InsightsPage() {
                     </Button>
                 </div>
             </header>
-
-            {(cota || data?.geradoPor) && (
-                <div className="insights-page__meta">
-                    {cota && (
-                        <span>
-                            Regenerações neste mês: {cota.usadas}/{cota.limite}
-                        </span>
-                    )}
-                    {data?.geradoPor && (
-                        <span className="insights-chip">
-                            {data.geradoPor === 'gemini' ? 'IA' : 'Regras'}
-                        </span>
-                    )}
-                </div>
-            )}
 
             {loading && (
                 <div className="insights-page__loading" aria-busy="true">
@@ -413,7 +397,7 @@ export default function InsightsPage() {
                             Projeção para os próximos meses
                         </SectionTitle>
                         <div className="insights-proj">
-                            {(data.projecoes || []).map((p) => (
+                            {(Array.isArray(data.projecoes) ? data.projecoes : []).map((p) => (
                                 <article
                                     key={p.id}
                                     className={`insights-proj__card insights-proj__card--${p.id}`}
