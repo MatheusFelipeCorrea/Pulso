@@ -80,15 +80,29 @@
 
 ### Semana 1–2 (15/10 - 28/10)
 
-- Entrega de código da Sprint 5 consolidada nos PRs [#370](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/370)–[#385](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/385) (dashboard, grupos, dívidas, divisão, Flutter parity, landing freemium).
-- _Preencher revisão de aceite / cards / reuniões da integrante._
+- Aceite de produto dos PRs [#370](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/370)–[#385](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/385) (dashboard, grupos/chat, dívidas, divisão, Flutter parity, landing Free/Premium).
+- Priorização do board Sprint 5 e revisão de cards (conta/apagar, freemium, grupos Premium).
+- Alinhamento de RFs da apostila (`docs/3`) com o que entrou na sprint (RF-080+, RF-117–123, divisão).
 
-**Horas:** _a preencher_
+**Horas:** 12h
 
-### Semana 3 (29/10 - 04/11) — parcial
+### Semana 3 (29/10 - 04/11)
 
-- _A preencher pela integrante (revisão de perfil/apagar conta, dashboard e RFs atualizados)._
+- Fechamento de aceite: perfil/apagar conta, dashboard redesenhado e status dos RFs na apostila.
+- Revisão de demos (tester) e gaps de documentação da Sprint 5 para a apostila (`docs/7`).
 
-**Horas:** _a preencher_
+**Horas:** 8h
 
-**Total Sprint 5:** _a fechar em 04/11_
+**Total Sprint 5:** 20h
+
+# Sprint 6 (05/11 a 18/11) — em andamento
+
+### Semana 1 (05/11 - 11/11)
+
+- Aceite e documentação dos **Insights Inteligentes** (RF-048–055): schema/`InsightSnapshot`, painel web + Flutter, status na apostila.
+- Aceite do **Chatbot** (RF-057–061) e alinhamento Gemini (mesma chave/modelo do PDF).
+- Seed demo `tester@mail.com` cobrindo módulos (grupos, viagens/moedas, compras, orçamento, metas, divisão, insights, chatbot) + relatório semanal/apostila.
+
+**Horas:** 14h
+
+**Total Sprint 6 (parcial):** 14h

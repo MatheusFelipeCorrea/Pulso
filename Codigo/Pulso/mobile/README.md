@@ -64,7 +64,7 @@ Os e-mails da API continuam com o CTA em `FRONTEND_URL` (fluxo Web se o app não
 
 Em produção, acrescente o host público no `AndroidManifest.xml` (`intent-filter` https) e o Associated Domain no iOS (`applinks:seu-dominio`) apontando para o mesmo `FRONTEND_URL`.
 
-## Telas (parity com a Web — Sprint 5)
+## Telas (parity com a Web — Sprint 5 + 6)
 
 Sem landing/marketing: a sessão começa no **login**.
 
@@ -77,3 +77,5 @@ Sem landing/marketing: a sessão começa no **login**.
 - Orçamento mensal e planejamento de compra
 - Grupos (CRUD, convite, imagem, **chat Socket.IO**)
 - Dívidas pessoais e divisão de despesas
+- **Insights Inteligentes** (`/insights`) — Sprint 6
+- **Chatbot** (`/chatbot`) — Sprint 6

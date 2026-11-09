@@ -49,6 +49,12 @@ export const SIDEBAR_NAV = [
         ],
     },
     {
+        id: 'insights',
+        label: 'Insights',
+        path: '/insights',
+        icon: 'Sparkles',
+    },
+    {
         id: 'chatbot',
         label: 'Pulso Assistente',
         path: '/chatbot',

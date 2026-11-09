@@ -228,6 +228,9 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
         matches('Planejamento de Compra') || matches('Planejamento');
     final showViagens =
         premium && (matches('Viagens e Moedas') || matches('Planejamento'));
+    final showInsights =
+        premium &&
+        (matches('Insights') || matches('Insights Inteligentes'));
     final showChatbot =
         matches('Pulso Assistente') ||
         matches('Assistente') ||
@@ -404,6 +407,13 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                       ),
                   ],
                 ],
+                if (showInsights)
+                  _NavTile(
+                    icon: Icons.auto_awesome_outlined,
+                    label: 'Insights',
+                    selected: location == '/insights',
+                    onTap: () => _go(context, '/insights'),
+                  ),
                 if (showChatbot)
                   _NavTile(
                     icon: Icons.smart_toy_outlined,
