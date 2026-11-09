@@ -17,6 +17,7 @@
         "db:pull": "npx prisma db pull",
         "db:studio": "npx prisma studio",
         "db:seed": "node prisma/seed.js",
+        "db:reseed-tester": "node scripts/reseed-tester.js",
         "lint": "eslint .",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
