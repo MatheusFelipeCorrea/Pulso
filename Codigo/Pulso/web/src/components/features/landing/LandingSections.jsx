@@ -9,7 +9,16 @@ import {
     TESTIMONIALS,
 } from './landingData.js'
 import { LandingPhoneHomeShowcase } from './LandingPhoneHomeMockup.jsx'
-import { Apple, Briefcase, Check, Download, GraduationCap, Laptop, Star, UserRound } from 'lucide-react'
+import {
+    Apple,
+    Briefcase,
+    Check,
+    Download,
+    GraduationCap,
+    Laptop,
+    Star,
+    UserRound,
+} from 'lucide-react'
 
 function AndroidGlyph({ size = 22 }) {
     return (
