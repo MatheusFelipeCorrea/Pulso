@@ -23,16 +23,15 @@ Código: [`Codigo/Pulso/web/`](../../Codigo/Pulso/web/) · DS: [`web/src/design-
 
 | Documento | Descrição |
 |-----------|-----------|
-| [Deploy/Hospedagem.md](./Deploy/Hospedagem.md) | Vercel, Neon, variáveis, cron |
-| [Deploy/TI5-Hospedagem.md](./Deploy/TI5-Hospedagem.md) | Nota TI5: Vercel web + API long-running |
-| [Guia-Commits.md](./Guia-Commits.md) | Conventional Commits + `Refs:` |
+| [docs/hospedagem-demo.md](../../../../docs/hospedagem-demo.md) | Neon + Render (API) + Vercel (web) + downloads mobile (URLs live) |
+| [Guia-Commits.md](./Guia-Commits.md) | Conventional Commits + `Refs:` (se existir nesta pasta) |
 
 ## Deep dives por módulo
 
 | Documento | Descrição |
 |-----------|-----------|
-| [Modulos/Grupos.md](./Modulos/Grupos.md) | API, UI, RF-091, chat, gaps |
-| [Modulos/Cron.md](./Modulos/Cron.md) | Jobs agendados |
+| [Modulos/Grupos.md](./Modulos/Grupos.md) | API, UI, RF-091, chat, gaps (se existir nesta pasta) |
+| Código API / jobs | Ver `Codigo/Pulso/api` (cron/jobs no próprio backend) |
 
 **Produto:** [../01-Produto/README.md](../01-Produto/README.md) · **Agents/skills:** [../../.github/INDEX.md](../../.github/INDEX.md)
 
