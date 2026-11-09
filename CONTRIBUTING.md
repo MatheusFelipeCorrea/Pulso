@@ -12,16 +12,18 @@ Código do produto: `Codigo/Pulso/` (`api`, `web`, `mobile`). Documentação da 
 
 **Toda branch de trabalho é criada a partir da branch da sprint vigente — nunca a partir da `main`.**
 
-A sprint atual é `Sprint-5`. Quando a disciplina avançar, a base passa a ser `Sprint-6`, e assim por diante. Confirme o nome da sprint aberta no GitHub antes de ramificar.
+A sprint atual é **`sprint-6`**. Confirme o nome da sprint aberta no GitHub antes de ramificar.
+
+Fluxo de integração: **`main` ← `sprint-6` ← branches de tarefa**.
 
 ```bash
 git fetch origin
-git checkout Sprint-5
-git pull origin Sprint-5
+git checkout sprint-6
+git pull origin sprint-6
 git checkout -b feat/minha-tarefa
 ```
 
-O Pull Request aponta para **`Sprint-5`** (a sprint vigente), não para `main`.
+O Pull Request aponta para **`sprint-6`** (a sprint vigente), não para `main`.
 
 `main` só recebe o merge da própria sprint (ou correção acordada com a equipe). Commit direto na `main` não é fluxo deste repositório.
 
@@ -34,7 +36,7 @@ A `main` pode estar atrás da sprint. Branch criada dela traz código velho, ger
 | Branch | Papel | Apagar? | Commit direto? |
 |---|---|---|---|
 | `main` | entrega consolidada da disciplina | nunca | não |
-| `Sprint-N` | trabalho da sprint N | nunca (enquanto for a sprint da disciplina) | não — só via PR |
+| `sprint-N` | trabalho da sprint N (ex.: `sprint-6`) | nunca (enquanto for a sprint da disciplina) | não — só via PR |
 
 Branches de tarefa (`feat/…`, `fix/…`, `docs/…`) são temporárias: nascem da sprint, voltam para a sprint por PR e são apagadas depois do merge.
 
@@ -70,7 +72,7 @@ Não commite `.env`, senhas, tokens nem chave de app.
 
 ## Pull Request
 
-1. Atualize a sprint (`git pull origin Sprint-5`) e rebase ou merge a sua branch nela antes de abrir o PR, se estiver atrás.
+1. Atualize a sprint (`git pull origin sprint-6`) e rebase ou merge a sua branch nela antes de abrir o PR, se estiver atrás.
 2. Abra o PR **contra a sprint vigente**.
 3. Descreva o que mudou e como testar. Vincule o card/issue (`Closes #123`) quando o PR resolver de fato.
 4. Outra pessoa do time revisa. Não faça merge do próprio PR sem review, salvo combinado com a equipe.
@@ -99,7 +101,7 @@ O PR de card também nasce da sprint e entra nela; a `main` recebe isso quando a
 
 ## Checklist rápido
 
-- [ ] Branch criada a partir da sprint vigente (`Sprint-5` agora)
+- [ ] Branch criada a partir da sprint vigente (`sprint-6` agora)
 - [ ] PR aberto para a sprint, não para `main`
 - [ ] Sem segredo no commit
 - [ ] Review de outra pessoa do time
