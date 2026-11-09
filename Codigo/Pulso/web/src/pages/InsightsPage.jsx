@@ -1,0 +1,428 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import {
+    AlertTriangle,
+    BookOpen,
+    Check,
+    Info,
+    Lightbulb,
+    RefreshCw,
+    Sparkles,
+    TrendingDown,
+    TrendingUp,
+    Minus,
+} from 'lucide-react'
+import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
+import { EmptyState } from '@/design-system/components/feedback/EmptyState/EmptyState.jsx'
+import { useToast } from '@/design-system/components/feedback/Toast/useToast.js'
+import * as insightsService from '@/services/insightsService.js'
+
+function mesAtual() {
+    const d = new Date()
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
+function formatMesLabel(mes) {
+    if (!mes || !/^\d{4}-\d{2}$/.test(mes)) return mes || ''
+    const [y, m] = mes.split('-')
+    const nomes = [
+        'Janeiro',
+        'Fevereiro',
+        'Março',
+        'Abril',
+        'Maio',
+        'Junho',
+        'Julho',
+        'Agosto',
+        'Setembro',
+        'Outubro',
+        'Novembro',
+        'Dezembro',
+    ]
+    return `${nomes[Number(m) - 1]}/${y}`
+}
+
+function formatBRL(v) {
+    return Number(v || 0).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+    })
+}
+
+function ScoreGauge({ score = 0, label = '' }) {
+    const pct = Math.max(0, Math.min(100, Number(score) || 0))
+    const r = 54
+    const c = 2 * Math.PI * r
+    const offset = c - (pct / 100) * c
+    return (
+        <div className="insights-gauge" aria-label={`Score ${pct} de 100`}>
+            <svg viewBox="0 0 140 140" className="insights-gauge__svg">
+                <circle
+                    cx="70"
+                    cy="70"
+                    r={r}
+                    className="insights-gauge__track"
+                    fill="none"
+                    strokeWidth="12"
+                />
+                <circle
+                    cx="70"
+                    cy="70"
+                    r={r}
+                    className="insights-gauge__fill"
+                    fill="none"
+                    strokeWidth="12"
+                    strokeDasharray={c}
+                    strokeDashoffset={offset}
+                    strokeLinecap="round"
+                    transform="rotate(-90 70 70)"
+                />
+            </svg>
+            <div className="insights-gauge__center">
+                <strong>
+                    {pct}
+                    <span>/100</span>
+                </strong>
+                <em>{label}</em>
+            </div>
+        </div>
+    )
+}
+
+function VariacaoBar({ item }) {
+    const pct = Number(item.percentual || 0)
+    const width = Math.min(100, Math.abs(pct))
+    const Icon = pct > 0 ? TrendingUp : pct < 0 ? TrendingDown : Minus
+    const tone = pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat'
+    return (
+        <div className="insights-var__row">
+            <div className="insights-var__label">
+                <span>{item.categoria}</span>
+                <strong className={`insights-var__pct insights-var__pct--${tone}`}>
+                    <Icon size={14} aria-hidden />
+                    {pct > 0 ? '+' : ''}
+                    {pct}%
+                </strong>
+            </div>
+            <div className="insights-var__track">
+                <div
+                    className={`insights-var__fill insights-var__fill--${tone}`}
+                    style={{ width: `${width}%` }}
+                />
+            </div>
+            {item.comentario && <p className="insights-var__comment">{item.comentario}</p>}
+        </div>
+    )
+}
+
+function AlertaCard({ alerta }) {
+    const sev = alerta.severidade || 'info'
+    const Icon =
+        sev === 'critico' ? AlertTriangle : sev === 'aviso' ? AlertTriangle : Info
+    return (
+        <div className={`insights-alert insights-alert--${sev}`}>
+            <Icon size={18} aria-hidden />
+            <p>{alerta.mensagem}</p>
+        </div>
+    )
+}
+
+export default function InsightsPage() {
+    const toast = useToast()
+    const navigate = useNavigate()
+    const [mes, setMes] = useState(mesAtual)
+    const [data, setData] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [regenerating, setRegenerating] = useState(false)
+
+    const carregar = useCallback(
+        async (signal) => {
+            setLoading(true)
+            try {
+                const result = await insightsService.obterInsights({ mes }, { signal })
+                setData(result)
+            } catch (err) {
+                if (signal?.aborted) return
+                const msg =
+                    err.response?.data?.message ||
+                    'Não foi possível carregar os Insights agora.'
+                toast.error(msg)
+                setData(null)
+            } finally {
+                if (!signal?.aborted) setLoading(false)
+            }
+        },
+        [mes, toast]
+    )
+
+    useEffect(() => {
+        const controller = new AbortController()
+        carregar(controller.signal)
+        return () => controller.abort()
+    }, [carregar])
+
+    const regenerar = async () => {
+        setRegenerating(true)
+        try {
+            const result = await insightsService.regenerarInsights({ mes })
+            setData(result)
+            toast.success('Insights regenerados!')
+        } catch (err) {
+            toast.error(
+                err.response?.data?.message || 'Falha ao regenerar Insights'
+            )
+        } finally {
+            setRegenerating(false)
+        }
+    }
+
+    const cota = data?.cotaRegeneracao
+    const semDados = useMemo(() => {
+        if (!data) return false
+        const r = Number(data.fluxo?.receitas || 0)
+        const d = Number(data.fluxo?.despesas || 0)
+        return r === 0 && d === 0
+    }, [data])
+
+    return (
+        <div className="insights-page">
+            <header className="insights-page__header">
+                <div>
+                    <div className="insights-page__title-row">
+                        <h1>Insights Inteligentes</h1>
+                        <span className="insights-page__badge">
+                            <Sparkles size={12} aria-hidden />
+                            Powered by Gemini
+                        </span>
+                    </div>
+                    <p className="insights-page__subtitle">
+                        Análises geradas automaticamente com base nos seus hábitos
+                        financeiros.
+                    </p>
+                </div>
+                <div className="insights-page__actions">
+                    <label className="insights-page__mes">
+                        <span className="sr-only">Mês</span>
+                        <input
+                            type="month"
+                            value={mes}
+                            onChange={(e) => setMes(e.target.value)}
+                            max={mesAtual()}
+                        />
+                    </label>
+                    <Button
+                        leftIcon={<RefreshCw size={16} />}
+                        onClick={regenerar}
+                        disabled={loading || regenerating}
+                    >
+                        {regenerating ? 'Regenerando…' : 'Regenerar Insights'}
+                    </Button>
+                </div>
+            </header>
+
+            {cota && (
+                <p className="insights-page__cota">
+                    Regenerações neste mês: {cota.usadas}/{cota.limite}
+                </p>
+            )}
+
+            {loading && (
+                <div className="insights-page__loading" aria-busy="true">
+                    Gerando análises do seu mês…
+                </div>
+            )}
+
+            {!loading && !data && (
+                <EmptyState
+                    title="Insights indisponíveis"
+                    description="Tente novamente em instantes ou verifique a configuração do Gemini."
+                />
+            )}
+
+            {!loading && data && semDados && (
+                <EmptyState
+                    title="Poucos dados neste mês"
+                    description="Registre receitas e despesas para liberar análises personalizadas."
+                    action={
+                        <Button onClick={() => navigate('/transactions')}>
+                            Ir para Transações
+                        </Button>
+                    }
+                />
+            )}
+
+            {!loading && data && !semDados && (
+                <div className="insights-grid">
+                    <section className="insights-card insights-card--resumo">
+                        <div className="insights-card__head">
+                            <h2>Resumo de {formatMesLabel(data.mesReferencia)}</h2>
+                            {data.geradoPor && (
+                                <span className="insights-chip">
+                                    {data.geradoPor === 'gemini' ? 'IA' : 'Regras'}
+                                </span>
+                            )}
+                        </div>
+                        <p className="insights-resumo">{data.resumoMensal}</p>
+                        <div className="insights-resumo__fluxo">
+                            <div>
+                                <span>Receitas</span>
+                                <strong>{formatBRL(data.fluxo?.receitas)}</strong>
+                            </div>
+                            <div>
+                                <span>Despesas</span>
+                                <strong>{formatBRL(data.fluxo?.despesas)}</strong>
+                            </div>
+                            <div>
+                                <span>Saldo</span>
+                                <strong>
+                                    {formatBRL(
+                                        Number(data.fluxo?.receitas || 0) -
+                                            Number(data.fluxo?.despesas || 0)
+                                    )}
+                                </strong>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="insights-card">
+                        <h2>Variação por Categoria</h2>
+                        <div className="insights-var">
+                            {(data.variacaoCategorias || []).length === 0 && (
+                                <p className="insights-muted">Sem comparação MoM ainda.</p>
+                            )}
+                            {(data.variacaoCategorias || []).slice(0, 6).map((item) => (
+                                <VariacaoBar key={item.categoria} item={item} />
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="insights-card insights-card--score">
+                        <h2>Score de Saúde Financeira</h2>
+                        <div className="insights-score">
+                            <ScoreGauge
+                                score={data.score?.valor}
+                                label={data.score?.label}
+                            />
+                            <ul className="insights-score__list">
+                                {(data.score?.checklist || []).map((item) => (
+                                    <li key={item.id} className={item.ok ? 'is-ok' : 'is-warn'}>
+                                        <Check size={14} aria-hidden />
+                                        {item.texto}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section className="insights-card insights-card--full">
+                        <div className="insights-card__head">
+                            <h2>Projeção para os próximos meses</h2>
+                            {data.diasAteNegativo != null && (
+                                <span className="insights-chip insights-chip--warn">
+                                    ~{data.diasAteNegativo} dias até aperto no ritmo atual
+                                </span>
+                            )}
+                        </div>
+                        <div className="insights-proj">
+                            {(data.projecoes || []).map((p) => (
+                                <article
+                                    key={p.id}
+                                    className={`insights-proj__card insights-proj__card--${p.id}`}
+                                >
+                                    <h3>{p.label}</h3>
+                                    <p>{p.descricao}</p>
+                                    <dl>
+                                        <div>
+                                            <dt>3 meses</dt>
+                                            <dd>{formatBRL(p.acumulado?.['3'])}</dd>
+                                        </div>
+                                        <div>
+                                            <dt>6 meses</dt>
+                                            <dd>{formatBRL(p.acumulado?.['6'])}</dd>
+                                        </div>
+                                        <div>
+                                            <dt>12 meses</dt>
+                                            <dd>{formatBRL(p.acumulado?.['12'])}</dd>
+                                        </div>
+                                    </dl>
+                                </article>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="insights-card">
+                        <h2>
+                            <Lightbulb size={18} aria-hidden /> Sugestões personalizadas
+                        </h2>
+                        <div className="insights-sugs">
+                            {(data.sugestoes || []).length === 0 && (
+                                <p className="insights-muted">
+                                    Sem sugestões novas neste ciclo — regenerar pode trazer
+                                    ideias frescas.
+                                </p>
+                            )}
+                            {(data.sugestoes || []).map((s) => (
+                                <div key={s.id} className="insights-sug">
+                                    <div>
+                                        <div className="insights-sug__title">
+                                            <strong>{s.titulo}</strong>
+                                            <span className="insights-chip">IA</span>
+                                        </div>
+                                        <p>{s.descricao}</p>
+                                        {s.impactoEstimado && (
+                                            <small>{s.impactoEstimado}</small>
+                                        )}
+                                    </div>
+                                    <Button
+                                        size="sm"
+                                        variant="secondary"
+                                        onClick={() =>
+                                            navigate(s.acaoPath || '/budget')
+                                        }
+                                    >
+                                        Aplicar sugestão
+                                    </Button>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="insights-card">
+                        <h2>Alertas</h2>
+                        <div className="insights-alerts">
+                            {(data.alertas || []).length === 0 && (
+                                <p className="insights-muted">Nenhum alerta no momento.</p>
+                            )}
+                            {(data.alertas || []).map((a, i) => (
+                                <AlertaCard key={`${a.tipo}-${i}`} alerta={a} />
+                            ))}
+                        </div>
+                    </section>
+
+                    {(data.educacao || []).length > 0 && (
+                        <section className="insights-card insights-card--full">
+                            <h2>
+                                <BookOpen size={18} aria-hidden /> Para aprender mais
+                            </h2>
+                            <div className="insights-edu">
+                                {data.educacao.map((e, i) => (
+                                    <a
+                                        key={`${e.url}-${i}`}
+                                        className="insights-edu__card"
+                                        href={e.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <span className="insights-chip">{e.tipo}</span>
+                                        <strong>{e.titulo}</strong>
+                                        {e.motivo && <p>{e.motivo}</p>}
+                                    </a>
+                                ))}
+                            </div>
+                        </section>
+                    )}
+                </div>
+            )}
+        </div>
+    )
+}
