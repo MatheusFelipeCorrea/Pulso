@@ -77,5 +77,7 @@ O controle orçamentário pessoal no Brasil enfrenta desafios estruturais devido
 | --------------------- | ---------- | -------------- |
 | Repositório de código | GitHub     | https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso |
 | Código das apps       | GitHub     | https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/tree/main/Codigo |
-| Hospedagem            | —          | Em breve |
+| Hospedagem (web)      | Vercel     | https://pulso-psi-five.vercel.app |
+| Hospedagem (API)      | Render     | https://pulso-api-aldu.onrender.com |
+| Guia de demo          | Docs       | [`docs/hospedagem-demo.md`](hospedagem-demo.md) |
 | Protótipos (export)   | Apostila   | [`docs/prototipos/`](prototipos/) — Figma em breve |

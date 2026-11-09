@@ -90,6 +90,6 @@ memory:
   project_file: Hyperion/.github/memory/PROJECT.md
 
 uncertainties:
-  - Deploy de producao ainda indefinido (Vercel / Neon no codigo; URL publica em breve).
-  - API de grupos existe no client (web/Flutter) mas a rota `/api/grupos` permanece comentada.
-  - Socket.IO (RF-140 tempo real) ainda nao esta no Flutter.
+  - Demo hospedada: web https://pulso-psi-five.vercel.app (Vercel) + API https://pulso-api-aldu.onrender.com (Render) + Neon; ver docs/hospedagem-demo.md.
+  - Vercel Hobby pode exigir mirror pessoal (MatheusFelipeCorrea/Pulso) em vez do repo da org.
+  - IPA iOS unsigned (Sideloadly/AltStore); APK Android via /downloads/ na landing.

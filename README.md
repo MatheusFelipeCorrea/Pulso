@@ -20,11 +20,21 @@ O nome "Pulso" remete à ideia de manter o pulso firme nas finanças, monitorar 
 
 ## Contribuição
 
-Branches de trabalho nascem da **sprint vigente** (`Sprint-5` agora), não da `main`. Fluxo completo: [CONTRIBUTING.md](CONTRIBUTING.md). Conduta: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Branches de trabalho nascem da **sprint vigente** (`sprint-6` agora), não da `main`. Fluxo: **Main ← Sprint ← demais branches**. Detalhes: [CONTRIBUTING.md](CONTRIBUTING.md). Conduta: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Instruções de utilização
 
-API e Web já sobem localmente (`Codigo/Pulso/api` e `Codigo/Pulso/web`). Detalhes em cada README da pasta. Hospedagem pública em breve.
+API e Web sobem localmente (`Codigo/Pulso/api` e `Codigo/Pulso/web`). Detalhes em cada README da pasta.
+
+**Hospedagem demo (live):**
+
+| Peça | URL |
+| --- | --- |
+| Web | https://pulso-psi-five.vercel.app |
+| API | https://pulso-api-aldu.onrender.com |
+| Guia | [docs/hospedagem-demo.md](docs/hospedagem-demo.md) |
+
+Login demo: `tester@mail.com` / `Pulso@123`. Downloads Android/iOS na homepage (`/downloads/`).
 
 ## Cards (Hyperion / GitHub Project)
 
