@@ -260,12 +260,29 @@ async function seedInsightsDemo(usuarioId) {
             ],
             fatores: { saldoPositivo: true, estourados: 0, progressoMedio: 40 },
         },
-        projecoes: {
-            meses: [3, 6, 12],
-            otimista: [3200, 6800, 14500],
-            atual: [2400, 5100, 10800],
-            pessimista: [900, 1800, 3600],
-        },
+        projecoes: [
+            {
+                id: 'otimista',
+                label: 'Otimista',
+                descricao: 'Se você economizar 15% a mais nas despesas',
+                saldoMensalEstimado: 2800,
+                acumulado: { '3': 8400, '6': 16800, '12': 33600 },
+            },
+            {
+                id: 'atual',
+                label: 'Atual',
+                descricao: 'Mantendo o ritmo atual',
+                saldoMensalEstimado: 2400,
+                acumulado: { '3': 7200, '6': 14400, '12': 28800 },
+            },
+            {
+                id: 'pessimista',
+                label: 'Pessimista',
+                descricao: 'Se os gastos subirem 10%',
+                saldoMensalEstimado: 1800,
+                acumulado: { '3': 5400, '6': 10800, '12': 21600 },
+            },
+        ],
         diasAteNegativo: null,
         sugestoes: [
             {
@@ -285,10 +302,9 @@ async function seedInsightsDemo(usuarioId) {
         ],
         alertas: [
             {
-                id: 'a1',
+                tipo: 'cobertura_va',
                 severidade: 'info',
-                titulo: 'VA sob controle',
-                mensagem: 'No ritmo atual o Vale Alimentação dura até o fim do mês.',
+                mensagem: 'No ritmo atual, o Vale Alimentação dura até o fim do mês.',
             },
         ],
         educacao: [

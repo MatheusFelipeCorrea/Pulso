@@ -6,8 +6,6 @@ const insightContextService = require('./insightContextService');
 const insightEngines = require('./insightEngines');
 const geminiInsightsProvider = require('../providers/geminiInsightsProvider');
 
-const REGEN_LIMIT = 3;
-
 const SYSTEM_PROMPT = `Você é o motor de Insights Inteligentes do app Pulso (Brasil).
 Responda APENAS com JSON válido (sem markdown) no schema:
 {
@@ -138,6 +136,56 @@ const notificarInsight = async (usuarioId, mesReferencia, geradoPor) => {
     }
 };
 
+/** Garante shape da UI: projecoes/alertas/etc. sempre listas. */
+const normalizarProjecoes = (projecoes) => {
+    if (Array.isArray(projecoes)) return projecoes;
+    if (!projecoes || typeof projecoes !== 'object') return [];
+
+    // Formato legado do seed (objeto com arrays por cenário)
+    const mapCenario = (id, label, descricao, valores) => ({
+        id,
+        label,
+        descricao,
+        saldoMensalEstimado: Array.isArray(valores) && valores[0] != null ? Number(valores[0]) / 3 : 0,
+        acumulado: {
+            '3': Array.isArray(valores) ? Number(valores[0] || 0) : 0,
+            '6': Array.isArray(valores) ? Number(valores[1] || 0) : 0,
+            '12': Array.isArray(valores) ? Number(valores[2] || 0) : 0,
+        },
+    });
+
+    return [
+        mapCenario(
+            'otimista',
+            'Otimista',
+            'Se você economizar 15% a mais nas despesas',
+            projecoes.otimista
+        ),
+        mapCenario('atual', 'Atual', 'Mantendo o ritmo atual', projecoes.atual),
+        mapCenario(
+            'pessimista',
+            'Pessimista',
+            'Se os gastos subirem 10%',
+            projecoes.pessimista
+        ),
+    ];
+};
+
+const asArray = (value) => (Array.isArray(value) ? value : []);
+
+const normalizarRespostaInsights = (payload, meta = {}) => {
+    const base = payload && typeof payload === 'object' ? payload : {};
+    return {
+        ...base,
+        projecoes: normalizarProjecoes(base.projecoes),
+        variacaoCategorias: asArray(base.variacaoCategorias),
+        sugestoes: asArray(base.sugestoes),
+        alertas: asArray(base.alertas),
+        educacao: asArray(base.educacao),
+        ...meta,
+    };
+};
+
 const gerarInsights = async (usuarioId, { mesReferencia, forcar = false } = {}) => {
     const mes = normalizarMes(mesReferencia);
     const existente = await prisma.insightSnapshot.findUnique({
@@ -147,20 +195,12 @@ const gerarInsights = async (usuarioId, { mesReferencia, forcar = false } = {}) 
     });
 
     if (existente && !forcar) {
-        return {
-            ...existente.payload,
+        return normalizarRespostaInsights(existente.payload, {
             regeneracoes: existente.regeneracoes,
             geradoPor: existente.geradoPor,
             atualizadoEm: existente.atualizadoEm,
             fromCache: true,
-        };
-    }
-
-    if (forcar && existente && existente.regeneracoes >= REGEN_LIMIT) {
-        throw new AppError(
-            `Limite de ${REGEN_LIMIT} regenerações neste mês atingido. Tente no próximo mês.`,
-            429
-        );
+        });
     }
 
     const ctx = await insightContextService.buildInsightContext(usuarioId, mes);
@@ -217,14 +257,12 @@ const gerarInsights = async (usuarioId, { mesReferencia, forcar = false } = {}) 
         await notificarInsight(usuarioId, mes, geradoPor);
     }
 
-    return {
-        ...saved.payload,
+    return normalizarRespostaInsights(saved.payload, {
         regeneracoes: saved.regeneracoes,
         geradoPor: saved.geradoPor,
         atualizadoEm: saved.atualizadoEm,
         fromCache: false,
-        cotaRegeneracao: { usadas: saved.regeneracoes, limite: REGEN_LIMIT },
-    };
+    });
 };
 
 const obterInsights = async (usuarioId, mesReferencia) => {
@@ -236,14 +274,12 @@ const obterInsights = async (usuarioId, mesReferencia) => {
     });
 
     if (existente) {
-        return {
-            ...existente.payload,
+        return normalizarRespostaInsights(existente.payload, {
             regeneracoes: existente.regeneracoes,
             geradoPor: existente.geradoPor,
             atualizadoEm: existente.atualizadoEm,
             fromCache: true,
-            cotaRegeneracao: { usadas: existente.regeneracoes, limite: REGEN_LIMIT },
-        };
+        });
     }
 
     return gerarInsights(usuarioId, { mesReferencia: mes, forcar: false });
@@ -329,5 +365,4 @@ module.exports = {
     gerarInsightParaUsuario,
     tentarGerarInsightAposTransacao,
     gerarInsightsMensaisParaTodos,
-    REGEN_LIMIT,
 };
