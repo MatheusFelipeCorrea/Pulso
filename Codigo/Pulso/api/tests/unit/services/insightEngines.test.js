@@ -25,10 +25,10 @@ describe('insightEngines', () => {
         config: { vaValor: 600 },
     };
 
-    it('calcula score Bom com fluxo saudável', () => {
+    it('calcula score Excelente com fluxo saudável', () => {
         const score = calcularScore(ctxBase);
-        expect(score.valor).toBeGreaterThanOrEqual(61);
-        expect(score.label).toBe('Bom');
+        expect(score.valor).toBeGreaterThanOrEqual(81);
+        expect(score.label).toBe('Excelente');
         expect(score.checklist.length).toBeGreaterThan(2);
     });
 
