@@ -95,14 +95,18 @@
 
 **Total Sprint 5:** 20h
 
-# Sprint 6 (05/11 a 18/11) — em andamento
+# Sprint 6 (05/11 a 18/11) — parcial até 09/11
 
 ### Semana 1 (05/11 - 11/11)
 
-- Aceite e documentação dos **Insights Inteligentes** (RF-048–055): schema/`InsightSnapshot`, painel web + Flutter, status na apostila.
-- Aceite do **Chatbot** (RF-057–061) e alinhamento Gemini (mesma chave/modelo do PDF).
-- Seed demo `tester@mail.com` cobrindo módulos (grupos, viagens/moedas, compras, orçamento, metas, divisão, insights, chatbot) + relatório semanal/apostila.
+Commits (9): `3d6ebca`, `b6311c3`, `9e35a85`, `f2f66ba`, `eae5488`, `9426397`, `45209e6`, `e4e9806`, `bdc81b2`.
 
-**Horas:** 14h
+- Schema/env dos Insights (`InsightSnapshot`) e marcação RF-048–055 / RF-061 na apostila.
+- Seed demo `tester@mail.com` cobrindo todos os módulos + atualização da contribuição semanal.
+- Auditoria Hyperion (consolidado + fases de segurança, PO e UX).
+- Limpeza da UI dos Insights (web) e guia de hospedagem demo (Neon/Render/Vercel).
+- Aceite do **Chatbot** (RF-057–061) e dos **Insights** no board.
 
-**Total Sprint 6 (parcial):** 14h
+**Horas:** 18h
+
+**Total Sprint 6 (parcial até 09/11):** 18h

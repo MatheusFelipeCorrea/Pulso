@@ -140,7 +140,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
     try {
       late final PulsoGrupo atualizado;
       if (escolha == 'file') {
-        final picked = await FilePicker.pickFiles(
+        final picked = await FilePicker.platform.pickFiles(
           type: FileType.image,
           withData: true,
         );

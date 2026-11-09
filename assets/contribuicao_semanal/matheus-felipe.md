@@ -115,4 +115,20 @@
 
 **Horas:** 18h
 
-**Total Sprint 5:** _a fechar em 04/11_ (54h até 03/11)
+**Total Sprint 5:** 54h
+
+# Sprint 6 (05/11 a 18/11) — parcial até 09/11
+
+### Semana 1 (05/11 - 11/11)
+
+Commits (12): `32747b4`, `ca0909d`, `e4d2984`, `fec4035`, `e8b61fb`, `367a3d2`, `0adf04d`, `e883d08`, `2b33c10`, `9d464d9`, `88c574f`, `0aab775`.
+
+- Flutter Sprint 6 (nav, extrato, metas/UX) — PR [#398](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/398).
+- Schema/env do Assistente; tela Flutter dos Insights; remoção da cota de regeneração e normalização de projeções na API.
+- Prep de hospedagem (Render blueprint + Vercel) — PR [#402](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/402).
+- Desbloqueio do Product CI sprint-6 → main (lint, Prettier, teste/cobertura) e merge [#401](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/401).
+- Auditoria Hyperion (fases de arquitetura, DevOps e code review).
+
+**Horas:** 24h
+
+**Total Sprint 6 (parcial até 09/11):** 24h
