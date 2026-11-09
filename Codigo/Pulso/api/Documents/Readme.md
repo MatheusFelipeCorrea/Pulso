@@ -51,7 +51,8 @@ Servidor **Node.js + Express** com arquitetura em camadas (routes → controller
 | **Planejamento de compra** | ✅ |
 | **Divisão de despesas** | ✅ |
 | **Grupos** (CRUD, convite, membros, viagem, metas, chat Socket.IO) | 🟡 Premium — ver gaps menores |
-| Insights, chatbot | 🔜 Schema / parcial |
+| **Insights Inteligentes** (`/insights`, snapshot, score, regenerar) | ✅ Gemini + engines determinísticos |
+| **Chatbot** (conversas, mensagem, proposta de tx) | ✅ Gemini + histórico persistente |
 | Planos Free/Premium | ✅ Gate Premium em grupos, viagens e sync Google Calendar |
 | RabbitMQ (emails; filas alerts/reminders reservadas) | ✅ Opcional — fail-soft (cai o broker → SMTP/cron direto) |
 
@@ -520,7 +521,7 @@ Epics: [`.github/plans/cards/`](../../../.github/plans/cards/) · Pack: [`.githu
 Documento de referência das entidades do banco de dados do **Pulso**.
 
 > **Fonte de verdade:** `Codigo/Pulso/api/prisma/schema.prisma`  
-> **Última revisão:** ago/2026 — alinhado ao schema Prisma 5.x (PostgreSQL / Neon)
+> **Última revisão:** nov/2026 — Insights (`InsightSnapshot` / `HistoricoScore`) e Chatbot (`ConversaChat` / `MensagemChat`) na Sprint 6; schema Prisma 5.x (PostgreSQL / Neon)
 
 ---
 
@@ -530,7 +531,8 @@ Documento de referência das entidades do banco de dados do **Pulso**.
 |--------|----------|
 | **Prisma** | Modelos no schema · documentados abaixo |
 | **API em uso** | Auth, transações, categorias, tags, orçamento, notificações, lembretes, calendário, dívidas, metas, viagens, moedas, planejamento de compra, grupos (Premium + Socket.IO), divisão de despesas, dashboard, importação |
-| **Pendente na API** | IA (chat/insights) completo |
+| **IA (Sprint 6)** | Insights + Chatbot entregues (`/api/insights`, `/api/chatbot`) |
+| **Demo local** | `npm run db:reseed-tester` → `tester@mail.com` / `Pulso@123` (todos os módulos) |
 | **TI5** | Planos Free/Premium · RabbitMQ (alerts + reminders + emails) · Socket.IO |
 
 Tabelas físicas usam **snake_case** via `@@map` (ex.: `usuarios`, `transacoes`, `configuracoes_usuario`).
