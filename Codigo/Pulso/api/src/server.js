@@ -17,6 +17,7 @@ const {
 const { runUnverifiedAccountCleanup } = require('./jobs/unverifiedAccountCleanupJob');
 const { runDebtCleanupJob } = require('./jobs/debtCleanupJob');
 const { runExpenseSplitCleanupJob } = require('./jobs/expenseSplitCleanupJob');
+const insightService = require('./services/insightService');
 // TEMP: jobs ainda ausentes neste repo.
 // const { runNotificationCleanup } = require('./jobs/notificationCleanupJob');
 // const { runChatCleanupJob } = require('./jobs/chatCleanupJob');
@@ -186,6 +187,30 @@ const startExpenseSplitCleanupScheduler = () => {
     logger.info('🧹 Agendador de limpeza de divisões de despesas ativo (diário 02:30 BRT)');
 };
 
+const startInsightsMonthlyScheduler = () => {
+    if (env.NODE_ENV === 'test') {
+        return;
+    }
+
+    // Dia 1 de cada mês às 06:00 BRT — gera/atualiza snapshots
+    cron.schedule(
+        '0 6 1 * *',
+        async () => {
+            try {
+                const result = await insightService.gerarInsightsMensaisParaTodos();
+                logger.info(
+                    `🧠 Insights mensais: ${result.ok} ok / ${result.fail} falhas (de ${result.total})`
+                );
+            } catch (error) {
+                logger.error(`Falha no job de Insights mensais: ${error.message}`);
+            }
+        },
+        { timezone: 'America/Sao_Paulo' }
+    );
+
+    logger.info('🧠 Agendador de Insights mensais ativo (dia 1, 06:00 BRT)');
+};
+
 // TEMP: jobs de notificação e limpeza de chat ainda não estão neste repo.
 // const startNotificationCleanupScheduler = () => { ... };
 // const startChatCleanupScheduler = () => { ... };
@@ -208,6 +233,7 @@ const start = async () => {
             startDebtCleanupScheduler();
             startDebtAlertScheduler();
             startExpenseSplitCleanupScheduler();
+            startInsightsMonthlyScheduler();
             // startNotificationCleanupScheduler();
             // startChatCleanupScheduler();
         } else {
