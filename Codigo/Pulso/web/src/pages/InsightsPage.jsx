@@ -23,10 +23,7 @@ import { Button } from '@/design-system/components/buttons/Button/Button.jsx'
 import { EmptyState } from '@/design-system/components/feedback/EmptyState/EmptyState.jsx'
 import { MonthPicker } from '@/design-system/components/pickers/MonthPicker/MonthPicker.jsx'
 import { useToast } from '@/design-system/components/feedback/Toast/useToast.js'
-import {
-    monthPickerParaPeriodo,
-    periodoParaMonthPicker,
-} from '@/utils/transactionRecurrence.js'
+import { monthPickerParaPeriodo, periodoParaMonthPicker } from '@/utils/transactionRecurrence.js'
 import * as insightsService from '@/services/insightsService.js'
 
 function mesAtual() {
@@ -143,8 +140,7 @@ function VariacaoBar({ item }) {
 
 function AlertaCard({ alerta }) {
     const sev = alerta.severidade || 'info'
-    const Icon =
-        sev === 'critico' ? AlertTriangle : sev === 'aviso' ? AlertTriangle : Info
+    const Icon = sev === 'critico' ? AlertTriangle : sev === 'aviso' ? AlertTriangle : Info
     return (
         <div className={`insights-alert insights-alert--${sev}`}>
             <span className="insights-alert__icon" aria-hidden>
@@ -173,8 +169,7 @@ export default function InsightsPage() {
             } catch (err) {
                 if (signal?.aborted) return
                 const msg =
-                    err.response?.data?.message ||
-                    'Não foi possível carregar os Insights agora.'
+                    err.response?.data?.message || 'Não foi possível carregar os Insights agora.'
                 toast.error(msg)
                 setData(null)
             } finally {
@@ -197,9 +192,7 @@ export default function InsightsPage() {
             setData(result)
             toast.success('Insights regenerados!')
         } catch (err) {
-            toast.error(
-                err.response?.data?.message || 'Falha ao regenerar Insights'
-            )
+            toast.error(err.response?.data?.message || 'Falha ao regenerar Insights')
         } finally {
             setRegenerating(false)
         }
@@ -234,8 +227,8 @@ export default function InsightsPage() {
                                 </span>
                             </div>
                             <p className="insights-page__subtitle">
-                                Análises geradas automaticamente com base nos seus
-                                hábitos financeiros.
+                                Análises geradas automaticamente com base nos seus hábitos
+                                financeiros.
                             </p>
                         </div>
                     </div>
@@ -297,7 +290,10 @@ export default function InsightsPage() {
                     <section className="insights-hero">
                         <div className="insights-hero__copy">
                             <div className="insights-hero__eyebrow">
-                                <span className="insights-soft-icon insights-soft-icon--primary" aria-hidden>
+                                <span
+                                    className="insights-soft-icon insights-soft-icon--primary"
+                                    aria-hidden
+                                >
                                     <Wallet size={16} />
                                 </span>
                                 Resumo de {formatMesLabel(data.mesReferencia)}
@@ -358,16 +354,10 @@ export default function InsightsPage() {
                             Score de saúde financeira
                         </SectionTitle>
                         <div className="insights-score">
-                            <ScoreGauge
-                                score={data.score?.valor}
-                                label={data.score?.label}
-                            />
+                            <ScoreGauge score={data.score?.valor} label={data.score?.label} />
                             <ul className="insights-score__list">
                                 {(data.score?.checklist || []).map((item) => (
-                                    <li
-                                        key={item.id}
-                                        className={item.ok ? 'is-ok' : 'is-warn'}
-                                    >
+                                    <li key={item.id} className={item.ok ? 'is-ok' : 'is-warn'}>
                                         <span className="insights-score__check" aria-hidden>
                                             {item.ok ? (
                                                 <Check size={14} />
@@ -433,8 +423,8 @@ export default function InsightsPage() {
                         <div className="insights-sugs">
                             {(data.sugestoes || []).length === 0 && (
                                 <p className="insights-muted">
-                                    Sem sugestões novas neste ciclo — regenerar pode trazer
-                                    ideias frescas.
+                                    Sem sugestões novas neste ciclo — regenerar pode trazer ideias
+                                    frescas.
                                 </p>
                             )}
                             {(data.sugestoes || []).map((s, index) => (
@@ -448,16 +438,12 @@ export default function InsightsPage() {
                                             <span className="insights-chip">IA</span>
                                         </div>
                                         <p>{s.descricao}</p>
-                                        {s.impactoEstimado && (
-                                            <small>{s.impactoEstimado}</small>
-                                        )}
+                                        {s.impactoEstimado && <small>{s.impactoEstimado}</small>}
                                     </div>
                                     <Button
                                         size="sm"
                                         variant="secondary"
-                                        onClick={() =>
-                                            navigate(s.acaoPath || '/budget')
-                                        }
+                                        onClick={() => navigate(s.acaoPath || '/budget')}
                                     >
                                         Aplicar sugestão
                                     </Button>

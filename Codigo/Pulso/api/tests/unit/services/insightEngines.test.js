@@ -9,7 +9,9 @@ describe('insightEngines', () => {
     const ctxBase = {
         mesReferencia: '2026-11',
         fluxoMes: { receitas: 5000, despesas: 3000 },
-        orcamentoStatus: [{ categoria: 'Alimentação', percentualUsado: 40, limite: 1000, gasto: 400 }],
+        orcamentoStatus: [
+            { categoria: 'Alimentação', percentualUsado: 40, limite: 1000, gasto: 400 },
+        ],
         metas: [{ id: 'm1', nome: 'Viagem', progresso: 50, prazo: '2027-01-15' }],
         variacaoCategorias: [
             { categoria: 'Alimentação', percentual: 12, atual: 800, anterior: 700 },
@@ -41,9 +43,7 @@ describe('insightEngines', () => {
     it('gera alertas de variação e VA', () => {
         const alertas = calcularAlertas({
             ...ctxBase,
-            variacaoCategorias: [
-                { categoria: 'Lazer', percentual: 40, atual: 400, anterior: 280 },
-            ],
+            variacaoCategorias: [{ categoria: 'Lazer', percentual: 40, atual: 400, anterior: 280 }],
             recursosMes: { VA: 400 },
             config: { vaValor: 500 },
         });

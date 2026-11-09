@@ -24,10 +24,7 @@ const confirmarTransacaoSchema = z.object({
         valor: z.number().positive('Valor deve ser maior que zero'),
         descricao: z.string().trim().max(255).optional(),
         data: z.union([z.string().datetime(), z.coerce.date()]).optional(),
-        recurso: z
-            .enum(['DINHEIRO', 'VA', 'VR', 'VT', 'POUPANCA'])
-            .optional()
-            .default('DINHEIRO'),
+        recurso: z.enum(['DINHEIRO', 'VA', 'VR', 'VT', 'POUPANCA']).optional().default('DINHEIRO'),
         categoriaId: z.string().min(1).optional(),
         categoriaNome: z.string().trim().max(80).optional(),
     }),

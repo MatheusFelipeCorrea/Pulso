@@ -194,7 +194,9 @@ async function seedChatbotDemo(usuarioId) {
         },
     });
 
-    console.log(`   ✓ Chatbot: 2 conversas (incl. proposta de tx) · id ${conversa.id.slice(0, 8)}…`);
+    console.log(
+        `   ✓ Chatbot: 2 conversas (incl. proposta de tx) · id ${conversa.id.slice(0, 8)}…`
+    );
     return true;
 }
 
@@ -266,21 +268,21 @@ async function seedInsightsDemo(usuarioId) {
                 label: 'Otimista',
                 descricao: 'Se você economizar 15% a mais nas despesas',
                 saldoMensalEstimado: 2800,
-                acumulado: { '3': 8400, '6': 16800, '12': 33600 },
+                acumulado: { 3: 8400, 6: 16800, 12: 33600 },
             },
             {
                 id: 'atual',
                 label: 'Atual',
                 descricao: 'Mantendo o ritmo atual',
                 saldoMensalEstimado: 2400,
-                acumulado: { '3': 7200, '6': 14400, '12': 28800 },
+                acumulado: { 3: 7200, 6: 14400, 12: 28800 },
             },
             {
                 id: 'pessimista',
                 label: 'Pessimista',
                 descricao: 'Se os gastos subirem 10%',
                 saldoMensalEstimado: 1800,
-                acumulado: { '3': 5400, '6': 10800, '12': 21600 },
+                acumulado: { 3: 5400, 6: 10800, 12: 21600 },
             },
         ],
         diasAteNegativo: null,

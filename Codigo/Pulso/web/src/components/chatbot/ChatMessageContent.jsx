@@ -14,7 +14,12 @@ function renderInline(text, keyPrefix = 'i') {
             return <strong key={key}>{renderInline(part.slice(2, -2), `${key}-b`)}</strong>
         }
 
-        if (part.startsWith('*') && part.endsWith('*') && part.length > 2 && !part.startsWith('**')) {
+        if (
+            part.startsWith('*') &&
+            part.endsWith('*') &&
+            part.length > 2 &&
+            !part.startsWith('**')
+        ) {
             return <em key={key}>{renderInline(part.slice(1, -1), `${key}-e`)}</em>
         }
 
@@ -39,7 +44,9 @@ function listItemText(line) {
 }
 
 export default function ChatMessageContent({ content }) {
-    const lines = String(content || '').replace(/\r\n/g, '\n').split('\n')
+    const lines = String(content || '')
+        .replace(/\r\n/g, '\n')
+        .split('\n')
     const blocks = []
     let i = 0
 

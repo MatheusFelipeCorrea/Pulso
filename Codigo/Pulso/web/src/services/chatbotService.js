@@ -42,10 +42,6 @@ export async function enviarMensagem(
 }
 
 export async function confirmarTransacao(proposta, options = {}) {
-    const { data } = await api.post(
-        '/chatbot/confirmar-transacao',
-        proposta,
-        axiosConfig(options)
-    )
+    const { data } = await api.post('/chatbot/confirmar-transacao', proposta, axiosConfig(options))
     return data
 }

@@ -13,11 +13,7 @@ export async function obterInsights({ mes } = {}, options = {}) {
 }
 
 export async function regenerarInsights({ mes } = {}, options = {}) {
-    const { data } = await api.post(
-        '/insights/regenerar',
-        mes ? { mes } : {},
-        axiosConfig(options)
-    )
+    const { data } = await api.post('/insights/regenerar', mes ? { mes } : {}, axiosConfig(options))
     return data
 }
 

@@ -71,8 +71,7 @@ const mergeGemini = (base, llm) => {
             return {
                 ...c,
                 comentario: hit?.comentario || c.comentario,
-                percentual:
-                    typeof hit?.percentual === 'number' ? hit.percentual : c.percentual,
+                percentual: typeof hit?.percentual === 'number' ? hit.percentual : c.percentual,
             };
         });
     }
@@ -146,11 +145,12 @@ const normalizarProjecoes = (projecoes) => {
         id,
         label,
         descricao,
-        saldoMensalEstimado: Array.isArray(valores) && valores[0] != null ? Number(valores[0]) / 3 : 0,
+        saldoMensalEstimado:
+            Array.isArray(valores) && valores[0] != null ? Number(valores[0]) / 3 : 0,
         acumulado: {
-            '3': Array.isArray(valores) ? Number(valores[0] || 0) : 0,
-            '6': Array.isArray(valores) ? Number(valores[1] || 0) : 0,
-            '12': Array.isArray(valores) ? Number(valores[2] || 0) : 0,
+            3: Array.isArray(valores) ? Number(valores[0] || 0) : 0,
+            6: Array.isArray(valores) ? Number(valores[1] || 0) : 0,
+            12: Array.isArray(valores) ? Number(valores[2] || 0) : 0,
         },
     });
 
@@ -162,12 +162,7 @@ const normalizarProjecoes = (projecoes) => {
             projecoes.otimista
         ),
         mapCenario('atual', 'Atual', 'Mantendo o ritmo atual', projecoes.atual),
-        mapCenario(
-            'pessimista',
-            'Pessimista',
-            'Se os gastos subirem 10%',
-            projecoes.pessimista
-        ),
+        mapCenario('pessimista', 'Pessimista', 'Se os gastos subirem 10%', projecoes.pessimista),
     ];
 };
 
@@ -336,8 +331,7 @@ const tentarGerarInsightAposTransacao = async (usuarioId) => {
     }
 };
 
-const gerarInsightParaUsuario = async (usuarioId) =>
-    gerarInsights(usuarioId, { forcar: false });
+const gerarInsightParaUsuario = async (usuarioId) => gerarInsights(usuarioId, { forcar: false });
 
 const gerarInsightsMensaisParaTodos = async () => {
     const usuarios = await prisma.usuario.findMany({

@@ -284,9 +284,7 @@ export default function ChatbotPage() {
                     </Button>
                 </div>
                 <div className="chatbot-history__list">
-                    {loadingConversas && (
-                        <p className="chatbot-history__empty">Carregando…</p>
-                    )}
+                    {loadingConversas && <p className="chatbot-history__empty">Carregando…</p>}
                     {!loadingConversas && conversas.length === 0 && (
                         <div className="chatbot-history__empty">
                             <MessageSquare size={22} aria-hidden />
@@ -339,9 +337,7 @@ export default function ChatbotPage() {
                         <button
                             type="button"
                             className="chatbot-page__toggle-history"
-                            aria-label={
-                                historyOpen ? 'Ocultar histórico' : 'Mostrar histórico'
-                            }
+                            aria-label={historyOpen ? 'Ocultar histórico' : 'Mostrar histórico'}
                             onClick={() => setHistoryOpen((v) => !v)}
                         >
                             {historyOpen ? <X size={18} /> : <PanelLeft size={18} />}
@@ -376,9 +372,7 @@ export default function ChatbotPage() {
                 </header>
 
                 <div className="chatbot-page__feed" ref={feedRef} aria-live="polite">
-                    {loadingThread && (
-                        <p className="chatbot-history__empty">Abrindo conversa…</p>
-                    )}
+                    {loadingThread && <p className="chatbot-history__empty">Abrindo conversa…</p>}
                     {!loadingThread &&
                         mensagens.map((msg) => {
                             const mine = msg.role === 'user'
@@ -403,10 +397,7 @@ export default function ChatbotPage() {
                                             <Clock3 size={11} aria-hidden />
                                             <time>{formatMsgTime(msg.at)}</time>
                                             {mine && (
-                                                <span
-                                                    className="chatbot-msg__checks"
-                                                    aria-hidden
-                                                >
+                                                <span className="chatbot-msg__checks" aria-hidden>
                                                     <CheckCheck size={14} />
                                                 </span>
                                             )}
@@ -421,9 +412,7 @@ export default function ChatbotPage() {
                                                 <img src={avatarUrl} alt="" />
                                             ) : (
                                                 <span>
-                                                    {(displayName || '?')
-                                                        .slice(0, 1)
-                                                        .toUpperCase()}
+                                                    {(displayName || '?').slice(0, 1).toUpperCase()}
                                                 </span>
                                             )}
                                         </div>
@@ -458,9 +447,7 @@ export default function ChatbotPage() {
                                     Confirmar lançamento:{' '}
                                     <strong>
                                         {pendingProposta.tipo} · R${' '}
-                                        {Number(pendingProposta.valor)
-                                            .toFixed(2)
-                                            .replace('.', ',')}
+                                        {Number(pendingProposta.valor).toFixed(2).replace('.', ',')}
                                     </strong>
                                     {pendingProposta.descricao
                                         ? ` — ${pendingProposta.descricao}`
@@ -517,11 +504,7 @@ export default function ChatbotPage() {
                             enviar(draft)
                         }}
                     >
-                        <Sparkles
-                            size={16}
-                            className="chatbot-page__input-icon"
-                            aria-hidden
-                        />
+                        <Sparkles size={16} className="chatbot-page__input-icon" aria-hidden />
                         <input
                             type="text"
                             value={draft}

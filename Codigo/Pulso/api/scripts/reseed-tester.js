@@ -91,7 +91,9 @@ async function main() {
     console.log(`   transações: ${totalTx}`);
     console.log(`   metas: ${totalMetas} | orçamentos: ${totalOrc}`);
     console.log(`   viagens: ${totalViagens} | moedas favoritas: ${totalMoedas}`);
-    console.log(`   compras: ${totalCompra} | dívidas: ${totalDividas} | lembretes: ${totalLembretes}`);
+    console.log(
+        `   compras: ${totalCompra} | dívidas: ${totalDividas} | lembretes: ${totalLembretes}`
+    );
     console.log(`   divisões: ${totalDivisoes} | chatbot: ${totalConversas} conversas`);
     console.log(`   insights: ${totalInsights} snapshot | scores: ${totalScores}`);
     console.log(`   grupos (memberships): ${totalGrupos} · códigos PULSO-TEST + PULSO-IGUAL`);

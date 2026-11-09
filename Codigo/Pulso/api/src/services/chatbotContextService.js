@@ -25,67 +25,66 @@ const buildUserFinanceContext = async (usuarioId) => {
     const inicio12m = new Date(startOfMonth(hoje));
     inicio12m.setUTCMonth(inicio12m.getUTCMonth() - 11);
 
-    const [transacoesMes, topCategorias, metas, categorias, saldosAgg, txs12m] =
-        await Promise.all([
-            prisma.transacao.findMany({
-                where: {
-                    usuarioId,
-                    data: { gte: inicioMes },
-                    tipo: { in: ['DESPESA', 'RECEITA'] },
-                },
-                orderBy: { data: 'desc' },
-                take: 40,
-                select: {
-                    tipo: true,
-                    valor: true,
-                    descricao: true,
-                    data: true,
-                    recurso: true,
-                    categoria: { select: { nome: true } },
-                },
-            }),
-            prisma.transacao.groupBy({
-                by: ['categoriaId'],
-                where: {
-                    usuarioId,
-                    tipo: 'DESPESA',
-                    data: { gte: inicioMes },
-                    categoriaId: { not: null },
-                },
-                _sum: { valor: true },
-                orderBy: { _sum: { valor: 'desc' } },
-                take: 5,
-            }),
-            prisma.meta.findMany({
-                where: { usuarioId, status: { in: ['ATIVA', 'PAUSADA'] } },
-                take: 8,
-                select: {
-                    nome: true,
-                    status: true,
-                    valorAtual: true,
-                    valorAlvo: true,
-                    prazo: true,
-                },
-            }),
-            prisma.categoria.findMany({
-                where: { OR: [{ usuarioId }, { usuarioId: null }] },
-                select: { id: true, nome: true, tipo: true },
-                take: 80,
-            }),
-            prisma.transacao.groupBy({
-                by: ['recurso', 'tipo'],
-                where: { usuarioId, data: { gte: inicio30d } },
-                _sum: { valor: true },
-            }),
-            prisma.transacao.findMany({
-                where: {
-                    usuarioId,
-                    data: { gte: inicio12m },
-                    tipo: { in: ['DESPESA', 'RECEITA'] },
-                },
-                select: { tipo: true, valor: true, data: true },
-            }),
-        ]);
+    const [transacoesMes, topCategorias, metas, categorias, saldosAgg, txs12m] = await Promise.all([
+        prisma.transacao.findMany({
+            where: {
+                usuarioId,
+                data: { gte: inicioMes },
+                tipo: { in: ['DESPESA', 'RECEITA'] },
+            },
+            orderBy: { data: 'desc' },
+            take: 40,
+            select: {
+                tipo: true,
+                valor: true,
+                descricao: true,
+                data: true,
+                recurso: true,
+                categoria: { select: { nome: true } },
+            },
+        }),
+        prisma.transacao.groupBy({
+            by: ['categoriaId'],
+            where: {
+                usuarioId,
+                tipo: 'DESPESA',
+                data: { gte: inicioMes },
+                categoriaId: { not: null },
+            },
+            _sum: { valor: true },
+            orderBy: { _sum: { valor: 'desc' } },
+            take: 5,
+        }),
+        prisma.meta.findMany({
+            where: { usuarioId, status: { in: ['ATIVA', 'PAUSADA'] } },
+            take: 8,
+            select: {
+                nome: true,
+                status: true,
+                valorAtual: true,
+                valorAlvo: true,
+                prazo: true,
+            },
+        }),
+        prisma.categoria.findMany({
+            where: { OR: [{ usuarioId }, { usuarioId: null }] },
+            select: { id: true, nome: true, tipo: true },
+            take: 80,
+        }),
+        prisma.transacao.groupBy({
+            by: ['recurso', 'tipo'],
+            where: { usuarioId, data: { gte: inicio30d } },
+            _sum: { valor: true },
+        }),
+        prisma.transacao.findMany({
+            where: {
+                usuarioId,
+                data: { gte: inicio12m },
+                tipo: { in: ['DESPESA', 'RECEITA'] },
+            },
+            select: { tipo: true, valor: true, data: true },
+        }),
+    ]);
 
     const catMap = new Map(categorias.map((c) => [c.id, c.nome]));
 

@@ -133,8 +133,7 @@ const calcularProjecoes = (ctx) => {
     if (saldoMensalAtual < 0) {
         const perdaDiaria = Math.abs(saldoMensalAtual) / 30;
         const reserva = Math.max(0, Number(ctx.fluxoMes.receitas || 0) * 0.1);
-        diasAteNegativo =
-            perdaDiaria > 0 ? Math.max(1, Math.round(reserva / perdaDiaria)) : null;
+        diasAteNegativo = perdaDiaria > 0 ? Math.max(1, Math.round(reserva / perdaDiaria)) : null;
         if (Number(ctx.fluxoMes.receitas || 0) - Number(ctx.fluxoMes.despesas || 0) < 0) {
             diasAteNegativo = Math.max(1, Math.round(30 / 2));
         }

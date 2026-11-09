@@ -712,7 +712,9 @@
     text-decoration: none;
     color: inherit;
     box-shadow: var(--ds-shadow-sm);
-    transition: border-color 0.15s ease, transform 0.12s ease;
+    transition:
+        border-color 0.15s ease,
+        transform 0.12s ease;
 }
 
 .insights-edu__card:hover {

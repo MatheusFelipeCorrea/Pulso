@@ -25,10 +25,7 @@ const parseGeminiError = (status, detail) => {
     const message = payload?.error?.message ?? detail;
 
     if (code === 429) {
-        throw new AppError(
-            'Cota do Gemini de Insights esgotada. Tente novamente mais tarde.',
-            429
-        );
+        throw new AppError('Cota do Gemini de Insights esgotada. Tente novamente mais tarde.', 429);
     }
 
     if (/no longer available|not found|does not exist/i.test(message)) {
@@ -69,7 +66,10 @@ const generateInsightsJson = async ({ system, userPrompt }) => {
     }
 
     const data = await response.json();
-    const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join('')?.trim();
+    const text = data?.candidates?.[0]?.content?.parts
+        ?.map((p) => p.text)
+        .join('')
+        ?.trim();
     if (!text) {
         throw new AppError('O Gemini não retornou Insights úteis. Tente regenerar.', 502);
     }

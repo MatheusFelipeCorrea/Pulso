@@ -68,7 +68,10 @@ const generateChatReply = async ({ system, contents }) => {
     }
 
     const data = await response.json();
-    const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text).join('')?.trim();
+    const text = data?.candidates?.[0]?.content?.parts
+        ?.map((p) => p.text)
+        .join('')
+        ?.trim();
     if (!text) {
         throw new AppError('O chatbot não retornou uma resposta útil. Tente de novo.', 502);
     }

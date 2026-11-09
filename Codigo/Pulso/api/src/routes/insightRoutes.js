@@ -8,11 +8,7 @@ const router = express.Router();
 
 router.get('/', authMiddleware, validateMiddleware(mesQuerySchema), insightController.obter);
 
-router.get(
-    '/score',
-    authMiddleware,
-    insightController.score
-);
+router.get('/score', authMiddleware, insightController.score);
 
 router.post(
     '/regenerar',

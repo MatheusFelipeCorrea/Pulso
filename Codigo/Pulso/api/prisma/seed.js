@@ -861,8 +861,7 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
         }
 
         // Despesas do dia a dia — volume alto, mas abaixo das receitas (saldo positivo)
-        const qtdDespesas =
-            offsetMes > 0 ? 18 + Math.floor(rng() * 6) : 22 + Math.floor(rng() * 8);
+        const qtdDespesas = offsetMes > 0 ? 18 + Math.floor(rng() * 6) : 22 + Math.floor(rng() * 8);
         for (let i = 0; i < qtdDespesas; i++) {
             const tpl = escolher(rng, templatesDespesa);
             const desc = escolher(rng, tpl.descricoes);
