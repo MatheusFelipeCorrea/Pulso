@@ -23,7 +23,7 @@ Arquivos de apoio nesta branch:
 
 ## 2. Render (API)
 
-1. [render.com](https://render.com) → **New → Blueprint** → repositório Pulso → branch `chore/prep-hospedagem-demo` (ou a branch de deploy).
+1. [render.com](https://render.com) → **New → Blueprint** → repositório Pulso → branch `main` (após merge da sprint-6; enquanto isso use `sprint-6`).
 2. Confirme o serviço `pulso-api` (`rootDir: Codigo/Pulso/api`).
 3. Preencha as env vars (mínimo para a demo):
 
