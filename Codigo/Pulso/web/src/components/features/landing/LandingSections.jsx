@@ -1,7 +1,23 @@
 import { Link } from 'react-router-dom'
-import { HIGHLIGHTS, FEATURES, AUDIENCE, BENEFITS, PRICING, TESTIMONIALS } from './landingData.js'
+import {
+    APP_DOWNLOADS,
+    HIGHLIGHTS,
+    FEATURES,
+    AUDIENCE,
+    BENEFITS,
+    PRICING,
+    TESTIMONIALS,
+} from './landingData.js'
 import { LandingPhoneHomeShowcase } from './LandingPhoneHomeMockup.jsx'
-import { Briefcase, Check, GraduationCap, Laptop, Smartphone, Star, UserRound } from 'lucide-react'
+import { Apple, Briefcase, Check, Download, GraduationCap, Laptop, Star, UserRound } from 'lucide-react'
+
+function AndroidGlyph({ size = 22 }) {
+    return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <path d="M17.6 9.48l1.84-3.18a.5.5 0 10-.87-.5l-1.86 3.22A7.9 7.9 0 0012 7.75c-1.66 0-3.2.51-4.71 1.27L5.43 5.8a.5.5 0 10-.87.5l1.84 3.18C4.15 11.05 3 13.18 3 15.5v.75c0 .69.56 1.25 1.25 1.25H6v-4a1 1 0 112 0v4h8v-4a1 1 0 112 0v4h1.75c.69 0 1.25-.56 1.25-1.25V15.5c0-2.32-1.15-4.45-3.4-6.02zM9.25 13.25a.75.75 0 110-1.5.75.75 0 010 1.5zm5.5 0a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+        </svg>
+    )
+}
 
 const AUDIENCE_ICONS = {
     graduation: GraduationCap,
@@ -114,27 +130,50 @@ export function LandingBenefits() {
 }
 
 export function LandingMobile() {
+    const downloads = [APP_DOWNLOADS.android, APP_DOWNLOADS.ios]
+
     return (
-        <section className="landing-section landing-section--muted">
+        <section id="baixar" className="landing-section landing-section--muted">
             <div className="landing-container landing-mobile">
                 <div className="landing-mobile__content">
+                    <p className="landing-mobile__eyebrow">App Flutter</p>
                     <h2>Leve o Pulso com você</h2>
                     <p>
-                        O app Flutter está em desenvolvimento. Em breve você baixa direto por aqui —
-                        Android e iOS — sem depender de loja.
+                        Baixe o app nativo e use a mesma conta da web — Android e iOS, direto por
+                        aqui, sem depender de loja.
                     </p>
-                    <div className="landing-mobile__soon" role="status">
-                        <span className="landing-mobile__soon-icon" aria-hidden>
-                            <Smartphone size={22} />
-                        </span>
-                        <div>
-                            <strong>App mobile em breve</strong>
-                            <p>
-                                Assim que o Flutter estiver pronto, liberamos o download nesta
-                                página.
-                            </p>
-                        </div>
+
+                    <div className="landing-mobile__downloads">
+                        {downloads.map((item) => {
+                            const Icon = item.id === 'ios' ? Apple : AndroidGlyph
+                            return (
+                                <a
+                                    key={item.id}
+                                    className={`landing-mobile__download landing-mobile__download--${item.id}`}
+                                    href={item.href}
+                                    download={item.filename}
+                                >
+                                    <span className="landing-mobile__download-icon" aria-hidden>
+                                        <Icon size={22} />
+                                    </span>
+                                    <span className="landing-mobile__download-copy">
+                                        <span className="landing-mobile__download-platform">
+                                            {item.label}
+                                        </span>
+                                        <strong>Baixar {item.fileLabel}</strong>
+                                    </span>
+                                    <span className="landing-mobile__download-action" aria-hidden>
+                                        <Download size={18} />
+                                    </span>
+                                </a>
+                            )
+                        })}
                     </div>
+
+                    <ul className="landing-mobile__notes">
+                        <li>{APP_DOWNLOADS.android.hint}</li>
+                        <li>{APP_DOWNLOADS.ios.hint}</li>
+                    </ul>
                 </div>
                 <LandingPhoneHomeShowcase />
             </div>

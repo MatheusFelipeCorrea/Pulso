@@ -20,6 +20,7 @@ export const NAV_LINKS = [
     { id: 'para-quem', label: 'Para quem' },
     { id: 'diferenciais', label: 'Diferenciais' },
     { id: 'precos', label: 'Preços' },
+    { id: 'baixar', label: 'Baixar app' },
 ]
 
 export const HIGHLIGHTS = [
@@ -227,4 +228,24 @@ export const FOOTER_LINKS = {
         { label: 'Privacidade', to: '/privacidade' },
     ],
     comunidade: [{ label: 'GitHub', href: REPO_URL, external: true }],
+}
+
+/** Downloads diretos do app Flutter (arquivos em `public/downloads/`). */
+export const APP_DOWNLOADS = {
+    android: {
+        id: 'android',
+        label: 'Android',
+        fileLabel: 'APK',
+        href: '/downloads/pulso-android.apk',
+        filename: 'pulso-android.apk',
+        hint: 'Instalação direta — permita fontes desconhecidas se o Android pedir.',
+    },
+    ios: {
+        id: 'ios',
+        label: 'iOS',
+        fileLabel: 'IPA',
+        href: '/downloads/pulso-ios.ipa',
+        filename: 'pulso-ios.ipa',
+        hint: 'Instale com Sideloadly ou AltStore. No iPhone: confie no perfil em Ajustes → Geral → VPN e Gerenciamento de Dispositivo.',
+    },
 }
