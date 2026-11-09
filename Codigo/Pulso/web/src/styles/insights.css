@@ -151,12 +151,12 @@
     background: color-mix(in srgb, #2563eb 14%, transparent);
 }
 .insights-soft-icon--amber {
-    color: #ca8a04;
-    background: color-mix(in srgb, #eab308 18%, transparent);
+    color: #d97706;
+    background: color-mix(in srgb, #f59e0b 18%, transparent);
 }
 .insights-soft-icon--orange {
-    color: #ca8a04;
-    background: color-mix(in srgb, #eab308 18%, transparent);
+    color: #d97706;
+    background: color-mix(in srgb, #f59e0b 18%, transparent);
 }
 .insights-soft-icon--teal {
     color: #0d9488;
@@ -306,8 +306,8 @@
     background: color-mix(in srgb, #16a34a 14%, transparent);
 }
 .insights-kpi--expense .insights-kpi__icon {
-    color: #dc2626;
-    background: color-mix(in srgb, #dc2626 16%, transparent);
+    color: #ef4444;
+    background: color-mix(in srgb, #ef4444 16%, transparent);
 }
 .insights-kpi--pos .insights-kpi__icon {
     color: #7c3aed;
@@ -317,11 +317,11 @@
     color: #16a34a;
 }
 .insights-kpi--neg .insights-kpi__icon {
-    color: #dc2626;
-    background: color-mix(in srgb, #dc2626 16%, transparent);
+    color: #ef4444;
+    background: color-mix(in srgb, #ef4444 16%, transparent);
 }
 .insights-kpi--neg strong {
-    color: #dc2626;
+    color: #ef4444;
 }
 
 .insights-chip {
@@ -338,8 +338,8 @@
 }
 
 .insights-chip--warn {
-    color: #a16207;
-    background: color-mix(in srgb, #eab308 20%, transparent);
+    color: #d97706;
+    background: color-mix(in srgb, #f59e0b 20%, transparent);
 }
 
 /* Variação */
@@ -365,7 +365,7 @@
 }
 
 .insights-var__pct--up {
-    color: #dc2626;
+    color: #ef4444;
 }
 .insights-var__pct--down {
     color: #16a34a;
@@ -387,7 +387,7 @@
 }
 
 .insights-var__fill--up {
-    background: #dc2626;
+    background: #ef4444;
 }
 .insights-var__fill--down {
     background: #22c55e;
@@ -490,8 +490,8 @@
     background: color-mix(in srgb, #16a34a 14%, transparent);
 }
 .insights-score__list li.is-warn .insights-score__check {
-    color: #ca8a04;
-    background: color-mix(in srgb, #eab308 18%, transparent);
+    color: #d97706;
+    background: color-mix(in srgb, #f59e0b 18%, transparent);
 }
 
 /* Projeções */
@@ -574,11 +574,11 @@
     color: var(--ds-color-primary);
 }
 .insights-proj__card--pessimista {
-    border-color: color-mix(in srgb, #dc2626 48%, transparent);
-    color: #dc2626;
+    border-color: color-mix(in srgb, #ef4444 48%, transparent);
+    color: #ef4444;
 }
 .insights-proj__card--pessimista h3 {
-    color: #dc2626;
+    color: #ef4444;
 }
 
 /* Sugestões */
@@ -607,8 +607,8 @@
     place-content: center;
     font-size: 0.78rem;
     font-weight: 700;
-    color: #ca8a04;
-    background: color-mix(in srgb, #eab308 18%, transparent);
+    color: #d97706;
+    background: color-mix(in srgb, #f59e0b 18%, transparent);
 }
 
 .insights-sug__title {
@@ -665,15 +665,15 @@
 }
 
 .insights-alert--aviso {
-    background: color-mix(in srgb, #eab308 14%, transparent);
-    border-color: color-mix(in srgb, #eab308 36%, transparent);
-    color: #a16207;
+    background: color-mix(in srgb, #f59e0b 14%, transparent);
+    border-color: color-mix(in srgb, #f59e0b 36%, transparent);
+    color: #d97706;
 }
 
 .insights-alert--critico {
-    background: color-mix(in srgb, #dc2626 14%, transparent);
-    border-color: color-mix(in srgb, #dc2626 40%, transparent);
-    color: #b91c1c;
+    background: color-mix(in srgb, #ef4444 14%, transparent);
+    border-color: color-mix(in srgb, #ef4444 40%, transparent);
+    color: #ef4444;
 }
 
 .insights-alert--info {
@@ -684,7 +684,7 @@
 
 :root[data-theme='dark'] .insights-alert--aviso,
 [data-theme='dark'] .insights-alert--aviso {
-    color: #fde047;
+    color: #fbbf24;
 }
 :root[data-theme='dark'] .insights-alert--critico,
 [data-theme='dark'] .insights-alert--critico {
