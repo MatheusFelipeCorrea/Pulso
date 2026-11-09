@@ -2,11 +2,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     AlertTriangle,
+    ArrowDownRight,
     ArrowLeftRight,
+    ArrowUpRight,
     BookOpen,
     Check,
+    HeartPulse,
     Info,
     Lightbulb,
+    LineChart,
+    PieChart,
     RefreshCw,
     Sparkles,
     TrendingDown,
@@ -54,6 +59,20 @@ function formatBRL(v) {
         style: 'currency',
         currency: 'BRL',
     })
+}
+
+function SectionTitle({ icon: Icon, tone = 'primary', children, trailing }) {
+    return (
+        <div className="insights-section-title">
+            <div className="insights-section-title__main">
+                <span className={`insights-soft-icon insights-soft-icon--${tone}`} aria-hidden>
+                    <Icon size={16} strokeWidth={2} />
+                </span>
+                <h2>{children}</h2>
+            </div>
+            {trailing}
+        </div>
+    )
 }
 
 function ScoreGauge({ score = 0, label = '' }) {
@@ -128,7 +147,9 @@ function AlertaCard({ alerta }) {
         sev === 'critico' ? AlertTriangle : sev === 'aviso' ? AlertTriangle : Info
     return (
         <div className={`insights-alert insights-alert--${sev}`}>
-            <Icon size={18} aria-hidden />
+            <span className="insights-alert__icon" aria-hidden>
+                <Icon size={16} />
+            </span>
             <p>{alerta.mensagem}</p>
         </div>
     )
@@ -202,16 +223,23 @@ export default function InsightsPage() {
             <header className="insights-page__header">
                 <div className="insights-page__intro">
                     <div className="insights-page__title-row">
-                        <h1>Insights Inteligentes</h1>
-                        <span className="insights-page__badge">
-                            <Sparkles size={12} aria-hidden />
-                            Powered by Gemini
-                        </span>
+                        <div className="insights-page__title-icon" aria-hidden>
+                            <Sparkles size={20} />
+                        </div>
+                        <div>
+                            <div className="insights-page__title-line">
+                                <h1>Insights Inteligentes</h1>
+                                <span className="insights-page__badge">
+                                    <Sparkles size={12} aria-hidden />
+                                    Powered by Gemini
+                                </span>
+                            </div>
+                            <p className="insights-page__subtitle">
+                                Análises geradas automaticamente com base nos seus
+                                hábitos financeiros.
+                            </p>
+                        </div>
                     </div>
-                    <p className="insights-page__subtitle">
-                        Análises geradas automaticamente com base nos seus hábitos
-                        financeiros.
-                    </p>
                 </div>
                 <div className="insights-page__actions">
                     <MonthPicker
@@ -285,29 +313,52 @@ export default function InsightsPage() {
                     <section className="insights-hero">
                         <div className="insights-hero__copy">
                             <div className="insights-hero__eyebrow">
-                                <Wallet size={16} aria-hidden />
+                                <span className="insights-soft-icon insights-soft-icon--primary" aria-hidden>
+                                    <Wallet size={16} />
+                                </span>
                                 Resumo de {formatMesLabel(data.mesReferencia)}
                             </div>
                             <p className="insights-hero__text">{data.resumoMensal}</p>
                         </div>
                         <div className="insights-hero__kpis">
-                            <div>
-                                <span>Receitas</span>
-                                <strong>{formatBRL(data.fluxo?.receitas)}</strong>
+                            <div className="insights-kpi insights-kpi--income">
+                                <span className="insights-kpi__icon" aria-hidden>
+                                    <ArrowUpRight size={16} />
+                                </span>
+                                <div>
+                                    <span>Receitas</span>
+                                    <strong>{formatBRL(data.fluxo?.receitas)}</strong>
+                                </div>
                             </div>
-                            <div>
-                                <span>Despesas</span>
-                                <strong>{formatBRL(data.fluxo?.despesas)}</strong>
+                            <div className="insights-kpi insights-kpi--expense">
+                                <span className="insights-kpi__icon" aria-hidden>
+                                    <ArrowDownRight size={16} />
+                                </span>
+                                <div>
+                                    <span>Despesas</span>
+                                    <strong>{formatBRL(data.fluxo?.despesas)}</strong>
+                                </div>
                             </div>
-                            <div className={saldo >= 0 ? 'is-pos' : 'is-neg'}>
-                                <span>Saldo</span>
-                                <strong>{formatBRL(saldo)}</strong>
+                            <div
+                                className={`insights-kpi ${
+                                    saldo >= 0 ? 'insights-kpi--pos' : 'insights-kpi--neg'
+                                }`}
+                            >
+                                <span className="insights-kpi__icon" aria-hidden>
+                                    <Wallet size={16} />
+                                </span>
+                                <div>
+                                    <span>Saldo</span>
+                                    <strong>{formatBRL(saldo)}</strong>
+                                </div>
                             </div>
                         </div>
                     </section>
 
-                    <section className="insights-panel insights-panel--variacao">
-                        <h2>Variação por categoria</h2>
+                    <section className="insights-card insights-card--variacao">
+                        <SectionTitle icon={PieChart} tone="violet">
+                            Variação por categoria
+                        </SectionTitle>
                         <div className="insights-var">
                             {(data.variacaoCategorias || []).length === 0 && (
                                 <p className="insights-muted">Sem comparação MoM ainda.</p>
@@ -318,8 +369,10 @@ export default function InsightsPage() {
                         </div>
                     </section>
 
-                    <section className="insights-panel insights-panel--score">
-                        <h2>Score de saúde financeira</h2>
+                    <section className="insights-card insights-card--score">
+                        <SectionTitle icon={HeartPulse} tone="rose">
+                            Score de saúde financeira
+                        </SectionTitle>
                         <div className="insights-score">
                             <ScoreGauge
                                 score={data.score?.valor}
@@ -331,11 +384,13 @@ export default function InsightsPage() {
                                         key={item.id}
                                         className={item.ok ? 'is-ok' : 'is-warn'}
                                     >
-                                        {item.ok ? (
-                                            <Check size={14} aria-hidden />
-                                        ) : (
-                                            <AlertTriangle size={14} aria-hidden />
-                                        )}
+                                        <span className="insights-score__check" aria-hidden>
+                                            {item.ok ? (
+                                                <Check size={14} />
+                                            ) : (
+                                                <AlertTriangle size={14} />
+                                            )}
+                                        </span>
                                         {item.texto}
                                     </li>
                                 ))}
@@ -343,22 +398,30 @@ export default function InsightsPage() {
                         </div>
                     </section>
 
-                    <section className="insights-panel insights-panel--proj">
-                        <div className="insights-panel__head">
-                            <h2>Projeção para os próximos meses</h2>
-                            {data.diasAteNegativo != null && (
-                                <span className="insights-chip insights-chip--warn">
-                                    ~{data.diasAteNegativo} dias até aperto no ritmo atual
-                                </span>
-                            )}
-                        </div>
+                    <section className="insights-card insights-card--proj">
+                        <SectionTitle
+                            icon={LineChart}
+                            tone="blue"
+                            trailing={
+                                data.diasAteNegativo != null ? (
+                                    <span className="insights-chip insights-chip--warn">
+                                        ~{data.diasAteNegativo} dias até aperto
+                                    </span>
+                                ) : null
+                            }
+                        >
+                            Projeção para os próximos meses
+                        </SectionTitle>
                         <div className="insights-proj">
                             {(data.projecoes || []).map((p) => (
                                 <article
                                     key={p.id}
                                     className={`insights-proj__card insights-proj__card--${p.id}`}
                                 >
-                                    <h3>{p.label}</h3>
+                                    <div className="insights-proj__head">
+                                        <span className="insights-proj__dot" aria-hidden />
+                                        <h3>{p.label}</h3>
+                                    </div>
                                     <p>{p.descricao}</p>
                                     <dl>
                                         <div>
@@ -379,10 +442,10 @@ export default function InsightsPage() {
                         </div>
                     </section>
 
-                    <section className="insights-panel insights-panel--sugs">
-                        <h2>
-                            <Lightbulb size={18} aria-hidden /> Sugestões personalizadas
-                        </h2>
+                    <section className="insights-card insights-card--sugs">
+                        <SectionTitle icon={Lightbulb} tone="amber">
+                            Sugestões personalizadas
+                        </SectionTitle>
                         <div className="insights-sugs">
                             {(data.sugestoes || []).length === 0 && (
                                 <p className="insights-muted">
@@ -419,8 +482,10 @@ export default function InsightsPage() {
                         </div>
                     </section>
 
-                    <section className="insights-panel insights-panel--alerts">
-                        <h2>Alertas</h2>
+                    <section className="insights-card insights-card--alerts">
+                        <SectionTitle icon={AlertTriangle} tone="orange">
+                            Alertas
+                        </SectionTitle>
                         <div className="insights-alerts">
                             {(data.alertas || []).length === 0 && (
                                 <p className="insights-muted">Nenhum alerta no momento.</p>
@@ -432,10 +497,10 @@ export default function InsightsPage() {
                     </section>
 
                     {(data.educacao || []).length > 0 && (
-                        <section className="insights-panel insights-panel--edu">
-                            <h2>
-                                <BookOpen size={18} aria-hidden /> Para aprender mais
-                            </h2>
+                        <section className="insights-card insights-card--edu">
+                            <SectionTitle icon={BookOpen} tone="teal">
+                                Para aprender mais
+                            </SectionTitle>
                             <div className="insights-edu">
                                 {data.educacao.map((e, i) => (
                                     <a
@@ -445,9 +510,14 @@ export default function InsightsPage() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        <span className="insights-chip">{e.tipo}</span>
-                                        <strong>{e.titulo}</strong>
-                                        {e.motivo && <p>{e.motivo}</p>}
+                                        <span className="insights-edu__icon" aria-hidden>
+                                            <BookOpen size={16} />
+                                        </span>
+                                        <div>
+                                            <span className="insights-chip">{e.tipo}</span>
+                                            <strong>{e.titulo}</strong>
+                                            {e.motivo && <p>{e.motivo}</p>}
+                                        </div>
                                     </a>
                                 ))}
                             </div>
