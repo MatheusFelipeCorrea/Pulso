@@ -1,26 +1,26 @@
 const prisma = require('../config/database');
 const { todayInTimezone } = require('../utils/dateTimezone');
+const { mesReferenciaFromQuery, intervaloDoMes } = require('../utils/monthUtils');
 
 const brl = (valor) =>
     Number(valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
 const monthKeyFromDate = (date) => {
-    const y = date.getUTCFullYear();
-    const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const d = date instanceof Date ? date : new Date(date);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
     return `${y}-${m}`;
 };
 
 const shiftMonth = (mesYYYYMM, delta) => {
     const [y, m] = mesYYYYMM.split('-').map(Number);
-    const d = new Date(Date.UTC(y, m - 1 + delta, 1));
+    const d = new Date(y, m - 1 + delta, 1);
     return monthKeyFromDate(d);
 };
 
 const monthBounds = (mesYYYYMM) => {
-    const inicio = new Date(`${mesYYYYMM}-01T00:00:00.000Z`);
-    const fim = new Date(inicio);
-    fim.setUTCMonth(fim.getUTCMonth() + 1);
-    return { inicio, fim };
+    const mesRef = mesReferenciaFromQuery(mesYYYYMM);
+    return intervaloDoMes(mesRef);
 };
 
 /**
@@ -32,15 +32,16 @@ const buildInsightContext = async (usuarioId, mesReferencia) => {
     const hoje = todayInTimezone();
     const mes = mesReferencia || hoje.slice(0, 7);
     const mesAnterior = shiftMonth(mes, -1);
-    const inicioJanela = new Date(`${shiftMonth(mes, -5)}-01T00:00:00.000Z`);
+    const mesRefDate = mesReferenciaFromQuery(mes);
     const { inicio: inicioMes, fim: fimMes } = monthBounds(mes);
     const { inicio: inicioAnt, fim: fimAnt } = monthBounds(mesAnterior);
+    const { inicio: inicioJanela } = monthBounds(shiftMonth(mes, -5));
 
-    const [txs, metas, orcamentos, config, categorias] = await Promise.all([
+    const [txs, metas, orcamentos, configRow, categorias] = await Promise.all([
         prisma.transacao.findMany({
             where: {
                 usuarioId,
-                data: { gte: inicioJanela, lt: fimMes },
+                data: { gte: inicioJanela, lte: fimMes },
                 tipo: { in: ['DESPESA', 'RECEITA'] },
             },
             select: {
@@ -66,9 +67,9 @@ const buildInsightContext = async (usuarioId, mesReferencia) => {
             },
         }),
         prisma.orcamento.findMany({
-            where: { usuarioId, mesReferencia: mes },
+            where: { usuarioId, mesReferencia: mesRefDate },
             select: {
-                limite: true,
+                limiteValor: true,
                 categoriaId: true,
                 categoria: { select: { nome: true } },
             },
@@ -77,10 +78,10 @@ const buildInsightContext = async (usuarioId, mesReferencia) => {
             where: { usuarioId },
             select: {
                 modoUso: true,
-                salarioValor: true,
-                vaValor: true,
-                vrValor: true,
-                vtValor: true,
+                valorSalario: true,
+                valorVa: true,
+                valorVr: true,
+                valorVt: true,
             },
         }),
         prisma.categoria.findMany({
@@ -89,6 +90,14 @@ const buildInsightContext = async (usuarioId, mesReferencia) => {
             take: 120,
         }),
     ]);
+
+    const config = {
+        modoUso: configRow?.modoUso || null,
+        salarioValor: Number(configRow?.valorSalario || 0),
+        vaValor: Number(configRow?.valorVa || 0),
+        vrValor: Number(configRow?.valorVr || 0),
+        vtValor: Number(configRow?.valorVt || 0),
+    };
 
     const catMap = new Map(categorias.map((c) => [c.id, c.nome]));
 
@@ -106,7 +115,7 @@ const buildInsightContext = async (usuarioId, mesReferencia) => {
         if (t.tipo === 'DESPESA') porMes[key].despesas += v;
 
         const data = new Date(t.data);
-        if (data >= inicioMes && data < fimMes) {
+        if (data >= inicioMes && data <= fimMes) {
             if (t.tipo === 'DESPESA') {
                 const nome = t.categoria?.nome || catMap.get(t.categoriaId) || 'Sem categoria';
                 catsMes[nome] = (catsMes[nome] || 0) + v;
@@ -123,7 +132,7 @@ const buildInsightContext = async (usuarioId, mesReferencia) => {
                 recursosMes[rec] += v;
             }
         }
-        if (data >= inicioAnt && data < fimAnt && t.tipo === 'DESPESA') {
+        if (data >= inicioAnt && data <= fimAnt && t.tipo === 'DESPESA') {
             const nome = t.categoria?.nome || catMap.get(t.categoriaId) || 'Sem categoria';
             catsAnt[nome] = (catsAnt[nome] || 0) + v;
         }
@@ -168,7 +177,7 @@ const buildInsightContext = async (usuarioId, mesReferencia) => {
     const orcamentoStatus = orcamentos.map((o) => {
         const nome = o.categoria?.nome || 'Categoria';
         const gasto = catsMes[nome] || 0;
-        const limite = Number(o.limite);
+        const limite = Number(o.limiteValor);
         return {
             categoria: nome,
             limite,
@@ -213,14 +222,18 @@ const buildInsightContext = async (usuarioId, mesReferencia) => {
         `Metas: ${metasCtx.map((m) => `${m.nome} ${m.progresso}% restante ${brl(m.restante)} prazo ${m.prazo || '-'}`).join('; ') || 'nenhuma'}`,
         `Despesas por recurso no mês: ${JSON.stringify(recursosMes)}`,
         `Top descrições: ${topEstabelecimentos.map((e) => `${e.descricao} ${brl(e.total)} x${e.qtd}`).join('; ') || 'nenhuma'}`,
-        `Perfil: modoUso=${config?.modoUso || '-'} salario=${brl(config?.salarioValor)} VA=${brl(config?.vaValor)} VR=${brl(config?.vrValor)}`,
+        `Perfil: modoUso=${config.modoUso || '-'} salario=${brl(config.salarioValor)} VA=${brl(config.vaValor)} VR=${brl(config.vrValor)}`,
     ].join('\n');
 
     return {
         mesReferencia: mes,
         mesAnterior,
         texto,
-        fluxoMes,
+        fluxoMes: {
+            receitas: fluxoMes.receitas,
+            despesas: fluxoMes.despesas,
+            saldo: fluxoMes.receitas - fluxoMes.despesas,
+        },
         fluxoAnt,
         mesesRecent,
         variacaoCategorias,
@@ -229,7 +242,7 @@ const buildInsightContext = async (usuarioId, mesReferencia) => {
         metas: metasCtx,
         recursosMes,
         topEstabelecimentos,
-        config: config || {},
+        config,
     };
 };
 
