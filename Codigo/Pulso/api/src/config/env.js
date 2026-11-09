@@ -66,6 +66,19 @@ module.exports = {
         process.env.GEMINI_CHATBOT_MODEL ||
         process.env.GEMINI_PDF_MODEL ||
         'gemini-3.1-flash-lite',
+    /**
+     * Insights (PULSO-EPIC-013): nome canônico no código.
+     * Reutiliza a chave/modelo de PDF quando as vars específicas não existem
+     * (mesmo padrão do chatbot):
+     *   GEMINI_API_KEY_INSIGHTS = GEMINI_API_KEY_PDF
+     *   GEMINI_INSIGHTS_MODEL   = GEMINI_PDF_MODEL
+     */
+    GEMINI_API_KEY_INSIGHTS:
+        process.env.GEMINI_API_KEY_INSIGHTS || process.env.GEMINI_API_KEY_PDF,
+    GEMINI_INSIGHTS_MODEL:
+        process.env.GEMINI_INSIGHTS_MODEL ||
+        process.env.GEMINI_PDF_MODEL ||
+        'gemini-3.1-flash-lite',
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_PORT: process.env.SMTP_PORT,
     SMTP_USER: process.env.SMTP_USER,

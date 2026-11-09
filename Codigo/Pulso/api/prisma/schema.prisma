@@ -232,6 +232,7 @@ model Usuario {
   conversasChat       ConversaChat[]
   mensagensChat       MensagemChat[]
   historicoScore      HistoricoScore[]
+  insightSnapshots    InsightSnapshot[]
   gruposCriados       Grupo[]              @relation("CriadorGrupo")
   membrosGrupo        MembroGrupo[]
   aportesGrupo        AporteMetaGrupo[]
@@ -702,6 +703,23 @@ model HistoricoScore {
 
   @@index([usuarioId, criadoEm(sort: Desc)])
   @@map("historico_score")
+}
+
+model InsightSnapshot {
+  id            String   @id @default(cuid())
+  usuarioId     String   @map("usuario_id")
+  mesReferencia String   @map("mes_referencia") @db.VarChar(7)
+  payload       Json
+  geradoPor     String   @default("gemini") @map("gerado_por") @db.VarChar(20)
+  regeneracoes  Int      @default(0)
+  criadoEm      DateTime @default(now()) @map("criado_em")
+  atualizadoEm  DateTime @updatedAt @map("atualizado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, mesReferencia])
+  @@index([usuarioId, atualizadoEm(sort: Desc)])
+  @@map("insight_snapshots")
 }
 
 // ==========================================
