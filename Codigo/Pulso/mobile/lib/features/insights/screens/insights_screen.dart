@@ -120,8 +120,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
       fieldLabelText: 'Mês',
     );
     if (picked == null) return;
-    final next =
-        '${picked.year}-${picked.month.toString().padLeft(2, '0')}';
+    final next = '${picked.year}-${picked.month.toString().padLeft(2, '0')}';
     if (next == _mes) return;
     setState(() => _mes = next);
     await _carregar();
@@ -380,7 +379,10 @@ class _InsightsScreenState extends State<InsightsScreen> {
                       for (final e in data.educacao)
                         ListTile(
                           contentPadding: EdgeInsets.zero,
-                          leading: Icon(Icons.menu_book_outlined, color: accent),
+                          leading: Icon(
+                            Icons.menu_book_outlined,
+                            color: accent,
+                          ),
                           title: Text(e.titulo),
                           subtitle: e.motivo != null ? Text(e.motivo!) : null,
                           trailing: const Icon(Icons.open_in_new, size: 18),
@@ -426,10 +428,8 @@ class _Header extends StatelessWidget {
           children: [
             Text(
               'Insights Inteligentes',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.3,
-                  ),
+              style: Theme.of(context).textTheme.headlineSmall
+                  ?.copyWith(fontWeight: FontWeight.w700, letterSpacing: -0.3),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -484,11 +484,7 @@ class _Header extends StatelessWidget {
 }
 
 class _SectionCard extends StatelessWidget {
-  const _SectionCard({
-    required this.title,
-    required this.child,
-    this.trailing,
-  });
+  const _SectionCard({required this.title, required this.child, this.trailing});
 
   final String title;
   final Widget child;
@@ -513,9 +509,8 @@ class _SectionCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
               if (trailing != null) trailing!,
@@ -600,8 +595,8 @@ class _VariacaoBar extends StatelessWidget {
     final tone = pct > 0
         ? const Color(0xFFEF4444)
         : pct < 0
-            ? const Color(0xFF16A34A)
-            : const Color(0xFF94A3B8);
+        ? const Color(0xFF16A34A)
+        : const Color(0xFF94A3B8);
     final width = (pct.abs().clamp(0, 100)) / 100;
     final prefix = pct > 0 ? '+' : '';
     return Column(
@@ -614,8 +609,8 @@ class _VariacaoBar extends StatelessWidget {
               pct > 0
                   ? Icons.trending_up
                   : pct < 0
-                      ? Icons.trending_down
-                      : Icons.horizontal_rule,
+                  ? Icons.trending_down
+                  : Icons.horizontal_rule,
               size: 16,
               color: tone,
             ),
@@ -632,9 +627,7 @@ class _VariacaoBar extends StatelessWidget {
           child: LinearProgressIndicator(
             value: width,
             minHeight: 8,
-            backgroundColor: Theme.of(context)
-                .colorScheme
-                .outline
+            backgroundColor: Theme.of(context).colorScheme.outline
                 .withValues(alpha: 0.2),
             color: tone,
           ),
@@ -769,10 +762,18 @@ class _ProjecaoCard extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 2),
               child: Row(
                 children: [
-                  Expanded(child: Text('$h meses', style: const TextStyle(fontSize: 13))),
+                  Expanded(
+                    child: Text(
+                      '$h meses',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  ),
                   Text(
                     formatBrl(projecao.acumulado[h] ?? 0),
-                    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 13,
+                    ),
                   ),
                 ],
               ),
@@ -880,7 +881,10 @@ class _AlertaTile extends StatelessWidget {
           Icon(icon, size: 18, color: fg),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(alerta.mensagem, style: TextStyle(color: fg, fontSize: 13.5)),
+            child: Text(
+              alerta.mensagem,
+              style: TextStyle(color: fg, fontSize: 13.5),
+            ),
           ),
         ],
       ),

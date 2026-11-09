@@ -179,11 +179,7 @@ class InsightEducacao {
 }
 
 class InsightFluxo {
-  const InsightFluxo({
-    this.receitas = 0,
-    this.despesas = 0,
-    this.saldo = 0,
-  });
+  const InsightFluxo({this.receitas = 0, this.despesas = 0, this.saldo = 0});
 
   final double receitas;
   final double despesas;
@@ -248,10 +244,7 @@ class InsightPayload {
   bool get semLancamentos => fluxo.receitas == 0 && fluxo.despesas == 0;
 
   factory InsightPayload.fromJson(Map<String, dynamic> json) {
-    List<T> mapList<T>(
-      dynamic raw,
-      T Function(Map<String, dynamic>) map,
-    ) {
+    List<T> mapList<T>(dynamic raw, T Function(Map<String, dynamic>) map) {
       if (raw is! List) return <T>[];
       return raw
           .whereType<Map>()
@@ -265,7 +258,10 @@ class InsightPayload {
       score: InsightScore.fromJson(
         Map<String, dynamic>.from(json['score'] as Map? ?? const {}),
       ),
-      variacaoCategorias: mapList(json['variacaoCategorias'], InsightVariacao.fromJson),
+      variacaoCategorias: mapList(
+        json['variacaoCategorias'],
+        InsightVariacao.fromJson,
+      ),
       projecoes: mapList(json['projecoes'], InsightProjecao.fromJson),
       sugestoes: mapList(json['sugestoes'], InsightSugestao.fromJson),
       alertas: mapList(json['alertas'], InsightAlerta.fromJson),

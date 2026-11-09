@@ -34,11 +34,12 @@ const HISTORICO_MAX = 12;
 const extractProposta = (texto) => {
     const match = texto.match(/<!--PROPOSTA_TX:(\{[\s\S]*?\})-->/);
     if (!match) return { limpa: texto.trim(), proposta: null };
-    let proposta = null;
+    let proposta;
     try {
         proposta = JSON.parse(match[1]);
-        if (!proposta?.tipo || !proposta?.valor) proposta = null;
-        else {
+        if (!proposta?.tipo || !proposta?.valor) {
+            proposta = null;
+        } else {
             proposta.valor = Number(proposta.valor);
             if (!(proposta.valor > 0)) proposta = null;
         }
@@ -191,12 +192,9 @@ const enviarMensagem = async (
 ) => {
     chatbotGeminiProvider.ensureConfigured();
 
-    let conversa = null;
-    if (conversaId) {
-        conversa = await assertConversaDoUsuario(usuarioId, conversaId);
-    } else {
-        conversa = await criarConversa(usuarioId, { titulo: mensagem });
-    }
+    const conversa = conversaId
+        ? await assertConversaDoUsuario(usuarioId, conversaId)
+        : await criarConversa(usuarioId, { titulo: mensagem });
 
     if (looksOffTopic(mensagem)) {
         await prisma.$transaction([

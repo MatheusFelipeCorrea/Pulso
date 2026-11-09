@@ -229,8 +229,7 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
     final showViagens =
         premium && (matches('Viagens e Moedas') || matches('Planejamento'));
     final showInsights =
-        premium &&
-        (matches('Insights') || matches('Insights Inteligentes'));
+        premium && (matches('Insights') || matches('Insights Inteligentes'));
     final showChatbot =
         matches('Pulso Assistente') ||
         matches('Assistente') ||

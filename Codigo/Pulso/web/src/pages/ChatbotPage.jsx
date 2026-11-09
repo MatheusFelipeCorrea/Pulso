@@ -27,6 +27,12 @@ import { useAppSelector } from '@/store/hooks'
 import { getUserDisplayName } from '@/utils/userDisplayName.js'
 import * as chatbotService from '@/services/chatbotService.js'
 
+/** Fora do componente — evita react-hooks/purity (Date.now no corpo do render). */
+const stampMsg = (prefix) => {
+    const at = Date.now()
+    return { id: `${prefix}-${at}`, at }
+}
+
 const ICON_MAP = {
     calendar: CalendarDays,
     target: Target,
@@ -77,10 +83,10 @@ function formatConversaQuando(at) {
 }
 
 const welcomeMsg = () => ({
+    ...stampMsg('welcome'),
     id: 'welcome',
     role: 'assistant',
     content: WELCOME,
-    at: Date.now(),
 })
 
 export default function ChatbotPage() {
@@ -157,7 +163,7 @@ export default function ChatbotPage() {
                 id: m.id,
                 role: m.role,
                 content: m.content,
-                at: m.at ? new Date(m.at).getTime() : Date.now(),
+                at: m.at ? new Date(m.at).getTime() : stampMsg('hist').at,
             }))
             setMensagens(msgs.length ? msgs : [welcomeMsg()])
             if (typeof window !== 'undefined' && window.innerWidth < 900) {
@@ -190,10 +196,9 @@ export default function ChatbotPage() {
         setDraft('')
         setPendingProposta(null)
         const userMsg = {
-            id: `u-${Date.now()}`,
+            ...stampMsg('u'),
             role: 'user',
             content: mensagem,
-            at: Date.now(),
         }
         setMensagens((prev) => [...prev, userMsg])
         setSending(true)
@@ -211,11 +216,10 @@ export default function ChatbotPage() {
             setMensagens((prev) => [
                 ...prev,
                 {
-                    id: `a-${Date.now()}`,
+                    ...stampMsg('a'),
                     role: 'assistant',
                     content: result.resposta,
                     recusada: Boolean(result.recusada),
-                    at: Date.now(),
                 },
             ])
             if (result.propostaTransacao) {
@@ -230,10 +234,9 @@ export default function ChatbotPage() {
             setMensagens((prev) => [
                 ...prev,
                 {
-                    id: `e-${Date.now()}`,
+                    ...stampMsg('e'),
                     role: 'assistant',
                     content: msg,
-                    at: Date.now(),
                 },
             ])
         } finally {
@@ -250,10 +253,9 @@ export default function ChatbotPage() {
             setMensagens((prev) => [
                 ...prev,
                 {
-                    id: `a-ok-${Date.now()}`,
+                    ...stampMsg('a-ok'),
                     role: 'assistant',
                     content: `Pronto! Lancei ${pendingProposta.tipo === 'DESPESA' ? 'a despesa' : 'a receita'} de R$ ${Number(pendingProposta.valor).toFixed(2).replace('.', ',')}${pendingProposta.descricao ? ` (${pendingProposta.descricao})` : ''}.`,
-                    at: Date.now(),
                 },
             ])
             setPendingProposta(null)
