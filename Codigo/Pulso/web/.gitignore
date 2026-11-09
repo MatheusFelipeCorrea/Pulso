@@ -36,3 +36,8 @@ dist-ssr
 
 # Coverage de testes
 coverage/
+
+# Builds mobile servidos em /downloads (gerados no CI / deploy local)
+public/downloads/*.apk
+public/downloads/*.ipa
+.vercel/

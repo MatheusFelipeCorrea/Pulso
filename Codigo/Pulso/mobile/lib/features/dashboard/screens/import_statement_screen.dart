@@ -33,7 +33,7 @@ class _ImportStatementScreenState extends State<ImportStatementScreen> {
   final Map<String, String> _mapeamento = {};
 
   Future<void> _escolherPdf(String origem) async {
-    final result = await FilePicker.pickFiles(
+    final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: const ['pdf'],
       withData: true,
@@ -83,7 +83,7 @@ class _ImportStatementScreenState extends State<ImportStatementScreen> {
   Future<void> _aplicarMapeamento() async {
     final origem = _origem;
     if (origem == null) return;
-    final result = await FilePicker.pickFiles(
+    final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: const ['pdf'],
       withData: true,
