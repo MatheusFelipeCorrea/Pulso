@@ -92,4 +92,17 @@
 
 **Horas:** _a preencher_
 
-**Total Sprint 5:** _a fechar em 04/11_
+**Total Sprint 5:** 0h _(sem registro de horas no arquivo)_
+
+# Sprint 6 (05/11 a 18/11) — parcial até 09/11
+
+### Semana 1 (05/11 - 11/11)
+
+Commits (7): `1a46820`, `14a733a`, `c1d8c74`, `16f0e3e`, `94df269`, `b93cd31`, `357eb23`.
+
+- Tela web do Assistente (histórico, Markdown, FAB no dashboard) — PR [#399](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/399).
+- Painel Insights no design system + MonthPicker/EmptyState, redesign de layout e tokens warning/danger — PR [#400](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/400).
+
+**Horas:** 16h
+
+**Total Sprint 6 (parcial até 09/11):** 16h
