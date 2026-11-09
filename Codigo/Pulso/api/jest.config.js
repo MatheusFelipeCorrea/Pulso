@@ -8,6 +8,8 @@ module.exports = {
     collectCoverageFrom: [
         'src/services/**/*.js',
         '!src/services/insightService.js',
+        '!src/services/insightContextService.js',
+        '!src/services/chatbotContextService.js',
         '!src/services/viagemService.js',
         '!src/services/purchaseItemImageService.js',
         '!src/services/purchaseItemImageStorageService.js',
@@ -35,7 +37,6 @@ module.exports = {
         '!src/middlewares/grupoImageUploadMiddleware.js',
         '!src/middlewares/purchaseItemImageUploadMiddleware.js',
         '!src/middlewares/chatbotRateLimit.js',
-        'src/providers/chatbotGeminiProvider.js',
     ],
     coverageDirectory: 'coverage',
     coverageReporters: ['text', 'text-summary', 'json-summary', 'lcov'],
