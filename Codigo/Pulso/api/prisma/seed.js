@@ -9,10 +9,12 @@ const prisma = new PrismaClient();
 const SEED_SENHA = 'Pulso@123';
 const MATHEUS_EMAIL = 'matheusfelipecorreasilva@hotmail.com';
 
-/** Vers�o do mega-seed de transa��es � incrementar para for�ar re-popula��o em dev */
-const SEED_TX_MEGA_VERSION = 2;
+/** Versão do mega-seed de transações — incrementar para forçar re-população em dev */
+const SEED_TX_MEGA_VERSION = 5;
 const SEED_TX_MEGA_MARKER = `__PULSO_SEED_MEGA_V${SEED_TX_MEGA_VERSION}__`;
 const MESES_HISTORICO_TX = 12;
+/** Inclui mês atual (0) + próximo (1) para gastos futuros (ex.: dezembro) */
+const MESES_FUTURO_TX = 1;
 const TX_BATCH_SIZE = 400;
 
 /** Usu�rios demo TI5 � Free vs Premium */
@@ -22,8 +24,8 @@ const SEED_USUARIOS = [
         nome: 'Matheus Felipe (Estagi�rio)',
         modoUso: 'ESTAGIARIO',
         config: {
-            valorSalario: 1800,
-            diaSalario: 5,
+            valorSalário: 1800,
+            diaSalário: 5,
             valorVa: 400,
             diaVa: 5,
             valorVr: 550,
@@ -196,11 +198,11 @@ async function seedTransacoesBase(usuarioId, byName, modoUso) {
             : [
                   {
                       usuarioId,
-                      categoriaId: byName('Sal�rio', 'RECEITA').id,
+                      categoriaId: byName('Salário', 'RECEITA').id,
                       tipo: 'RECEITA',
                       recurso: 'DINHEIRO',
                       valor: modoUso === 'PJ' ? 8500 : 3850,
-                      descricao: modoUso === 'PJ' ? 'Honor�rios mensais' : 'Sal�rio mensal',
+                      descricao: modoUso === 'PJ' ? 'Honor�rios mensais' : 'Salário mensal',
                       data: new Date(year, month, 5),
                   },
               ];
@@ -210,7 +212,7 @@ async function seedTransacoesBase(usuarioId, byName, modoUso) {
             ...receitas,
             {
                 usuarioId,
-                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                categoriaId: byName('Alimentação', 'DESPESA').id,
                 tipo: 'DESPESA',
                 recurso: modoUso === 'PESSOA_FISICA' ? 'DINHEIRO' : 'VR',
                 valor: 25,
@@ -293,7 +295,7 @@ async function criarTx(data, tagIds = []) {
 /** RF-016 a RF-026, RF-027 (transfer�ncia) e RF-028 (hist�rico p/ sugest�o de categoria) */
 async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
     const jaRodou = await prisma.transacao.findFirst({
-        where: { usuarioId, descricao: 'Bolsa est�gio' },
+        where: { usuarioId, descricao: 'Bolsa estágio' },
     });
     if (jaRodou) return false;
 
@@ -305,14 +307,14 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
         ...extra,
     });
 
-    // Receitas (RF-016) � sal�rio dos �ltimos 3 meses + extras no m�s atual
+    // Receitas (RF-016) — salário dos últimos 3 meses + extras no mês atual
     for (const offsetMes of [-2, -1, 0]) {
         await criarTx(
             base('RECEITA', {
-                categoriaId: byName('Sal�rio', 'RECEITA').id,
+                categoriaId: byName('Salário', 'RECEITA').id,
                 recurso: 'DINHEIRO',
-                valor: 1800,
-                descricao: 'Bolsa est�gio',
+                valor: 4200,
+                descricao: 'Bolsa estágio',
                 data: dataNoMes(5, offsetMes),
             })
         );
@@ -341,21 +343,21 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
     const despesasPorMes = {
         '-2': [
             {
-                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 24.9,
                 descricao: 'Almo�o no RU',
                 dia: 3,
             },
             {
-                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 22.5,
                 descricao: 'Almo�o no RU',
                 dia: 16,
             },
             {
-                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 68,
                 descricao: 'Jantar com amigos',
@@ -390,7 +392,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 dia: 21,
             },
             {
-                categoriaId: byName('Sa�de', 'DESPESA').id,
+                categoriaId: byName('Saúde', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 38,
                 descricao: 'Farm�cia',
@@ -399,21 +401,21 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
         ],
         '-1': [
             {
-                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 26,
                 descricao: 'Almo�o no RU',
                 dia: 3,
             },
             {
-                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 23.9,
                 descricao: 'Almo�o no RU',
                 dia: 16,
             },
             {
-                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 74,
                 descricao: 'Jantar com amigos',
@@ -441,7 +443,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 dia: 9,
             },
             {
-                categoriaId: byName('Educa��o', 'DESPESA').id,
+                categoriaId: byName('Educação', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 120,
                 descricao: 'Mensalidade curso de ingl�s',
@@ -464,7 +466,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 dia: 21,
             },
             {
-                categoriaId: byName('Sa�de', 'DESPESA').id,
+                categoriaId: byName('Saúde', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 41,
                 descricao: 'Farm�cia',
@@ -473,21 +475,21 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
         ],
         0: [
             {
-                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 25.5,
                 descricao: 'Almo�o no RU',
                 dia: 3,
             },
             {
-                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 24,
                 descricao: 'Almo�o no RU',
                 dia: 7,
             },
             {
-                categoriaId: byName('Alimenta��o', 'DESPESA').id,
+                categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 62,
                 descricao: 'Jantar com amigos',
@@ -515,7 +517,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 dia: 2,
             },
             {
-                categoriaId: byName('Educa��o', 'DESPESA').id,
+                categoriaId: byName('Educação', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 120,
                 descricao: 'Mensalidade curso de ingl�s',
@@ -530,7 +532,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 dia: 1,
             },
             {
-                categoriaId: byName('Sa�de', 'DESPESA').id,
+                categoriaId: byName('Saúde', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 35,
                 descricao: 'Farm�cia',
@@ -574,7 +576,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
     );
 
     // RF-021/RF-022 � transa��o recorrente (m�e) j� com "filhas" geradas nos meses seguintes
-    const categoriaAssinaturas = byName('Servi�os e Assinaturas', 'DESPESA').id;
+    const categoriaAssinaturas = byName('Serviços e Assinaturas', 'DESPESA').id;
     const mae = await criarTx(
         base('DESPESA', {
             categoriaId: categoriaAssinaturas,
@@ -636,18 +638,18 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
 
     const templatesDespesa = [
         {
-            categoria: 'Alimenta��o',
+            categoria: 'Alimentação',
             recurso: 'VR',
-            descricoes: ['Almo�o no RU', 'Lanche cantina', 'Marmita RU'],
-            min: 21,
-            max: 29,
+            descricoes: ['Almoço no RU', 'Lanche cantina', 'Marmita RU'],
+            min: 18,
+            max: 28,
         },
         {
-            categoria: 'Alimenta��o',
+            categoria: 'Alimentação',
             recurso: 'DINHEIRO',
-            descricoes: ['Jantar delivery', 'A�a�', 'Padaria', 'Hamburguer'],
-            min: 28,
-            max: 95,
+            descricoes: ['Jantar delivery', 'Açaí', 'Padaria', 'Hamburguer'],
+            min: 22,
+            max: 65,
         },
         {
             categoria: 'Transporte',
@@ -661,84 +663,84 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
             recurso: 'DINHEIRO',
             descricoes: ['Uber pro trampo', '99 pra faculdade', 'Estacionamento'],
             min: 12,
-            max: 45,
+            max: 35,
         },
         {
             categoria: 'Compras',
             recurso: 'VA',
             descricoes: ['Mercado', 'Feira', 'Produtos de limpeza'],
-            min: 45,
-            max: 180,
+            min: 35,
+            max: 110,
         },
         {
             categoria: 'Compras',
             recurso: 'DINHEIRO',
             descricoes: ['Amazon', 'Shopee', 'Presente'],
-            min: 35,
-            max: 220,
+            min: 25,
+            max: 95,
         },
         {
             categoria: 'Lazer',
             recurso: 'DINHEIRO',
             descricoes: ['Cinema', 'Bar com amigos', 'Show', 'Streaming avulso'],
+            min: 20,
+            max: 80,
+        },
+        {
+            categoria: 'Saúde',
+            recurso: 'DINHEIRO',
+            descricoes: ['Farmácia', 'Consulta', 'Exame'],
+            min: 20,
+            max: 90,
+        },
+        {
+            categoria: 'Educação',
+            recurso: 'DINHEIRO',
+            descricoes: ['Material escolar', 'Livro técnico', 'Curso online'],
             min: 25,
+            max: 90,
+        },
+        {
+            categoria: 'Vestuário',
+            recurso: 'DINHEIRO',
+            descricoes: ['Camiseta', 'Calça jeans', 'Tênis'],
+            min: 39,
             max: 120,
-        },
-        {
-            categoria: 'Sa�de',
-            recurso: 'DINHEIRO',
-            descricoes: ['Farm�cia', 'Consulta', 'Exame'],
-            min: 25,
-            max: 180,
-        },
-        {
-            categoria: 'Educa��o',
-            recurso: 'DINHEIRO',
-            descricoes: ['Material escolar', 'Livro t�cnico', 'Curso online'],
-            min: 35,
-            max: 150,
-        },
-        {
-            categoria: 'Vestu�rio',
-            recurso: 'DINHEIRO',
-            descricoes: ['Camiseta', 'Cal�a jeans', 'T�nis'],
-            min: 49,
-            max: 280,
         },
         {
             categoria: 'Beleza',
             recurso: 'DINHEIRO',
             descricoes: ['Barbearia', 'Produtos skincare'],
-            min: 35,
-            max: 90,
+            min: 30,
+            max: 70,
         },
         {
             categoria: 'Tecnologia',
             recurso: 'DINHEIRO',
             descricoes: ['Cabo USB-C', 'Mouse', 'Capinha'],
-            min: 25,
-            max: 350,
+            min: 20,
+            max: 120,
         },
         {
             categoria: 'Pet',
             recurso: 'DINHEIRO',
-            descricoes: ['Ra��o', 'Veterin�rio'],
-            min: 45,
-            max: 160,
+            descricoes: ['Ração', 'Veterinário'],
+            min: 35,
+            max: 95,
         },
         {
             categoria: 'Presentes',
             recurso: 'DINHEIRO',
-            descricoes: ['Anivers�rio', 'Dia das m�es'],
-            min: 50,
-            max: 200,
+            descricoes: ['Aniversário', 'Dia das mães'],
+            min: 40,
+            max: 120,
         },
         {
-            categoria: 'Fam�lia',
+            categoria: 'Família',
             recurso: 'DINHEIRO',
             descricoes: ['Ajuda em casa', 'Visita'],
-            min: 80,
-            max: 250,
+            min: 50,
+            max: 120,
         },
     ];
 
@@ -746,19 +748,19 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
         { descricao: 'Netflix', valor: 39.9, dia: 12 },
         { descricao: 'iCloud 50GB', valor: 12.9, dia: 18 },
         { descricao: 'Academia Smart Fit', valor: 89.9, dia: 5 },
-        { descricao: 'Spotify Fam�lia', valor: 34.9, dia: 10 },
+        { descricao: 'Spotify Família', valor: 34.9, dia: 10 },
         { descricao: 'Google One', valor: 11.99, dia: 22 },
     ];
 
-    for (let offsetMes = -(MESES_HISTORICO_TX - 1); offsetMes <= 0; offsetMes++) {
+    for (let offsetMes = -(MESES_HISTORICO_TX - 1); offsetMes <= MESES_FUTURO_TX; offsetMes++) {
         // Receitas fixas mensais
         if (!mesesComBolsaDemo.has(offsetMes)) {
             registros.push(
                 base('RECEITA', {
-                    categoriaId: cat('Sal�rio', 'RECEITA'),
+                    categoriaId: cat('Salário', 'RECEITA'),
                     recurso: 'DINHEIRO',
-                    valor: 1800,
-                    descricao: 'Bolsa est�gio',
+                    valor: 4200,
+                    descricao: 'Bolsa estágio',
                     data: dataNoMes(5, offsetMes),
                 })
             );
@@ -768,15 +770,15 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
             base('RECEITA', {
                 categoriaId: cat('Outros', 'RECEITA'),
                 recurso: 'VA',
-                valor: 400,
-                descricao: 'Vale Alimenta��o mensal',
+                valor: 600,
+                descricao: 'Vale Alimentação mensal',
                 data: dataNoMes(5, offsetMes),
             }),
             base('RECEITA', {
                 categoriaId: cat('Outros', 'RECEITA'),
                 recurso: 'VR',
-                valor: 550,
-                descricao: 'Vale Refei��o mensal',
+                valor: 800,
+                descricao: 'Vale Refeição mensal',
                 data: dataNoMes(5, offsetMes),
             })
         );
@@ -835,11 +837,11 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
                 categoriaId: null,
                 recurso: 'DINHEIRO',
                 recursoDestino: 'POUPANCA',
-                valor: valorEntre(rng, 150, 450),
+                valor: valorEntre(rng, 60, 150),
                 descricao: escolher(rng, [
                     'Guardando pra reserva',
                     'Aporte meta',
-                    'Reserva emerg�ncia',
+                    'Reserva emergência',
                 ]),
                 data: dataNoMes(diaValidoNoMes(7 + Math.floor(rng() * 10), offsetMes), offsetMes),
             })
@@ -849,7 +851,7 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
         for (const ass of assinaturas) {
             registros.push(
                 base('DESPESA', {
-                    categoriaId: cat('Servi�os e Assinaturas', 'DESPESA'),
+                    categoriaId: cat('Serviços e Assinaturas', 'DESPESA'),
                     recurso: 'DINHEIRO',
                     valor: ass.valor,
                     descricao: ass.descricao,
@@ -858,16 +860,17 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
             );
         }
 
-        // Despesas do dia a dia � densidade alta (~60�75 por m�s)
-        const qtdDespesas = 60 + Math.floor(rng() * 16);
+        // Despesas do dia a dia — volume alto, mas abaixo das receitas (saldo positivo)
+        const qtdDespesas = offsetMes > 0 ? 18 + Math.floor(rng() * 6) : 22 + Math.floor(rng() * 8);
         for (let i = 0; i < qtdDespesas; i++) {
             const tpl = escolher(rng, templatesDespesa);
+            const desc = escolher(rng, tpl.descricoes);
             registros.push(
                 base('DESPESA', {
                     categoriaId: cat(tpl.categoria, 'DESPESA'),
                     recurso: tpl.recurso,
                     valor: valorEntre(rng, tpl.min, tpl.max),
-                    descricao: escolher(rng, tpl.descricoes),
+                    descricao: offsetMes > 0 ? `[Planejado] ${desc}` : desc,
                     data: dataNoMes(
                         diaValidoNoMes(1 + Math.floor(rng() * 28), offsetMes),
                         offsetMes
@@ -880,9 +883,9 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
         if (offsetMes === -2) {
             registros.push(
                 base('DESPESA', {
-                    categoriaId: cat('Ve�culos', 'DESPESA'),
+                    categoriaId: cat('Veículos', 'DESPESA'),
                     recurso: 'DINHEIRO',
-                    valor: 450,
+                    valor: 280,
                     descricao: 'IPVA parcela',
                     data: dataNoMes(15, offsetMes),
                 })
@@ -893,7 +896,7 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
                 base('DESPESA', {
                     categoriaId: cat('Viagem', 'DESPESA'),
                     recurso: 'DINHEIRO',
-                    valor: 890,
+                    valor: 420,
                     descricao: 'Passagem fim de semana prolongado',
                     data: dataNoMes(20, offsetMes),
                 })
@@ -902,11 +905,36 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
         if (offsetMes === 0 && rng() > 0.3) {
             registros.push(
                 base('DESPESA', {
-                    categoriaId: cat('Finan�as', 'DESPESA'),
+                    categoriaId: cat('Finanças', 'DESPESA'),
                     recurso: 'DINHEIRO',
                     valor: valorEntre(rng, 35, 120),
-                    descricao: 'Taxa banc�ria / IOF',
+                    descricao: 'Taxa bancária / IOF',
                     data: dataNoMes(28, offsetMes),
+                })
+            );
+        }
+        if (offsetMes === 1) {
+            registros.push(
+                base('DESPESA', {
+                    categoriaId: cat('Presentes', 'DESPESA'),
+                    recurso: 'DINHEIRO',
+                    valor: valorEntre(rng, 80, 180),
+                    descricao: '[Planejado] Presentes de Natal',
+                    data: dataNoMes(18, offsetMes),
+                }),
+                base('DESPESA', {
+                    categoriaId: cat('Viagem', 'DESPESA'),
+                    recurso: 'DINHEIRO',
+                    valor: valorEntre(rng, 280, 480),
+                    descricao: '[Planejado] Passagem fim de ano',
+                    data: dataNoMes(22, offsetMes),
+                }),
+                base('DESPESA', {
+                    categoriaId: cat('Lazer', 'DESPESA'),
+                    recurso: 'DINHEIRO',
+                    valor: valorEntre(rng, 80, 180),
+                    descricao: '[Planejado] Réveillon',
+                    data: dataNoMes(31, offsetMes),
                 })
             );
         }
@@ -984,14 +1012,14 @@ async function seedMetasCompletas(usuarioId) {
             tipo: 'CURTO_PRAZO',
             status: 'CONCLUIDA',
             prioridade: 'MEDIA',
-            valorAlvo: 4500,
-            valorAtual: 4500,
+            valorAlvo: 1800,
+            valorAtual: 1800,
             prazo: dataNoMes(28, -1),
             concluidaEm: dataNoMes(20, -1),
             aportes: {
                 create: [
-                    { valor: 2000, data: dataNoMes(5, -2) },
-                    { valor: 2500, data: dataNoMes(20, -1) },
+                    { valor: 800, data: dataNoMes(5, -2) },
+                    { valor: 1000, data: dataNoMes(20, -1) },
                 ],
             },
         },
@@ -1050,7 +1078,7 @@ async function seedPlanejamentoCompraCompleto(usuarioId, categorias, metaNoteboo
             tipo: 'DESPESA',
             recurso: 'DINHEIRO',
             categoriaId: categoriaTecnologia.id,
-            valor: 4500,
+            valor: 1800,
             descricao: 'Compra: Notebook Dell Inspiron',
             data: dataNoMes(20, -1),
             recorrente: false,
@@ -1062,7 +1090,7 @@ async function seedPlanejamentoCompraCompleto(usuarioId, categorias, metaNoteboo
         data: {
             usuarioId,
             nome: 'Notebook Dell Inspiron',
-            valorEstimado: 4500,
+            valorEstimado: 1800,
             prioridade: 'MEDIA',
             categoria: 'ELETRONICOS',
             simularParcelas: true,
@@ -1293,17 +1321,17 @@ async function seedOrcamentoCompleto(usuarioId, byName) {
     if (marker) return false;
 
     const limites = [
-        { nome: 'Alimenta��o', limite: 500 },
+        { nome: 'Alimentação', limite: 500 },
         { nome: 'Transporte', limite: 150 },
         { nome: 'Lazer', limite: 100 },
         { nome: 'Compras', limite: 300 },
-        { nome: 'Sa�de', limite: 150 },
+        { nome: 'Saúde', limite: 150 },
         { nome: 'Moradia', limite: 700 },
-        { nome: 'Educa��o', limite: 200 },
+        { nome: 'Educação', limite: 200 },
     ];
 
     const registros = [];
-    for (let offsetMes = -(MESES_HISTORICO_TX - 1); offsetMes <= 0; offsetMes++) {
+    for (let offsetMes = -(MESES_HISTORICO_TX - 1); offsetMes <= MESES_FUTURO_TX; offsetMes++) {
         for (const { nome, limite } of limites) {
             registros.push({
                 usuarioId,
@@ -1390,24 +1418,24 @@ async function seedNotificacoesCompletas(usuarioId, categorias) {
     const count = await prisma.notificacao.count({ where: { usuarioId } });
     if (count > 0) return false;
 
-    const alimentacao = categorias.find((c) => c.nome === 'Alimenta��o' && c.tipo === 'DESPESA');
+    const alimentacao = categorias.find((c) => c.nome === 'Alimentação' && c.tipo === 'DESPESA');
 
     await notificationService.criarNotificacao(usuarioId, {
         tipo: 'RECEITA_REGISTRADA',
         titulo: 'Receita registrada',
-        mensagem: 'Bolsa est�gio: +R$ 1.800,00',
+        mensagem: 'Bolsa estágio: +R$ 4.200,00',
         linkAcao: '/transactions',
     });
     await notificationService.criarNotificacao(usuarioId, {
         tipo: 'TRANSFERENCIA_REGISTRADA',
-        titulo: 'Transfer�ncia registrada',
+        titulo: 'Transferência registrada',
         mensagem: 'Guardando pra reserva: R$ 300,00',
         linkAcao: '/transactions',
     });
     await notificationService.criarNotificacao(usuarioId, {
         tipo: 'ALERTA_ORCAMENTO',
-        titulo: 'Alerta or�amento (80%)',
-        mensagem: 'Voc� j� usou 82% do or�amento de Alimenta��o este m�s',
+        titulo: 'Alerta orçamento (80%)',
+        mensagem: 'Você já usou 82% do orçamento de Alimentação este mês',
         linkAcao: '/budget',
         metadados: { categoriaId: alimentacao.id, mesReferencia: periodoAtual() },
     });
@@ -1419,21 +1447,21 @@ async function seedNotificacoesCompletas(usuarioId, categorias) {
     });
     await notificationService.criarNotificacao(usuarioId, {
         tipo: 'DIVIDA_COBRANCA',
-        titulo: 'D�vida/cobran�a',
-        mensagem: 'Jo�o Silva: d�vida vence em 3 dias',
+        titulo: 'Dívida/cobrança',
+        mensagem: 'João Silva: dívida vence em 3 dias',
         linkAcao: '/debts',
     });
     await notificationService.criarNotificacao(usuarioId, {
         tipo: 'GRUPO_ATIVIDADE',
         titulo: 'Grupo (atividade)',
-        mensagem: 'Maria adicionou uma nova pretens�o na Viagem Maca� 2026',
+        mensagem: 'Novo aporte na meta do grupo demo PULSO-TEST',
         linkAcao: '/groups',
     });
     await notificationService.criarNotificacao(usuarioId, {
         tipo: 'INSIGHT_IA',
         titulo: 'Insight IA',
-        mensagem: 'Seus gastos com Alimenta��o aumentaram 12% em rela��o ao m�s passado',
-        linkAcao: '/dashboard',
+        mensagem: 'Seus gastos com Alimentação aumentaram 12% em relação ao mês passado',
+        linkAcao: '/insights',
     });
 
     console.log('   ? 7 notifica��es de exemplo (v�rios tipos)');
@@ -1457,6 +1485,9 @@ async function seedDadosCompletos(usuario, categoriasIniciais) {
     await seedOrcamentoCompleto(usuario.id, byName);
     await seedDividasCompletas(usuario.id);
     await seedNotificacoesCompletas(usuario.id, categorias);
+
+    const { seedExtrasCompletos } = require('./seedExtras');
+    await seedExtrasCompletos(usuario.id);
 }
 
 const MACAE_DESTINO_META = {
@@ -1782,11 +1813,23 @@ async function main() {
     console.log('  � F�rias Nordeste 2026 � c�digo PULSO-NE26 (5 membros)');
 }
 
-main()
-    .catch((e) => {
-        console.error('? Erro no seed:', e);
-        process.exit(1);
-    })
-    .finally(async () => {
-        await prisma.$disconnect();
-    });
+if (require.main === module) {
+    main()
+        .catch((e) => {
+            console.error('Erro no seed:', e);
+            process.exit(1);
+        })
+        .finally(async () => {
+            await prisma.$disconnect();
+        });
+}
+
+module.exports = {
+    SEED_SENHA,
+    MATHEUS_EMAIL,
+    upsertSeedUsuario,
+    seedCategorias,
+    seedDadosCompletos,
+    seedTransacoesBase,
+    dataNoMes,
+};

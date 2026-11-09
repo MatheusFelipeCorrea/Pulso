@@ -1,0 +1,55 @@
+# Blueprint Render — API Pulso (demo / apresentação)
+# Dashboard: New → Blueprint → selecione este repositório
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Depois do deploy, configure as env vars secretas no painel
+# (DATABASE_URL, JWT_*, GOOGLE_*, GEMINI_*, SMTP_*, CORS_ORIGIN, FRONTEND_URL).
+
+services:
+  - type: web
+    name: pulso-api
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: Codigo/Pulso/api
+    buildCommand: npm ci && npx prisma generate
+    startCommand: npx prisma migrate deploy && npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      # Preencha no dashboard (Sync: false = secreto manual):
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        sync: false
+      - key: GOOGLE_TOKENS_ENCRYPTION_KEY
+        sync: false
+      - key: GEMINI_API_KEY_PDF
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        sync: false

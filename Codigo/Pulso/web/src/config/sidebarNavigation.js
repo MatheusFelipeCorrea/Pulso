@@ -48,6 +48,18 @@ export const SIDEBAR_NAV = [
             { id: 'divisao', label: 'Divisão de Despesas', path: '/expense-split', icon: 'Split' },
         ],
     },
+    {
+        id: 'insights',
+        label: 'Insights',
+        path: '/insights',
+        icon: 'Sparkles',
+    },
+    {
+        id: 'chatbot',
+        label: 'Pulso Assistente',
+        path: '/chatbot',
+        icon: 'Bot',
+    },
 ]
 
 /** Itens fixos no rodapé da sidebar (seção Conta) */

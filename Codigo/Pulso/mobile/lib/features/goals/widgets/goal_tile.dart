@@ -42,87 +42,91 @@ class GoalTile extends StatelessWidget {
     final prioridadeKind = badgeKindFromPrioridade(meta.prioridade);
     final insight = _insightStyle(meta, brightness);
 
+    // Sem InkWell no card inteiro: evita conflito de gesto com o scroll/RefreshIndicator.
     return Padding(
       padding: const EdgeInsets.only(bottom: PulsoTokens.space3),
       child: PulsoSurface(
-        onTap: onOpen,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PulsoSoftIcon(
-                  icon: goalIconForName(meta.nome),
-                  color: barColor,
-                ),
-                const SizedBox(width: PulsoTokens.space3),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        meta.nome,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      const SizedBox(height: 6),
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: [
-                          if (tipoKind != null)
-                            PulsoBadge.kind(
-                              kind: tipoKind,
-                              brightness: brightness,
-                              compact: true,
-                            ),
-                          if (statusKind != null)
-                            PulsoBadge.kind(
-                              kind: statusKind,
-                              brightness: brightness,
-                              compact: true,
-                            ),
-                          if (prioridadeKind != null)
-                            PulsoBadge.kind(
-                              kind: prioridadeKind,
-                              brightness: brightness,
-                              compact: true,
-                            ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        _deadlineLabel(meta),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
+            InkWell(
+              onTap: onOpen,
+              borderRadius: BorderRadius.circular(PulsoTokens.radiusLg),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PulsoSoftIcon(
+                    icon: goalIconForName(meta.nome),
+                    color: barColor,
                   ),
-                ),
-                if (meta.status == 'CONCLUIDA')
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 8,
+                  const SizedBox(width: PulsoTokens.space3),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          meta.nome,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        const SizedBox(height: 6),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: [
+                            if (tipoKind != null)
+                              PulsoBadge.kind(
+                                kind: tipoKind,
+                                brightness: brightness,
+                                compact: true,
+                              ),
+                            if (statusKind != null)
+                              PulsoBadge.kind(
+                                kind: statusKind,
+                                brightness: brightness,
+                                compact: true,
+                              ),
+                            if (prioridadeKind != null)
+                              PulsoBadge.kind(
+                                kind: prioridadeKind,
+                                brightness: brightness,
+                                compact: true,
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          _deadlineLabel(meta),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
                     ),
-                    decoration: BoxDecoration(
-                      color: PulsoColors.successOf(brightness)
-                          .withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
+                  ),
+                  if (meta.status == 'CONCLUIDA')
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
                         color: PulsoColors.successOf(brightness)
-                            .withValues(alpha: 0.3),
+                            .withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: PulsoColors.successOf(brightness)
+                              .withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: Text(
+                        'CONCLUÍDA',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: PulsoColors.successOf(brightness),
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.4,
+                        ),
                       ),
                     ),
-                    child: Text(
-                      'CONCLUÍDA',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: PulsoColors.successOf(brightness),
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.4,
-                      ),
-                    ),
-                  ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(height: PulsoTokens.space4),
             Row(

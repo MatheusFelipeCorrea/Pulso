@@ -5,6 +5,7 @@ import 'package:pulso/core/api/api_exception.dart';
 import 'package:pulso/core/theme/pulso_colors.dart';
 import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/category_icon.dart';
+import 'package:pulso/core/widgets/pulso_badge.dart';
 import 'package:pulso/core/widgets/pulso_feedback.dart';
 import 'package:pulso/core/widgets/pulso_page.dart';
 import 'package:pulso/features/budget/data/budget_models.dart';
@@ -49,18 +50,29 @@ class _BudgetScreenState extends State<BudgetScreen> {
             title: 'Orçamento Mensal',
             subtitle: 'Defina limites por categoria e acompanhe seus gastos no período.',
             icon: Icons.pie_chart_outline,
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
+          ),
+          PulsoSurface(
+            margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
+            padding: const EdgeInsets.symmetric(
+              horizontal: PulsoTokens.space2,
+              vertical: PulsoTokens.space1,
+            ),
+            child: Row(
               children: [
                 IconButton(
+                  tooltip: 'Mês anterior',
                   onPressed: () => controller.shiftMonth(-1),
                   icon: const Icon(Icons.chevron_left),
                 ),
-                Text(
-                  TransactionPeriod.label(controller.mes),
-                  style: Theme.of(context).textTheme.titleSmall,
+                Expanded(
+                  child: Text(
+                    TransactionPeriod.label(controller.mes),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
                 IconButton(
+                  tooltip: 'Próximo mês',
                   onPressed: () => controller.shiftMonth(1),
                   icon: const Icon(Icons.chevron_right),
                 ),
@@ -80,21 +92,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
             )
           else if (status != null && resumo != null) ...[
             if (resumo.orcamentoExcedeRenda)
-              PulsoSurface(
-                margin: const EdgeInsets.only(bottom: PulsoTokens.space3),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.warning_amber_rounded,
-                      color: PulsoColors.warningOf(brightness),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        'Seu orçamento total (${formatBrl(resumo.orcamentoTotal)}) excede a renda planejada (${formatBrl(status.rendaMensalPlanejada)}).',
-                      ),
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.only(bottom: PulsoTokens.space3),
+                child: PulsoAlert(
+                  type: PulsoAlertType.warning,
+                  icon: Icons.warning_amber_rounded,
+                  title: 'Orçamento acima da renda',
+                  message:
+                      'Seu orçamento total (${formatBrl(resumo.orcamentoTotal)}) excede a renda planejada (${formatBrl(status.rendaMensalPlanejada)}).',
                 ),
               ),
             const PulsoSectionHeader(
@@ -130,6 +135,25 @@ class _BudgetScreenState extends State<BudgetScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Orçamento utilizado',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ),
+                      Text(
+                        '${resumo.percentualUsado.round()}%',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              color: PulsoColors.accent(brightness),
+                              fontWeight: PulsoTokens.weightBold,
+                            ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: PulsoTokens.space2),
                   LinearProgressIndicator(
                     value: (resumo.percentualUsado / 100).clamp(0, 1),
                     minHeight: 10,
@@ -139,9 +163,12 @@ class _BudgetScreenState extends State<BudgetScreen> {
                         .colorScheme
                         .surfaceContainerHighest,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: PulsoTokens.space2),
                   Text(
-                    '${resumo.percentualUsado.round()}% do orçamento utilizado',
+                    '${formatBrl(resumo.gastoTotal)} de ${formatBrl(resumo.orcamentoTotal)}',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),
@@ -173,22 +200,32 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 title: 'Categorias sem limite',
                 icon: Icons.add_circle_outline,
               ),
-              ...status.categoriasSemOrcamento.map(
-                (item) => ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: CategoryGlyph(
-                    icone: item.icone,
-                    color:
-                        parseHexColor(item.cor) ??
-                        PulsoColors.accent(brightness),
-                    size: 36,
-                  ),
-                  title: Text(item.nome),
-                  trailing: TextButton.icon(
-                    onPressed: () => context.push('/budget/edit'),
-                    icon: const Icon(Icons.edit_outlined, size: 16),
-                    label: const Text('Definir'),
-                  ),
+              PulsoSurface(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: PulsoTokens.space3,
+                  vertical: PulsoTokens.space1,
+                ),
+                child: Column(
+                  children: status.categoriasSemOrcamento
+                      .map(
+                        (item) => ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: CategoryGlyph(
+                            icone: item.icone,
+                            color:
+                                parseHexColor(item.cor) ??
+                                PulsoColors.accent(brightness),
+                            size: 36,
+                          ),
+                          title: Text(item.nome),
+                          trailing: TextButton.icon(
+                            onPressed: () => context.push('/budget/edit'),
+                            icon: const Icon(Icons.edit_outlined, size: 16),
+                            label: const Text('Definir'),
+                          ),
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             ],
@@ -297,38 +334,42 @@ class _CategoryCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '${formatBrl(item.gastoValor)} / ${formatBrl(item.limiteValor)} · resta ${formatBrl(item.restanteValor)}',
+            '${formatBrl(item.gastoValor)} de ${formatBrl(item.limiteValor)}',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            'Resta ${formatBrl(item.restanteValor)}',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
           if (item.valorRollover > 0 || item.status != 'normal') ...[
-            const SizedBox(height: 8),
+            const SizedBox(height: PulsoTokens.space2),
             Wrap(
-              spacing: 8,
+              spacing: PulsoTokens.space2,
+              runSpacing: PulsoTokens.space1,
               children: [
                 if (item.valorRollover > 0)
-                  Chip(
-                    avatar: const Icon(Icons.autorenew, size: 14),
-                    label: Text('+ ${formatBrl(item.valorRollover)}'),
-                    visualDensity: VisualDensity.compact,
+                  PulsoBadge.custom(
+                    label: '+ ${formatBrl(item.valorRollover)}',
+                    icon: Icons.autorenew,
+                    color: PulsoColors.infoOf(brightness),
+                    compact: true,
                   ),
                 if (item.status == 'alerta')
-                  Chip(
-                    avatar: Icon(
-                      Icons.notifications_outlined,
-                      size: 14,
-                      color: PulsoColors.warningOf(brightness),
-                    ),
-                    label: const Text('80%'),
-                    visualDensity: VisualDensity.compact,
+                  PulsoBadge.custom(
+                    label: '80%',
+                    icon: Icons.notifications_outlined,
+                    color: PulsoColors.warningOf(brightness),
+                    compact: true,
                   ),
                 if (item.status == 'estourado')
-                  Chip(
-                    avatar: Icon(
-                      Icons.warning_amber_rounded,
-                      size: 14,
-                      color: PulsoColors.dangerOf(brightness),
-                    ),
-                    label: const Text('Estourou!'),
-                    visualDensity: VisualDensity.compact,
+                  PulsoBadge.custom(
+                    label: 'Estourou!',
+                    icon: Icons.warning_amber_rounded,
+                    color: PulsoColors.dangerOf(brightness),
+                    compact: true,
                   ),
               ],
             ),

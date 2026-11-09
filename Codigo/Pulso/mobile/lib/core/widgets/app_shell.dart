@@ -19,7 +19,8 @@ class AppShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final location = GoRouterState.of(context).uri.path;
-    final premium = context.watch<AuthController>().user?.plano == 'PREMIUM';
+    final tab = _navIndex(location);
+    final onPrimaryTabs = tab >= 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -29,41 +30,43 @@ class AppShell extends StatelessWidget {
       drawer: const PulsoSidebar(),
       floatingActionButton: _fab(context, location),
       bottomNavigationBar: NavigationBar(
-        selectedIndex: _navIndex(location, premium),
-        onDestinationSelected: (index) => _onNav(context, index, premium),
-        destinations: [
-          const NavigationDestination(
+        selectedIndex: onPrimaryTabs ? tab : 0,
+        indicatorColor: onPrimaryTabs ? null : Colors.transparent,
+        onDestinationSelected: (index) => _onNav(context, index),
+        destinations: const [
+          NavigationDestination(
             icon: Icon(Icons.swap_horiz),
             selectedIcon: Icon(Icons.swap_horiz),
             label: 'Transações',
           ),
-          const NavigationDestination(
-            icon: Icon(Icons.gps_fixed),
-            selectedIcon: Icon(Icons.gps_fixed),
-            label: 'Metas',
+          NavigationDestination(
+            icon: Icon(Icons.space_dashboard_outlined),
+            selectedIcon: Icon(Icons.space_dashboard),
+            label: 'Dashboard',
           ),
-          if (premium)
-            const NavigationDestination(
-              icon: Icon(Icons.flight_takeoff_outlined),
-              selectedIcon: Icon(Icons.flight_takeoff),
-              label: 'Viagens',
-            ),
+          NavigationDestination(
+            icon: Icon(Icons.calendar_month_outlined),
+            selectedIcon: Icon(Icons.calendar_month),
+            label: 'Calendário',
+          ),
         ],
       ),
       body: child,
     );
   }
 
-  int _navIndex(String location, bool premium) {
-    if (location.startsWith('/goals')) return 1;
-    if (premium && location.startsWith('/trips')) return 2;
-    return 0;
+  /// -1 quando a rota atual não é um dos 3 atalhos da barra.
+  int _navIndex(String location) {
+    if (location.startsWith('/dashboard')) return 1;
+    if (location.startsWith('/calendar')) return 2;
+    if (location.startsWith('/transactions')) return 0;
+    return -1;
   }
 
-  void _onNav(BuildContext context, int index, bool premium) {
+  void _onNav(BuildContext context, int index) {
     if (index == 0) context.go('/transactions');
-    if (index == 1) context.go('/goals');
-    if (premium && index == 2) context.go('/trips');
+    if (index == 1) context.go('/dashboard');
+    if (index == 2) context.go('/calendar');
   }
 
   Widget? _fab(BuildContext context, String location) {
@@ -128,6 +131,13 @@ class AppShell extends StatelessWidget {
         onPressed: () => context.push('/purchase-planning/form'),
         icon: const Icon(Icons.add),
         label: const Text('Novo'),
+      );
+    }
+    if (location == '/dashboard' || location.startsWith('/dashboard/')) {
+      return FloatingActionButton(
+        onPressed: () => context.push('/chatbot?modo=quick_add'),
+        tooltip: 'Pulso Assistente',
+        child: const Icon(Icons.smart_toy_outlined),
       );
     }
     return null;
@@ -218,11 +228,16 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
         matches('Planejamento de Compra') || matches('Planejamento');
     final showViagens =
         premium && (matches('Viagens e Moedas') || matches('Planejamento'));
+    final showInsights =
+        premium && (matches('Insights') || matches('Insights Inteligentes'));
+    final showChatbot =
+        matches('Pulso Assistente') ||
+        matches('Assistente') ||
+        matches('Chatbot');
     final showFinanceiro =
         showTransacoes ||
         showCalendario ||
         showOrcamento ||
-        showDashboard ||
         showDividas ||
         showDivisao;
     final showPlanejamento =
@@ -329,6 +344,13 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
+                if (showDashboard)
+                  _NavTile(
+                    icon: Icons.space_dashboard_outlined,
+                    label: 'Dashboard',
+                    selected: location == '/dashboard',
+                    onTap: () => _go(context, '/dashboard'),
+                  ),
                 if (showFinanceiro) ...[
                   _SectionHeader(
                     icon: Icons.payments_outlined,
@@ -337,13 +359,6 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                     onTap: () => _toggle('financeiro'),
                   ),
                   if (financeiroOpen) ...[
-                    if (showDashboard)
-                      _NavTile(
-                        icon: Icons.space_dashboard_outlined,
-                        label: 'Dashboard',
-                        selected: location == '/dashboard',
-                        onTap: () => _go(context, '/dashboard'),
-                      ),
                     if (showTransacoes)
                       _NavTile(
                         icon: Icons.swap_horiz,
@@ -391,6 +406,20 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                       ),
                   ],
                 ],
+                if (showInsights)
+                  _NavTile(
+                    icon: Icons.auto_awesome_outlined,
+                    label: 'Insights',
+                    selected: location == '/insights',
+                    onTap: () => _go(context, '/insights'),
+                  ),
+                if (showChatbot)
+                  _NavTile(
+                    icon: Icons.smart_toy_outlined,
+                    label: 'Pulso Assistente',
+                    selected: location == '/chatbot',
+                    onTap: () => _go(context, '/chatbot'),
+                  ),
                 if (showPlanejamento) ...[
                   _SectionHeader(
                     icon: Icons.gps_fixed,

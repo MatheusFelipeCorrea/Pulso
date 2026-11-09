@@ -29,6 +29,8 @@ import GroupsPage from './pages/GroupsPage'
 import GroupDetailPage from './pages/GroupDetailPage'
 import GroupJoinRedirect from './pages/GroupJoinRedirect'
 import ExpenseSplitPage from './pages/ExpenseSplitPage'
+import ChatbotPage from './pages/ChatbotPage.jsx'
+import InsightsPage from './pages/InsightsPage.jsx'
 import { PremiumRoute } from './components/routing/PremiumRoute.jsx'
 // TEMP: demais páginas ainda não estão neste repo.
 
@@ -89,9 +91,11 @@ function App() {
                             <Route path="groups" element={<GroupsPage />} />
                             <Route path="groups/:id" element={<GroupDetailPage />} />
                             <Route path="expense-split" element={<ExpenseSplitPage />} />
+                            <Route path="chatbot" element={<ChatbotPage />} />
                             <Route path="profile" element={<AccountPage mode="profile" />} />
                             <Route path="settings" element={<AccountPage mode="settings" />} />
                             <Route element={<PremiumRoute />}>
+                                <Route path="insights" element={<InsightsPage />} />
                                 <Route path="trips" element={<TripsPage />} />
                                 <Route path="trips/:id" element={<TripDetailPage />} />
                             </Route>

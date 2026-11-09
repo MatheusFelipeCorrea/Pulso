@@ -229,8 +229,10 @@ model Usuario {
   conquistasUsuario   ConquistaUsuario[]
   moedasFavoritas     MoedaFavorita[]
   desafiosMensais     DesafioMensal[]
+  conversasChat       ConversaChat[]
   mensagensChat       MensagemChat[]
   historicoScore      HistoricoScore[]
+  insightSnapshots    InsightSnapshot[]
   gruposCriados       Grupo[]              @relation("CriadorGrupo")
   membrosGrupo        MembroGrupo[]
   aportesGrupo        AporteMetaGrupo[]
@@ -660,15 +662,32 @@ model DesafioMensal {
 // IA / CHATBOT
 // ==========================================
 
+model ConversaChat {
+  id           String   @id @default(cuid())
+  usuarioId    String   @map("usuario_id")
+  titulo       String   @default("Nova conversa") @db.VarChar(120)
+  criadoEm     DateTime @default(now()) @map("criado_em")
+  atualizadoEm DateTime @updatedAt @map("atualizado_em")
+
+  usuario   Usuario        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  mensagens MensagemChat[]
+
+  @@index([usuarioId, atualizadoEm(sort: Desc)])
+  @@map("conversas_chat")
+}
+
 model MensagemChat {
-  id        String   @id @default(cuid())
-  usuarioId String   @map("usuario_id")
-  papel     String   @db.VarChar(20) // "user" | "assistant"
-  conteudo  String   @db.Text
-  criadoEm  DateTime @default(now()) @map("criado_em")
+  id         String   @id @default(cuid())
+  conversaId String   @map("conversa_id")
+  usuarioId  String   @map("usuario_id")
+  papel      String   @db.VarChar(20) // "user" | "assistant"
+  conteudo   String   @db.Text
+  criadoEm   DateTime @default(now()) @map("criado_em")
 
-  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  conversa ConversaChat @relation(fields: [conversaId], references: [id], onDelete: Cascade)
+  usuario  Usuario      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 
+  @@index([conversaId, criadoEm])
   @@index([usuarioId, criadoEm(sort: Desc)])
   @@map("mensagens_chat")
 }
@@ -684,6 +703,23 @@ model HistoricoScore {
 
   @@index([usuarioId, criadoEm(sort: Desc)])
   @@map("historico_score")
+}
+
+model InsightSnapshot {
+  id            String   @id @default(cuid())
+  usuarioId     String   @map("usuario_id")
+  mesReferencia String   @map("mes_referencia") @db.VarChar(7)
+  payload       Json
+  geradoPor     String   @default("gemini") @map("gerado_por") @db.VarChar(20)
+  regeneracoes  Int      @default(0)
+  criadoEm      DateTime @default(now()) @map("criado_em")
+  atualizadoEm  DateTime @updatedAt @map("atualizado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, mesReferencia])
+  @@index([usuarioId, atualizadoEm(sort: Desc)])
+  @@map("insight_snapshots")
 }
 
 // ==========================================

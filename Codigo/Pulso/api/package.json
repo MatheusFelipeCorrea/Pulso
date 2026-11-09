@@ -3,9 +3,13 @@
     "version": "1.0.0",
     "description": "API do Pulso — O pulso da sua vida financeira",
     "main": "src/server.js",
+    "engines": {
+        "node": ">=22.12.0"
+    },
     "scripts": {
         "dev": "nodemon src/server.js",
         "start": "node src/server.js",
+        "start:prod": "prisma migrate deploy && node src/server.js",
         "postinstall": "prisma generate",
         "test": "jest",
         "test:watch": "jest --watch",
@@ -17,6 +21,7 @@
         "db:pull": "npx prisma db pull",
         "db:studio": "npx prisma studio",
         "db:seed": "node prisma/seed.js",
+        "db:reseed-tester": "node scripts/reseed-tester.js",
         "lint": "eslint .",
         "format": "prettier --write .",
         "format:check": "prettier --check .",

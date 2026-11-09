@@ -123,14 +123,30 @@ class _DebtsScreenState extends State<DebtsScreen> {
                 divida.nomePessoa,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              const SizedBox(height: 8),
-              Text('Total ${formatBrl(divida.valor)}'),
-              Text('Pago ${formatBrl(divida.valorPago)}'),
-              Text('Restante ${formatBrl(divida.valorRestante)}'),
-              if (divida.prazoDevolucao != null)
-                Text(
-                  'Prazo ${divida.prazoDevolucao!.day.toString().padLeft(2, '0')}/${divida.prazoDevolucao!.month.toString().padLeft(2, '0')}/${divida.prazoDevolucao!.year}',
+              const SizedBox(height: PulsoTokens.space3),
+              PulsoSurface(
+                padding: const EdgeInsets.all(PulsoTokens.space3),
+                child: Column(
+                  children: [
+                    _DetailRow(label: 'Total', value: formatBrl(divida.valor)),
+                    _DetailRow(
+                      label: 'Pago',
+                      value: formatBrl(divida.valorPago),
+                    ),
+                    _DetailRow(
+                      label: 'Restante',
+                      value: formatBrl(divida.valorRestante),
+                      strong: true,
+                    ),
+                    if (divida.prazoDevolucao != null)
+                      _DetailRow(
+                        label: 'Prazo',
+                        value:
+                            '${divida.prazoDevolucao!.day.toString().padLeft(2, '0')}/${divida.prazoDevolucao!.month.toString().padLeft(2, '0')}/${divida.prazoDevolucao!.year}',
+                      ),
+                  ],
                 ),
+              ),
               if ((divida.observacao ?? '').trim().isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Text(divida.observacao!),
@@ -267,11 +283,30 @@ class _DebtsScreenState extends State<DebtsScreen> {
               onAction: controller.reload,
             )
           else if (visiveis.isEmpty)
-            const PulsoEmptyState(
-              title: 'Nada por aqui',
-              description: 'Registre um empréstimo para acompanhar o saldo.',
+            PulsoEmptyState(
+              title: switch (_aba) {
+                'QUITADAS' => 'Nenhuma dívida quitada',
+                'EU_DEVO' => 'Você não deve a ninguém',
+                _ => 'Ninguém te deve no momento',
+              },
+              description: _aba == 'QUITADAS'
+                  ? 'Dívidas quitadas aparecem aqui.'
+                  : 'Registre um empréstimo para acompanhar o saldo.',
+              icon: Icons.handshake_outlined,
+              actionLabel: _aba == 'QUITADAS' ? null : 'Nova dívida',
+              onAction: _aba == 'QUITADAS'
+                  ? null
+                  : () => context.push('/debts/new'),
             )
-          else
+          else ...[
+            PulsoSectionHeader(
+              title: switch (_aba) {
+                'QUITADAS' => 'Quitadas (${visiveis.length})',
+                'EU_DEVO' => 'Eu devo (${visiveis.length})',
+                _ => 'Me devem (${visiveis.length})',
+              },
+              icon: Icons.list_alt_outlined,
+            ),
             ...visiveis.map(
               (divida) => _DebtCard(
                 divida: divida,
@@ -285,6 +320,47 @@ class _DebtsScreenState extends State<DebtsScreen> {
                 onDelete: () => _acao(divida, 'excluir'),
               ),
             ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _DetailRow extends StatelessWidget {
+  const _DetailRow({
+    required this.label,
+    required this.value,
+    this.strong = false,
+  });
+
+  final String label;
+  final String value;
+  final bool strong;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+          Text(
+            value,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontWeight: strong
+                  ? PulsoTokens.weightBold
+                  : PulsoTokens.weightMedium,
+            ),
+          ),
         ],
       ),
     );
@@ -314,9 +390,26 @@ class _ResumoCard extends StatelessWidget {
         children: [
           PulsoSoftIcon(icon: icon, color: color, size: 36),
           const SizedBox(height: 8),
-          Text(label, style: Theme.of(context).textTheme.labelMedium),
-          Text(valor, style: Theme.of(context).textTheme.titleMedium),
-          Text(detalhe, style: Theme.of(context).textTheme.bodySmall),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            valor,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(color: color, fontWeight: PulsoTokens.weightBold),
+          ),
+          Text(
+            detalhe,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
         ],
       ),
     );
@@ -377,11 +470,33 @@ class _DebtCard extends StatelessWidget {
               ),
               Text(
                 formatBrl(divida.valorRestante),
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: color,
+                  fontWeight: PulsoTokens.weightBold,
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 2),
+          Text(
+            'Restante de ${formatBrl(divida.valor)}',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          if (divida.valor > 0) ...[
+            const SizedBox(height: PulsoTokens.space2),
+            LinearProgressIndicator(
+              value: (divida.valorPago / divida.valor).clamp(0, 1).toDouble(),
+              minHeight: 6,
+              borderRadius: BorderRadius.circular(99),
+              color: PulsoColors.successOf(brightness),
+              backgroundColor: Theme.of(context)
+                  .colorScheme
+                  .surfaceContainerHighest,
+            ),
+          ],
+          const SizedBox(height: PulsoTokens.space2),
           Wrap(
             spacing: 8,
             runSpacing: 8,
