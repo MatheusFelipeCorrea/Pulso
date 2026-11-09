@@ -5,7 +5,7 @@
     "outputDirectory": "dist",
     "rewrites": [
         {
-            "source": "/((?!assets/).*)",
+            "source": "/((?!assets/|downloads/).*)",
             "destination": "/index.html"
         }
     ],
@@ -16,6 +16,19 @@
                 {
                     "key": "Cache-Control",
                     "value": "public, max-age=31536000, immutable"
+                }
+            ]
+        },
+        {
+            "source": "/downloads/(.*)",
+            "headers": [
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=3600"
+                },
+                {
+                    "key": "Content-Disposition",
+                    "value": "attachment"
                 }
             ]
         }
