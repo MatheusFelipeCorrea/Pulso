@@ -89,4 +89,18 @@
 
 **Horas:** _a preencher_
 
-**Total Sprint 5:** _a fechar em 04/11_
+**Total Sprint 5:** 0h _(sem registro de horas no arquivo)_
+
+# Sprint 6 (05/11 a 18/11) — parcial até 09/11
+
+### Semana 1 (05/11 - 11/11)
+
+Commits (3): `a285c63`, `a0b25f0`, `1e90995`.
+
+- Assistente Flutter com histórico de chats (repositório, tela, FAB/shell) — PR [#399](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/399).
+- Ajuste da sidebar: Dashboard como primeiro item.
+- Endpoints Gemini + cache dos Insights Inteligentes (`InsightSnapshot`) — PR [#400](https://github.com/ICEI-PUC-Minas-PMGES-TI/pmg-es-2026-2-ti5-6904100-pulso/pull/400).
+
+**Horas:** 12h
+
+**Total Sprint 6 (parcial até 09/11):** 12h
