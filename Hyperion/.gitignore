@@ -6,6 +6,19 @@
 !.github/audits/results/_summary/
 .github/audits/results/_summary/*
 !.github/audits/results/_summary/remediacoes-sprint-3.md
+!.github/audits/results/_summary/full-audit-2026-11-09.md
+!.github/audits/results/architecture/
+!.github/audits/results/architecture/architecture-2026-11-09.md
+!.github/audits/results/application-security/
+!.github/audits/results/application-security/security-2026-11-09.md
+!.github/audits/results/devops/
+!.github/audits/results/devops/devops-2026-11-09.md
+!.github/audits/results/code-review/
+!.github/audits/results/code-review/code-review-2026-11-09.md
+!.github/audits/results/product-owner/
+!.github/audits/results/product-owner/product-owner-2026-11-09.md
+!.github/audits/results/ux-design/
+!.github/audits/results/ux-design/ux-design-2026-11-09.md
 
 # Plans — generated per session
 .github/plans/implementations/*
