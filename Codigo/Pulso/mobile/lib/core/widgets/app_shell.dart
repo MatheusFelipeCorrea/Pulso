@@ -6,6 +6,7 @@ import 'package:pulso/core/theme/pulso_tokens.dart';
 import 'package:pulso/core/widgets/pulso_badge.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/auth/widgets/pulso_brand.dart';
+import 'package:pulso/features/notifications/state/notifications_controller.dart';
 import 'package:pulso/features/transactions/state/transactions_controller.dart';
 import 'package:pulso/features/transactions/widgets/filters_sheet.dart';
 
@@ -144,6 +145,17 @@ class AppShell extends StatelessWidget {
   }
 
   List<Widget> _actions(BuildContext context, String location) {
+    final unread = context.watch<NotificationsController>().unread;
+    final bell = IconButton(
+      tooltip: 'Notificações',
+      onPressed: () => context.push('/notifications'),
+      icon: Badge(
+        isLabelVisible: unread > 0,
+        label: Text(unread > 9 ? '9+' : '$unread'),
+        child: const Icon(Icons.notifications_outlined),
+      ),
+    );
+
     if (location == '/transactions') {
       return [
         IconButton(
@@ -155,15 +167,17 @@ class AppShell extends StatelessWidget {
               current: controller.filters,
               options: controller.options,
             );
-            if (next != null && context.mounted)
+            if (next != null && context.mounted) {
               await controller.applyFilters(next);
+            }
           },
           icon: const Icon(Icons.tune),
         ),
+        bell,
         const SizedBox(width: PulsoTokens.space1),
       ];
     }
-    return const [];
+    return [bell, const SizedBox(width: PulsoTokens.space1)];
   }
 }
 
@@ -413,6 +427,12 @@ class _PulsoSidebarState extends State<PulsoSidebar> {
                     selected: location == '/insights',
                     onTap: () => _go(context, '/insights'),
                   ),
+                _NavTile(
+                  icon: Icons.notifications_outlined,
+                  label: 'Notificações',
+                  selected: location == '/notifications',
+                  onTap: () => _go(context, '/notifications'),
+                ),
                 if (showChatbot)
                   _NavTile(
                     icon: Icons.smart_toy_outlined,
