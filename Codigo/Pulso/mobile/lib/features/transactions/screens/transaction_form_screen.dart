@@ -132,22 +132,50 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
           FilterOption(value: 'POUPANCA', label: 'Poupança'),
         ];
 
-  void _addTag(String raw) {
-    final nome = raw.trim();
-    if (nome.isEmpty) return;
-    if (tags.any((item) => item.nome.toLowerCase() == nome.toLowerCase()))
-      return;
-    final existente = (options?.tags ?? []).where(
-      (tag) => tag.nome.toLowerCase() == nome.toLowerCase(),
-    );
-    setState(() {
+  bool _addTag(String raw, {bool silentDuplicate = false}) {
+    final partes = raw
+        .split(',')
+        .map((part) => part.trim())
+        .where((part) => part.isNotEmpty);
+    var added = false;
+    for (final nome in partes) {
+      if (nome.length > 40) {
+        showPulsoSnack(context, 'Tag "$nome" passa de 40 caracteres.');
+        continue;
+      }
+      if (tags.any((item) => item.nome.toLowerCase() == nome.toLowerCase())) {
+        if (!silentDuplicate) {
+          showPulsoSnack(context, 'A tag "$nome" já foi adicionada.');
+        }
+        continue;
+      }
+      final existente = (options?.tags ?? []).where(
+        (tag) => tag.nome.toLowerCase() == nome.toLowerCase(),
+      );
       tags.add((nome: nome, id: existente.isEmpty ? null : existente.first.id));
-    });
-    _tagInput.clear();
+      added = true;
+    }
+    if (added) {
+      setState(() {});
+      _tagInput.clear();
+    }
+    return added;
   }
 
   void _removeTag(String nome) {
     setState(() => tags.removeWhere((item) => item.nome == nome));
+  }
+
+  void _onTagChanged(String value) {
+    if (!value.contains(',')) return;
+    final partes = value.split(',');
+    final completo = partes.sublist(0, partes.length - 1).join(',');
+    final resto = partes.last;
+    _addTag(completo, silentDuplicate: true);
+    _tagInput.value = TextEditingValue(
+      text: resto,
+      selection: TextSelection.collapsed(offset: resto.length),
+    );
   }
 
   Future<void> _pickDate({required bool fim}) async {
@@ -169,6 +197,9 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
   }
 
   Future<void> _salvar() async {
+    if (_tagInput.text.trim().isNotEmpty) {
+      _addTag(_tagInput.text, silentDuplicate: true);
+    }
     final valor = parseMoney(_valor.text);
     final fieldErrors = <String>[];
     if (valor == null || valor <= 0)
@@ -190,6 +221,7 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
     }
     if (fieldErrors.isNotEmpty) {
       setState(() => error = fieldErrors.first);
+      showPulsoSnack(context, fieldErrors.first);
       return;
     }
 
@@ -243,7 +275,14 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
       );
       context.pop(true);
     } on ApiException catch (err) {
-      if (mounted) setState(() => error = err.message);
+      if (!mounted) return;
+      setState(() => error = err.message);
+      showPulsoSnack(context, err.message);
+    } catch (err) {
+      if (!mounted) return;
+      const message = 'Não foi possível salvar as tags/transação.';
+      setState(() => error = message);
+      showPulsoSnack(context, message);
     } finally {
       if (mounted) setState(() => submitting = false);
     }
@@ -439,13 +478,32 @@ class _TransactionFormScreenState extends State<TransactionFormScreen> {
                   onChanged: (value) => setState(() => recurso = value),
                 ),
                 const SizedBox(height: PulsoTokens.space3),
-                TextField(
-                  controller: _tagInput,
-                  decoration: const InputDecoration(
-                    labelText: 'Tags',
-                    hintText: 'faculdade, almoço...',
-                  ),
-                  onSubmitted: _addTag,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _tagInput,
+                        decoration: const InputDecoration(
+                          labelText: 'Tags',
+                          hintText: 'faculdade, almoço...',
+                          helperText: 'Enter ou vírgula para adicionar',
+                        ),
+                        textInputAction: TextInputAction.done,
+                        onChanged: _onTagChanged,
+                        onSubmitted: _addTag,
+                      ),
+                    ),
+                    const SizedBox(width: PulsoTokens.space2),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: IconButton.filledTonal(
+                        tooltip: 'Adicionar tag',
+                        onPressed: () => _addTag(_tagInput.text),
+                        icon: const Icon(Icons.add),
+                      ),
+                    ),
+                  ],
                 ),
                 if (tags.isNotEmpty) ...[
                   const SizedBox(height: PulsoTokens.space2),

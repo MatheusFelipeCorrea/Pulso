@@ -72,6 +72,8 @@ npm run db:migrate:deploy
 npm run db:reseed-tester
 ```
 
+Se textos demo aparecerem com acento quebrado (`Almo�o`, `Maca�`), o `prisma/seed.js` foi reparado em UTF-8 — rode de novo o reseed acima (Neon/produção) para sobrescrever as strings antigas.
+
 ## 3. Vercel (web)
 
 Site atual: https://pulso-psi-five.vercel.app

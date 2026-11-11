@@ -120,26 +120,29 @@ class TripDestinationHint {
   final Map<String, dynamic> raw;
 
   Map<String, dynamic>? toDestinoMeta() {
+    final nested = raw['destinoMeta'];
+    if (nested is Map<String, dynamic>) {
+      return Map<String, dynamic>.from(nested);
+    }
     final catalogId = raw['catalogId'] as String? ?? raw['id'] as String?;
+    final geonameId = raw['geonameId'];
     final iata = raw['iata'] as String?;
     final countryCode = raw['countryCode'] as String?;
-    if (catalogId == null ||
-        catalogId.isEmpty ||
-        iata == null ||
-        countryCode == null) {
-      return null;
-    }
+    final hasCatalog = catalogId != null && catalogId.isNotEmpty;
+    final hasGeoname = geonameId != null;
+    if (!hasCatalog && !hasGeoname) return null;
     return {
-      'source': raw['source'] ?? 'catalog',
-      'catalogId': catalogId,
-      'iata': iata,
+      'source':
+          raw['source'] ?? (hasGeoname ? 'geonames' : 'catalog'),
+      if (hasCatalog) 'catalogId': catalogId,
+      if (iata != null) 'iata': iata,
       'label': raw['label'] ?? label,
-      'countryCode': countryCode,
+      if (countryCode != null) 'countryCode': countryCode,
       'countryName': raw['countryName'] ?? '',
       'moedaSugerida': (raw['moedaSugerida'] as String? ?? moedaSugerida)
           .toUpperCase(),
       'domestic': raw['domestic'] == true,
-      if (raw['geonameId'] != null) 'geonameId': raw['geonameId'],
+      if (geonameId != null) 'geonameId': geonameId,
       if (raw['region'] != null) 'region': raw['region'],
     };
   }

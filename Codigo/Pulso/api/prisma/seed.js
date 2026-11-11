@@ -17,11 +17,11 @@ const MESES_HISTORICO_TX = 12;
 const MESES_FUTURO_TX = 1;
 const TX_BATCH_SIZE = 400;
 
-/** Usu�rios demo TI5 � Free vs Premium */
+/** Usuários demo TI5 — Free vs Premium */
 const SEED_USUARIOS = [
     {
         email: MATHEUS_EMAIL,
-        nome: 'Matheus Felipe (Estagi�rio)',
+        nome: 'Matheus Felipe (Estagiário)',
         modoUso: 'ESTAGIARIO',
         config: {
             valorSalário: 1800,
@@ -54,14 +54,14 @@ const SEED_USUARIOS = [
     },
     {
         email: 'demo.pf@pulso.app',
-        nome: 'Priscila Pessoa F�sica',
+        nome: 'Priscila Pessoa Física',
         modoUso: 'PESSOA_FISICA',
         config: {
             valorVt: 0,
             plano: 'FREE',
         },
         transacoesDemo: true,
-        descricao: 'Plano FREE � core financeiro',
+        descricao: 'Plano FREE — core financeiro',
     },
 ];
 
@@ -89,7 +89,7 @@ function dataNoMes(dia, offsetMes = 0) {
     return new Date(now.getFullYear(), now.getMonth() + offsetMes, dia, 12, 0, 0, 0);
 }
 
-/** Data relativa a hoje (para d�vidas/lembretes com prazo, n�o presa ao calend�rio do m�s) */
+/** Data relativa a hoje (para dívidas/lembretes com prazo, não presa ao calendário do ms) */
 function emDias(offsetDias) {
     const d = new Date();
     d.setHours(12, 0, 0, 0);
@@ -97,7 +97,7 @@ function emDias(offsetDias) {
     return d;
 }
 
-/** PRNG determin�stico � mesmos dados a cada execu��o do seed */
+/** PRNG determinístico — mesmos dados a cada execuo do seed */
 function criarRng(seed) {
     let s = seed >>> 0;
     return () => {
@@ -202,7 +202,7 @@ async function seedTransacoesBase(usuarioId, byName, modoUso) {
                       tipo: 'RECEITA',
                       recurso: 'DINHEIRO',
                       valor: modoUso === 'PJ' ? 8500 : 3850,
-                      descricao: modoUso === 'PJ' ? 'Honor�rios mensais' : 'Salário mensal',
+                      descricao: modoUso === 'PJ' ? 'Honorários mensais' : 'Salário mensal',
                       data: new Date(year, month, 5),
                   },
               ];
@@ -216,7 +216,7 @@ async function seedTransacoesBase(usuarioId, byName, modoUso) {
                 tipo: 'DESPESA',
                 recurso: modoUso === 'PESSOA_FISICA' ? 'DINHEIRO' : 'VR',
                 valor: 25,
-                descricao: modoUso === 'PESSOA_FISICA' ? 'Almo�o' : 'Almo�o no RU',
+                descricao: modoUso === 'PESSOA_FISICA' ? 'Almoço' : 'Almoço no RU',
                 data: new Date(year, month, 15),
             },
             {
@@ -235,22 +235,22 @@ async function seedTransacoesBase(usuarioId, byName, modoUso) {
 }
 
 // ==========================================
-// SEED COMPLETO � matheusfelipecorreasilva@hotmail.com
-// Cobre toda funcionalidade j� desenvolvida no Pulso (m�dulos entregues no
-// Documentacao/01-Produto/Requisitos/Readme.md). Cada sub-seed � idempotente (verifica
+// SEED COMPLETO — matheusfelipecorreasilva@hotmail.com
+// Cobre toda funcionalidade já desenvolvida no Pulso (módulos entregues no
+// Documentacao/01-Produto/Requisitos/Readme.md). Cada sub-seed — idempotente (verifica
 // contagem antes de criar) para permitir rodar o script mais de uma vez.
 // ==========================================
 
 async function seedCategoriaPersonalizada(usuarioId) {
     const existente = await prisma.categoria.findFirst({
-        where: { usuarioId, nome: 'Curso de Ingl�s', tipo: 'DESPESA' },
+        where: { usuarioId, nome: 'Curso de Inglês', tipo: 'DESPESA' },
     });
     if (existente) return existente;
 
     const categoria = await prisma.categoria.create({
         data: {
             usuarioId,
-            nome: 'Curso de Ingl�s',
+            nome: 'Curso de Inglês',
             icone: 'GraduationCap',
             cor: '#0EA5E9',
             tipo: 'DESPESA',
@@ -258,7 +258,7 @@ async function seedCategoriaPersonalizada(usuarioId) {
         },
     });
 
-    console.log('   ? Categoria personalizada: Curso de Ingl�s (RF-019)');
+    console.log('   ? Categoria personalizada: Curso de Inglês (RF-019)');
     return categoria;
 }
 
@@ -281,7 +281,7 @@ async function seedTagsDemo(usuarioId) {
     return Object.fromEntries(tags.map((t) => [t.nome, t]));
 }
 
-/** Cria uma transa��o e (opcionalmente) vincula tags � usado quando precisamos do id de volta */
+/** Cria uma transao e (opcionalmente) vincula tags — usado quando precisamos do id de volta */
 async function criarTx(data, tagIds = []) {
     const transacao = await prisma.transacao.create({ data });
     if (tagIds.length) {
@@ -292,7 +292,7 @@ async function criarTx(data, tagIds = []) {
     return transacao;
 }
 
-/** RF-016 a RF-026, RF-027 (transfer�ncia) e RF-028 (hist�rico p/ sugest�o de categoria) */
+/** RF-016 a RF-026, RF-027 (transferência) e RF-028 (histórico p/ sugestão de categoria) */
 async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
     const jaRodou = await prisma.transacao.findFirst({
         where: { usuarioId, descricao: 'Bolsa estágio' },
@@ -339,21 +339,21 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
         })
     );
 
-    // Despesas (RF-017/RF-018/RF-026 recurso x categoria) � 3 meses de hist�rico
+    // Despesas (RF-017/RF-018/RF-026 recurso x categoria) — 3 meses de histórico
     const despesasPorMes = {
         '-2': [
             {
                 categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 24.9,
-                descricao: 'Almo�o no RU',
+                descricao: 'Almoço no RU',
                 dia: 3,
             },
             {
                 categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 22.5,
-                descricao: 'Almo�o no RU',
+                descricao: 'Almoço no RU',
                 dia: 16,
             },
             {
@@ -395,7 +395,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 categoriaId: byName('Saúde', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 38,
-                descricao: 'Farm�cia',
+                descricao: 'Farmácia',
                 dia: 25,
             },
         ],
@@ -404,14 +404,14 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 26,
-                descricao: 'Almo�o no RU',
+                descricao: 'Almoço no RU',
                 dia: 3,
             },
             {
                 categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 23.9,
-                descricao: 'Almo�o no RU',
+                descricao: 'Almoço no RU',
                 dia: 16,
             },
             {
@@ -446,7 +446,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 categoriaId: byName('Educação', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 120,
-                descricao: 'Mensalidade curso de ingl�s',
+                descricao: 'Mensalidade curso de inglês',
                 dia: 20,
                 tags: ['Faculdade'],
             },
@@ -454,7 +454,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 categoriaId: byName('Compras', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 189.9,
-                descricao: 'T�nis novo',
+                descricao: 'Tênis novo',
                 dia: 22,
                 tags: ['Impulsivo'],
             },
@@ -469,7 +469,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 categoriaId: byName('Saúde', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 41,
-                descricao: 'Farm�cia',
+                descricao: 'Farmácia',
                 dia: 25,
             },
         ],
@@ -478,14 +478,14 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 25.5,
-                descricao: 'Almo�o no RU',
+                descricao: 'Almoço no RU',
                 dia: 3,
             },
             {
                 categoriaId: byName('Alimentação', 'DESPESA').id,
                 recurso: 'VR',
                 valor: 24,
-                descricao: 'Almo�o no RU',
+                descricao: 'Almoço no RU',
                 dia: 7,
             },
             {
@@ -520,7 +520,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 categoriaId: byName('Educação', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 120,
-                descricao: 'Mensalidade curso de ingl�s',
+                descricao: 'Mensalidade curso de inglês',
                 dia: 8,
                 tags: ['Faculdade'],
             },
@@ -535,7 +535,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
                 categoriaId: byName('Saúde', 'DESPESA').id,
                 recurso: 'DINHEIRO',
                 valor: 35,
-                descricao: 'Farm�cia',
+                descricao: 'Farmácia',
                 dia: 7,
             },
         ],
@@ -563,7 +563,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
         [tagsPorNome.Essencial.id]
     );
 
-    // RF-027 � transfer�ncia entre recursos (Dinheiro ? Poupan�a), fora dos totais de receita/despesa
+    // RF-027 — transferência entre recursos (Dinheiro ? Poupança), fora dos totais de receita/despesa
     await criarTx(
         base('TRANSFERENCIA', {
             categoriaId: null,
@@ -575,7 +575,7 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
         })
     );
 
-    // RF-021/RF-022 � transa��o recorrente (m�e) j� com "filhas" geradas nos meses seguintes
+    // RF-021/RF-022 — transao recorrente (mãe) já com "filhas" geradas nos meses seguintes
     const categoriaAssinaturas = byName('Serviços e Assinaturas', 'DESPESA').id;
     const mae = await criarTx(
         base('DESPESA', {
@@ -609,13 +609,13 @@ async function seedTransacoesDemoCuradas(usuarioId, byName, tagsPorNome) {
         }),
     });
 
-    console.log('   ? Transa��es curadas (3 meses, transfer�ncia, recorrente, tags)');
+    console.log('   ? Transaes curadas (3 meses, transferência, recorrente, tags)');
     return true;
 }
 
 /**
- * Gera ~1.200+ transa��es em 12 meses � receitas de benef�cios, despesas di�rias variadas,
- * assinaturas, transfer�ncias e hist�rico denso para dashboard / listagens / gr�ficos.
+ * Gera ~1.200+ transaes em 12 meses — receitas de benefícios, despesas diárias variadas,
+ * assinaturas, transferências e histórico denso para dashboard / listagens / gráficos.
  */
 async function seedTransacoesMegaVolume(usuarioId, byName) {
     const markerExistente = await prisma.transacao.findFirst({
@@ -783,7 +783,7 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
             })
         );
 
-        // Freelance espor�dico (~40% dos meses)
+        // Freelance esporádico (~40% dos meses)
         if (rng() > 0.6) {
             registros.push(
                 base('RECEITA', {
@@ -814,7 +814,7 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
                     descricao: escolher(rng, [
                         'Rendimento CDB',
                         'Dividendos FIIs',
-                        'Juros poupan�a',
+                        'Juros poupança',
                     ]),
                     data: dataNoMes(
                         diaValidoNoMes(1 + Math.floor(rng() * 5), offsetMes),
@@ -824,7 +824,7 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
             );
         }
 
-        // Moradia + transfer�ncia mensal
+        // Moradia + transferência mensal
         registros.push(
             base('DESPESA', {
                 categoriaId: cat('Moradia', 'DESPESA'),
@@ -940,7 +940,7 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
         }
     }
 
-    // Marker invis�vel na UI (valor simb�lico) � controle de idempot�ncia
+    // Marker invisível na UI (valor simbólico) — controle de idempotência
     registros.push(
         base('RECEITA', {
             categoriaId: cat('Outros', 'RECEITA'),
@@ -955,7 +955,7 @@ async function seedTransacoesMegaVolume(usuarioId, byName) {
 
     const total = await prisma.transacao.count({ where: { usuarioId } });
     console.log(
-        `   ? Mega-volume: +${registros.length} transa��es (${MESES_HISTORICO_TX} meses) | total usu�rio: ${total}`
+        `   ? Mega-volume: +${registros.length} transaes (${MESES_HISTORICO_TX} meses) | total usurio: ${total}`
     );
     return true;
 }
@@ -965,7 +965,7 @@ async function seedTransacoesCompletas(usuarioId, byName, tagsPorNome) {
     return seedTransacoesMegaVolume(usuarioId, byName);
 }
 
-/** RF-029 a RF-034, RF-047 (v�nculo viagem), RF-128 (v�nculo planejamento de compra) */
+/** RF-029 a RF-034, RF-047 (vínculo viagem), RF-128 (vínculo planejamento de compra) */
 async function seedMetasCompletas(usuarioId) {
     const count = await prisma.meta.count({ where: { usuarioId } });
     if (count > 0) return null;
@@ -973,7 +973,7 @@ async function seedMetasCompletas(usuarioId) {
     const reserva = await prisma.meta.create({
         data: {
             usuarioId,
-            nome: 'Reserva de Emerg�ncia',
+            nome: 'Reserva de Emergência',
             tipo: 'CURTO_PRAZO',
             status: 'ATIVA',
             prioridade: 'ALTA',
@@ -1028,7 +1028,7 @@ async function seedMetasCompletas(usuarioId) {
     await prisma.meta.create({
         data: {
             usuarioId,
-            nome: 'Curso de ingl�s',
+            nome: 'Curso de inglês',
             tipo: 'CURTO_PRAZO',
             status: 'ATIVA',
             prioridade: 'MEDIA',
@@ -1058,7 +1058,7 @@ async function seedMetasCompletas(usuarioId) {
         },
     });
 
-    console.log('   ? 5 metas pessoais (ativa, pausada, conclu�da, v�nculo compra e viagem)');
+    console.log('   ? 5 metas pessoais (ativa, pausada, concluída, vínculo compra e viagem)');
     return { reserva, notebook, bonito };
 }
 
@@ -1071,7 +1071,7 @@ async function seedPlanejamentoCompraCompleto(usuarioId, categorias, metaNoteboo
         (c) => c.nome === 'Tecnologia' && c.tipo === 'DESPESA'
     );
 
-    // RF-129 � item comprado gera automaticamente a transa��o vinculada
+    // RF-129 — item comprado gera automaticamente a transao vinculada
     const transacaoNotebook = await prisma.transacao.create({
         data: {
             usuarioId,
@@ -1115,7 +1115,7 @@ async function seedPlanejamentoCompraCompleto(usuarioId, categorias, metaNoteboo
             },
             {
                 usuarioId,
-                nome: 'Sof� novo',
+                nome: 'Sofá novo',
                 valorEstimado: 2200,
                 prioridade: 'MEDIA',
                 categoria: 'CASA_ELETRODOMESTICOS',
@@ -1124,7 +1124,7 @@ async function seedPlanejamentoCompraCompleto(usuarioId, categorias, metaNoteboo
             },
             {
                 usuarioId,
-                nome: 'T�nis de corrida',
+                nome: 'Tênis de corrida',
                 valorEstimado: 450,
                 prioridade: 'BAIXA',
                 categoria: 'VESTUARIO',
@@ -1134,11 +1134,11 @@ async function seedPlanejamentoCompraCompleto(usuarioId, categorias, metaNoteboo
         ],
     });
 
-    console.log('   ? 4 itens de planejamento de compra (1 comprado com transa��o vinculada)');
+    console.log('   ? 4 itens de planejamento de compra (1 comprado com transao vinculada)');
     return true;
 }
 
-/** RF-037 a RF-047 � viagens pessoais, despesas por categoria, observa��es e moedas favoritas */
+/** RF-037 a RF-047 — viagens pessoais, despesas por categoria, observaes e moedas favoritas */
 async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
     const count = await prisma.viagem.count({ where: { usuarioId } });
     if (count > 0) return false;
@@ -1152,11 +1152,11 @@ async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
             metaId: metaBonitoId,
             despesas: {
                 create: [
-                    { categoria: 'TRANSPORTE', descricao: 'Passagem a�rea', valorEstimado: 850 },
+                    { categoria: 'TRANSPORTE', descricao: 'Passagem aérea', valorEstimado: 850 },
                     { categoria: 'HOSPEDAGEM', descricao: 'Pousada 5 noites', valorEstimado: 1200 },
                     {
                         categoria: 'PASSEIOS',
-                        descricao: 'Gruta do Lago Azul + flutua��o',
+                        descricao: 'Gruta do Lago Azul + flutuao',
                         valorEstimado: 600,
                     },
                     { categoria: 'ALIMENTACAO', descricao: 'Restaurantes', valorEstimado: 400 },
@@ -1168,8 +1168,8 @@ async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
                         titulo: 'Checklist de viagem',
                         tipo: 'CHECKLIST',
                         checklist: [
-                            { item: 'Reservar passeios com anteced�ncia', feito: true },
-                            { item: 'Levar protetor solar biodegrad�vel', feito: false },
+                            { item: 'Reservar passeios com antecedência', feito: true },
+                            { item: 'Levar protetor solar biodegradável', feito: false },
                             { item: 'Confirmar pousada', feito: false },
                         ],
                     },
@@ -1177,7 +1177,7 @@ async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
                         titulo: 'Dica de amigo',
                         tipo: 'DICA',
                         conteudo:
-                            'Vale muito a pena reservar a Gruta do Lago Azul com 2 meses de anteced�ncia!',
+                            'Vale muito a pena reservar a Gruta do Lago Azul com 2 meses de antecedência!',
                     },
                 ],
             },
@@ -1187,14 +1187,14 @@ async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
     await prisma.viagem.create({
         data: {
             usuarioId,
-            destino: 'Paris - Fran�a',
+            destino: 'Paris - França',
             moeda: 'EUR',
             dataPrevista: dataNoMes(1, 8),
             despesas: {
                 create: [
                     {
                         categoria: 'TRANSPORTE',
-                        descricao: 'Passagem a�rea internacional',
+                        descricao: 'Passagem aérea internacional',
                         valorEstimado: 4200,
                     },
                     { categoria: 'HOSPEDAGEM', descricao: 'Hostel 6 noites', valorEstimado: 1500 },
@@ -1205,9 +1205,9 @@ async function seedViagensPessoaisCompletas(usuarioId, metaBonitoId) {
             observacoes: {
                 create: [
                     {
-                        titulo: 'Documentos necess�rios',
+                        titulo: 'Documentos necessários',
                         tipo: 'DOCUMENTOS',
-                        conteudo: 'Passaporte v�lido, seguro viagem, reserva de hotel',
+                        conteudo: 'Passaporte válido, seguro viagem, reserva de hotel',
                     },
                 ],
             },
@@ -1237,7 +1237,7 @@ async function seedLembretesCompletos(usuarioId) {
         data: [
             {
                 usuarioId,
-                titulo: 'Fatura do cart�o',
+                titulo: 'Fatura do cartão',
                 categoria: 'FATURA_CARTAO',
                 valor: 890,
                 dataVencimento: dataNoMes(15, 0),
@@ -1288,7 +1288,7 @@ async function seedLembretesCompletos(usuarioId) {
             },
             {
                 usuarioId,
-                titulo: 'Anivers�rio da m�e',
+                titulo: 'Aniversário da mãe',
                 categoria: 'ANIVERSARIO',
                 dataVencimento: emDias(10),
                 antecedencia: 'UMA_SEMANA',
@@ -1296,7 +1296,7 @@ async function seedLembretesCompletos(usuarioId) {
             },
             {
                 usuarioId,
-                titulo: 'Plano de sa�de',
+                titulo: 'Plano de saúde',
                 categoria: 'PLANO_SAUDE',
                 valor: 210,
                 dataVencimento: emDias(-3),
@@ -1310,7 +1310,7 @@ async function seedLembretesCompletos(usuarioId) {
     return true;
 }
 
-/** RF-099 a RF-104 � or�amento em v�rios meses para stress-test de alertas */
+/** RF-099 a RF-104 — orçamento em vários meses para stress-test de alertas */
 async function seedOrcamentoCompleto(usuarioId, byName) {
     const marker = await prisma.orcamento.findFirst({
         where: {
@@ -1345,7 +1345,7 @@ async function seedOrcamentoCompleto(usuarioId, byName) {
     await prisma.orcamento.createMany({ data: registros, skipDuplicates: true });
 
     console.log(
-        `   ? Or�amento em ${limites.length} categorias � ${MESES_HISTORICO_TX} meses (${registros.length} registros)`
+        `   ? Orçamento em ${limites.length} categorias — ${MESES_HISTORICO_TX} meses (${registros.length} registros)`
     );
     return true;
 }
@@ -1359,7 +1359,7 @@ async function seedDividasCompletas(usuarioId) {
         data: {
             usuarioId,
             direcao: 'ME_DEVEM',
-            nomePessoa: 'Jo�o Silva',
+            nomePessoa: 'João Silva',
             valor: 300,
             dataEmprestimo: dataNoMes(5, -1),
             prazoDevolucao: emDias(10),
@@ -1398,7 +1398,7 @@ async function seedDividasCompletas(usuarioId) {
         data: {
             usuarioId,
             direcao: 'EU_DEVO',
-            nomePessoa: 'Maria (cart�o emprestado)',
+            nomePessoa: 'Maria (cartão emprestado)',
             valor: 200,
             dataEmprestimo: dataNoMes(2, 0),
             prazoDevolucao: emDias(30),
@@ -1408,12 +1408,12 @@ async function seedDividasCompletas(usuarioId) {
     });
 
     console.log(
-        '   ? 4 d�vidas (2 a receber � 1 vencendo, 1 atrasada; 2 a pagar � 1 quitada, 1 parcial)'
+        '   ? 4 dívidas (2 a receber — 1 vencendo, 1 atrasada; 2 a pagar — 1 quitada, 1 parcial)'
     );
     return true;
 }
 
-/** Amostra de notifica��es de v�rios tipos (lidas e n�o lidas) */
+/** Amostra de notificaes de vários tipos (lidas e não lidas) */
 async function seedNotificacoesCompletas(usuarioId, categorias) {
     const count = await prisma.notificacao.count({ where: { usuarioId } });
     if (count > 0) return false;
@@ -1464,11 +1464,11 @@ async function seedNotificacoesCompletas(usuarioId, categorias) {
         linkAcao: '/insights',
     });
 
-    console.log('   ? 7 notifica��es de exemplo (v�rios tipos)');
+    console.log('   ? 7 notificaes de exemplo (vários tipos)');
     return true;
 }
 
-/** Orquestra todo o mega-seed de Matheus, na ordem de depend�ncia entre os m�dulos */
+/** Orquestra todo o mega-seed de Matheus, na ordem de dependência entre os módulos */
 async function seedDadosCompletos(usuario, categoriasIniciais) {
     console.log('\n   ?? Populando dados completos de todas as funcionalidades...');
 
@@ -1493,7 +1493,7 @@ async function seedDadosCompletos(usuario, categoriasIniciais) {
 const MACAE_DESTINO_META = {
     catalogId: 'BR-GIG-macae',
     iata: 'GIG',
-    label: 'Maca�',
+    label: 'Macaé',
     region: 'Rio de Janeiro',
     countryCode: 'BR',
     countryName: 'Brasil',
@@ -1509,16 +1509,16 @@ async function seedGruposDemo(usuariosPorEmail) {
     const patricia = usuariosPorEmail['demo.pj.optin@pulso.app'];
 
     if (!matheus || !maria || !pedro) {
-        console.log('??  Seed de grupos ignorado � usu�rios demo incompletos');
+        console.log('??  Seed de grupos ignorado — usuários demo incompletos');
         return;
     }
 
     const demos = [
         {
             codigo: 'PULSO-MC26',
-            nome: 'Viagem Maca� 2026',
-            descricao: 'Planejamento da viagem em grupo para Maca� � demo completa',
-            destino: 'Maca� - RJ',
+            nome: 'Viagem Macaé 2026',
+            descricao: 'Planejamento da viagem em grupo para Macaé — demo completa',
+            destino: 'Macaé - RJ',
             destinoMeta: MACAE_DESTINO_META,
             dataViagem: new Date(2026, 7, 15, 12, 0, 0),
             membros: [
@@ -1548,7 +1548,7 @@ async function seedGruposDemo(usuariosPorEmail) {
                 {
                     usuarioId: maria.id,
                     categoria: 'ALIMENTACAO',
-                    descricao: 'Compras e refei��es',
+                    descricao: 'Compras e refeies',
                     valorEstimado: 300,
                 },
                 {
@@ -1578,7 +1578,7 @@ async function seedGruposDemo(usuariosPorEmail) {
             mensagens: [
                 {
                     usuarioId: maria.id,
-                    conteudo: 'J� reservei o airbnb, dividimos em 3!',
+                    conteudo: 'Já reservei o airbnb, dividimos em 3!',
                     criadoEm: new Date(2026, 5, 8, 9, 42, 0),
                 },
                 {
@@ -1598,8 +1598,8 @@ async function seedGruposDemo(usuariosPorEmail) {
     if (paulo && patricia) {
         demos.push({
             codigo: 'PULSO-NE26',
-            nome: 'F�rias Nordeste 2026',
-            descricao: 'Grupo maior para testar scroll de membros e pretens�es',
+            nome: 'Férias Nordeste 2026',
+            descricao: 'Grupo maior para testar scroll de membros e pretensões',
             destino: 'Salvador - BA',
             destinoMeta: {
                 catalogId: 'BR-SSA-salvador',
@@ -1623,7 +1623,7 @@ async function seedGruposDemo(usuariosPorEmail) {
                 {
                     usuarioId: matheus.id,
                     categoria: 'TRANSPORTE',
-                    descricao: 'Passagem a�rea',
+                    descricao: 'Passagem aérea',
                     valorEstimado: 890,
                 },
                 {
@@ -1635,7 +1635,7 @@ async function seedGruposDemo(usuariosPorEmail) {
                 {
                     usuarioId: maria.id,
                     categoria: 'TRANSPORTE',
-                    descricao: 'Passagem a�rea',
+                    descricao: 'Passagem aérea',
                     valorEstimado: 920,
                 },
                 {
@@ -1697,7 +1697,7 @@ async function seedGruposDemo(usuariosPorEmail) {
             mensagens: [
                 {
                     usuarioId: paulo.id,
-                    conteudo: 'Algu�m j� olhou passagem pra dezembro?',
+                    conteudo: 'Alguém já olhou passagem pra dezembro?',
                     criadoEm: new Date(2026, 4, 20, 8, 15, 0),
                 },
                 {
@@ -1717,7 +1717,7 @@ async function seedGruposDemo(usuariosPorEmail) {
         });
 
         if (existente) {
-            console.log(`   ??  ${demo.nome} (${demo.codigo}) j� existe`);
+            console.log(`   ??  ${demo.nome} (${demo.codigo}) já existe`);
             continue;
         }
 
@@ -1765,7 +1765,7 @@ async function seedGruposDemo(usuariosPorEmail) {
         });
 
         console.log(
-            `   ? ${demo.nome} (${demo.codigo}) � ${demo.membros.length} membros, ${demo.despesas.length} pretens�es`
+            `   ? ${demo.nome} (${demo.codigo}) — ${demo.membros.length} membros, ${demo.despesas.length} pretensões`
         );
     }
 }
@@ -1787,7 +1787,7 @@ async function main() {
 
         if (perfil.transacoesDemo) {
             const criou = await seedTransacoesBase(usuario.id, byName, perfil.modoUso);
-            if (criou) console.log('   ? Transa��es base');
+            if (criou) console.log('   ? Transaes base');
         }
 
         if (perfil.email === MATHEUS_EMAIL) {
@@ -1800,17 +1800,17 @@ async function main() {
     await seedGruposDemo(usuariosPorEmail);
 
     console.log('-----------------------------------------------------------');
-    console.log(`?? Senha de todos os usu�rios: ${SEED_SENHA}`);
+    console.log(`?? Senha de todos os usuários: ${SEED_SENHA}`);
     console.log('');
     console.log('Contas para testar:');
     for (const p of SEED_USUARIOS) {
-        console.log(`  � ${p.email}`);
+        console.log(`  • ${p.email}`);
         console.log(`    ${p.modoUso} — ${p.descricao}`);
     }
     console.log('');
     console.log('Grupos demo (login como matheusfelipecorreasilva@hotmail.com):');
-    console.log('  � Viagem Maca� 2026 � c�digo PULSO-MC26');
-    console.log('  � F�rias Nordeste 2026 � c�digo PULSO-NE26 (5 membros)');
+    console.log('  — Viagem Macaé 2026 — cdigo PULSO-MC26');
+    console.log('  — Férias Nordeste 2026 — cdigo PULSO-NE26 (5 membros)');
 }
 
 if (require.main === module) {
