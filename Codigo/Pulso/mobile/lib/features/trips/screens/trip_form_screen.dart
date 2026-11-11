@@ -70,10 +70,7 @@ class _TripFormScreenState extends State<TripFormScreen> {
       return;
     }
     if (destinoMeta == null && !isEdit) {
-      showPulsoSnack(
-        context,
-        'Selecione um destino da lista de sugestões',
-      );
+      showPulsoSnack(context, 'Selecione um destino da lista de sugestões');
       return;
     }
     setState(() => submitting = true);
@@ -130,8 +127,7 @@ class _TripFormScreenState extends State<TripFormScreen> {
               children: [
                 PulsoPageHeader(
                   title: isEdit ? 'Editar viagem' : 'Nova viagem',
-                  subtitle:
-                      'Busque o destino na lista (igual à web), escolha moeda e data.',
+                  subtitle: 'Busque o destino na lista (igual à web), escolha moeda e data.',
                   icon: Icons.flight_takeoff,
                 ),
                 DestinationSearchPicker(

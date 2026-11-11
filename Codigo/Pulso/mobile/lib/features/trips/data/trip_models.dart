@@ -132,8 +132,7 @@ class TripDestinationHint {
     final hasGeoname = geonameId != null;
     if (!hasCatalog && !hasGeoname) return null;
     return {
-      'source':
-          raw['source'] ?? (hasGeoname ? 'geonames' : 'catalog'),
+      'source': raw['source'] ?? (hasGeoname ? 'geonames' : 'catalog'),
       if (hasCatalog) 'catalogId': catalogId,
       if (iata != null) 'iata': iata,
       'label': raw['label'] ?? label,

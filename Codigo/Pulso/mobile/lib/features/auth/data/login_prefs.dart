@@ -7,8 +7,9 @@ class LoginPrefs {
   static Future<({String identificador, bool lembrarMe})> load() async {
     final prefs = await SharedPreferences.getInstance();
     final lembrarMe = prefs.getBool(_lembrarKey) ?? false;
-    final identificador =
-        lembrarMe ? (prefs.getString(_identificadorKey) ?? '') : '';
+    final identificador = lembrarMe
+        ? (prefs.getString(_identificadorKey) ?? '')
+        : '';
     return (identificador: identificador, lembrarMe: lembrarMe);
   }
 
