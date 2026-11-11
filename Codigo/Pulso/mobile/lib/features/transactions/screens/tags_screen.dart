@@ -20,6 +20,7 @@ class TagsScreen extends StatefulWidget {
 class _TagsScreenState extends State<TagsScreen> {
   List<PulsoTag> tags = [];
   bool loading = true;
+  bool creating = false;
   String? error;
 
   @override
@@ -37,12 +38,15 @@ class _TagsScreenState extends State<TagsScreen> {
       tags = await widget.repository.listarTags();
     } on ApiException catch (err) {
       error = err.message;
+    } catch (_) {
+      error = 'Não foi possível carregar as tags.';
     } finally {
       if (mounted) setState(() => loading = false);
     }
   }
 
   Future<void> _criar() async {
+    if (creating) return;
     final nome = TextEditingController();
     final ok = await showDialog<bool>(
       context: context,
@@ -50,8 +54,13 @@ class _TagsScreenState extends State<TagsScreen> {
         title: const Text('Nova tag'),
         content: TextField(
           controller: nome,
-          decoration: const InputDecoration(labelText: 'Nome'),
+          decoration: const InputDecoration(
+            labelText: 'Nome',
+            helperText: 'Até 40 caracteres',
+          ),
+          maxLength: 40,
           textCapitalization: TextCapitalization.sentences,
+          onSubmitted: (_) => Navigator.pop(context, true),
         ),
         actions: [
           TextButton(
@@ -68,12 +77,20 @@ class _TagsScreenState extends State<TagsScreen> {
     final trimmed = nome.text.trim();
     nome.dispose();
     if (ok != true || trimmed.isEmpty) return;
+    setState(() => creating = true);
     try {
       await widget.repository.criarTag(nome: trimmed);
       await _load();
+      if (!mounted) return;
+      showPulsoSnack(context, 'Tag "$trimmed" criada.');
     } on ApiException catch (err) {
       if (!mounted) return;
       showPulsoSnack(context, err.message);
+    } catch (_) {
+      if (!mounted) return;
+      showPulsoSnack(context, 'Não foi possível criar a tag.');
+    } finally {
+      if (mounted) setState(() => creating = false);
     }
   }
 
@@ -87,9 +104,14 @@ class _TagsScreenState extends State<TagsScreen> {
     try {
       await widget.repository.excluirTag(tag.id);
       await _load();
+      if (!mounted) return;
+      showPulsoSnack(context, 'Tag excluída.');
     } on ApiException catch (err) {
       if (!mounted) return;
       showPulsoSnack(context, err.message);
+    } catch (_) {
+      if (!mounted) return;
+      showPulsoSnack(context, 'Não foi possível excluir a tag.');
     }
   }
 
@@ -121,9 +143,15 @@ class _TagsScreenState extends State<TagsScreen> {
         Align(
           alignment: Alignment.centerLeft,
           child: FilledButton.icon(
-            onPressed: _criar,
-            icon: const Icon(Icons.add, size: 18),
-            label: const Text('Nova tag'),
+            onPressed: creating ? null : _criar,
+            icon: creating
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.add, size: 18),
+            label: Text(creating ? 'Criando...' : 'Nova tag'),
           ),
         ),
         const SizedBox(height: PulsoTokens.space3),

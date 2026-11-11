@@ -22,6 +22,7 @@
         "db:studio": "npx prisma studio",
         "db:seed": "node prisma/seed.js",
         "db:reseed-tester": "node scripts/reseed-tester.js",
+        "db:check-seed-utf8": "node prisma/check-seed-utf8.js",
         "lint": "eslint .",
         "format": "prettier --write .",
         "format:check": "prettier --check .",

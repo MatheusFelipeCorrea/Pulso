@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pulso/core/api/api_exception.dart';
+import 'package:pulso/features/auth/data/login_prefs.dart';
 import 'package:pulso/features/auth/state/auth_controller.dart';
 import 'package:pulso/features/auth/widgets/auth_card.dart';
 import 'package:pulso/features/auth/widgets/auth_extras.dart';
@@ -19,10 +20,29 @@ class _LoginScreenState extends State<LoginScreen> {
   final _identificador = TextEditingController();
   final _senha = TextEditingController();
   bool _lembrarMe = false;
+  bool _prefsReady = false;
   bool _submitting = false;
   bool _resending = false;
   String? _credentialsError;
   bool _showResend = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _hydratePrefs();
+  }
+
+  Future<void> _hydratePrefs() async {
+    final prefs = await LoginPrefs.load();
+    if (!mounted) return;
+    setState(() {
+      _lembrarMe = prefs.lembrarMe;
+      if (prefs.identificador.isNotEmpty) {
+        _identificador.text = prefs.identificador;
+      }
+      _prefsReady = true;
+    });
+  }
 
   @override
   void dispose() {
@@ -46,6 +66,10 @@ class _LoginScreenState extends State<LoginScreen> {
       await context.read<AuthController>().login(
         identificador: _identificador.text,
         senha: _senha.text,
+        lembrarMe: _lembrarMe,
+      );
+      await LoginPrefs.save(
+        identificador: _identificador.text,
         lembrarMe: _lembrarMe,
       );
       if (!mounted) return;
@@ -113,6 +137,11 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (!_prefsReady)
+            const Padding(
+              padding: EdgeInsets.only(bottom: 12),
+              child: LinearProgressIndicator(minHeight: 2),
+            ),
           PulsoTextField(
             controller: _identificador,
             hint: 'E-mail ou Nome de Usuário',
