@@ -11,6 +11,7 @@ import 'package:pulso/features/currency/data/currency_repository.dart';
 import 'package:pulso/features/transactions/utils/formatters.dart';
 import 'package:pulso/features/trips/data/trip_models.dart';
 import 'package:pulso/features/trips/data/trip_repository.dart';
+import 'package:pulso/features/trips/widgets/destination_search_picker.dart';
 
 class TripFormScreen extends StatefulWidget {
   const TripFormScreen({super.key, this.viagem});
@@ -25,6 +26,7 @@ class _TripFormScreenState extends State<TripFormScreen> {
   final _destino = TextEditingController();
   DateTime data = DateTime.now().add(const Duration(days: 30));
   String moeda = 'BRL';
+  Map<String, dynamic>? destinoMeta;
   List<CurrencyItem> catalog = const [];
   bool loading = true;
   bool submitting = false;
@@ -67,19 +69,17 @@ class _TripFormScreenState extends State<TripFormScreen> {
       showPulsoSnack(context, 'Informe o destino');
       return;
     }
+    if (destinoMeta == null && !isEdit) {
+      showPulsoSnack(
+        context,
+        'Selecione um destino da lista de sugestões',
+      );
+      return;
+    }
     setState(() => submitting = true);
     try {
       final repo = context.read<TripRepository>();
-      Map<String, dynamic>? destinoMeta;
-      try {
-        final hints = await repo.listarDestinos(q: _destino.text.trim());
-        for (final hint in hints) {
-          destinoMeta = hint.toDestinoMeta();
-          if (destinoMeta != null) break;
-        }
-      } on ApiException {
-        destinoMeta = null;
-      }
+      final payloadMeta = destinoMeta;
       if (isEdit) {
         await repo.editar(widget.viagem!.id, {
           'destino': _destino.text.trim(),
@@ -90,14 +90,14 @@ class _TripFormScreenState extends State<TripFormScreen> {
             data.day,
             12,
           ).toUtc().toIso8601String(),
-          if (destinoMeta != null) 'destinoMeta': destinoMeta,
+          if (payloadMeta != null) 'destinoMeta': payloadMeta,
         });
       } else {
         await repo.criar(
           destino: _destino.text.trim(),
           moeda: moeda,
           dataPrevista: data,
-          destinoMeta: destinoMeta,
+          destinoMeta: payloadMeta,
         );
       }
       if (!mounted) return;
@@ -130,12 +130,21 @@ class _TripFormScreenState extends State<TripFormScreen> {
               children: [
                 PulsoPageHeader(
                   title: isEdit ? 'Editar viagem' : 'Nova viagem',
-                  subtitle: 'Informe destino, moeda e data prevista. O app busca a mesma ficha de destino da web.',
+                  subtitle:
+                      'Busque o destino na lista (igual à web), escolha moeda e data.',
                   icon: Icons.flight_takeoff,
                 ),
-                TextField(
+                DestinationSearchPicker(
+                  repository: context.read<TripRepository>(),
                   controller: _destino,
-                  decoration: const InputDecoration(labelText: 'Destino'),
+                  initialMeta: destinoMeta,
+                  onSelected: (hint, meta) {
+                    setState(() {
+                      destinoMeta = meta;
+                      final sugerida = hint.moedaSugerida.toUpperCase();
+                      if (codes.contains(sugerida)) moeda = sugerida;
+                    });
+                  },
                 ),
                 const SizedBox(height: PulsoTokens.space3),
                 DropdownButtonFormField<String>(

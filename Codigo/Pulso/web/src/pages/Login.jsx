@@ -11,6 +11,7 @@ import { loginSchema } from '@/schemas/authSchemas'
 import * as authService from '@/services/authService'
 import { setUser } from '@/store/slices/authSlice'
 import { DEFAULT_AUTHENTICATED_ROUTE } from '@/config/defaultAuthenticatedRoute.js'
+import { loadLoginPrefs, saveLoginPrefs } from '@/utils/loginPrefs.js'
 
 function GoogleIcon() {
     return (
@@ -48,25 +49,38 @@ export default function Login() {
     const [pendingVerificationEmail, setPendingVerificationEmail] = useState('')
     const [isResending, setIsResending] = useState(false)
 
+    const savedPrefs = loadLoginPrefs()
     const {
         control,
         handleSubmit,
         watch,
         getValues,
+        reset,
         formState: { errors },
     } = useForm({
         resolver: zodResolver(loginSchema),
         mode: 'onChange',
         defaultValues: {
-            identificador: '',
+            identificador: savedPrefs.identificador,
             senha: '',
-            lembrarMe: false,
+            lembrarMe: savedPrefs.lembrarMe,
         },
     })
 
     const identificador = watch('identificador')
     const senha = watch('senha')
     const canSubmit = identificador.trim().length > 0 && senha.length > 0 && !isSubmitting
+
+    useEffect(() => {
+        const prefs = loadLoginPrefs()
+        if (prefs.lembrarMe || prefs.identificador) {
+            reset({
+                identificador: prefs.identificador,
+                senha: '',
+                lembrarMe: prefs.lembrarMe,
+            })
+        }
+    }, [reset])
 
     useEffect(() => {
         if (toastShownRef.current) return
@@ -87,6 +101,10 @@ export default function Login() {
 
         try {
             const result = await authService.login(data)
+            saveLoginPrefs({
+                identificador: data.identificador,
+                lembrarMe: Boolean(data.lembrarMe),
+            })
             dispatch(setUser(result.user))
             toast.success(`Bem-vindo de volta, ${result.user.nome}!`)
             navigate(DEFAULT_AUTHENTICATED_ROUTE, { replace: true })
