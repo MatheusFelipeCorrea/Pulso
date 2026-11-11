@@ -18,8 +18,8 @@ const dashboardRoutes = require('./dashboardRoutes');
 const importRoutes = require('./importRoutes');
 const chatbotRoutes = require('./chatbotRoutes');
 const insightRoutes = require('./insightRoutes');
-// TEMP: demais módulos ainda não estão neste repo.
-// const notificationRoutes = require('./notificationRoutes');
+const notificationRoutes = require('./notificationRoutes');
+// TEMP: sync ainda não está neste repo.
 // const syncRoutes = require('./syncRoutes');
 
 const router = express.Router();
@@ -43,7 +43,7 @@ router.use('/dashboard', dashboardRoutes);
 router.use('/importacoes', importRoutes);
 router.use('/chatbot', chatbotRoutes);
 router.use('/insights', insightRoutes);
-// router.use('/notificacoes', notificationRoutes);
+router.use('/notificacoes', notificationRoutes);
 // router.use('/sync', syncRoutes);
 
 module.exports = router;

@@ -1,5 +1,4 @@
-double roundMoney(num value) =>
-    (value * 100).roundToDouble() / 100;
+double roundMoney(num value) => (value * 100).roundToDouble() / 100;
 
 List<double> splitEqual(num valorTotal, int n) {
   if (n <= 0) return const [];
@@ -13,8 +12,10 @@ List<double> splitEqual(num valorTotal, int n) {
 }
 
 bool validarSomaPersonalizada(num valorTotal, List<num> valores) {
-  final somaCentavos =
-      valores.fold<int>(0, (acc, valor) => acc + (valor * 100).round());
+  final somaCentavos = valores.fold<int>(
+    0,
+    (acc, valor) => acc + (valor * 100).round(),
+  );
   final totalCentavos = (valorTotal * 100).round();
   return somaCentavos == totalCentavos;
 }

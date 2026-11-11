@@ -13,6 +13,8 @@ import 'package:pulso/features/calendar/state/calendar_controller.dart';
 import 'package:pulso/features/chatbot/data/chatbot_repository.dart';
 import 'package:pulso/features/currency/data/currency_repository.dart';
 import 'package:pulso/features/insights/data/insight_repository.dart';
+import 'package:pulso/features/notifications/data/notification_repository.dart';
+import 'package:pulso/features/notifications/state/notifications_controller.dart';
 import 'package:pulso/features/dashboard/data/dashboard_repository.dart';
 import 'package:pulso/features/dashboard/data/import_repository.dart';
 import 'package:pulso/features/dashboard/state/dashboard_controller.dart';
@@ -54,6 +56,7 @@ class PulsoApp extends StatelessWidget {
     required this.splits,
     required this.chatbot,
     required this.insights,
+    required this.notifications,
   });
 
   final AuthController auth;
@@ -75,6 +78,7 @@ class PulsoApp extends StatelessWidget {
   final ExpenseSplitRepository splits;
   final ChatbotRepository chatbot;
   final InsightRepository insights;
+  final NotificationRepository notifications;
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +102,10 @@ class PulsoApp extends StatelessWidget {
         Provider<ExpenseSplitRepository>.value(value: splits),
         Provider<ChatbotRepository>.value(value: chatbot),
         Provider<InsightRepository>.value(value: insights),
+        Provider<NotificationRepository>.value(value: notifications),
+        ChangeNotifierProvider(
+          create: (_) => NotificationsController(notifications),
+        ),
         ChangeNotifierProvider(
           create: (_) => TransactionsController(transactions),
         ),

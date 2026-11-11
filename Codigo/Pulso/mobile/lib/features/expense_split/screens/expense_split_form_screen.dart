@@ -104,11 +104,14 @@ class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
     final valor = parseMoney(_valor.text);
     if (valor == null || valor <= 0 || _nPessoas <= 0) return;
     final fatias = splitEqual(valor, _nPessoas);
-    _valorOrganizador.text = fatias.first.toStringAsFixed(2).replaceAll('.', ',');
+    _valorOrganizador.text = fatias.first
+        .toStringAsFixed(2)
+        .replaceAll('.', ',');
     for (var i = 0; i < _participantesOutros.length; i++) {
       final nome = _participantesOutros[i];
-      _valoresOutros[nome]?.text =
-          fatias[i + 1].toStringAsFixed(2).replaceAll('.', ',');
+      _valoresOutros[nome]?.text = fatias[i + 1]
+          .toStringAsFixed(2)
+          .replaceAll('.', ',');
     }
   }
 
@@ -220,8 +223,9 @@ class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
   @override
   Widget build(BuildContext context) {
     final valor = parseMoney(_valor.text);
-    final fatiaIgual =
-        valor != null && valor > 0 && _nPessoas > 0 ? valor / _nPessoas : null;
+    final fatiaIgual = valor != null && valor > 0 && _nPessoas > 0
+        ? valor / _nPessoas
+        : null;
 
     return PulsoFormScaffold(
       title: _editando ? 'Editar divisão' : 'Nova divisão',
@@ -230,8 +234,7 @@ class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
         children: [
           PulsoPageHeader(
             title: _editando ? 'Atualizar divisão' : 'Dividir uma conta',
-            subtitle:
-                'Defina quem pagou e entre quem dividir — igual à web.',
+            subtitle: 'Defina quem pagou e entre quem dividir — igual à web.',
             icon: Icons.groups_2_outlined,
           ),
           TextField(
@@ -252,7 +255,9 @@ class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: const Text('Eu paguei a conta'),
-            subtitle: Text(_euPaguei ? 'Você é o pagador' : 'Outra pessoa pagou'),
+            subtitle: Text(
+              _euPaguei ? 'Você é o pagador' : 'Outra pessoa pagou',
+            ),
             value: _euPaguei,
             onChanged: (value) => setState(() => _euPaguei = value),
           ),
@@ -332,10 +337,9 @@ class _ExpenseSplitFormScreenState extends State<ExpenseSplitFormScreen> {
                           width: 110,
                           child: TextField(
                             controller: _valorOrganizador,
-                            keyboardType:
-                                const TextInputType.numberWithOptions(
-                                  decimal: true,
-                                ),
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
                             decoration: const InputDecoration(
                               labelText: 'R\$',
                               isDense: true,
